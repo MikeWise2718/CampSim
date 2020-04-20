@@ -854,6 +854,11 @@ namespace Aiskwk.Map
             CalculateMeshSize();
             //Debug.Log("synthTex:" + synthTex);
             (var tex, var nBmRetrieved) = await qkm.GetTexAsy(scenename, mapExtent, execute: execute, forceload: forceload, synthTex: synthTex, synthSpec: synthSpec);
+            if (tex==null)
+            {
+                Debug.LogError($"GetTexAsy failed to retrieve tex - bitmaps retreived:{nBmRetrieved}");
+                return (nBmRetrieved, 0);
+            }
             if (execute)
             {
                 stats.textHeighthPix = tex.height;
