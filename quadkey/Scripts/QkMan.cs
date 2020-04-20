@@ -190,44 +190,52 @@ namespace Aiskwk.Map
 
         async Task<bool> GetQuadkeyAsy(string qkname, string ppath, string scenename)
         {
-            Debug.Log("GetQuadKeyAsy" + scenename + " lod:" + levelOfDetail + " qk:" + qkname);
-            // https://t1.ssl.ak.dynamic.tiles.virtualearth.net/comp/ch/021230030212230?mkt=en&it=A,G,L,LA&og=30&n=z
-            //
-            //var uri = "https://t3.ssl.ak.dynamic.tiles.virtualearth.net/comp/ch/" + qkname + "?mkt=en&it=A,G,L,LA&og=30&n=z";
-            var uri = GetUri(qkname);
-            Debug.Log($"{uri}");
-            using (var webRequest = UnityWebRequest.Get(uri))
+            try
             {
-                // Request and wait for the desired page.
-                webRequest.SendWebRequest();
-                while (!webRequest.isDone)
+                Debug.Log("GetQuadKeyAsy" + scenename + " lod:" + levelOfDetail + " qk:" + qkname);
+                // https://t1.ssl.ak.dynamic.tiles.virtualearth.net/comp/ch/021230030212230?mkt=en&it=A,G,L,LA&og=30&n=z
+                //
+                //var uri = "https://t3.ssl.ak.dynamic.tiles.virtualearth.net/comp/ch/" + qkname + "?mkt=en&it=A,G,L,LA&og=30&n=z";
+                var uri = GetUri(qkname);
+                Debug.Log($"{uri}");
+                using (var webRequest = UnityWebRequest.Get(uri))
                 {
-                    //yield return new WaitForSeconds(1000);
-                    await Task.Delay(TimeSpan.FromSeconds(0.05f));
-                    Debug.Log("   back from Task.Delay");
-                }
+                    // Request and wait for the desired page.
+                    webRequest.SendWebRequest();
+                    while (!webRequest.isDone)
+                    {
+                        //yield return new WaitForSeconds(1000);
+                        await Task.Delay(TimeSpan.FromSeconds(0.05f));
+                        Debug.Log("   back from Task.Delay");
+                    }
 
-                string[] pages = uri.Split('/');
-                int lastpage = pages.Length - 1;
+                    string[] pages = uri.Split('/');
+                    int lastpage = pages.Length - 1;
 
-                if (webRequest.isNetworkError)
-                {
-                    Debug.Log(pages[lastpage] + " - Error: " + webRequest.error);
-                    return false;
-                }
-                else
-                {
-                    Debug.Log(pages[lastpage] + " - Received  " + webRequest.downloadHandler.data.Length + " bytes");
-                    //var dname = GetFullQkSubDir(scenename);
-                    var dname = ppath;
-                    var bytes = webRequest.downloadHandler.data;
-                    var fname = dname + qkname + ".png";
-                    QresFinder.EnsureExistenceOfDirectory(fname);
-                    File.WriteAllBytes(fname, bytes);
-                    Debug.Log("Wrote " + fname + " bytes:" + bytes.Length);
-                    return true;
+                    if (webRequest.isNetworkError)
+                    {
+                        Debug.Log(pages[lastpage] + " - Error: " + webRequest.error);
+                        return false;
+                    }
+                    else
+                    {
+                        Debug.Log(pages[lastpage] + " - Received  " + webRequest.downloadHandler.data.Length + " bytes");
+                        //var dname = GetFullQkSubDir(scenename);
+                        var dname = ppath;
+                        var bytes = webRequest.downloadHandler.data;
+                        var fname = dname + qkname + ".png";
+                        QresFinder.EnsureExistenceOfDirectory(fname);
+                        File.WriteAllBytes(fname, bytes);
+                        Debug.Log("Wrote " + fname + " bytes:" + bytes.Length);
+                        return true;
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                Debug.LogError($"Exception in GetQuadkeyAsy ex:{ex.Message}");
+            }
+            return false;
         }
         public Texture2D LoadBitmap(string qd, string filePath, string ext)
         {
@@ -455,9 +463,13 @@ namespace Aiskwk.Map
             return texname;
         }
 
-
+        Texture2D vertex = null;
+        Texture2D hortex = null;
         async Task<(bool, string, int)> GetWwwQktilesAndMakeTex(string scenename, string tpath, string ppath, bool execute = true)
         {
+            Debug.Log($"GetWwwQktilesAndMakeTex scene - {scenename}");
+            Debug.Log($"GetWwwQktilesAndMakeTex tpath - {tpath}");
+            Debug.Log($"GetWwwQktilesAndMakeTex ppath - {ppath}");
             bool ok = false;
             string errmsg = "";
             var nBmRetrieved = 0;
@@ -465,12 +477,16 @@ namespace Aiskwk.Map
             // Have to build it from top to bottom, left to right
             int iqk = 0;
             int nqktodo = nqk.x * nqk.y;
-            Texture2D vertex = null;
+            bool getquadkeyok = false;
+            bool hortexnull = true;
+            vertex = null;
+            hortex = null;
             try
             {
                 for (int iy = 0; iy < nqk.y; iy++)
                 {
-                    Texture2D hortex = null;
+                    Debug.Log($"hortex being assigned null iy:{iy}  nqk.y:{nqk.y}");
+                    hortex = null;
                     for (int ix = 0; ix < nqk.x; ix++)
                     {
                         var qktile = qktiles[iqk];
@@ -479,25 +495,54 @@ namespace Aiskwk.Map
                             Debug.Log($"iy:{iy} ix:{ix}  iqkk:{iqk}/{nqktodo}  {qktile}");
                             if (!File.Exists(tpath + qktile.name))
                             {
-                                await GetQuadkeyAsy(qktile.name, tpath, scenename);
+                                hortexnull = hortex == null && ix > 0;
+                                if (hortexnull)
+                                {
+                                    Debug.LogWarning($"Calling GetQuadkeyAsy hortexnull:{hortexnull}  qktile.name:{qktile.name} ");
+                                }
+                                getquadkeyok = await GetQuadkeyAsy(qktile.name, tpath, scenename);
+                                hortexnull = hortex == null && ix > 0;
+                                if (hortexnull)
+                                {
+                                    Debug.LogWarning($"Back    GetQuadkeyAsy hortexnull:{hortexnull} getquadkeyok:{getquadkeyok}");
+                                }
                             }
                             else
                             {
                                 Debug.Log($"Found {tpath}{qktile}");
                             }
-                            //var tix = LoadBitmap(qkdir, qktile.name, ".png");
+                            hortexnull = hortex == null && ix > 0;
+                            if (hortexnull)
+                            {
+                                Debug.LogWarning($"Calling LoadBitmap hortexnull:{hortexnull}");
+                            }
                             var tix = LoadBitmap(tpath, qktile.name, ".png");
+                            hortexnull = hortex == null && ix > 0;
+                            if (hortexnull)
+                            {
+                                Debug.LogWarning($"Back from LoadBitmap hortexnull:{hortexnull}");
+                            }
                             if (ix == 0)
                             {
                                 hortex = tix;
                             }
                             else
                             {
+                                hortexnull = hortex == null && ix > 0;
+                                if (hortexnull)
+                                {
+                                    Debug.LogWarning($"CombineTexHorz iy:{iy} ix:{ix} hortexnull:{hortexnull}  getquadkeyok:{getquadkeyok}");
+                                }
                                 hortex = CombineTexHorz(hortex, tix);
+                                hortexnull = hortex == null && ix > 0;
+                                if (hortexnull)
+                                {
+                                    Debug.LogWarning($"Back   TexHorz iy:{iy} ix:{ix} hortexnull:{hortexnull}");
+                                }
                             }
+                            iqk++;
+                            nBmRetrieved++;
                         }
-                        iqk++;
-                        nBmRetrieved++;
                     }
                     if (iy == 0)
                     {
@@ -508,15 +553,18 @@ namespace Aiskwk.Map
                     }
                     else
                     {
-                        //vertex = CombineTexVert(vertex, hortex);// bottom to top
                         if (execute)
                         {
+                            //Debug.Log($"CombineTexVert iy:{iy}");
                             vertex = CombineTexVert(hortex, vertex);// top to bottom
+                                                                    //vertex = CombineTexVert(vertex, hortex);// bottom to top
                         }
                     }
+
                 }
                 if (execute)
                 {
+                    Debug.Log($"Finshed loading quadkeys - writing combined tex pngs");
                     byte[] vbytes = vertex.EncodeToPNG();
                     var fname1 = ppath + "tex.png";
                     QresFinder.EnsureExistenceOfDirectory(fname1);
@@ -534,7 +582,8 @@ namespace Aiskwk.Map
             catch (Exception ex)
             {
                 ok = false;
-                errmsg = ex.Message;
+                errmsg = ex.Message;              
+                Debug.LogError($"Error in GetWwwQktilesAndMakeTex ok:{ok} err:{errmsg}  nBmRetrieved:{nBmRetrieved}");// to insert
             }
             return (ok, errmsg, nBmRetrieved);
         }
@@ -613,6 +662,10 @@ namespace Aiskwk.Map
                     Debug.LogWarning($"Non-existance of {tfname} determined in {perspath} requires www bitmap fetching");
                 }
                 var (ok, errmsg, nBm) = await GetWwwQktilesAndMakeTex(scenename, temppath, perspath, execute);
+                if (!ok)
+                {
+                    return (null, nBm);
+                }
                 nBmRetrieved += nBm;
                 qrf.Reload();
             }
@@ -637,22 +690,15 @@ namespace Aiskwk.Map
                     case QmapMesh.sythTexMethod.Quadkeys:
                         {
                             tex = qrf.GetTex();
-                            if (tex == null)
+                            var sz = this.expectedTexSize;
+                            if (mapextent == MapExtentTypeE.AsSpecified)
                             {
-                                Debug.LogError($"GetTexAsy - tex not inited but exists is true:{exists}?");
+                                sz = this.expectedCroppedTexSize;
                             }
-                            else
+                            if ((sz.x != tex.width) || (sz.y != tex.height))
                             {
-                                var sz = this.expectedTexSize;
-                                if (mapextent == MapExtentTypeE.AsSpecified)
-                                {
-                                    sz = this.expectedCroppedTexSize;
-                                }
-                                if ((sz.x != tex.width) || (sz.y != tex.height))
-                                {
-                                    Debug.LogWarning($"Mapextent:{mapextent}");
-                                    Debug.LogWarning($"Expected tex size:{sz.x},{sz.y} but retrieved:{tex.width},{tex.height}");
-                                }
+                                Debug.LogWarning($"Mapextent:{mapextent}");
+                                Debug.LogWarning($"Expected tex size:{sz.x},{sz.y} but retrieved:{tex.width},{tex.height}");
                             }
                             break;
                         }

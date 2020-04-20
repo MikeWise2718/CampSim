@@ -14,12 +14,13 @@ namespace CampusSimulator
         GameObject rmapgo;
         GameObject qmapgo;
         QmapMan qmapman;
-        public int fuzz = 0;
-        public int xscale = 1;
-        public int zscale = 3;
+ 
+        public double xscale = 1;
+        public double zscale = 3;
         public int lod = 16;
         public Vector3 maptrans;
         public Vector3 maprot;
+        public bool useElevations = false;
 
         public double maplng = -122.134216;
         public double maplat = 47.639217;
@@ -60,7 +61,6 @@ namespace CampusSimulator
             rmapgo = GameObject.Find("Map");
             SetScene(initscene);
 
-
             qmap = true;
             old_qmap = !qmap;
 
@@ -81,14 +81,24 @@ namespace CampusSimulator
             qmapgo.SetActive(qmap);
             qmapman.qmapMode = QmapMan.QmapModeE.Bespoke;
             var fak = 2*0.4096f;
+            //qmapman.bespoke = new BespokeSpec(lastregionset.ToString(), maplat,maplng, fak*zscale, fak*xscale,lod:17 );
             qmapman.bespoke = new BespokeSpec(lastregionset.ToString(), maplat,maplng, fak*zscale, fak*xscale,lod:lod );
             qmapman.bespoke.maptrans = maptrans;
             qmapman.bespoke.maprot = new Vector3(0,-90,0);
+            qmapman.SetMode(qmapman.qmapMode);
             Debug.Log("RealizeQmap done");
         }
 
         void Initialize()
         {
+            if (qmapgo == null)
+            {
+                CreateQmap();
+            }
+            else
+            {
+                RealizeQmap();
+            }
         }
         void SetMeshCollider(bool enable)
         {
@@ -114,6 +124,7 @@ namespace CampusSimulator
             }
             maprot = Vector3.zero;
             maptrans = Vector3.zero;
+            int defaultlod = 19;
             switch (newregion)
             {
                 default:
@@ -125,7 +136,7 @@ namespace CampusSimulator
                     config = 1;
                     xscale = 1;
                     zscale = 1;
-                    lod = 19;
+                    lod = defaultlod;
                     break;
                 case SceneSelE.MsftB19focused:
                     maplat = 47.639217;
@@ -135,7 +146,7 @@ namespace CampusSimulator
                     config = 0;
                     xscale = 1;
                     zscale = 2;
-                    lod = 19;
+                    lod = defaultlod;
                     break;
                 case SceneSelE.Eb12:
                     // better with google maps
@@ -146,7 +157,7 @@ namespace CampusSimulator
                     config = 1;
                     xscale = 1;
                     zscale = 1;
-                    lod = 19;
+                    lod = defaultlod;
                     break;
                 case SceneSelE.Tukwila:
                     // better with google maps
@@ -157,7 +168,27 @@ namespace CampusSimulator
                     config = 1;
                     xscale = 1;
                     zscale = 1;
-                    lod = 19;
+                    lod = defaultlod;
+                    break;
+                case SceneSelE.Seattle:
+
+                    //var llmid = new LatLng(47.619992, -122.3373495, "Seattle");
+                    //var llbox = new LatLngBox(llmid, 25.17, 14.84, lod: 12);
+                    //useElevationDataStart = true;
+                    //Viewer.viewerDefaultRotation = new Vector3(0, 90, 0);
+                    //Viewer.viewerDefaultPosition = new Vector3(0, 0, 0);
+                    //Viewer.ViewerCamPositionDefaultValue = ViewerCamPosition.FloatBehind;
+
+                    // better with google maps
+                    maplat = 47.619992;
+                    maplng = -122.3373495;
+                    maprot = Vector3.zero;
+                    maptrans = Vector3.zero;
+                    config = 1;
+                    xscale = 14.84 / (2*0.4096);
+                    zscale = 25.17 / (2*0.4096);
+                    lod = 12;
+                    useElevations = true;
                     break;
                 case SceneSelE.MsftDublin:
                     maplat = 53.268998;
@@ -165,7 +196,7 @@ namespace CampusSimulator
                     config = 0;
                     xscale = 2;
                     zscale = 1;
-                    lod = 19;
+                    lod = defaultlod;
                     break;
                 case SceneSelE.MsftCoreCampus:
                     maplat = 47.639217;
@@ -175,7 +206,7 @@ namespace CampusSimulator
                     config = 0;
                     xscale = 2;
                     zscale = 6;
-                    lod = 19;
+                    lod = defaultlod;
                     break;
             }
             transform.localRotation = Quaternion.identity;
