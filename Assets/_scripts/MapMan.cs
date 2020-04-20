@@ -89,6 +89,14 @@ namespace CampusSimulator
 
         void Initialize()
         {
+            if (qmapgo == null)
+            {
+                CreateQmap();
+            }
+            else
+            {
+                RealizeQmap();
+            }
         }
         void SetMeshCollider(bool enable)
         {

@@ -189,8 +189,10 @@ public class VisualsPanel : MonoBehaviour
     {
         var chg = false;
         {
-            var curregion = SceneMan.GetSceneOptionsString(initialScene.value);
-            SceneMan.SetInitialSceneOption(curregion);
+            var curregionstr = SceneMan.GetSceneOptionsString(initialScene.value);
+            SceneMan.SetInitialSceneOption(curregionstr);
+            var curregion = SceneMan.GetSceneOptionsEnum(curregionstr);
+            sman.SetScene(curregion);
         }
         {
             var tropts = bman.treeMode.GetOptionsAsList();
