@@ -825,10 +825,10 @@ namespace Aiskwk.Map
         {
             var i = gomflst.Count;
             var nname = "gomf-" + i;
-            var go = new GameObject(nname);
-            var gomf = go.AddComponent<MfWrap>();
+            var gomfgo = new GameObject(nname);
+            var gomf = gomfgo.AddComponent<MfWrap>();
             gomf.Init(this, srow, nrow, nhps, nvps);
-            go.transform.parent = transform;
+            gomfgo.transform.SetParent(this.transform,worldPositionStays:false);
 
             gomflst.Add(gomf);
             return gomf;
