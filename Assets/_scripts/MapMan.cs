@@ -81,6 +81,7 @@ namespace CampusSimulator
             qmapgo.SetActive(qmap);
             qmapman.qmapMode = QmapMan.QmapModeE.Bespoke;
             var fak = 2*0.4096f;
+            //qmapman.bespoke = new BespokeSpec(lastregionset.ToString(), maplat,maplng, fak*zscale, fak*xscale,lod:17 );
             qmapman.bespoke = new BespokeSpec(lastregionset.ToString(), maplat,maplng, fak*zscale, fak*xscale,lod:lod );
             qmapman.bespoke.maptrans = maptrans;
             qmapman.bespoke.maprot = new Vector3(0,-90,0);

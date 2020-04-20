@@ -463,7 +463,8 @@ namespace Aiskwk.Map
             return texname;
         }
 
-
+        Texture2D vertex = null;
+        Texture2D hortex = null;
         async Task<(bool, string, int)> GetWwwQktilesAndMakeTex(string scenename, string tpath, string ppath, bool execute = true)
         {
             Debug.Log($"GetWwwQktilesAndMakeTex scene - {scenename}");
@@ -478,12 +479,13 @@ namespace Aiskwk.Map
             int nqktodo = nqk.x * nqk.y;
             bool getquadkeyok = false;
             bool hortexnull = true;
-            Texture2D vertex = null;
-            Texture2D hortex = null;
+            vertex = null;
+            hortex = null;
             try
             {
                 for (int iy = 0; iy < nqk.y; iy++)
                 {
+                    Debug.Log($"hortex being assigned null iy:{iy}  nqk.y:{nqk.y}");
                     hortex = null;
                     for (int ix = 0; ix < nqk.x; ix++)
                     {
@@ -493,51 +495,69 @@ namespace Aiskwk.Map
                             Debug.Log($"iy:{iy} ix:{ix}  iqkk:{iqk}/{nqktodo}  {qktile}");
                             if (!File.Exists(tpath + qktile.name))
                             {
-                                hortexnull = hortex == null;
-                                Debug.LogWarning($"Calling GetQuadkeyAsy hortexnull:{hortexnull}  qktile.name:{qktile.name} ");
+                                hortexnull = hortex == null && ix>0;
+                                if (hortexnull)
+                                {
+                                    Debug.LogWarning($"Calling GetQuadkeyAsy hortexnull:{hortexnull}  qktile.name:{qktile.name} ");
+                                }
                                 getquadkeyok = await GetQuadkeyAsy(qktile.name, tpath, scenename);
-                                hortexnull = hortex == null;
-                                Debug.LogWarning($"Back    GetQuadkeyAsy hortexnull:{hortexnull} getquadkeyok:{getquadkeyok}");
+                                hortexnull = hortex == null && ix > 0;
+                                if (hortexnull)
+                                {
+                                    Debug.LogWarning($"Back    GetQuadkeyAsy hortexnull:{hortexnull} getquadkeyok:{getquadkeyok}");
+                                }
                             }
                             else
                             {
                                 Debug.Log($"Found {tpath}{qktile}");
                             }
-                            //var tix = LoadBitmap(qkdir, qktile.name, ".png");
-                            hortexnull = hortex == null;
-                            Debug.Log($"Calling LoadBitmap hortexnull:{hortexnull}");
+                            hortexnull = hortex == null && ix > 0;
+                            if (hortexnull)
+                            {
+                                Debug.LogWarning($"Calling LoadBitmap hortexnull:{hortexnull}");
+                            }
                             var tix = LoadBitmap(tpath, qktile.name, ".png");
-                            hortexnull = hortex == null;
-                            Debug.Log($"Back from LoadBitmap hortexnull:{hortexnull}");
+                            hortexnull = hortex == null && ix > 0;
+                            if (hortexnull)
+                            {
+                                Debug.LogWarning($"Back from LoadBitmap hortexnull:{hortexnull}");
+                            }
                             if (ix == 0)
                             {
                                 hortex = tix;
                             }
                             else
                             {
-                                hortexnull = hortex == null;
-                                Debug.Log($"CombineTexHorz iy:{iy} ix:{ix} hortexnull:{hortexnull}  getquadkeyok:{getquadkeyok}");
+                                hortexnull = hortex == null && ix > 0;
+                                if (hortexnull)
+                                {
+                                    Debug.LogWarning($"CombineTexHorz iy:{iy} ix:{ix} hortexnull:{hortexnull}  getquadkeyok:{getquadkeyok}");
+                                }
                                 hortex = CombineTexHorz(hortex, tix);
-                                Debug.Log($"Back   TexHorz iy:{iy} ix:{ix}");
+                                hortexnull = hortex == null && ix > 0;
+                                if (hortexnull)
+                                {
+                                    Debug.LogWarning($"Back   TexHorz iy:{iy} ix:{ix} hortexnull:{hortexnull}");
+                                }
+                            }
+                            iqk++;
+                            nBmRetrieved++;
+                        }
+                        if (iy == 0)
+                        {
+                            if (execute)
+                            {
+                                vertex = hortex;
                             }
                         }
-                        iqk++;
-                        nBmRetrieved++;
-                    }
-                    if (iy == 0)
-                    {
-                        if (execute)
+                        else
                         {
-                            vertex = hortex;
-                        }
-                    }
-                    else
-                    {
-                        //vertex = CombineTexVert(vertex, hortex);// bottom to top
-                        if (execute)
-                        {
-                            Debug.Log($"CombineTexVert iy:{iy}");
-                            vertex = CombineTexVert(hortex, vertex);// top to bottom
+                            if (execute)
+                            {
+                                //Debug.Log($"CombineTexVert iy:{iy}");
+                                vertex = CombineTexVert(hortex, vertex);// top to bottom
+                                //vertex = CombineTexVert(vertex, hortex);// bottom to top
+                            }
                         }
                     }
                 }

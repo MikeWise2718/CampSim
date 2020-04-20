@@ -193,13 +193,13 @@ namespace Aiskwk.Map
     public class BespokeSpec
     {
         public string SceneName;
-        public MapProvider MapProv;
+        public MapProvider mapProv;
         public MapExtentTypeE MapExtent;
         public int lod;
         public LatLng LatLng;
         public LatLngBox llbox;
-        public float LatExtentKm;
-        public float LngExtentKm;
+        public double LatExtentKm;
+        public double LngExtentKm;
         public Vector3 maprot;
         public Vector3 maptrans;
         public bool useElevationData;
@@ -216,6 +216,9 @@ namespace Aiskwk.Map
         {
             SceneName = scenename;
             useElevationData = false;
+            mapProv = MapProvider.AzureMaps;
+            LatExtentKm = latkm;
+            LngExtentKm = lngkm;
             MapExtent = MapExtentTypeE.AsSpecified;
             llbox = new LatLngBox(ll, latkm, lngkm, lod: lod);
         }
@@ -313,7 +316,7 @@ namespace Aiskwk.Map
 
             var qmmcomp = qkgo.AddComponent<QmapMesh>();
             qmmcomp.descriptor = $"{scenename} {llbox.lod} {mapprov} {mapextent}";
-            qmmcomp.InitializeGrid(scenename, llbox, mapcoordname: mapcoordname);
+            qmmcomp.InitializeGrid(scenename, llbox, mapprov:mapprov, elevprov:elevprov, mapcoordname: mapcoordname);
             qmmcomp.secsPerQkTile = tpqk;
             qmmcomp.useElevationData = useElevationDataStart;
             qmmcomp.mapExtent = mapextent;
@@ -341,7 +344,7 @@ namespace Aiskwk.Map
                 case QmapModeE.Bespoke:
                     {
                         useElevationDataStart = false;
-                        (qmm, _, _) = await MakeMeshFromLlbox(bespoke.SceneName, bespoke.llbox, tpqk: 16, mapprov: bespoke.MapProv, mapextent: bespoke.MapExtent, limitQuadkeys: false);
+                        (qmm, _, _) = await MakeMeshFromLlbox(bespoke.SceneName, bespoke.llbox, tpqk: 16, mapprov: bespoke.mapProv, mapextent: bespoke.MapExtent, limitQuadkeys: false);
                         var rotv = bespoke.maprot;
                         transform.localRotation = Quaternion.identity;
                         transform.Rotate(rotv.x, rotv.y, rotv.z);

@@ -120,6 +120,7 @@ namespace Aiskwk.Map
         HeightSource old_heightSource;
         HeightAdjust old_heightAdjust;
 
+        bool initializationComplete = false;
 
         public bool CheckWebReleventChange()
         {
@@ -843,6 +844,8 @@ namespace Aiskwk.Map
         }
         public async Task<(int, int)> GenerateGrid(bool execute = true, bool forceload = true, bool limitQuadkeys = true)
         {
+            initializationComplete = false;
+
             InitGomflst();
 
             // Get base texture
@@ -998,7 +1001,7 @@ namespace Aiskwk.Map
             }
             GenerateViewer();
             AddMeshColliders();
-
+            initializationComplete = true;
             return (nBmRetrieved, nElRetrived);
         }
         private void AddVertexSmooth(int ix0, int iz0, ICollection<Vector3> vertices)
@@ -1104,37 +1107,40 @@ namespace Aiskwk.Map
         }
         void Update()
         {
-            if (regenMesh || (CheckChange() && updcount > 0))
+            if (initializationComplete)
             {
-                _ = GenerateGrid(execute: true, forceload: false, limitQuadkeys: limitQuadkeys);
-                regenMesh = false;
-            }
-            if (regenMeshNormals)
-            {
-                EditMeshNormals();
-                regenMeshNormals = false;
-            }
-            if (deleteSceneData)
-            {
-                deleteSceneData = false;
-                qkm.DeleteWebData(scenename, mapprov);
-            }
-            if (CheckWebReleventChange())
-            {
-                float nqks = this.qkm.nqk.x * this.qkm.nqk.y;
-                var qlod = this.qkm.levelOfDetail;
-                var req_lod = levelOfDetail;
-                var nnquk = (int)(nqks * Math.Pow(4, req_lod - qlod));
-                this.nQks = nnquk;
-                this.nElevSamples = (int)Math.Ceiling((this.nHorzSecs + 1) * ((this.nVertSecs + 1) / 1024.0));
-            }
-            if (addViewer != old_addViewer)
-            {
-                GenerateViewer();
-            }
-            if (addMeshColliders != old_addMeshColliders)
-            {
-                AddMeshColliders();
+                if (regenMesh || (CheckChange() && updcount > 0))
+                {
+                    _ = GenerateGrid(execute: true, forceload: false, limitQuadkeys: limitQuadkeys);
+                    regenMesh = false;
+                }
+                if (regenMeshNormals)
+                {
+                    EditMeshNormals();
+                    regenMeshNormals = false;
+                }
+                if (deleteSceneData)
+                {
+                    deleteSceneData = false;
+                    qkm.DeleteWebData(scenename, mapprov);
+                }
+                if (CheckWebReleventChange())
+                {
+                    float nqks = this.qkm.nqk.x * this.qkm.nqk.y;
+                    var qlod = this.qkm.levelOfDetail;
+                    var req_lod = levelOfDetail;
+                    var nnquk = (int)(nqks * Math.Pow(4, req_lod - qlod));
+                    this.nQks = nnquk;
+                    this.nElevSamples = (int)Math.Ceiling((this.nHorzSecs + 1) * ((this.nVertSecs + 1) / 1024.0));
+                }
+                if (addViewer != old_addViewer)
+                {
+                    GenerateViewer();
+                }
+                if (addMeshColliders != old_addMeshColliders)
+                {
+                    AddMeshColliders();
+                }
             }
             updcount++;
         }
