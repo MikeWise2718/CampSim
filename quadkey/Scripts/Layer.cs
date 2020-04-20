@@ -2,28 +2,31 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Layer : MonoBehaviour
+namespace Aiskwk.Map
 {
-    Dictionary<string, GameObject> laygodict = new Dictionary<string, GameObject>();
-    public void AddGo(GameObject objgo)
+    public class Layer : MonoBehaviour
     {
-        string key = objgo.name;
-        if (laygodict.ContainsKey(key))
+        Dictionary<string, GameObject> laygodict = new Dictionary<string, GameObject>();
+        public void AddGo(GameObject objgo)
         {
-            Debug.LogError($"layer {name} already contains a go named {key} - exiting");
-            return;
+            string key = objgo.name;
+            if (laygodict.ContainsKey(key))
+            {
+                Debug.LogError($"layer {name} already contains a go named {key} - exiting");
+                return;
+            }
+            laygodict[key] = objgo;
+            objgo.transform.parent = transform;
         }
-        laygodict[key] = objgo;
-        objgo.transform.parent = transform;
-    }
-    void Start()
-    {
-        
-    }
+        void Start()
+        {
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+
+        }
     }
 }

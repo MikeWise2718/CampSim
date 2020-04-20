@@ -4,6 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
+using Aiskwk.Dataframe;
 
 namespace Tests
 {
@@ -23,7 +24,7 @@ namespace Tests
             sdf.preferedType["dt"] = SdfColType.dfdatetime;
             sdf.preferedFormat["dt"] = "yyyy-MM-dd HH:mm:ss";
             sdf.preferedSubstitute["dt"] = ("+00","");
-            sdf.ReadCsv(sdflines);
+            sdf.ReadCsv(new List<string>(sdflines));
             Assert.True(sdf.Nrow() == 3);
             Assert.True(sdf.Ncol() == 5);
             Assert.True(sdf.InfoClassStr()=="Classes:id:dfint,x:dfdouble,y:dfdouble,dt:dfdatetime,n:dfstring");
