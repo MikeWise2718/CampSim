@@ -14,12 +14,13 @@ namespace CampusSimulator
         GameObject rmapgo;
         GameObject qmapgo;
         QmapMan qmapman;
-        public int fuzz = 0;
-        public int xscale = 1;
-        public int zscale = 3;
+ 
+        public double xscale = 1;
+        public double zscale = 3;
         public int lod = 16;
         public Vector3 maptrans;
         public Vector3 maprot;
+        public bool useElevations = false;
 
         public double maplng = -122.134216;
         public double maplat = 47.639217;
@@ -123,7 +124,7 @@ namespace CampusSimulator
             }
             maprot = Vector3.zero;
             maptrans = Vector3.zero;
-            int defaultlod = 17;
+            int defaultlod = 19;
             switch (newregion)
             {
                 default:
@@ -168,6 +169,26 @@ namespace CampusSimulator
                     xscale = 1;
                     zscale = 1;
                     lod = defaultlod;
+                    break;
+                case SceneSelE.Seattle:
+
+                    //var llmid = new LatLng(47.619992, -122.3373495, "Seattle");
+                    //var llbox = new LatLngBox(llmid, 25.17, 14.84, lod: 12);
+                    //useElevationDataStart = true;
+                    //Viewer.viewerDefaultRotation = new Vector3(0, 90, 0);
+                    //Viewer.viewerDefaultPosition = new Vector3(0, 0, 0);
+                    //Viewer.ViewerCamPositionDefaultValue = ViewerCamPosition.FloatBehind;
+
+                    // better with google maps
+                    maplat = 47.619992;
+                    maplng = -122.3373495;
+                    maprot = Vector3.zero;
+                    maptrans = Vector3.zero;
+                    config = 1;
+                    xscale = 14.84 / (2*0.4096);
+                    zscale = 25.17 / (2*0.4096);
+                    lod = 12;
+                    useElevations = true;
                     break;
                 case SceneSelE.MsftDublin:
                     maplat = 53.268998;
