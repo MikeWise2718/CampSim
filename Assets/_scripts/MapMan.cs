@@ -60,7 +60,6 @@ namespace CampusSimulator
             rmapgo = GameObject.Find("Map");
             SetScene(initscene);
 
-
             qmap = true;
             old_qmap = !qmap;
 
@@ -115,6 +114,7 @@ namespace CampusSimulator
             }
             maprot = Vector3.zero;
             maptrans = Vector3.zero;
+            int defaultlod = 17;
             switch (newregion)
             {
                 default:
@@ -126,7 +126,7 @@ namespace CampusSimulator
                     config = 1;
                     xscale = 1;
                     zscale = 1;
-                    lod = 19;
+                    lod = defaultlod;
                     break;
                 case SceneSelE.MsftB19focused:
                     maplat = 47.639217;
@@ -136,7 +136,7 @@ namespace CampusSimulator
                     config = 0;
                     xscale = 1;
                     zscale = 2;
-                    lod = 19;
+                    lod = defaultlod;
                     break;
                 case SceneSelE.Eb12:
                     // better with google maps
@@ -147,7 +147,7 @@ namespace CampusSimulator
                     config = 1;
                     xscale = 1;
                     zscale = 1;
-                    lod = 19;
+                    lod = defaultlod;
                     break;
                 case SceneSelE.Tukwila:
                     // better with google maps
@@ -158,7 +158,7 @@ namespace CampusSimulator
                     config = 1;
                     xscale = 1;
                     zscale = 1;
-                    lod = 19;
+                    lod = defaultlod;
                     break;
                 case SceneSelE.MsftDublin:
                     maplat = 53.268998;
@@ -166,7 +166,7 @@ namespace CampusSimulator
                     config = 0;
                     xscale = 2;
                     zscale = 1;
-                    lod = 19;
+                    lod = defaultlod;
                     break;
                 case SceneSelE.MsftCoreCampus:
                     maplat = 47.639217;
@@ -176,7 +176,7 @@ namespace CampusSimulator
                     config = 0;
                     xscale = 2;
                     zscale = 6;
-                    lod = 19;
+                    lod = defaultlod;
                     break;
             }
             transform.localRotation = Quaternion.identity;

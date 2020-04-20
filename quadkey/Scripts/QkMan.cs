@@ -495,7 +495,7 @@ namespace Aiskwk.Map
                             Debug.Log($"iy:{iy} ix:{ix}  iqkk:{iqk}/{nqktodo}  {qktile}");
                             if (!File.Exists(tpath + qktile.name))
                             {
-                                hortexnull = hortex == null && ix>0;
+                                hortexnull = hortex == null && ix > 0;
                                 if (hortexnull)
                                 {
                                     Debug.LogWarning($"Calling GetQuadkeyAsy hortexnull:{hortexnull}  qktile.name:{qktile.name} ");
@@ -543,23 +543,24 @@ namespace Aiskwk.Map
                             iqk++;
                             nBmRetrieved++;
                         }
-                        if (iy == 0)
+                    }
+                    if (iy == 0)
+                    {
+                        if (execute)
                         {
-                            if (execute)
-                            {
-                                vertex = hortex;
-                            }
-                        }
-                        else
-                        {
-                            if (execute)
-                            {
-                                //Debug.Log($"CombineTexVert iy:{iy}");
-                                vertex = CombineTexVert(hortex, vertex);// top to bottom
-                                //vertex = CombineTexVert(vertex, hortex);// bottom to top
-                            }
+                            vertex = hortex;
                         }
                     }
+                    else
+                    {
+                        if (execute)
+                        {
+                            //Debug.Log($"CombineTexVert iy:{iy}");
+                            vertex = CombineTexVert(hortex, vertex);// top to bottom
+                                                                    //vertex = CombineTexVert(vertex, hortex);// bottom to top
+                        }
+                    }
+
                 }
                 if (execute)
                 {

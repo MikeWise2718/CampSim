@@ -216,7 +216,7 @@ namespace Aiskwk.Map
         {
             SceneName = scenename;
             useElevationData = false;
-            mapProv = MapProvider.AzureMaps;
+            mapProv = MapProvider.AzureSatelliteRoads;
             LatExtentKm = latkm;
             LngExtentKm = lngkm;
             MapExtent = MapExtentTypeE.AsSpecified;
