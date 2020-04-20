@@ -343,7 +343,7 @@ namespace Aiskwk.Map
             {
                 case QmapModeE.Bespoke:
                     {
-                        useElevationDataStart = false;
+                        useElevationDataStart = bespoke.useElevationData;
                         (qmm, _, _) = await MakeMeshFromLlbox(bespoke.SceneName, bespoke.llbox, tpqk: 16, mapprov: bespoke.mapProv, mapextent: bespoke.MapExtent, limitQuadkeys: false);
                         var rotv = bespoke.maprot;
                         transform.localRotation = Quaternion.identity;
