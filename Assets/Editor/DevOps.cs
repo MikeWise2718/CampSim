@@ -12,7 +12,7 @@ public class DevOps
 {
     private static string outputFileName = @"CampusSim";
     private static bool developmentBuild = false;
-    private static string locationPathName = @"Build\Win64";
+    private static string locationPathName = @"Build\Linux64";
     private static string[] includedScenes = null;
 
     [MenuItem("Dinomite Studios/Azure DevOps Tools/Perform Build")]
