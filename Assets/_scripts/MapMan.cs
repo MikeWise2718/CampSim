@@ -15,12 +15,14 @@ namespace CampusSimulator
         GameObject qmapgo;
         QmapMan qmapman;
  
-        public double xscale = 1;
-        public double zscale = 3;
+        public float xdistkm = 1;
+        public float zdistkm = 3;
+        public float hmult;
         public int lod = 16;
         public Vector3 maptrans;
         public Vector3 maprot;
         public bool useElevations = false;
+        public bool useViewer = false;
 
         public double maplng = -122.134216;
         public double maplat = 47.639217;
@@ -82,7 +84,10 @@ namespace CampusSimulator
             qmapman.qmapMode = QmapMan.QmapModeE.Bespoke;
             var fak = 2*0.4096f;
             //qmapman.bespoke = new BespokeSpec(lastregionset.ToString(), maplat,maplng, fak*zscale, fak*xscale,lod:17 );
-            qmapman.bespoke = new BespokeSpec(lastregionset.ToString(), maplat,maplng, fak*zscale, fak*xscale,lod:lod );
+            qmapman.bespoke = new BespokeSpec(lastregionset.ToString(), maplat,maplng, fak*zdistkm, fak*xdistkm,lod:lod );
+            qmapman.bespoke.useElevationData = useElevations;
+            qmapman.bespoke.hmult = hmult;
+            qmapman.bespoke.useViewer = useViewer;
             qmapman.bespoke.maptrans = maptrans;
             qmapman.bespoke.maprot = new Vector3(0,-90,0);
             qmapman.SetMode(qmapman.qmapMode);
@@ -134,8 +139,8 @@ namespace CampusSimulator
                     maprot = new Vector3(0, 71.1f, 0);
                     maptrans = new Vector3(-6 - 1970.0f + 4, 0, 17 - 1122.0f - 16);
                     config = 1;
-                    xscale = 1;
-                    zscale = 1;
+                    xdistkm = 1;
+                    zdistkm = 1;
                     lod = defaultlod;
                     break;
                 case SceneSelE.MsftB19focused:
@@ -144,8 +149,8 @@ namespace CampusSimulator
                     maprot = new Vector3(0, 71.1f, 0);
                     maptrans = new Vector3(-6, 0, 17);
                     config = 0;
-                    xscale = 1;
-                    zscale = 2;
+                    xdistkm = 1;
+                    zdistkm = 2;
                     lod = defaultlod;
                     break;
                 case SceneSelE.Eb12:
@@ -155,8 +160,8 @@ namespace CampusSimulator
                     maprot = new Vector3(0,-90, 0);
                     maptrans = Vector3.zero;
                     config = 1;
-                    xscale = 1;
-                    zscale = 1;
+                    xdistkm = 1;
+                    zdistkm = 1;
                     lod = defaultlod;
                     break;
                 case SceneSelE.Tukwila:
@@ -166,8 +171,8 @@ namespace CampusSimulator
                     maprot = Vector3.zero;
                     maptrans = Vector3.zero;
                     config = 1;
-                    xscale = 1;
-                    zscale = 1;
+                    xdistkm = 1;
+                    zdistkm = 1;
                     lod = defaultlod;
                     break;
                 case SceneSelE.Seattle:
@@ -185,17 +190,19 @@ namespace CampusSimulator
                     maprot = Vector3.zero;
                     maptrans = Vector3.zero;
                     config = 1;
-                    xscale = 14.84 / (2*0.4096);
-                    zscale = 25.17 / (2*0.4096);
+                    xdistkm = 14.84f / (2*0.4096f);
+                    zdistkm = 25.17f / (2*0.4096f);
+                    hmult = 10;
                     lod = 12;
                     useElevations = true;
+                    useViewer = true;
                     break;
                 case SceneSelE.MsftDublin:
                     maplat = 53.268998;
                     maplng = -6.196680;
                     config = 0;
-                    xscale = 2;
-                    zscale = 1;
+                    xdistkm = 2;
+                    zdistkm = 1;
                     lod = defaultlod;
                     break;
                 case SceneSelE.MsftCoreCampus:
@@ -204,8 +211,8 @@ namespace CampusSimulator
                     maprot = new Vector3(0, 71.1f, 0);
                     maptrans = new Vector3(-6, 0, 17);
                     config = 0;
-                    xscale = 2;
-                    zscale = 6;
+                    xdistkm = 2;
+                    zdistkm = 6;
                     lod = defaultlod;
                     break;
             }
