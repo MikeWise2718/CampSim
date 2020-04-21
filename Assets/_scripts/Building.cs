@@ -98,8 +98,21 @@ namespace CampusSimulator
                 destnodes = destnodelst;
             }
         }
+        public void EmptyRooms()
+        {
+            foreach(var roomname in roomdict.Keys)
+            {
+                bm.UnRegisterRoom(roomname);
+                var br = roomdict[roomname];
+                br.EmptyRoom();
+                Destroy(br.gameObject);// now delete the room
+            }
+            roomdict = new Dictionary<string, BldRoom>();
+            bm.UpdateBldStats();
+        }
         public void Empty()
         {
+            EmptyRooms();
             DeleteGos();
         }
 
@@ -284,6 +297,7 @@ namespace CampusSimulator
             {
                 roomspecs.ForEach(roomspec => AddOneRoomSpec(roomspec));
             }
+            bm.UpdateBldStats();
         }
 
         public void DeleteGos()

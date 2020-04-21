@@ -10,8 +10,6 @@ namespace CampusSimulator
     {
         SceneMan sman;
 
-        public int config = 0;
-        GameObject rmapgo;
         GameObject qmapgo;
         QmapMan qmapman;
  
@@ -26,13 +24,11 @@ namespace CampusSimulator
 
         public double maplng = -122.134216;
         public double maplat = 47.639217;
+        public float mapscale = 1;
+        public float roty2 = 0;
 
-        public bool qmap;
-
-        bool old_qmap;
 
         public enum MapVisualsE {  MapOn, MapOff }
-        //public MapVisualsE mapVisuals = MapVisualsE.MapOn;
         public UxEnumSetting<MapVisualsE> mapVisiblity = new UxEnumSetting<MapVisualsE>("MapVisuals",MapVisualsE.MapOn);
         #region Map Visuals
         public void RealizeMapVisuals()
@@ -40,12 +36,7 @@ namespace CampusSimulator
             var mapviz = mapVisiblity.Get();
             var active = mapviz == MapVisualsE.MapOn;
             //Debug.Log("RealizeMapVisuals " + mapviz+" active:"+active);
-            if (rmapgo==null)
-            {
-                Debug.Log("mapgo null");
-                return;
-            }
-            rmapgo.SetActive(active);
+            qmapgo?.SetActive(active);
         }
         #endregion Map Visuals
 
@@ -57,28 +48,19 @@ namespace CampusSimulator
             {
                 Debug.Log("In MapMan.Awake Could not find object of type SceneSetupMan");
             }
-            sman = FindObjectOfType<SceneMan>();
-            var initscene = SceneMan.GetInitialSceneOption();
-            //Debug.Log("MapMan awake - now setting "+initscene);
-            rmapgo = GameObject.Find("Map");
-            SetScene(initscene);
-
-            qmap = true;
-            old_qmap = !qmap;
-
         }
 
         void CreateQmap()
         {
             qmapgo = new GameObject("QmapMan");
-            qmapgo.transform.SetParent(this.transform, worldPositionStays: true);
+            qmapgo.transform.SetParent(this.transform, worldPositionStays: false);
             qmapman = qmapgo.AddComponent<QmapMan>();
             RealizeQmap();
         }
         void RealizeQmap()
         {
             Debug.Log("QmapMan.RealizeQmap");
-            qmapgo.SetActive(qmap);
+            RealizeMapVisuals();
             qmapman.qmapMode = QmapMan.QmapModeE.Bespoke;
             var fak = 2*0.4096f;
             //qmapman.bespoke = new BespokeSpec(lastregionset.ToString(), maplat,maplng, fak*zscale, fak*xscale,lod:17 );
@@ -87,7 +69,10 @@ namespace CampusSimulator
             qmapman.bespoke.hmult = hmult;
             qmapman.bespoke.useViewer = useViewer;
             qmapman.bespoke.maptrans = maptrans;
-            qmapman.bespoke.maprot = new Vector3(0,-90,0);
+            qmapman.bespoke.maprot = new Vector3(0,this.roty2,0);
+            var ska = 1 / mapscale;
+            qmapman.bespoke.mapscale = new Vector3(ska, ska, ska);
+            //qmapman.bespoke.maprot = new Vector3(0, 0, 0);
             qmapman.SetMode(qmapman.qmapMode);
             Debug.Log("RealizeQmap done");
         }
@@ -105,6 +90,7 @@ namespace CampusSimulator
         }
         void SetMeshCollider(bool enable)
         {
+            Debug.Log("Qmap funciton SetMeshCollider - Not implemented yet");
         }
         public void TurnOffMeshCollider()
         {
@@ -122,7 +108,7 @@ namespace CampusSimulator
             RealizeMapVisuals();
             if (newregion == lastregionset)
             {
-                Debug.Log("Region " + newregion + " already set");
+                Debug.LogWarning("Region " + newregion + " already set");
                 return;
             }
             maprot = Vector3.zero;
@@ -130,15 +116,20 @@ namespace CampusSimulator
             useElevations = false;
             useViewer = false;
             int defaultlod = 19;
+            mapscale = 3.2f;
+            maprot = Vector3.zero;
+            maptrans = Vector3.zero;
+            roty2 = -90;
+            hmult = 1;
             switch (newregion)
             {
                 default:
                 case SceneSelE.MsftRedwest:
                     maplat = 47.659377;
                     maplng = -122.140189;
+                    mapscale = 3.2f;
                     maprot = new Vector3(0, 71.1f, 0);
                     maptrans = new Vector3(-6 - 1970.0f + 4, 0, 17 - 1122.0f - 16);
-                    config = 1;
                     xdistkm = 1;
                     zdistkm = 1;
                     lod = defaultlod;
@@ -146,9 +137,9 @@ namespace CampusSimulator
                 case SceneSelE.MsftB19focused:
                     maplat = 47.639217;
                     maplng = -122.134216;
+                    mapscale = 3.2f;
                     maprot = new Vector3(0, 71.1f, 0);
                     maptrans = new Vector3(-6, 0, 17);
-                    config = 0;
                     xdistkm = 1;
                     zdistkm = 2;
                     lod = defaultlod;
@@ -157,9 +148,8 @@ namespace CampusSimulator
                     // better with google maps
                     maplat = 49.993311;
                     maplng =  8.678343;
+                    mapscale = 3.2f;
                     maprot = new Vector3(0,-90, 0);
-                    maptrans = Vector3.zero;
-                    config = 1;
                     xdistkm = 1;
                     zdistkm = 1;
                     lod = defaultlod;
@@ -168,78 +158,93 @@ namespace CampusSimulator
                     // better with google maps
                     maplat = 47.456970; 
                     maplng = -122.258825;
-                    maprot = Vector3.zero;
-                    maptrans = Vector3.zero;
-                    config = 1;
+                    mapscale = 3.2f;
                     xdistkm = 1;
                     zdistkm = 1;
+                    lod = defaultlod;
+                    break;
+                case SceneSelE.MsftDublin:
+                    maplat = 53.268998;
+                    maplng = -6.196680;
+                    xdistkm = 2;
+                    zdistkm = 1;
+                    lod = defaultlod;
+                    mapscale = 3.2f;
+                    break;
+                case SceneSelE.MsftCoreCampus:
+                    maplat = 47.639217;
+                    maplng = -122.134216;
+                    mapscale = 3.2f;
+                    maprot = new Vector3(0, 71.1f, 0);
+                    maptrans = new Vector3(-6, 0, 17);
+                    xdistkm = 2;
+                    zdistkm = 6;
                     lod = defaultlod;
                     break;
                 case SceneSelE.Seattle:
                     maplat = 47.619992;
                     maplng = -122.3373495;
+                    mapscale = 3.2f;
                     maprot = Vector3.zero;
                     maptrans = Vector3.zero;
-                    config = 1;
                     xdistkm = 14.84f / (2*0.4096f);
                     zdistkm = 25.17f / (2*0.4096f);
                     hmult = 10;
                     lod = 12;
                     useElevations = true;
                     useViewer = true;
+                    mapscale = 1f;
+                    roty2 = 0;
                     break;
                 case SceneSelE.MtStHelens:
                     maplat = 46.198428;
                     maplng = -122.188841;
+                    mapscale = 3.2f;
                     maprot = Vector3.zero;
                     maptrans = Vector3.zero;
-                    config = 1;
                     xdistkm = 12;
                     zdistkm = 12;
-                    hmult = 1;
                     lod = 15;
                     useElevations = true;
                     useViewer = true;
+                    mapscale = 1f;
+                    roty2 = 0;
                     Viewer.viewerAvatarDefaultValue = ViewerAvatar.Rover;
                     Viewer.ViewerCamPositionDefaultValue = ViewerCamPosition.FloatBehind;
                     Viewer.ViewerControlDefaultValue = ViewerControl.Velocity;
+                    mapscale = 1f;
                     break;
-                case SceneSelE.MsftDublin:
-                    maplat = 53.268998;
-                    maplng = -6.196680;
-                    config = 0;
-                    xdistkm = 2;
-                    zdistkm = 1;
-                    lod = defaultlod;
+                case SceneSelE.Riggins:
+                    maplat = 45.412219;
+                    maplng = -116.328921;
+                    mapscale = 3.2f;
+                    maprot = Vector3.zero;
+                    maptrans = Vector3.zero;
+                    xdistkm = 10;
+                    zdistkm = 10;
+                    lod = 15;
+                    useElevations = true;
+                    useViewer = true;
+                    mapscale = 1f;
+                    roty2 = 0;
+                    mapscale = 1f;
                     break;
-                case SceneSelE.MsftCoreCampus:
-                    maplat = 47.639217;
-                    maplng = -122.134216;
-                    maprot = new Vector3(0, 71.1f, 0);
-                    maptrans = new Vector3(-6, 0, 17);
-                    config = 0;
-                    xdistkm = 2;
-                    zdistkm = 6;
-                    lod = defaultlod;
+                    //        var llmid = new LatLng(45.412219, -116.328921, "Riggins");
+                    //        var llbox = new LatLngBox(llmid, 10.0, 10.0, "Riggins box", lod: 15);
+                    //        Debug.Log("riggins-llbox llmid:" + llbox.midll.ToString());
+                    //        (qmm, _, _) = await MakeMeshFromLlbox("riggins", llbox, tpqk: 16, hmult: 1, mapprov: mapprov);
+                    //        //var qcm = InitMesh("dozers", "", 15, ll1, ll2, 16, 10, mapprov: mapprov);
+                    //        qmm.nodefak = 0.2f;
                     break;
+
             }
             transform.localRotation = Quaternion.identity;
             transform.Rotate(maprot.x, maprot.y, maprot.z);
             transform.position = maptrans;
+            transform.localScale = new Vector3(mapscale, mapscale, mapscale);
             lastregionset = newregion;
+            Debug.Log($"MapMap Set Position - trans:{maptrans} rot:{maprot}");
             Initialize();
-        }
-        void Start()
-        {
-        }
-        void Update()
-        {
-            if (qmap != old_qmap)
-            {
-                //Debug.Log($"Toggling qmap:{qmap}");
-                RealizeQmap();
-                old_qmap = qmap;
-            }
         }
     }
 }

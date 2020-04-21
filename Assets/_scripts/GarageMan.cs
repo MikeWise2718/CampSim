@@ -195,7 +195,7 @@ namespace CampusSimulator
         }
         public void DelGarage(string name)
         {
-            Debug.Log("Deleting garage " + name);
+            //Debug.Log("Deleting garage " + name);
             //var go = GameObject.Find(name);
             var gar = garagelookup[name];
             gar.Empty(); // destroys game object as well

@@ -650,7 +650,7 @@ namespace Aiskwk.Map
             var exists = qrf.Exists();
             var temppath = qrf.TempPathName();
             var perspath = qrf.PersistentPathName();
-            Debug.Log($"GetTexAsy forceload{forceload} exists:{exists}");
+            Debug.Log($"GetTexAsy forceload:{forceload} exists:{exists}");
             if (forceload || !exists)
             {
                 if (forceload)

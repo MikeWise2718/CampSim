@@ -1,0 +1,220 @@
+newmtl Cabine
+Ka 0 0 0
+Kd 0.14902 0.247059 0.509804
+Ks 0.6 0.6 0.6
+Ni 1
+Ns 200
+Tf 1 1 1
+d 1
+
+newmtl Chassis
+Ka 0 0 0
+Kd 0.360784 0.247059 0.247059
+Ks 0.1 0.1 0.1
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+
+newmtl Chrome
+Ka 0 0 0
+Kd 0.32549 0.32549 0.32549
+Ks 1 1 1
+Ni 1
+Ns 200
+Tf 1 1 1
+d 1
+
+newmtl Jante
+Ka 0 0 0
+Kd 0.32549 0.32549 0.32549
+Ks 1 1 1
+Ni 1
+Ns 200
+Tf 1 1 1
+d 1
+
+newmtl Metal_noir
+Ka 0 0 0
+Kd 0.235294 0.235294 0.235294
+Ks 0.2 0.2 0.2
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+
+newmtl Miroir
+Ka 0 0 0
+Kd 0.254902 0.254902 0.254902
+Ks 0.6 0.6 0.6
+Ni 1
+Ns 200
+Tf 1 1 1
+d 1
+
+newmtl Pneus_1
+Ka 0 0 0
+Kd 0.239216 0.227451 0.219608
+Ks 0.1 0.1 0.1
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_bump pneu2.jpg
+bump pneu2.jpg
+
+newmtl Semi_Trailer
+Ka 0 0 0
+Kd 0.530404 0.613611 0.779995
+Ks 0 0 0
+Ni 1
+Ns 435
+Tf 1 1 1
+d 1
+
+newmtl Trailer
+Ka 0 0 0
+Kd 0.732982 0.784314 0.420203
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+
+newmtl Trailer_Edge
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+
+newmtl Trailer_Ext
+Ka 0 0 0
+Kd 0.662745 0.819608 0.980392
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+map_bump TrailerSidePanel_01.jpg
+bump TrailerSidePanel_01.jpg
+
+newmtl Trailer_Floor
+Ka 0 0 0
+Kd 0.784314 0.729671 0.638132
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+
+newmtl Trailer_Walls
+Ka 0 0 0
+Kd 0.784314 0.729671 0.638132
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+
+newmtl Vitre
+Ka 0 0 0
+Kd 0.184314 0.227451 0.235294
+Ks 1 1 1
+Ni 1
+Ns 200
+Tf 1 1 1
+d 0.255
+
+newmtl Dark
+Ka 0 0 0
+Kd 0.331426 0.327367 0.398184
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+
+newmtl Default
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+
+newmtl Tire_Rubber
+Ka 0 0 0
+Kd 0.194568 0.194568 0.194568
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+
+newmtl Window
+Ka 0 0 0
+Kd 0.351553 0.389136 0.337926
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+
+newmtl Yellow
+Ka 0 0 0
+Kd 0.784314 0.612284 0.0721447
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+
+newmtl Flaps
+Ka 0 0 0
+Kd 0.335805 0.28098 0.294179
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+
+newmtl Tires
+Ka 0 0 0
+Kd 0.313848 0.317433 0.333272
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+
+newmtl Trim
+Ka 0 0 0
+Kd 0.45539 0.319646 0.247776
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+
+newmtl Windows
+Ka 0 0 0
+Kd 0.439536 0.452903 0.349477
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+
+newmtl Yellow
+Ka 0 0 0
+Kd 0.916411 0.728573 0.0402228
+Ks 0 0 0
+Ni 1
+Ns 435
+Tf 1 1 1
+d 1
+

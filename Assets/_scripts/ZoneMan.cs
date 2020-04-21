@@ -205,7 +205,7 @@ namespace CampusSimulator
         }
         public void DelZone(string name)
         {
-            Debug.Log("Deleting Zone " + name);
+            //Debug.Log("Deleting Zone " + name);
             //var go = GameObject.Find(name);
             var zar = zonelookup[name];
             zar.Empty(); // destroys game object as well

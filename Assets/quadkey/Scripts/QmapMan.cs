@@ -200,6 +200,7 @@ namespace Aiskwk.Map
         public LatLngBox llbox;
         public double LatExtentKm;
         public double LngExtentKm;
+        public Vector3 mapscale;
         public Vector3 maprot;
         public Vector3 maptrans;
         public bool useElevationData;
@@ -223,6 +224,9 @@ namespace Aiskwk.Map
             LngExtentKm = lngkm;
             mapExtent = MapExtentTypeE.AsSpecified;
             llbox = new LatLngBox(ll, latkm, lngkm, lod: lod);
+            maprot = Vector3.zero;
+            maptrans = Vector3.zero;
+            mapscale = Vector3.one;
         }
 
     }
@@ -257,14 +261,12 @@ namespace Aiskwk.Map
         void Awake()
         {
             ConfigureSystemEnvironment();
-
         }
 
         void Start()
         {
             locSpecer = new LocSpecer(this);
-            SetMode(qmapMode);
-            lastQmapMode = qmapMode;
+            //SetMode(qmapMode); probably don't need to do this?
         }
         public void ClearMesh()
         {
@@ -293,14 +295,19 @@ namespace Aiskwk.Map
             var llbox = new LatLngBox(ll1, ll2, scenename, lod: lod);
             return await MakeMeshFromLlbox(scenename, llbox, mapcoordname: mapcoordname, tpqk: tpqk, hmult: hmult, mapprov: mapprov, elevprov: elevprov);
         }
-
+        static int mmcnt = 0;
         public async Task<(QmapMesh, int, int)> MakeMeshFromLlbox(string scenename, LatLngBox llbox, int tpqk = 4, float hmult = 1, string mapcoordname = "", MapExtentTypeE mapextent = MapExtentTypeE.SnapToTiles, MapProvider mapprov = MapProvider.BingSatelliteRoads, ElevProvider elevprov = ElevProvider.Bing, bool execute = true, bool forceload = false,
                                                                bool limitQuadkeys = true, QmapMesh.sythTexMethod synthTex = QmapMesh.sythTexMethod.Quadkeys,
                                                                HeightSource heitSource = HeightSource.Fetched, HeightAdjust heitAdjust = HeightAdjust.Zeroed) //, HeightTypeE heitType= HeightTypeE.FetchedAndZeroed)
         {
 
             var wpstays = false;
-            Debug.Log($"QmapMan.MakeMeshFromLlbox scenename:{scenename} wpstays:{wpstays}");
+            Debug.Log($"QmapMan.MakeMeshFromLlbox mmcnt:{mmcnt} scenename:{scenename} wpstays:{wpstays} position:{this.transform.position}");
+            if (mmcnt>=0)
+            {
+                //Debug.LogWarning($"mmcnt:{mmcnt}");
+            }
+            mmcnt++;
             this.mapprov = mapprov;
             this.elevprov = elevprov;
             this.scenename = scenename;
@@ -314,11 +321,12 @@ namespace Aiskwk.Map
             rgo.transform.SetParent(this.transform, worldPositionStays: wpstays);
             qkgo = new GameObject("QmapMesh");
             qkgo.transform.SetParent(rgo.transform, worldPositionStays: wpstays);
-            qkgo.transform.position = Vector3.zero;
-
+            //qkgo.transform.position = Vector3.zero;
+            Debug.Log("Adding qmmcomp");
             var qmmcomp = qkgo.AddComponent<QmapMesh>();
             qmmcomp.descriptor = $"{scenename} {llbox.lod} {mapprov} {mapextent}";
             qmmcomp.InitializeGrid(scenename, llbox, mapprov:mapprov, elevprov:elevprov, mapcoordname: mapcoordname);
+            Debug.Log("back from qmmcomp.InitializeGrid");
             qmmcomp.secsPerQkTile = tpqk;
             qmmcomp.useElevationData = useElevationDataStart;
             qmmcomp.mapExtent = mapextent;
@@ -328,6 +336,7 @@ namespace Aiskwk.Map
             //qmmcomp.heightType = heitType;
             qmmcomp.heightSource = heitSource;
             qmmcomp.heightAdjust = heitAdjust;
+            Debug.Log("Calling qmmcomp.GenerateGrid");
 
             (var nbm, var nel) = await qmmcomp.GenerateGrid(execute, forceload, limitQuadkeys: limitQuadkeys);
 
@@ -348,8 +357,9 @@ namespace Aiskwk.Map
                         Debug.Log($"Setting QmapModeE.bespoke for {bespoke.sceneName}");
                         useElevationDataStart = bespoke.useElevationData;
                         (qmm, _, _) = await MakeMeshFromLlbox(bespoke.sceneName, bespoke.llbox, tpqk: 16, mapprov: bespoke.mapProv, mapextent: bespoke.mapExtent, limitQuadkeys: false, hmult:bespoke.hmult );
-                        var rotv = bespoke.maprot;
+                        transform.localScale = bespoke.mapscale;
                         transform.localRotation = Quaternion.identity;
+                        var rotv = bespoke.maprot;
                         transform.Rotate(rotv.x, rotv.y, rotv.z);
                         transform.position = bespoke.maptrans;
                         qmm.nodefak = 1f;
@@ -662,7 +672,7 @@ namespace Aiskwk.Map
                     }
                     // 49.996606, 8.674300
             }
-
+            lastQmapMode = qmapMode;
         }
         //public void InitMeshW3w(string w3w,string name,LatLng ll,float latkm,float lngkm,int lod)
         //{
@@ -677,7 +687,6 @@ namespace Aiskwk.Map
             if (lastQmapMode != qmapMode)
             {
                 SetMode(qmapMode);
-                lastQmapMode = qmapMode;
             }
             if (locSpecer.locSpecExecute)
             {

@@ -19,6 +19,11 @@ namespace CampusSimulator
 
         public SceneMan sman = null;
 
+        public int nBuildings;
+        public int nRooms;
+        public int nPeople;
+        public int nPeopleInRooms;
+
         public bool showPersRects;
 
         #region bldMode
@@ -99,7 +104,10 @@ namespace CampusSimulator
 
         public void SetScene(SceneSelE newregion)
         {
-            DelBuildings();
+            if (bldlookup.Count > 0)
+            {
+                DelBuildings();
+            }
             switch (newregion)
             {
                 case SceneSelE.MsftRedwest:
@@ -115,8 +123,19 @@ namespace CampusSimulator
                     break;
                 default:
                 case SceneSelE.None:
-                    DelBuildings();
+                    // DelBuildings called above already
                     break;
+            }
+        }
+        public void UpdateBldStats()
+        {
+            nBuildings = bldlookup.Count;
+            nRooms = roomlookup.Count;
+            nPeople = sman.psman.GetPersonCount();
+            nPeopleInRooms = 0;
+            foreach( var broom in roomlookup.Values )
+            {
+                nPeopleInRooms += broom.GetAllPeopleInRoom().Count;
             }
         }
         public void MakeBuildings(string filtername)
@@ -206,6 +225,7 @@ namespace CampusSimulator
                 case SceneSelE.None:
                     break;
             }
+            UpdateBldStats();
         }
         public string GetRandomBldName(string notthisone="",string ranset="")
         {
@@ -247,7 +267,7 @@ namespace CampusSimulator
             AddBuildingToCollection(bld); /// has to be afterwards because of the sorted names for journeys
             bld.llm = bgo.AddComponent<LatLongMap>(); // todo uncomment
             //bld.llm.AddLlmDetails();
-
+            UpdateBldStats();
         }
         public void DelBuildings()
         {
@@ -257,13 +277,14 @@ namespace CampusSimulator
         }
         public void DelBuilding(string name)
         {
-            Debug.Log($"Deleting building {name} nbld:{bldlookup.Count}");
+            //Debug.Log($"Deleting building {name} nbld:{bldlookup.Count}");
             //var go = GameObject.Find(name);
 
             var bld = bldlookup[name];
             bld.Empty(); // destroys game object as well
             bldlookup.Remove(name);
-            Debug.Log($"After deleting building {name} nbld:{bldlookup.Count}");
+            UpdateBldStats();
+            //Debug.Log($"After deleting building {name} nbld:{bldlookup.Count}");
         }
         public Building GetBuilding(string name,bool couldFail=false)
         {
@@ -325,9 +346,17 @@ namespace CampusSimulator
         {
             if (roomlookup.ContainsKey(roomname))
             {
-                Debug.Log("In BuildingMan - Room being registered twice:" + roomname);
+                Debug.LogError("In BuildingMan - Room being registered twice:" + roomname);
             }
             roomlookup[roomname] = bldRoom;
+        }
+        public void UnRegisterRoom(string roomname)
+        {
+            if (!roomlookup.ContainsKey(roomname))
+            {
+                Debug.LogError("In BuildingMan - Room being unregistered that was not registered:" + roomname);
+            }
+            roomlookup.Remove(roomname);
         }
         public bool IsRoom(string nodename)
         {
