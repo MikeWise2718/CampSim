@@ -192,9 +192,9 @@ namespace Aiskwk.Map
     }
     public class BespokeSpec
     {
-        public string SceneName;
+        public string sceneName;
         public MapProvider mapProv;
-        public MapExtentTypeE MapExtent;
+        public MapExtentTypeE mapExtent;
         public int lod;
         public LatLng LatLng;
         public LatLngBox llbox;
@@ -203,6 +203,8 @@ namespace Aiskwk.Map
         public Vector3 maprot;
         public Vector3 maptrans;
         public bool useElevationData;
+        public float hmult;
+        public bool useViewer;
         public BespokeSpec(string scenename, LatLng ll, double latkm, double lngkm, int lod = 16)
         {
             Init(scenename, ll, latkm, lngkm, lod);
@@ -214,12 +216,12 @@ namespace Aiskwk.Map
         }
         void Init(string scenename, LatLng ll, double latkm, double lngkm, int lod)
         {
-            SceneName = scenename;
+            sceneName = scenename;
             useElevationData = false;
             mapProv = MapProvider.AzureSatelliteRoads;
             LatExtentKm = latkm;
             LngExtentKm = lngkm;
-            MapExtent = MapExtentTypeE.AsSpecified;
+            mapExtent = MapExtentTypeE.AsSpecified;
             llbox = new LatLngBox(ll, latkm, lngkm, lod: lod);
         }
 
@@ -343,14 +345,15 @@ namespace Aiskwk.Map
             {
                 case QmapModeE.Bespoke:
                     {
+                        Debug.Log($"Setting QmapModeE.bespoke for {bespoke.sceneName}");
                         useElevationDataStart = bespoke.useElevationData;
-                        (qmm, _, _) = await MakeMeshFromLlbox(bespoke.SceneName, bespoke.llbox, tpqk: 16, mapprov: bespoke.mapProv, mapextent: bespoke.MapExtent, limitQuadkeys: false);
+                        (qmm, _, _) = await MakeMeshFromLlbox(bespoke.sceneName, bespoke.llbox, tpqk: 16, mapprov: bespoke.mapProv, mapextent: bespoke.mapExtent, limitQuadkeys: false, hmult:bespoke.hmult );
                         var rotv = bespoke.maprot;
                         transform.localRotation = Quaternion.identity;
                         transform.Rotate(rotv.x, rotv.y, rotv.z);
                         transform.position = bespoke.maptrans;
-                        Debug.Log($"Setting bespoke - transform:{bespoke.maptrans} rot:{rotv.y}");
                         qmm.nodefak = 1f;
+                        qmm.addViewer = bespoke.useViewer;
                         break;
                     }
                 case QmapModeE.None:
