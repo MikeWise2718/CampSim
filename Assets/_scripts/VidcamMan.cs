@@ -229,7 +229,7 @@ namespace CampusSimulator
             var namelist = new List<string>(vidcam.Keys);
             namelist.ForEach(name => DelVidcam(name));
         }
-        List<string> vidcamlist = null;
+        List<string> vidcamlist = new List<string>();
         public void MakeVidcams(string filtername)
         {
             vidcamlist = Vidcam.GetVidcamNames(filtername);

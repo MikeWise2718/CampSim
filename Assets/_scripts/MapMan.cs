@@ -66,8 +66,6 @@ namespace CampusSimulator
             qmap = true;
             old_qmap = !qmap;
 
-            CreateQmap();
-            //Initialize();
         }
 
         void CreateQmap()
@@ -129,6 +127,8 @@ namespace CampusSimulator
             }
             maprot = Vector3.zero;
             maptrans = Vector3.zero;
+            useElevations = false;
+            useViewer = false;
             int defaultlod = 19;
             switch (newregion)
             {
@@ -176,15 +176,6 @@ namespace CampusSimulator
                     lod = defaultlod;
                     break;
                 case SceneSelE.Seattle:
-
-                    //var llmid = new LatLng(47.619992, -122.3373495, "Seattle");
-                    //var llbox = new LatLngBox(llmid, 25.17, 14.84, lod: 12);
-                    //useElevationDataStart = true;
-                    //Viewer.viewerDefaultRotation = new Vector3(0, 90, 0);
-                    //Viewer.viewerDefaultPosition = new Vector3(0, 0, 0);
-                    //Viewer.ViewerCamPositionDefaultValue = ViewerCamPosition.FloatBehind;
-
-                    // better with google maps
                     maplat = 47.619992;
                     maplng = -122.3373495;
                     maprot = Vector3.zero;
@@ -196,6 +187,22 @@ namespace CampusSimulator
                     lod = 12;
                     useElevations = true;
                     useViewer = true;
+                    break;
+                case SceneSelE.MtStHelens:
+                    maplat = 46.198428;
+                    maplng = -122.188841;
+                    maprot = Vector3.zero;
+                    maptrans = Vector3.zero;
+                    config = 1;
+                    xdistkm = 12;
+                    zdistkm = 12;
+                    hmult = 1;
+                    lod = 15;
+                    useElevations = true;
+                    useViewer = true;
+                    Viewer.viewerAvatarDefaultValue = ViewerAvatar.Rover;
+                    Viewer.ViewerCamPositionDefaultValue = ViewerCamPosition.FloatBehind;
+                    Viewer.ViewerControlDefaultValue = ViewerControl.Velocity;
                     break;
                 case SceneSelE.MsftDublin:
                     maplat = 53.268998;

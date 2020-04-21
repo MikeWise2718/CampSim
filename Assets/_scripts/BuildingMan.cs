@@ -115,6 +115,7 @@ namespace CampusSimulator
                     break;
                 default:
                 case SceneSelE.None:
+                    DelBuildings();
                     break;
             }
         }
@@ -250,18 +251,19 @@ namespace CampusSimulator
         }
         public void DelBuildings()
         {
-          //  Debug.Log("DelBuildings called");
+            Debug.Log("DelBuildings called");
             var namelist = new List<string>(bldlookup.Keys);
             namelist.ForEach(name => DelBuilding(name));
         }
         public void DelBuilding(string name)
         {
-          //  Debug.Log("Deleting building " + name);
+            Debug.Log($"Deleting building {name} nbld:{bldlookup.Count}");
             //var go = GameObject.Find(name);
 
             var bld = bldlookup[name];
             bld.Empty(); // destroys game object as well
             bldlookup.Remove(name);
+            Debug.Log($"After deleting building {name} nbld:{bldlookup.Count}");
         }
         public Building GetBuilding(string name,bool couldFail=false)
         {
