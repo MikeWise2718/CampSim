@@ -1,11 +1,11 @@
 # CampSim
 
 - Author: Mike Wise
-- Last Updated: 20 April 2020
+- Last Updated: 20 April 2020 - 15:08
 
 ## Prerequisites
 - At least 20 GB of free space, 8 GB of memory, and as much CPU/GPU as possible, although GPU is not stricly necessary. 
-- Visual Studio 2017 with Unity support installed, it can work with VS Code too, but it hasn't been tried on this yet.
+- Visual Studio 2017 with Unity support installed, it can probably work with VS Code too, but it is not being used here.
 
 ## Installation instructions (probably obsolete)
 
@@ -37,10 +37,6 @@
      -	File where (missing) line was referenced was: **D:\Unity\onefloortestforparking\Assets\GoogleARCore\SDK\InstantPreview\Scripts\InstantPreviewManager.cs**
      -	Reference was at line  54
      -	Saw this on both Windows and Ubuntu
-
-
-- Console Error:  NullReferenceException: Object reference not set to an instance of an object (Filename: Assets/GoogleARCore/SDK/Scripts/ARCoreBackgroundRenderer.cs Line: 231)
-     -	Arcore threw a lot of exceptions on Ubuntu because a texture was not initialized. I fixed this with a code modification to the **ArcoreBackgroundRenderer** update event handler (commented all the code out), but it probably was due to not have git-lfs enabled which caused some texture maps to be left behind
 
 - Console Error: "A Tree asset could not be loaded because the prefab is missing"
      -	Probably missed step 10 (i.e. the one about **TreesAndShrubs**) above. Otherwise you might need to re-import the **Treespackage** 
