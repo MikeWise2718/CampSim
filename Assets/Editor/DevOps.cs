@@ -112,7 +112,6 @@ public class DevOps
             case BuildTarget.StandaloneLinux:
             case BuildTarget.WebGL:
             case BuildTarget.WSAPlayer:
-            case BuildTarget.StandaloneLinux64:
             case BuildTarget.StandaloneLinuxUniversal:
 #if !UNITY_2018_3_OR_NEWER
                     case BuildTarget.PSP2:    
