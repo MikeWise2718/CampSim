@@ -92,7 +92,7 @@ public class DevOps
     {
         switch (EditorUserBuildSettings.activeBuildTarget)
         {
-            case BuildTarget.Linux64:
+            case BuildTarget.StandaloneLinux64:
                 return string.Format("{0}", outputFileName);
             case BuildTarget.Android:
                 return string.Format("{0}.apk", outputFileName);
