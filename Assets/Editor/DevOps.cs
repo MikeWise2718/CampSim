@@ -15,7 +15,7 @@ public class DevOps
     private static string locationPathName = @"Build\Linux64";
     private static string[] includedScenes = null;
 
-    [MenuItem("Dinomite Studios/Azure DevOps Tools/Perform Build")]
+    [MenuItem("Applied Innovation/Azure DevOps Tools/Perform Build")]
     public static void PerformBuild()
     {
         try
