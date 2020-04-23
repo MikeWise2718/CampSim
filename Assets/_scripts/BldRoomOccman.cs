@@ -337,6 +337,14 @@ namespace CampusSimulator
                 sgo.transform.parent = room.roomformgo.transform;
             }
         }
+        public void EmptyRoom()
+        {
+            var peeps = new List<Person>(GetAllPeopleInRoom());// deep copy needed
+            foreach (var peep in peeps)
+            {
+                Vacate(peep);
+            }
+        }
         // Start is called before the first frame update
         void Start()
         {

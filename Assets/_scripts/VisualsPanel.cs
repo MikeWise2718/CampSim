@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using CampusSimulator;
 using TMPro;
+using System;
 
 public class VisualsPanel : MonoBehaviour
 {
@@ -68,6 +69,8 @@ public class VisualsPanel : MonoBehaviour
         {
             LinkObjectsAndComponents();
         }
+        var errmsg = "Error in VisualsPanels.InitVals-";
+        try
         {
             var soopts = SceneMan.GetSceneOptionsList();
             var soinival = SceneMan.GetInitialSceneOption().ToString();
@@ -77,7 +80,12 @@ public class VisualsPanel : MonoBehaviour
             initialScene.AddOptions(soopts);
             initialScene.value = soidx;
         }
+        catch(Exception ex)
+        {
+            Debug.LogError($"{errmsg}1:{ex.Message}");
+        }
 
+        try
         {
             //var tropts = BuildingMan.GetTreeOptionsList();
             //var trinival = BuildingMan.GetInitialTreeMode().ToString();
@@ -90,7 +98,12 @@ public class VisualsPanel : MonoBehaviour
             treeOptions.AddOptions(tropts);
             treeOptions.value = tridx;
         }
+        catch (Exception ex)
+        {
+            Debug.LogError($"{errmsg}1:{ex.Message}");
+        }
 
+        try
         {
             //var blopts = BuildingMan.GetBldOptionsList();
             //var trinival = BuildingMan.GetInitialBldMode().ToString();
@@ -103,6 +116,11 @@ public class VisualsPanel : MonoBehaviour
             bldOptions.AddOptions(blopts);
             bldOptions.value = blidx;
         }
+        catch (Exception ex)
+        {
+            Debug.LogError($"{errmsg}2:{ex.Message}");
+        }
+        try
         {
             //var opts = LinkCloudCtrl.GetLvisOptionsList();
             //var inival = LinkCloudCtrl.GetInitialLvisOption().ToString();
@@ -115,12 +133,22 @@ public class VisualsPanel : MonoBehaviour
             linkVisuals.AddOptions(opts);
             linkVisuals.value = idx;
         }
+        catch (Exception ex)
+        {
+            Debug.LogError($"{errmsg}3:{ex.Message}");
+        }
+        try
         {
             linkTrans.minValue = lman.GetLinkTransMin();
             linkTrans.maxValue = lman.GetLinkTransMax();
             oldLinkTrans = lman.GetLinkTrans();
             linkTrans.value = oldLinkTrans;
         }
+        catch (Exception ex)
+        {
+            Debug.LogError($"{errmsg}4:{ex.Message}");
+        }
+        try
         {
             var opts = gman.slotform.GetOptionsAsList();
             var inival = gman.slotform.Get().ToString();
@@ -131,6 +159,11 @@ public class VisualsPanel : MonoBehaviour
             slotVisuals.AddOptions(opts);
             slotVisuals.value = idx;
         }
+        catch (Exception ex)
+        {
+            Debug.LogError($"{errmsg}5:{ex.Message}");
+        }
+        try
         {
             var opts = mman.mapVisiblity.GetOptionsAsList();
             var inival = mman.mapVisiblity.Get().ToString();
@@ -141,6 +174,11 @@ public class VisualsPanel : MonoBehaviour
             mapVisuals.AddOptions(opts);
             mapVisuals.value = idx;
         }
+        catch (Exception ex)
+        {
+            Debug.LogError($"{errmsg}6:{ex.Message}");
+        }
+        try
         {
             var opts = vman.backType.GetOptionsAsList();
             var inival = vman.backType.Get().ToString();
@@ -151,6 +189,11 @@ public class VisualsPanel : MonoBehaviour
             backVisuals.AddOptions(opts);
             backVisuals.value = idx;
         }
+        catch (Exception ex)
+        {
+            Debug.LogError($"{errmsg}7:{ex.Message}");
+        }
+        try
         {
             var opts = vman.GetCameraOptions();
             var inival = vman.mainCamName.Get().ToString();
@@ -161,16 +204,26 @@ public class VisualsPanel : MonoBehaviour
             camSelection.AddOptions(opts);
             camSelection.value = idx;
         }
+        catch (Exception ex)
+        {
+            Debug.LogError($"{errmsg}8:{ex.Message}");
+        }
+        try
         {
             var opts = lman.graphGenOptions.GetOptionsAsList();
+            Debug.Log($"VisualsPanel9 opts.count:{opts.Count} opts:{opts}");
             var inival = lman.graphGenOptions.Get().ToString();
-            //Debug.Log("ggo inival:" + inival);
+            Debug.Log($"VisualsPanel9 inival:{inival}");
             var idx = opts.FindIndex(s => s == inival);
             if (idx <= 0) idx = 0;
 
             graphGenMode.ClearOptions();
             graphGenMode.AddOptions(opts);
             graphGenMode.value = idx;
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"{errmsg}9:{ex.Message}");
         }
         panelActive = true;
     }
@@ -188,20 +241,39 @@ public class VisualsPanel : MonoBehaviour
     public void SetVals()
     {
         var chg = false;
+        var errmsg = "Error in VisualsPanels.SetVals-";
+        try
         {
-            var curregion = SceneMan.GetSceneOptionsString(initialScene.value);
-            SceneMan.SetInitialSceneOption(curregion);
+            var curregionstr = SceneMan.GetSceneOptionsString(initialScene.value);
+            SceneMan.SetInitialSceneOption(curregionstr);
+            var curregion = SceneMan.GetSceneOptionsEnum(curregionstr);
+            sman.SetScene(curregion);
         }
+        catch (Exception ex)
+        {
+            Debug.LogError($"{errmsg}1:{ex.Message}");
+        }
+        try
         {
             var tropts = bman.treeMode.GetOptionsAsList();
             var newval = tropts[treeOptions.value];
             chg = chg || bman.treeMode.SetAndSave(newval);
         }
+        catch (Exception ex)
+        {
+            Debug.LogError($"{errmsg}2:{ex.Message}");
+        }
+        try
         {
             var blopts = bman.bldMode.GetOptionsAsList();
             var newval = blopts[bldOptions.value];
             chg = chg || bman.bldMode.SetAndSave(newval);
         }
+        catch (Exception ex)
+        {
+            Debug.LogError($"{errmsg}3:{ex.Message}");
+        }
+        try
         {
             var lvopts = lman.lvisOptions.GetOptionsAsList();
             var newval = lvopts[linkVisuals.value];
@@ -212,6 +284,11 @@ public class VisualsPanel : MonoBehaviour
             }
             chg = chg || lchg;
         }
+        catch (Exception ex)
+        {
+            Debug.LogError($"{errmsg}4:{ex.Message}");
+        }
+        try
         {
             var lchg = lman.SetLinkTrans(linkTrans.value);
             if (lchg)
@@ -220,6 +297,11 @@ public class VisualsPanel : MonoBehaviour
             }
             chg = chg || lchg;
         }
+        catch (Exception ex)
+        {
+            Debug.LogError($"{errmsg}5:{ex.Message}");
+        }
+        try
         {
             var slopts = gman.slotform.GetOptionsAsList();
             var newval = slopts[slotVisuals.value];
@@ -230,6 +312,11 @@ public class VisualsPanel : MonoBehaviour
             }
             chg = chg || lchg;
         }
+        catch (Exception ex)
+        {
+            Debug.LogError($"{errmsg}6:{ex.Message}");
+        }
+        try
         {
             var mvopts = mman.mapVisiblity.GetOptionsAsList();
             var newval = mvopts[mapVisuals.value];
@@ -240,6 +327,11 @@ public class VisualsPanel : MonoBehaviour
             }
             chg = chg || lchg;
         }
+        catch (Exception ex)
+        {
+            Debug.LogError($"{errmsg}7:{ex.Message}");
+        }
+        try
         {
             var bkopts = vman.backType.GetOptionsAsList();
             var newval = bkopts[backVisuals.value];
@@ -250,6 +342,11 @@ public class VisualsPanel : MonoBehaviour
             }
             chg = chg || lchg;
         }
+        catch (Exception ex)
+        {
+            Debug.LogError($"{errmsg}8:{ex.Message}");
+        }
+        try
         {
             var vcopts = vman.GetCameraOptions();
             var newval = vcopts[camSelection.value];
@@ -260,10 +357,19 @@ public class VisualsPanel : MonoBehaviour
             }
             chg = chg || lchg;
         }
+        catch (Exception ex)
+        {
+            Debug.LogError($"{errmsg}9:{ex.Message}");
+        }
+        try
         {
             var ggopts = lman.graphGenOptions.GetOptionsAsList();
             var newval = ggopts[graphGenMode.value];
             chg = chg || lman.graphGenOptions.SetAndSave(newval);
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"{errmsg}10:{ex.Message}");
         }
         panelActive = false;
         if (chg)

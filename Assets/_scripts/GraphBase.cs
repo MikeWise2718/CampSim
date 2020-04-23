@@ -458,6 +458,11 @@ namespace GraphAlgos
         }
         public void Finish()
         {
+            if (waypts.Count<=0)
+            {
+                Debug.LogError($"Can't finish genAstar when the node count is zero");
+                return;
+            }
             end = waypts[waypts.Count - 1].toNode;
             endpt = end.pt;
         }

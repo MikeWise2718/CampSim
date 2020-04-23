@@ -116,7 +116,7 @@ namespace Aiskwk.Map
                     instancego = t.gameObject;
                     height = 2.5f;
                     loaded = true;
-                    Debug.Log("Sucessufully loaded " + avaname);
+                    Debug.Log("Sucessfully loaded " + avaname);
                 }
                 catch (System.Exception ex)
                 {
@@ -282,42 +282,43 @@ namespace Aiskwk.Map
             var shift = Vector3.zero;
             var scale = 1.0f;
             var angle = 0;
+            var pfix = "obj3d/";
             switch (viewerAvatar)
             {
                 case ViewerAvatar.SimpleTruck:
                     {
                         angle = 180;
-                        MakeAvatar("obj/DumpTruck_TS1", angle, shift, scale);
+                        MakeAvatar(pfix + "DumpTruck_TS1", angle, shift, scale);
                         break;
                     }
                 case ViewerAvatar.Minehaul1:
                     {
                         shift = new Vector3(0, 0, 0);
-                        MakeAvatar("obj/Minehaul1", angle, shift, scale);
+                        MakeAvatar(pfix + "Minehaul1", angle, shift, scale);
                         break;
                     }
                 case ViewerAvatar.Shovel1:
                     {
                         shift = new Vector3(-10, 0, 0);
-                        MakeAvatar("obj/Shovel1", angle, shift, scale);
+                        MakeAvatar(pfix + "Shovel1", angle, shift, scale);
                         break;
                     }
                 case ViewerAvatar.Dozer1:
                     {
                         shift = new Vector3(-28.80f, 0, 0);
-                        MakeAvatar("obj/Dozer1", angle, shift, scale);
+                        MakeAvatar(pfix + "Dozer1", angle, shift, scale);
                         break;
                     }
                 case ViewerAvatar.Dozer2:
                     {
                         shift = new Vector3(-20, 0, 0);
-                        MakeAvatar("obj/Dozer2", angle, shift, scale);
+                        MakeAvatar(pfix + "Dozer2", angle, shift, scale);
                         break;
                     }
                 case ViewerAvatar.Rover:
                     {
                         angle = 90;
-                        MakeAvatar("obj/rover2", angle, shift, scale);
+                        MakeAvatar(pfix + "rover2", angle, shift, scale);
                         break;
                     }
                 case ViewerAvatar.SphereMan:
@@ -375,7 +376,7 @@ namespace Aiskwk.Map
             var postr = t.position.ToString("f3");
             var (vo, nrm, _) = qmm.GetWcMeshPosProjectedAlongY(p);
             var fwd = bt.forward;
-            p += zmove * fwd + xmove * bt.right;
+            p += zmove*fwd + xmove*bt.right;
             var fwdstr = fwd.ToString("f2");
             var (vn, _, _) = qmm.GetWcMeshPosProjectedAlongY(p);
             //t.position = p + Vector3.up * (vn.y - vo.y);
@@ -392,7 +393,8 @@ namespace Aiskwk.Map
             rodgo.transform.localRotation = nrmrot;
             var pnstr = t.position.ToString("f3");
             var nrmstr = nrm.ToString("f3");
-            //Debug.Log($"translate viewer = xmove:{xmove} zmove:{zmove} po:{postr}  pn:{pnstr}  fwd:{fwdstr}");
+            //Debug.Log($"TranslateViewerLatLng -  xmove:{xmove} zmove:{zmove} po:{postr}  pn:{pnstr}  fwd:{fwdstr}");
+            //Debug.Log($"TranslateViewerLatLng -  vn:{vn}  pos:{t.position}");
         }
         void TranslateViewerToPosition(Vector3 p)
         {
@@ -414,7 +416,7 @@ namespace Aiskwk.Map
             rodgo.transform.localRotation = nrmrot;
             var pnstr = t.position.ToString("f3");
             var nrmstr = nrm.ToString("f3");
-            //Debug.Log($"translate viewer = xmove:{xmove} zmove:{zmove} po:{postr}  pn:{pnstr}  fwd:{fwdstr}");
+            Debug.Log($"TranslateViewerToPosition - vn:{vn}");
         }
         bool usellmeth = true;
         void TranslateViewerLambda(float xmove, float zmove)
@@ -696,6 +698,8 @@ namespace Aiskwk.Map
                     TranslateViewer(0, -inc);
                 }
             }
+            //var v = transform.position;
+            //Debug.Log($"Viewer now at {transform.position}");
         }
 
         bool changed;

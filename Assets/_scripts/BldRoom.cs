@@ -269,6 +269,11 @@ namespace CampusSimulator {
         {
             CreateObjects();
         }
+        public void EmptyRoom()
+        {
+            occman.EmptyRoom();
+            occman = null;
+        }
 
         // Start is called before the first frame update
         void Start()

@@ -31,6 +31,11 @@ namespace CampusSimulator
 
         void RefreshVals()
         {
+            if (grc==null)
+            {
+                Debug.LogError("grc null in GraphCtrlComp");
+                return;
+            }
             nnodes = grc.GetNodeCount();
             nlinks = grc.GetLinkCount();
             nregions = grc.regman.GetNodeRegionCount();

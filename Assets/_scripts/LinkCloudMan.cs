@@ -304,14 +304,9 @@ namespace CampusSimulator
             sman.RequestRefresh("LinkCloudMan-GenLinkCloud");
         }
 
-//        OnlineMapsTileSetControl tilesetctrl = null;
         public bool CanGetHeights()
         {
-            //if (tilesetctrl == null)
-            //{
-            //    tilesetctrl = FindObjectOfType<OnlineMapsTileSetControl>();
-            //    if (tilesetctrl == null) return false;
-            //}
+            // todo - to do: setup heights from qkmaptool
             if (longlatmap == null)
             {
                 //longlatmap = sman.glGetComponent<LatLongMap>();
@@ -335,17 +330,12 @@ namespace CampusSimulator
             double brx = lat;
             double tly = lng;
             double bry = lat;
-            var scale = 1f;
-  
-            //tilesetctrl.map.GetCorners(out tlx, out tly, out brx, out bry);
-            //var scale = tilesetctrl.GetBestElevationYScale(tlx, tly, brx, bry);
-            //Debug.Log("LinkCloudCtrl scale:" + scale);
-            scale = 0.3258676f;
-            scale = 1;
-            //var wp = tilesetctrl.GetWorldPositionWithElevation(lng, lat, lng - d, lat + d, lng + d, lat - d);
-            //var y = tilesetctrl.GetElevationValue(lng, lat, scale, tlx,tly,brx,bry);
-            //var y = tilesetctrl.GetUnscaledElevationValue(lng, lat, tlx, tly, brx, bry);
-            var y = scale*0f;
+            // to do -todo : get heights and elevations from qkmaptool 
+            // 
+            // map.GetCorners(out tlx, out tly, out brx, out bry);
+            // var wp = GetElevation(lng, lat, lng - d, lat + d, lng + d, lat - d);
+            // var y = GetElevationValue(lng, lat, scale, tlx,tly,brx,bry);
+            var y = 0f;
             return y;
         }
 
@@ -353,11 +343,7 @@ namespace CampusSimulator
         {
             longlatmap = sman.GetComponent<LatLongMap>();
             if (longlatmap == null) return;
-            var calcheights = false;
-            //if (tilesetctrl != null)
-            //{
-            //    calcheights = tilesetctrl.useElevation;
-            //}
+            var calcHeights = false;
             var grc = GetGraphCtrl();
             foreach (string lptname in grc.linkpoints())
             {
@@ -365,7 +351,7 @@ namespace CampusSimulator
                 var v2 = longlatmap.llcoord(node.pt.x, node.pt.z);
                 node.lat = v2.x;
                 node.lng = v2.y;
-                if (calcheights)
+                if (calcHeights)
                 {
                     var y = GetHeight(node.pt.x, node.pt.z);
                     node.pt = new Vector3(node.pt.x, y, node.pt.z);

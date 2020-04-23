@@ -16,7 +16,7 @@ namespace CampusSimulator
 {
     public enum RouteGarnishE { none, names, coords, all }
 
-    public enum SceneSelE { MsftCoreCampus, MsftB19focused, MsftRedwest, Eb12, MsftDublin, Tukwila, None }
+    public enum SceneSelE { MsftCoreCampus, MsftB19focused, MsftRedwest, Eb12, MsftDublin, Tukwila, Seattle, MtStHelens,Riggins, None }
 
     public class SceneMan : MonoBehaviour
     {
@@ -1615,10 +1615,7 @@ namespace CampusSimulator
                         bool startstream = e.shift;
                         alarm.ToggleZoneAlarm(justone,startstream);
                     }
-                    if (go.name!="Map")
-                    {
-                        e.Use();
-                    }
+                    e.Use();
                 }
             }
             if (e.type == EventType.MouseDown && e.button == 0)
