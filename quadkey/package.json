@@ -1,8 +1,8 @@
 {
-  "name": "com.coffee.qkmaptool",
+  "name": "com.aiskwk.qkmaptool",
   "displayName": "qkmaptool",
   "description": "QuadKey oriented map tool",
-  "version": "1.2.6",
+  "version": "1.4.0",
   "unity": "2018.3",
   "license": "MIT",
   "dependencies": {},

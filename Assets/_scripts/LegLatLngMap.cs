@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using Microsoft.MapPoint;
+using Aiskwk.Map;
 
 [System.Serializable]
 public class LegLatLng

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Aiskwk.Map;
 
 /// <summary>
 /// GraphAlgos.cs  - This file contains Graph algorithems that we need. It is fairly self-contained. 

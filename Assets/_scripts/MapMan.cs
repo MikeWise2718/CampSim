@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UxUtils;
+using Aiskwk.Map;
 
 namespace CampusSimulator
 {
