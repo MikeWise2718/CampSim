@@ -265,14 +265,19 @@ namespace CampusSimulator
             //vc.Empty(); // destroys game object as well
             vidcam.Remove(name);
         }
-        public Vidcam GetVidcam(string name)
+        public Vidcam GetVidcam(string vcname)
         {
-            if (!vidcam.ContainsKey(name))
+            if (!vidcam.ContainsKey(vcname))
             {
-                Debug.LogError($"Bad Vidcam lookup:{name}");
+                Debug.LogError($"Bad Vidcam lookup:{vcname}");
                 return null;
             }
-            return vidcam[name];
+            return vidcam[vcname];
+        }
+
+        public bool VidcamExists(string vcname)
+        {
+            return vidcam.ContainsKey(vcname);  
         }
 
         public void AddVidcam(Vidcam Vidcam)

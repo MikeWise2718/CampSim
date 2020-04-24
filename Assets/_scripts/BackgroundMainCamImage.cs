@@ -45,13 +45,16 @@ namespace CampusSimulator
             }
             nname = cam.name;
 
-            vcam = vman.GetVidcam(vman.lastcamset);
-            if (vcam == null)
+            if (vman.VidcamExists(vman.lastcamset))
             {
-                Debug.LogError($"BackgroundMainCamImage could not find Vidcam \"{vman.lastcamset}\" on go {name}");
-                return;
+                vcam = vman.GetVidcam(vman.lastcamset);
+                if (vcam == null)
+                {
+                    Debug.LogError($"BackgroundMainCamImage could not find Vidcam \"{vman.lastcamset}\" on go {name}");
+                    return;
+                }
+                lamb = vcam.camimagelambda;
             }
-            lamb = vcam.camimagelambda;
         }
         void DeactivateBackgroundImage()
         {
