@@ -92,8 +92,13 @@ namespace CampusSimulator
             var mcam = Camera.main;
             if (mcam!=null)
             {
-                if (vidcam.ContainsKey(mcamvcam))
+                if (mcamvcam=="Viewer")
                 {
+                    mcam.gameObject.SetActive(false);
+                }
+                else if (vidcam.ContainsKey(mcamvcam))
+                {
+                    mcam.gameObject.SetActive(true);
                     //Debug.Log("doing it sybil");
                     var vcam = vidcam[mcamvcam];
                     mcam.transform.position = vcam.transform.position;

@@ -23,6 +23,7 @@ namespace CampusSimulator
         public int nRooms;
         public int nPeople;
         public int nPeopleInRooms;
+        public int nVehicles;
 
         public bool showPersRects;
 
@@ -137,6 +138,7 @@ namespace CampusSimulator
             {
                 nPeopleInRooms += broom.GetAllPeopleInRoom().Count;
             }
+            nVehicles = sman.veman.GetVehicleCount();
         }
         public void MakeBuildings(string filtername)
         {

@@ -114,7 +114,7 @@ namespace CampusSimulator
             maprot = Vector3.zero;
             maptrans = Vector3.zero;
             useElevations = false;
-            useViewer = false;
+            useViewer = true;
             int defaultlod = 19;
             mapscale = 3.2f;
             maprot = Vector3.zero;

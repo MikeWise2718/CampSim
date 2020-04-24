@@ -25,27 +25,31 @@ public class InfoPanel : MonoBehaviour
         Init();
     }
 
+    public void ComplainIfNull(object oman,string tname,string oname)
+    {
+        if (oman==null)
+        {
+            Debug.LogError($"{oname} of type {tname} is null");
+        }
+    }
     public void LinkObjectsAndComponents()
     {
         sman = FindObjectOfType<SceneMan>();
         jman = FindObjectOfType<JourneyMan>();
         gman = FindObjectOfType<GarageMan>();
-        vman = FindObjectOfType<VidcamMan>(); ;
-        if (jman == null)
-        {
-            Debug.Log("Cound not find JourneyMan");
-        }
-        if (gman == null)
-        {
-            Debug.Log("Cound not find GarageMan");
-        }
-        trackedObject = Camera.main.gameObject;
+        vman = FindObjectOfType<VidcamMan>();
+        ComplainIfNull(sman, "SceneMan", "sman");
+        ComplainIfNull(jman, "JourneyMan", "jman");
+        ComplainIfNull(gman, "GarageMan", "gman");
+        ComplainIfNull(vman, "VidcamMan", "vman");
+
+        trackedObject = Camera.main?.gameObject;
 
 
-        sysText = transform.Find("SysText").GetComponent<Text>();
-        simText = transform.Find("SimText").GetComponent<Text>();
-        geoText = transform.Find("GeoText").GetComponent<Text>();
-        mscText = transform.Find("MscText").GetComponent<Text>();
+        sysText = transform.Find("SysText")?.GetComponent<Text>();
+        simText = transform.Find("SimText")?.GetComponent<Text>();
+        geoText = transform.Find("GeoText")?.GetComponent<Text>();
+        mscText = transform.Find("MscText")?.GetComponent<Text>();
 
         locman = FindObjectOfType<LocationMan>();
 

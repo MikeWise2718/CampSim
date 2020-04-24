@@ -94,8 +94,13 @@ public class CalibMarker : MonoBehaviour
     public void UpdateCoords()
     {
         worldPt = transform.position;
-        screenPt = Camera.main.WorldToScreenPoint(worldPt);
-        normScreenPt = Camera.main.WorldToScreenPoint(worldPt) - screenmid;
+        screenPt = Vector3.zero;
+        normScreenPt = Vector3.zero;
+        if (Camera.main != null)
+        {
+            screenPt = Camera.main.WorldToScreenPoint(worldPt);
+            normScreenPt = Camera.main.WorldToScreenPoint(worldPt) - screenmid;
+        }
         normWorldPt = worldPt - cman.org;
         var dist = Vector3.Distance(screenPt, lastspt);
         if (dist > 0.1)
