@@ -91,7 +91,7 @@ namespace CampusSimulator
         }
         public void SetMainCameraToVcam(string mcamvcam)
         {
-            //Debug.Log("SetMainCamToVcam: " + mcamvcam);
+            Debug.Log("SetMainCamToVcam: " + mcamvcam);
             var mcam = Camera.main;
             if (mcam!=null)
             {
@@ -118,7 +118,7 @@ namespace CampusSimulator
                 }
                 else
                 {
-                    Debug.Log("Bad camera name:" + mcamvcam);
+                    Debug.LogError("Bad camera name:" + mcamvcam);
                 }
             }
         }

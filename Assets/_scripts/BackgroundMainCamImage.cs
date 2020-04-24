@@ -41,14 +41,14 @@ namespace CampusSimulator
             cam = gameObject.GetComponent<Camera>();
             if (cam == null)
             {
-                Debug.Log("BMCI could not find Camera");
+                Debug.LogError($"BackgroundMainCamImage could not find Camera Component on {name}");
             }
             nname = cam.name;
 
             vcam = vman.GetVidcam(vman.lastcamset);
             if (vcam == null)
             {
-                Debug.Log("BMCI could not find Vidcam \""+ vman.lastcamset+"\"");
+                Debug.LogError($"BackgroundMainCamImage could not find Vidcam \"{vman.lastcamset}\" on go {name}");
                 return;
             }
             lamb = vcam.camimagelambda;
@@ -81,11 +81,12 @@ namespace CampusSimulator
                     imname += "port_sj";
                 }
             }
-            //Debug.Log("BackImage loading:" + imname);
-            var tex = Resources.Load<Texture2D>("Images/" + imname);
+            var fullimname = "Images/" + imname;
+            //Debug.Log("BackImage loading:" + fullimname);
+            var tex = Resources.Load<Texture2D>(fullimname );
             if (tex==null)
             {
-                Debug.Log("Loaded null");
+                Debug.LogError($"BackgroundMainCamImage LoadImage failed to load:{fullimname}");
             }
             //else
             //{
