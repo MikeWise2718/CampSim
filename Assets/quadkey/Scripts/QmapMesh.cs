@@ -979,7 +979,7 @@ namespace Aiskwk.Map
                 //Debug.Log("Total NumVertices:" + numVertices + "  NumTriangles:" + numTriangles);
                 InitGetMeshLambdaFromXZ();
             }
-            Debug.Log("nBmRetrieved:" + nBmRetrieved + "  nElRetrived:" + nElRetrived);
+            //Debug.Log("nBmRetrieved:" + nBmRetrieved + "  nElRetrived:" + nElRetrived);
 
             if (!flatTriangles)
             {

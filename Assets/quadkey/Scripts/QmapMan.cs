@@ -272,7 +272,7 @@ namespace Aiskwk.Map
         {
             var qkgonull = qkgo == null;
             var llgonull = llgo == null;
-            Debug.Log($"ClearMesh qkgonull:{qkgonull}  llgonull:{llgonull}");
+            //Debug.Log($"ClearMesh qkgonull:{qkgonull}  llgonull:{llgonull}");
             Destroy(qkgo);
             qkgo = null;
             Destroy(llgo);
@@ -302,7 +302,7 @@ namespace Aiskwk.Map
         {
 
             var wpstays = false;
-            Debug.Log($"QmapMan.MakeMeshFromLlbox mmcnt:{mmcnt} scenename:{scenename} wpstays:{wpstays} position:{this.transform.position}");
+            //Debug.Log($"QmapMan.MakeMeshFromLlbox mmcnt:{mmcnt} scenename:{scenename} wpstays:{wpstays} position:{this.transform.position}");
             if (mmcnt>=0)
             {
                 //Debug.LogWarning($"mmcnt:{mmcnt}");
@@ -322,11 +322,11 @@ namespace Aiskwk.Map
             qkgo = new GameObject("QmapMesh");
             qkgo.transform.SetParent(rgo.transform, worldPositionStays: wpstays);
             //qkgo.transform.position = Vector3.zero;
-            Debug.Log("Adding qmmcomp");
+            //Debug.Log("Adding qmmcomp");
             var qmmcomp = qkgo.AddComponent<QmapMesh>();
             qmmcomp.descriptor = $"{scenename} {llbox.lod} {mapprov} {mapextent}";
             qmmcomp.InitializeGrid(scenename, llbox, mapprov:mapprov, elevprov:elevprov, mapcoordname: mapcoordname);
-            Debug.Log("back from qmmcomp.InitializeGrid");
+            //Debug.Log("back from qmmcomp.InitializeGrid");
             qmmcomp.secsPerQkTile = tpqk;
             qmmcomp.useElevationData = useElevationDataStart;
             qmmcomp.mapExtent = mapextent;
@@ -336,7 +336,7 @@ namespace Aiskwk.Map
             //qmmcomp.heightType = heitType;
             qmmcomp.heightSource = heitSource;
             qmmcomp.heightAdjust = heitAdjust;
-            Debug.Log("Calling qmmcomp.GenerateGrid");
+            //Debug.Log("Calling qmmcomp.GenerateGrid");
 
             (var nbm, var nel) = await qmmcomp.GenerateGrid(execute, forceload, limitQuadkeys: limitQuadkeys);
 

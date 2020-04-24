@@ -211,9 +211,9 @@ public class VisualsPanel : MonoBehaviour
         try
         {
             var opts = lman.graphGenOptions.GetOptionsAsList();
-            Debug.Log($"VisualsPanel9 opts.count:{opts.Count} opts:{opts}");
+            //Debug.Log($"VisualsPanel9 opts.count:{opts.Count} opts:{opts}");
             var inival = lman.graphGenOptions.Get().ToString();
-            Debug.Log($"VisualsPanel9 inival:{inival}");
+            //Debug.Log($"VisualsPanel9 inival:{inival}");
             var idx = opts.FindIndex(s => s == inival);
             if (idx <= 0) idx = 0;
 

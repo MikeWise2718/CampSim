@@ -374,7 +374,7 @@ namespace CampusSimulator
             vcamera.transform.position = campos;
             if (camorienttype == CamOrientTypeE.lookat)
             {
-                Debug.Log("Legacy");
+                //Debug.Log("Legacy");
                 //vcamera.transform.LookAt(camlookat);
             }
             else

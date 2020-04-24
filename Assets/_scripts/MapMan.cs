@@ -121,6 +121,11 @@ namespace CampusSimulator
             maptrans = Vector3.zero;
             roty2 = -90;
             hmult = 1;
+            Viewer.viewerDefaultPosition = Vector3.zero;
+            Viewer.viewerDefaultRotation = Vector3.zero;
+            Viewer.viewerAvatarDefaultValue = ViewerAvatar.CapsuleMan;
+            Viewer.ViewerCamPositionDefaultValue = ViewerCamPosition.FloatBehind;
+            Viewer.ViewerControlDefaultValue = ViewerControl.Velocity;
             switch (newregion)
             {
                 default:
@@ -133,6 +138,8 @@ namespace CampusSimulator
                     xdistkm = 1;
                     zdistkm = 1;
                     lod = defaultlod;
+                    Viewer.viewerDefaultPosition = new Vector3(-2035.2f, 3.8f, -1173.5f);
+                    Viewer.viewerDefaultPosition = new Vector3(21.895f, 163.310f, 0.475f);
                     break;
                 case SceneSelE.MsftB19focused:
                     maplat = 47.639217;
@@ -143,6 +150,11 @@ namespace CampusSimulator
                     xdistkm = 1;
                     zdistkm = 2;
                     lod = defaultlod;
+                    Viewer.viewerDefaultPosition = new Vector3(-451.5f, 3f, 98.3f);
+                    Viewer.viewerDefaultPosition = new Vector3(30f, -60f, 0);
+                    //case "Ms_c_B19_raspipole":
+                    //    campos = new Vector3(-451.5f, 3f, 98.3f);
+                    //    camrotate = new Vector3(30f, -60f, 0);
                     break;
                 case SceneSelE.Eb12:
                     // better with google maps
@@ -210,8 +222,6 @@ namespace CampusSimulator
                     mapscale = 1f;
                     roty2 = 0;
                     Viewer.viewerAvatarDefaultValue = ViewerAvatar.Rover;
-                    Viewer.ViewerCamPositionDefaultValue = ViewerCamPosition.FloatBehind;
-                    Viewer.ViewerControlDefaultValue = ViewerControl.Velocity;
                     mapscale = 1f;
                     break;
                 case SceneSelE.Riggins:
