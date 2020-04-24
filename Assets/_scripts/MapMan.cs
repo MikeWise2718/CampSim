@@ -59,7 +59,7 @@ namespace CampusSimulator
         }
         void RealizeQmap()
         {
-            Debug.Log("QmapMan.RealizeQmap");
+            //Debug.Log("QmapMan.RealizeQmap");
             RealizeMapVisuals();
             qmapman.qmapMode = QmapMan.QmapModeE.Bespoke;
             var fak = 2*0.4096f;
@@ -74,7 +74,7 @@ namespace CampusSimulator
             qmapman.bespoke.mapscale = new Vector3(ska, ska, ska);
             //qmapman.bespoke.maprot = new Vector3(0, 0, 0);
             qmapman.SetMode(qmapman.qmapMode);
-            Debug.Log("RealizeQmap done");
+            //Debug.Log("RealizeQmap done");
         }
 
         void Initialize()
@@ -139,7 +139,7 @@ namespace CampusSimulator
                     zdistkm = 1;
                     lod = defaultlod;
                     Viewer.viewerDefaultPosition = new Vector3(-2035.2f, 3.8f, -1173.5f);
-                    Viewer.viewerDefaultPosition = new Vector3(21.895f, 163.310f, 0.475f);
+                    Viewer.viewerDefaultRotation = new Vector3(21.895f, 163.310f, 0.475f);
                     break;
                 case SceneSelE.MsftB19focused:
                     maplat = 47.639217;
@@ -150,8 +150,10 @@ namespace CampusSimulator
                     xdistkm = 1;
                     zdistkm = 2;
                     lod = defaultlod;
-                    Viewer.viewerDefaultPosition = new Vector3(-451.5f, 3f, 98.3f);
-                    Viewer.viewerDefaultPosition = new Vector3(30f, -60f, 0);
+                    //Viewer.viewerDefaultPosition = new Vector3(-451.5f, 3f, 98.3f);
+                    //Viewer.viewerDefaultRotation = new Vector3(0, -60f, 0);
+                    Viewer.viewerDefaultPosition = new Vector3(-451.5f,3f,98.3f);
+                    Viewer.viewerDefaultRotation = new Vector3(0, -60, 0);
                     //case "Ms_c_B19_raspipole":
                     //    campos = new Vector3(-451.5f, 3f, 98.3f);
                     //    camrotate = new Vector3(30f, -60f, 0);
@@ -245,7 +247,6 @@ namespace CampusSimulator
                     //        (qmm, _, _) = await MakeMeshFromLlbox("riggins", llbox, tpqk: 16, hmult: 1, mapprov: mapprov);
                     //        //var qcm = InitMesh("dozers", "", 15, ll1, ll2, 16, 10, mapprov: mapprov);
                     //        qmm.nodefak = 0.2f;
-                    break;
 
             }
             transform.localRotation = Quaternion.identity;

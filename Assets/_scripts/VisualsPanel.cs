@@ -247,7 +247,11 @@ public class VisualsPanel : MonoBehaviour
             var curregionstr = SceneMan.GetSceneOptionsString(initialScene.value);
             SceneMan.SetInitialSceneOption(curregionstr);
             var curregion = SceneMan.GetSceneOptionsEnum(curregionstr);
-            sman.SetScene(curregion);
+            if (curregion != sman.curregion)
+            {
+                chg = true;
+                sman.SetScene(curregion);
+            }
         }
         catch (Exception ex)
         {
@@ -376,6 +380,7 @@ public class VisualsPanel : MonoBehaviour
         {
             sman.RequestRefresh("VisualPanel-SetVals");
         }
+        Debug.Log("Setvals done");
     }
 
     // Update is called once per frame

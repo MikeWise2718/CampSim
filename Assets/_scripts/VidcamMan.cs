@@ -9,6 +9,8 @@ namespace CampusSimulator
     {
         public SceneMan sman;
 
+        public Camera mcam;// we don't want this to change
+
         public string lastcamset = "MainCam";
         public bool setMainCamToSceneCam = false;
         public bool setSceneCamToMainCam = false;
@@ -21,9 +23,20 @@ namespace CampusSimulator
         public enum BackGroundTypeE { UiFrame, Quad, None }
         public UxEnumSetting<BackGroundTypeE> backType = new UxEnumSetting<BackGroundTypeE>("BackgroundType",BackGroundTypeE.None);
 
+
+        private void Awake()
+        {
+            mcam = Camera.main;
+            if (mcam==null)
+            {
+                Debug.LogError("VidcamMan - No active main camera found at Awake time");
+                return;
+            }
+        }
+
         public void RealizeBackground()
         {
-            var mcam = Camera.main;
+            mcam = Camera.main;
             if (mcam == null) return;
             var bgim = mcam.GetComponent<BackgroundMainCamImage>();
             if (bgim == null) return;
@@ -89,44 +102,38 @@ namespace CampusSimulator
         public void SetMainCameraToVcam(string mcamvcam)
         {
             Debug.Log($"SetMainCamToVcam:{mcamvcam}");
-            var mcam = Camera.main;
-            if (mcam!=null)
+            if (mcamvcam == "Viewer")
             {
-                if (mcamvcam=="Viewer")
+                mcam.gameObject.SetActive(false);
+            }
+            else if (vidcam.ContainsKey(mcamvcam))
+            {
+                mcam.gameObject.SetActive(true);
+                var vcam = vidcam[mcamvcam];
+                mcam.transform.position = vcam.transform.position;
+                mcam.transform.localRotation = vcam.transform.localRotation;
+                mcam.depth = 1;
+                mcam.fieldOfView = vcam.camfov;
+                lastcamset = mcamvcam;
+                if (vcam.camimage != "")
                 {
-                    mcam.gameObject.SetActive(false);
-                }
-                else if (vidcam.ContainsKey(mcamvcam))
-                {
-                    mcam.gameObject.SetActive(true);
-                    //Debug.Log("doing it sybil");
-                    var vcam = vidcam[mcamvcam];
-                    mcam.transform.position = vcam.transform.position;
-                    mcam.transform.localRotation = vcam.transform.localRotation;
-                    mcam.depth = 1;
-                    mcam.fieldOfView = vcam.camfov;
-                    lastcamset = mcamvcam;
-                    if (vcam.camimage != "")
+                    var bgim = mcam.GetComponent<BackgroundMainCamImage>();
+                    if (bgim == null)
                     {
-                        var bgim = mcam.GetComponent<BackgroundMainCamImage>();
-                        if (bgim==null)
-                        {
-                            bgim = mcam.gameObject.AddComponent<BackgroundMainCamImage>();
-                        }
-                        bgim.imageName = vcam.camimage;
-                        bgim.showBackground = true;
-                        bgim.showSpheres = false;
+                        bgim = mcam.gameObject.AddComponent<BackgroundMainCamImage>();
                     }
+                    bgim.imageName = vcam.camimage;
+                    bgim.showBackground = true;
+                    bgim.showSpheres = false;
                 }
-                else
-                {
-                    Debug.LogError($"Bad camera name:{mcamvcam}");
-                }
+            }
+            else
+            {
+                Debug.LogError($"Bad camera name:{mcamvcam}");
             }
         }
         public void SetMainCameraToCam(Camera cam)
         {
-            var mcam = Camera.main;
             //var camparent = cam.transform.parent;
             //Quaternion quat = Quaternion.identity;
             //Quaternion iquat = Quaternion.identity;
@@ -173,7 +180,6 @@ namespace CampusSimulator
         public void SetSceneCamToMainCam()
         {
 #if UNITY_EDITOR
-            var mcam = Camera.main;
             if (mcam != null)
             {
                 var svcam = UnityEditor.SceneView.lastActiveSceneView.camera;
@@ -198,7 +204,6 @@ namespace CampusSimulator
         public void SetMainCamToSceneCam()
         {
 #if UNITY_EDITOR
-            var mcam = Camera.main;
             if (mcam != null)
             {
                 // There are limitations -  see this for details: https://forum.unity.com/threads/moving-scene-view-camera-from-editor-script.64920/
@@ -344,7 +349,6 @@ namespace CampusSimulator
         public void SaveMainCameraShot(string camname)
         {
             // https://forum.unity.com/threads/how-to-save-manually-save-a-png-of-a-camera-view.506269/
-            var mcam = Camera.main;
             if (mcam != null)
             {
                 var fname = GetImageSaveFileName(camname);

@@ -802,10 +802,10 @@ namespace Aiskwk.Map
             if (!addViewer) return;
 
             viewerobj = new GameObject("Viewer");
-            viewerobj.transform.parent = this.transform;
-            viewerobj.transform.SetAsFirstSibling();
             viewer = viewerobj.AddComponent<Viewer>();
             viewer.InitViewer(this);
+            viewerobj.transform.SetParent(this.transform, worldPositionStays: true);
+            viewerobj.transform.SetAsFirstSibling();
         }
         void UpdateStatistics()
         {

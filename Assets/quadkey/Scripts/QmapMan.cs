@@ -364,6 +364,18 @@ namespace Aiskwk.Map
                         transform.position = bespoke.maptrans;
                         qmm.nodefak = 1f;
                         qmm.addViewer = bespoke.useViewer;
+                        if (qmm.addViewer)
+                        {
+                            var viewer = GameObject.FindObjectOfType<Viewer>();
+                            if (viewer == null)
+                            {
+                                Debug.LogError("Cound not find viewer for initial position adjustment");
+                            }
+                            else
+                            {
+                                viewer.ReAdjustViewerInitialPosition();
+                            }
+                        }
                         break;
                     }
                 case QmapModeE.None:
