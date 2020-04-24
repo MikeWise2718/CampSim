@@ -27,7 +27,7 @@ namespace CampusSimulator
 
         private void Awake()
         {
-            var vmcamgo = new GameObject("Vmain Camera");
+            vmcamgo = new GameObject("Vmain Camera");
             vmcam = vmcamgo.AddComponent<Camera>();
             if (vmcam==null)
             {
@@ -38,7 +38,6 @@ namespace CampusSimulator
 
         public void RealizeBackground()
         {
-            vmcam = Camera.main;
             if (vmcam == null) return;
             var bgim = vmcam.GetComponent<BackgroundMainCamImage>();
             if (bgim == null) return;
@@ -75,7 +74,12 @@ namespace CampusSimulator
                 case SceneSelE.None:
                     break;
             }
-            SetMainCameraToVcam(mainCamName.Get());
+            var vcamname = mainCamName.Get();
+            if (!vidcam.ContainsKey(vcamname))
+            {
+                vcamname = "Viewer";
+            }
+            SetMainCameraToVcam(vcamname);
         }
         public bool toggleFreeFly;
         public FreeFlyCam ffc = null;
@@ -106,11 +110,11 @@ namespace CampusSimulator
             Debug.Log($"SetMainCamToVcam:{mcamvcam}");
             if (mcamvcam == "Viewer")
             {
-                vmcam.gameObject.SetActive(false);
+                vmcamgo.SetActive(false);
             }
             else if (vidcam.ContainsKey(mcamvcam))
             {
-                vmcam.gameObject.SetActive(true);
+                vmcamgo.SetActive(true);
                 var vcam = vidcam[mcamvcam];
                 vmcam.transform.position = vcam.transform.position;
                 vmcam.transform.localRotation = vcam.transform.localRotation;
@@ -232,8 +236,9 @@ namespace CampusSimulator
         public void DelVidcams()
         {
             //  Debug.Log("DelVidcams called");
-            var namelist = new List<string>(vidcam.Keys);
-            namelist.ForEach(name => DelVidcam(name));
+            var keynamelist = new List<string>(vidcam.Keys);
+            keynamelist.ForEach(name => DelVidcam(name));
+            vidcam = new Dictionary<string, Vidcam>();           
         }
         List<string> vidcamlist = new List<string>();
         public void MakeVidcams(string filtername)
