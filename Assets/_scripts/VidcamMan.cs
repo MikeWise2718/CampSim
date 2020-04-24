@@ -5,8 +5,6 @@ using UxUtils;
 
 namespace CampusSimulator
 {
-
-
     public class VidcamMan : MonoBehaviour
     {
         public SceneMan sman;
@@ -14,7 +12,6 @@ namespace CampusSimulator
         public string lastcamset = "MainCam";
         public bool setMainCamToSceneCam = false;
         public bool setSceneCamToMainCam = false;
-
 
         public UxSetting<string> mainCamName = new UxSetting<string>("MainCamName","NoCameraChosen");
 
@@ -72,13 +69,13 @@ namespace CampusSimulator
         {
             if (!inFreeFly)
             {
-                //Debug.Log("   VidCamMan.toggleFreeFly - Adding FreeFlyCam");
+                Debug.Log($"VidCamMan.toggleFreeFly - Adding FreeFlyCam");
                 var mcamgo = Camera.main.gameObject;
                 ffc = mcamgo.AddComponent<FreeFlyCam>();
             }
             else
             {
-                //Debug.Log("   VidCamMan.toggleFreeFly - Destroying FreeFlyCam");
+                Debug.Log($"VidCamMan.toggleFreeFly - Destroying FreeFlyCam");
                 Destroy(ffc);
                 ffc = null;
             }
@@ -91,7 +88,7 @@ namespace CampusSimulator
         }
         public void SetMainCameraToVcam(string mcamvcam)
         {
-            Debug.Log("SetMainCamToVcam: " + mcamvcam);
+            Debug.Log($"SetMainCamToVcam:{mcamvcam}");
             var mcam = Camera.main;
             if (mcam!=null)
             {
@@ -118,7 +115,7 @@ namespace CampusSimulator
                 }
                 else
                 {
-                    Debug.LogError("Bad camera name:" + mcamvcam);
+                    Debug.LogError($"Bad camera name:{mcamvcam}");
                 }
             }
         }
@@ -154,7 +151,6 @@ namespace CampusSimulator
             }
             //mcam.fieldOfView = vcam.camfov;
         }
-
         //#if UNITY_EDITOR
         //        var svc = UnityEditor.SceneView.lastActiveSceneView.camera;
         //            if (svc!=null)
@@ -169,7 +165,6 @@ namespace CampusSimulator
         //                msg += "\nScene Cam lastActiveSceneView is null";
         //            }
         //#endif
-
         public void SetSceneCamToMainCam()
         {
 #if UNITY_EDITOR
@@ -195,7 +190,6 @@ namespace CampusSimulator
             }
 #endif
         }
-
         public void SetMainCamToSceneCam()
         {
 #if UNITY_EDITOR
@@ -233,23 +227,22 @@ namespace CampusSimulator
         public void MakeVidcams(string filtername)
         {
             vidcamlist = Vidcam.GetVidcamNames(filtername);
-            //Debug.Log("Making vidcams n:" + vidcamlist.Count);
+            //Debug.Log($"Making vidcams n:{vidcamlist.Count}");
             vidcamlist.ForEach(item => MakeVidcam(item));
         }
         public void MakeVidcam(string name)
         {
-            //Debug.Log("  Making vidcam " + name);
+            //Debug.Log("$Making vidcam:{name}");
             var vgo = new GameObject(name);
             vgo.SetActive( false );
             vgo.transform.parent = this.transform;
             var vc = vgo.AddComponent<Vidcam>();
             AddVidcam(vc);
             vc.AddDetail(this, vgo );
-            //Debug.Log("  Made vidcam " + name);
         }
         public void DelVidcam(string name)
         {
-            //Debug.Log("Deleting Vidcam " + name);
+            //Debug.Log($"Deleting Vidcam {name}");
             //var go = GameObject.Find(name);
             var vc = vidcam[name];
             //vc.Empty(); // destroys game object as well
@@ -259,7 +252,7 @@ namespace CampusSimulator
         {
             if (!vidcam.ContainsKey(name))
             {
-                Debug.Log("Bad Vidcam lookup:" + name);
+                Debug.LogError($"Bad Vidcam lookup:{name}");
                 return null;
             }
             return vidcam[name];
@@ -269,7 +262,7 @@ namespace CampusSimulator
         {
             if (vidcam.ContainsKey(Vidcam.name))
             {
-                Debug.Log("Tried to add duplicate Vidcam:" + Vidcam.name);
+                Debug.LogError($"Tried to add duplicate Vidcam:{Vidcam.name}");
                 return;
             }
             vidcamnames.Add(Vidcam.name);
@@ -310,7 +303,6 @@ namespace CampusSimulator
         // Use this for initialization
         void Start()
         {
-            //   SetRegion(RegionSelE.MsftCoreCampus);
             sman = FindObjectOfType<SceneMan>();
 
 #if MOBILE_INPUT
@@ -338,7 +330,6 @@ namespace CampusSimulator
         public string GetImageSaveFileName(string camname)
         {
             lastcamerashotsave = Time.time;
-            //var ncs = numMainCamSaves.ToString("D3");
             var spath = sman.simrundir + sman.imagesdir;
             System.IO.Directory.CreateDirectory(spath);
             var tstmp = GraphAlgos.GraphUtil.LeadZeroFloat(lastcamerashotsave, 5, 1);

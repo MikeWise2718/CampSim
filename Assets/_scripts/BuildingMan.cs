@@ -284,6 +284,7 @@ namespace CampusSimulator
             bld.Empty(); // destroys game object as well
             bldlookup.Remove(name);
             UpdateBldStats();
+            Destroy(bld.gameObject);
             //Debug.Log($"After deleting building {name} nbld:{bldlookup.Count}");
         }
         public Building GetBuilding(string name,bool couldFail=false)
