@@ -140,8 +140,8 @@ namespace CampusSimulator
             //errmarkctrl.SetRegMan(this);
             floorplanctrl.SetSceneMan(this);
 
-            var cmango = new GameObject("CalibMarkers");
-            cbman = cmango.AddComponent<CalibMan>();
+            //var cmango = new GameObject("CalibMarkers");
+            //cbman = cmango.AddComponent<CalibMan>();
 
 #if USE_KEYWORDRECOGNIZER
             keyman = new KeywordMan(this);
@@ -1247,7 +1247,7 @@ namespace CampusSimulator
             gaman.RefreshGos();
             bdman.RefreshGos();
             vcman.RefreshGos();
-            cbman.RefreshGos();
+            cbman?.RefreshGos();
 
             // We have to do it afterwards - that is the trick :)
             rgo.transform.localScale = new Vector3(rgoScale, rgoScale, rgoScale);

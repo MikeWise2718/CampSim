@@ -414,9 +414,9 @@ namespace CampusSimulator
         }
 
         // Use this for initialization
-        void Start()
-        {
-        }
+        //void Start()
+        //{
+        //}
         public bool everybodyDance = false;
         // Update is called once per frame
         void Update()

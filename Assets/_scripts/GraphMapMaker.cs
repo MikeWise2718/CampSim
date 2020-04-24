@@ -561,31 +561,34 @@ namespace GraphAlgos
         void AddRedwestCalibrationMarkers()
         {
             var cman = GameObject.FindObjectOfType<CalibMan>();
-            cman.org = new Vector3(-2035.0f,0,-1176.6f);
-            cman.AddCalibMarker("Pt0",  -2028.51, 0, -1183.76, "green");
-            cman.AddCalibMarker("Pt1",  -2030.95, 0,  -1175, "green");
-            cman.AddCalibMarker("Pt2",  -2036.50, 0, -1185.4, "green");
-            cman.AddCalibMarker("Pt0a", -2027.1, 0, -1188.5, "green");
-            cman.AddCalibMarker("Pt2a", -2016.8, 0, -1218.5, "green");
-            cman.AddCalibMarker("Pt2b", -2007.8, 0, -1270.1, "green");
-            cman.AddCalibMarker("Pt0c", -2000.3, 0, -1213.3, "green");
-            cman.AddCalibMarker("Pt1a", -1998.4, 0, -1164.2, "green");
-            cman.AddCalibMarker("Pt1b", -2010.6, 0, -1183.2, "green");
-            cman.AddCalibMarker("Pt3",  -1977.1, 0, -1250.3, "green");
-            cman.AddCalibMarker("Pt4",  -1981.33, 0, -1253.31, "green");
-            cman.AddCalibMarker("Pt5",  -1998.99, 0, -1259.28, "green");
-            cman.AddCalibMarker("Pt6",  -1991.55, 0, -1265.88, "green");
-            cman.AddCalibMarker("Pt7",  -1980.75, 0, -1240.05, "green");
-            cman.AddCalibMarker("Pt8",  -1969.19, 0, -1256.69, "green");
-            cman.AddCalibMarker("Pt11", -1987.25, 0, -1253.84, "darkgreen");
-            cman.AddCalibMarker("Pt12", -1988.50, 0, -1249.10, "darkgreen");
-            cman.AddCalibMarker("Pt13", -1990.52, 0, -1243.25, "darkgreen");
-            cman.AddCalibMarker("Pt14", -1994.76, 0, -1256.47, "darkgreen");
-            cman.AddCalibMarker("Pt15", -1995.53, 0, -1251.63, "darkgreen");
-            cman.AddCalibMarker("Pt16", -1997.62, 0, -1245.90, "darkgreen");
-            cman.AddCalibMarker("Pt17", -2004.17, 0, -1259.71, "darkgreen");
-            cman.AddCalibMarker("Pt18", -2006.02, 0, -1255.47, "darkgreen");
-            cman.AddCalibMarker("Pt19", -2007.77, 0, -1249.87, "darkgreen");
+            if (cman != null)
+            {
+                cman.org = new Vector3(-2035.0f, 0, -1176.6f);
+                cman.AddCalibMarker("Pt0", -2028.51, 0, -1183.76, "green");
+                cman.AddCalibMarker("Pt1", -2030.95, 0, -1175, "green");
+                cman.AddCalibMarker("Pt2", -2036.50, 0, -1185.4, "green");
+                cman.AddCalibMarker("Pt0a", -2027.1, 0, -1188.5, "green");
+                cman.AddCalibMarker("Pt2a", -2016.8, 0, -1218.5, "green");
+                cman.AddCalibMarker("Pt2b", -2007.8, 0, -1270.1, "green");
+                cman.AddCalibMarker("Pt0c", -2000.3, 0, -1213.3, "green");
+                cman.AddCalibMarker("Pt1a", -1998.4, 0, -1164.2, "green");
+                cman.AddCalibMarker("Pt1b", -2010.6, 0, -1183.2, "green");
+                cman.AddCalibMarker("Pt3", -1977.1, 0, -1250.3, "green");
+                cman.AddCalibMarker("Pt4", -1981.33, 0, -1253.31, "green");
+                cman.AddCalibMarker("Pt5", -1998.99, 0, -1259.28, "green");
+                cman.AddCalibMarker("Pt6", -1991.55, 0, -1265.88, "green");
+                cman.AddCalibMarker("Pt7", -1980.75, 0, -1240.05, "green");
+                cman.AddCalibMarker("Pt8", -1969.19, 0, -1256.69, "green");
+                cman.AddCalibMarker("Pt11", -1987.25, 0, -1253.84, "darkgreen");
+                cman.AddCalibMarker("Pt12", -1988.50, 0, -1249.10, "darkgreen");
+                cman.AddCalibMarker("Pt13", -1990.52, 0, -1243.25, "darkgreen");
+                cman.AddCalibMarker("Pt14", -1994.76, 0, -1256.47, "darkgreen");
+                cman.AddCalibMarker("Pt15", -1995.53, 0, -1251.63, "darkgreen");
+                cman.AddCalibMarker("Pt16", -1997.62, 0, -1245.90, "darkgreen");
+                cman.AddCalibMarker("Pt17", -2004.17, 0, -1259.71, "darkgreen");
+                cman.AddCalibMarker("Pt18", -2006.02, 0, -1255.47, "darkgreen");
+                cman.AddCalibMarker("Pt19", -2007.77, 0, -1249.87, "darkgreen");
+            }
         }
 
 

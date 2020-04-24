@@ -25,27 +25,31 @@ public class InfoPanel : MonoBehaviour
         Init();
     }
 
+    public void ComplainIfNull(object oman,string tname,string oname)
+    {
+        if (oman==null)
+        {
+            Debug.LogError($"{oname} of type {tname} is null");
+        }
+    }
     public void LinkObjectsAndComponents()
     {
         sman = FindObjectOfType<SceneMan>();
         jman = FindObjectOfType<JourneyMan>();
         gman = FindObjectOfType<GarageMan>();
-        vman = FindObjectOfType<VidcamMan>(); ;
-        if (jman == null)
-        {
-            Debug.Log("Cound not find JourneyMan");
-        }
-        if (gman == null)
-        {
-            Debug.Log("Cound not find GarageMan");
-        }
-        trackedObject = Camera.main.gameObject;
+        vman = FindObjectOfType<VidcamMan>();
+        ComplainIfNull(sman, "SceneMan", "sman");
+        ComplainIfNull(jman, "JourneyMan", "jman");
+        ComplainIfNull(gman, "GarageMan", "gman");
+        ComplainIfNull(vman, "VidcamMan", "vman");
+
+        trackedObject = Camera.main?.gameObject;
 
 
-        sysText = transform.Find("SysText").GetComponent<Text>();
-        simText = transform.Find("SimText").GetComponent<Text>();
-        geoText = transform.Find("GeoText").GetComponent<Text>();
-        mscText = transform.Find("MscText").GetComponent<Text>();
+        sysText = transform.Find("SysText")?.GetComponent<Text>();
+        simText = transform.Find("SimText")?.GetComponent<Text>();
+        geoText = transform.Find("GeoText")?.GetComponent<Text>();
+        mscText = transform.Find("MscText")?.GetComponent<Text>();
 
         locman = FindObjectOfType<LocationMan>();
 
@@ -79,8 +83,11 @@ public class InfoPanel : MonoBehaviour
 
     float smoothedDeltaTime = 0.0f;
     int updatecount;
-    void Update()
+    float lastupdate=-1;
+    void UpdateInfoPanel()
     {
+        if (Time.time - lastupdate < 0.25f) return;
+
         var msg = vman.lastcamset + "\n";
         msg += "Jny:" + jman.njnys + " Sspn:"+jman.nspawned+" Fspn:"+jman.nspawnfails+"\n";
 
@@ -96,8 +103,16 @@ public class InfoPanel : MonoBehaviour
 
         if (trackedObject!=null)
         {
-            var pos = trackedObject.transform.position;
-            var fwd = Camera.main.transform.forward;
+            var pos = Vector3.zero;
+            if (trackedObject!=null)
+            {
+                pos = trackedObject.transform.position;
+            }
+            var fwd = Vector3.zero;
+            if (Camera.main != null)
+            {
+                fwd = Camera.main.transform.forward;
+            }
             string txt = "";
             txt += "Pos:" + pos.x.ToString("f2") + " " + pos.y.ToString("f2") + " " + pos.z.ToString("f2")+"\n";
             txt += "Fwd:" + fwd.x.ToString("f2") + " " + fwd.y.ToString("f2") + " " + fwd.z.ToString("f2");
@@ -119,5 +134,10 @@ public class InfoPanel : MonoBehaviour
         mmsg += "P:" + sman.psman.GetPersonCount()+ " V:" + sman.veman.GetVehicleCount()+
                 " B:"+sman.bdman.GetBuildingCount() + " BR:" + sman.bdman.GetBroomCount() + " VC:" + sman.vcman.GetVidcamCount();
         mscText.text = mmsg;
+
+    }
+    private void Update()
+    {
+        UpdateInfoPanel();
     }
 }

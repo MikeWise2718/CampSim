@@ -65,6 +65,17 @@ namespace Aiskwk.Map
             qcmdescriptor = qmm.descriptor;
             BuildViewer();
         }
+
+        public void ReAdjustViewerInitialPosition()
+        {
+            var parent = transform.parent;
+            transform.parent = null;
+            transform.position = viewerDefaultPosition;
+            transform.localRotation = Quaternion.Euler(viewerDefaultRotation); 
+            TranslateViewer(0, 0);
+            RotateViewer(0);
+            transform.SetParent(parent.transform, worldPositionStays: true);
+        }
         public void DeleteGos()
         {
             if (moveplane != null)

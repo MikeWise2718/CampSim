@@ -802,10 +802,10 @@ namespace Aiskwk.Map
             if (!addViewer) return;
 
             viewerobj = new GameObject("Viewer");
-            viewerobj.transform.parent = this.transform;
-            viewerobj.transform.SetAsFirstSibling();
             viewer = viewerobj.AddComponent<Viewer>();
             viewer.InitViewer(this);
+            viewerobj.transform.SetParent(this.transform, worldPositionStays: true);
+            viewerobj.transform.SetAsFirstSibling();
         }
         void UpdateStatistics()
         {
@@ -979,7 +979,7 @@ namespace Aiskwk.Map
                 //Debug.Log("Total NumVertices:" + numVertices + "  NumTriangles:" + numTriangles);
                 InitGetMeshLambdaFromXZ();
             }
-            Debug.Log("nBmRetrieved:" + nBmRetrieved + "  nElRetrived:" + nElRetrived);
+            //Debug.Log("nBmRetrieved:" + nBmRetrieved + "  nElRetrived:" + nElRetrived);
 
             if (!flatTriangles)
             {

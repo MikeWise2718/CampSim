@@ -349,7 +349,7 @@ namespace CampusSimulator
                 var enabled = SetVisibityOnEnablement(peep);
                 if (enabled) ncnt++;
             }
-            //Debug.Log("SetPeepVisiblity - Visible count:"+ncnt);       
+            Debug.Log("SetPeepVisiblity - Visible count:"+ncnt);       
         }
 
         public void CalcBldRoomFrames(BldRoom broom, personDetectModeE personDetectMode)

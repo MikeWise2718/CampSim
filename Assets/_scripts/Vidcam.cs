@@ -63,6 +63,7 @@ namespace CampusSimulator
                 "Ms_c_B11_raspipole",
             };
             l.RemoveAll(item => !item.StartsWith(filter));
+            l.Add("Viewer");
             return l;
         }
         //public void AddCameraMarker(string name, Vector3 campos, string clrname)
@@ -81,7 +82,10 @@ namespace CampusSimulator
         public void AddCameraMarker(string name, Vector3 cpt, string clrname)
         {
             var cman = GameObject.FindObjectOfType<CalibMan>();
-            cman.AddCalibMarker(name, cpt.x, cpt.y, cpt.z, "purple");
+            if (cman != null)
+            {
+                cman.AddCalibMarker(name, cpt.x, cpt.y, cpt.z, "purple");
+            }
         }
 
         public void AddDetail(VidcamMan vm, GameObject vgo)
@@ -370,7 +374,7 @@ namespace CampusSimulator
             vcamera.transform.position = campos;
             if (camorienttype == CamOrientTypeE.lookat)
             {
-                Debug.Log("Legacy");
+                //Debug.Log("Legacy");
                 //vcamera.transform.LookAt(camlookat);
             }
             else

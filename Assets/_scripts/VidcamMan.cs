@@ -5,16 +5,16 @@ using UxUtils;
 
 namespace CampusSimulator
 {
-
-
     public class VidcamMan : MonoBehaviour
     {
         public SceneMan sman;
 
+        public GameObject vmcamgo;
+        public Camera vmcam;// we don't want this to change
+
         public string lastcamset = "MainCam";
         public bool setMainCamToSceneCam = false;
         public bool setSceneCamToMainCam = false;
-
 
         public UxSetting<string> mainCamName = new UxSetting<string>("MainCamName","NoCameraChosen");
 
@@ -24,11 +24,22 @@ namespace CampusSimulator
         public enum BackGroundTypeE { UiFrame, Quad, None }
         public UxEnumSetting<BackGroundTypeE> backType = new UxEnumSetting<BackGroundTypeE>("BackgroundType",BackGroundTypeE.None);
 
+
+        private void Awake()
+        {
+            vmcamgo = new GameObject("Vmain Camera");
+            vmcam = vmcamgo.AddComponent<Camera>();
+            if (vmcam==null)
+            {
+                Debug.LogError("VidcamMan - No active main camera found at Awake time");
+                return;
+            }
+        }
+
         public void RealizeBackground()
         {
-            var mcam = Camera.main;
-            if (mcam == null) return;
-            var bgim = mcam.GetComponent<BackgroundMainCamImage>();
+            if (vmcam == null) return;
+            var bgim = vmcam.GetComponent<BackgroundMainCamImage>();
             if (bgim == null) return;
             bgim.RealizeBackground();
         }
@@ -63,7 +74,12 @@ namespace CampusSimulator
                 case SceneSelE.None:
                     break;
             }
-            SetMainCameraToVcam(mainCamName.Get());
+            var vcamname = mainCamName.Get();
+            if (!vidcam.ContainsKey(vcamname))
+            {
+                vcamname = "Viewer";
+            }
+            SetMainCameraToVcam(vcamname);
         }
         public bool toggleFreeFly;
         public FreeFlyCam ffc = null;
@@ -72,13 +88,13 @@ namespace CampusSimulator
         {
             if (!inFreeFly)
             {
-                //Debug.Log("   VidCamMan.toggleFreeFly - Adding FreeFlyCam");
-                var mcamgo = Camera.main.gameObject;
-                ffc = mcamgo.AddComponent<FreeFlyCam>();
+                Debug.Log($"VidCamMan.toggleFreeFly - Adding FreeFlyCam");
+                //var mcamgo = Camera.main.gameObject;
+                ffc = vmcamgo.AddComponent<FreeFlyCam>();
             }
             else
             {
-                //Debug.Log("   VidCamMan.toggleFreeFly - Destroying FreeFlyCam");
+                Debug.Log($"VidCamMan.toggleFreeFly - Destroying FreeFlyCam");
                 Destroy(ffc);
                 ffc = null;
             }
@@ -91,40 +107,39 @@ namespace CampusSimulator
         }
         public void SetMainCameraToVcam(string mcamvcam)
         {
-            //Debug.Log("SetMainCamToVcam: " + mcamvcam);
-            var mcam = Camera.main;
-            if (mcam!=null)
+            Debug.Log($"SetMainCamToVcam:{mcamvcam}");
+            if (mcamvcam == "Viewer")
             {
-                if (vidcam.ContainsKey(mcamvcam))
+                vmcamgo.SetActive(false);
+            }
+            else if (vidcam.ContainsKey(mcamvcam))
+            {
+                vmcamgo.SetActive(true);
+                var vcam = vidcam[mcamvcam];
+                vmcam.transform.position = vcam.transform.position;
+                vmcam.transform.localRotation = vcam.transform.localRotation;
+                vmcam.depth = 1;
+                vmcam.fieldOfView = vcam.camfov;
+                lastcamset = mcamvcam;
+                if (vcam.camimage != "")
                 {
-                    //Debug.Log("doing it sybil");
-                    var vcam = vidcam[mcamvcam];
-                    mcam.transform.position = vcam.transform.position;
-                    mcam.transform.localRotation = vcam.transform.localRotation;
-                    mcam.depth = 1;
-                    mcam.fieldOfView = vcam.camfov;
-                    lastcamset = mcamvcam;
-                    if (vcam.camimage != "")
+                    var bgim = vmcam.GetComponent<BackgroundMainCamImage>();
+                    if (bgim == null)
                     {
-                        var bgim = mcam.GetComponent<BackgroundMainCamImage>();
-                        if (bgim==null)
-                        {
-                            bgim = mcam.gameObject.AddComponent<BackgroundMainCamImage>();
-                        }
-                        bgim.imageName = vcam.camimage;
-                        bgim.showBackground = true;
-                        bgim.showSpheres = false;
+                        bgim = vmcam.gameObject.AddComponent<BackgroundMainCamImage>();
                     }
+                    bgim.imageName = vcam.camimage;
+                    bgim.showBackground = true;
+                    bgim.showSpheres = false;
                 }
-                else
-                {
-                    Debug.Log("Bad camera name:" + mcamvcam);
-                }
+            }
+            else
+            {
+                Debug.LogError($"Bad camera name:{mcamvcam} cams defined:{vidcam.Count}");
             }
         }
         public void SetMainCameraToCam(Camera cam)
         {
-            var mcam = Camera.main;
             //var camparent = cam.transform.parent;
             //Quaternion quat = Quaternion.identity;
             //Quaternion iquat = Quaternion.identity;
@@ -135,26 +150,25 @@ namespace CampusSimulator
             //    var qiq = quat * iquat;
             //    Debug.Log("quat:" + quat.ToString()+"  Iquat:"+iquat.ToString()+"  qiq:"+qiq.ToString());
             //}
-            mcam.transform.position = cam.transform.position;
+            vmcam.transform.position = cam.transform.position;
             //mcam.transform.localRotation = cam.transform.localRotation*iquat;
-            mcam.transform.localRotation = cam.transform.localRotation;
-            mcam.depth = cam.depth;
-            mcam.fieldOfView = cam.fieldOfView;
-            mcam.clearFlags = cam.clearFlags;
-            mcam.backgroundColor = cam.backgroundColor;
-            var bgim = mcam.GetComponent<BackgroundMainCamImage>();
+            vmcam.transform.localRotation = cam.transform.localRotation;
+            vmcam.depth = cam.depth;
+            vmcam.fieldOfView = cam.fieldOfView;
+            vmcam.clearFlags = cam.clearFlags;
+            vmcam.backgroundColor = cam.backgroundColor;
+            var bgim = vmcam.GetComponent<BackgroundMainCamImage>();
             if (bgim)
             {
                 Destroy(bgim);
             }
-            var qt = mcam.transform.Find("Quad");
+            var qt = vmcam.transform.Find("Quad");
             if (qt)
             {
                 Destroy(qt.gameObject);
             }
             //mcam.fieldOfView = vcam.camfov;
         }
-
         //#if UNITY_EDITOR
         //        var svc = UnityEditor.SceneView.lastActiveSceneView.camera;
         //            if (svc!=null)
@@ -169,25 +183,23 @@ namespace CampusSimulator
         //                msg += "\nScene Cam lastActiveSceneView is null";
         //            }
         //#endif
-
         public void SetSceneCamToMainCam()
         {
 #if UNITY_EDITOR
-            var mcam = Camera.main;
-            if (mcam != null)
+            if (vmcam != null)
             {
                 var svcam = UnityEditor.SceneView.lastActiveSceneView.camera;
-                mcam.transform.position = svcam.transform.position;
-                mcam.transform.localRotation = svcam.transform.localRotation;
-                mcam.depth = svcam.depth;
-                mcam.fieldOfView = svcam.fieldOfView;
+                vmcam.transform.position = svcam.transform.position;
+                vmcam.transform.localRotation = svcam.transform.localRotation;
+                vmcam.depth = svcam.depth;
+                vmcam.fieldOfView = svcam.fieldOfView;
                 lastcamset = "SceneCam";
-                var bgim = mcam.GetComponent<BackgroundMainCamImage>();
+                var bgim = vmcam.GetComponent<BackgroundMainCamImage>();
                 if (bgim)
                 {
                     Destroy(bgim);
                 }
-                var qt = mcam.transform.Find("Quad");
+                var qt = vmcam.transform.Find("Quad");
                 if (qt)
                 {
                     Destroy(qt.gameObject);
@@ -195,27 +207,25 @@ namespace CampusSimulator
             }
 #endif
         }
-
         public void SetMainCamToSceneCam()
         {
 #if UNITY_EDITOR
-            var mcam = Camera.main;
-            if (mcam != null)
+            if (vmcam != null)
             {
                 // There are limitations -  see this for details: https://forum.unity.com/threads/moving-scene-view-camera-from-editor-script.64920/
                 var svcam = UnityEditor.SceneView.lastActiveSceneView.camera;
-                svcam.transform.position = mcam.transform.position;
-                svcam.transform.localRotation = mcam.transform.localRotation;
+                svcam.transform.position = vmcam.transform.position;
+                svcam.transform.localRotation = vmcam.transform.localRotation;
                 //svcam.depth = mcam.depth;
                 //svcam.fieldOfView = mcam.fieldOfView;
                 UnityEditor.SceneView.lastActiveSceneView.AlignViewToObject(svcam.transform);
                 // lastcamset = "SceneCam";
-                var bgim = mcam.GetComponent<BackgroundMainCamImage>();
+                var bgim = vmcam.GetComponent<BackgroundMainCamImage>();
                 if (bgim)
                 {
                     Destroy(bgim);
                 }
-                var qt = mcam.transform.Find("Quad");
+                var qt = vmcam.transform.Find("Quad");
                 if (qt)
                 {
                     Destroy(qt.gameObject);
@@ -226,50 +236,55 @@ namespace CampusSimulator
         public void DelVidcams()
         {
             //  Debug.Log("DelVidcams called");
-            var namelist = new List<string>(vidcam.Keys);
-            namelist.ForEach(name => DelVidcam(name));
+            var keynamelist = new List<string>(vidcam.Keys);
+            keynamelist.ForEach(name => DelVidcam(name));
+            vidcam = new Dictionary<string, Vidcam>();           
         }
         List<string> vidcamlist = new List<string>();
         public void MakeVidcams(string filtername)
         {
             vidcamlist = Vidcam.GetVidcamNames(filtername);
-            //Debug.Log("Making vidcams n:" + vidcamlist.Count);
+            //Debug.Log($"Making vidcams n:{vidcamlist.Count}");
             vidcamlist.ForEach(item => MakeVidcam(item));
         }
         public void MakeVidcam(string name)
         {
-            //Debug.Log("  Making vidcam " + name);
+            //Debug.Log("$Making vidcam:{name}");
             var vgo = new GameObject(name);
             vgo.SetActive( false );
             vgo.transform.parent = this.transform;
             var vc = vgo.AddComponent<Vidcam>();
             AddVidcam(vc);
             vc.AddDetail(this, vgo );
-            //Debug.Log("  Made vidcam " + name);
         }
         public void DelVidcam(string name)
         {
-            //Debug.Log("Deleting Vidcam " + name);
+            //Debug.Log($"Deleting Vidcam {name}");
             //var go = GameObject.Find(name);
             var vc = vidcam[name];
             //vc.Empty(); // destroys game object as well
             vidcam.Remove(name);
         }
-        public Vidcam GetVidcam(string name)
+        public Vidcam GetVidcam(string vcname)
         {
-            if (!vidcam.ContainsKey(name))
+            if (!vidcam.ContainsKey(vcname))
             {
-                Debug.Log("Bad Vidcam lookup:" + name);
+                Debug.LogError($"Bad Vidcam lookup:{vcname}");
                 return null;
             }
-            return vidcam[name];
+            return vidcam[vcname];
+        }
+
+        public bool VidcamExists(string vcname)
+        {
+            return vidcam.ContainsKey(vcname);  
         }
 
         public void AddVidcam(Vidcam Vidcam)
         {
             if (vidcam.ContainsKey(Vidcam.name))
             {
-                Debug.Log("Tried to add duplicate Vidcam:" + Vidcam.name);
+                Debug.LogError($"Tried to add duplicate Vidcam:{Vidcam.name}");
                 return;
             }
             vidcamnames.Add(Vidcam.name);
@@ -310,7 +325,6 @@ namespace CampusSimulator
         // Use this for initialization
         void Start()
         {
-            //   SetRegion(RegionSelE.MsftCoreCampus);
             sman = FindObjectOfType<SceneMan>();
 
 #if MOBILE_INPUT
@@ -338,7 +352,6 @@ namespace CampusSimulator
         public string GetImageSaveFileName(string camname)
         {
             lastcamerashotsave = Time.time;
-            //var ncs = numMainCamSaves.ToString("D3");
             var spath = sman.simrundir + sman.imagesdir;
             System.IO.Directory.CreateDirectory(spath);
             var tstmp = GraphAlgos.GraphUtil.LeadZeroFloat(lastcamerashotsave, 5, 1);
@@ -348,21 +361,20 @@ namespace CampusSimulator
         public void SaveMainCameraShot(string camname)
         {
             // https://forum.unity.com/threads/how-to-save-manually-save-a-png-of-a-camera-view.506269/
-            var mcam = Camera.main;
-            if (mcam != null)
+            if (vmcam != null)
             {
                 var fname = GetImageSaveFileName(camname);
 
-                var savetex = mcam.targetTexture;
+                var savetex = vmcam.targetTexture;
                 var rendtex = new RenderTexture(Screen.width, Screen.height, 24);
-                mcam.targetTexture = rendtex;
+                vmcam.targetTexture = rendtex;
                 var currentRT = RenderTexture.active;
-                RenderTexture.active = mcam.targetTexture;
+                RenderTexture.active = vmcam.targetTexture;
 
-                mcam.Render();
+                vmcam.Render();
 
-                Texture2D image = new Texture2D(mcam.targetTexture.width, mcam.targetTexture.height);
-                image.ReadPixels(new Rect(0, 0, mcam.targetTexture.width, mcam.targetTexture.height), 0, 0);
+                Texture2D image = new Texture2D(vmcam.targetTexture.width, vmcam.targetTexture.height);
+                image.ReadPixels(new Rect(0, 0, vmcam.targetTexture.width, vmcam.targetTexture.height), 0, 0);
                 image.Apply();
                 RenderTexture.active = currentRT;
 
@@ -370,7 +382,7 @@ namespace CampusSimulator
                 Destroy(image);
                 Debug.Log("Writing " + fname+" bytes:" + bytes.Length+" time:"+lastcamerashotsave.ToString("f1"));
 
-                mcam.targetTexture = savetex;
+                vmcam.targetTexture = savetex;
 
                 System.IO.File.WriteAllBytes(fname, bytes);
                 numMainCamSaves++;

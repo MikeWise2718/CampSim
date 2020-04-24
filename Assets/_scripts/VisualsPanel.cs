@@ -211,9 +211,9 @@ public class VisualsPanel : MonoBehaviour
         try
         {
             var opts = lman.graphGenOptions.GetOptionsAsList();
-            Debug.Log($"VisualsPanel9 opts.count:{opts.Count} opts:{opts}");
+            //Debug.Log($"VisualsPanel9 opts.count:{opts.Count} opts:{opts}");
             var inival = lman.graphGenOptions.Get().ToString();
-            Debug.Log($"VisualsPanel9 inival:{inival}");
+            //Debug.Log($"VisualsPanel9 inival:{inival}");
             var idx = opts.FindIndex(s => s == inival);
             if (idx <= 0) idx = 0;
 
@@ -247,7 +247,11 @@ public class VisualsPanel : MonoBehaviour
             var curregionstr = SceneMan.GetSceneOptionsString(initialScene.value);
             SceneMan.SetInitialSceneOption(curregionstr);
             var curregion = SceneMan.GetSceneOptionsEnum(curregionstr);
-            sman.SetScene(curregion);
+            if (curregion != sman.curregion)
+            {
+                chg = true;
+                sman.SetScene(curregion);
+            }
         }
         catch (Exception ex)
         {
@@ -376,6 +380,7 @@ public class VisualsPanel : MonoBehaviour
         {
             sman.RequestRefresh("VisualPanel-SetVals");
         }
+        Debug.Log("Setvals done");
     }
 
     // Update is called once per frame

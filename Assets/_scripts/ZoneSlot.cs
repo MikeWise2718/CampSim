@@ -57,10 +57,6 @@ namespace CampusSimulator
         public GameObject sign;
         public GameObject persgo;
         // Use this for initialization
-        void Start()
-        {
-            //Debug.Log("start slot");
-        }
 
         public void Initialize(Zone zone, int num, float x, float z, float ang, float width)
         {
@@ -358,8 +354,8 @@ namespace CampusSimulator
             slotformgo = null;
         }
         // Update is called once per frame
-        void Update()
-        {
-        }
+    //    void Update()
+    //    {
+    //    }
     }
 }
