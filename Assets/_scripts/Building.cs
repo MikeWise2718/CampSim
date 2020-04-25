@@ -316,8 +316,8 @@ namespace CampusSimulator
             roomlist.ForEach(brm => brm.CreateGos());
         }
         // Update is called once per frame
-        void Update()
-        {
-        }
+        //void Update()
+        //{
+        //}
     }
 }

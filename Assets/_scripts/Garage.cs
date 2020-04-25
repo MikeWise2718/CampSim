@@ -747,19 +747,19 @@ namespace CampusSimulator
                 slots[slt].CreateGos();
             }
         }
-        void Start()
-        {
-        }
+        //void Start()
+        //{
+        //}
 
-        // Update is called once per frame
-        void Update()
-        {
-            //if (  oldshowcarrects != showCarRects )
-            //{
-            //    DeleteGos();
-            //    CreateGos();
-            //    oldshowcarrects = showCarRects;
-            //}
-        }
+        //// Update is called once per frame
+        //void Update()
+        //{
+        //    //if (  oldshowcarrects != showCarRects )
+        //    //{
+        //    //    DeleteGos();
+        //    //    CreateGos();
+        //    //    oldshowcarrects = showCarRects;
+        //    //}
+        //}
     }
 }

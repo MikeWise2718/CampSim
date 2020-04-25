@@ -89,8 +89,8 @@ namespace CampusSimulator
             if (!inFreeFly)
             {
                 Debug.Log($"VidCamMan.toggleFreeFly - Adding FreeFlyCam");
-                var mcamgo = Camera.main.gameObject;
-                ffc = mcamgo.AddComponent<FreeFlyCam>();
+                //var mcamgo = Camera.main.gameObject;
+                ffc = vmcamgo.AddComponent<FreeFlyCam>();
             }
             else
             {

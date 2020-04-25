@@ -61,10 +61,7 @@ namespace CampusSimulator
         public Garage garage;
         public Vehicle vehicle;
         // Use this for initialization
-        void Start()
-        {
-            //Debug.Log("start slot");
-        }
+
 
         public void Initialize(Garage garage, int num, float x, float z, float ang, float width,string group)
         {

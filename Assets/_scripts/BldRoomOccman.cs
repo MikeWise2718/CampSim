@@ -346,9 +346,9 @@ namespace CampusSimulator
             }
         }
         // Start is called before the first frame update
-        void Start()
-        {
-        }
+        //void Start()
+        //{
+        //}
 
         public bool doDoubleCap=false;
         // Update is called once per frame

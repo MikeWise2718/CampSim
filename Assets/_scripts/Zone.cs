@@ -444,12 +444,12 @@ namespace CampusSimulator
                 slots[slt].CreateGos();
             }
         }
-        void Start()
-        {
-        }
+        //void Start()
+        //{
+        //}
 
-        void Update()
-        {
-        }
+        //void Update()
+        //{
+        //}
     }
 }

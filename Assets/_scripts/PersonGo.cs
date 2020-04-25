@@ -21,11 +21,6 @@ namespace CampusSimulator
             SetAvatarType();
             //this.building = person.GetBuilding();   doesn't have to be in a building
         }
-        // Start is called before the first frame update
-        void Start()
-        {
-
-        }
 
 
 
