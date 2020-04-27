@@ -59,7 +59,8 @@ namespace CampusSimulator
         public bool droperrormarkers = false;
 
         public bool autoerrorcorrect = false;
-        private bool needrefresh = true;
+        private bool needsrefresh = true;
+        private bool needstotalrefresh = true;
 
 
         public GameObject rmango;
@@ -200,13 +201,13 @@ namespace CampusSimulator
             leditor = rgo.AddComponent<LinkEditor>();
             leditor.Init(linkcloudman, this);
         }
-        public void SetScene( SceneSelE newscene )
+        public void SetScene( SceneSelE newscene,bool force=false )
         {
-            if (newscene != curregion)
+            if (newscene != curscene || force)
             {
                 try
                 {
-                    Debug.Log("SceneMan-Setting scenario to " + newscene);
+                    Debug.LogWarning("SceneMan-Setting scenario to " + newscene);
                     if (runtimestamp == "")
                     {
                         runtimestamp = DateTime.UtcNow.ToString("yyyyMMdd-HHmmss");
@@ -214,7 +215,7 @@ namespace CampusSimulator
                     simrundir = "./simrun/" + newscene + "_" + runtimestamp + "/";
                     UxUtils.UxSettingsMan.SetScenario(newscene.ToString());
                     jnman.DeleteAllJourneys();
-                    curregion = newscene;
+                    curscene = newscene;
                     var oldglblm = rmango.GetComponent<LegLatLngMap>();
                     glbllm = rmango.AddComponent<LatLongMap>();
                     glbllm.InitMapFromSceneSel(newscene.ToString(),0); // to do uncomment
@@ -266,15 +267,20 @@ namespace CampusSimulator
 #endif
         }
 
-        public void RequestRefresh(string requester)
+        public void RequestRefresh(string requester,bool totalrefresh=false)
         {
-            //Debug.Log("RefreshRequested by " + requester);
-            needrefresh = true;
+            Debug.Log($"RefreshRequested by {requester} total:{totalrefresh}");    
+            needsrefresh = true;
+            if (totalrefresh)
+            {
+                // note that just setting this to totalrefresh would overwrite other totalrefresh requests
+                needstotalrefresh = true; 
+            }
         }
         public void RequestHighObjRefresh(string highobjname,string requester)
         {
             //Debug.Log("RefreshHighObjRequested by " + requester);
-            needrefresh = true;
+            needsrefresh = true;
             //this.highobjnames.Add(highobjname);
         }
         public void ToggleDropErrorMarkers()
@@ -827,7 +833,7 @@ namespace CampusSimulator
         public void SaveToJsonFile()
         {
             System.IO.Directory.CreateDirectory(graphsdir);
-            string fname = graphsdir + curregion.ToString() + ".json";
+            string fname = graphsdir + curscene.ToString() + ".json";
             Debug.Log("Saving to Json file:" + fname);
             linkcloudman.SaveToJsonFile(fname);
         }
@@ -1349,7 +1355,7 @@ namespace CampusSimulator
             return linknodescale*lcradiusdict[mode];
         }
 
-        public SceneSelE curregion = SceneSelE.None;
+        public SceneSelE curscene = SceneSelE.None;
         #region SceneOptions
         static List<string> sceneOptions = new List<string>(System.Enum.GetNames(typeof(SceneSelE)));
         static string initialSceneOptionsKey = "InitialScene";
@@ -1369,7 +1375,7 @@ namespace CampusSimulator
         }
         public static SceneSelE GetInitialSceneOption()
         {
-            var einival = SceneSelE.Eb12; // default scene
+            var einival = SceneSelE.MsftB19focused; // default scene
             if (PlayerPrefs.HasKey(initialSceneOptionsKey))
             {
                 var inival = PlayerPrefs.GetString(initialSceneOptionsKey, "");
@@ -1388,7 +1394,7 @@ namespace CampusSimulator
         {
             initVars();
             var esi = SceneMan.GetInitialSceneOption();
-            curregion = SceneSelE.None; // force it to execute - kind of a kludge
+            curscene = SceneSelE.None; // force it to execute - kind of a kludge
             SetScene(esi);
         }
         public void ToggleAutoErrorCorrect()
@@ -1476,12 +1482,12 @@ namespace CampusSimulator
                 Debug.Log("Hit LCtrl-C");
                 if ((Time.time - ctrlChit) < 1)
                 {
-                    Debug.Log("Application.Quit()");
+                    Debug.Log("Hit it twice so quitting: Application.Quit()");
                     Application.Quit();
                 }
                 if ((Time.time - ctrlMhit) < 1)
                 {
-                    vcman.SetSceneCamToMainCam();
+                    vcman.SetSceneCamToMainCam();// really?
                 }
                 // L-CTRL + C
                 ctrlChit = Time.time;
@@ -1498,8 +1504,7 @@ namespace CampusSimulator
             }
         }
 
-        RouteGarnishE oldGarnish;
-        int updatesSinceRefresh = 0;
+
         int updateCount = 0;
         private void Update()
         {
@@ -1519,39 +1524,30 @@ namespace CampusSimulator
             checkTripod();
             SetArcoreTracking();
 
-            if (updatesSinceRefresh==0 || oldGarnish!=garnish)
-            {
-                needrefresh = true;
-                oldGarnish = garnish;
-            }
-            
             if (needsLifted)
             {
                 if (linkcloudman.CanGetHeights())
                 {
-                    linkcloudman.AddLongLat();
-                    needrefresh = true;
+                    linkcloudman.CalculateHeights();
+                    needsrefresh = true;
                 }
             }
 
 
-            if (needrefresh)
+            if (needsrefresh)
             {
-                RefreshSceneManGos(); // in update
-                updatesSinceRefresh = 0;
-                needrefresh = false;
+                if (needstotalrefresh)
+                {
+                    SetScene(curscene, force: true);
+                    RefreshSceneManGos(); // in update
+                }
+                else
+                {
+                    RefreshSceneManGos(); // in update
+                }
+                needstotalrefresh = false;
+                needsrefresh = false;
             }
-            //if (updatesSinceRefresh == 2)
-            //{
-            //    // this is a silly delay in restoring the selected objects 
-            //    // that causes the selected objects to flash, 
-            //    // but refreshing under 2 updates later provokes the dreaded 
-            //    // "You are pushing more GUIClips than you are popping" message
-            //    // from the Hierarchy View List window in the Unity Editor
-            //    restoreHighobs();
-            //    clearhighobs();
-            //}
-            updatesSinceRefresh += 1;
             KeyProcessing();
             updateCount++;
         }
@@ -1646,37 +1642,44 @@ namespace CampusSimulator
                 }
               
             }
+            var ctrlpressed = Event.current.modifiers == EventModifiers.Control;
 
-            if ((e.type == EventType.KeyDown) && (e.keyCode == KeyCode.S) && Event.current.modifiers == EventModifiers.Control)
+            if ((e.type == EventType.KeyDown) && (e.keyCode == KeyCode.S))
             {
-                Debug.Log("Hit Ctrl-S");
                 if ((Time.time - ctrlMhit) < 1)
                 {
                     vcman.SetMainCamToSceneCam();
                     e.Use();
                 }
-                ctrlShit = Time.time;
+                if (ctrlpressed)
+                {
+                    Debug.Log("Hit Ctrl-S");
+                    ctrlShit = Time.time;
+                }
             }
-            if ((e.type == EventType.KeyDown) && (e.keyCode == KeyCode.M) && Event.current.modifiers == EventModifiers.Control)
+            if ((e.type == EventType.KeyDown) && (e.keyCode == KeyCode.M))
             {
-                Debug.Log("Hit Ctrl-M");
                 if ((Time.time - ctrlMhit) < 1)
                 {
                     vcman.SetSceneCamToMainCam();
                 }
-                ctrlMhit = Time.time;
+                if (ctrlpressed)
+                {
+                    Debug.Log("Hit Ctrl-M");
+                    ctrlMhit = Time.time;
+                }
             }
-            if ((e.type == EventType.KeyDown) && (e.keyCode == KeyCode.E) && Event.current.modifiers == EventModifiers.Control)
+            if ((e.type == EventType.KeyDown) && (e.keyCode == KeyCode.E) && ctrlpressed)
             {
                 Debug.Log("Hit Ctrl-E - setEditMode will now be set to " + !leditor.editMode);
                 leditor.editMode = !leditor.editMode;
             }
-            if ((e.type == EventType.KeyDown) && (e.keyCode == KeyCode.X) && Event.current.modifiers == EventModifiers.Control)
+            if ((e.type == EventType.KeyDown) && (e.keyCode == KeyCode.X) && ctrlpressed)
             {
                 Debug.Log("Hit Ctrl-X - StartStretchMode");
                 leditor.StartStretchMode();
             }
-            if ((e.type == EventType.KeyDown) && (e.keyCode == KeyCode.Y) && Event.current.modifiers == EventModifiers.Control)
+            if ((e.type == EventType.KeyDown) && (e.keyCode == KeyCode.Y) && ctrlpressed)
             {
                 Debug.Log("Hit Ctrl-Y - Splitting Link if link selected");
                 var selobj = UnityEditor.Selection.activeGameObject;

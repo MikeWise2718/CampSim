@@ -137,17 +137,18 @@ namespace CampusSimulator
             }
             //Debug.Log("Populated garage " + name + " with "+npoped+" vehicles - slots:" + slots.Count);
         }
-        void SubSlot(string name)
+        void DestroySlot(string name)
         {
             var slot = slots[name];
             gm.RemoveSlot(slot);
             slot.EmptyAndDestroy();
+            Destroy(slot.gameObject);
         }
         public void Empty()
         {
             DeleteGos();
             var namelist = new List<string>(slots.Keys);
-            namelist.ForEach(name => SubSlot(name));
+            namelist.ForEach(name => DestroySlot(name));
             namelist.ForEach(name => slots.Remove(name));
             slotnames = null;
         }
@@ -626,7 +627,7 @@ namespace CampusSimulator
             string gname = this.fullname;
             if (gname.StartsWith("MsGarageRWB"))
             {
-                if (gm.sman.curregion == SceneSelE.MsftB19focused)
+                if (gm.sman.curscene == SceneSelE.MsftB19focused)
                 {
                     defPercentFull = 0.05f;
                 }

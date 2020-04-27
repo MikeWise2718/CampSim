@@ -20,14 +20,6 @@ namespace CampusSimulator
         {
             DeleteGos();
         }
-        public static List<string> GetVehicleNames(string filter)
-        {
-            var l = new List<string>
-            {
-            };
-            l.RemoveAll(item => !item.StartsWith(filter));
-            return l;
-        }
         public void AddVehicleDetails(VehicleMan vm,string vehicleid,string formname)
         {
             this.veman = vm;

@@ -47,17 +47,24 @@ namespace Aiskwk.Map
 
         public void ConstructBase()
         {
-
-            decoroot = new GameObject("objects");
+            decoroot = new GameObject("decoroot");
+            AttachToParent();
+        }
+        public void AttachToParent()
+        {
+            decoroot.transform.parent = null;
             if (preferedParent != null)
             {
-                decoroot.transform.parent = preferedParent.transform;
+                //decoroot.transform.parent = preferedParent.transform;
+                Debug.Log($"{decotype} decoroot gameobject attaching to parent");
+                decoroot.transform.SetParent(preferedParent.transform, worldPositionStays: false);
             }
         }
 
         public virtual void Construct()
         {
             ConstructBase();
+            //AttachToParent();
         }
 
         public virtual void EnsureExistence()
@@ -119,45 +126,105 @@ namespace Aiskwk.Map
         public GameObject tpnode3;
         public GameObject tpnodem;
 
+        public GameObject tpmode1;
+        public GameObject tpmode2;
+        public GameObject tpmode3;
+        public GameObject tpmodem;
+
         public override void InitDecoType()
         {
             decotype = DecoType.TriPoints;
             deconame = "tripoints";
         }
 
+        public void DoOneNode(ref GameObject tpn, string nodename, Color color,Vector3 skavek, bool wps)
+        {
+            if (wps)
+            {
+                tpn = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            }
+            else
+            {
+                tpn = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                skavek *= 0.7f;
+            }
+            tpn.name = nodename;
+            tpn.transform.localScale = skavek;
+
+            //if (nodename == "tpmodem")
+            //{
+            //    var (s0, r0, p0) = UnpackTransform(tpmodem.transform);
+            //    Debug.Log($"Start Time {Time.time}");
+            //    Debug.Log($"Sca {s0}");
+            //    Debug.Log($"Rot {r0}");
+            //    Debug.Log($"Pos {p0}");
+            //}
+            tpn.transform.SetParent(decoroot.transform,worldPositionStays:wps);
+            qut.SetColorOfGo(tpn, color);
+        }
+
         public override void Construct()
         {
             ConstructBase();
-            var ska = qmm.triDiag * 0.05f;
+            var ska = qmm.triMeshMinLeg * 0.04f;
             var skav = new Vector3(ska, ska, ska);
-            var skam = new Vector3(1, 1, 1);
-            tpnode1 = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            tpnode1.name = "tpnode1";
-            tpnode1.transform.localScale = skav;
-            tpnode1.transform.parent = decoroot.transform;
 
-            tpnode2 = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            tpnode2.name = "tpnode2";
-            tpnode2.transform.localScale = skav;
-            tpnode2.transform.parent = decoroot.transform;
+            DoOneNode(ref tpnode1, "tpnode1", Color.red, skav, true);
+            DoOneNode(ref tpnode2, "tpnode2", Color.green, skav, true);
+            DoOneNode(ref tpnode3, "tpnode3", Color.blue, skav, true);
+            DoOneNode(ref tpnodem, "tpnodem", Color.cyan, skav, true);
 
-            tpnode3 = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            tpnode3.name = "tpnode3";
-            tpnode3.transform.localScale = skav;
-            tpnode3.transform.parent = decoroot.transform;
+            DoOneNode(ref tpmode1, "tpmode1", Color.red, skav, false);
+            DoOneNode(ref tpmode2, "tpmode2", Color.green, skav, false);
+            DoOneNode(ref tpmode3, "tpmode3", Color.blue, skav, false);
+            DoOneNode(ref tpmodem, "tpmodem", Color.cyan, skav, false);
 
-            tpnodem = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            tpnodem.name = "tpnodem";
-            tpnodem.transform.localScale = skam;
-            tpnodem.transform.parent = decoroot.transform;
 
-            qut.SetColorOfGo(tpnode1, Color.yellow);
-            qut.SetColorOfGo(tpnode2, Color.cyan);
-            qut.SetColorOfGo(tpnode3, Color.magenta);
-            qut.SetColorOfGo(tpnodem, Color.blue);
+
+            //tpnode1 = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            //tpnode1.name = "tpnode1";
+            //tpnode1.transform.localScale = skav;
+            //tpnode1.transform.parent = decoroot.transform;
+
+            //tpnode2 = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            //tpnode2.name = "tpnode2";
+            //tpnode2.transform.localScale = skav;
+            //tpnode2.transform.parent = decoroot.transform;
+
+            //tpnode3 = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            //tpnode3.name = "tpnode3";
+            //tpnode3.transform.localScale = skav;
+            //tpnode3.transform.parent = decoroot.transform;
+
+            //tpnodem = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            //tpnodem.name = "tpnodem";
+            //tpnodem.transform.localScale = skam;
+            //tpnodem.transform.parent = decoroot.transform;
+
+            //qut.SetColorOfGo(tpnode1, Color.yellow);
+            //qut.SetColorOfGo(tpnode2, Color.cyan);
+            //qut.SetColorOfGo(tpnode3, Color.magenta);
+            //qut.SetColorOfGo(tpnodem, Color.blue);
             Debug.Log("tpnodes constructed");
         }
 
+        (Vector3, Vector3, Vector3) UnpackTransform(Transform t)
+        {
+            var v1= t.localScale;
+            var v2 = t.localRotation.eulerAngles;
+            var v3 = t.position;
+            return (v1, v2, v3);
+        }
+
+        public void MoveObjectTo(Transform tran,Vector3 p)
+        {
+            var oldpartran = tran.parent;
+            var r = tran.localEulerAngles;
+            tran.parent = null;
+            tran.position = p;
+            tran.localEulerAngles = r;
+            tran.SetParent(oldpartran, worldPositionStays: false);
+        }
         public override void UpdateState()
         {
             if (decoroot != null)
@@ -166,6 +233,41 @@ namespace Aiskwk.Map
                 tpnode2.transform.position = qmm.bpt2;
                 tpnode3.transform.position = qmm.bpt3;
                 tpnodem.transform.position = qmm.bptm;
+
+                //MoveObjectTo(tpmode1.transform, qmm.bpt1);
+                //MoveObjectTo(tpmode2.transform, qmm.bpt2);
+                //MoveObjectTo(tpmode3.transform, qmm.bpt3);
+                //MoveObjectTo(tpmodem.transform, qmm.bptm);
+
+                //tpmode1.transform.parent = null;
+                tpmode1.transform.SetParent(null, worldPositionStays: false);// must be false or will accumulate rotation
+                tpmode1.transform.position = qmm.bpt1;
+                tpmode1.transform.SetParent(decoroot.transform, worldPositionStays: false);
+
+                //tpmode2.transform.parent = null;
+                tpmode2.transform.SetParent(null, worldPositionStays: false);// must be false or will accumulate rotation
+                tpmode2.transform.position = qmm.bpt2;
+                tpmode2.transform.SetParent(decoroot.transform, worldPositionStays: false);
+
+
+                //tpmode3.transform.parent = null;
+                tpmode3.transform.SetParent(null, worldPositionStays: false);// must be false or will accumulate rotation
+                tpmode3.transform.position = qmm.bpt3;
+                tpmode3.transform.SetParent(decoroot.transform, worldPositionStays: false);
+
+                var (s0, r0, p0) = UnpackTransform(tpmodem.transform);
+                //tpmodem.transform.parent = null;
+                tpmodem.transform.SetParent(null, worldPositionStays: false);// must be false or will accumulate rotation
+                var (s1, r1, p1) = UnpackTransform(tpmodem.transform);
+                tpmodem.transform.position = qmm.bptm;
+                //tpmodem.transform.localEulerAngles = r0;
+                var (s2, r2, p2) = UnpackTransform(tpmodem.transform);
+                tpmodem.transform.SetParent(decoroot.transform, worldPositionStays: false);
+                var (s3, r3, p3) = UnpackTransform(tpmodem.transform);
+                //Debug.Log($"Time {Time.time}");
+                //Debug.Log($"Sca {s0} {s1}  {s2}  {s3}");
+                //Debug.Log($"Rot {r0} {r1}  {r2}  {r3}");
+                //Debug.Log($"Pos {p0} {p1}  {p2}  {p3}");
             }
         }
 
@@ -275,6 +377,7 @@ namespace Aiskwk.Map
         public bool addRanPoints;
         public bool addRanLines;
         public bool earlyTerminate;
+        public bool wps = true;
 
         public override void InitDecoType()
         {
@@ -290,9 +393,9 @@ namespace Aiskwk.Map
             {
                 ranpoints = new GameObject("ranpoints");
                 ranpoints.transform.position = Vector3.zero;
-                ranpoints.transform.parent = preferedParent.transform;
+                ranpoints.transform.SetParent( preferedParent.transform, worldPositionStays:wps );
             }
-            var ska = qmm.triDiag * 0.025f;
+            var ska = qmm.triMeshDiag * 0.025f;
 
             var lmn = -0.1f;
             var lmx = 1.1f;
@@ -312,7 +415,7 @@ namespace Aiskwk.Map
                 var name = "ranpt:" + nranpts;
                 //QsphInfo.DoInfoSphere(ranpoints, name, pos, ska, clrs[istat], addQsphInfo: false);
                 var sphgo = GpuInst.CreateSphereGpu(name, pos, ska, clrs[istat]);
-                sphgo.transform.parent = ranpoints.transform;
+                sphgo.transform.SetParent(ranpoints.transform, worldPositionStays: wps);
                 nranpts++;
             }
         }
@@ -328,7 +431,7 @@ namespace Aiskwk.Map
                 ranlines.transform.position = Vector3.zero;
                 ranlines.transform.parent = preferedParent.transform;
             }
-            var ska = qmm.triDiag * 0.05f;
+            var ska = qmm.triMeshDiag * 0.05f;
             //var lmn = 0.1f;
             //var lmx = 0.9f;
             var lmn = -0.1f;
@@ -342,7 +445,7 @@ namespace Aiskwk.Map
                 var lambLng2 = qut.GetRanFloat(lmn, lmx, "ranlines");
                 (var vv2, _, _) = qmm.GetWcMeshPosFromLambda(lambLng2, lambLat2);
                 var lname = "ranline:" + nranplines;
-                qmm.qtt.AddFragLine(lname, vv1, vv2, ska, nclr: "black");
+                qmm.qtt.AddFragLine(lname, vv1, vv2, ska, nclr: "black",wps:wps);
                 nranplines++;
             }
         }
@@ -354,8 +457,8 @@ namespace Aiskwk.Map
             var qkm = qmm.qkm;
             var qtt = qmm.qtt;
 
-            var ska = qmm.triDiag * 0.05f;
-            Debug.Log($"Construct Trilinesdeco - ska:{ska}  triDiag:{qmm.triDiag}");
+            var ska = qmm.triMeshMinLeg * 0.02f;
+            Debug.Log($"Construct Trilinesdeco - ska:{ska}  triDiag:{qmm.triMeshDiag}");
 
 
             var nHorzSecs = qmm.nHorzSecs;
@@ -368,6 +471,7 @@ namespace Aiskwk.Map
             int nvlines = 0;
             int ndlines = 0;
             int nsegs = 0;
+            bool wpsloc = false;
             for (int i = 0; i <= nHorzSecs; i++)
             {
                 nlines++;
@@ -377,7 +481,7 @@ namespace Aiskwk.Map
                     p2 = qmm.GetMeshNodePos(i, j);
                     pname = $"horzseg_{i}_{j}";
                     var cgo = GpuInst.CreateCylinderGpu(pname, p1, p2, ska, "cyan");
-                    cgo.transform.parent = decoroot.transform;
+                    cgo.transform.SetParent(decoroot.transform,worldPositionStays:wpsloc);
                     p1 = p2;
                     nsegs++;
                 }
@@ -400,7 +504,7 @@ namespace Aiskwk.Map
                         p2 = qmm.GetMeshNodePos(j, i);
                         pname = $"vertseg_{j}_{i}";
                         var cgo = GpuInst.CreateCylinderGpu(pname, p1, p2, ska, "yellow");
-                        cgo.transform.parent = decoroot.transform;
+                        cgo.transform.SetParent(decoroot.transform, worldPositionStays: wpsloc);
                         p1 = p2;
                         nsegs++;
                     }
@@ -425,7 +529,7 @@ namespace Aiskwk.Map
                         p2 = qmm.GetMeshNodePos(i + 1, j + 1);
                         pname = $"crosseg_{i}_{j}";
                         var cgo = GpuInst.CreateCylinderGpu(pname, p1, p2, ska, "purple");
-                        cgo.transform.parent = decoroot.transform;
+                        cgo.transform.SetParent(decoroot.transform, worldPositionStays: wpsloc);
                         nsegs++;
                     }
                     ndlines++;
@@ -449,7 +553,9 @@ namespace Aiskwk.Map
             sw.Stop();
             Debug.Log($"Generating {nTotalTriLines} trilines with {nTotalElements} elements took {sw.ElapSecs(3)} secs");
             earlyTerminate = false;
-            //yield return null;
+            //qmm.layerman.Reattach(deconame);
+            //AttachToParent();
+            yield return null;
         }
 
         public override void Construct()
@@ -497,7 +603,7 @@ namespace Aiskwk.Map
             ConstructBase();
             var nHorzSecs = qmm.nHorzSecs;
             var nVertSecs = qmm.nVertSecs;
-            var ska = qmm.triDiag * 0.1f;
+            var ska = qmm.triMeshDiag * 0.1f;
             if (largeNodes)
             {
                 ska *= 4;
@@ -524,16 +630,11 @@ namespace Aiskwk.Map
                     var ll = qmm.GetMeshNodeLatLng(i, j);
                     var clr = "yellow";
                     var edb = false;
-                    if ((i == 128 && j == 83) || (i == 128 && j == 84))
-                    {
-                        edb = true;
-                        clr = "cyan";
-                    }
-                    if ((i == 127 && j == 83) || (i == 127 && j == 84))
-                    {
-                        edb = true;
-                        clr = "cyan";
-                    }
+                    //if ((i == 128 && j == 83) || (i == 128 && j == 84))
+                    //{
+                    //    //edb = true;
+                    //    //clr = "cyan";
+                    //}
                     if (gtm != null)
                     {
                         var (isin, elev) = gtm.GetElev(pos.x, pos.z, edb);
@@ -547,7 +648,11 @@ namespace Aiskwk.Map
                         }
                         cmt = gtm.GetElevCmt(pos.x, pos.z);
                     }
-                    QsphInfo.DoInfoCubeSlim(decoroot, sname + " " + cmt, pos, ska, clr, ll);
+                    var sphinfo = QsphInfo.DoInfoCubeSlim(decoroot, sname + " " + cmt, pos, ska, clr, ll,wps:false);
+                    var info = new QsphNodeInfo();
+                    info.vertCoord.x = i;
+                    info.globalMeshCoord = new MeshCoord(i, j, nHorzSecs, nVertSecs);
+                    sphinfo.SetNodeInfo(info);
                     imn++;
                 }
                 if (sw.ElapfOverYieldTime())
@@ -583,16 +688,16 @@ namespace Aiskwk.Map
         {
             ConstructBase();
 
-            var ska = qmm.triDiag * 0.5f;
+            var ska = qmm.triMeshDiag * 0.5f;
             int i = 0;
-            foreach (var md in qmm.llmap.mapcoord.mapdata)
+            foreach (var md in qmm.llmapqkcoords.mapcoord.mapdata)
             {
                 var sname = "mc:" + i;
                 //var v = llmap.mapcoord.glbmap(md.x, 0, md.z);
                 var ll = new LatLng(md.lat, md.lng);
                 var posll = qmm.GetPosFromLatLng(ll);
                 var pos = new Vector3((float)md.x, posll.y, (float)md.z);
-                var spi = QsphInfo.DoInfoSphere(decoroot, sname, pos, ska, "orange", ll);
+                var spi = QsphInfo.DoInfoSphere(decoroot, sname, pos, ska, "orange", ll, wps:false);
                 spi.mapPoint = md;
                 i++;
             }
@@ -612,27 +717,27 @@ namespace Aiskwk.Map
         {
             ConstructBase();
 
-            var ska = qmm.triDiag * 0.5f;
+            var ska = qmm.triMeshDiag * 0.5f;
             var qkm = qmm.qkm;
 
             //var pos1 = GetPosFromLatLng(qkm.ll1, yval0);
             var pos1 = qmm.GetPosFromLatLng(qkm.ll1);
             var name1 = "ll1";
-            QsphInfo.DoInfoSphere(decoroot, name1, pos1, ska, "red", qkm.ll1);
+            QsphInfo.DoInfoSphere(decoroot, name1, pos1, ska, "red", qkm.ll1, wps:false);
 
             //var pos2 = GetPosFromLatLng(qkm.ll2, yval1);
             var pos2 = qmm.GetPosFromLatLng(qkm.ll2);
             var name2 = "ll2";
-            QsphInfo.DoInfoSphere(decoroot, name2, pos2, ska, "red", qkm.ll2);
+            QsphInfo.DoInfoSphere(decoroot, name2, pos2, ska, "red", qkm.ll2, wps: false);
 
             //var pos3 = GetPosFromLatLng(qkm.tileul.llul, yval0);
             var pos3 = qmm.GetPosFromLatLng(qkm.tileul.llul);
             var name3 = "qkt_ll_ul";
-            QsphInfo.DoInfoSphere(decoroot, name3, pos3, ska, "blue", qkm.tileul.llul);
+            QsphInfo.DoInfoSphere(decoroot, name3, pos3, ska, "blue", qkm.tileul.llul, wps: false);
             //var pos4 = GetPosFromLatLng(qkm.tilebr.llbr, yval1);
             var pos4 = qmm.GetPosFromLatLng(qkm.tilebr.llbr);
             var name4 = "qkt_ll_br";
-            QsphInfo.DoInfoSphere(decoroot, name4, pos4, ska, "blue", qkm.tilebr.llbr);
+            QsphInfo.DoInfoSphere(decoroot, name4, pos4, ska, "blue", qkm.tilebr.llbr, wps: false);
         }
     }
 
@@ -647,21 +752,21 @@ namespace Aiskwk.Map
 
         public override void Destruct()
         {
-            qmm.llmap.mapcoord.DestroyNativeCoordMarkers();
+            qmm.llmapqkcoords.mapcoord.DestroyNativeCoordMarkers();
         }
 
         public override void Construct()
         {
             ConstructBase();
             var ska = qmm.qkm.llbox.diagonalInMeters / 250;
-            qmm.llmap.mapcoord.MakeNativeCoordMarkers(ska: ska, clr: "purple");
+            qmm.llmapqkcoords.mapcoord.MakeNativeCoordMarkers(ska: ska, clr: "purple",wps:false);
         }
     }
 
     public class FrameQuadkeysDeco : QmeshDeco
     {
         public bool earlyTerminate = false;
-        public bool oldway = false;
+        public bool singlepipe = false;
         public bool showQuadkeyLabels = false;
         public override void InitDecoType()
         {
@@ -678,7 +783,7 @@ namespace Aiskwk.Map
             var qkm = qmm.qkm;
 
             //        var ska = qmm.nodefak * qkm.llbox.diagonalInMeters / 450;
-            var ska = qmm.triDiag * 0.075f;
+            var ska = qmm.triMeshDiag * 0.075f;
 
             var qtt = qmm.qtt;
             int i = 0;
@@ -687,24 +792,34 @@ namespace Aiskwk.Map
             {
                 var llul = qktile.llul;
                 var llbr = qktile.llbr;
+                //Debug.Log($"fqm {i}  llul:{llul.ToString()} llbr:{llbr}");
                 var llur = new LatLng(llul.lat, llbr.lng);
                 var llbl = new LatLng(llbr.lat, llul.lng);
                 var pul = qmm.GetPosFromLatLng(llul);
                 var pur = qmm.GetPosFromLatLng(llur);
                 var pbl = qmm.GetPosFromLatLng(llbl);
                 var pbr = qmm.GetPosFromLatLng(llbr);
+                var puls = pul.ToString("f3");
+                var pbrs = pbr.ToString("f3");
+                //Debug.Log($"    {i}   pul:{puls} pbr:{pbrs}");
                 var qkname = qktile.name;
                 var qkgo = new GameObject(qkname);
-                qkgo.transform.parent = decoroot.transform;
                 qkgo.transform.position = (pul + pur + pbl + pbr) / 4;
 
-                if (oldway)
+                //qkgo.transform.parent = decoroot.transform;
+
+                if (singlepipe)
                 {
                     QsphInfo.DoInfoSphere(qkgo, "pur" + i, pur, ska, "navyblue", llur);
-                    pipeu = GpuInst.CreateCylinderGpu(qkgo, qkname + "-u", pul, pur, ska, "cyan");
-                    piper = GpuInst.CreateCylinderGpu(qkgo, qkname + "-r", pur, pbr, ska, "cyan");
-                    pipeb = GpuInst.CreateCylinderGpu(qkgo, qkname + "-b", pbr, pbl, ska, "cyan");
-                    pipel = GpuInst.CreateCylinderGpu(qkgo, qkname + "-l", pbl, pul, ska, "cyan");
+                    pipeu = qtt.AddStraightLine(qkgo, qkname + "-u", pul, pur, ska, lclr: "orange");
+                    piper = qtt.AddStraightLine(qkgo, qkname + "-r", pur, pbr, ska, lclr: "orange");
+                    pipeb = qtt.AddStraightLine(qkgo, qkname + "-b", pbr, pbl, ska, lclr: "orange");
+                    pipel = qtt.AddStraightLine(qkgo, qkname + "-l", pbl, pul, ska, lclr: "orange");
+
+                    //pipeu = GpuInst.CreateCylinderGpu(qkgo, qkname + "-u", pul, pur, ska, "cyan");
+                    //piper = GpuInst.CreateCylinderGpu(qkgo, qkname + "-r", pur, pbr, ska, "cyan");
+                    //pipeb = GpuInst.CreateCylinderGpu(qkgo, qkname + "-b", pbr, pbl, ska, "cyan");
+                    //pipel = GpuInst.CreateCylinderGpu(qkgo, qkname + "-l", pbl, pul, ska, "cyan");
                 }
                 else
                 {
@@ -724,11 +839,14 @@ namespace Aiskwk.Map
                     yield return null;
                     if (earlyTerminate) break;
                 }
+                qkgo.transform.SetParent(decoroot.transform, worldPositionStays: false);
+
                 i++;
             }
             sw.Stop();
             Debug.Log($"Framed {i} tiles in {sw.ElapSecs(3)} secs");
             earlyTerminate = false;
+            //qmm.layerman.Reattach(deconame);
             yield return null;
         }
 
@@ -791,12 +909,12 @@ namespace Aiskwk.Map
                     var ll = qmm.GetMeshNodeLatLng(ix, iz1);
 
                     var clr = GetColor(ix, iz);
-                    var spi = QsphInfo.DoInfoSphereSlim(decoroot, sname, pos, ska, clr, ll);
+                    var spi = QsphInfo.DoInfoSphereSlim(decoroot, sname, pos, ska, clr, ll,wps:false);
 
                     var spni = new QsphNodeInfo();
                     //meshnodespis[ix, iz] = spni;
-                    spni.globalMeshCoord = new MeshCoord(ix, iz1);
-                    spni.localMeshCoord = new MeshCoord(ix, iz);
+                    spni.globalMeshCoord = new MeshCoord(ix, iz1, nHorzSecs,nVertSecs);
+                    spni.localMeshCoord = new MeshCoord(ix, iz, nHorzSecs, nVertSecs);
                     var spos = mfw.GetPosLocal(ix, iz);
                     var snrm = mfw.GetNormalLocal(ix, iz);
                     spni.vertCoord = spos;
@@ -807,7 +925,7 @@ namespace Aiskwk.Map
                         var epos = spos + snrm * normlength;
                         //var nrmgo = qut.CreatePipe(nname, spos, epos, ska / cylsphthickratio, "yellow");
                         var nrmgo = GpuInst.CreateCylinderGpu(nname, spos, epos, size: ska / cylsphthickratio, "yellow");
-                        nrmgo.transform.parent = decoroot.transform;
+                        nrmgo.transform.SetParent(decoroot.transform, worldPositionStays:false);
                     }
 
                     var uv = qmm.GetUv(ix, iz1);
@@ -849,12 +967,12 @@ namespace Aiskwk.Map
             var gt = gtm.GetGeotiff(index);
             if (gt.loading) return;
 
-            var ska = qmm.triDiag * 0.3f;
+            var ska = qmm.triMeshDiag * 0.3f;
             var fgo = new GameObject(gt.gname);
             fgo.transform.position = gt.transform.position;
             if (decoroot != null)
             {
-                fgo.transform.parent = decoroot.transform;
+                fgo.transform.parent = decoroot.transform;// probably wrong needs to be setparent false
             }
 
             var gname = gt.gname;

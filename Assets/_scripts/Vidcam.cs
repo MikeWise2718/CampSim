@@ -369,7 +369,8 @@ namespace CampusSimulator
                     camimpixy = 1600;
                     break;
             }
-
+            var yelev = vm.sman.mpman.GetHeight(campos.x, campos.z);
+            campos = campos + yelev*Vector3.up;
             vcamera.fieldOfView = camfov;
             vcamera.transform.position = campos;
             if (camorienttype == CamOrientTypeE.lookat)

@@ -70,11 +70,12 @@ namespace CampusSimulator
             slots[zslt.nodename] = zslt;
             slotnames.Add(zslt.nodename);
         }
-        void SubSlot(string name)
+        void DestroySlot(string name)
         {
             var slot = slots[name];
             zm.RemoveSlot(slot);
             slot.EmptyAndDestroy();
+            Destroy(slot.gameObject);
         }
 
         public void CreateObjects()
@@ -86,7 +87,7 @@ namespace CampusSimulator
         {
             DeleteGos();
             var namelist = new List<string>(slots.Keys);
-            namelist.ForEach(name => SubSlot(name));
+            namelist.ForEach(name => DestroySlot(name));
             namelist.ForEach(name => slots.Remove(name));
             slotnames = null;
         }
@@ -207,6 +208,7 @@ namespace CampusSimulator
             float dz = (pt2.z - pt1.z) / ndiv;
             this.slot2slotdist = Mathf.Sqrt( dx*dx + dz*dz );
             float ang = (180/Mathf.PI)*Mathf.Atan2(-dz, dx);
+            var mman = this.zm.sman.mpman;
             for (int j = 0; j < nrows; j++)
             {
                 int jofs = j*ncols;
@@ -219,7 +221,8 @@ namespace CampusSimulator
                     AddSlot(name, idx, x,z,  ang);
                     var nname = SlotNameNode(idx);
                     //lclc.AddNodePtxy(nname, x, z);
-                    lclc.AddNode(nname,new Vector3(x,0,z),domodv:false);
+                    var y = mman.GetHeight(x, z);
+                    lclc.AddNode(nname,new Vector3(x,y,z),domodv:false);
                     //Debug.Log("Added zone slot node:" + nname+" idx:"+idx+" x:"+x.ToString("f1")+" z:"+z.ToString("f1"));
                 }
                 x0 = x0 - dz;

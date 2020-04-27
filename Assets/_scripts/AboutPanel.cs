@@ -5,10 +5,16 @@ using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
 using GraphAlgos;
+using CampusSimulator;
 
 public class AboutPanel : MonoBehaviour
 {
     Text aboutText;
+
+    Button closeButton;
+    Button copyClipboardButton;
+    Button deleteSettingsButton;
+    bool buttonsInited = false;
 
     System.Diagnostics.PerformanceCounter cpuCounter;
     System.Diagnostics.PerformanceCounter ramCounter;
@@ -27,6 +33,9 @@ public class AboutPanel : MonoBehaviour
         var go = gameObject;
         var name = go.name;
         aboutText = transform.Find("AboutText").GetComponent<Text>();
+        closeButton = transform.Find("CloseButton").gameObject.GetComponent<Button>();
+        copyClipboardButton = transform.Find("CopyClipboardButton").gameObject.GetComponent<Button>();
+        deleteSettingsButton = transform.Find("DeleteSettingsButton").gameObject.GetComponent<Button>();
     }
 
     public float getCurrentCpuUsage()
@@ -41,7 +50,7 @@ public class AboutPanel : MonoBehaviour
 
     void Init()
     {
-
+        Debug.Log("Initing AboutPanel");
         cpuCounter = new System.Diagnostics.PerformanceCounter();
 
         cpuCounter.CategoryName = "Processor";
@@ -51,15 +60,48 @@ public class AboutPanel : MonoBehaviour
         ramCounter = new System.Diagnostics.PerformanceCounter("Memory", "Available MBytes");
 
         //FillAboutPanel();
+        if (!buttonsInited)
+        {
+            closeButton.onClick.AddListener(delegate { ButtonClick(closeButton.name); });
+            copyClipboardButton.onClick.AddListener(delegate { ButtonClick(copyClipboardButton.name); });
+            deleteSettingsButton.onClick.AddListener(delegate { ButtonClick(deleteSettingsButton.name); });
+            buttonsInited = true;
+        }
+        Debug.Log("Initing AboutPanel done");
     }
 
-    public Tuple<float,float> GetMemUsed()
+    void ButtonClick(string buttonname)
     {
-        var gcmem = (float) (GC.GetTotalMemory(true)/1e6);
+        Debug.Log($"{buttonname} clicked:" + Time.time);
+        switch (buttonname)
+        {
+            case "CloseButton":
+                {
+                    var spcomp = FindObjectOfType<StatusPanel>();
+                    spcomp.OptionsButton();
+                    break;
+                }
+            case "CopyClipboardButton":
+                {
+                    Aiskwk.Map.qut.CopyTextToClipboard(aboutText.text);
+                    break;
+                }
+            case "DeleteSettingsButton":
+                {
+                    Debug.LogWarning("PlayerPref Settings Deleted");
+                    PlayerPrefs.DeleteAll();
+                    break;
+                }
+        }
+    }
+
+    public Tuple<float, float> GetMemUsed()
+    {
+        var gcmem = (float)(GC.GetTotalMemory(true) / 1e6);
         var proc = System.Diagnostics.Process.GetCurrentProcess();
-        var totprivmem = (float) (proc.PrivateMemorySize64 / 1e6);
+        var totprivmem = (float)(proc.PrivateMemorySize64 / 1e6);
         proc.Dispose();
-        return new Tuple<float,float>(gcmem, totprivmem);
+        return new Tuple<float, float>(gcmem, totprivmem);
     }
 
 
@@ -77,12 +119,12 @@ public class AboutPanel : MonoBehaviour
                 frmver);
             return rv;
         }
-        catch(Exception)
+        catch (Exception)
         {
             return new Tuple<string, string>("??", "??");
         }
     }
-    public Tuple<string, string,string> GetSecurityPrincipalNames()
+    public Tuple<string, string, string> GetSecurityPrincipalNames()
     {
         var winname = "??";
         var username = "??";
@@ -93,7 +135,7 @@ public class AboutPanel : MonoBehaviour
             userdomainname = Environment.UserDomainName;
             winname = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
 
-            return new Tuple<string,string,string>(winname,username,userdomainname);
+            return new Tuple<string, string, string>(winname, username, userdomainname);
         }
         catch (Exception)
         {
@@ -171,7 +213,7 @@ public class AboutPanel : MonoBehaviour
 
 #if UNITY_EDITOR
             var svc = UnityEditor.SceneView.lastActiveSceneView.camera;
-            if (svc!=null)
+            if (svc != null)
             {
                 var t = svc.transform;
                 msg += "\nScene Cam Pos:" + t.position.ToString("F3");
@@ -192,7 +234,7 @@ public class AboutPanel : MonoBehaviour
 
             var (winname, username, userdomname) = GetSecurityPrincipalNames();
             msg += "\n\nWindows Identity:" + winname;
-            msg += "\nEnvironment.UserName:" + username+" DomainName:"+userdomname;
+            msg += "\nEnvironment.UserName:" + username + " DomainName:" + userdomname;
         }
         catch (Exception ex)
         {

@@ -100,7 +100,9 @@ namespace Aiskwk.Map
         [Header("Misc")]
         public QkMan qkm = null;
         public Qtrilines qtt = null;
-        public LatLongMap llmap = null;
+        public LatLongMap llmapqkcoords = null;
+        public LatLongMap llmapuscoords = null;
+        public LatLongMap llmapyacoords = null;
 
         int updcount = 0;
         MapExtentTypeE old_mapExtent;
@@ -121,6 +123,11 @@ namespace Aiskwk.Map
         HeightAdjust old_heightAdjust;
 
         bool initializationComplete = false;
+
+        public void DisposeOfThings()
+        {
+
+        }
 
         public bool CheckWebReleventChange()
         {
@@ -150,6 +157,8 @@ namespace Aiskwk.Map
                       old_heightAdjust != heightAdjust ||
                       old_useElevationData != useElevationData;
 
+            //Debug.Log($"CheckChange:{chg} - hmult:{hmult}");
+
             if (updcount == 0 || chg)
             {
                 old_mapExtent = mapExtent;
@@ -169,19 +178,45 @@ namespace Aiskwk.Map
             return chg;
         }
 
-        public void InitializeGrid(string scenename, LatLngBox llbox, string mapcoordname = "", MapProvider mapprov = MapProvider.BingSatelliteRoads, ElevProvider elevprov = ElevProvider.Bing)
+        public void InitializeGrid(string scenename, LatLngBox llbox, string mapcoordname = "", MapProvider mapprov = MapProvider.BingSatelliteRoads, ElevProvider elevprov = ElevProvider.BingElev)
         {
             this.scenename = scenename;
             this.mapcoordname = mapcoordname;
             this.mapprov = mapprov;
             this.elevprov = elevprov;
             this.levelOfDetail = llbox.lod;
-            this.llmap = this.gameObject.AddComponent<LatLongMap>();
+            this.llmapqkcoords = this.gameObject.AddComponent<LatLongMap>();
+            llmapqkcoords.InitMapCoords("");
+            this.llmapuscoords = this.gameObject.AddComponent<LatLongMap>();
+            llmapuscoords.InitMapCoords("");
             this.qmapElev = gameObject.AddComponent<QmapElevation>();
             this.qkm = new QkMan(this, this.mapcoordname, mapprov, llbox);
             this.qtt = this.gameObject.AddComponent<Qtrilines>();
             qtt.Init(this);
+        }
 
+        public void AddUserMapPoint(double lat,double lng, double x, double z,bool finished=false)
+        {
+            llmapuscoords.AddRowLatLng(lat, lng, x, z);
+            if (finished)
+            {
+                FinishMapPoints();
+            }
+        }
+        public void FinishMapPoints()
+        {
+            var cnt = llmapuscoords.mapcoord.mapdata.Count;
+            if (cnt<3)
+            {
+                Debug.LogWarning($"llsmapuscoords finishing with less than 3 points :{cnt}");
+                return;
+            }
+            llmapuscoords.CalcRegressionMaps();
+            var zlat = llmapuscoords.maps.latmap.Map(0, 0);
+            var zlng = llmapuscoords.maps.lngmap.Map(0, 0);
+            var zx = llmapuscoords.maps.xmap.Map(0, 0);
+            var zz = llmapuscoords.maps.zmap.Map(0, 0);
+            Debug.Log($"Finishmappoints zlat:{zlat} zlng:{zlng}   - zx:{zx}   zz:{zz}");
         }
 
         List<QmeshDeco> decolist = new List<QmeshDeco>();
@@ -233,7 +268,7 @@ namespace Aiskwk.Map
             }
             if (ix > nHorzSecs)
             {
-                Debug.LogWarning("GetUv ix>nHorzTiles:" + ix);
+                Debug.LogWarning("GetUv ix>nHorzSecs:" + ix);
             }
             if (iz < 0)
             {
@@ -241,9 +276,9 @@ namespace Aiskwk.Map
             }
             if (iz > nVertSecs)
             {
-                Debug.LogWarning("GetUv iz>nVertTiles:" + iz);
+                Debug.LogWarning("GetUv iz>nVertSecs:" + iz);
             }
-            ix = Math.Max(0, Math.Min(nHorzSecs, ix));
+            ix = Math.Max(0, Math.Min(nHorzSecs, ix));// do not subtract - 1 from this
             iz = Math.Max(0, Math.Min(nVertSecs, iz));
             var uv = uvslookup[ix, iz];
             return uv;
@@ -259,7 +294,7 @@ namespace Aiskwk.Map
                 }
                 if (ix > nHorzSecs)
                 {
-                    Debug.LogWarning("GetVert ix>nHorzTiles:" + ix + ">" + nHorzSecs);
+                    Debug.LogWarning("GetVert ix>nHorzSecs:" + ix + ">" + nHorzSecs);
                 }
                 if (iz < 0)
                 {
@@ -267,10 +302,10 @@ namespace Aiskwk.Map
                 }
                 if (iz > nVertSecs)
                 {
-                    Debug.LogWarning("GetVert iz>nVertTiles:" + iz + ">" + nVertSecs);
+                    Debug.LogWarning("GetVert iz>nVertSecs:" + iz + ">" + nVertSecs);
                 }
             }
-            ix = Math.Max(0, Math.Min(nHorzSecs, ix));
+            ix = Math.Max(0, Math.Min(nHorzSecs, ix));// do not subtract - 1 from this
             iz = Math.Max(0, Math.Min(nVertSecs, iz));
             var vert = verlookup[ix, iz];
             return vert;
@@ -309,6 +344,7 @@ namespace Aiskwk.Map
             var p = new Vector3(x, 0, z);
             var b = Barycentric(p, fv1, fv2, fv3);
             var nb = new Vector3(b.z, b.x, b.y);
+            //rangeWarnings = true;
             if (rangeWarnings && (b.x < 0 || b.y < 0 || b.z < 0))
             {
                 Debug.LogWarning("Bary1 coord out of range b.l1:" + b.x + " l2:" + b.y + " l3:" + b.z);
@@ -318,6 +354,7 @@ namespace Aiskwk.Map
             var v3 = GetVert(ix3, iz3);
             var vmid = v2;
             var vx = nb.x * v1.x + nb.y * vmid.x + nb.z * v3.x;
+            //Debug.Log($"vx:{vx}  =  nb.x:{nb.x}*v1.x:{v1.x}  +  nb.y:{nb.y}*vmid.x:{vmid.x}  +  nb.z:{nb.z}*v3.x:{v3.x}");
             var vy = nb.x * v1.y + nb.y * vmid.y + nb.z * v3.y;
             var vz = nb.x * v1.z + nb.y * vmid.z + nb.z * v3.z;
             var barypt = new Vector3(vx, vy, vz);
@@ -325,6 +362,8 @@ namespace Aiskwk.Map
             bpt2 = v2;
             bpt3 = v3;
             bptm = barypt;
+            //var bs = b.ToString("f3");
+            //Debug.Log($"Bary1 b:{bs}  x:" + x + " z:" + z + " ix1:" + ix1 + " iz1:" + iz1 + " ix2:" + ix2 + " iz2:" + iz2 + " ix3:" + ix3 + " iz3:" + iz3+" bptm:"+bptm.ToString("f3"));
             var nrm = Vector3.Cross(v2 - v1, v3 - v1);
             nrm.Normalize();
             return (barypt, nrm);
@@ -336,8 +375,8 @@ namespace Aiskwk.Map
             var zext = lambz * nVertSecs;
             var ix0 = (int)Math.Floor(xext);
             var iz0 = (int)Math.Floor(zext);
-            ix0 = Math.Min(nHorzSecs - 1, Math.Max(0, ix0));
-            iz0 = Math.Min(nVertSecs - 1, Math.Max(0, iz0));
+            ix0 = Math.Min(nHorzSecs-1, Math.Max(0, ix0));
+            iz0 = Math.Min(nVertSecs-1, Math.Max(0, iz0));
             var ix1 = ix0 + 1;
             var iz1 = iz0 + 1;
 
@@ -368,7 +407,18 @@ namespace Aiskwk.Map
             return (v, nrm, istat);
         }
 
-        public (Vector3, Vector3, int) GetWcMeshPosFromLatLng(LatLng ll)
+        public (float,float) GetLambMeshPosFromLatLng(LatLng ll)
+        {
+            var llbox = qkm.qllbox;
+            if (mapExtent == MapExtentTypeE.AsSpecified)
+            {
+                llbox = qkm.llbox;
+            }
+            var (lamblng, lamblat) = llbox.Interpolate(ll);
+            return (lamblng, lamblat);
+        }
+
+        public (Vector3, Vector3, int) GetQkWcMeshPosFromLatLng(LatLng ll)
         {
             float lamblng, lamblat;
             if (mapExtent == MapExtentTypeE.AsSpecified)
@@ -379,12 +429,56 @@ namespace Aiskwk.Map
             {
                 (lamblng, lamblat) = qkm.qllbox.Interpolate(ll);
             }
+            var lngs = lamblng.ToString("f3");
+            var lats = lamblat.ToString("f3");
+            //Debug.Log($"GetQkWcMeshPosFromLng ll:{ll.ToString()}   lamblng:{lngs} lamblat:{lats}");
             var rv = GetWcMeshPosFromLambda(lamblng, lamblat);
             return rv;
         }
+
+        public (Vector3 meshpos, Vector3 normal, int istat) GetWcMeshPosProjectedAlongYnew(Vector3 wcpos)
+        {
+            var ll = GetLngLatNew(wcpos);
+            var (lambx, lambz) = GetLambMeshPosFromLatLng(ll);
+            var (meshpos, nrm, istat) = GetWcMeshPosFromLambda(lambx, lambz);
+            var lats = ll.lat.ToString("f6");
+            var lngs = ll.lng.ToString("f6");
+            var lxs = lambx.ToString("f4");
+            var lzs = lambz.ToString("f4");
+            var wcs = wcpos.ToString("f3");
+            //Debug.Log($"GetWcMeshPos Ynew- wc:{wcs}   ll:{lats} {lngs}   lbx:{lxs} lbz:{lzs}");
+            var nmeshpos = new Vector3(wcpos.x, meshpos.y, wcpos.z);
+            return (nmeshpos, nrm, istat);
+        }
+        public LatLng GetLngLatNew(Vector3 wcpos)
+        {
+            var llmap = llmapyacoords;
+            if (llmap==null || !llmap.isInited)
+            {
+                //Debug.LogWarning("danger danger will robinson");
+                llmap = llmapqkcoords;
+            }
+            // long lat from world position
+            var nlat = llmap.maps.latmap.Map(wcpos.x, wcpos.z);
+            var nlng = llmap.maps.lngmap.Map(wcpos.x, wcpos.z);
+            var nx = llmap.maps.xmap.Map(nlng, nlat);
+            var nz = llmap.maps.zmap.Map(nlng, nlat);
+            var errx = nx - wcpos.x;
+            var errz = nz - wcpos.z;
+            var err = errx*errx + errz*errz;
+            if (err>1e-2)
+            {
+                Debug.LogError($"Error too large in GetLngLatNew:{err}");
+            }
+            var ll = new LatLng(nlat, nlng);
+            return ll;
+        }
+
+
         public (Vector3 meshpos, Vector3 normal, int istat) GetWcMeshPosProjectedAlongY(Vector3 wcpos)
         {
             var (lambx, lambz) = GetMeshLambdaFromXZ(wcpos.x, wcpos.z);
+            Debug.Log($"GetWcMeshPosProjected lambx:{lambx} lzmbz:{lambz}");
             var (meshpos, nrm, istat) = GetWcMeshPosFromLambda(lambz, lambx);
             var nmeshpos = new Vector3(wcpos.x, meshpos.y, wcpos.z);
             return (nmeshpos, nrm, istat);
@@ -393,10 +487,10 @@ namespace Aiskwk.Map
         public LatLng GetLngLat(Vector3 wcpos)
         {
             // long lat from world position
-            var nlat = llmap.maps.latmap.Map(wcpos.x, wcpos.z);
-            var nlng = llmap.maps.lngmap.Map(wcpos.x, wcpos.z);
-            var nx = llmap.maps.xmap.Map(nlng, nlat);
-            var nz = llmap.maps.zmap.Map(nlng, nlat);
+            var nlat = llmapqkcoords.maps.latmap.Map(wcpos.x, wcpos.z);
+            var nlng = llmapqkcoords.maps.lngmap.Map(wcpos.x, wcpos.z);
+            var nx = llmapqkcoords.maps.xmap.Map(nlng, nlat);
+            var nz = llmapqkcoords.maps.zmap.Map(nlng, nlat);
             var errx = nx - wcpos.x;
             var errz = nz - wcpos.z;
             var ll = new LatLng(nlat, nlng);
@@ -504,6 +598,22 @@ namespace Aiskwk.Map
                             }
                             if (stillNeedElev && useElevationData)
                             {
+                                var idx = iZ * (nHorzSecs + 1) + iX;
+                                if (qmapElev==null)
+                                {
+                                    Debug.LogWarning($"QmapMesh.GenYvals - qmapElev==null");
+                                    break;
+                                }
+                                if (qmapElev.heights == null)
+                                {
+                                    Debug.LogWarning($"QmapMesh.GenYvals - qmapElev.heights==null");
+                                    break;
+                                }
+                                if (idx>=qmapElev.heights.Count)
+                                {
+                                    Debug.LogWarning($"QmapMesh.GenYvals - idx({idx}) out of range 0-{qmapElev.heights.Count}");
+                                    break;
+                                }
                                 yval = this.qmapElev.heights[iZ * (nHorzSecs + 1) + iX];
                             }
                             break;
@@ -545,8 +655,8 @@ namespace Aiskwk.Map
         }
         public LatLng GetMeshNodeLatLng(int ix, int iz)
         {
-            var x = ix * 1.0f / nHorzSecs;
-            var z = iz * 1.0f / nVertSecs;
+            var x = ix * 1f / nHorzSecs;
+            var z = iz * 1f / nVertSecs;
 
             var rv = GetQktileBoxRelativeLatLng(z, x);
             return rv;
@@ -638,15 +748,15 @@ namespace Aiskwk.Map
         }
         public Vector3 GetPosFromLatLng(LatLng ll, float yval)
         {
-            var v = llmap.xycoord((float)ll.lng, (float)ll.lat);// backwards, see comments in xycoord code
+            var v = llmapqkcoords.xycoord((float)ll.lng, (float)ll.lat);// backwards, see comments in xycoord code
             var rv = new Vector3(v.x, yval, v.z);
             //var rv = new Vector3(v.z, yval, v.x);
             //Debug.Log("ll.lat:" + ll.lat + " lng:" + ll.lng + "    rv.x:" + rv.x + " z:" + rv.z);
             return rv;
         }
-        public Vector3 GetPosFromLatLng(LatLng ll)
+        public Vector3 GetPosFromLatLng(LatLng ll)// wrong when in hierarchy?
         {
-            (var rv, _, _) = GetWcMeshPosFromLatLng(ll);
+            (var rv, _, _) = GetQkWcMeshPosFromLatLng(ll);
             return rv;
         }
 
@@ -662,15 +772,17 @@ namespace Aiskwk.Map
                 {
                     llbox = qkm.llbox;
                 }
-                qmapElev.InitElevs(scenename, ElevProvider.Bing, this.mapExtent, EarthHightModelE.sealevel, nVertSecs + 1, nHorzSecs + 1, llbox);
+                qmapElev.InitElevs(scenename, this.elevprov, this.mapExtent, EarthHightModelE.sealevel, nVertSecs + 1, nHorzSecs + 1, llbox);
                 (ok, nelev) = await qmapElev.RetrieveElevations(execute, forceload);
                 if (ok)
                 {
                     heights = qmapElev.heights;
-                    var nexp = (nVertSecs + 1) * (nHorzSecs + 1);
-                    if (nexp != heights.Count)
+                    var nexp1 = (nVertSecs + 1) * (nHorzSecs + 1);
+                    var nexp2 = (nVertSecs + 2) * (nHorzSecs + 1);
+                    if (heights.Count!=nexp1 && heights.Count!=nexp2)
                     {
-                        Debug.LogWarning($"Retrieved {heights.Count} bing heights - but expected:{nexp}");
+                        // sometimes we have to retrieve one row too many since we cannot retrieve only one row
+                        Debug.LogWarning($"Retrieved {heights.Count} bing heights but expected:{nexp1} or {nexp2}  -   nVertSecs:{nVertSecs} nHorzSecs:{nHorzSecs}");
                     }
                     if (heights.Count > 0)
                     {
@@ -729,9 +841,9 @@ namespace Aiskwk.Map
             nHorzSecsPerMesh = nHorzSecs;
             nVertSecsPerMesh = nVertSecs / nMeshes;
             var nVertsPerMesh = CalcVertNumber(nHorzSecsPerMesh, nVertSecsPerMesh);
-            Debug.Log("CalcMeshSize - nHorzTiles:" + nHorzSecs + " nVertTiles:" + nVertSecs + " flatTris:" + flatTriangles);
-            Debug.Log("CalcMeshSize -     nVerts:" + nVerts + "  fnMeshes:" + fnMeshes.ToString("f2") + " nMeshes:" + nMeshes);
-            Debug.Log("CalcMeshSize -  qkm.nqk.x:" + qkm.nqk.x + " y:" + qkm.nqk.y + "  nVertSecsPerMesh: " + nVertSecsPerMesh + " nVertsPerMesh:" + nVertsPerMesh);
+            //Debug.Log("CalcMeshSize - nHorzTiles:" + nHorzSecs + " nVertTiles:" + nVertSecs + " flatTris:" + flatTriangles);
+            //Debug.Log("CalcMeshSize -     nVerts:" + nVerts + "  fnMeshes:" + fnMeshes.ToString("f2") + " nMeshes:" + nMeshes);
+            //Debug.Log("CalcMeshSize -  qkm.nqk.x:" + qkm.nqk.x + " y:" + qkm.nqk.y + "  nVertSecsPerMesh: " + nVertSecsPerMesh + " nVertsPerMesh:" + nVertsPerMesh);
         }
         Vector3[,] verlookup = null;
         Vector2[,] uvslookup = null;
@@ -739,7 +851,9 @@ namespace Aiskwk.Map
         public int numTriangles = 0;
         public int numBitmapTilesRetrieved = 0;
         public int numElevationSetsRetrieved = 0;
-        public float triDiag = 20;
+        public float triMeshDiag = 20;
+        public float triMeshMinLeg = 20;
+        public float triMeshMaxLeg = 20;
 
         List<MfWrap> gomflst = null;
 
@@ -791,21 +905,31 @@ namespace Aiskwk.Map
             old_addMeshColliders = addMeshColliders;
         }
 
-        void GenerateViewer()
+        public void RegenerateViewer()
+        {
+            DestroyViewer();
+            if (!addViewer) return;
+
+            BuildViewer();
+        }
+        void DestroyViewer()
         {
             if (viewerobj != null)
             {
                 Destroy(viewerobj);
                 viewerobj = null;
             }
-            old_addViewer = addViewer;
-            if (!addViewer) return;
-
+        }
+        public void BuildViewer()
+        {
+            DestroyViewer();
             viewerobj = new GameObject("Viewer");
             viewer = viewerobj.AddComponent<Viewer>();
             viewer.InitViewer(this);
             viewerobj.transform.SetParent(this.transform, worldPositionStays: true);
             viewerobj.transform.SetAsFirstSibling();
+            addViewer = true;
+            old_addViewer = true;
         }
         void UpdateStatistics()
         {
@@ -815,16 +939,22 @@ namespace Aiskwk.Map
                 box = qkm.qllbox;
             }
             stats.CalcValues(box);
-            var meshorg = GetMeshNodePos(0, 0);
+            var meshq00 = GetMeshNodePos(0, 0);
+            var meshq01 = GetMeshNodePos(0, 1);
+            var meshq10 = GetMeshNodePos(1, 0);
             var meshq11 = GetMeshNodePos(1, 1);
-            triDiag = Vector3.Distance(meshorg, meshq11);
-            stats.meshDeltaMeters = GetMeshNodePos(1, 1) - meshorg;
+            triMeshDiag = Vector3.Distance(meshq00, meshq11);
+            var d01 = Vector3.Distance(meshq00, meshq01);
+            var d10 = Vector3.Distance(meshq00, meshq10);
+            triMeshMinLeg = Math.Min(d01, d10);
+            triMeshMaxLeg = Math.Max(d01, d10);
+            stats.meshDeltaMeters = GetMeshNodePos(1, 1) - meshq00;
 
         }
         MfWrap GetNewGomf(int srow, int nrow, int nhps, int nvps)
         {
-            var i = gomflst.Count;
-            var nname = "gomf-" + i;
+            var gomfidx = gomflst.Count;
+            var nname = "gomf-" + gomfidx;
             var gomfgo = new GameObject(nname);
             var gomf = gomfgo.AddComponent<MfWrap>();
             gomf.Init(this, srow, nrow, nhps, nvps);
@@ -883,7 +1013,7 @@ namespace Aiskwk.Map
             {
                 while (nVertRowsDone < nVertRowsTodo)
                 {
-                    //Debug.Log("nrowsdone:" + nrowsdone + " nrowstodo:" + nrowstodo);
+                    //Debug.Log($"nVertRowsDone:{nVertRowsDone} nVertRowsTodo:{nVertRowsTodo}  Time:{Time.time}");
                     // need new lists
                     var vertices = new List<Vector3>();
                     var triangles = new List<int>();
@@ -894,7 +1024,7 @@ namespace Aiskwk.Map
 
                     var nVertRowsTodoPerStep = Math.Min(nVertSecsPerMesh, nVertRowsTodo - nVertRowsDone) - testgap;
 
-                    //Debug.Log("top - nVertRowsTodoPerStep:" + nVertRowsTodoPerStep + " nVertRowsTodo:" + nVertRowsTodo + " nVertRowsDone:" + nVertRowsDone);
+                    //Debug.Log($"Top - nVertRowsTodoPerStep:{nVertRowsTodoPerStep} nVertRowsTodo:{nVertRowsTodo} nVertRowsDone:{nVertRowsDone} time:{Time.time}");
 
                     var gomf = GetNewGomf(nVertRowsDone, nVertRowsTodoPerStep, nHorzSecsPerMesh, nVertSecsPerMesh);
                     var mf = gomf.GetComponent<MeshFilter>();
@@ -931,7 +1061,7 @@ namespace Aiskwk.Map
                         mesh.triangles = triangles.ToArray();
                         mesh.uv = uvs.ToArray();
                         mesh.RecalculateNormals();
-                        Debug.Log("recacluated normals");
+                        //Debug.Log("recalculated normals");
                     }
                     else
                     {
@@ -999,11 +1129,40 @@ namespace Aiskwk.Map
                 AdjustYvals(yvalmidpt, dogomfs: true);
                 var nyvalmidpt = GetYvalLamb(lambx, lambz);
             }
-            GenerateViewer();
+            RegenerateViewer();
             AddMeshColliders();
             initializationComplete = true;
             return (nBmRetrieved, nElRetrived);
         }
+
+        public void CalcYaLLmap()
+        {
+            var cnt = llmapqkcoords.mapcoord.mapdata.Count;
+            Debug.Log($"CalcYaLLmap llmapqk pts:{cnt}");
+            var llya= this.gameObject.AddComponent<LatLongMap>();
+            llya.InitMapCoords();
+            int i = 0;
+            foreach (var md in llmapqkcoords.mapcoord.mapdata)
+            {
+                var sname = "mc:" + i;
+                //var v = llmap.mapcoord.glbmap(md.x, 0, md.z);
+                var ll = new LatLng(md.lat, md.lng);
+                var oripos = new Vector3((float)md.x, 0, (float)md.z);
+                var go = new GameObject(sname);
+                go.transform.position = oripos;
+                go.transform.SetParent(transform, worldPositionStays: false);
+                var newpos = go.transform.position;
+                llya.AddRowLatLng(ll.lat, ll.lng, newpos.x, newpos.z);
+                //llya.AddRowLatLng(ll.lat, ll.lng, oripos.x, oripos.z);
+                var ops = oripos.ToString("f3");
+                var nps = newpos.ToString("f3");
+                Debug.Log($"  CalcYaLlmap {sname} {ll.ToString()}  orip:{ops}  newp:{nps}");
+                i++;
+            }
+            llya.CalcRegressionMaps();
+            llmapyacoords = llya;
+        }
+
         private void AddVertexSmooth(int ix0, int iz0, ICollection<Vector3> vertices)
         {
             var v00 = GetMeshNodePos(ix0, iz0);
@@ -1105,6 +1264,14 @@ namespace Aiskwk.Map
             uvslookup[ix0, iz0] = uv1;
             uvs.Add(uv1);
         }
+
+        public void DeleteSceneData()
+        {
+            qkm.DeleteBitmapData(scenename, mapprov);
+            qmapElev.DeleteElevData(scenename, mapprov);
+            deleteSceneData = false;
+        }
+
         void Update()
         {
             if (initializationComplete)
@@ -1121,8 +1288,9 @@ namespace Aiskwk.Map
                 }
                 if (deleteSceneData)
                 {
+                    Debug.Log($"Deleting Scene Data {scenename} {mapprov}");
+                    qkm.DeleteBitmapData(scenename, mapprov);
                     deleteSceneData = false;
-                    qkm.DeleteWebData(scenename, mapprov);
                 }
                 if (CheckWebReleventChange())
                 {
@@ -1135,7 +1303,8 @@ namespace Aiskwk.Map
                 }
                 if (addViewer != old_addViewer)
                 {
-                    GenerateViewer();
+                    RegenerateViewer();
+                    old_addViewer = addViewer;
                 }
                 if (addMeshColliders != old_addMeshColliders)
                 {

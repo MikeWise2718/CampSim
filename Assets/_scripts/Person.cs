@@ -41,6 +41,16 @@ namespace CampusSimulator
         public Journey journey = null;
         public bool flagged = false;
         public PersonAniStateE perstate = PersonAniStateE.standing;
+        public bool isVisible = true;
+
+        public void SetVisiblity(bool visstat)
+        {
+            isVisible = visstat;
+        }
+        public bool GetVisiblity()
+        {
+            return isVisible;
+        }
 
 
 

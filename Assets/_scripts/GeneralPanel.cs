@@ -58,9 +58,9 @@ public class GeneralPanel : MonoBehaviour
     }
 
 
-    public void SetVals()
+    public void SetVals(bool closing = false)
     {
-        Debug.Log("GeneralPanel SetVals called");
+        Debug.Log($"GeneralPanel.SetVals called - closing:{closing}");
         sman.fastMode = fastModeToggle.isOn;
         panelActive = false;
         sman.RequestRefresh("GeneralPanel-SetVals");

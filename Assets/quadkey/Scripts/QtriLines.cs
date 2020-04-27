@@ -141,7 +141,7 @@ namespace Aiskwk.Map
                     var isect = ls1.TryIntersect(ls2, out var pti, out var t, out var u);
                     if (isect)
                     {
-                        var (ptii, _, _) = qmm.GetWcMeshPosProjectedAlongY(pti);
+                        var (ptii, _, _) = qmm.GetWcMeshPosProjectedAlongYnew(pti);
                         var (_, icomp) = AddPoint(lname, rv, ptii, t);
                         nTotComps += icomp;
                     }
@@ -153,13 +153,25 @@ namespace Aiskwk.Map
         public int nTotComps = 0;
         public int nFragLines = 0;
 
-        public GameObject AddFragLine(GameObject parent, string lname, Vector3 pt1, Vector3 pt2, float lska = 1.0f, float nska = 1.0f, string lclr = "red", string nclr = "", int omit = -1, float widratio = 1)
+        public GameObject AddStraightLine( string lname, Vector3 pt1, Vector3 pt2, float lska = 1.0f, float nska = 1.0f, string lclr = "red", string nclr = "", int omit = -1, float widratio = 1, bool wps = true)
         {
-            var frago = AddFragLine(lname, pt1, pt2, lska, nska, lclr, nclr, omit, widratio);
-            frago.transform.parent = parent.transform;
+            var lgo = GpuInst.CreateCylinderGpu(lname, pt1, pt2, lska, lclr, widratio: widratio);
+            return lgo;
+        }
+        public GameObject AddStraightLine(GameObject parent, string lname, Vector3 pt1, Vector3 pt2, float lska = 1.0f, float nska = 1.0f, string lclr = "red", string nclr = "", int omit = -1, float widratio = 1, bool wps = true)
+        {
+            var lgo = AddStraightLine(lname, pt1, pt2, lska, nska, lclr, nclr, omit, widratio, wps: wps);
+            lgo.transform.SetParent(parent.transform, worldPositionStays: wps);
+            return lgo;
+        }
+
+        public GameObject AddFragLine(GameObject parent, string lname, Vector3 pt1, Vector3 pt2, float lska = 1.0f, float nska = 1.0f, string lclr = "red", string nclr = "", int omit = -1, float widratio = 1, bool wps=true)
+        {
+            var frago = AddFragLine(lname, pt1, pt2, lska, nska, lclr, nclr, omit, widratio, wps: wps);
+            frago.transform.SetParent(parent.transform, worldPositionStays:wps);
             return frago;
         }
-        public GameObject AddFragLine(string lname, Vector3 pt1, Vector3 pt2, float lska = 1.0f, float nska = 1.0f, string lclr = "red", string nclr = "", int omit = -1, float widratio = 1)
+        public GameObject AddFragLine(string lname, Vector3 pt1, Vector3 pt2, float lska = 1.0f, float nska = 1.0f, string lclr = "red", string nclr = "", int omit = -1, float widratio = 1, bool wps = true)
         {
             var ptlist = GetIsectList(lname, pt1, pt2, omit: omit);
             ntotIsects += ptlist.Count;
@@ -179,7 +191,7 @@ namespace Aiskwk.Map
                 {
                     sname = $"{llname}_pt1_{d1.ToString("f4")}";
                     sphgo = qut.CreateMarkerSphere(sname, pit1, lska * nska, nclr);
-                    sphgo.transform.parent = lgo.transform;
+                    sphgo.transform.SetParent(lgo.transform, worldPositionStays: wps);
                 }
                 var ptform = GpuInst.CreateCylinderGpu(llname, pit1, pit2, lska, lclr, widratio: widratio);
                 ptform.transform.parent = lgo.transform;
@@ -187,7 +199,8 @@ namespace Aiskwk.Map
                 {
                     sname = $"{llname}_pt2_{d2.ToString("f4")}";
                     var sphgotform = GpuInst.CreateSphereGpu(sname, pit2, lska * nska, nclr);
-                    sphgotform.transform.parent = lgo.transform;
+                    sphgotform.transform.SetParent(lgo.transform, worldPositionStays: wps);
+                    //sphgotform.transform.parent = lgo.transform;
                 }
             }
             return lgo;

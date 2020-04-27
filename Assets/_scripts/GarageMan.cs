@@ -200,6 +200,7 @@ namespace CampusSimulator
             var gar = garagelookup[name];
             gar.Empty(); // destroys game object as well
             garagelookup.Remove(name);
+            Destroy(gar.gameObject);
         }
         public void DelGarages()
         {

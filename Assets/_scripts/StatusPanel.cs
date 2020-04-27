@@ -8,8 +8,6 @@ namespace CampusSimulator
 {
     public class StatusPanel : MonoBehaviour
     {
-
-
         SceneMan sman;
         JourneyMan jman;
         GarageMan gman;
@@ -183,6 +181,7 @@ namespace CampusSimulator
         public void OptionsButton()
         {
             var newstate = !optionsPanelGo.activeSelf;
+            Debug.Log($"Options Button Pushed optionsPanelGo.activeSelf:{optionsPanelGo.activeSelf} -> newstate:{newstate}");
             optionsPanelGo.SetActive(newstate);// this does immediately take effect
             optionsPanel.ChangingOptionsDialog(newstate);
         }

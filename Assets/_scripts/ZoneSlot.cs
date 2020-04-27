@@ -196,7 +196,9 @@ namespace CampusSimulator
                 }
             }
             calcVeks();
-            slotformgo.transform.position = new Vector3(x, 0, z);
+            var y = zm.sman.mpman.GetHeight(x, z);
+            //Debug.Log($"{name}  x:{x} y:{y} z:{z}  ang:{ang}");
+            slotformgo.transform.position = new Vector3(x, y, z);
             slotformgo.transform.rotation = Quaternion.Euler(0, ang + 90, 0);
         }
 
@@ -272,7 +274,9 @@ namespace CampusSimulator
             {
                 return slotformgo.transform.position;
             }
-            return new Vector3(x, 0, z);
+            var y = zone.zm.sman.mpman.GetHeight(x, z);
+            Debug.Log($"ZoneSlot.GetPosition y:{y}");
+            return new Vector3(x, y, z);
         }
         public Vector3 GetPosition(zslotPosE slotpos)
         {

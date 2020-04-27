@@ -246,7 +246,7 @@ namespace Aiskwk.Map
             }
             Debug.Log("Plotting " + vehicleTrackName + " consolidationDistance:" + vtm.consolidationDistance + "  trackscale:" + vtm.trackScale);
             var ll0 = new LatLng(latcol[0], lngcol[0]);
-            (var pos0, _, _) = qmesh.GetWcMeshPosFromLatLng(ll0);
+            (var pos0, _, _) = qmesh.GetQkWcMeshPosFromLatLng(ll0);
             var dolinks = vtm.vehicleTrackForm == VehicleTrackForm.Links || vtm.vehicleTrackForm == VehicleTrackForm.NodesAndLinks;
             var donodes = vtm.vehicleTrackForm == VehicleTrackForm.Nodes || vtm.vehicleTrackForm == VehicleTrackForm.NodesAndLinks;
             for (var i = 0; i < nrow; i++)
@@ -258,7 +258,7 @@ namespace Aiskwk.Map
                     Debug.Log("pt:" + ptname);
                 }
                 var ll = new LatLng(latcol[i], lngcol[i]);
-                (var pos, _, _) = qmesh.GetWcMeshPosFromLatLng(ll);
+                (var pos, _, _) = qmesh.GetQkWcMeshPosFromLatLng(ll);
                 if (Vector3.Distance(pos0, pos) > vtm.consolidationDistance)
                 {
                     if (donodes)
@@ -273,7 +273,7 @@ namespace Aiskwk.Map
                         var nclr = Color.Lerp(cclr, Color.white, frac);
                         //var pipe = qut.CreatePipe(ppname, pos0, pos, nclr, skalink);
                         //var pipe = GpuInst.CreateCylinderGpu(ppname, pos0, pos, skalink, clr);
-                        var pipe = vtm.qmm.qtt.AddFragLine(ppname, pos0, pos, skalink, lclr: clr, widratio: skawid);
+                        var pipe = vtm.qmm.qtt.AddFragLine(ppname, pos0, pos, skalink, lclr: clr, widratio: skawid,wps:true);
                         pipe.transform.parent = vehgo.transform;
                         nlinks++;
                     }

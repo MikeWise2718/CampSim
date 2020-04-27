@@ -30,12 +30,16 @@ public class FramePanel : MonoBehaviour
 
     void Start()
     {
+        Debug.Log("FramePanel Start called");
+
         panelActive = false;
         LinkObjectsAndComponents();
     }
 
     public void LinkObjectsAndComponents()
     {
+        Debug.Log("FramePanel LinkObjectsAndComponents called");
+
         sman = FindObjectOfType<SceneMan>();
         if (sman == null)
         {
@@ -65,6 +69,7 @@ public class FramePanel : MonoBehaviour
     public void InitVals()
     {
         Debug.Log("FramePanel InitVals called");
+
         if (!linked)
         {
             LinkObjectsAndComponents();
@@ -108,9 +113,9 @@ public class FramePanel : MonoBehaviour
     }
 
 
-    public void SetVals()
+    public void SetVals(bool closing = false)
     {
-        Debug.Log("FramePanel SetVals called");
+        Debug.Log($"FramePanel.SetVals called - closing:{closing}");
         fman.visibilityTiedToDetectability.SetAndSave(visTiedToggle.isOn);
         fman.showCarRects.SetAndSave(showCarsToggle.isOn);
         fman.showPersRects.SetAndSave(showPersToggle.isOn);

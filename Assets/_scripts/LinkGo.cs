@@ -62,6 +62,8 @@ namespace CampusSimulator
             }
 
         }
+        public static bool usemman = true;
+
         public static GameObject MakeLinkGo(SceneMan sman, LcLink link, float linkRadius, string clrname,float alf,bool flatlink=false)
         {
             var go = new GameObject();
@@ -88,7 +90,14 @@ namespace CampusSimulator
             }
             else
             {
-                linkcyl = GraphUtil.CreatePipe(link.name, p1, p2, linkRadius, clrname, alf);
+                if (usemman)
+                {
+                    linkcyl = sman.mpman.AddLine(link.name, p1, p2, linkRadius, lclr:clrname, frag:true );
+                }
+                else
+                {
+                    linkcyl = GraphUtil.CreatePipe(link.name, p1, p2, linkRadius, clrname, alf);
+                }
             }
             if (sman != null && sman.garnish != RouteGarnishE.none)
             {

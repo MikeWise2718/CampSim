@@ -8,8 +8,8 @@ public class OptionsPanel : MonoBehaviour
 
     public GameObject visualPanelGo;
     public VisualsPanel visualsPanel;
-    public GameObject mapFitPanelGo;
-    public MapFitPanel mapFitPanel;
+    public GameObject mapSetGo;
+    public MapSetPanel mapSetPanel;
     public GameObject framePanelGo;
     public FramePanel framePanel;
     public GameObject b19PanelGo;
@@ -21,7 +21,7 @@ public class OptionsPanel : MonoBehaviour
     public GameObject aboutPanelGo;
     public AboutPanel aboutPanel;
     public Toggle visualToggle;
-    public Toggle mapfitToggle;
+    public Toggle mapsetToggle;
     public Toggle frameToggle;
     public Toggle b19Toggle;
     public Toggle generalToggle;
@@ -36,8 +36,8 @@ public class OptionsPanel : MonoBehaviour
         aboutPanel = aboutPanelGo.GetComponent<AboutPanel>();
         visualPanelGo = transform.Find("VisualsPanel").gameObject;
         visualsPanel = visualPanelGo.GetComponent<VisualsPanel>();
-        mapFitPanelGo = transform.Find("MapFitPanel").gameObject;
-        mapFitPanel = mapFitPanelGo.GetComponent<MapFitPanel>();
+        mapSetGo = transform.Find("MapSetPanel").gameObject;
+        mapSetPanel = mapSetGo.GetComponent<MapSetPanel>();
         framePanelGo = transform.Find("FramePanel").gameObject;
         framePanel = framePanelGo.GetComponent<FramePanel>();
         b19PanelGo = transform.Find("B19Panel").gameObject;
@@ -48,8 +48,8 @@ public class OptionsPanel : MonoBehaviour
         helpPanel = helpPanelGo.GetComponent<HelpPanel>();
         var vgo = transform.Find("VisualsToggle").gameObject;
         visualToggle = vgo.GetComponent<Toggle>();
-        var mgo = transform.Find("MapFitToggle").gameObject;
-        mapfitToggle = mgo.GetComponent<Toggle>();
+        var mgo = transform.Find("MapSetToggle").gameObject;
+        mapsetToggle = mgo.GetComponent<Toggle>();
         var fgo = transform.Find("FrameToggle").gameObject;
         frameToggle = fgo.GetComponent<Toggle>();
         var bgo = transform.Find("B19Toggle").gameObject;
@@ -62,13 +62,14 @@ public class OptionsPanel : MonoBehaviour
         aboutToggle = ago.GetComponent<Toggle>();
         togGroup = GetComponent<ToggleGroup>();
         togGroup.allowSwitchOff = true; // otherwise it does not save state correctly when we turn off the panel
-        SyncState();
+        SyncOptionsTabState();
     }
-    public void SyncState()
+    public void SyncOptionsTabState()
     {
         if (!visualPanelGo) return; // not initialized yet
+        //Debug.Log("SyncOptionsTabState");
         visualPanelGo.SetActive(visualToggle.isOn);
-        mapFitPanelGo.SetActive(mapfitToggle.isOn);
+        mapSetGo.SetActive(mapsetToggle.isOn);
         framePanelGo.SetActive(frameToggle.isOn);
         b19PanelGo.SetActive(b19Toggle.isOn);
         generalPanelGo.SetActive(generalToggle.isOn);
@@ -81,6 +82,10 @@ public class OptionsPanel : MonoBehaviour
         if (visualToggle.isOn)
         {
             visualsPanel.InitVals();
+        }
+        if (mapsetToggle.isOn)
+        {
+            mapSetPanel .InitVals();
         }
         if (frameToggle.isOn)
         {
@@ -101,34 +106,40 @@ public class OptionsPanel : MonoBehaviour
     }
     public void ChangingOptionsDialog(bool isOpening)
     {
+        //Debug.Log($"ChangingOptionsDialog - isOpening:{isOpening}");
+
         if (isOpening)
         {
-            SyncState();
+            SyncOptionsTabState();
         }
         else
         {
-            // must be closeing then
+            // if we are not opening then we must be closing
             if (visualToggle.isOn)
             {
-                visualsPanel.SetVals();
+                visualsPanel.SetVals(closing: true);
+            }
+            if (mapsetToggle.isOn)
+            {
+                mapSetPanel.SetVals(closing:true);
             }
             if (frameToggle.isOn)
             {
-                framePanel.SetVals();
+                framePanel.SetVals(closing: true);
             }
             if (b19Toggle.isOn)
             {
-                b19Panel.SetVals();
+                b19Panel.SetVals(closing: true);
             }
             if (generalToggle.isOn)
             {
-                generalPanel.SetVals();
+                generalPanel.SetVals(closing: true);
             }
         }
     }
     public void OptionsTabToggle()
     {
-        SyncState();
+        SyncOptionsTabState();
     }
     // Update is called once per frame
     void Update()

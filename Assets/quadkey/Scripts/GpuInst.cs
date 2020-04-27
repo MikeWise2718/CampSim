@@ -151,7 +151,7 @@ namespace Aiskwk.Map
         public static GameObject CreateCylinderGpu(GameObject pargo, string name, Vector3 frpt, Vector3 topt, float size = 0.1f, string clr = "yellow", float alf = 1, float widratio = 1)
         {
             var cgo = CreateCylinderGpu(name, frpt, topt, size, clr, alf, widratio);
-            cgo.transform.parent = pargo.transform;
+            cgo.transform.parent = pargo?.transform;
             return cgo;
         }
         public static GameObject CreateCylinderGpu(string name, Vector3 frpt, Vector3 topt, float size = 0.1f, string clr = "yellow", float alf = 1, float widratio = 1)

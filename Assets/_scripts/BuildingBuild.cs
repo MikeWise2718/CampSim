@@ -263,12 +263,16 @@ namespace CampusSimulator
             if (cname != "")
             {
                 var rrenderer = bgo.GetComponent<Renderer>();
-                rrenderer.material.color = GraphAlgos.GraphUtil.getcolorbyname(cname);
+                rrenderer.material.color = GraphAlgos.GraphUtil.getcolorbyname(cname,alpha:0.7f);
+                rrenderer.material.shader = Shader.Find("Transparent/Diffuse");
             }
         }
         void AddQuadHouse(string name, Vector3 bscale, double brot, Vector3 bpos, string sidecolor = "white", string rufcolor = "dirtyred")
         {
             //       Debug.Log("Adding house of quads " + name);
+            var yelev = bm.sman.mpman.GetHeight(bpos.x, bpos.z);
+            bpos = bpos + yelev*Vector3.up;
+
             var sq2 = Mathf.Sqrt(2);
             bscale = new Vector3(bscale.x, bscale.y / sq2, bscale.z / sq2); // the rooftop is higher than the top floor
             var sq22 = sq2 / 2;
@@ -276,7 +280,8 @@ namespace CampusSimulator
             var ones = Vector3.one;
             var sq2v = ones * sq22;
             var xoff = Vector3.right / 2;
-            var yoff = Vector3.up / 2;
+            //var yoff = new Vector3(0, yelev + 0.5f, 0);
+            var yoff =  Vector3.up / 2;
             var zoff = Vector3.forward / 2;
             var pgo = new GameObject(name);
             AddQuad(pgo, "floor", ones, new Vector3(-90, 0, 0), -yoff, sidecolor);
@@ -301,6 +306,8 @@ namespace CampusSimulator
         // AddFlatQuadHouse("blk2", new Vector3(26.9f, 5, 16.7f), -3.4, new Vector3(56.53f, 4f, -35.05f));
         void AddFlatQuadHouse(string name, Vector3 bscale, double brot, Vector3 bpos, string sidecolor = "white", string rufcolor = "dimgray")
         {
+            var yelev = bm.sman.mpman.GetHeight(bpos.x, bpos.z);
+            bpos = bpos + yelev * Vector3.up;
             //      Debug.Log("Adding flat house of quads " + name);
             var sq2 = Mathf.Sqrt(2);
             //bscale = new Vector3(bscale.x, bscale.y / sq2, bscale.z / sq2); // the rooftop is higher than the top floor
@@ -332,6 +339,9 @@ namespace CampusSimulator
 
         void AddMfCube(string name, Vector3 bscale, double brot, Vector3 bpos, string cname = "")
         {
+            var yelev = bm.sman.mpman.GetHeight(bpos.x, bpos.z);
+            bpos = bpos + yelev * Vector3.up;
+
             //       Debug.Log("Adding mfcube " + name);
             var zero = Vector3.zero;
             var ones = Vector3.one;
@@ -355,6 +365,10 @@ namespace CampusSimulator
 
         void AddBlock(string name, Vector3 bscale, double brot, Vector3 bpos, string cname = "")
         {
+            var yelev = bm.sman.mpman.GetHeight(bpos.x, bpos.z);
+            bpos = bpos + yelev * Vector3.up;
+
+
             var bgo = GameObject.CreatePrimitive(PrimitiveType.Cube);
             bgo.name = name;
             bgo.transform.localScale = bscale;
@@ -370,6 +384,9 @@ namespace CampusSimulator
         }
         void AddBlockR(string name, Vector3 bscale, Vector3 brot, Vector3 bpos, string cname = "")
         {
+            var yelev = bm.sman.mpman.GetHeight(bpos.x, bpos.z);
+            bpos = bpos + yelev * Vector3.up;
+
             var bgo = GameObject.CreatePrimitive(PrimitiveType.Cube);
             bgo.name = name;
             bgo.transform.localScale = bscale;
@@ -385,6 +402,10 @@ namespace CampusSimulator
         }
         void AddBldResource(string name, string rname, Vector3 bscale, double brot, Vector3 bpos)
         {
+            var yelev = bm.sman.mpman.GetHeight(bpos.x, bpos.z);
+            bpos = bpos + yelev * Vector3.up;
+
+
             var objPrefab = Resources.Load<GameObject>(rname);
             var rgo = Instantiate<GameObject>(objPrefab) as GameObject;
             rgo.name = name;
@@ -407,6 +428,12 @@ namespace CampusSimulator
         int pnum = 0;
         void AddLineOfResources(string pname, string resourcename, int n, Vector3 p1, Vector3 p2, bool randomrotate, bool randomscale, float minheit, float maxheit, float aspectx, float aspectz)
         {
+            var yelev1 = bm.sman.mpman.GetHeight(p1.x, p1.z);
+            p1 = p1 + yelev1 * Vector3.up;
+            var yelev2 = bm.sman.mpman.GetHeight(p2.x, p2.z);
+            p2 = p2 + yelev2 * Vector3.up;
+
+
             int nm1 = n - 1;
             if (nm1 <= 0) nm1 = 1;
             var d1 = p2 - p1;
@@ -434,22 +461,32 @@ namespace CampusSimulator
         }
         void AddLineOfPines(string pname, int n, Vector3 p1, Vector3 p2, bool randomrotate = true, bool randomscale = true, float minheit = 0.35f, float maxheit = 0.6f, float aspectx = 1, float aspectz = 1)
         {
+            var yelev1 = bm.sman.mpman.GetHeight(p1.x, p1.z);
+            p1 = p1 + yelev1 * Vector3.up;
+            var yelev2 = bm.sman.mpman.GetHeight(p2.x, p2.z);
+            p2 = p2 + yelev2 * Vector3.up;
+
             AddLineOfResources(pname, "TreesAndShrubs/PineTree", n, p1, p2, randomrotate, randomscale, minheit, maxheit, aspectx, aspectz);
         }
         void AddLineOfBushes(string pname, int n, Vector3 p1, Vector3 p2, bool randomrotate = false, bool randomscale = true, float minheit = 1.0f, float maxheit = 1.4f, float aspectx = 2.5f, float aspectz = 3.5f)
         {
+            var yelev1 = bm.sman.mpman.GetHeight(p1.x, p1.z);
+            p1 = p1 + yelev1 * Vector3.up;
+            var yelev2 = bm.sman.mpman.GetHeight(p2.x, p2.z);
+            p2 = p2 + yelev2 * Vector3.up;
             AddLineOfResources(pname, "TreesAndShrubs/BigBush", n, p1, p2, randomrotate, randomscale, minheit, maxheit, aspectx, aspectz);
         }
         void AddBldPoleCamera(string name, float xpos, float zpos, float ang, float heit)
         {
-           // add a camera on a pole at xpos,heit,ypos, y-rotated by ang
-
+            // add a camera on a pole at xpos,heit,ypos, y-rotated by ang
+            var yelev = bm.sman.mpman.GetHeight(xpos,zpos);
+            heit = heit + yelev;
 
             // add a cylinder scaled by 0.1,heit,0.1
             // add a camera to the end, and tip it down
             // rotate the cylinder
             // add to the scene
-           var v = new Vector3(xpos, heit, zpos);
+            var v = new Vector3(xpos, heit, zpos);
             
            return;
         }
@@ -468,13 +505,14 @@ namespace CampusSimulator
             if (nodept == null) return;
 
             var pt = nodept.pt;
-            var apos = new Vector3(pt.x, pt.y + almheight, pt.z);
+            var yelev = bm.sman.mpman.GetHeight(pt.x, pt.z);
+
+            var apos = new Vector3(pt.x, yelev + almheight, pt.z);
             var ago = BldEvacAlarm.GetGo(alarmname, apos, 1.0f);
             ago.transform.parent = parentnode.transform;
             var beac = ago.AddComponent<BldEvacAlarm>();
             beac.Init(this, apos);  
         }
-
 
         public void CreateObjects()
         {
@@ -506,7 +544,7 @@ namespace CampusSimulator
                     }
                 case "Eb12-22":
                     {
-                        if (bm.sman.curregion == SceneSelE.Eb12 )
+                        if (bm.sman.curscene == SceneSelE.Eb12 )
                         {
                             bm.sman.jnman.preferedJourneyBuildingName = name;
                         }
@@ -517,8 +555,8 @@ namespace CampusSimulator
                         defAngAlign = 0;
                         if (bmode == BuildingMan.BldModeE.full)
                         {
-                            AddQuadHouse("blk1", new Vector3(23, 8, 14), -1.343, new Vector3(15.26f, 4f, 34.92f), rufcolor: "darkslategray");
-                            AddQuadHouse("blk2", new Vector3(23, 8, 14), -1.343, new Vector3(38.16f, 4f, 38.23f), rufcolor: "darkslategray");
+                            AddQuadHouse("blk1", new Vector3(23, 8, 14), -1.343, new Vector3(15.26f, 2f, 34.92f), rufcolor: "darkslategray");
+                            AddQuadHouse("blk2", new Vector3(23, 8, 14), -1.343, new Vector3(38.16f, 2f, 38.23f), rufcolor: "darkslategray");
                         }
 
                         if (tmode == BuildingMan.TreeModeE.full)
@@ -640,7 +678,7 @@ namespace CampusSimulator
                         //AddResource("pine1", "TreesAndShrubs/PineTree", new Vector3(0.4f, 0.4f, 0.4f), 180, new Vector3(-1987.0f, 0, -1167.7f));
                         //AddResource("pine2", "TreesAndShrubs/PineTree", new Vector3(0.4f, 0.4f, 0.4f), 180, new Vector3(-1959.9f, 0, -1242.6f));
                         defPeoplePerRoom = 2;
-                        if (bm.sman.curregion == SceneSelE.MsftB19focused)
+                        if (bm.sman.curscene == SceneSelE.MsftB19focused)
                         {
                             defPercentFull = 0.05f;
                         }
@@ -650,7 +688,7 @@ namespace CampusSimulator
                         }
                         defRoomArea = 10;
                         defAngAlign = -18.0f;
-                        if (bm.sman.curregion == SceneSelE.MsftRedwest)
+                        if (bm.sman.curscene == SceneSelE.MsftRedwest)
                         {
                             bm.sman.jnman.preferedJourneyBuildingName = name;
                         }
@@ -688,7 +726,7 @@ namespace CampusSimulator
                     }
                 case "Bld19":
                     {
-                        if (bm.sman.curregion == SceneSelE.MsftB19focused)
+                        if (bm.sman.curscene == SceneSelE.MsftB19focused)
                         {
                             bm.sman.jnman.preferedJourneyBuildingName = name;
                         }

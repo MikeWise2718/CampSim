@@ -250,12 +250,7 @@ namespace CampusSimulator
             var status = float.TryParse(str, out val);
             return (status ? val : devval);
         }
-        //public T StrCvt<T>(string str, T devval)
-        //{
-        //    T val;
-        //    var status = T.TryParse(str, out val);
-        //    return (status ? val : devval);
-        //}
+
         public void AddOneRoomSpec(string roomspec)
         {
             //Debug.Log("AddOneRoomSpec:" + roomspec);

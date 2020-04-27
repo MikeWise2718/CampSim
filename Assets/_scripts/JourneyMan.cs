@@ -59,7 +59,7 @@ namespace CampusSimulator
         public void StartLoggingJourneys()
         {
             startJnyTime = Time.time;
-            var scenename = sman.curregion.ToString();
+            var scenename = sman.curscene.ToString();
             var dtnow = System.DateTime.UtcNow.ToString("yyyyMMdd-HHmmss");
             var jlogdir = "./jlog/";
             try
@@ -725,7 +725,7 @@ namespace CampusSimulator
             var msg = "Go get em";
             //pers.AddNewCamera("Arnie Launcher");
             pers.GrabMainCamera();
-            if (sman.curregion == SceneSelE.Eb12 )
+            if (sman.curscene == SceneSelE.Eb12 )
             {
                 room = "eb12-12-lob";
             }
@@ -809,7 +809,7 @@ namespace CampusSimulator
             if (nstreamers % 6 == 3) // every 6 times a new one comes, but the first one comes after 3
             {
                 pers.empStatus = PersonMan.empStatusE.Unknown;
-                if (sman.curregion== SceneSelE.MsftB19focused)
+                if (sman.curscene== SceneSelE.MsftB19focused)
                 {
                     if (bld.name=="Bld19")
                     {

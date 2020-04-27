@@ -210,6 +210,7 @@ namespace CampusSimulator
             var zar = zonelookup[name];
             zar.Empty(); // destroys game object as well
             zonelookup.Remove(name);
+            Destroy(zar.gameObject);
         }
         public void DelZones()
         {

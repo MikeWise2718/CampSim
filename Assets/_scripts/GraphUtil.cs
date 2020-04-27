@@ -524,14 +524,17 @@ namespace GraphAlgos
             }
             return ren;
         }
-        public static bool IsInFrontOfMainCamera(GameObject go)
+        public static bool IsInFrontOfMainCamera(GameObject go,Camera cam)
         {
             var rv = true;
             var ren = FindFirstRenderer(go);
-            var mcam = Camera.main; // Camera.current might be more performant
+            if (cam==null)
+            {
+                cam = Camera.main;
+            }
 
-            Vector3 maintogovek = ren.bounds.center - mcam.transform.position;
-            rv = Vector3.Dot(maintogovek, mcam.transform.forward) > 0;
+            Vector3 maintogovek = ren.bounds.center - cam.transform.position;
+            rv = Vector3.Dot(maintogovek, cam.transform.forward) > 0;
            
             return rv;
         }
@@ -550,7 +553,7 @@ namespace GraphAlgos
             }
             return trn.gameObject;
         }
-        public static Rect GUIRectWithObject(GameObject go)
+        public static Rect GUIRectWithObject(GameObject go,Camera cam)
         {
             var ren = FindFirstRenderer(go);
             if (!ren)
@@ -562,14 +565,14 @@ namespace GraphAlgos
             Vector3 ext = ren.bounds.extents;
             Vector2[] extentPoints = new Vector2[8]
              {
-               WorldToGUIPoint(new Vector3(cen.x-ext.x, cen.y-ext.y, cen.z-ext.z)),
-               WorldToGUIPoint(new Vector3(cen.x+ext.x, cen.y-ext.y, cen.z-ext.z)),
-               WorldToGUIPoint(new Vector3(cen.x-ext.x, cen.y-ext.y, cen.z+ext.z)),
-               WorldToGUIPoint(new Vector3(cen.x+ext.x, cen.y-ext.y, cen.z+ext.z)),
-               WorldToGUIPoint(new Vector3(cen.x-ext.x, cen.y+ext.y, cen.z-ext.z)),
-               WorldToGUIPoint(new Vector3(cen.x+ext.x, cen.y+ext.y, cen.z-ext.z)),
-               WorldToGUIPoint(new Vector3(cen.x-ext.x, cen.y+ext.y, cen.z+ext.z)),
-               WorldToGUIPoint(new Vector3(cen.x+ext.x, cen.y+ext.y, cen.z+ext.z))
+               WorldToGUIPoint(new Vector3(cen.x-ext.x, cen.y-ext.y, cen.z-ext.z),cam),
+               WorldToGUIPoint(new Vector3(cen.x+ext.x, cen.y-ext.y, cen.z-ext.z),cam),
+               WorldToGUIPoint(new Vector3(cen.x-ext.x, cen.y-ext.y, cen.z+ext.z),cam),
+               WorldToGUIPoint(new Vector3(cen.x+ext.x, cen.y-ext.y, cen.z+ext.z),cam),
+               WorldToGUIPoint(new Vector3(cen.x-ext.x, cen.y+ext.y, cen.z-ext.z),cam),
+               WorldToGUIPoint(new Vector3(cen.x+ext.x, cen.y+ext.y, cen.z-ext.z),cam),
+               WorldToGUIPoint(new Vector3(cen.x-ext.x, cen.y+ext.y, cen.z+ext.z),cam),
+               WorldToGUIPoint(new Vector3(cen.x+ext.x, cen.y+ext.y, cen.z+ext.z),cam)
              };
             Vector2 min = extentPoints[0];
             Vector2 max = extentPoints[0];
@@ -580,7 +583,7 @@ namespace GraphAlgos
             }
             return new Rect(min.x, min.y, max.x - min.x, max.y - min.y);
         }
-        public static bool ClipToCameraBox(GameObject go,float clipdist=100)
+        public static bool ClipToCameraBox(GameObject go,float clipdist=100,Camera cam=null)
         {
             var ren = FindFirstRenderer(go);
             if (!ren)
@@ -589,7 +592,11 @@ namespace GraphAlgos
                 return false;
             }
             Vector3 cen = ren.bounds.center;
-            var mcam = Camera.main;
+            var mcam = cam;
+            if (cam == null)
+            {
+                mcam = Camera.main;
+            }
             var v1 = cen - mcam.transform.position;
             var dist = Vector3.Dot(v1, mcam.transform.forward);
             //Debug.Log(go.name + " dist to main cam " + dist);
@@ -639,9 +646,13 @@ namespace GraphAlgos
             return true;
         }
 
-        public static Vector2 WorldToGUIPoint(Vector3 world)
+        public static Vector2 WorldToGUIPoint(Vector3 world,Camera cam=null)
         {
-            Vector2 screenPoint = Camera.main.WorldToScreenPoint(world); // Camera.current?
+            if (cam==null)
+            {
+                cam = Camera.main;
+            }
+            Vector2 screenPoint = cam.WorldToScreenPoint(world); // Camera.current?
             screenPoint.y = (float)Screen.height - screenPoint.y;
             return screenPoint;
         }

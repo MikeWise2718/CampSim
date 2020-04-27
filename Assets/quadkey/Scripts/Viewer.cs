@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Aiskwk.Map
 {
-    public enum ViewerAvatar { SphereMan, CapsuleMan, SimpleTruck, Minehaul1, Shovel1, Dozer1, Dozer2, Rover };
+    public enum ViewerAvatar { SphereMan, CapsuleMan, SimpleTruck, Minehaul1, Shovel1, Dozer1, Dozer2, Rover, QuadCopter };
     public enum ViewerCamPosition { Eyes, FloatBehind }
     public enum ViewerControl { Position, Velocity }
 
@@ -19,7 +19,7 @@ namespace Aiskwk.Map
         GameObject camgo = null;
         GameObject rodgo = null;
         Light lightcomp;
-        Camera cam;
+        static Camera viewercam;
         bool doTrackThings = false;
         public ViewerAvatar viewerAvatar = ViewerAvatar.CapsuleMan;
         public ViewerCamPosition viewerCamPosition = ViewerCamPosition.Eyes;
@@ -33,6 +33,7 @@ namespace Aiskwk.Map
         public Vector2d offsetToMapMidpointMeter;
         public LatLngVek offsetToOrigin;
         public Vector2d offsetToOriginMeter;
+        public float altitude = 0;
 
         public static Vector3 viewerDefaultPosition = Vector3.zero;
         public static Vector3 viewerDefaultRotation = Vector3.zero;
@@ -40,6 +41,11 @@ namespace Aiskwk.Map
         public static ViewerAvatar viewerAvatarDefaultValue = ViewerAvatar.CapsuleMan;
         public static ViewerCamPosition ViewerCamPositionDefaultValue = ViewerCamPosition.Eyes;
         public static ViewerControl ViewerControlDefaultValue = ViewerControl.Position;
+
+        public static Camera GetViewerCamera()
+        {
+            return viewercam;
+        }
 
         // Start is called before the first frame update
         void Start()
@@ -54,65 +60,82 @@ namespace Aiskwk.Map
         }
         public void InitViewer(QmapMesh qmm)
         {
+            Debug.Log("InitViewer");
             this.qmm = qmm;
             viewerAvatar = viewerAvatarDefaultValue;
             viewerCamPosition = ViewerCamPositionDefaultValue;
             viewerControl = ViewerControlDefaultValue;
             //var (vo,_, istat) = qmm.GetWcMeshPosFromLambda(0.5f, 0.5f);
-            var (vo, _, istat) = qmm.GetWcMeshPosProjectedAlongY(viewerDefaultPosition);
+            var (vo, _, istat) = qmm.GetWcMeshPosProjectedAlongYnew(viewerDefaultPosition);
             transform.position = vo;
+            Debug.Log($"Initviwer initial position {vo}");
             transform.localRotation = Quaternion.Euler(viewerDefaultRotation);
             qcmdescriptor = qmm.descriptor;
             BuildViewer();
+            Debug.Log("Done with InitViewer");
         }
 
+
+        public void DumpViewer()
+        {
+            int iter = 0;
+            var t = transform;
+            var s = t.localScale.x.ToString("f3");
+            var pname = $"{t.name}({s})";
+            while (true)
+            {
+                if (iter++ > 20) break;
+                if (t.parent == null) break;
+                t = t.parent;
+                s = t.localScale.x.ToString("f3");
+                pname = $"{t.name}({s})-{pname}";
+            }
+            Debug.Log($"ViewerPath:{pname}");
+        }
+        public Transform GetRootTransform(Transform t)
+        {
+            int iter = 0;
+            while (true)
+            {
+                if (iter++ > 20) break;
+                if (t.parent == null) break;
+                //Debug.Log($"{t.name}  {iter}");
+                t = t.parent;
+            }
+            //Debug.Log($"GetRootTransform root:{t.name}  {iter}");
+            return t;
+        }
         public void ReAdjustViewerInitialPosition()
         {
+            Debug.Log($"ReAdjustViewerInitialPosition - current scale:{transform.localScale}");
+            var scale = transform.localScale;
+
             var parent = transform.parent;
-            transform.parent = null;
+            transform.SetParent(null, worldPositionStays: false);// disconnect
             transform.position = viewerDefaultPosition;
-            transform.localRotation = Quaternion.Euler(viewerDefaultRotation); 
+            transform.localRotation = Quaternion.Euler(viewerDefaultRotation);
+            var t = GetRootTransform(parent.transform);
+            var s = t.localScale.x;
+            if (s != 0)
+            {
+                var sinv = 1 / s;
+                //Debug.Log($"{t.name} - sinv:{sinv}");
+                transform.localScale = new Vector3(sinv, sinv, sinv);
+            }
+            else
+            {
+                Debug.LogError($"{t.name} s == 0");
+            }
+            transform.SetParent(parent.transform, worldPositionStays: true);// reconnect
             TranslateViewer(0, 0);
             RotateViewer(0);
-            transform.SetParent(parent.transform, worldPositionStays: true);
-        }
-        public void DeleteGos()
-        {
-            if (moveplane != null)
-            {
-                Destroy(moveplane);
-                moveplane = null;
-            }
-            if (body != null)
-            {
-                Destroy(body);
-                body = null;
-            }
-            if (bodyprefab != null)
-            {
-                Destroy(bodyprefab);
-                bodyprefab = null;
-            }
-            if (visor != null)
-            {
-                Destroy(visor);
-                visor = null;
-            }
-            if (camgo != null)
-            {
-                Destroy(camgo);
-                camgo = null;
-            }
-            if (rodgo != null)
-            {
-                Destroy(rodgo);
-                rodgo = null;
-            }
+            DumpViewer();
         }
 
         string[] primitivetypes = { "Capsule", "Sphere" };
         public (GameObject, float) GetAvatarPrefab(string avaname, float angle, Vector3 shift, float scale = 1)
         {
+            Debug.Log($"GetAvatarPrefab scale:{scale}");
             GameObject instancego = null;
 
             var height = 0f;
@@ -150,39 +173,53 @@ namespace Aiskwk.Map
             }
             instancego.name = "bodyprefab";
 
-            var skav3 = instancego.transform.localScale * scale;
-            instancego.transform.localScale = skav3;
-            //Debug.Log($"Setting bodyprefab rotation for {avaname} angle:{angle} ");
+            var vscale = instancego.transform.localScale * scale;
+            instancego.transform.localScale = vscale;
+            Debug.Log($"Setting bodyprefab rotation for {avaname} angle:{angle}");
             instancego.transform.localRotation = Quaternion.Euler(0, angle, 0);
             instancego.transform.position += shift;
             instancego.transform.SetParent(body.transform, worldPositionStays: false);
             return (instancego, height);
         }
 
-        public void DestroyBody()
+        public void DeleteGos()
         {
             if (moveplane != null)
             {
                 Destroy(moveplane);
                 moveplane = null;
             }
-            if (bodyprefab != null)
-            {
-                Destroy(bodyprefab);
-                bodyprefab = null;
-            }
             if (body != null)
             {
                 Destroy(body);
                 body = null;
             }
-
+            if (bodyprefab != null)
+            {
+                Destroy(bodyprefab);
+                bodyprefab = null;
+            }
+            if (visor != null)
+            {
+                Destroy(visor);
+                visor = null;
+            }
+            if (camgo != null)
+            {
+                Destroy(camgo);
+                camgo = null;
+            }
+            if (rodgo != null)
+            {
+                Destroy(rodgo);
+                rodgo = null;
+            }
         }
 
         public bool pinCameraToFrame = false;
         public bool showNormalRod = false;
         public bool showDroppings = false;
-        public void MakeAvatar(string avaname, float angle, Vector3 shift, float scale = 1)
+        public void MakeAvatar(string avaname, float angle, Vector3 shift, float scale = 1,float visorscale=2)
         {
             moveplane = new GameObject("moveplane");
             body = new GameObject("body");
@@ -199,7 +236,8 @@ namespace Aiskwk.Map
             var vv = new Vector3(0, height, 0.25f);
 
             visor.transform.position = vv;
-
+            var vska = visorscale;
+            visor.transform.localScale = new Vector3(vska,vska,vska);
             visor.transform.localRotation = Quaternion.Euler(0, -angle, 0); ;
             visor.transform.SetParent(body.transform, worldPositionStays: false);
             qut.SetColorOfGo(visor, Color.black);
@@ -208,7 +246,7 @@ namespace Aiskwk.Map
             var cska = 0.1f;
             camgo.name = "camgo";
             camgo.transform.localScale = new Vector3(cska, cska, cska);
-            cam = camgo.AddComponent<Camera>();
+            viewercam = camgo.AddComponent<Camera>();
             switch (viewerCamPosition)
             {
                 case ViewerCamPosition.Eyes:
@@ -233,7 +271,7 @@ namespace Aiskwk.Map
                 camgo.transform.SetParent(moveplane.transform, worldPositionStays: false);
                 //Debug.Log("camgo parent is now moveplane");
             }
-            cam.farClipPlane = 10000;// 10 km
+            viewercam.farClipPlane = 10000;// 10 km
 
 
             moveplane.transform.SetParent(transform, worldPositionStays: false);
@@ -249,6 +287,7 @@ namespace Aiskwk.Map
                 qut.SetColorOfGo(rod, Color.blue);
             }
             rodgo.transform.SetParent(transform, worldPositionStays: false);
+
         }
         public void ToggleLight()
         {
@@ -332,6 +371,15 @@ namespace Aiskwk.Map
                         MakeAvatar(pfix + "rover2", angle, shift, scale);
                         break;
                     }
+                case ViewerAvatar.QuadCopter:
+                    {
+                        angle = 90;
+                        scale = 100;
+                        shift = new Vector3(0, 2, 0);
+                        //MakeAvatar(pfix + "quadcopter", angle, shift, scale,visorscale:0.01f);
+                        MakeAvatar(pfix + "quadcopterspinning", angle, shift, scale, visorscale: 0.01f);
+                        break;
+                    }
                 case ViewerAvatar.SphereMan:
                     {
                         shift = new Vector3(0, 1, 0);
@@ -377,22 +425,25 @@ namespace Aiskwk.Map
             rv.Normalize();
             return rv;
         }
-
-
-        void TranslateViewerLatLng(float xmove, float zmove)
+        void RaiseViewer(float ymove)
+        {
+            altitude += ymove;
+            TranslateViewerProjected(0,0);
+            var posstr = transform.position.ToString("f1");
+            Debug.Log($"RaiseViewer ymove:{ymove} newpos:{posstr}");
+        }
+        void TranslateViewerProjected(float xmove, float zmove)
         {
             var bt = moveplane.transform;
             var t = transform;
             var p = t.position;
             var postr = t.position.ToString("f3");
-            var (vo, nrm, _) = qmm.GetWcMeshPosProjectedAlongY(p);
+            var (vo, nrm, _) = qmm.GetWcMeshPosProjectedAlongYnew(p);
             var fwd = bt.forward;
-            p += zmove*fwd + xmove*bt.right;
+            p += zmove * fwd + xmove * bt.right;
             var fwdstr = fwd.ToString("f2");
-            var (vn, _, _) = qmm.GetWcMeshPosProjectedAlongY(p);
-            //t.position = p + Vector3.up * (vn.y - vo.y);
-            t.position = vn;
-            //bt.position = t.position;
+            var (vn, _, _) = qmm.GetWcMeshPosProjectedAlongYnew(p);
+            t.position = vn + altitude*Vector3.up;
             if (Vector3.Dot(Vector3.up, nrm) < 0)
             {
                 nrm = -nrm;
@@ -400,13 +451,15 @@ namespace Aiskwk.Map
             lstnrm = nrm;
             var nrmrot = Quaternion.FromToRotation(Vector3.up, nrm);
             body.transform.localRotation = nrmrot * bodyPrefabRotation;
-            //bodypose.transform.localRotation = nrmrot;
             rodgo.transform.localRotation = nrmrot;
             var pnstr = t.position.ToString("f3");
             var nrmstr = nrm.ToString("f3");
             //Debug.Log($"TranslateViewerLatLng -  xmove:{xmove} zmove:{zmove} po:{postr}  pn:{pnstr}  fwd:{fwdstr}");
-            //Debug.Log($"TranslateViewerLatLng -  vn:{vn}  pos:{t.position}");
+            //Debug.Log($"TranslateViewerLatLng - vo:{vo} vn:{vn}  pos:{t.position}");
         }
+
+
+
         void TranslateViewerToPosition(Vector3 p)
         {
             var (vo, nrm, _) = qmm.GetWcMeshPosProjectedAlongY(p);
@@ -449,17 +502,11 @@ namespace Aiskwk.Map
             var pstr = t.position.ToString("f1");
             Debug.Log($"lambx:{nlambx} lambz:{nlambz}   p:{pstr}");
         }
+
         int ndrop = 0;
         void TranslateViewer(float xmove, float zmove)
         {
-            if (usellmeth)
-            {
-                TranslateViewerLatLng(xmove, zmove);
-            }
-            else
-            {
-                TranslateViewerLambda(xmove, zmove);
-            }
+            TranslateViewerProjected(xmove, zmove);
             curLatLng = qmm.GetLngLat(transform.position);
             offsetToMapMidpoint = curLatLng - qmm.stats.llbox.midll;
             offsetToOrigin = curLatLng - qmm.stats.llbox.orgll;
@@ -468,6 +515,8 @@ namespace Aiskwk.Map
             if (showDroppings)
             {
                 var dropgo = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                var ska = 0.125f;
+                dropgo.transform.localScale = new Vector3(ska, ska, ska);
                 dropgo.transform.position = transform.position;
                 dropgo.name = "Drop" + ndrop;
                 qut.SetColorOfGo(dropgo, "green");
@@ -498,7 +547,7 @@ namespace Aiskwk.Map
             //svcam.depth = cam.depth;
             //svcam.fieldOfView = cam.fieldOfView;
             // see Unity Editor Menu View/AlignViewToSelected
-            UnityEditor.SceneView.lastActiveSceneView.AlignViewToObject(cam.transform);
+            UnityEditor.SceneView.lastActiveSceneView.AlignViewToObject(viewercam.transform);
 #endif
         }
         float ctrlAhit = float.MinValue;
@@ -528,7 +577,7 @@ namespace Aiskwk.Map
             var speedmult = 0.3f;
             if (ctrlpressed) speedmult = 3.0f;
 
-            var ainc = 2.0f * speedmult;
+            var ainc = 10.0f * speedmult/2;
             var inc = 1.0f * speedmult;
 
             if (doTrackThings && (Time.time - ctrlVhit < 1.0f))
@@ -707,6 +756,28 @@ namespace Aiskwk.Map
                 else
                 {
                     TranslateViewer(0, -inc);
+                }
+            }
+            if (Input.GetKey(KeyCode.PageUp))
+            {
+                if (altpressed)
+                {
+                    TiltHead(ainc);
+                }
+                else
+                {
+                    RaiseViewer(inc);
+                }
+            }
+            if (Input.GetKey(KeyCode.PageDown))
+            {
+                if (altpressed)
+                {
+                    TiltHead(-ainc);
+                }
+                else
+                {
+                    RaiseViewer(-inc);
                 }
             }
             //var v = transform.position;

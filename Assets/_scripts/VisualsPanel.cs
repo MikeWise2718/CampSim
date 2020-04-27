@@ -67,6 +67,7 @@ public class VisualsPanel : MonoBehaviour
     {
         if (sman==null)
         {
+            //Debug.Log("sman is null in VisualsPanel.InitVals");
             LinkObjectsAndComponents();
         }
         var errmsg = "Error in VisualsPanels.InitVals-";
@@ -238,8 +239,9 @@ public class VisualsPanel : MonoBehaviour
             sman.RequestRefresh("VisualPanel-SetLinkTransText");
         }
     }
-    public void SetVals()
+    public void SetVals(bool closing=false)
     {
+        Debug.Log($"VisualsPanel/SetVals called - closing:{closing}");
         var chg = false;
         var errmsg = "Error in VisualsPanels.SetVals-";
         try
@@ -247,7 +249,7 @@ public class VisualsPanel : MonoBehaviour
             var curregionstr = SceneMan.GetSceneOptionsString(initialScene.value);
             SceneMan.SetInitialSceneOption(curregionstr);
             var curregion = SceneMan.GetSceneOptionsEnum(curregionstr);
-            if (curregion != sman.curregion)
+            if (curregion != sman.curscene)
             {
                 chg = true;
                 sman.SetScene(curregion);
@@ -363,7 +365,11 @@ public class VisualsPanel : MonoBehaviour
         }
         catch (Exception ex)
         {
-            Debug.LogError($"{errmsg}9:{ex.Message}");
+            Debug.LogError($"{errmsg}9 - CameraOptions:{ex.Message}");
+            Debug.LogError($"   CameraOptions");
+            Debug.LogError($"   value: {camSelection.value}");
+            Debug.LogError($"   opt count:{vman.GetCameraOptions().Count}");
+            Debug.LogError($"   mainCamName:{vman.mainCamName.Get()}");
         }
         try
         {

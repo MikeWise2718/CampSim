@@ -209,7 +209,8 @@ namespace CampusSimulator
                 //cargo.transform.Translate(new Vector3(0, 0, -0.4f));
             }
             calcVeks();
-            slotformgo.transform.position = new Vector3(x, 0, z);
+            var y = gm.sman.mpman.GetHeight(x, z);
+            slotformgo.transform.position = new Vector3(x, y, z);
             slotformgo.transform.rotation = Quaternion.Euler(0, ang + 90, 0);
         }
         void neuterwheel(GameObject cargo,string wename)
@@ -323,7 +324,8 @@ namespace CampusSimulator
             {
                 return slotformgo.transform.position;
             }
-            return new Vector3(x, 0, z);
+            var y = this.garage.gm.sman.mpman.GetHeight(x, z);
+            return new Vector3(x, y, z);
         }
         public Vector3 GetPosition(slotPosE slotpos)
         {

@@ -15,6 +15,7 @@ public class B19Willow : MonoBehaviour
     public UxSetting<bool> floors = new UxSetting<bool>("B19_floors", true);
     public UxSetting<bool> doors = new UxSetting<bool>("B19_doors", true);
 
+    public CampusSimulator.SceneMan sman=null;
 
     public UxEnumSetting<B19_MaterialMode> b19_materialMode = new UxEnumSetting<B19_MaterialMode>("B19_MaterialMode", B19_MaterialMode.materialed);
     //   public UxSetting<bool> visibilityTiedToDetectability = new UxSetting<bool>("FrameVisibilityTiedToDetectability", true);
@@ -29,6 +30,11 @@ public class B19Willow : MonoBehaviour
 
     public void init()
     {
+        sman = FindObjectOfType<CampusSimulator.SceneMan>();
+        if (sman==null)
+        {
+            Debug.Log("Building 19 could not find SceneMan");
+        }
         b19_materialMode.GetInitial();
         loadmodel.GetInitial();
         level01.GetInitial();
@@ -126,11 +132,19 @@ public class B19Willow : MonoBehaviour
     {
         if (loadmodel.Get() && !_b19_WillowModel)
         {
+            Vector3 defpos = new Vector3(-474.3f, 4.72f, 87.6f);
+            var yoff = 0f;
+            if (sman!=null)
+            {
+                yoff = sman.mpman.GetHeight(defpos.x, defpos.z);
+                Debug.Log($"B19 yoff:{yoff}");
+                defpos = new Vector3(defpos.x, yoff+defpos.y, defpos.z);
+            }
             var obprefab = Resources.Load<GameObject>("Willow/B19-Willow");
             willgo = Instantiate<GameObject>(obprefab);
             var ftm = 0.3048f;
             willgo.transform.localScale = new Vector3(ftm,ftm,ftm);
-            willgo.transform.position = new Vector3(-474.3f, 4.72f, 87.6f);
+            willgo.transform.position = defpos;
             willgo.transform.Rotate(new Vector3(-90, 26, 0));
             willgo.transform.parent = this.transform;
             _b19_WillowModel = true;

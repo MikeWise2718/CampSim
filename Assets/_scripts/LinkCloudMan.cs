@@ -294,11 +294,11 @@ namespace CampusSimulator
             nVoiceKeywords = mm.nVoiceKeywords;
             if (CanGetHeights())
             {
-                AddLongLat();
+                CalculateHeights();
             }
             else
             {
-                sman.needsLifted = true;
+                sman.needsLifted = false; 
             }
             lastgenmodel = graphScene;
             sman.RequestRefresh("LinkCloudMan-GenLinkCloud");
@@ -313,37 +313,26 @@ namespace CampusSimulator
                 longlatmap = sman.glbllm;
                 if (longlatmap == null) return false;
             }
-            var y = GetHeight(0, 0);
-            if (y > 0)
-            {
-                Debug.Log("y:" + y);
-            }
-            return y > 0;
+            return true;
+            //var y = GetHeight(0, 0);
+            //if (y > 0)
+            //{
+            //    Debug.Log("y:" + y);
+            //}
+            //return y > 0;
         }
 
         public float GetHeight(float x,float z)
         {
-            var v2 = longlatmap.llcoord(x, z);
-            var lat = v2.x;
-            var lng = v2.y;
-            double tlx = lng;
-            double brx = lat;
-            double tly = lng;
-            double bry = lat;
-            // to do -todo : get heights and elevations from qkmaptool 
-            // 
-            // map.GetCorners(out tlx, out tly, out brx, out bry);
-            // var wp = GetElevation(lng, lat, lng - d, lat + d, lng + d, lat - d);
-            // var y = GetElevationValue(lng, lat, scale, tlx,tly,brx,bry);
-            var y = 0f;
+            var y = sman.mpman.GetHeight(x, z);
             return y;
         }
 
-        public void AddLongLat()
+        public void CalculateHeights()
         {
-            longlatmap = sman.GetComponent<LatLongMap>();
+            longlatmap = sman.glbllm;
             if (longlatmap == null) return;
-            var calcHeights = false;
+            var calcHeights = true;
             var grc = GetGraphCtrl();
             foreach (string lptname in grc.linkpoints())
             {
@@ -357,9 +346,13 @@ namespace CampusSimulator
                     node.pt = new Vector3(node.pt.x, y, node.pt.z);
                 }
             }
-            var pt = Camera.current.transform.position;
-            var ht = GetHeight(pt.x, pt.z);
-            Camera.current.transform.position = new Vector3(pt.x,pt.y+ht,pt.z);
+            var cam = Camera.current;
+            if (cam != null)
+            {
+                var pt = cam.transform.position;
+                var ht = GetHeight(pt.x, pt.z);
+                cam.transform.position = new Vector3(pt.x, pt.y + ht, pt.z);
+            }
             sman.needsLifted = false;
         }
 

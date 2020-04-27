@@ -279,7 +279,7 @@ namespace Aiskwk.Map
             var lat = sdf.DeInterploateDouble("y", imin, imax, lamb);
             var lng = sdf.DeInterploateDouble("x", imin, imax, lamb);
             var ll = new LatLng(lat, lng);
-            (var pos, _, _) = VehicleTrack.qmesh.GetWcMeshPosFromLatLng(ll);
+            (var pos, _, _) = VehicleTrack.qmesh.GetQkWcMeshPosFromLatLng(ll);
             //Debug.Log("MoveAvaGo at time " + curtime + " ll:" + ll.ToString() + "  pos:" + pos);
             return pos;
         }

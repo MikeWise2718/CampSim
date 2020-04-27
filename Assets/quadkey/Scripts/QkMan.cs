@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace Aiskwk.Map
 {
-    public enum ElevProvider { Bing }
+    public enum ElevProvider { BingElev }
     public enum MapProvider { AzureMaps, AzureSatelliteOnly, AzureSatelliteRoads, BingMaps, BingSatelliteOnly, BingSatelliteRoads, Altx , OpenStreetMaps}
     //public enum HeightTypeE { Constant, Random, SineWave, Fetched,FetchedAndZeroed,FetchedAndOriginZeroed }
     public enum HeightSource { Constant, Random, SineWave, Fetched, FetchedPlusLidar }
@@ -57,6 +57,18 @@ namespace Aiskwk.Map
             this.llbox = llbox;
             this.ll1 = llbox.GetUpperLeft();
             this.ll2 = llbox.GetBottomRight();
+        }
+
+        public static string GetElevProvSubdirName(ElevProvider eleprov)
+        {
+            var rv = "";
+            switch (eleprov)
+            {
+                case ElevProvider.BingElev:
+                    rv = "bingelev";
+                    break;
+            }
+            return rv;
         }
 
         public static string GetMapProvSubdirName(MapProvider maprov)
@@ -339,12 +351,12 @@ namespace Aiskwk.Map
             {
                 //Debug.Log("Initing llmap from LatLongBox");
                 //qmm.llmap.InitMapFromLatLongBox(qllbox, levelOfDetail);
-                qmm.llmap.InitMapFromLatLongBox(llbox, levelOfDetail);
+                qmm.llmapqkcoords.InitMapFromLatLongBox(llbox, levelOfDetail);
             }
             else
             {
                 Debug.Log("Initing llmap from datamapname:" + datamapname);
-                qmm.llmap.InitMapFromSceneSel(datamapname, 0);
+                qmm.llmapqkcoords.InitMapFromSceneSel(datamapname, 0);
             }
 
             var nxx = (tilebr.pixbr.x - tileul.pixul.x);
@@ -406,28 +418,21 @@ namespace Aiskwk.Map
 
 
 
-        string GetTexSubDir(string scenename)
-        {
-            var dirname = "scenemaps/" + GetMapProvSubdirName(mapprov) + "/" + scenename + "/texmap/" + levelOfDetail + "/";
 
-            return dirname;
-        }
-
-
-        public void DeleteWebData(string scenename, MapProvider mapprov)
+        public void DeleteBitmapData(string scenename, MapProvider mapprov)
         {
 
-            Debug.Log($"DeleteWebData for scenename:{scenename} mapprove:{mapprov.ToString()}");
+            Debug.Log($"DeleteBitmapData for scenename:{scenename} mapprove:{mapprov.ToString()}");
             if (qrf == null) return;
 
             //var mprov = GetMapProvSubdirName(mapprov);
             //var ppath = $"{Application.persistentDataPath}/qkmaps/scenemaps/{mapprov}/{scenename}";
             //Directory.Delete(ppath, true);
-            var ppath = qrf.PersistentPathName();
-            var tpath = qrf.TempPathName();
+            var ppath = qrf.GetPersistentPathName();
+            var tpath = qrf.GetTempPathName();
             qut.CopyTextToClipboard($"persistent:\n{ppath}\ntemp:\n{tpath}");
 #if UNITY_EDITOR_WIN
-            var msg = $"Delete persistent and temp paths:\n\"{ppath}\"\n\"{tpath}\"\nPaths copied to clipboard";
+            var msg = $"Delete Bitmap persistent and temp paths:\n\"{ppath}\"\n\"{tpath}\"\nPaths copied to clipboard";
             var ok1 = UnityEditor.EditorUtility.DisplayDialog("Deleting Persistent Path Data", msg, "Ok to delete", "Cancel");
             if (!ok1) return;
 #endif
@@ -452,16 +457,9 @@ namespace Aiskwk.Map
                 Debug.LogWarning($"Temp path {tpath} does not exist");
             }
         }
+        public static int nbmLoaded = 0;
+        public static int nbmToLoad = 0;
 
-        public string GetTexFileName(MapExtentTypeE mapextent)
-        {
-            var texname = "tex.png";
-            if (mapextent == MapExtentTypeE.AsSpecified)
-            {
-                texname = "croppedtex.png";
-            }
-            return texname;
-        }
 
         Texture2D vertex = null;
         Texture2D hortex = null;
@@ -477,6 +475,8 @@ namespace Aiskwk.Map
             // Have to build it from top to bottom, left to right
             int iqk = 0;
             int nqktodo = nqk.x * nqk.y;
+            nbmLoaded = 0;
+            nbmToLoad = nqktodo;
             bool getquadkeyok = false;
             bool hortexnull = true;
             vertex = null;
@@ -542,6 +542,7 @@ namespace Aiskwk.Map
                             }
                             iqk++;
                             nBmRetrieved++;
+                            nbmLoaded = nBmRetrieved;
                         }
                     }
                     if (iy == 0)
@@ -582,8 +583,9 @@ namespace Aiskwk.Map
             catch (Exception ex)
             {
                 ok = false;
-                errmsg = ex.Message;              
-                Debug.LogError($"Error in GetWwwQktilesAndMakeTex ok:{ok} err:{errmsg}  nBmRetrieved:{nBmRetrieved}");// to insert
+                errmsg = ex.ToString();              
+                Debug.LogError($"Error in GetWwwQktilesAndMakeTex ok:{ok} nBmRetrieved:{nBmRetrieved} nqktodo:{nqktodo} time:{Time.time} - Exception follows");
+                Debug.LogError($"Exception err:{errmsg} ");
             }
             return (ok, errmsg, nBmRetrieved);
         }
@@ -640,26 +642,35 @@ namespace Aiskwk.Map
 
         QresFinder qrf = null;
 
+        public QresFinder GetTexQrf(MapProvider mapprov, string scenename, MapExtentTypeE mapextent,int lod,bool loadData=true)
+        {
+            // sometimes we don't want to use this to load the bitmaps immediately, but just to gather information
+            var tfpath = "qkmaps/" + QresFinder.GetTextureSubDir(mapprov,   scenename,levelOfDetail);
+            qrf = new QresFinder(mapprov, scenename, lod, tfpath,"", mapextent, loadData: loadData);
+            return qrf;
+        }
+
         public long last_loaded_texsize = 0L;
         public async Task<(Texture2D, int)> GetTexAsy(string scenename, MapExtentTypeE mapextent, bool execute, bool forceload, QmapMesh.sythTexMethod synthTex, string synthSpec)
         {
             var nBmRetrieved = 0;
-            var tfname = GetTexFileName(mapextent);
-            var tfpath = "qkmaps/" + GetTexSubDir(scenename);
-            qrf = new QresFinder(tfpath, tfname);
+            qrf = GetTexQrf(mapprov,scenename, mapextent,levelOfDetail,loadData:true);
+            //var tfname = GetTexFileName(mapextent);
+            //var tfpath = "qkmaps/" + GetTexSubDir(scenename);
+            //qrf = new QresFinder(tfpath, tfname);
             var exists = qrf.Exists();
-            var temppath = qrf.TempPathName();
-            var perspath = qrf.PersistentPathName();
+            var temppath = qrf.GetTempPathName();
+            var perspath = qrf.GetPersistentPathName();
             //Debug.Log($"GetTexAsy forceload:{forceload} exists:{exists}");
             if (forceload || !exists)
             {
                 if (forceload)
                 {
-                    Debug.LogWarning($"Forceloading of {tfname} requires www bitmap fetching");
+                    Debug.LogWarning($"Forceloading of {qrf.GetFullName()} requires www bitmap fetching");
                 }
                 else
                 {
-                    Debug.LogWarning($"Non-existance of {tfname} determined in {perspath} requires www bitmap fetching");
+                    Debug.LogWarning($"Non-existence of {qrf.GetFullName()} determined in {perspath} requires www bitmap fetching");
                 }
                 var (ok, errmsg, nBm) = await GetWwwQktilesAndMakeTex(scenename, temppath, perspath, execute);
                 if (!ok)

@@ -206,7 +206,8 @@ namespace CampusSimulator
         public void SaveLabelList(string camname)
         {
             // https://forum.unity.com/threads/how-to-save-manually-save-a-png-of-a-camera-view.506269/
-            var mcam = Camera.main;
+            //var mcam = Camera.main;
+            var mcam = sman.vcman.GetCurrentCamera();
             if (mcam != null)
             {
                 //lastlabelsave = Time.time;
@@ -338,6 +339,7 @@ namespace CampusSimulator
             {
                 Debug.Log("null persgo for " + pers.personName);
             }
+            pers.SetVisiblity(GetEnabled(pers.empStatus));
             return enabled;
         }
         public void SetPeepVisibility()
@@ -349,7 +351,7 @@ namespace CampusSimulator
                 var enabled = SetVisibityOnEnablement(peep);
                 if (enabled) ncnt++;
             }
-            Debug.Log("SetPeepVisiblity - Visible count:"+ncnt);       
+            Debug.Log($"SetPeepVisiblity - Visible count:{ncnt} updatecnt:{updcount}");       
         }
 
         public void CalcBldRoomFrames(BldRoom broom, personDetectModeE personDetectMode)
@@ -357,6 +359,7 @@ namespace CampusSimulator
             int icnt = 0;
             var persons = broom.GetPersons();
             var vz = Vector3.zero;
+            var cam = sman.vcman.GetCurrentCamera();
             foreach (var person in persons)
             {
                 //var rendgo = pers.roomPogo;
@@ -364,9 +367,10 @@ namespace CampusSimulator
 
                 var rendgo = GetBodyPart(person, personDetectMode);
                 if (rendgo == null) continue;
+                if (!person.GetVisiblity()) continue;
 
-                if (!GraphAlgos.GraphUtil.ClipToCameraBox(rendgo, clipdist: maxFrameDist)) continue;
-                var obrect = GraphAlgos.GraphUtil.GUIRectWithObject(rendgo);
+                if (!GraphAlgos.GraphUtil.ClipToCameraBox(rendgo, clipdist: maxFrameDist,cam)) continue;
+                var obrect = GraphAlgos.GraphUtil.GUIRectWithObject(rendgo,cam);
                 var obrectvisible = GraphAlgos.GraphUtil.ClipToScreen(obrect);
                 if (obrectvisible)
                 {
@@ -413,20 +417,21 @@ namespace CampusSimulator
             var vz = Vector3.zero;
             int icnt = 0;
             var zoneslots = sman.znman.GetZoneSlots();
+            var cam = sman.vcman.GetCurrentCamera();
             foreach (ZoneSlot slot in zoneslots)
             {
                 if (slot.slotformgo != null)
                 {
-                    if (slot.persgo != null)
+                    if (slot.persgo != null && slot.person.GetVisiblity())
                     {
                         //if (showOnlyFlaggedPeople && !slot.person.flagged) continue;
                         var rendgo = GetBodyPart(slot.person, personDetectMode);
                         if (rendgo == null) continue;
 
                         //var rendgo = slot.persgo;
-                        if (!GraphAlgos.GraphUtil.ClipToCameraBox(rendgo, clipdist: maxFrameDist)) continue;
+                        if (!GraphAlgos.GraphUtil.ClipToCameraBox(rendgo, clipdist: maxFrameDist,cam)) continue;
 
-                        var obrect = GraphAlgos.GraphUtil.GUIRectWithObject(rendgo);
+                        var obrect = GraphAlgos.GraphUtil.GUIRectWithObject(rendgo,cam);
                         var obrectvisible = GraphAlgos.GraphUtil.ClipToScreen(obrect);
                         if (obrectvisible)
                         {
@@ -455,15 +460,17 @@ namespace CampusSimulator
             var vz = Vector3.zero;
             int icnt = 0;
             var slots = sman.gaman.GetGarageSlots();
+            var cam = sman.vcman.GetCurrentCamera();
+            //Debug.Log($"CalcGarageFrames name:{cam.gameObject.name} cam.pos:{cam.transform.position}");
             foreach (GarageSlot slot in slots)
             {
                 if (slot.slotformgo != null)
                 {
                     if (slot.cargo != null)
                     {
-                        if (!GraphAlgos.GraphUtil.ClipToCameraBox(slot.cargo, clipdist: maxFrameDist)) continue;
+                        if (!GraphAlgos.GraphUtil.ClipToCameraBox(slot.cargo, clipdist: maxFrameDist,cam)) continue;
 
-                        var obrect = GraphAlgos.GraphUtil.GUIRectWithObject(slot.cargo);
+                        var obrect = GraphAlgos.GraphUtil.GUIRectWithObject(slot.cargo,cam);
                         var obrectvisible = GraphAlgos.GraphUtil.ClipToScreen(obrect);
                         if (obrectvisible)
                         {
@@ -488,6 +495,7 @@ namespace CampusSimulator
             var vz = Vector3.zero;
             int icnt = 0;
             var journeys = sman.jnman.GetJourneys();
+            var cam = sman.vcman.GetCurrentCamera();
             foreach (Journey jny in journeys)
             {
                 if (jny.status == JourneyStatE.WaitingToStart) continue;
@@ -500,15 +508,16 @@ namespace CampusSimulator
                     if (formfilter == BirdFormE.person)
                     {
                         //if (showOnlyFlaggedPeople && !jny.person.flagged) continue;
+                        if (!jny.person.GetVisiblity()) continue;
                         rendgo = GetBodyPart(jny.person, personDetectMode);
                         if (rendgo == null) continue;
                     }
 
-                    if (!GraphAlgos.GraphUtil.ClipToCameraBox(rendgo, clipdist: maxFrameDist)) continue;
+                    if (!GraphAlgos.GraphUtil.ClipToCameraBox(rendgo, clipdist: maxFrameDist,cam)) continue;
 
-                    jny.birdrect = GraphAlgos.GraphUtil.GUIRectWithObject(rendgo);
+                    jny.birdrect = GraphAlgos.GraphUtil.GUIRectWithObject(rendgo,cam);
                     visible = GraphAlgos.GraphUtil.ClipToScreen(jny.birdrect);
-                    visible = visible && GraphAlgos.GraphUtil.IsInFrontOfMainCamera(rendgo);
+                    visible = visible && GraphAlgos.GraphUtil.IsInFrontOfMainCamera(rendgo,cam);
                     jny.birdrectvisible = visible;
                     if (visible)
                     {

@@ -190,10 +190,32 @@ namespace Aiskwk.Map
             locSpecTrialExecute = false;
         }
     }
+    public class MappingPoint
+    {
+        public double lat;
+        public double lng;
+        public double x;
+        public double z;
+        public MappingPoint(double lat,double lng,double x,double z)
+        {
+            this.lat = lat;
+            this.lng = lng;
+            this.x = x;
+            this.z = z;
+        }
+        public string Fmt()
+        {
+            var fll = "f6";
+            var fxz = "f1";
+            var s = "ll:"+lat.ToString(fll)+","+lng.ToString(fll)+"  x:"+x.ToString(fxz)+" z:"+z.ToString(fxz);
+            return s;
+        }
+    }
     public class BespokeSpec
     {
         public string sceneName;
         public MapProvider mapProv;
+        public ElevProvider eleProv;
         public MapExtentTypeE mapExtent;
         public int lod;
         public LatLng LatLng;
@@ -204,22 +226,34 @@ namespace Aiskwk.Map
         public Vector3 maprot;
         public Vector3 maptrans;
         public bool useElevationData;
+        public bool useFlatTris;
+        public bool frameQuadkeys;
+        public bool triPoints;
+        public bool triLines;
+        public bool meshPoints;
+        public bool coordPoints;
+        public bool extentPoints;
+        public int nodesPerQuadKey;
         public float hmult;
         public bool useViewer;
-        public BespokeSpec(string scenename, LatLng ll, double latkm, double lngkm, int lod = 16)
+        public List<MappingPoint> mappoints= new List<MappingPoint>();
+        public BespokeSpec(string scenename, LatLng ll, double latkm, double lngkm, int lod = 16, int nodesPerQuadKey = 16)
         {
-            Init(scenename, ll, latkm, lngkm, lod);
+            Init(scenename, ll, latkm, lngkm, lod, nodesPerQuadKey);
         }
-        public BespokeSpec(string scenename, double lat, double lng, double latkm, double lngkm, int lod = 16)
+        public BespokeSpec(string scenename, double lat, double lng, double latkm, double lngkm, int lod = 16, int nodesPerQuadKey = 16)
         {
             var ll = new LatLng(lat, lng);
-            Init(scenename, ll, latkm, lngkm, lod);
+            Init(scenename, ll, latkm, lngkm, lod, nodesPerQuadKey);
         }
-        void Init(string scenename, LatLng ll, double latkm, double lngkm, int lod)
+        void Init(string scenename, LatLng ll, double latkm, double lngkm, int lod, int nodesPerQuadKey = 16)
         {
             sceneName = scenename;
             useElevationData = false;
-            mapProv = MapProvider.AzureSatelliteRoads;
+            useFlatTris = false;
+            frameQuadkeys = false;
+            mapProv = MapProvider.BingSatelliteRoads;
+            eleProv = ElevProvider.BingElev;
             LatExtentKm = latkm;
             LngExtentKm = lngkm;
             mapExtent = MapExtentTypeE.AsSpecified;
@@ -227,6 +261,7 @@ namespace Aiskwk.Map
             maprot = Vector3.zero;
             maptrans = Vector3.zero;
             mapscale = Vector3.one;
+            this.nodesPerQuadKey = nodesPerQuadKey;
         }
 
     }
@@ -244,11 +279,14 @@ namespace Aiskwk.Map
         public LocSpecer locSpecer;
         public bool executeWhat3Words = false;
         public bool useElevationDataStart = true;
+        public bool useFlatTrisStart = false;
+        public bool frameQuadkeysStart = false;
         public SceneScripter sceneScripter = null;
 
         public BespokeSpec bespoke;
 
-        QmapMesh qmm = null;
+        public QmapMesh qmm = null;
+        public LatLngBox llbox = null;
 
         [Header("Providers")]
         public MapProvider mapprov;
@@ -290,24 +328,28 @@ namespace Aiskwk.Map
             }
         }
 
-        public async Task<(QmapMesh, int, int)> MakeMesh(string scenename, int lod, LatLng ll1, LatLng ll2, string mapcoordname = "", int tpqk = 4, float hmult = 1, MapProvider mapprov = MapProvider.BingSatelliteRoads, ElevProvider elevprov = ElevProvider.Bing)
+        public async Task<(QmapMesh, int, int)> MakeMesh(string scenename, int lod, LatLng ll1, LatLng ll2, string mapcoordname = "", int tpqk = 4, float hmult = 1, MapProvider mapprov = MapProvider.BingSatelliteRoads, ElevProvider elevprov = ElevProvider.BingElev)
         {
-            var llbox = new LatLngBox(ll1, ll2, scenename, lod: lod);
+            llbox = new LatLngBox(ll1, ll2, scenename, lod: lod);
             return await MakeMeshFromLlbox(scenename, llbox, mapcoordname: mapcoordname, tpqk: tpqk, hmult: hmult, mapprov: mapprov, elevprov: elevprov);
         }
         static int mmcnt = 0;
-        public async Task<(QmapMesh, int, int)> MakeMeshFromLlbox(string scenename, LatLngBox llbox, int tpqk = 4, float hmult = 1, string mapcoordname = "", MapExtentTypeE mapextent = MapExtentTypeE.SnapToTiles, MapProvider mapprov = MapProvider.BingSatelliteRoads, ElevProvider elevprov = ElevProvider.Bing, bool execute = true, bool forceload = false,
+        static int mmreentrycnt = 0;
+        public async Task<(QmapMesh, int, int)> MakeMeshFromLlbox(string scenename, LatLngBox llbox, int tpqk = 4, float hmult = 1, string mapcoordname = "", MapExtentTypeE mapextent = MapExtentTypeE.SnapToTiles, MapProvider mapprov = MapProvider.BingSatelliteRoads, ElevProvider elevprov = ElevProvider.BingElev, bool execute = true, bool forceload = false,
                                                                bool limitQuadkeys = true, QmapMesh.sythTexMethod synthTex = QmapMesh.sythTexMethod.Quadkeys,
                                                                HeightSource heitSource = HeightSource.Fetched, HeightAdjust heitAdjust = HeightAdjust.Zeroed) //, HeightTypeE heitType= HeightTypeE.FetchedAndZeroed)
         {
 
             var wpstays = false;
             //Debug.Log($"QmapMan.MakeMeshFromLlbox mmcnt:{mmcnt} scenename:{scenename} wpstays:{wpstays} position:{this.transform.position}");
-            if (mmcnt>=0)
+            if (mmreentrycnt > 0)
             {
-                //Debug.LogWarning($"mmcnt:{mmcnt}");
+                Debug.LogWarning($"MakeMesh reentry count greater zero:{mmreentrycnt} - total callss:{mmcnt} exiting early");
+                return (null, 0, 0);
             }
             mmcnt++;
+            mmreentrycnt++;
+            this.llbox = llbox;
             this.mapprov = mapprov;
             this.elevprov = elevprov;
             this.scenename = scenename;
@@ -325,10 +367,12 @@ namespace Aiskwk.Map
             //Debug.Log("Adding qmmcomp");
             var qmmcomp = qkgo.AddComponent<QmapMesh>();
             qmmcomp.descriptor = $"{scenename} {llbox.lod} {mapprov} {mapextent}";
-            qmmcomp.InitializeGrid(scenename, llbox, mapprov:mapprov, elevprov:elevprov, mapcoordname: mapcoordname);
+            qmmcomp.addViewer = true;
+            qmmcomp.InitializeGrid(scenename, llbox, mapprov: mapprov, elevprov: elevprov, mapcoordname: mapcoordname);
             //Debug.Log("back from qmmcomp.InitializeGrid");
             qmmcomp.secsPerQkTile = tpqk;
             qmmcomp.useElevationData = useElevationDataStart;
+            qmmcomp.flatTriangles = useFlatTrisStart;
             qmmcomp.mapExtent = mapextent;
             qmmcomp.hmult = hmult;
             qmmcomp.synthTex = synthTex;
@@ -339,9 +383,102 @@ namespace Aiskwk.Map
             //Debug.Log("Calling qmmcomp.GenerateGrid");
 
             (var nbm, var nel) = await qmmcomp.GenerateGrid(execute, forceload, limitQuadkeys: limitQuadkeys);
-
+            mmreentrycnt--;
+            //Debug.Log($"QmapMan.MakeMeshFromLlbox setting frameQuadkeysStart:{frameQuadkeysStart}");
             return (qmmcomp, nbm, nel);
         }
+        public void SetFrameQuadKey(bool onoff)
+        {
+            //Debug.Log($"QmapMan.SetFrameQuadKey:{onoff}");
+            var decocomp = this.qmm?.GetComponent<FrameQuadkeysDeco>();
+            if (decocomp != null)
+            {
+                decocomp.showDeco = onoff;
+            }
+            else
+            {
+                var qmmisnull = qmm == null;
+                Debug.LogError($"QmapMan.SetFrameQuadKey  - decocomp is null - qmmIsNull:{qmmisnull}");
+            }
+        }
+
+        public void SetTrilines(bool onoff)
+        {
+            //Debug.Log($"QmapMan.SetTrilines:{onoff}");
+            var decocomp = this.qmm?.GetComponent<TrilinesDeco>();
+            if (decocomp != null)
+            {
+                decocomp.showDeco = onoff;
+            }
+            else
+            {
+                var qmmisnull = qmm == null;
+                Debug.LogError($"QmapMan.SetTrilines  - decocomp is null - qmmIsNull:{qmmisnull}");
+            }
+        }
+
+
+        public void SetTriPoints(bool onoff)
+        {
+            //Debug.Log($"QmapMan.SetTriPoints:{onoff}");
+            var decocomp = this.qmm?.GetComponent<TriPointDeco>();
+            if (decocomp != null)
+            {
+                decocomp.showDeco = onoff;
+            }
+            else
+            {
+                var qmmisnull = qmm == null;
+                Debug.LogError($"QmapMan.SetTrilines  - decocomp is null - qmmIsNull:{qmmisnull}");
+            }
+        }
+
+        public void SetMeshPoints(bool onoff)
+        {
+            //Debug.Log($"QmapMan.MeshPoints:{onoff}");
+            var decocomp = this.qmm?.GetComponent<MeshNodesDeco>();
+            if (decocomp != null)
+            {
+                decocomp.showDeco = onoff;
+            }
+            else
+            {
+                var qmmisnull = qmm == null;
+                Debug.LogError($"QmapMan.MeshPoints  - decocomp is null - qmmIsNull:{qmmisnull}");
+            }
+        }
+
+        public void SetCoordPoints(bool onoff)
+        {
+            //Debug.Log($"QmapMan.CoordPoints:{onoff}");
+            var decocomp = this.qmm?.GetComponent<CoordDefiningNodesDeco>();
+            if (decocomp != null)
+            {
+                decocomp.showDeco = onoff;
+            }
+            else
+            {
+                var qmmisnull = qmm == null;
+                Debug.LogError($"QmapMan.CoordPoints  - decocomp is null - qmmIsNull:{qmmisnull}");
+            }
+        }
+
+        public void SetExtentPoints(bool onoff)
+        {
+            //Debug.Log($"QmapMan.CoordPoints:{onoff}");
+            var decocomp = this.qmm?.GetComponent<ExtendDefiningNodesDeco>();
+            if (decocomp != null)
+            {
+                decocomp.showDeco = onoff;
+            }
+            else
+            {
+                var qmmisnull = qmm == null;
+                Debug.LogError($"QmapMan.ExtentPoints  - decocomp is null - qmmIsNull:{qmmisnull}");
+            }
+        }
+
+
         string gdalFilePath = "c:/transfer/gdal/";
         string trackFilePath = "c:/transfer/tracks/";
         public async void SetMode(QmapModeE newmode)
@@ -349,14 +486,33 @@ namespace Aiskwk.Map
             //Debug.Log("SetMode:" + newmode);
             ClearMesh();
             useElevationDataStart = true;
-
+            useFlatTrisStart = false;
+            if (qmm != null)
+            {
+                qmm.DisposeOfThings();
+                Destroy(qmm);
+                qmm = null;
+            }
             switch (newmode)
             {
                 case QmapModeE.Bespoke:
                     {
                         Debug.Log($"Setting QmapModeE.bespoke for {bespoke.sceneName}");
                         useElevationDataStart = bespoke.useElevationData;
-                        (qmm, _, _) = await MakeMeshFromLlbox(bespoke.sceneName, bespoke.llbox, tpqk: 16, mapprov: bespoke.mapProv, mapextent: bespoke.mapExtent, limitQuadkeys: false, hmult:bespoke.hmult );
+                        frameQuadkeysStart = bespoke.frameQuadkeys;
+                        useFlatTrisStart = bespoke.useFlatTris;
+                        var tpqk = bespoke.nodesPerQuadKey;
+                        (qmm, _, _) = await MakeMeshFromLlbox(bespoke.sceneName, bespoke.llbox, tpqk: tpqk, mapprov: bespoke.mapProv, mapextent: bespoke.mapExtent, limitQuadkeys: false, hmult:bespoke.hmult  );
+                        //Debug.Log($"Back from makemeshfromLlbox ptcnt:{bespoke.mappoints.Count}");
+                        if (bespoke.mappoints.Count > 0)
+                        {
+                            foreach (var pt in bespoke.mappoints)
+                            {
+                                //Debug.Log($"   qmm.AddUserPoint " + pt.Fmt());
+                                qmm.AddUserMapPoint(pt.lat, pt.lng, pt.x, pt.z);
+                            }
+                            qmm.FinishMapPoints();
+                        }
                         transform.localScale = bespoke.mapscale;
                         transform.localRotation = Quaternion.identity;
                         var rotv = bespoke.maprot;
@@ -364,7 +520,15 @@ namespace Aiskwk.Map
                         transform.position = bespoke.maptrans;
                         qmm.nodefak = 1f;
                         qmm.addViewer = bespoke.useViewer;
-                        if (qmm.addViewer)
+                        SetFrameQuadKey(bespoke.frameQuadkeys);
+                        SetTrilines(bespoke.triLines);
+                        SetTriPoints(bespoke.triPoints);
+                        SetMeshPoints(bespoke.meshPoints);
+                        SetCoordPoints(bespoke.coordPoints);
+                        SetExtentPoints(bespoke.extentPoints);
+                        qmm.CalcYaLLmap();
+                        qmm.RegenerateViewer();
+                        if (qmm.addViewer || true)
                         {
                             var viewer = GameObject.FindObjectOfType<Viewer>();
                             if (viewer == null)
@@ -422,6 +586,8 @@ namespace Aiskwk.Map
                         var llmid = new LatLng(36.801411, 25.271239, "Cyclades mid");
                         var llbox = new LatLngBox(llmid, 110, 170, lod: 12);
                         useElevationDataStart = true;
+                        useFlatTrisStart = false;
+                        Viewer.viewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
                         Viewer.viewerDefaultRotation = new Vector3(0, 90, 0);
                         Viewer.viewerDefaultPosition = new Vector3(0, 0, 0);
                         Viewer.ViewerCamPositionDefaultValue = ViewerCamPosition.FloatBehind;
@@ -443,6 +609,8 @@ namespace Aiskwk.Map
                         var llmid = new LatLng(47.619992, -122.3373495, "Seattle mid");
                         var llbox = new LatLngBox(llmid, 25.17, 14.84, lod: 12);
                         useElevationDataStart = true;
+                        useFlatTrisStart = false;
+                        Viewer.viewerAvatarDefaultValue = ViewerAvatar.Rover;
                         Viewer.viewerDefaultRotation = new Vector3(0, 90, 0);
                         Viewer.viewerDefaultPosition = new Vector3(0, 0, 0);
                         Viewer.ViewerCamPositionDefaultValue = ViewerCamPosition.FloatBehind;
@@ -468,6 +636,7 @@ namespace Aiskwk.Map
                 case QmapModeE.Seattle3:
                     {
                         //useElevationDataStart = false;
+                        Viewer.viewerAvatarDefaultValue = ViewerAvatar.Rover;
                         Viewer.viewerDefaultRotation = new Vector3(0, 90, 0);
                         Viewer.viewerDefaultPosition = new Vector3(0, 0, 0);
                         Viewer.ViewerCamPositionDefaultValue = ViewerCamPosition.FloatBehind;
@@ -692,35 +861,39 @@ namespace Aiskwk.Map
         //    (qmm,_,_) = MakeMeshFromLlbox(name,llbox, 16, 10, mapprov: mapprov);
         //}
 
+        bool enableInspectorManimpulation = false;
         QmapModeE lastQmapMode = QmapModeE.None;
         // Update is called once per frame
         void Update()
         {
-            if (lastQmapMode != qmapMode)
+            if (enableInspectorManimpulation)
             {
-                SetMode(qmapMode);
-            }
-            if (locSpecer.locSpecExecute)
-            {
-                locSpecer.Execute();
-            }
-            if (locSpecer.locSpecTrialExecute)
-            {
-                locSpecer.TrialExecute();
-            }
-            if (locSpecer.locW3wExecute)
-            {
-                Debug.Log("so ExecuteW3wApi");
-                locSpecer.ExecuteW3wApi();
-            }
-            if (deleteAllSceneData)
-            {
-                Debug.Log("Deleting all scene data");
-                if (qmm != null)
+                if (lastQmapMode != qmapMode)
                 {
-                    qmm.deleteSceneData = true;
+                    SetMode(qmapMode);
                 }
-                deleteAllSceneData = false;
+                if (locSpecer.locSpecExecute)
+                {
+                    locSpecer.Execute();
+                }
+                if (locSpecer.locSpecTrialExecute)
+                {
+                    locSpecer.TrialExecute();
+                }
+                if (locSpecer.locW3wExecute)
+                {
+                    Debug.Log("so ExecuteW3wApi");
+                    locSpecer.ExecuteW3wApi();
+                }
+                if (deleteAllSceneData)
+                {
+                    Debug.Log("Deleting all scene data");
+                    if (qmm != null)
+                    {
+                        qmm.deleteSceneData = true;
+                    }
+                    deleteAllSceneData = false;
+                }
             }
         }
 

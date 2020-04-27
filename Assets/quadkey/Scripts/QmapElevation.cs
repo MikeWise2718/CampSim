@@ -136,6 +136,7 @@ namespace Aiskwk.Map
         ElevProvider elevprov;
         int nrow;
         int ncol;
+        int lod;
         LatLngBox llb;
         EarthHightModelE model;
         MapExtentTypeE mapextent;
@@ -150,6 +151,7 @@ namespace Aiskwk.Map
             this.nrow = nrow;
             this.ncol = ncol;
             this.llb = llb;
+            this.lod = llb.lod;
             this.model = model;
             this.mapextent = mapextent;
             heights = new List<float>();
@@ -199,6 +201,7 @@ namespace Aiskwk.Map
             var cursrow = iblk * maxrowinblk;
             var curerow = cursrow + maxrowinblk - 1;
             if (curerow > (nrow - 1)) curerow = nrow - 1;
+            Debug.Log($"   GetWwwUri cursrow:{cursrow}  curerow:{curerow}");
             if (cursrow >= nrow)
             {
                 Debug.LogError("cursrow>=nrow  currow:" + cursrow + " nrow:" + nrow);
@@ -212,6 +215,7 @@ namespace Aiskwk.Map
             int nrowstofetch = nrowsinblock;
             if (nrowsinblock == 1)
             {
+                // have to retrieve more than one row
                 latmax += 0.0000001;
                 nrowstofetch++;
             }
@@ -219,9 +223,12 @@ namespace Aiskwk.Map
             var uri = String.Format(url, latmin, llb.minll.lng, latmax, llb.maxll.lng, nrowstofetch, ncol, bingKey);
             return (true, uri, latmin, latmax);
         }
+        public static int nblktodo;
+        public static int nblkdone;
+
         async Task<(bool, string, int)> GetWwwElevDataAsync(string tpath, string ppath, bool execute = true)
         {
-            Debug.Log("GetElevDataAsy - llb:" + llb.ToString() + " nrow:" + nrow + " ncol:" + ncol);
+            Debug.Log($"GetElevDataAsy - llb:{llb.ToString()} nrow:{nrow} ncol:{ncol}");
             var ok = true;
             var errmsg = "";
             ElevCsvMaker csvmaker = new ElevCsvMaker(ncol, decpt: 1);
@@ -235,8 +242,10 @@ namespace Aiskwk.Map
             }
             int nblk = nrow / maxrowinblk;
             if (nrow % maxrowinblk != 0) nblk += 1;// get the leftovers
-            Debug.Log("Stats maxrowinblk:" + maxrowinblk + " nblk:" + nblk);
+            //Debug.Log($"Stats nrow:{nrow} maxrowinblk:{maxrowinblk} nblk:{nblk}");
             int nretrieved = 0;
+            nblktodo = nblk;
+            nblkdone = 0;
 
             for (int iblk = 0; iblk < nblk; iblk++)
             {
@@ -248,7 +257,7 @@ namespace Aiskwk.Map
                     var rfname = GetElevReqName(tpath, iblk);
                     QresFinder.EnsureExistenceOfDirectory(rfname);
                     File.WriteAllText(rfname, uri);
-                    Debug.Log("Wrote " + rfname + " bytes:" + uri.Length);
+                    Debug.Log($"Wrote {rfname} bytes:{uri.Length}");
                     using (var webRequest = UnityWebRequest.Get(uri))
                     {
                         // Request and wait for the desired page.
@@ -267,7 +276,7 @@ namespace Aiskwk.Map
                             errmsg = uriarray[urilast] + " - Error: " + webRequest.error;
                             return (false, errmsg, nretrieved);
                         }
-                        Debug.Log(uriarray[urilast] + " - Received  " + webRequest.downloadHandler.data.Length + " bytes");
+                        Debug.Log($"{uriarray[urilast]} - Received  {webRequest.downloadHandler.data.Length} bytes");
                         var fname = GetEleBlkPathFileName(tpath, iblk);
                         QresFinder.EnsureExistenceOfDirectory(fname);
                         var bytes = webRequest.downloadHandler.data;
@@ -279,14 +288,14 @@ namespace Aiskwk.Map
                         }
                         else
                         {
-                            errmsg = "See " + fname + " for error message";
+                            errmsg = $"See {fname} for error message";
                             Debug.LogError(errmsg);
                         }
                         File.WriteAllBytes(fname, bytes);
-                        Debug.Log("Wrote " + fname + " bytes:" + bytes.Length + " ok:" + ok);
-
+                        Debug.Log($"Wrote {fname} bytes:{bytes.Length} ok:{ok}  nretrieved:{nretrieved}");
                     }
                 }
+                nblkdone++;
                 nretrieved++;
             }
 
@@ -309,10 +318,10 @@ namespace Aiskwk.Map
 
             var efname = "eledata.csv";
             var efpath = "qkmaps/" + GetEleCsvSubDir(scenename, mapprov);
-            qrf = new QresFinder(efpath, efname);
+            qrf = new QresFinder(elevprov, scenename, lod, efpath, efname, loadData:false);
             (ok, errmsg) = GetElevdataFromQresFinder(qrf);
-            var ppath = qrf.PersistentPathName();
-            var tpath = qrf.TempPathName();
+            var ppath = qrf.GetPersistentPathName();
+            var tpath = qrf.GetTempPathName();
             if (forceload || !ok)
             {
                 Debug.LogWarning(errmsg);
@@ -335,6 +344,7 @@ namespace Aiskwk.Map
             }
             return (ok, nretrieved);
         }
+
 
         public (bool, string) ProcessDf(SimpleDf df)
         {
@@ -379,13 +389,53 @@ namespace Aiskwk.Map
             df.ReadCsv(fname);
             return ProcessDf(df);
         }
+        public void DeleteElevData(string scenename, MapProvider mapprov)
+        {
+
+            Debug.Log($"DeleteElevData for scenename:{scenename} mapprove:{mapprov.ToString()}");
+            if (qrf == null) return;
+
+            //var mprov = GetMapProvSubdirName(mapprov);
+            //var ppath = $"{Application.persistentDataPath}/qkmaps/scenemaps/{mapprov}/{scenename}";
+            //Directory.Delete(ppath, true);
+            var ppath = qrf.GetPersistentPathName();
+            var tpath = qrf.GetTempPathName();
+
+#if UNITY_EDITOR_WIN
+            var msg = $"Delete Elevation persistent and temp paths:\n\"{ppath}\"\n\"{tpath}\"\nPaths copied to clipboard";
+            var ok1 = UnityEditor.EditorUtility.DisplayDialog("Deleting Persistent Path Data", msg, "Ok to delete", "Cancel");
+            if (!ok1) return;
+#endif
+            if (Directory.Exists(ppath))
+            {
+                Directory.Delete(ppath, true);
+                Debug.LogWarning($"Deleted {scenename} data stored in persistent path {ppath}");
+            }
+            else
+            {
+                Debug.LogWarning($"Persistent path {ppath} does not exist");
+            }
+
+
+            if (Directory.Exists(tpath))
+            {
+                Directory.Delete(tpath, true);
+                Debug.LogWarning($"Deleted {scenename} data stored in temp path {tpath}");
+            }
+            else
+            {
+                Debug.LogWarning($"Temp path {tpath} does not exist");
+            }
+
+        }
 
         public (bool, string) GetElevdataFromQresFinder(QresFinder qrf)
         {
-            if (!qrf.Exists())
+            if (!qrf.CheckCsvExistence())
             {
                 return (false, "Qrf could not find data");
             }
+            qrf.LoadIfNeeded();
             var text = qrf.GetText();
             var textar = text.Split('\n');
             var df = new SimpleDf();

@@ -93,9 +93,9 @@ public class B19Panel : MonoBehaviour
     }
 
 
-    public void SetVals()
+    public void SetVals(bool closing = false)
     {
-        Debug.Log("B19Panel SetVals called");
+        Debug.Log($"B19Panel.SetVals called - closing:{closing}");
         //fman.visibilityTiedToDetectability = visTiedToggle.isOn;
         b19comp.loadmodel.SetAndSave( b19_model.isOn );
         b19comp.level01.SetAndSave(b19_level1.isOn);

@@ -425,6 +425,7 @@ namespace CampusSimulator
             CreateGos();
         }
 
+
         private void Awake()
         {
             sman = FindObjectOfType<SceneMan>();

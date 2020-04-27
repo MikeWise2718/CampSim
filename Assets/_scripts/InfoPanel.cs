@@ -129,7 +129,7 @@ public class InfoPanel : MonoBehaviour
             txt += gyr.w.ToString("F3") + " " + gyr.x.ToString("F3") + " " + gyr.y.ToString("F3") + " " + gyr.z.ToString("F3") + "\n";
             geoText.text = txt;
         }
-        var mmsg = "Reg:"+sman.curregion + "\n";
+        var mmsg = "Reg:"+sman.curscene + "\n";
         mmsg += System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss zzz\n");
         mmsg += "P:" + sman.psman.GetPersonCount()+ " V:" + sman.veman.GetVehicleCount()+
                 " B:"+sman.bdman.GetBuildingCount() + " BR:" + sman.bdman.GetBroomCount() + " VC:" + sman.vcman.GetVidcamCount();

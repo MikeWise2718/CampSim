@@ -13,7 +13,7 @@ namespace Aiskwk.Map
         public void Init(Transform desiredParent)
         {
             layerRootGo = new GameObject("layers");
-            layerRootGo.transform.parent = desiredParent;
+            layerRootGo.transform.SetParent(desiredParent, worldPositionStays:false );
         }
 
         public Layer AddLayer(string layername)
@@ -25,7 +25,7 @@ namespace Aiskwk.Map
                 Debug.LogError($"LayerManager {name} already contains a layer named {layername} - exiting");
                 return null;
             }
-            laygo.transform.parent = layerRootGo.transform;
+            laygo.transform.SetParent(layerRootGo.transform,worldPositionStays:false);
             var laygocomp = laygo.AddComponent<Layer>();
             laydict[layername] = laygocomp;
             //Debug.Log("Created layer " + laygo.name + " parent:"+laygo.transform.parent.name);
@@ -39,6 +39,21 @@ namespace Aiskwk.Map
                 return null;
             }
             return (laydict[layername]);
+        }
+        public void Reattach(string key)
+        {
+            if (!laydict.ContainsKey(key))
+            {
+                Debug.LogError($"LayerManager does not have a key called {key}");
+                return;
+            }
+            var objgo = laydict[key];
+            objgo.transform.parent = null;
+            objgo.transform.localScale = Vector3.one;
+            objgo.transform.localRotation = Quaternion.identity;
+            objgo.transform.position = Vector3.zero;
+            objgo.transform.SetParent(layerRootGo.transform, worldPositionStays: false);
+            Debug.Log($"Reattached {key} to {layerRootGo.name}");
         }
         void Start()
         {

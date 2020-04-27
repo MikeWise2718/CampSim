@@ -11,6 +11,7 @@ namespace CampusSimulator
 
         public GameObject vmcamgo;
         public Camera vmcam;// we don't want this to change
+        public Camera viewercam;
 
         public string lastcamset = "MainCam";
         public bool setMainCamToSceneCam = false;
@@ -29,11 +30,6 @@ namespace CampusSimulator
         {
             vmcamgo = new GameObject("Vmain Camera");
             vmcam = vmcamgo.AddComponent<Camera>();
-            if (vmcam==null)
-            {
-                Debug.LogError("VidcamMan - No active main camera found at Awake time");
-                return;
-            }
         }
 
         public void RealizeBackground()
@@ -90,12 +86,17 @@ namespace CampusSimulator
             {
                 Debug.Log($"VidCamMan.toggleFreeFly - Adding FreeFlyCam");
                 //var mcamgo = Camera.main.gameObject;
-                ffc = vmcamgo.AddComponent<FreeFlyCam>();
+                var curcam = GetCurrentCamera();
+                //ffc = vmcamgo.AddComponent<FreeFlyCam>();
+                ffc = curcam.gameObject.AddComponent<FreeFlyCam>();
             }
             else
             {
-                Debug.Log($"VidCamMan.toggleFreeFly - Destroying FreeFlyCam");
-                Destroy(ffc);
+                if (ffc != null)
+                {
+                    Debug.Log($"VidCamMan.toggleFreeFly - Destroying FreeFlyCam");
+                    Destroy(ffc);
+                }
                 ffc = null;
             }
             inFreeFly = !inFreeFly;
@@ -111,6 +112,11 @@ namespace CampusSimulator
             if (mcamvcam == "Viewer")
             {
                 vmcamgo.SetActive(false);
+                lastcamset = mcamvcam;
+                viewercam = Aiskwk.Map.Viewer.GetViewerCamera();
+                vmcam.transform.position = viewercam.gameObject.transform.position;
+                vmcam.transform.rotation = viewercam.gameObject.transform.rotation;
+                vmcam.gameObject.name = "vc-" + mcamvcam;
             }
             else if (vidcam.ContainsKey(mcamvcam))
             {
@@ -121,6 +127,7 @@ namespace CampusSimulator
                 vmcam.depth = 1;
                 vmcam.fieldOfView = vcam.camfov;
                 lastcamset = mcamvcam;
+                vmcam.gameObject.name = "vc-" + mcamvcam;
                 if (vcam.camimage != "")
                 {
                     var bgim = vmcam.GetComponent<BackgroundMainCamImage>();
@@ -169,20 +176,6 @@ namespace CampusSimulator
             }
             //mcam.fieldOfView = vcam.camfov;
         }
-        //#if UNITY_EDITOR
-        //        var svc = UnityEditor.SceneView.lastActiveSceneView.camera;
-        //            if (svc!=null)
-        //            {
-        //                var t = svc.transform;
-        //        msg += "\nScene Cam Pos:" + t.position.ToString("F1");
-        //                msg += "\nScene Cam Rot:" + t.rotation.eulerAngles.ToString("F1");
-        //                msg += "\nScene Cam FOV:" + svc.fieldOfView.ToString("F1");
-        //            }
-        //            else
-        //            {
-        //                msg += "\nScene Cam lastActiveSceneView is null";
-        //            }
-        //#endif
         public void SetSceneCamToMainCam()
         {
 #if UNITY_EDITOR
@@ -232,6 +225,15 @@ namespace CampusSimulator
                 }
             }
 #endif
+        }
+        public Camera GetCurrentCamera()
+        {
+            var rv = vmcam;
+            if (lastcamset=="Viewer")
+            {
+                rv = viewercam;
+            }
+            return rv;
         }
         public void DelVidcams()
         {

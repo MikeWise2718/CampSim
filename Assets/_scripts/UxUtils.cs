@@ -106,11 +106,17 @@ namespace UxUtils
             typedict = new Dictionary<string, string>();
             PlayerPrefs.DeleteAll();
         }
+        public static bool IsRootKey(string keyname)
+        {
+            // rootkeys don't get a scenario prefix
+            var rv = keyname.Length>0 && keyname[0]=='/';
+            return rv;
+        }
+
         public static string ScenarioKey(string keyname)
         {
             var rv = keyname;
-            bool rootkey = keyname[0] == '/';
-            if (rootkey)
+            if (IsRootKey(keyname))
             {
                 return keyname;
             }
@@ -160,15 +166,22 @@ namespace UxUtils
     {
         [SerializeField]
         public T val;
+        public T inival;
         [SerializeField]
         public string keyname;
         [SerializeField]
         string typename;
+        bool valueRetrived = false;
+        public bool ValueRetrived()
+        {
+            return valueRetrived;
+        }
         public UxSetting(string keyname, T inival)
         {
             this.keyname = keyname;
             GetTypeName();
             UxSettingsMan.Add(keyname, typename);
+            this.inival = inival;
             val = inival;
         }
         private void GetTypeName()
@@ -194,16 +207,18 @@ namespace UxUtils
             var s = PlayerPrefs.GetString(skeyname);
             if (String.IsNullOrEmpty(s))
             {
+                valueRetrived = false;
+                val = inival;
                 Save(); // it must have been the first time we tried to retrive it
                 return val;
             }
+            valueRetrived = true;
             T rv1 = UxSettingsMan.TryParse<T>(s);
             //T rv2 = UxSettingsMan.TryParseAlt<T>(val,s);
             return rv1;
         }
         public T GetInitial()
         {
-            //Debug.Log("GetInitial for " + keyname);
             var rv1 = Retrieve();
             val = rv1;
             return rv1;
@@ -249,6 +264,11 @@ namespace UxUtils
         string typename;
         [SerializeField]
         string keyname;
+        bool valueRetrived=false;
+        public bool ValueRetrived()
+        {
+            return valueRetrived;
+        }
         public UxEnumSetting(string keyname, TE inival)
         {
             options = new List<string>(System.Enum.GetNames(typeof(TE)));
@@ -281,7 +301,7 @@ namespace UxUtils
         public void Save()
         {
             var skeyname = UxSettingsMan.ScenarioKey(keyname);
-            //Debug.Log("UxEnumSettings - saving " + skeyname + " to val "+val);
+            Debug.Log("UxEnumSettings - saving " + skeyname + " to val "+val);
             PlayerPrefs.SetString(skeyname, val.ToString());
         }
 
@@ -291,13 +311,15 @@ namespace UxUtils
             var s = PlayerPrefs.GetString(skeyname);
             if (String.IsNullOrEmpty(s))
             {
+                valueRetrived = false;
                 //Debug.Log(skeyname + " not found so retrieved " + val);
                 Save(); // it must have been the first time we tried to retrive it
                 return val;
             }
-            TE rv1 = UxSettingsMan.TryParse<TE>(s);
-            //Debug.Log(skeyname + " found - retrieved " + rv1);
-            return rv1;
+            valueRetrived = true;
+            TE rv = UxSettingsMan.TryParse<TE>(s);
+            //Debug.Log(skeyname + " found - retrieved " + rv);
+            return rv;
         }
         public TE GetInitial()
         {

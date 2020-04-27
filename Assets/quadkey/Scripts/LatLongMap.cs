@@ -505,6 +505,10 @@ namespace Aiskwk.Map
         {
             mapdata.Add(new MapCoordPoint { lng = dlng, lat = dlat, x = dx, z = dz });
         }
+        public int Count()
+        {
+            return mapdata.Count;
+        }
         public void AddRowLngLat(LatLng ll, int lod, double pixToMeters, Vector2d org)
         {
             TileSystem.LatLongToPixelXY(ll.lat, ll.lng, lod, out var pixx, out var pixz);
@@ -612,7 +616,7 @@ namespace Aiskwk.Map
         {
             return glbunmap(v.x, v.y, v.z);
         }
-        public GameObject MakeMarkers(string coordsys, float ska = 1, string clr = "purple")
+        public GameObject MakeMarkers(string coordsys, float ska = 1, string clr = "purple",bool wps=true)
         {
             var sphholder = new GameObject();
             sphholder.transform.parent = llm.transform;
@@ -641,7 +645,7 @@ namespace Aiskwk.Map
                         break;
                 }
                 sph.transform.position = new Vector3((float)x, 0, (float)z);
-                sph.transform.parent = sphholder.transform;
+                sph.transform.SetParent(sphholder.transform,worldPositionStays:wps);
                 var spi = sph.AddComponent<QsphInfo>();
                 spi.latLng = new LatLng(md.lat, md.lng);
                 spi.mapPoint = md;
@@ -669,14 +673,14 @@ namespace Aiskwk.Map
                 lgnlatgo = null;
             }
         }
-        public GameObject MakeNativeCoordMarkers(float ska = 1, string clr = "purple")
+        public GameObject MakeNativeCoordMarkers(float ska = 1, string clr = "purple", bool wps=true)
         {
-            nativego = MakeMarkers("Native", ska, clr: clr);
+            nativego = MakeMarkers("Native", ska, clr: clr, wps: wps);
             return nativego;
         }
-        public GameObject MakeLongLatCoordMarkers(float ska = 1, string clr = "cyan")
+        public GameObject MakeLongLatCoordMarkers(float ska = 1, string clr = "cyan", bool wps = true)
         {
-            lgnlatgo = MakeMarkers("LongLat", ska, clr: clr);
+            lgnlatgo = MakeMarkers("LongLat", ska, clr: clr, wps: wps);
             return lgnlatgo;
         }
     }
@@ -701,6 +705,7 @@ namespace Aiskwk.Map
         bool lnglatSpheresMade = false;
 
         public LatLongMap glbllm = null;
+        public bool isInited = false;
         // Use this for initialization
 
         public Vector3 xycoord(double lng, double lat)
@@ -718,60 +723,69 @@ namespace Aiskwk.Map
             var rv = new Vector2((float)lat, (float)lng);
             return rv;
         }
-        public void InitMapCoords(string dataSetName)
+        public void AddRowLatLng(double lat,double lng, double x, double z)
+        {
+            mapcoord.AddRowLatLng(lat,lng,x,z);
+        }
+        public void CalcRegressionMaps()
+        {
+            maps.latmap = mapcoord.DoRegression("lat = x + z");
+            maps.lngmap = mapcoord.DoRegression("lng = x + z");
+            maps.xmap = mapcoord.DoRegression("x = lng + lat");
+            maps.zmap = mapcoord.DoRegression("z = lng + lat");
+            isInited = true;
+        }
+        public void InitMapCoords(string dataSetName="")
         {
             mapcoord = new MapCoordblock(this);
             switch (dataSetName)
             {
                 case "Bld43":
-                    mapcoord.AddRowLatLng(47.640490, -122.133797, -149.1, 0.2);
-                    mapcoord.AddRowLatLng(47.639079, -122.134960, 28.0, -31.4);
-                    mapcoord.AddRowLatLng(47.638526, -122.134519, 75.4, 19.9);
-                    mapcoord.AddRowLatLng(47.639368, -122.133926, -29.4, 30.8);
-                    mapcoord.AddRowLatLng(47.641066, -122.136018, -155.44, -177.96);
+                    AddRowLatLng(47.640490, -122.133797, -149.1, 0.2);
+                    AddRowLatLng(47.639079, -122.134960, 28.0, -31.4);
+                    AddRowLatLng(47.638526, -122.134519, 75.4, 19.9);
+                    AddRowLatLng(47.639368, -122.133926, -29.4, 30.8);
+                    AddRowLatLng(47.641066, -122.136018, -155.44, -177.96);
                     break;
                 case "BldRWB":
                     double xadj = 10.5;
                     double zadj = 3.0;
-                    mapcoord.AddRowLatLng(47.660078, -122.140175, 72.70 + xadj, 4.77 + zadj);// upper left
-                    mapcoord.AddRowLatLng(47.659377, -122.140189, -5.35 + xadj, 4.77 + zadj);// lower left
-                    mapcoord.AddRowLatLng(47.660150, -122.139328, 81.23 + xadj, -59.70 + zadj);// upper right
-                    mapcoord.AddRowLatLng(47.659457, -122.139339, 3.18 + xadj, -59.70 + zadj);// lower right
+                    AddRowLatLng(47.660078, -122.140175, 72.70 + xadj, 4.77 + zadj);// upper left
+                    AddRowLatLng(47.659377, -122.140189, -5.35 + xadj, 4.77 + zadj);// lower left
+                    AddRowLatLng(47.660150, -122.139328, 81.23 + xadj, -59.70 + zadj);// upper right
+                    AddRowLatLng(47.659457, -122.139339, 3.18 + xadj, -59.70 + zadj);// lower right
                     break;
                 case "test":
-                    mapcoord.AddRowLatLng(1, 1, 40, 25);
-                    mapcoord.AddRowLatLng(2, 2, 45, 20);
-                    mapcoord.AddRowLatLng(1, 1, 38, 30);
-                    mapcoord.AddRowLatLng(3, 3, 50, 30);
-                    mapcoord.AddRowLatLng(2, 2, 48, 28);
+                    AddRowLatLng(1, 1, 40, 25);
+                    AddRowLatLng(2, 2, 45, 20);
+                    AddRowLatLng(1, 1, 38, 30);
+                    AddRowLatLng(3, 3, 50, 30);
+                    AddRowLatLng(2, 2, 48, 28);
 
-                    mapcoord.AddRowLatLng(3, 3, 55, 30);
-                    mapcoord.AddRowLatLng(3, 3, 53, 34);
-                    mapcoord.AddRowLatLng(4, 4, 55, 36);
-                    mapcoord.AddRowLatLng(4, 4, 58, 32);
-                    mapcoord.AddRowLatLng(3, 3, 40, 34);
+                    AddRowLatLng(3, 3, 55, 30);
+                    AddRowLatLng(3, 3, 53, 34);
+                    AddRowLatLng(4, 4, 55, 36);
+                    AddRowLatLng(4, 4, 58, 32);
+                    AddRowLatLng(3, 3, 40, 34);
 
-                    mapcoord.AddRowLatLng(5, 5, 55, 38);
-                    mapcoord.AddRowLatLng(3, 3, 48, 28);
-                    mapcoord.AddRowLatLng(3, 3, 45, 30);
-                    mapcoord.AddRowLatLng(2, 2, 55, 36);
-                    mapcoord.AddRowLatLng(4, 4, 60, 34);
+                    AddRowLatLng(5, 5, 55, 38);
+                    AddRowLatLng(3, 3, 48, 28);
+                    AddRowLatLng(3, 3, 45, 30);
+                    AddRowLatLng(2, 2, 55, 36);
+                    AddRowLatLng(4, 4, 60, 34);
 
-                    mapcoord.AddRowLatLng(5, 5, 60, 38);
-                    mapcoord.AddRowLatLng(5, 5, 60, 42);
-                    mapcoord.AddRowLatLng(5, 5, 65, 38);
-                    mapcoord.AddRowLatLng(4, 4, 50, 34);
-                    mapcoord.AddRowLatLng(3, 3, 58, 38);
+                    AddRowLatLng(5, 5, 60, 38);
+                    AddRowLatLng(5, 5, 60, 42);
+                    AddRowLatLng(5, 5, 65, 38);
+                    AddRowLatLng(4, 4, 50, 34);
+                    AddRowLatLng(3, 3, 58, 38);
                     break;
                 default:
                     return;
             }
             //sman = Object.FindO            SphInfo.DoInfoSphere(ranpoints, name, pos, ska, clrs[istat]);nativebjectOfType<SceneMan>();
             //glbllm = sman.GetComponent<LatLongMap>();
-            maps.latmap = mapcoord.DoRegression("lat = x + z");
-            maps.lngmap = mapcoord.DoRegression("lng = x + z");
-            maps.xmap = mapcoord.DoRegression("x = lng + lat");
-            maps.zmap = mapcoord.DoRegression("z = lng + lat");
+            CalcRegressionMaps();
         }
 
         public void InitMapFromSceneSel(string regsel, int nothing)
@@ -841,7 +855,7 @@ namespace Aiskwk.Map
         {
             if (makeNativeSpheres && !nativeSpheresMade)
             {
-                mapcoord.MakeNativeCoordMarkers();
+                mapcoord.MakeNativeCoordMarkers(wps:false);
                 nativeSpheresMade = true;
             }
             if (!makeNativeSpheres && nativeSpheresMade)
@@ -853,7 +867,7 @@ namespace Aiskwk.Map
 
             if (makeLngLatSpheres && !lnglatSpheresMade)
             {
-                mapcoord.MakeLongLatCoordMarkers();
+                mapcoord.MakeLongLatCoordMarkers(wps: false);
                 lnglatSpheresMade = true;
             }
             if (!makeLngLatSpheres && lnglatSpheresMade)
