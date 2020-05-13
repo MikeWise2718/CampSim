@@ -188,6 +188,11 @@ namespace Aiskwk.Map
             return dirname;
         }
 
+        public (int,int) GetGridSize()
+        {
+            return (nrow, ncol);
+        }
+
 
 
         string GetElevCsvFullName(string ppath)
@@ -318,7 +323,7 @@ namespace Aiskwk.Map
 
             var efname = "eledata.csv";
             var efpath = "qkmaps/" + GetEleCsvSubDir(scenename, mapprov);
-            qrf = new QresFinder(elevprov, scenename, lod, efpath, efname, loadData:false);
+            qrf = new QresFinder(elevprov, scenename, nrow,ncol, efpath, efname, loadData:false);
             (ok, errmsg) = GetElevdataFromQresFinder(qrf);
             var ppath = qrf.GetPersistentPathName();
             var tpath = qrf.GetTempPathName();

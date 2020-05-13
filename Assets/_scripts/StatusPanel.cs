@@ -34,9 +34,10 @@ namespace CampusSimulator
             //Debug.Log("Status Panel Start");
             Init();
         }
-
+        bool linked = false;
         void LinkObjectsAndComponents()
         {
+            if (linked) return;
             sman = FindObjectOfType<SceneMan>();
             if (sman == null)
             {
@@ -68,9 +69,10 @@ namespace CampusSimulator
             visButton = transform.Find("VisButton").gameObject.GetComponent<Button>();
             unkButton = transform.Find("UnkButton").gameObject.GetComponent<Button>();
             vt2dButton = transform.Find("Vt2DButton").gameObject.GetComponent<Button>();
+            linked = true;
         }
 
-        void Init()
+        public void Init()
         {
             LinkObjectsAndComponents();
             ColorizeButtonStates();
@@ -78,6 +80,11 @@ namespace CampusSimulator
 
         public void SetButtonColor(Button butt,string hicolor,bool status,string txt,bool force=false)
         {
+            if (butt == null)
+            {
+                Debug.Log($"SetButton color button {txt} is null");
+                return;
+            }
             var colors = butt.colors;
             //Debug.Log("Set button color:"+hicolor+" status:"+status+" butt.name:"+butt.name);
             var textgo = butt.transform.Find("Text");
@@ -121,18 +128,19 @@ namespace CampusSimulator
                 sman.frman.saveLabelListContinuously = true;
             }
             Debug.Log("Toggled run to " + sman.jnman.spawnjourneys);
-            SetButtonColor(runButton, "pink", sman.jnman.spawnjourneys,"Run");
+            ColorizeButtonStates();
             btnclk++;
         }
 
 
-
         public void FrameButton()
         {
-            var newval = !sman.frman.frameJourneys.Get();
+            var oldval = sman.frman.frameJourneys.Get();
+            var newval = !oldval;
+            //Debug.LogWarning($"FrameButton {sman.curscene} setting all frames to newval:{newval}");
             var ctrlmod = Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl);
             sman.frman.FrameButtonPressed(newval,ctrlmod);
-            SetButtonColor(frameButton, "pink", sman.frman.frameJourneys.Get(),"Frame",force:ctrlmod);
+            ColorizeButtonStates();
             btnclk++;
         }
         public void EvacButton()
@@ -204,8 +212,9 @@ namespace CampusSimulator
                     ToggleFreeFlyPanel();
                 }
             }
-            SetButtonColor(freeFlyButton, "pink", ffstat, "FreeFly");
+            ColorizeButtonStates();
         }
+
         public void ColorizeButtonStates()
         {
             SetButtonColor(fteButton, "lightblue", sman.frman.detectFte.Get(), "F");
@@ -213,7 +222,11 @@ namespace CampusSimulator
             SetButtonColor(secButton, "lightblue", sman.frman.detectSecurity.Get(), "S");
             SetButtonColor(visButton, "lightblue", sman.frman.detectVisitor.Get(), "V");
             SetButtonColor(unkButton, "lightblue", sman.frman.detectUnknown.Get(), "U");
+            //Debug.Log($"ColorizeButtonStates Vt2D:{sman.frman.visibilityTiedToDetectability.Get()}");
             SetButtonColor(vt2dButton, "lightblue", sman.frman.visibilityTiedToDetectability.Get(), "Vt2D");
+            SetButtonColor(frameButton, "pink", sman.frman.frameJourneys.Get(), "Frame");
+            SetButtonColor(freeFlyButton, "pink", sman.vcman.InFreeFly(), "FreeFly");
+            SetButtonColor(runButton, "pink", sman.jnman.spawnjourneys, "Run");
         }
         public void DetectFteButton()
         {
@@ -252,9 +265,11 @@ namespace CampusSimulator
             //SetButtonColor(vt2dButton, "lightblue", sman.frman.visibilityTiedToDetectability.Get(), "Vt2D");
         }
         // Update is called once per frame
+
+        int updcount = 0;
         void Update()
         {
-
+            updcount++;
         }
     }
 }

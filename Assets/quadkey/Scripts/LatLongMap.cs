@@ -36,15 +36,15 @@ namespace Aiskwk.Map
             if (!double.TryParse(sar[1], out var lng)) return falseRv;
             return (true, new LatLng(lat, lng));
         }
-        public string ToW3Wformat()
+        public string ToRequestformat()
         {
-            var fmt = "f6";
+            var fmt = "f7";
             var s = $"{lat.ToString(fmt)},{lng.ToString(fmt)}";
             return s;
         }
         public override string ToString()
         {
-            var fmt = "f6";
+            var fmt = "f7";
             var s = $"lat:{lat.ToString(fmt)} lng:{lng.ToString(fmt)}";
             return s;
         }
@@ -73,6 +73,8 @@ namespace Aiskwk.Map
             TileSystem.LatLongToPixelXYdouble(lat, lng, levelofDetail, out double pixx, out double pixy);
             var faklng = TileSystem.GroundResolution(lat, levelofDetail);
             var faklat = TileSystem.GroundResolution(0, levelofDetail);
+            //faklng = 1;
+            //faklat = 1;
             var rv = new Vector2d(pixx * faklng, pixy * faklat);
             return rv;
         }
@@ -231,7 +233,7 @@ namespace Aiskwk.Map
 
         public float groundMetersPerPixel = 0;
         public float diagonalInMeters = 0;
-        public Vector2 extentMeters = Vector2.zero;
+        public Vector2 extentMetersBadEstimate = Vector2.zero;
         public Vector2 extentMeters1 = Vector2.zero;
         public Vector2 extentPixels = Vector2.zero;
 
@@ -299,7 +301,7 @@ namespace Aiskwk.Map
             var d1 = LatLng.DistanceV2d(metul, metbl);
             var d2 = LatLng.DistanceV2d(metur, metbr);
             var dmy = (LatLng.DistanceV2d(metul, metbl) + LatLng.DistanceV2d(metur, metbr)) / 2;// long live symmetry
-            extentMeters = new Vector2((float)dmx, (float)dmy);
+            extentMetersBadEstimate = new Vector2((float)dmx, (float)dmy);
             extentMeters1 = groundMetersPerPixel * extentPixels;
         }
         public LatLngBox(LatLng llorg, double latExtentKm, double lngExtentKm, string name = "llbox", int lod = 16)
@@ -309,6 +311,41 @@ namespace Aiskwk.Map
             var ll1 = LatLng.GetLatLngOffSetMeter(lod, llorg, mofs);
             var ll2 = LatLng.GetLatLngOffSetMeter(lod, llorg, ofs);
             Initialize(ll1, ll2, name, lod, org: llorg);
+        }
+        public (int,int) GetTileSizeOld(int pixperqktile=256)
+        {
+            var nx = pixbr.x - pixbl.x;
+            var ny = pixbr.y - pixur.y;
+            var nqkx = (nx / pixperqktile) + 1;
+            var nqky = (ny / pixperqktile) + 1;
+            Debug.Log($"GetTileSizeOld pixbr:{pixbr}  pixbl:{pixbl}  pixur:{pixur}");
+            Debug.Log($"GetTileSizeOld nx:{nx} nqkx:{nqkx}     ny:{ny} nqky:{nqky}");
+            var rv = (nqkx,nqky);
+            return rv;
+        }
+        public (int, int) GetTileSize(int pixperqktile = 256)
+        {
+            //// oldway
+            ////var nx = pixbr.x - pixbl.x;
+            ////var ny = pixbr.y - pixur.y;
+            ////var nqkx = (nx / pixperqktile) + 1;
+            ////var nqky = (ny / pixperqktile) + 1;
+
+            // new way
+            var nqkx = ((pixbr.x/pixperqktile) - (pixbl.x/pixperqktile)) + 1;
+            var nqky = ((pixbr.y/pixperqktile) - (pixur.y/pixperqktile)) + 1;
+
+            //var t1x = pixbr.x / pixperqktile;
+            //var t2x = pixbl.x / pixperqktile;
+            //var t1y = pixbr.y / pixperqktile;
+            //var t2y = pixur.y / pixperqktile;
+            //var pixh = pixbr.y - pixur.y;
+            //var pixw = pixbr.x - pixbl.x;
+            //Debug.Log($"GetTileSize pixbr:{pixbr}  pixbl:{pixbl}  pixur:{pixur}   pixh:{pixh} pixw:{pixw}");
+            //Debug.Log($"GetTileSize t1x:{t1x} t2x:{t2x} nqkx:{nqkx}     t1y:{t1y} t2y:{t2y} nqky:{nqky}");
+
+            var rv = (nqkx, nqky);
+            return rv;
         }
 
         public (float, float) GetLambdaCoords(LatLng ll)
@@ -365,9 +402,19 @@ namespace Aiskwk.Map
             var rv = LatLng.GetVector2IntPixelCoords(lod, maxll.lat, minll.lng);
             return rv;
         }
+        public Vector2Int GetPixelBottomLeft(int lod)
+        {
+            var rv = LatLng.GetVector2IntPixelCoords(lod, minll.lat, minll.lng);
+            return rv;
+        }
         public Vector2Int GetPixelBottomRight(int lod)
         {
             var rv = LatLng.GetVector2IntPixelCoords(lod, minll.lat, maxll.lng);
+            return rv;
+        }
+        public Vector2Int GetPixelUpperRight(int lod)
+        {
+            var rv = LatLng.GetVector2IntPixelCoords(lod, maxll.lat, maxll.lng);
             return rv;
         }
         public Vector2Int GetPixelSize(int lod)

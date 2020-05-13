@@ -40,12 +40,16 @@ public class AboutPanel : MonoBehaviour
 
     public float getCurrentCpuUsage()
     {
-        return cpuCounter.NextValue();
+        var rv = 0f;
+        if (cpuCounter!=null) rv = cpuCounter.NextValue();
+        return rv;
     }
 
     public float getAvailableRAM()
     {
-        return ramCounter.NextValue();
+        var rv = 0f;
+        if (ramCounter != null) rv = ramCounter.NextValue();
+        return rv;
     }
 
     void Init()
@@ -230,7 +234,7 @@ public class AboutPanel : MonoBehaviour
             msg += "\nUnity Platform:" + Application.platform;
 
             msg += "\n\nBuild Version :" + GraphUtil.GetVersionString();
-            msg += "\nBuild Date (maybe):" + GraphUtil.GetBuildDate();
+            msg += "\nAssembly Date:" + GraphUtil.GetBuildDate();
 
             var (winname, username, userdomname) = GetSecurityPrincipalNames();
             msg += "\n\nWindows Identity:" + winname;

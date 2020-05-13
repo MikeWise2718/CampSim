@@ -782,8 +782,8 @@ namespace Aiskwk.Map
 
             var qkm = qmm.qkm;
 
-            //        var ska = qmm.nodefak * qkm.llbox.diagonalInMeters / 450;
             var ska = qmm.triMeshDiag * 0.075f;
+            ska = ska / 2;
 
             var qtt = qmm.qtt;
             int i = 0;
@@ -811,10 +811,10 @@ namespace Aiskwk.Map
                 if (singlepipe)
                 {
                     QsphInfo.DoInfoSphere(qkgo, "pur" + i, pur, ska, "navyblue", llur);
-                    pipeu = qtt.AddStraightLine(qkgo, qkname + "-u", pul, pur, ska, lclr: "orange");
-                    piper = qtt.AddStraightLine(qkgo, qkname + "-r", pur, pbr, ska, lclr: "orange");
-                    pipeb = qtt.AddStraightLine(qkgo, qkname + "-b", pbr, pbl, ska, lclr: "orange");
-                    pipel = qtt.AddStraightLine(qkgo, qkname + "-l", pbl, pul, ska, lclr: "orange");
+                    pipeu = qtt.AddStraightLine(qkgo, qkname + "-u", pul, pur, ska, lclr: "orange", coordsys: QkCoordSys.QkWc);
+                    piper = qtt.AddStraightLine(qkgo, qkname + "-r", pur, pbr, ska, lclr: "orange", coordsys: QkCoordSys.QkWc);
+                    pipeb = qtt.AddStraightLine(qkgo, qkname + "-b", pbr, pbl, ska, lclr: "orange", coordsys: QkCoordSys.QkWc);
+                    pipel = qtt.AddStraightLine(qkgo, qkname + "-l", pbl, pul, ska, lclr: "orange", coordsys: QkCoordSys.QkWc);
 
                     //pipeu = GpuInst.CreateCylinderGpu(qkgo, qkname + "-u", pul, pur, ska, "cyan");
                     //piper = GpuInst.CreateCylinderGpu(qkgo, qkname + "-r", pur, pbr, ska, "cyan");
@@ -824,10 +824,10 @@ namespace Aiskwk.Map
                 else
                 {
                     QsphInfo.DoInfoSphereSlim(qkgo, "pur" + i, pur, ska, "navyblue", llur);
-                    pipeu = qtt.AddFragLine(qkgo, qkname + "-u", pul, pur, ska, lclr: "blue");
-                    piper = qtt.AddFragLine(qkgo, qkname + "-r", pur, pbr, ska, lclr: "blue");
-                    pipeb = qtt.AddFragLine(qkgo, qkname + "-b", pbr, pbl, ska, lclr: "blue");
-                    pipel = qtt.AddFragLine(qkgo, qkname + "-l", pbl, pul, ska, lclr: "blue");
+                    pipeu = qtt.AddFragLine(qkgo, qkname + "-u", pul, pur, ska, lclr: "red",nclr:"blue",coordsys: QkCoordSys.QkWc);
+                    piper = qtt.AddFragLine(qkgo, qkname + "-r", pur, pbr, ska, lclr: "blue",nclr:"red", coordsys: QkCoordSys.QkWc);
+                    pipeb = qtt.AddFragLine(qkgo, qkname + "-b", pbr, pbl, ska, lclr: "green", nclr: "yellow", coordsys: QkCoordSys.QkWc);
+                    pipel = qtt.AddFragLine(qkgo, qkname + "-l", pbl, pul, ska, lclr: "yellow", nclr: "green", coordsys: QkCoordSys.QkWc);
                 }
                 if (showQuadkeyLabels)
                 {
@@ -835,7 +835,7 @@ namespace Aiskwk.Map
                 }
                 if (sw.ElapfOverYieldTime())
                 {
-                    Debug.Log($"Yielding on qktile frame {i} of {qkm.qktiles.Count}");
+                    //Debug.Log($"Yielding on qktile frame {i} of {qkm.qktiles.Count}");
                     yield return null;
                     if (earlyTerminate) break;
                 }

@@ -16,7 +16,7 @@ namespace CampusSimulator
 {
     public enum RouteGarnishE { none, names, coords, all }
 
-    public enum SceneSelE { MsftCoreCampus, MsftB19focused, MsftRedwest, Eb12, MsftDublin, Tukwila, Seattle, MtStHelens,Riggins, None }
+    public enum SceneSelE { MsftCoreCampus, MsftB19focused, MsftRedwest, Eb12, MsftDublin, Tukwila, Seattle, MtStHelens,Riggins,Custom, None }
 
     public class SceneMan : MonoBehaviour
     {
@@ -59,8 +59,8 @@ namespace CampusSimulator
         public bool droperrormarkers = false;
 
         public bool autoerrorcorrect = false;
-        private bool needsrefresh = true;
-        private bool needstotalrefresh = true;
+        private bool needsrefresh = false;
+        private bool needstotalrefresh = false;
 
 
         public GameObject rmango;
@@ -207,7 +207,7 @@ namespace CampusSimulator
             {
                 try
                 {
-                    Debug.LogWarning("SceneMan-Setting scenario to " + newscene);
+                    Debug.LogWarning($"SceneMan-Setting scenario to {newscene} - curscene:{curscene} - force:{force}");
                     if (runtimestamp == "")
                     {
                         runtimestamp = DateTime.UtcNow.ToString("yyyyMMdd-HHmmss");
@@ -238,6 +238,17 @@ namespace CampusSimulator
                     jnman.SetScene(newscene);
                     frman.SetScene(newscene);
                     linkcloudman.SetScene3(newscene);  // realize latelinks    
+                    var optpan = FindObjectOfType<OptionsPanel>();
+                    if (optpan != null)
+                    {
+                        optpan.SetScene(newscene);
+                    }
+                    var span = FindObjectOfType<StatusPanel>();
+                    if (span != null)
+                    {
+                        //Debug.LogWarning($"Resetting StatusPanel for {newscene}");
+                        span.Init();
+                    }
                     //Debug.Log("SetScene finished");
                 }
                 catch(Exception ex)
@@ -1453,11 +1464,11 @@ namespace CampusSimulator
                 Debug.Log(go.name);
             }
         }
-        float ctrlChit = 0;
-        float ctrlMhit = 0;
-        float ctrlQhit = 0;
-        float ctrlShit = 0;
-        float ctrlDhit = 0;
+        float ctrlChitTime = 0;
+        float ctrlMhitTime = 0;
+        float ctrlQhitTime = 0;
+        float ctrlShitTime = 0;
+        float ctrlDhitTime = 0;
         public void KeyProcessing()
         {
             //if (Input.GetKeyDown(KeyCode.LeftShift))
@@ -1476,31 +1487,34 @@ namespace CampusSimulator
             //    Debug.Log("Mouse 4 ");
             //}
             // note that one uses GetKey and the other GetKeyDown... not sure why
-
-            if ((Input.GetKey(KeyCode.LeftControl)) && Input.GetKeyDown(KeyCode.C))
+            var ctrlhit = Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl);
+            if (ctrlhit && Input.GetKeyDown(KeyCode.Q))
             {
-                Debug.Log("Hit LCtrl-C");
-                if ((Time.time - ctrlChit) < 1)
+                Debug.Log("Hit Ctrl-Q");
+                if ((Time.time - ctrlQhitTime) < 1)
                 {
                     Debug.Log("Hit it twice so quitting: Application.Quit()");
                     Application.Quit();
                 }
-                if ((Time.time - ctrlMhit) < 1)
-                {
-                    vcman.SetSceneCamToMainCam();// really?
-                }
-                // L-CTRL + C
-                ctrlChit = Time.time;
+                // CTRL + Q
+                ctrlQhitTime = Time.time;
             }
-            if ((Input.GetKey(KeyCode.LeftControl)) && Input.GetKeyDown(KeyCode.D))
+            if (ctrlhit && Input.GetKeyDown(KeyCode.C))
+            {
+                Debug.Log("Hit Ctrl-C - interrupting");
+                Aiskwk.Map.QkMan.interruptLoading = true;
+                // CTRL + C
+                ctrlChitTime = Time.time;
+            }
+            if (ctrlhit &&  Input.GetKeyDown(KeyCode.D))
             {
                 Debug.Log("Hit LCtrl-D");
-                if ((Time.time - ctrlDhit)<1)
+                if ((Time.time - ctrlDhitTime)<1)
                 {
                     // must have hit it twice
                     psman.EverybodyDance();
                 }
-                ctrlDhit = Time.time;
+                ctrlDhitTime = Time.time;
             }
         }
 
@@ -1646,7 +1660,7 @@ namespace CampusSimulator
 
             if ((e.type == EventType.KeyDown) && (e.keyCode == KeyCode.S))
             {
-                if ((Time.time - ctrlMhit) < 1)
+                if ((Time.time - ctrlMhitTime) < 1)
                 {
                     vcman.SetMainCamToSceneCam();
                     e.Use();
@@ -1654,19 +1668,19 @@ namespace CampusSimulator
                 if (ctrlpressed)
                 {
                     Debug.Log("Hit Ctrl-S");
-                    ctrlShit = Time.time;
+                    ctrlShitTime = Time.time;
                 }
             }
             if ((e.type == EventType.KeyDown) && (e.keyCode == KeyCode.M))
             {
-                if ((Time.time - ctrlMhit) < 1)
+                if ((Time.time - ctrlMhitTime) < 1)
                 {
                     vcman.SetSceneCamToMainCam();
                 }
                 if (ctrlpressed)
                 {
                     Debug.Log("Hit Ctrl-M");
-                    ctrlMhit = Time.time;
+                    ctrlMhitTime = Time.time;
                 }
             }
             if ((e.type == EventType.KeyDown) && (e.keyCode == KeyCode.E) && ctrlpressed)

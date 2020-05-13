@@ -38,11 +38,14 @@ public class B19Panel : MonoBehaviour
             throw new UnityException("Frame panel could not find RegionMan");
         }
         bman = FindObjectOfType<BuildingMan>();
-        var bld = bman.GetBuilding("Bld19");
-        b19comp = bld.GetComponent<B19Willow>();
-        if (bman == null)
+        var bld = bman?.GetBuilding("Bld19");
+        if (bld != null)
         {
-            Debug.Log("bman null");
+            b19comp = bld.GetComponent<B19Willow>();
+        }
+        else
+        {
+            Debug.LogWarning("B19 Panel can not find Bld19");
         }
         b19_model = transform.Find("B19Model").GetComponent<Toggle>();
         b19_level1 = transform.Find("Level1").GetComponent<Toggle>();
@@ -63,6 +66,7 @@ public class B19Panel : MonoBehaviour
         {
             LinkObjectsAndComponents();
         }
+        if (b19comp == null) return;
         b19_model.isOn = b19comp.loadmodel.Get();
         b19_level1.isOn = b19comp.level01.Get();
         b19_level2.isOn = b19comp.level02.Get();
@@ -96,6 +100,8 @@ public class B19Panel : MonoBehaviour
     public void SetVals(bool closing = false)
     {
         Debug.Log($"B19Panel.SetVals called - closing:{closing}");
+        if (b19comp == null) return;
+
         //fman.visibilityTiedToDetectability = visTiedToggle.isOn;
         b19comp.loadmodel.SetAndSave( b19_model.isOn );
         b19comp.level01.SetAndSave(b19_level1.isOn);
@@ -117,6 +123,8 @@ public class B19Panel : MonoBehaviour
 
     public void SetVals2()
     {
+        if (b19comp == null) return;
+
         //Debug.Log("B19Panel SetVals2 called");
         //fman.visibilityTiedToDetectability = visTiedToggle.isOn;
         var chg = false;

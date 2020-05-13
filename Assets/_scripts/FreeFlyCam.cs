@@ -73,7 +73,7 @@ namespace CampusSimulator
         }
 #endif
 
-        CampusSimulator.StatusPanel span = null;
+        public CampusSimulator.StatusPanel span = null;
 
         private void Start()
         {
