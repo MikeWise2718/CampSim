@@ -398,7 +398,8 @@ namespace CampusSimulator
                 var qrfbitm = qmm.qkm.GetTexQrf(qmm.mapprov,qmm.scenename, qmm.mapExtent,qmm.levelOfDetail,loadData:false);
                 var efname = "eledata.csv";
                 var efpath = "qkmaps/" + qmapman.qmm.qmapElev.GetEleCsvSubDir(qmm.scenename, qmm.mapprov);
-                var qrfelev = new QresFinder(qmm.elevprov, qmm.scenename,qmm.levelOfDetail,efpath,efname, loadData: false);
+                var (nrowx, ncolz) = qmm.qmapElev.GetGridSize();
+                var qrfelev = new QresFinder(qmm.elevprov, qmm.scenename,nrowx,ncolz,efpath,efname, loadData: false);
                 s1 = qrfbitm.GetPersistentPathName();
                 s2 = qrfbitm.GetPersistentFileData();
                 s3 = qrfelev.GetPersistentPathName();

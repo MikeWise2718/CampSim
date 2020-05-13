@@ -273,7 +273,7 @@ public class MapSetPanel : MonoBehaviour
         tempMapsDataText.text = s6;
         tempElevPathText.text = s7;
         tempElevInfoText.text = s8;
-        copyClipText = $"{s1}\n{s2}\n{s7}\n{s8}\n\n{s3}\n{s4}\n{s7}\n{s8}\n\n{sregkey}";
+        copyClipText = $"{s1}\n{s2}\n{s5}\n{s6}\n\n{s3}\n{s4}\n{s7}\n{s8}\n\n{sregkey}";
     }
 
     bool isLoadingMaps = false;

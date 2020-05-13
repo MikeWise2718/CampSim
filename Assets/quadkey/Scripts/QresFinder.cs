@@ -14,11 +14,13 @@ namespace Aiskwk.Map
         MapProvider mapprov;
         MapExtentTypeE mapextent;
         int lod;
+        int nrow_x;
+        int ncol_z;
         string scenename;
         string fileName;
         string pathName;
-        string oldfileName;
-        string oldpathName;
+        //string oldfileName;
+        //string oldpathName;
         string fullName;
         string resFullName;
         public long last_loaded_texsize;
@@ -26,7 +28,7 @@ namespace Aiskwk.Map
         Texture2D tex = null;
         bool exists = false;
         bool loaded = false;
-        public QresFinder(ElevProvider eleprov, string scenename, int lod, string oldpathname, string oldfilename, bool loadData=true )
+        public QresFinder(ElevProvider eleprov, string scenename, int nrow_x,int ncol_z, string oldpathname, string oldfilename, bool loadData=true )
         {
             // Example: 
             //          pathname = "qkmaps/scenemaps/bing/tukwila/texmap/16/"
@@ -43,9 +45,12 @@ namespace Aiskwk.Map
             //    /{size}
             this.qresType =  QresType.Elevations;
             this.eleprov = eleprov;
-            this.oldfileName = oldfilename;
-            this.oldpathName = oldpathname;
-            this.lod = lod;
+            //this.oldfileName = oldfilename;
+            //this.oldpathName = oldpathname;
+            this.lod = -1;
+            this.nrow_x = nrow_x;
+            this.ncol_z = ncol_z;
+
             Init(oldpathname, scenename, loadData: loadData);
         }
         public QresFinder(MapProvider mapprov, string scenename, int lod, string oldpathname, string oldfilename, MapExtentTypeE mapextent,bool loadData = true)
@@ -54,8 +59,8 @@ namespace Aiskwk.Map
             this.mapprov = mapprov;
             this.mapextent = mapextent;
             this.lod = lod;
-            this.oldfileName = oldfilename;
-            this.oldpathName = oldpathname;
+            //this.oldfileName = oldfilename;
+            //this.oldpathName = oldpathname;
             Init(oldpathname, scenename, loadData: loadData);
         }
         public string GetTextureFullName(MapExtentTypeE mapextent)
@@ -109,15 +114,16 @@ namespace Aiskwk.Map
         }
         public static string GetTextureSubDir(MapProvider mapprov, string scenename, int levelOfDetail)
         {
-            var dirname = "scenemaps/" + QkMan.GetMapProvSubdirName(mapprov) + "/" + scenename + "/texmap/" + levelOfDetail + "/";
+            var mapsubdir = QkMan.GetMapProvSubdirName(mapprov);
+            var dirname = $"scenemaps/{mapsubdir}/{scenename}/texmap/lod{levelOfDetail}/";
 
             return dirname;
         }
 
-        public static string GetElevationSubDir(ElevProvider eleprov, string scenename, int levelOfDetail)
+        public static string GetElevationSubDir(ElevProvider eleprov, string scenename, int nrowx, int ncolz)
         {
-            var dirname = "scenemaps/" + QkMan.GetElevProvSubdirName(eleprov) + "/" + scenename + "/elev/";
-
+            var elesubdir = QkMan.GetElevProvSubdirName(eleprov);
+            var dirname = $"scenemaps/{elesubdir}/{scenename}/elev/grid{nrowx}x{ncolz}/";
             return dirname;
         }
 
@@ -133,7 +139,7 @@ namespace Aiskwk.Map
                     }
                 case QresType.Elevations:
                     {
-                        rv = GetElevationSubDir(eleprov, scenename, lod);
+                        rv = GetElevationSubDir(eleprov, scenename, nrow_x,ncol_z);
                         break;
                     }
             }
