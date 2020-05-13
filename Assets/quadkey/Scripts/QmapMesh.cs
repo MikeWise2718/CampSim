@@ -20,11 +20,12 @@ namespace Aiskwk.Map
         public float textWidthPix = 0;
         public float textHeighthPix = 0;
         public float textMbytes = 0;
+        public Vector2Int nqktiles;
         public Vector3 meshDeltaMeters = Vector3.zero;
         public QkmeshStatistics()
         {
         }
-        public void CalcValues(LatLngBox box)
+        public void CalcValues(LatLngBox box,Vector2Int nqk)
         {
             diagonalKm = box.diagonalInMeters / 1000.0f;
             widthKm = (float)box.extentMeters.x / 1000.0f;
@@ -33,6 +34,7 @@ namespace Aiskwk.Map
             heightPix = (float)box.extentPixels.y;
             areaSqkm = widthKm * heightKm;
             llbox = box;
+            nqktiles = nqk;
         }
     }
 
@@ -938,7 +940,7 @@ namespace Aiskwk.Map
             {
                 box = qkm.qllbox;
             }
-            stats.CalcValues(box);
+            stats.CalcValues(box,qkm.nqk);
             var meshq00 = GetMeshNodePos(0, 0);
             var meshq01 = GetMeshNodePos(0, 1);
             var meshq10 = GetMeshNodePos(1, 0);

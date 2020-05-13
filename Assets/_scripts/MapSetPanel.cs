@@ -230,8 +230,10 @@ public class MapSetPanel : MonoBehaviour
             var lats = stats.llbox.midll.lat.ToString("f6");
             var lngs = stats.llbox.midll.lng.ToString("f6");
             latLngText.text = $"lat,lng: {lats},{lngs}";
-            latKmText.text = "Latkm: "+stats.heightKm.ToString("f5");
-            lngKmText.text = "Lnglm: "+stats.widthKm.ToString("f5");
+            var latkms = stats.heightKm.ToString("f5");
+            var lngkms = stats.widthKm.ToString("f5");
+            latKmText.text = $"Latkm: {latkms}   lat-tiles:{stats.nqktiles.y}";
+            lngKmText.text = $"Lnglm: {lngkms}   lng-tiles:{stats.nqktiles.x}";
             //Debug.Log($"Setting lod to {stats.llbox.lod}");
             lodVal.value = stats.llbox.lod;
             npqkVal.value = mman.nodesPerQuadKey;
