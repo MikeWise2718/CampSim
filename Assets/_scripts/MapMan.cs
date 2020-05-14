@@ -23,6 +23,7 @@ namespace CampusSimulator
         public bool useElesForNow = false;
         public bool useViewer = false;
         public bool hasLLmap = false;
+        public bool isCustomizable = false;
 
         public double maplng = -122.134216;
         public double maplat = 47.639217;
@@ -237,6 +238,34 @@ namespace CampusSimulator
             qmapman.useElevationDataStart = neweleval;
             qmapman.qmm.useElevationData = neweleval;
         }
+        public void SetLatLngAndExtent(double lat,double lng,double latkm,double lngkm)
+        {
+            maplat = lat;
+            maplng = lng;
+            xdistkm = (float) lngkm;
+            zdistkm = (float) latkm;
+            var ll = new LatLng(lat, lng);
+            var llbox = new LatLngBox(ll, latkm, lngkm, lod:lod);
+            qmapman.bespoke.llbox = llbox;
+            Debug.Log($"mman.SetLatLngAndExtent: lat:{lat} lng:{lng} latkm:{latkm} lngkm:{lngkm}");
+        }
+        public void SetLod(int newlod)
+        {
+            if (newlod < 0) newlod = 0;
+            if (newlod > 19) newlod = 19;
+            Debug.Log($"mman.SetLod:{newlod}");
+            lod = newlod;
+            qmapman.qmm.levelOfDetail = newlod;
+        }
+        public void SetNtqk(int newntqk)
+        {
+            if (newntqk < 1) newntqk = 1;
+            if (newntqk > 20) newntqk = 20;
+            Debug.Log($"mman.SetNtqk:{newntqk}");
+            nodesPerQuadKey = newntqk;
+            qmapman.qmm.secsPerQkTile = newntqk;
+        }
+
         public void SetHmult(float newhmult)
         {
             hmult.SetAndSave(newhmult);
@@ -370,6 +399,9 @@ namespace CampusSimulator
             Debug.Log("Loading Scene Maps");
             QkMan.nbmLoaded = 0;
             QmapElevation.nblkdone = 0;
+            qmapman.bespoke.lod = lod;
+            qmapman.bespoke.llbox.lod = lod;
+            qmapman.bespoke.nodesPerQuadKey = nodesPerQuadKey;
             qmapman.SetMode(qmapman.qmapMode);
         }
         public (bool isLoading,int nbmLoaded,int nbmToLoad,int nelevBatchesLoaded, int nelevBatchsToLoad) GetLoadingStatus()
@@ -455,7 +487,7 @@ namespace CampusSimulator
             RealizeMapVisuals();
             if (newregion == lastregionset)
             {
-                Debug.LogWarning("Region " + newregion + " already set");
+                Debug.LogWarning("MamMan.SetScene - Region " + newregion + " already set");
                 return;
             }
             maprot = Vector3.zero;
@@ -470,6 +502,7 @@ namespace CampusSimulator
             hmultForNow = 1;
             nodesPerQuadKey = 16;
             hasLLmap = false;
+            isCustomizable = false;
             Viewer.viewerDefaultPosition = Vector3.zero;
             Viewer.viewerDefaultRotation = Vector3.zero;
             Viewer.viewerAvatarDefaultValue = ViewerAvatar.CapsuleMan;
@@ -498,19 +531,16 @@ namespace CampusSimulator
                     mapscale = 3.2f;
                     maprot = new Vector3(0, 71.1f, 0);
                     maptrans = new Vector3(-6, 0, 17);
-                    xdistkm = 1;
-                    zdistkm = 2;
+                    //xdistkm = 1;
+                    //zdistkm = 2;
+                    xdistkm = 2;
+                    zdistkm = 3;
                     nodesPerQuadKey = 4;
-                    lod = defaultlod;
+                    lod = 19;
                     hasLLmap = true;
-                    //Viewer.viewerDefaultPosition = new Vector3(-451.5f, 3f, 98.3f);
-                    //Viewer.viewerDefaultRotation = new Vector3(0, -60f, 0);
                     Viewer.viewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
                     Viewer.viewerDefaultPosition = new Vector3(-451.5f,3f,98.3f);
                     Viewer.viewerDefaultRotation = new Vector3(0, -60, 0);
-                    //case "Ms_c_B19_raspipole":
-                    //    campos = new Vector3(-451.5f, 3f, 98.3f);
-                    //    camrotate = new Vector3(30f, -60f, 0);
                     break;
                 case SceneSelE.Eb12:
                     // better with google maps
@@ -545,6 +575,7 @@ namespace CampusSimulator
                     lod = defaultlod;
                     mapscale = 3.2f;
                     hasLLmap = true;
+                    Viewer.viewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
                     break;
                 case SceneSelE.MsftCoreCampus:
                     maplat = 47.639217;
@@ -556,6 +587,9 @@ namespace CampusSimulator
                     zdistkm = 6;
                     lod = defaultlod;
                     hasLLmap = true;
+                    Viewer.viewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
+                    Viewer.viewerDefaultPosition = new Vector3(-451.5f, 3f, 98.3f);
+                    Viewer.viewerDefaultRotation = new Vector3(0, -60, 0);
                     break;
                 case SceneSelE.Seattle:
                     maplat = 47.619992;
@@ -572,6 +606,7 @@ namespace CampusSimulator
                     mapscale = 1f;
                     roty2 = 0;
                     nodesPerQuadKey = 8;
+                    Viewer.viewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
                     break;
                 case SceneSelE.MtStHelens:
                     maplat = 46.198428;
@@ -589,6 +624,23 @@ namespace CampusSimulator
                     Viewer.viewerAvatarDefaultValue = ViewerAvatar.Rover;
                     mapscale = 1f;
                     break;
+                case SceneSelE.Custom:
+                    maplat = 45.412219;
+                    maplng = -116.328921;
+                    mapscale = 3.2f;
+                    maprot = Vector3.zero;
+                    maptrans = Vector3.zero;
+                    xdistkm = 10;
+                    zdistkm = 10;
+                    lod = 15;
+                    useElesForNow = true;
+                    useViewer = true;
+                    mapscale = 1f;
+                    roty2 = 0;
+                    mapscale = 1f;
+                    isCustomizable = true;
+                    Viewer.viewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
+                    break;
                 case SceneSelE.Riggins:
                     maplat = 45.412219;
                     maplng = -116.328921;
@@ -603,6 +655,7 @@ namespace CampusSimulator
                     mapscale = 1f;
                     roty2 = 0;
                     mapscale = 1f;
+                    Viewer.viewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
                     break;
                     //        var llmid = new LatLng(45.412219, -116.328921, "Riggins");
                     //        var llbox = new LatLngBox(llmid, 10.0, 10.0, "Riggins box", lod: 15);

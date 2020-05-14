@@ -244,7 +244,7 @@ namespace Aiskwk.Map
 
             camgo = GameObject.CreatePrimitive(PrimitiveType.Cube);
             var cska = 0.1f;
-            camgo.name = "camgo";
+            camgo.name = "viewer-camgo";
             camgo.transform.localScale = new Vector3(cska, cska, cska);
             viewercam = camgo.AddComponent<Camera>();
             switch (viewerCamPosition)
@@ -540,6 +540,15 @@ namespace Aiskwk.Map
         }
         public void SetSceneCamToMainCam()
         {
+            if (viewercam == null)
+            {
+                Debug.LogError($"SetSceneCamToMainCam viewcam is null");
+            }
+            else
+            {
+                Debug.Log($"SetSceneCamToMainCam viewcam:{viewercam.name}");
+
+            }
 #if UNITY_EDITOR
             //var svcam = UnityEditor.SceneView.lastActiveSceneView.camera;
             //svcam.transform.position = cam.transform.position;

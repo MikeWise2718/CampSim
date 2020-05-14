@@ -68,6 +68,17 @@ public class MapSetPanel : MonoBehaviour
     Text latKmText;
     Text lngKmText;
 
+    InputField newLatLngInputField;
+    InputField newLatKmInputField;
+    InputField newLngKmInputField;
+
+    bool newPosAndExtentAvailable;
+    double newLat;
+    double newLng;
+    double newLatKm;
+    double newLngKm;
+
+
     public bool needSetSceneReset;
 
 
@@ -135,7 +146,15 @@ public class MapSetPanel : MonoBehaviour
         latLngText = transform.Find("LatLngText").gameObject.GetComponent<Text>();
         latKmText = transform.Find("LatKmText").gameObject.GetComponent<Text>();
         lngKmText = transform.Find("LngKmText").gameObject.GetComponent<Text>();
-        //Debug.Log("MapSetPanel.LinkObjectsAndComponents Found everything apparently");
+
+        newLatLngInputField = transform.Find("NewLatLngInputField").gameObject.GetComponent<InputField>();
+        newLatKmInputField = transform.Find("NewLatKmInputField").gameObject.GetComponent<InputField>();
+        newLngKmInputField = transform.Find("NewLngKmInputField").gameObject.GetComponent<InputField>();
+
+
+
+        Debug.Log("MapSetPanel.LinkObjectsAndComponents Found everything apparently");
+
         linked = true;
     }
 
@@ -162,7 +181,6 @@ public class MapSetPanel : MonoBehaviour
         {
             LinkObjectsAndComponents();
         }
-
 
         var errmsg = "Error in MapSetPanel.InitVals-";
         try
@@ -213,16 +231,21 @@ public class MapSetPanel : MonoBehaviour
         oldHmultVal = -9e9f;
         hmultVal.value = mman.hmult.Get();
 
-        UpdateHmult();
-        UpdateFileText();
-
         lodVal.minValue = 0;
         lodVal.maxValue = 19;
+        oldLodVal = -9e9f;
+        lodVal.value = 15;
 
         npqkVal.minValue = 1;
         npqkVal.maxValue = 48;
         oldHmultVal = -9e9f;
         npqkVal.value = mman.nodesPerQuadKey;
+
+        UpdateHmult();
+        UpdateLod();
+        UpdateNpqk();
+
+        UpdateFileText();
 
         var stats = mman.GetQkmeshStatistics();
         if (stats != null)
@@ -230,10 +253,10 @@ public class MapSetPanel : MonoBehaviour
             var lats = stats.llbox.midll.lat.ToString("f6");
             var lngs = stats.llbox.midll.lng.ToString("f6");
             latLngText.text = $"lat,lng: {lats},{lngs}";
-            var latkms = stats.heightKm.ToString("f5");
-            var lngkms = stats.widthKm.ToString("f5");
+            var latkms = stats.heightKm.ToString("f3");
+            var lngkms = stats.widthKm.ToString("f3");
             latKmText.text = $"Latkm: {latkms}   lat-tiles:{stats.nqktiles.y}";
-            lngKmText.text = $"Lnglm: {lngkms}   lng-tiles:{stats.nqktiles.x}";
+            lngKmText.text = $"Lngkm: {lngkms}   lng-tiles:{stats.nqktiles.x}";
             //Debug.Log($"Setting lod to {stats.llbox.lod}");
             lodVal.value = stats.llbox.lod;
             npqkVal.value = mman.nodesPerQuadKey;
@@ -252,8 +275,130 @@ public class MapSetPanel : MonoBehaviour
             buttonsInited = true;
         }
 
+
+        var locactive = mman.isCustomizable;
+        newLatLngInputField.transform.gameObject.SetActive(locactive);
+        newLatKmInputField.transform.gameObject.SetActive(locactive);
+        newLngKmInputField.transform.gameObject.SetActive(locactive);
+
+        if (mman.isCustomizable)
+        {
+            var lats = stats.llbox.midll.lat.ToString("f6");
+            var lngs = stats.llbox.midll.lng.ToString("f6");
+            var latlngs = $"{lats},{lngs}";
+            newLatLngInputField.text = latlngs;
+            newLatLngInputField.onValueChanged.AddListener(delegate { ParseLatLng(); });
+            newLatKmInputField.text = stats.heightKm.ToString("f3");
+            newLatKmInputField.onValueChanged.AddListener(delegate { ParseLatKm(); });
+            newLngKmInputField.text = stats.widthKm.ToString("f3");
+            newLngKmInputField.onValueChanged.AddListener(delegate { ParseLngKm(); });
+
+            newPosAndExtentAvailable = false;
+            newLat = stats.llbox.midll.lat;
+            newLng = stats.llbox.midll.lng;
+            newLatKm = stats.heightKm;
+            newLngKm = stats.widthKm;
+        }
+
         panelActive = true;
     }
+
+    public void ParseLatKm()
+    {
+        var s = newLatKmInputField.text;
+        var msg = "--";
+        double f = 0f;
+        var ok = double.TryParse(s, out f);
+        if (!ok)
+        {
+           msg = "format error";
+        }
+        else if (f <= 0)
+        {
+            msg = "value must be greater zero";
+        }
+        else
+        {
+            msg = "LatKm: "+f.ToString("f3");
+            newPosAndExtentAvailable = true;
+            newLatKm = f;
+        }
+        latKmText.text = msg;
+    }
+
+    public void ParseLngKm()
+    {
+        var s = newLngKmInputField.text;
+        var msg = "--";
+        double f = 0f;
+        var ok = double.TryParse(s, out f);
+        if (!ok)
+        {
+            msg = "format error";
+        }
+        else if (f<=0)
+        {
+            msg = "value must be greater zero";
+        }
+        else
+        {
+            msg = "LngKm: " + f.ToString("f3");
+            newLngKm = f;
+            newPosAndExtentAvailable = true;
+        }
+        lngKmText.text = msg;
+    }
+
+
+    public void ParseLatLng()
+    {
+        var sarr = newLatLngInputField.text.Split(',');
+        var msg = "--";
+        if (sarr.Length != 2)
+        {
+            msg = "Need 2 comma fields";
+        }
+        else
+        {
+            double f1 = 0f;
+            double f2 = 0f;
+            var ok1 = double.TryParse(sarr[0], out f1);
+            if (!ok1)
+            {
+                msg = "field 1 format error";
+            }
+            else
+            {
+                var ok2 = double.TryParse(sarr[1], out f2);
+                if (!ok2)
+                {
+                    msg = "field 2 format error";
+                }
+                else
+                {
+                    if (Math.Abs(f1) > 90)
+                    {
+                        msg = "field 1 not in (-90 to 90)";
+                    }
+                    else if (Math.Abs(f2) > 180)
+                    {
+                        msg = "field 2 not in (-180 to 180)";
+                    }
+                    else
+                    {
+                        var f1s = f1.ToString("f6");
+                        var f2s = f2.ToString("f6");
+                        msg = $"lat,lng: {f1s},{f2s}";
+                        newPosAndExtentAvailable = true;
+                        newLat = f1;
+                        newLng = f2;
+                    }
+                }
+            }
+        }
+        latLngText.text = msg;
+    }
+
     string copyClipText;
     void UpdateFileText()
     {
@@ -284,7 +429,13 @@ public class MapSetPanel : MonoBehaviour
     {
         isLoadingMaps = true;
         loadStartTime = Time.time;
-        mman.DeleteMaps();
+        //mman.DeleteMaps();
+        mman.SetLod((int) (lodVal.value+0.5f));
+        if (newPosAndExtentAvailable)
+        {
+            mman.SetLatLngAndExtent(newLat, newLng, newLatKm, newLngKm);
+        }
+        mman.SetNtqk((int) (npqkVal.value+0.5f));
         mman.LoadMaps();
     }
     float checkLoadInterval = 0.25f;
@@ -372,7 +523,6 @@ public class MapSetPanel : MonoBehaviour
             {
                 oldUseElevations = useElevationsToggle.isOn;
                 needSetSceneReset = true;
-
                 mman.SetUseElevations(oldUseElevations);
             }
             if (oldFlatTriangles != flatTrisToggle.isOn)
@@ -433,7 +583,7 @@ public class MapSetPanel : MonoBehaviour
         }
     }
 
-    private void Updatelod()
+    private void UpdateLod()
     {
         var callsettextvalues = false;
         if (oldLodVal != lodVal.value)
@@ -447,6 +597,22 @@ public class MapSetPanel : MonoBehaviour
             SetLodTextValues();
         }
     }
+
+    private void UpdateNpqk()
+    {
+        var callsettextvalues = false;
+        if (oldNpqkVal != npqkVal.value)
+        {
+            var diffv = new Vector3(0, 0, npqkVal.value - oldNpqkVal);
+            oldNpqkVal = npqkVal.value;
+            callsettextvalues = true;
+        }
+        if (callsettextvalues)
+        {
+            SetNpqkTextValues();
+        }
+    }
+
 
 
     public void SetVals(bool closing=false)
@@ -494,6 +660,9 @@ public class MapSetPanel : MonoBehaviour
         Debug.Log($"MapSetPanel.SetVals Phase1 took:{sw.ElapSecs()} secs");
 
         UpdateHmult();
+        UpdateLod();
+        UpdateNpqk();
+
         panelActive = false;
 
 
@@ -520,16 +689,19 @@ public class MapSetPanel : MonoBehaviour
         }
     }
     float fileTextUpdate;
+    float lastCheck;
     // Update is called once per frame
     void Update()
     {
-        if (panelActive)
+        if (panelActive && (Time.time-lastCheck)>0.2f)
         {
             if (nSetHmultTextValueCalled == 0)
             {
                SetHmultTextValues();
             }
             UpdateHmult();
+            UpdateLod();
+            UpdateNpqk();
             UpdateChangables();
             if (Time.time - fileTextUpdate > 1)
             {
@@ -540,6 +712,7 @@ public class MapSetPanel : MonoBehaviour
             {
                 CheckLoading();
             }
+            lastCheck = Time.time;
         }
     }
 }
