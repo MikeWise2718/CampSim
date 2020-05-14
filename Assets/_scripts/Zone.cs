@@ -425,8 +425,8 @@ namespace CampusSimulator
             alarmgo = new GameObject("alarms");
             alarmgo.transform.parent = transform;
 
-            var ago1 = BldEvacAlarm.GetGo("AllFreeAlarm1", apt1, 1);
-            var ago2 = BldEvacAlarm.GetGo("AllFreeAlarm2", apt2, 1);
+            var ago1 = BldEvacAlarm.GetGo("AllFreeAlarm1", apt1, 0.5f);
+            var ago2 = BldEvacAlarm.GetGo("AllFreeAlarm2", apt2, 0.5f);
             ago1.transform.parent = alarmgo.transform;
             ago2.transform.parent = alarmgo.transform;
             var alarm1 = ago1.AddComponent<BldEvacAlarm>();

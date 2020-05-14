@@ -105,7 +105,10 @@ namespace CampusSimulator
                 var anglat = GraphUtil.GetAngLatDegrees(p1, p2);
                 GraphUtil.addFloatingTextStatic(go, midpt, text + "  ang:" + anglat, clrname, anglat + 90);
             }
-            linkcyl.transform.parent = go.transform;
+            if (linkcyl != null)
+            {
+                linkcyl.transform.parent = go.transform;
+            }
             return go;
         }
     }

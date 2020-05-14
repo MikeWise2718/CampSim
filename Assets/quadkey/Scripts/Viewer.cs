@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Aiskwk.Map
 {
     public enum ViewerAvatar { SphereMan, CapsuleMan, SimpleTruck, Minehaul1, Shovel1, Dozer1, Dozer2, Rover, QuadCopter };
-    public enum ViewerCamPosition { Eyes, FloatBehind }
+    public enum ViewerCamPosition { Eyes, FloatBehindDiv2, FloatBehind }
     public enum ViewerControl { Position, Velocity }
 
     public class Viewer : MonoBehaviour
@@ -34,6 +34,7 @@ namespace Aiskwk.Map
         public LatLngVek offsetToOrigin;
         public Vector2d offsetToOriginMeter;
         public float altitude = 0;
+        public bool followGround;
 
         public static Vector3 viewerDefaultPosition = Vector3.zero;
         public static Vector3 viewerDefaultRotation = Vector3.zero;
@@ -215,12 +216,28 @@ namespace Aiskwk.Map
                 rodgo = null;
             }
         }
-
+        void DestroyGo(ref GameObject go)
+        {
+            if(go!=null)
+            {
+                Destroy(go);
+                go = null;
+            }
+        }
+        void DestroyAvatar()
+        {
+            DestroyGo(ref rodgo);
+            DestroyGo(ref visor);
+            DestroyGo(ref camgo);
+            DestroyGo(ref body);
+            DestroyGo(ref moveplane);
+        }
         public bool pinCameraToFrame = false;
         public bool showNormalRod = false;
         public bool showDroppings = false;
         public void MakeAvatar(string avaname, float angle, Vector3 shift, float scale = 1,float visorscale=2)
         {
+            DestroyAvatar();
             moveplane = new GameObject("moveplane");
             body = new GameObject("body");
 
@@ -244,22 +261,10 @@ namespace Aiskwk.Map
 
             camgo = GameObject.CreatePrimitive(PrimitiveType.Cube);
             var cska = 0.1f;
-            camgo.name = "camgo";
+            camgo.name = "viewer-camgo";
             camgo.transform.localScale = new Vector3(cska, cska, cska);
             viewercam = camgo.AddComponent<Camera>();
-            switch (viewerCamPosition)
-            {
-                case ViewerCamPosition.Eyes:
-                    {
-                        camgo.transform.position = Vector3.up * 1.75f;
-                        break;
-                    }
-                case ViewerCamPosition.FloatBehind:
-                    {
-                        camgo.transform.position = new Vector3(0, 10, -24);
-                        break;
-                    }
-            }
+            SetCamPosition();
             if (pinCameraToFrame)
             {
                 //camgo.transform.localRotation = Quaternion.Euler(0, -angle, 0); ;
@@ -287,8 +292,52 @@ namespace Aiskwk.Map
                 qut.SetColorOfGo(rod, Color.blue);
             }
             rodgo.transform.SetParent(transform, worldPositionStays: false);
-
         }
+        public void SetCamPosition()
+        {
+            switch (viewerCamPosition)
+            {
+                case ViewerCamPosition.Eyes:
+                    {
+                        camgo.transform.position = new Vector3(0, 1.75f, 0.4f);
+                        break;
+                    }
+                case ViewerCamPosition.FloatBehindDiv2:
+                    {
+                        camgo.transform.position = new Vector3(0, 12f/4, -24f/4);
+                        break;
+                    }
+                case ViewerCamPosition.FloatBehind:
+                    {
+                        camgo.transform.position = new Vector3(0, 12f/2, -24f/2);
+                        break;
+                    }
+            }
+        }
+
+        public void ShiftCamPosition()
+        {
+            switch (viewerCamPosition)
+            {
+                case ViewerCamPosition.Eyes:
+                    {
+                        viewerCamPosition = ViewerCamPosition.FloatBehind;
+                        break;
+                    }
+                case ViewerCamPosition.FloatBehindDiv2:
+                    {
+                        viewerCamPosition = ViewerCamPosition.Eyes;
+                        break;
+                    }
+                case ViewerCamPosition.FloatBehind:
+                    {
+                        viewerCamPosition = ViewerCamPosition.FloatBehindDiv2;
+                        break;
+                    }
+            }
+            SetCamPosition();
+        }
+
         public void ToggleLight()
         {
             if (lightcomp == null)
@@ -333,6 +382,7 @@ namespace Aiskwk.Map
             var scale = 1.0f;
             var angle = 0;
             var pfix = "obj3d/";
+            followGround = true;
             switch (viewerAvatar)
             {
                 case ViewerAvatar.SimpleTruck:
@@ -378,6 +428,7 @@ namespace Aiskwk.Map
                         shift = new Vector3(0, 2, 0);
                         //MakeAvatar(pfix + "quadcopter", angle, shift, scale,visorscale:0.01f);
                         MakeAvatar(pfix + "quadcopterspinning", angle, shift, scale, visorscale: 0.01f);
+                        followGround = false;
                         break;
                     }
                 case ViewerAvatar.SphereMan:
@@ -410,7 +461,10 @@ namespace Aiskwk.Map
             bodyPlaneRotation *= Quaternion.Euler(new Vector3(0, rotate, 0));
             moveplane.transform.localRotation = bodyPlaneRotation;
             bodyPrefabRotation *= Quaternion.Euler(new Vector3(0, rotate, 0));
-            body.transform.localRotation = Quaternion.FromToRotation(Vector3.up, lstnrm) * bodyPrefabRotation;
+            if (followGround)
+            {
+                body.transform.localRotation = Quaternion.FromToRotation(Vector3.up, lstnrm) * bodyPrefabRotation;
+            }
             //bodypose.transform.localRotation = Quaternion.Euler(new Vector3(0, rotate, 0)) * Quaternion.FromToRotation(Vector3.up, lstnrm) ;
             //Debug.Log($"RotateViewer: {rotate}");
         }
@@ -444,14 +498,17 @@ namespace Aiskwk.Map
             var fwdstr = fwd.ToString("f2");
             var (vn, _, _) = qmm.GetWcMeshPosProjectedAlongYnew(p);
             t.position = vn + altitude*Vector3.up;
-            if (Vector3.Dot(Vector3.up, nrm) < 0)
+            if (followGround)
             {
-                nrm = -nrm;
+                if (Vector3.Dot(Vector3.up, nrm) < 0)
+                {
+                    nrm = -nrm;
+                }
+                lstnrm = nrm;
+                var nrmrot = Quaternion.FromToRotation(Vector3.up, nrm);
+                body.transform.localRotation = nrmrot * bodyPrefabRotation;
+                rodgo.transform.localRotation = nrmrot;
             }
-            lstnrm = nrm;
-            var nrmrot = Quaternion.FromToRotation(Vector3.up, nrm);
-            body.transform.localRotation = nrmrot * bodyPrefabRotation;
-            rodgo.transform.localRotation = nrmrot;
             var pnstr = t.position.ToString("f3");
             var nrmstr = nrm.ToString("f3");
             //Debug.Log($"TranslateViewerLatLng -  xmove:{xmove} zmove:{zmove} po:{postr}  pn:{pnstr}  fwd:{fwdstr}");
@@ -468,40 +525,25 @@ namespace Aiskwk.Map
             var (vn, _, _) = qmm.GetWcMeshPosProjectedAlongY(p);
             //t.position = p + Vector3.up * (vn.y - vo.y);
             t.position = vn;
-            //bt.position = t.position;
-            if (Vector3.Dot(Vector3.up, nrm) < 0)
+            if (followGround)
             {
-                nrm = -nrm;
+                //bt.position = t.position;
+                if (Vector3.Dot(Vector3.up, nrm) < 0)
+                {
+                    nrm = -nrm;
+                }
+                lstnrm = nrm;
+                var nrmrot = Quaternion.FromToRotation(Vector3.up, nrm);
+                body.transform.localRotation = nrmrot * bodyPrefabRotation;
+                //bodypose.transform.localRotation = nrmrot;
+                rodgo.transform.localRotation = nrmrot;
             }
-            lstnrm = nrm;
-            var nrmrot = Quaternion.FromToRotation(Vector3.up, nrm);
-            body.transform.localRotation = nrmrot * bodyPrefabRotation;
-            //bodypose.transform.localRotation = nrmrot;
-            rodgo.transform.localRotation = nrmrot;
             var pnstr = t.position.ToString("f3");
             var nrmstr = nrm.ToString("f3");
             Debug.Log($"TranslateViewerToPosition - vn:{vn}");
         }
         bool usellmeth = true;
-        void TranslateViewerLambda(float xmove, float zmove)
-        {
-            var t = transform;
-            var p = t.position;
-            var (olambx, olambz) = qmm.GetMeshLambdaFromXZ(p.x, p.z);
-            var (vo, nrm, _) = qmm.GetWcMeshPosFromLambda(olambx, olambz);
-            if (Vector3.Dot(Vector3.up, nrm) < 0)
-            {
-                nrm = -nrm;
-            }
-            lstnrm = nrm;
-            p += zmove * t.forward + xmove * t.right;
-            var (nlambx, nlambz) = qmm.GetMeshLambdaFromXZ(p.x, p.z);
-            var (vn, _, _) = qmm.GetWcMeshPosFromLambda(nlambx, nlambz);
-            t.position = p + Vector3.up * (vn.y - vo.y);
-            t.up = nrm;
-            var pstr = t.position.ToString("f1");
-            Debug.Log($"lambx:{nlambx} lambz:{nlambz}   p:{pstr}");
-        }
+
 
         int ndrop = 0;
         void TranslateViewer(float xmove, float zmove)
@@ -540,6 +582,15 @@ namespace Aiskwk.Map
         }
         public void SetSceneCamToMainCam()
         {
+            if (viewercam == null)
+            {
+                Debug.LogError($"SetSceneCamToMainCam viewcam is null");
+            }
+            else
+            {
+                Debug.Log($"SetSceneCamToMainCam viewcam:{viewercam.name}");
+
+            }
 #if UNITY_EDITOR
             //var svcam = UnityEditor.SceneView.lastActiveSceneView.camera;
             //svcam.transform.position = cam.transform.position;
@@ -555,6 +606,7 @@ namespace Aiskwk.Map
         float ctrlRhit = float.MinValue;
         float ctrlLhit = float.MinValue;
         float ctrlNhit = float.MinValue;
+        float ctrlEhit = float.MinValue;
         float ctrlDhit = float.MinValue;
         float ctrlShit = float.MinValue;
         float ctrlMhit = float.MinValue;
@@ -620,6 +672,11 @@ namespace Aiskwk.Map
             if (Input.GetKey(KeyCode.PageDown))
             {
                 TiltHead(-ainc);
+            }
+            if (Input.GetKey(KeyCode.E) && ctrlpressed && Time.time - ctrlEhit > hitgap3)
+            {
+                ShiftCamPosition();
+                ctrlEhit = Time.time;
             }
             if (Input.GetKey(KeyCode.S))
             {

@@ -11,7 +11,6 @@ namespace CampusSimulator
 
         public GameObject vmcamgo;
         public Camera vmcam;// we don't want this to change
-        public Camera viewercam;
 
         public string lastcamset = "MainCam";
         public bool setMainCamToSceneCam = false;
@@ -109,16 +108,29 @@ namespace CampusSimulator
         public void SetMainCameraToVcam(string mcamvcam)
         {
             Debug.Log($"SetMainCamToVcam:{mcamvcam}");
+            var camsetok = false;
             if (mcamvcam == "Viewer")
             {
-                vmcamgo.SetActive(false);
-                lastcamset = mcamvcam;
-                viewercam = Aiskwk.Map.Viewer.GetViewerCamera();
-                vmcam.transform.position = viewercam.gameObject.transform.position;
-                vmcam.transform.rotation = viewercam.gameObject.transform.rotation;
-                vmcam.gameObject.name = "vc-" + mcamvcam;
+                var viewercam = Aiskwk.Map.Viewer.GetViewerCamera();
+                if (viewercam != null)
+                {
+                    vmcam.transform.position = viewercam.gameObject.transform.position;
+                    vmcam.transform.rotation = viewercam.gameObject.transform.rotation;
+                    lastcamset = mcamvcam;
+                    vmcamgo.SetActive(false);
+                    camsetok = true;
+                }
+                else
+                {
+                    Debug.LogWarning($"VidcamMan could not find viewercam for Viewer object");
+                    if (vidcam.Count > 0)
+                    {
+                        var keys = new List<string>(vidcam.Keys);
+                        mcamvcam = keys[0];
+                    }
+                }
             }
-            else if (vidcam.ContainsKey(mcamvcam))
+            if (!camsetok && vidcam.ContainsKey(mcamvcam))
             {
                 vmcamgo.SetActive(true);
                 var vcam = vidcam[mcamvcam];
@@ -142,8 +154,9 @@ namespace CampusSimulator
             }
             else
             {
-                Debug.LogError($"Bad camera name:{mcamvcam} cams defined:{vidcam.Count}");
+                Debug.LogWarning($"Camera name:{mcamvcam} not found - number of cams defined:{vidcam.Count}");
             }
+            vmcam.gameObject.name = "vc-" + mcamvcam;
         }
         public void SetMainCameraToCam(Camera cam)
         {
@@ -231,7 +244,7 @@ namespace CampusSimulator
             var rv = vmcam;
             if (lastcamset=="Viewer")
             {
-                rv = viewercam;
+                rv = Aiskwk.Map.Viewer.GetViewerCamera();
             }
             return rv;
         }

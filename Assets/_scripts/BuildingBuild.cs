@@ -508,7 +508,7 @@ namespace CampusSimulator
             var yelev = bm.sman.mpman.GetHeight(pt.x, pt.z);
 
             var apos = new Vector3(pt.x, yelev + almheight, pt.z);
-            var ago = BldEvacAlarm.GetGo(alarmname, apos, 1.0f);
+            var ago = BldEvacAlarm.GetGo(alarmname, apos, 0.5f );
             ago.transform.parent = parentnode.transform;
             var beac = ago.AddComponent<BldEvacAlarm>();
             beac.Init(this, apos);  
