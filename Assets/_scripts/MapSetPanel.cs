@@ -92,7 +92,7 @@ public class MapSetPanel : MonoBehaviour
     void Start()
     {
         //Debug.Log("MapSetPanel Start called");
-        panelActive = false;
+        panelActive = true;
         LinkObjectsAndComponents();
     }
 
@@ -424,7 +424,7 @@ public class MapSetPanel : MonoBehaviour
         copyClipText = $"{s1}\n{s2}\n{s5}\n{s6}\n\n{s3}\n{s4}\n{s7}\n{s8}\n\n{sregkey}";
     }
 
-    bool isLoadingMaps = false;
+    static public bool isLoadingMaps = false;
     float loadStartTime = 0;
     void StartLoading()
     {
@@ -664,8 +664,6 @@ public class MapSetPanel : MonoBehaviour
         UpdateLod();
         UpdateNpqk();
 
-        panelActive = false;
-
 
         mman.SetUseElevations(useElevationsToggle.isOn);
         mman.SetFlatTris(flatTrisToggle.isOn);
@@ -687,6 +685,10 @@ public class MapSetPanel : MonoBehaviour
         {
             Debug.LogWarning("Need set mode reset");
             /// how do do do this now?
+        }
+        if (closing)
+        {
+            panelActive = false;
         }
     }
     float fileTextUpdate;
