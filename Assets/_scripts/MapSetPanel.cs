@@ -174,13 +174,14 @@ public class MapSetPanel : MonoBehaviour
 
     public void InitVals()
     {
-        InitCheckNeedSetModeRefresh();
-
        // Debug.Log("MapSetPanel.InitVals called");
         if (!linked)
         {
             LinkObjectsAndComponents();
         }
+
+        InitCheckNeedSetModeRefresh();
+
 
         var errmsg = "Error in MapSetPanel.InitVals-";
         try
