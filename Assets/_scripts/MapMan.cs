@@ -262,7 +262,10 @@ namespace CampusSimulator
             if (newlod > 19) newlod = 19;
             Debug.Log($"mman.SetLod:{newlod}");
             lod = newlod;
-            qmapman.qmm.levelOfDetail = newlod;
+            if (qmapman?.qmm != null)
+            {
+                qmapman.qmm.levelOfDetail = newlod;
+            }
         }
         public void SetNtqk(int newntqk)
         {
@@ -410,7 +413,7 @@ namespace CampusSimulator
             qmapman.bespoke.lod = lod;
             qmapman.bespoke.llbox.lod = lod;
             qmapman.bespoke.nodesPerQuadKey = nodesPerQuadKey;
-            qmapman.SetMode(qmapman.qmapMode);
+            qmapman.SetMode(qmapman.qmapMode,forceload:true);
         }
         public (bool isLoading,int nbmLoaded,int nbmToLoad,int nelevBatchesLoaded, int nelevBatchsToLoad) GetLoadingStatus()
         {

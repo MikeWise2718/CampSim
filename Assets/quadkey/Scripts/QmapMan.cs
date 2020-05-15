@@ -478,10 +478,9 @@ namespace Aiskwk.Map
             }
         }
 
-
         string gdalFilePath = "c:/transfer/gdal/";
         string trackFilePath = "c:/transfer/tracks/";
-        public async void SetMode(QmapModeE newmode)
+        public async void SetMode(QmapModeE newmode,bool forceload=false)
         {
             //Debug.Log("SetMode:" + newmode);
             ClearMesh();
@@ -502,7 +501,7 @@ namespace Aiskwk.Map
                         frameQuadkeysStart = bespoke.frameQuadkeys;
                         useFlatTrisStart = bespoke.useFlatTris;
                         var tpqk = bespoke.nodesPerQuadKey;
-                        (qmm, _, _) = await MakeMeshFromLlbox(bespoke.sceneName, bespoke.llbox, tpqk: tpqk, mapprov: bespoke.mapProv, mapextent: bespoke.mapExtent, limitQuadkeys: false, hmult:bespoke.hmult  );
+                        (qmm, _, _) = await MakeMeshFromLlbox(bespoke.sceneName, bespoke.llbox, tpqk: tpqk, mapprov: bespoke.mapProv, mapextent: bespoke.mapExtent, limitQuadkeys: false, hmult:bespoke.hmult,forceload:forceload  );
                         //Debug.Log($"Back from makemeshfromLlbox ptcnt:{bespoke.mappoints.Count}");
                         if (bespoke.mappoints.Count > 0)
                         {

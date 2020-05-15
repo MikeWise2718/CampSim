@@ -96,8 +96,13 @@ public class InfoPanel : MonoBehaviour
         float msec = smoothedDeltaTime * 1000.0f;
         var simtime = Time.time.ToString("f1");
         var gcmem = (float)(System.GC.GetTotalMemory(false) / 1e6);
-        string fpstext = string.Format(" {0:0.0} ms\n {1:0.0} fps GC:{2:0.0} mb", msec, fps,gcmem);
-        msg += "Upd:" + updatecount+" Sim:"+simtime+" "+fpstext;
+        string extext = string.Format(" {0:0.0} ms\n {1:0.0} fps GC:{2:0.0} mb", msec, fps,gcmem);
+        if (MapSetPanel.isLoadingMaps)
+        {
+            var (isLoading, nbmLoaded, nbmToLoad, nelevBatchesLoaded, nelevBatchsToLoad) = sman.mpman.GetLoadingStatus();
+            extext = $"\nBitmaps:{nbmLoaded}/{nbmToLoad} Elev:{nelevBatchesLoaded}/{nelevBatchsToLoad}";
+        }
+        msg += "Upd:" + updatecount + " Sim:" + simtime + " " + extext;
         simText.text = msg;
         updatecount++;
 
