@@ -115,6 +115,8 @@ namespace CampusSimulator
         }
         #endregion ElevProvider
 
+        public UxSetting<int> numNodesPerQktile = new UxSetting<int>("NumNodesPerQktile", 4);
+        public UxSetting<int> levelOfDetail = new UxSetting<int>("levelOfDetail", 12);
         public UxSettingBool InstantMapSettingsChange = new UxSettingBool("InstantMapSettingsChange", true);
         public UxSettingBool useElevations = new UxSettingBool("UseElevations", true);
 
@@ -132,6 +134,9 @@ namespace CampusSimulator
 
         public void GetInitialSettings()
         {
+            numNodesPerQktile.GetInitial();
+            levelOfDetail.GetInitial();
+
             mapVisiblity.GetInitial();
             reqEleProv.GetInitial();
             reqMapProv.GetInitial();
@@ -178,13 +183,14 @@ namespace CampusSimulator
         }
         void RealizeQmap()
         {
-            //Debug.LogWarning("QmapMan.RealizeQmap");
+            Debug.LogWarning($"QmapMan.RealizeQmap lod:{lod}");
             qmapgo.transform.parent = null;// we need to set this to force the next transformation to occur
             qmapgo.transform.SetParent(this.transform, worldPositionStays: false);
             RealizeMapVisuals();
             qmapman.qmapMode = QmapMan.QmapModeE.Bespoke;
             var fak = 2*0.4096f;
             //qmapman.bespoke = new BespokeSpec(lastregionset.ToString(), maplat,maplng, fak*zscale, fak*xscale,lod:17 );
+
             qmapman.bespoke = new BespokeSpec(lastregionset.ToString(), maplat,maplng, fak*zdistkm, fak*xdistkm,lod:lod,nodesPerQuadKey:nodesPerQuadKey );
             qmapman.bespoke.mapProv = reqMapProv.Get();
             qmapman.bespoke.eleProv = reqEleProv.Get();
@@ -251,6 +257,7 @@ namespace CampusSimulator
         }
         public void SetLod(int newlod)
         {
+            levelOfDetail.SetAndSave(newlod);
             if (newlod < 0) newlod = 0;
             if (newlod > 19) newlod = 19;
             Debug.Log($"mman.SetLod:{newlod}");
@@ -259,6 +266,7 @@ namespace CampusSimulator
         }
         public void SetNtqk(int newntqk)
         {
+            numNodesPerQktile.SetAndSave(newntqk);
             if (newntqk < 1) newntqk = 1;
             if (newntqk > 20) newntqk = 20;
             Debug.Log($"mman.SetNtqk:{newntqk}");
@@ -480,27 +488,28 @@ namespace CampusSimulator
         SceneSelE lastregionset = SceneSelE.None;
         public void SetScene(SceneSelE newregion)
         {
+            Debug.Log($"SetRegion for mapman {newregion}");
             GetInitialSettings();
-
+            Debug.Log($"  after GetIntialSettings lod:{levelOfDetail.Get()}");
             
-            //Debug.Log("SetRegion for mapman " + newregion);
             RealizeMapVisuals();
             if (newregion == lastregionset)
             {
-                Debug.LogWarning("MamMan.SetScene - Region " + newregion + " already set");
-                return;
+                Debug.LogWarning("MapMan.SetScene - Region " + newregion + " already set");
+                //return;
             }
             maprot = Vector3.zero;
             maptrans = Vector3.zero;
             useElesForNow = false;
             useViewer = true;
-            int defaultlod = 17;
+            int defaultlod = levelOfDetail.Get();
+            lod = defaultlod;
             mapscale = 3.2f;
             maprot = Vector3.zero;
             maptrans = Vector3.zero;
             roty2 = -90;
             hmultForNow = 1;
-            nodesPerQuadKey = 16;
+            nodesPerQuadKey = numNodesPerQktile.Get();// Was 16
             hasLLmap = false;
             isCustomizable = false;
             Viewer.viewerDefaultPosition = Vector3.zero;
@@ -519,7 +528,6 @@ namespace CampusSimulator
                     maptrans = new Vector3(-6 - 1970.0f + 4, 0, 17 - 1122.0f - 16);
                     xdistkm = 1;
                     zdistkm = 1;
-                    lod = defaultlod;
                     Viewer.viewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
                     Viewer.viewerDefaultPosition = new Vector3(-2035.2f, 3.8f, -1173.5f);
                     Viewer.viewerDefaultRotation = new Vector3(0, 163.310f, 0);
@@ -535,8 +543,17 @@ namespace CampusSimulator
                     //zdistkm = 2;
                     xdistkm = 2;
                     zdistkm = 3;
-                    nodesPerQuadKey = 4;
-                    lod = 19;
+                    //nodesPerQuadKey = 4;
+                    if (!levelOfDetail.ValueRetrived())
+                    {
+                        lod = 19;
+                        Debug.Log($" MsftB19focused lod not retreived setting to {lod}");
+                        levelOfDetail.SetAndSave(lod);
+                    }
+                    else
+                    {
+                        Debug.Log($" MsftB19focused retreived setting to:{lod}");
+                    }
                     hasLLmap = true;
                     Viewer.viewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
                     Viewer.viewerDefaultPosition = new Vector3(-451.5f,3f,98.3f);
@@ -547,11 +564,20 @@ namespace CampusSimulator
                     maplat = 49.993311;
                     maplng =  8.678343;
                     mapscale = 3.2f;
-                    nodesPerQuadKey = 8;
+                    //nodesPerQuadKey = 8;
                     maprot = new Vector3(0,-90, 0);
                     xdistkm = 1;
                     zdistkm = 1;
-                    lod = 19;
+                    if (!levelOfDetail.ValueRetrived())
+                    {
+                        lod = 15;
+                        Debug.Log($" Eb12 lod not retreived setting to {lod}");
+                        levelOfDetail.SetAndSave(lod);
+                    }
+                    else
+                    {
+                        Debug.Log($" Eb12 retreived setting to:{lod}");
+                    }
                     hasLLmap = true;
                     Viewer.viewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
                     Viewer.viewerDefaultPosition = new Vector3(0,0,0);
@@ -564,7 +590,7 @@ namespace CampusSimulator
                     mapscale = 3.2f;
                     xdistkm = 1;
                     zdistkm = 1;
-                    lod = defaultlod;
+                    //lod = defaultlod;
                     hasLLmap = true;
                     break;
                 case SceneSelE.MsftDublin:
@@ -572,7 +598,7 @@ namespace CampusSimulator
                     maplng = -6.196680;
                     xdistkm = 2;
                     zdistkm = 1;
-                    lod = defaultlod;
+                    //lod = defaultlod;
                     mapscale = 3.2f;
                     hasLLmap = true;
                     Viewer.viewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
@@ -585,7 +611,7 @@ namespace CampusSimulator
                     maptrans = new Vector3(-6, 0, 17);
                     xdistkm = 2;
                     zdistkm = 6;
-                    lod = defaultlod;
+                    //lod = defaultlod;
                     hasLLmap = true;
                     Viewer.viewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
                     Viewer.viewerDefaultPosition = new Vector3(-451.5f, 3f, 98.3f);
@@ -600,12 +626,16 @@ namespace CampusSimulator
                     xdistkm = 14.84f / (2*0.4096f);
                     zdistkm = 25.17f / (2*0.4096f);
                     hmultForNow = 10;
-                    lod = 12;
+                    if (!levelOfDetail.ValueRetrived())
+                    {
+                        lod = 12;
+                        levelOfDetail.Set(lod);
+                    }
                     useElesForNow = true;
                     useViewer = true;
                     mapscale = 1f;
                     roty2 = 0;
-                    nodesPerQuadKey = 8;
+                    //nodesPerQuadKey = 8;
                     Viewer.viewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
                     break;
                 case SceneSelE.MtStHelens:
@@ -616,7 +646,11 @@ namespace CampusSimulator
                     maptrans = Vector3.zero;
                     xdistkm = 12;
                     zdistkm = 12;
-                    lod = 15;
+                    if (!levelOfDetail.ValueRetrived())
+                    {
+                        lod = 15;
+                        levelOfDetail.Set(lod);
+                    }
                     useElesForNow = true;
                     useViewer = true;
                     mapscale = 1f;
@@ -632,7 +666,11 @@ namespace CampusSimulator
                     maptrans = Vector3.zero;
                     xdistkm = 10;
                     zdistkm = 10;
-                    lod = 13;
+                    if (!levelOfDetail.ValueRetrived())
+                    {
+                        lod = 13;
+                        levelOfDetail.Set(lod);
+                    }
                     useElesForNow = true;
                     useViewer = true;
                     mapscale = 1f;
@@ -649,7 +687,11 @@ namespace CampusSimulator
                     maptrans = Vector3.zero;
                     xdistkm = 10;
                     zdistkm = 10;
-                    lod = 15;
+                    if (!levelOfDetail.ValueRetrived())
+                    {
+                        lod = 15;
+                        levelOfDetail.Set(lod);
+                    }
                     useElesForNow = true;
                     useViewer = true;
                     mapscale = 1f;
