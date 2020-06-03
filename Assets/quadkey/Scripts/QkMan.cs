@@ -121,7 +121,7 @@ namespace Aiskwk.Map
             return rv;
         }
 
-        string key = "IdbTbLfVZWE6B5pnqB-ybmzk5KbM_lyQeLtt_YusYNc";
+        string azkey = "IdbTbLfVZWE6B5pnqB-ybmzk5KbM_lyQeLtt_YusYNc";
         string msft = "microsoft.com";
         string bing = "ssl.ak.dynamic.tiles.virtualearth.net";
         string osm = "a.tile.openstreetmap.org";
@@ -134,14 +134,14 @@ namespace Aiskwk.Map
                 case MapProvider.AzureMaps:
                     {
                         TileSystem.QuadKeyToTileXY(qkname, out var tX, out var tY, out var lod);
-                        uri = $"https://atlas.{msft}/map/tile/png?subscription-key={key}&api-version=1.0&layer=basic&style=main&zoom={lod}&x={tX}&y={tY}";
+                        uri = $"https://atlas.{msft}/map/tile/png?subscription-key={azkey}&api-version=1.0&layer=basic&style=main&zoom={lod}&x={tX}&y={tY}";
                         break;
                     }
                 case MapProvider.AzureSatelliteOnly:
                     {
                         TileSystem.QuadKeyToTileXY(qkname, out var tX, out var tY, out var lod);
                         // Get map Imagery Tile - https://docs.microsoft.com/en-us/rest/api/maps/render/getmapimagerytile#mapimagerystyle
-                        uri = $"https://atlas.{msft}/map/imagery/png?subscription-key={key}&api-version=1.0&style=satellite&zoom={lod}&x={tX}&y={tY}";
+                        uri = $"https://atlas.{msft}/map/imagery/png?subscription-key={azkey}&api-version=1.0&style=satellite&zoom={lod}&x={tX}&y={tY}";
                         break;
                     }
                 case MapProvider.AzureSatelliteRoads:
@@ -150,14 +150,14 @@ namespace Aiskwk.Map
                         //uri = $"https://atlas.{msft}/map/imagery/png?subscription-key={key}&api-version=1.0&height=256&width=256&style=satellite_road_labels&zoom={lod}&x={tX}&y={tY}";
                         // https://docs.microsoft.com/en-us/rest/api/maps/render/getmapimage#staticmaplayer 
                         // https://docs.microsoft.com/bs-cyrl-ba/azure/azure-maps/supported-map-styles?view=azurermps-2.2.0 
-                        uri = $"https://atlas.{msft}/map/static/png?subscription-key={key}&api-version=1.0&style=hybrid&zoom={lod}&x={tX}&y={tY}";
+                        uri = $"https://atlas.{msft}/map/static/png?subscription-key={azkey}&api-version=1.0&style=hybrid&zoom={lod}&x={tX}&y={tY}";
                         var layer = "layer";
                         var style = "hybrid";
                         var language = "en";
                         // can't seem to get this one working, so subsituting naked satellite pictures for now - seems tile rendering (using the "imagery" directory) doesn't support roads and labels, which is odd
                         //uri = $"https://atlas.{msft}/map/static/png?subscription-key={key}&api-version=1.0&layer={layer}&style={style}&zoom={lod}&center={center}&bbox={bbox}&height={height}&width={width}&language={language}&view={view}&pins={pins}&path={path}";
-                        uri = $"https://atlas.{msft}/map/static/png?subscription-key={key}&api-version=1.0&layer={layer}&style={style}&zoom={lod}&language={language}";
-                        uri = $"https://atlas.{msft}/map/imagery/png?subscription-key={key}&api-version=1.0&style=satellite&zoom={lod}&x={tX}&y={tY}";
+                        uri = $"https://atlas.{msft}/map/static/png?subscription-key={azkey}&api-version=1.0&layer={layer}&style={style}&zoom={lod}&language={language}";
+                        uri = $"https://atlas.{msft}/map/imagery/png?subscription-key={azkey}&api-version=1.0&style=satellite&zoom={lod}&x={tX}&y={tY}";
                         break;
                     }
                 case MapProvider.OpenStreetMaps:
@@ -328,7 +328,6 @@ namespace Aiskwk.Map
         }
 
         public QkTile tileul, tilebr;
-        public Vector2Int numqkpix;
         //public LatLongMap llmap = null;
 
         public void CalcQuadKeys(bool limitQuadkeys = true)
@@ -359,12 +358,13 @@ namespace Aiskwk.Map
                 qmm.llmapqkcoords.InitMapFromSceneSel(datamapname, 0);
             }
 
-            var nxx = (tilebr.pixbr.x - tileul.pixul.x);
-            var nxy = (tilebr.pixbr.y - tileul.pixul.y);
-            numqkpix = new Vector2Int(nxx, nxy);
+            //var nxx = (tilebr.pixbr.x - tileul.pixul.x);
+            //var nxy = (tilebr.pixbr.y - tileul.pixul.y);
+            //var numqkpix = new Vector2Int(nxx, nxy);
+            //var nqkx = (numqkpix.x / this.pixelspertile) + 1;
+            //var nqky = (numqkpix.y / this.pixelspertile) + 1;
 
-            var nqkx = (numqkpix.x / this.pixelspertile) + 1;
-            var nqky = (numqkpix.y / this.pixelspertile) + 1;
+            var (nqkx, nqky) = qllbox.GetTileSizeOld(this.pixelspertile);
             if (limitQuadkeys)
             {
                 if (nqkx > 20)
@@ -385,7 +385,7 @@ namespace Aiskwk.Map
 
             if (verbose)
             {
-                Debug.Log("numpix.x:" + numqkpix.x + " y:" + numqkpix.y);
+                //Debug.Log("numpix.x:" + numqkpix.x + " y:" + numqkpix.y);
                 Debug.Log("nqk.x:" + nqk.x + " y" + nqk.y);
             }
 
@@ -463,8 +463,11 @@ namespace Aiskwk.Map
 
         Texture2D vertex = null;
         Texture2D hortex = null;
+
+        public static bool interruptLoading = false;
         async Task<(bool, string, int)> GetWwwQktilesAndMakeTex(string scenename, string tpath, string ppath, bool execute = true)
         {
+            interruptLoading = false;
             Debug.Log($"GetWwwQktilesAndMakeTex scene - {scenename}");
             Debug.Log($"GetWwwQktilesAndMakeTex tpath - {tpath}");
             Debug.Log($"GetWwwQktilesAndMakeTex ppath - {ppath}");
@@ -500,7 +503,14 @@ namespace Aiskwk.Map
                                 {
                                     Debug.LogWarning($"Calling GetQuadkeyAsy hortexnull:{hortexnull}  qktile.name:{qktile.name} ");
                                 }
-                                getquadkeyok = await GetQuadkeyAsy(qktile.name, tpath, scenename);
+                                if (interruptLoading)
+                                {
+                                    getquadkeyok = true;
+                                }
+                                else
+                                {
+                                    getquadkeyok = await GetQuadkeyAsy(qktile.name, tpath, scenename);
+                                }
                                 hortexnull = hortex == null && ix > 0;
                                 if (hortexnull)
                                 {
@@ -516,7 +526,15 @@ namespace Aiskwk.Map
                             {
                                 Debug.LogWarning($"Calling LoadBitmap hortexnull:{hortexnull}");
                             }
-                            var tix = LoadBitmap(tpath, qktile.name, ".png");
+                            Texture2D tix;
+                            if (interruptLoading)
+                            {
+                                tix = new Texture2D(256, 256);
+                            }
+                            else
+                            {
+                                tix = LoadBitmap(tpath, qktile.name, ".png");
+                            }
                             hortexnull = hortex == null && ix > 0;
                             if (hortexnull)
                             {

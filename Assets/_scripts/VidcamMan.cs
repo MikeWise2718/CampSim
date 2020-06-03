@@ -79,6 +79,10 @@ namespace CampusSimulator
         public bool toggleFreeFly;
         public FreeFlyCam ffc = null;
         public bool inFreeFly = false;
+        public bool InFreeFly()
+        {
+            return inFreeFly;
+        }
         public bool ToggleFreeFly()
         {
             if (!inFreeFly)

@@ -171,10 +171,10 @@ namespace UxUtils
         public string keyname;
         [SerializeField]
         string typename;
-        bool valueRetrived = false;
-        public bool ValueRetrived()
+        bool valueRetrievedFromPersistentSTore = false;
+        public bool ValueRetrievedFromPersistentStore()
         {
-            return valueRetrived;
+            return valueRetrievedFromPersistentSTore;
         }
         public UxSetting(string keyname, T inival)
         {
@@ -207,12 +207,12 @@ namespace UxUtils
             var s = PlayerPrefs.GetString(skeyname);
             if (String.IsNullOrEmpty(s))
             {
-                valueRetrived = false;
+                valueRetrievedFromPersistentSTore = false;
                 val = inival;
                 Save(); // it must have been the first time we tried to retrive it
                 return val;
             }
-            valueRetrived = true;
+            valueRetrievedFromPersistentSTore = true;
             T rv1 = UxSettingsMan.TryParse<T>(s);
             //T rv2 = UxSettingsMan.TryParseAlt<T>(val,s);
             return rv1;
@@ -222,6 +222,20 @@ namespace UxUtils
             var rv1 = Retrieve();
             val = rv1;
             return rv1;
+        }
+        public T GetInitial(T defval)
+        {
+            var rv = Retrieve();
+            if (!ValueRetrievedFromPersistentStore())
+            {
+                SetAndSave(defval);
+                return defval;
+            }
+            else
+            {
+                val = rv;
+                return rv;
+            }
         }
         public bool Set(T sval)
         {
@@ -264,10 +278,10 @@ namespace UxUtils
         string typename;
         [SerializeField]
         string keyname;
-        bool valueRetrived=false;
-        public bool ValueRetrived()
+        bool valueRetrievedFromPersistentStore=false;
+        public bool ValueRetrievedFromPersistentStore()
         {
-            return valueRetrived;
+            return valueRetrievedFromPersistentStore;
         }
         public UxEnumSetting(string keyname, TE inival)
         {
@@ -311,12 +325,12 @@ namespace UxUtils
             var s = PlayerPrefs.GetString(skeyname);
             if (String.IsNullOrEmpty(s))
             {
-                valueRetrived = false;
+                valueRetrievedFromPersistentStore = false;
                 //Debug.Log(skeyname + " not found so retrieved " + val);
                 Save(); // it must have been the first time we tried to retrive it
                 return val;
             }
-            valueRetrived = true;
+            valueRetrievedFromPersistentStore = true;
             TE rv = UxSettingsMan.TryParse<TE>(s);
             //Debug.Log(skeyname + " found - retrieved " + rv);
             return rv;
@@ -327,6 +341,20 @@ namespace UxUtils
             var rv1 = Retrieve();
             val = rv1;
             return rv1;
+        }
+        public TE GetInitial(TE defval)
+        {
+            var rv = Retrieve();
+            if (!ValueRetrievedFromPersistentStore())
+            {
+                SetAndSave(defval);
+                return defval;
+            }
+            else
+            {
+                val = rv;
+                return rv;
+            }
         }
         public bool Set(TE nval)
         {

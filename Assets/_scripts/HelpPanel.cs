@@ -54,7 +54,11 @@ public class HelpPanel : MonoBehaviour
             msg += "\nCtrl-M Ctrl-M   - Copy scene camera to main camera (editor only)";
             msg += "\nCtrl-M Ctrl-S   - Copy main camera to scene camera (editor only)";
 #endif
-            msg += "\nCtrl-C Ctrl-C   - Quit Application";
+            msg += "\nCtrl-E            - Shift Camera position on viewer";
+            msg += "\nCtrl-A            - Shift Camera position on viewer";
+            msg += "\nCtrl-W            - Force Viewer to respond to keys";
+            msg += "\\nnCtrl-C            - Interrupt bitmap loading";
+            msg += "\n\nCtrl-Q Ctrl-Q   - Quit Application (hit ctrl-q twice)";
         }
         catch (Exception ex)
         {

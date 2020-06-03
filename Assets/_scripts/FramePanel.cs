@@ -143,11 +143,4 @@ public class FramePanel : MonoBehaviour
         sman.RequestRefresh("FramePanel-SetVals");
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (panelActive)
-        {
-        }
-    }
 }

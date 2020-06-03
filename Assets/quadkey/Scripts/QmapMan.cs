@@ -17,10 +17,12 @@ namespace Aiskwk.Map
     [Serializable]
     public class LocSpecer
     {
-        public string locW3wSpec = "sounds.foil.lake";
-        public string locW3wlngLat = "";
-        public string locW3wNearestPlace = "";
-        public string locW3wErrorMsg = "";
+        public enum LocSpecerSource {  What3words, AzureMaps }
+        public LocSpecerSource locSpecerSource = LocSpecerSource.What3words;
+        public string locSpec = "sounds.foil.lake";
+        public string loclngLat = "";
+        public string locNearestPlace = "";
+        public string locErrorMsg = "";
         public float latkm = 2;
         public float lngkm = 2;
         public int lod = 15;
@@ -44,27 +46,40 @@ namespace Aiskwk.Map
             var rv = s.Length == 3;
             return rv;
         }
-        public async Task<(LatLng, string, string, bool, string)> W3Wrequest(string w3w, LatLng ll)
+        public (string,bool,string) GetUri(string locspec,LatLng ll)
         {
-            // API docs
-            bool ok = false;
-            string errmsg = "no error";
-            string apikey = "VZWZ1PGA";
-            var nearplace = "";
-
-            // https://t1.ssl.ak.dynamic.tiles.virtualearth.net/comp/ch/021230030212230?mkt=en&it=A,G,L,LA&og=30&n=z
-            //
-            string w3wuri;
-            if (w3w == "")
+            var ok = false;
+            var requri = "";
+            string w3wapikey = "VZWZ1PGA";
+            string azumapkey = "IdbTbLfVZWE6B5pnqB-ybmzk5KbM_lyQeLtt_YusYNc";
+            string errmsg = "";
+            if (locspec == "")
             {
-                var llstr = ll.ToW3Wformat();
-                w3wuri = $"https://api.what3words.com/v3/convert-to-3wa?coordinates={llstr}&key={apikey}";
+                var llstr = ll.ToRequestformat();
+                requri = "https:" + $"//api.what3words.com/v3/convert-to-3wa?coordinates={llstr}&key={w3wapikey}";
+                ok = true;
             }
             else
             {
-                w3wuri = $"https://api.what3words.com/v3/convert-to-coordinates?words={w3w}&key={apikey}";
+                if (IsMaybeValidW3W(locspec))
+                {
+                    requri = "https:" + $"//api.what3words.com/v3/convert-to-coordinates?words={locspec}&key={w3wapikey}";
+                    ok = true;
+                }
+                else
+                {
+                    requri = "https:" + $"//atlas.microsoft.com/search/address/json?api-version=1.0&query={locspec}&subscription-key={azumapkey}";
+                    ok = true;
+                }
             }
-            using (var webRequest = UnityWebRequest.Get(w3wuri))
+            return (requri,ok,errmsg);
+        }
+        public async Task<(string outstring, bool reqok, string errmsg)> W3Wrequest(string requri)
+        {
+            bool reqisok = false;
+            string errmsg = "no error";
+            string outstring = "";
+            using (var webRequest = UnityWebRequest.Get(requri))
             {
                 // Request and wait for the desired page.
                 webRequest.SendWebRequest();
@@ -75,61 +90,160 @@ namespace Aiskwk.Map
                     Debug.Log("   back from Thread.Sleep");
                 }
 
-                string[] pages = w3wuri.Split('/');
+                string[] pages = requri.Split('/');
                 int lastpage = pages.Length - 1;
 
                 if (webRequest.isNetworkError)
                 {
                     Debug.Log($"{pages[lastpage]} response code: {webRequest.responseCode} Error: {webRequest.error}");
-                    ok = false;
+                    reqisok = false;
                     errmsg = webRequest.error;
                 }
                 else if (webRequest.responseCode != 200)
                 {
                     Debug.Log($"{pages[lastpage]} response code: {webRequest.responseCode} Error: {webRequest.error}");
-                    ok = false;
+                    reqisok = false;
                     errmsg = webRequest.error;
                 }
                 else
                 {
                     Debug.Log($"{pages[lastpage]}  Received {webRequest.downloadHandler.data.Length} bytes");
                     var bytes = webRequest.downloadHandler.data;
-                    var str = System.Text.Encoding.Default.GetString(bytes);
-                    var jsonw3w = Aiskwk.SimpleJSON.JSON.Parse(str);
-                    var coords = jsonw3w["coordinates"];
-                    if (coords != "")
-                    {
-                        var lat = coords["lat"].AsDouble;
-                        var lng = coords["lng"].AsDouble;
-                        ll = new LatLng(lat, lng);
-                    }
-                    nearplace = jsonw3w["nearestPlace"];
-                    if (w3w == "")
-                    {
-                        w3w = jsonw3w["words"];
-                    }
-                    ok = true;
+                    outstring = System.Text.Encoding.Default.GetString(bytes);
+                    reqisok = true;
                 }
             }
-            return (ll, w3w, nearplace, ok, errmsg);
+            return (outstring, reqisok, errmsg);
         }
-        public async Task<(LatLng, string, string, bool, string)> GetLatLngFromW3wApi(string w3w)
+
+        public async Task<(LatLng ll, string w3w, string nearplace, bool ok, string errmsg)> W3Wrequest(string locspec, LatLng ll)
         {
-            Debug.Log($"GetW3WfromW3Wapi:{w3w}");
-            var rv = await W3Wrequest(w3w, null);
+            // API docs
+            bool ok = false;
+
+            var nearplace = "";
+            var oll = ll;
+            var olocspec = locspec;
+            var outstring = "";
+
+            // https://t1.ssl.ak.dynamic.tiles.virtualearth.net/comp/ch/021230030212230?mkt=en&it=A,G,L,LA&og=30&n=z
+            //
+            var (requri,uriok,errmsg) = GetUri(locspec, ll);
+            var reqok = false;
+            if (uriok)
+            {
+                (outstring, reqok, errmsg) = await W3Wrequest(requri);
+            }
+            if (reqok)
+            { 
+                    var json = Aiskwk.SimpleJSON.JSON.Parse(outstring);
+                    Debug.Log($"jsonw3w");
+                    var coords = json["coordinates"];
+                    var res = json["results"];
+                    if (coords.Count > 0)
+                    {
+                        //Debug.Log("In w3w");
+                        var lat = coords["lat"].AsDouble;
+                        var lng = coords["lng"].AsDouble;
+                        oll = new LatLng(lat, lng);
+                    }
+                    if (res.Count>0)
+                    {
+                        //Debug.Log("In azuremaps");
+                        var pos = res[0]["position"];
+                        var lat = pos["lat"].AsDouble;
+                        var lng = pos["lon"].AsDouble;
+                        oll = new LatLng(lat, lng);
+                    }
+                    nearplace = json["nearestPlace"];
+                    if (locspec == "")
+                    {
+                        olocspec = json["words"];
+                    }
+                    ok = true;
+            }
+            return (oll, olocspec, nearplace, ok, errmsg);
+        }
+        //public async Task<(LatLng ll, string w3w, string nearplace, bool ok, string errmsg)> oldW3Wrequest(string locspec, LatLng ll)
+        //{
+        //    // API docs
+        //    bool ok = false;
+        //    string errmsg = "no error";
+
+        //    var nearplace = "";
+        //    var oll = ll;
+        //    var olocspec = locspec;
+
+        //    // https://t1.ssl.ak.dynamic.tiles.virtualearth.net/comp/ch/021230030212230?mkt=en&it=A,G,L,LA&og=30&n=z
+        //    //
+        //    string requri = GetUri(locspec,ll);
+
+        //    using (var webRequest = UnityWebRequest.Get(requri))
+        //    {
+        //        // Request and wait for the desired page.
+        //        webRequest.SendWebRequest();
+        //        while (!webRequest.isDone)
+        //        {
+        //            //System.Threading.Thread.Sleep(50);// should probably do a yield or something
+        //            await Task.Delay(TimeSpan.FromSeconds(0.05f));
+        //            Debug.Log("   back from Thread.Sleep");
+        //        }
+
+        //        string[] pages = requri.Split('/');
+        //        int lastpage = pages.Length - 1;
+
+        //        if (webRequest.isNetworkError)
+        //        {
+        //            Debug.Log($"{pages[lastpage]} response code: {webRequest.responseCode} Error: {webRequest.error}");
+        //            ok = false;
+        //            errmsg = webRequest.error;
+        //        }
+        //        else if (webRequest.responseCode != 200)
+        //        {
+        //            Debug.Log($"{pages[lastpage]} response code: {webRequest.responseCode} Error: {webRequest.error}");
+        //            ok = false;
+        //            errmsg = webRequest.error;
+        //        }
+        //        else
+        //        {
+        //            Debug.Log($"{pages[lastpage]}  Received {webRequest.downloadHandler.data.Length} bytes");
+        //            var bytes = webRequest.downloadHandler.data;
+        //            var oustring = System.Text.Encoding.Default.GetString(bytes);
+        //            var jsonw3w = Aiskwk.SimpleJSON.JSON.Parse(oustring);
+        //            var coords = jsonw3w["coordinates"];
+        //            if (coords != "")
+        //            {
+        //                var lat = coords["lat"].AsDouble;
+        //                var lng = coords["lng"].AsDouble;
+        //                oll = new LatLng(lat, lng);
+        //            }
+        //            nearplace = jsonw3w["nearestPlace"];
+        //            if (locspec == "")
+        //            {
+        //                olocspec = jsonw3w["words"];
+        //            }
+        //            ok = true;
+        //        }
+        //    }
+        //    return (oll, olocspec, nearplace, ok, errmsg);
+        //}
+        public async Task<(LatLng ll, string w3w, string nearplace, bool ok, string errmsg)> GetLLfromLocspec(string locspec)
+        {
+            Debug.Log($"GetLLfromLocspec:{locspec}");
+            var rv = await W3Wrequest(locspec, null);
             return rv;
         }
-        public async Task<(LatLng, string, string, bool, string)> GetW3wFromW3wApi(LatLng ll)
+        public async Task<(LatLng ll, string w3w, string nearplace, bool ok, string errmsg)> GetLocspecFromLL(LatLng ll)
         {
-            Debug.Log($"GetLatLngFromW3Wapi:{ll.ToW3Wformat()}");
+            Debug.Log($"GetLocspecFromLL:{ll.ToRequestformat()}");
             var rv = await W3Wrequest("", ll);
             return rv;
         }
-        public async Task<(LatLng, string, string, bool, string)> GetLatLng()
+        public async Task<(LatLng ll, string w3w, string nearplace, bool ok, string errmsg)> GetLatLng()
         {
-            return await GetLatLngFromW3wApi(locW3wSpec);
+            return await GetLLfromLocspec(locSpec);
         }
-        public async Task<(LatLngBox, string, string, bool, string)> GetLlbSpec()
+        public async Task<(LatLngBox llbox, string w3w, string nearplace, bool ok, string errmsg)> GetLlbSpec()
         {
             LatLngBox llb = null;
             (var ll, var name, var nearplace, var ok, var errmsg) = await GetLatLng();
@@ -141,25 +255,25 @@ namespace Aiskwk.Map
         }
         public async void ExecuteW3wApi()
         {
-            var (isValid, ll) = LatLng.IsValidLatLngString(locW3wlngLat);
+            var (isValid, ll) = LatLng.IsValidLatLngString(loclngLat);
             if (isValid)
             {
-                var (_, w3w, np, ok, errmsg) = await GetW3wFromW3wApi(ll);
-                locW3wErrorMsg = errmsg;
+                var (_, w3w, np, ok, errmsg) = await GetLocspecFromLL(ll);
+                locErrorMsg = errmsg;
                 if (ok)
                 {
-                    locW3wSpec = w3w;
-                    locW3wNearestPlace = np;
+                    locSpec = w3w;
+                    locNearestPlace = np;
                 }
             }
-            else if (locW3wSpec != "")
+            else if (locSpec != "")
             {
-                var (llnew, _, np, ok, errmsg) = await GetLatLngFromW3wApi(locW3wSpec);
-                locW3wErrorMsg = errmsg;
+                var (llnew, _, np, ok, errmsg) = await GetLLfromLocspec(locSpec);
+                locErrorMsg = errmsg;
                 if (ok)
                 {
-                    locW3wlngLat = llnew.ToW3Wformat();
-                    locW3wNearestPlace = np;
+                    loclngLat = llnew.ToRequestformat();
+                    locNearestPlace = np;
                 }
 
             }
@@ -190,24 +304,27 @@ namespace Aiskwk.Map
             locSpecTrialExecute = false;
         }
     }
+
+    public enum QkCoordSys {  UserWc, QkWc };
+
     public class MappingPoint
     {
         public double lat;
         public double lng;
-        public double x;
-        public double z;
+        public double userwc_x;
+        public double userwc_z;
         public MappingPoint(double lat,double lng,double x,double z)
         {
             this.lat = lat;
             this.lng = lng;
-            this.x = x;
-            this.z = z;
+            this.userwc_x = x;
+            this.userwc_z = z;
         }
         public string Fmt()
         {
             var fll = "f6";
             var fxz = "f1";
-            var s = "ll:"+lat.ToString(fll)+","+lng.ToString(fll)+"  x:"+x.ToString(fxz)+" z:"+z.ToString(fxz);
+            var s = "ll:"+lat.ToString(fll)+","+lng.ToString(fll)+"  x:"+userwc_x.ToString(fxz)+" z:"+userwc_z.ToString(fxz);
             return s;
         }
     }
@@ -335,7 +452,7 @@ namespace Aiskwk.Map
         }
         static int mmcnt = 0;
         static int mmreentrycnt = 0;
-        public async Task<(QmapMesh, int, int)> MakeMeshFromLlbox(string scenename, LatLngBox llbox, int tpqk = 4, float hmult = 1, string mapcoordname = "", MapExtentTypeE mapextent = MapExtentTypeE.SnapToTiles, MapProvider mapprov = MapProvider.BingSatelliteRoads, ElevProvider elevprov = ElevProvider.BingElev, bool execute = true, bool forceload = false,
+        public async Task<(QmapMesh qmm, int nbmloaded, int nelloaded)> MakeMeshFromLlbox(string scenename, LatLngBox llbox, int tpqk = 4, float hmult = 1, string mapcoordname = "", MapExtentTypeE mapextent = MapExtentTypeE.SnapToTiles, MapProvider mapprov = MapProvider.BingSatelliteRoads, ElevProvider elevprov = ElevProvider.BingElev, bool execute = true, bool forceload = false,
                                                                bool limitQuadkeys = true, QmapMesh.sythTexMethod synthTex = QmapMesh.sythTexMethod.Quadkeys,
                                                                HeightSource heitSource = HeightSource.Fetched, HeightAdjust heitAdjust = HeightAdjust.Zeroed) //, HeightTypeE heitType= HeightTypeE.FetchedAndZeroed)
         {
@@ -480,9 +597,11 @@ namespace Aiskwk.Map
 
         string gdalFilePath = "c:/transfer/gdal/";
         string trackFilePath = "c:/transfer/tracks/";
-        public async void SetMode(QmapModeE newmode,bool forceload=false)
+        public async Task<(int nbmloaded,int nelloaded)> SetMode(QmapModeE newmode,bool forceload=false)
         {
-            //Debug.Log("SetMode:" + newmode);
+            Debug.LogWarning("SetMode:" + newmode);
+            var nbm = 0;
+            var nel = 0;
             ClearMesh();
             useElevationDataStart = true;
             useFlatTrisStart = false;
@@ -501,14 +620,14 @@ namespace Aiskwk.Map
                         frameQuadkeysStart = bespoke.frameQuadkeys;
                         useFlatTrisStart = bespoke.useFlatTris;
                         var tpqk = bespoke.nodesPerQuadKey;
-                        (qmm, _, _) = await MakeMeshFromLlbox(bespoke.sceneName, bespoke.llbox, tpqk: tpqk, mapprov: bespoke.mapProv, mapextent: bespoke.mapExtent, limitQuadkeys: false, hmult:bespoke.hmult,forceload:forceload  );
+                        (qmm, nbm, nel) = await MakeMeshFromLlbox(bespoke.sceneName, bespoke.llbox, tpqk: tpqk, mapprov: bespoke.mapProv, mapextent: bespoke.mapExtent, limitQuadkeys: false, hmult:bespoke.hmult,forceload:forceload  );
                         //Debug.Log($"Back from makemeshfromLlbox ptcnt:{bespoke.mappoints.Count}");
                         if (bespoke.mappoints.Count > 0)
                         {
                             foreach (var pt in bespoke.mappoints)
                             {
                                 //Debug.Log($"   qmm.AddUserPoint " + pt.Fmt());
-                                qmm.AddUserMapPoint(pt.lat, pt.lng, pt.x, pt.z);
+                                qmm.AddUserMapPoint(pt.lat, pt.lng, pt.userwc_x, pt.userwc_z);
                             }
                             qmm.FinishMapPoints();
                         }
@@ -853,6 +972,7 @@ namespace Aiskwk.Map
                     // 49.996606, 8.674300
             }
             lastQmapMode = qmapMode;
+            return (nbm, nel);
         }
         //public void InitMeshW3w(string w3w,string name,LatLng ll,float latkm,float lngkm,int lod)
         //{

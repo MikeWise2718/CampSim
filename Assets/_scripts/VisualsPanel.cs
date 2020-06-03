@@ -396,6 +396,5 @@ public class VisualsPanel : MonoBehaviour
         {
             SetLinkTransText();
         }
-
     }
 }

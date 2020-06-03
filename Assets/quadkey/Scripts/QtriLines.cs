@@ -125,9 +125,9 @@ namespace Aiskwk.Map
             return (ptlist.Count, icomps);
         }
 
-        public List<(Vector3, float)> GetIsectList(string lname, Vector3 pt1, Vector3 pt2, int omit = -1)
+        public List<(Vector3 pt, float lamb)> GetIsectList(string lname, Vector3 pt1, Vector3 pt2, int omit = -1, QkCoordSys coordsys= QkCoordSys.UserWc, bool db =false)
         {
-            var rv = new List<(Vector3, float)>();
+            var rv = new List<(Vector3 pt, float lamb)>();
             var (_, icomp1) = AddPoint(lname, rv, pt1, 0);
             var (_, icomp2) = AddPoint(lname, rv, pt2, 1);
             nTotComps += icomp1 + icomp2;
@@ -141,7 +141,7 @@ namespace Aiskwk.Map
                     var isect = ls1.TryIntersect(ls2, out var pti, out var t, out var u);
                     if (isect)
                     {
-                        var (ptii, _, _) = qmm.GetWcMeshPosProjectedAlongYnew(pti);
+                        var (ptii, _, _) = qmm.GetWcMeshPosProjectedAlongYnew(pti,coordsys:coordsys, db:db);
                         var (_, icomp) = AddPoint(lname, rv, ptii, t);
                         nTotComps += icomp;
                     }
@@ -153,27 +153,34 @@ namespace Aiskwk.Map
         public int nTotComps = 0;
         public int nFragLines = 0;
 
-        public GameObject AddStraightLine( string lname, Vector3 pt1, Vector3 pt2, float lska = 1.0f, float nska = 1.0f, string lclr = "red", string nclr = "", int omit = -1, float widratio = 1, bool wps = true)
+        public GameObject AddStraightLine( string lname, Vector3 pt1, Vector3 pt2, float lska = 1.0f, float nska = 1.0f, string lclr = "red", string nclr = "", int omit = -1, float widratio = 1, bool wps = true, QkCoordSys coordsys = QkCoordSys.UserWc)
         {
             var lgo = GpuInst.CreateCylinderGpu(lname, pt1, pt2, lska, lclr, widratio: widratio);
             return lgo;
         }
-        public GameObject AddStraightLine(GameObject parent, string lname, Vector3 pt1, Vector3 pt2, float lska = 1.0f, float nska = 1.0f, string lclr = "red", string nclr = "", int omit = -1, float widratio = 1, bool wps = true)
+        public GameObject AddStraightLine(GameObject parent, string lname, Vector3 pt1, Vector3 pt2, float lska = 1.0f, float nska = 1.0f, string lclr = "red", string nclr = "", int omit = -1, float widratio = 1, bool wps = true, QkCoordSys coordsys = QkCoordSys.UserWc)
         {
-            var lgo = AddStraightLine(lname, pt1, pt2, lska, nska, lclr, nclr, omit, widratio, wps: wps);
+            var lgo = AddStraightLine(lname, pt1, pt2, lska, nska, lclr, nclr, omit, widratio, wps: wps, coordsys: coordsys);
             lgo.transform.SetParent(parent.transform, worldPositionStays: wps);
             return lgo;
         }
 
-        public GameObject AddFragLine(GameObject parent, string lname, Vector3 pt1, Vector3 pt2, float lska = 1.0f, float nska = 1.0f, string lclr = "red", string nclr = "", int omit = -1, float widratio = 1, bool wps=true)
+        public GameObject AddFragLine(GameObject parent, string lname, Vector3 pt1, Vector3 pt2, float lska = 1.0f, float nska = 1.0f, string lclr = "red", string nclr = "", int omit = -1, float widratio = 1, bool wps=true,QkCoordSys coordsys=QkCoordSys.UserWc)
         {
-            var frago = AddFragLine(lname, pt1, pt2, lska, nska, lclr, nclr, omit, widratio, wps: wps);
+            var frago = AddFragLine(lname, pt1, pt2, lska, nska, lclr, nclr, omit, widratio, wps: wps,coordsys:coordsys);
             frago.transform.SetParent(parent.transform, worldPositionStays:wps);
             return frago;
         }
-        public GameObject AddFragLine(string lname, Vector3 pt1, Vector3 pt2, float lska = 1.0f, float nska = 1.0f, string lclr = "red", string nclr = "", int omit = -1, float widratio = 1, bool wps = true)
+        public GameObject AddFragLine(string lname, Vector3 pt1, Vector3 pt2, float lska = 1.0f, float nska = 1.0f, string lclr = "red", string nclr = "", int omit = -1, float widratio = 1, bool wps = true, QkCoordSys coordsys = QkCoordSys.UserWc)
         {
-            var ptlist = GetIsectList(lname, pt1, pt2, omit: omit);
+            var db = lname == "1202033022121033-b";
+            if (db)
+            {
+                var pt1s = pt1.ToString("f3");
+                var pt2s = pt2.ToString("f3");
+                Debug.Log($"AFL p1:{pt1s} p2:{pt2s}");
+            }
+            var ptlist = GetIsectList(lname, pt1, pt2, omit: omit, db: db,coordsys:coordsys);
             ntotIsects += ptlist.Count;
             nFragLines++;
             //Debug.Log($"AddFragLine found {ptlist.Count} intersections");
@@ -182,10 +189,19 @@ namespace Aiskwk.Map
             string sname;
             GameObject sphgo;
 
+
             for (int i = 0; i < ptlist.Count - 1; i++)
             {
                 var (pit1, d1) = ptlist[i];
-                var (pit2, d2) = ptlist[i + 1];
+                var (pit2, d2) = ptlist[i+1];
+                var pit1s = pit1.ToString("f3");
+                if (db)
+                {
+                    var d1s = d1.ToString("f3");
+                    var pit2s = pit2.ToString("f3");
+                    var d2s = d2.ToString("f3");
+                    Debug.Log($"{i}  - pt1:{pit1s} l1:{d1s}   pt2:{pit2s} l2:{d2s}");
+                }
                 var llname = $"{lname}_{i}";
                 if (nclr != "" && i == 0)
                 {

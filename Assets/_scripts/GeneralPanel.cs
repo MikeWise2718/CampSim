@@ -46,8 +46,10 @@ public class GeneralPanel : MonoBehaviour
     public void InitVals()
     {
         Debug.Log("GeneralPanel InitVals called");
-
-        fastModeToggle.isOn = sman.fastMode;
+        if (fastModeToggle != null)
+        {
+            fastModeToggle.isOn = sman.fastMode;
+        }
         panelActive = true;
     }
 
