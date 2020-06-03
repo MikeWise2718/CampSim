@@ -17,7 +17,7 @@ public class B19Willow : MonoBehaviour
 
     public CampusSimulator.SceneMan sman=null;
 
-    public UxEnumSetting<B19_MaterialMode> b19_materialMode = new UxEnumSetting<B19_MaterialMode>("B19_MaterialMode", B19_MaterialMode.materialed);
+    public UxEnumSetting<B19_MaterialMode> b19_materialMode = new UxEnumSetting<B19_MaterialMode>("B19_MaterialMode", B19_MaterialMode.glass);
     //   public UxSetting<bool> visibilityTiedToDetectability = new UxSetting<bool>("FrameVisibilityTiedToDetectability", true);
     // public B19_MaterialMode materialMode = B19_MaterialMode.materialed;
 

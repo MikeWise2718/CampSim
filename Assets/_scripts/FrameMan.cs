@@ -141,25 +141,25 @@ namespace CampusSimulator
 
         public void FrameButtonPressed(bool onoff, bool reset)
         {
-            //Debug.Log("FBP onoff:" + onoff + " reset:" + reset);
-            frameJourneys.Set(onoff);
-            frameBuildings.Set(onoff);
-            frameGarages.Set(onoff);
-            frameZones.Set(onoff);
-            showCarRects.Set(onoff);
-            showPersRects.Set(onoff);
-            showHeadRects.Set(false);
-            visibilityTiedToDetectability.Set(true);
+            //Debug.LogWarning($"FBP {sman.curscene} onoff:{onoff} reset:{reset}");
+            frameJourneys.SetAndSave(onoff);
+            frameBuildings.SetAndSave(onoff);
+            frameGarages.SetAndSave(onoff);
+            frameZones.SetAndSave(onoff);
+            showCarRects.SetAndSave(onoff);
+            showPersRects.SetAndSave(onoff);
+            showHeadRects.SetAndSave(false);
+            visibilityTiedToDetectability.SetAndSave(true);
             if (reset)
             {
                 //Debug.Log("Reseting detect variables to " + onoff);
-                detectFte.Set(onoff);
-                detectContractor.Set(onoff);
-                detectSecurity.Set(onoff);
-                detectVisitor.Set(onoff);
-                detectUnknown.Set(onoff);
-                topLabelText.Set(textContentE.name);
-                botLabelText.Set(textContentE.empstatus);
+                detectFte.SetAndSave(onoff);
+                detectContractor.SetAndSave(onoff);
+                detectSecurity.SetAndSave(onoff);
+                detectVisitor.SetAndSave(onoff);
+                detectUnknown.SetAndSave(onoff);
+                topLabelText.SetAndSave(textContentE.name);
+                botLabelText.SetAndSave(textContentE.empstatus);
             }
         }
 
@@ -230,24 +230,23 @@ namespace CampusSimulator
 
         public void SetScene(SceneSelE newregion)
         {
-            //Debug.Log("Frame setregion:" + newregion);
-            visibilityTiedToDetectability.GetInitial();
-            frameJourneys.GetInitial();
-            frameBuildings.GetInitial();
-            frameGarages.GetInitial();
-            frameZones.GetInitial();
-            showCarRects.GetInitial();
-            showPersRects.GetInitial();
-            showHeadRects.GetInitial();
-            detectFte.GetInitial();
-            detectContractor.GetInitial();
-            detectSecurity.GetInitial();
-            detectVisitor.GetInitial();
-            detectUnknown.GetInitial();
-            topLabelText.GetInitial();
-            botLabelText.GetInitial();
-            //Debug.Log("topLabelText - initial:" + topLabelText.Get());
-            //Debug.Log("botLabelText - initial:" + botLabelText.Get());
+            Debug.LogWarning($"FrameMan.SetScene setregion:{newregion}");
+            visibilityTiedToDetectability.GetInitial(false);
+            frameJourneys.GetInitial(false);
+            frameBuildings.GetInitial(false);
+            frameGarages.GetInitial(false);
+            frameZones.GetInitial(false);
+            showCarRects.GetInitial(false);
+            showPersRects.GetInitial(false);
+            showHeadRects.GetInitial(false);
+            detectFte.GetInitial(false);
+            detectContractor.GetInitial(false);
+            detectSecurity.GetInitial(false);
+            detectVisitor.GetInitial(false);
+            detectUnknown.GetInitial(false);
+            topLabelText.GetInitial(textContentE.none);
+            botLabelText.GetInitial(textContentE.name);
+            //Debug.LogWarning($"FrameMan.SetScene - showCarRects:{showCarRects.Get()} frameJouneys:{frameJourneys.Get()}");
         }
 
         private void LateUpdate()

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-//using GraphAlgos;
 using System.Threading.Tasks;
 using UnityEngine;
 using Aiskwk.Dataframe;
@@ -11,6 +10,7 @@ namespace Aiskwk.Map
     public class QkmeshStatistics
     {
         public LatLngBox llbox;
+        public MapExtentTypeE extent;
         public float areaSqkm = 0;
         public float diagonalKm = 0;
         public float widthKm = 0;
@@ -20,19 +20,28 @@ namespace Aiskwk.Map
         public float textWidthPix = 0;
         public float textHeighthPix = 0;
         public float textMbytes = 0;
+        public Vector2Int pixul;
+        public Vector2Int pixur;
+        public Vector2Int pixbl;
+        public Vector2Int pixbr;
         public Vector2Int nqktiles;
         public Vector3 meshDeltaMeters = Vector3.zero;
         public QkmeshStatistics()
         {
         }
-        public void CalcValues(LatLngBox box,Vector2Int nqk)
+        public void CalcValues(LatLngBox box,MapExtentTypeE extent,Vector2Int nqk)
         {
+            this.extent = extent;
             diagonalKm = box.diagonalInMeters / 1000.0f;
-            widthKm = (float)box.extentMeters.x / 1000.0f;
-            heightKm = (float)box.extentMeters.y / 1000.0f;
+            widthKm = (float)box.extentMeters1.x / 1000.0f;
+            heightKm = (float)box.extentMeters1.y / 1000.0f;
             widthPix = (float)box.extentPixels.x;
             heightPix = (float)box.extentPixels.y;
             areaSqkm = widthKm * heightKm;
+            pixul = box.GetPixelUpperLeft(box.lod);
+            pixur = box.GetPixelUpperRight(box.lod);
+            pixbl = box.GetPixelBottomLeft(box.lod);
+            pixbr = box.GetPixelBottomRight(box.lod);
             llbox = box;
             nqktiles = nqk;
         }
@@ -438,26 +447,28 @@ namespace Aiskwk.Map
             return rv;
         }
 
-        public (Vector3 meshpos, Vector3 normal, int istat) GetWcMeshPosProjectedAlongYnew(Vector3 wcpos)
+        public (Vector3 meshpos, Vector3 normal, int istat) GetWcMeshPosProjectedAlongYnew(Vector3 wcpos, QkCoordSys coordsys = QkCoordSys.UserWc, bool db =false)
         {
-            var ll = GetLngLatNew(wcpos);
+            var ll = GetLngLatNew(wcpos,coordsys:coordsys);
             var (lambx, lambz) = GetLambMeshPosFromLatLng(ll);
             var (meshpos, nrm, istat) = GetWcMeshPosFromLambda(lambx, lambz);
-            var lats = ll.lat.ToString("f6");
-            var lngs = ll.lng.ToString("f6");
-            var lxs = lambx.ToString("f4");
-            var lzs = lambz.ToString("f4");
-            var wcs = wcpos.ToString("f3");
-            //Debug.Log($"GetWcMeshPos Ynew- wc:{wcs}   ll:{lats} {lngs}   lbx:{lxs} lbz:{lzs}");
+            if (db)
+            {
+                var lats = ll.lat.ToString("f8");
+                var lngs = ll.lng.ToString("f8");
+                var lxs = lambx.ToString("f4");
+                var lzs = lambz.ToString("f4");
+                var wcs = wcpos.ToString("f3");
+                Debug.Log($"GetWcMeshPos Ynew- wc:{wcs}   ll:{lats} {lngs}   lambbx:{lxs} lambbz:{lzs}");
+            }
             var nmeshpos = new Vector3(wcpos.x, meshpos.y, wcpos.z);
             return (nmeshpos, nrm, istat);
         }
-        public LatLng GetLngLatNew(Vector3 wcpos)
+        public LatLng GetLngLatNew(Vector3 wcpos, QkCoordSys coordsys)
         {
             var llmap = llmapyacoords;
-            if (llmap==null || !llmap.isInited)
+            if (llmap==null || !llmap.isInited || coordsys== QkCoordSys.QkWc)
             {
-                //Debug.LogWarning("danger danger will robinson");
                 llmap = llmapqkcoords;
             }
             // long lat from world position
@@ -940,7 +951,7 @@ namespace Aiskwk.Map
             {
                 box = qkm.qllbox;
             }
-            stats.CalcValues(box,qkm.nqk);
+            stats.CalcValues(box,mapExtent,qkm.nqk);
             var meshq00 = GetMeshNodePos(0, 0);
             var meshq01 = GetMeshNodePos(0, 1);
             var meshq10 = GetMeshNodePos(1, 0);
@@ -974,9 +985,11 @@ namespace Aiskwk.Map
                 MfWrap.ZipUpNormals(mfw1, mfw2, normmethod);
             }
         }
+        public static bool isLoading = false;
         public async Task<(int, int)> GenerateGrid(bool execute = true, bool forceload = true, bool limitQuadkeys = true)
         {
             initializationComplete = false;
+            isLoading = true;
 
             InitGomflst();
 
@@ -1134,20 +1147,20 @@ namespace Aiskwk.Map
             RegenerateViewer();
             AddMeshColliders();
             initializationComplete = true;
+            isLoading = false;
             return (nBmRetrieved, nElRetrived);
         }
 
         public void CalcYaLLmap()
         {
             var cnt = llmapqkcoords.mapcoord.mapdata.Count;
-            Debug.Log($"CalcYaLLmap llmapqk pts:{cnt}");
+            //Debug.Log($"CalcYaLLmap llmapqk pts:{cnt}");
             var llya= this.gameObject.AddComponent<LatLongMap>();
             llya.InitMapCoords();
             int i = 0;
             foreach (var md in llmapqkcoords.mapcoord.mapdata)
             {
                 var sname = "mc:" + i;
-                //var v = llmap.mapcoord.glbmap(md.x, 0, md.z);
                 var ll = new LatLng(md.lat, md.lng);
                 var oripos = new Vector3((float)md.x, 0, (float)md.z);
                 var go = new GameObject(sname);
@@ -1155,10 +1168,9 @@ namespace Aiskwk.Map
                 go.transform.SetParent(transform, worldPositionStays: false);
                 var newpos = go.transform.position;
                 llya.AddRowLatLng(ll.lat, ll.lng, newpos.x, newpos.z);
-                //llya.AddRowLatLng(ll.lat, ll.lng, oripos.x, oripos.z);
                 var ops = oripos.ToString("f3");
                 var nps = newpos.ToString("f3");
-                Debug.Log($"  CalcYaLlmap {sname} {ll.ToString()}  orip:{ops}  newp:{nps}");
+                //Debug.Log($"  CalcYaLlmap {sname} {ll.ToString()}  orip:{ops}  newp:{nps}");
                 i++;
             }
             llya.CalcRegressionMaps();

@@ -75,33 +75,47 @@ public class OptionsPanel : MonoBehaviour
         generalPanelGo.SetActive(generalToggle.isOn);
         helpPanelGo.SetActive(helpToggle.isOn);
         aboutPanelGo.SetActive(aboutToggle.isOn);
-        if (aboutToggle.isOn)
+        var heavyInit = false;
+        if (heavyInit)
         {
             aboutPanel.FillAboutPanel();
-        }
-        if (visualToggle.isOn)
-        {
             visualsPanel.InitVals();
-        }
-        if (mapsetToggle.isOn)
-        {
-            mapSetPanel .InitVals();
-        }
-        if (frameToggle.isOn)
-        {
+            mapSetPanel.InitVals();
             framePanel.InitVals();
-        }
-        if (b19Toggle.isOn)
-        {
             b19Panel.InitVals();
-        }
-        if (helpToggle.isOn)
-        {
             helpPanel.FillHelpPanel();
-        }
-        if (generalToggle.isOn)
-        {
             generalPanel.InitVals();
+        }
+        else
+        {
+            if (aboutToggle.isOn)
+            {
+                aboutPanel.FillAboutPanel();
+            }
+            if (visualToggle.isOn)
+            {
+                visualsPanel.InitVals();
+            }
+            if (mapsetToggle.isOn)
+            {
+                mapSetPanel.InitVals();
+            }
+            if (frameToggle.isOn)
+            {
+                framePanel.InitVals();
+            }
+            if (b19Toggle.isOn)
+            {
+                b19Panel.InitVals();
+            }
+            if (helpToggle.isOn)
+            {
+                helpPanel.FillHelpPanel();
+            }
+            if (generalToggle.isOn)
+            {
+                generalPanel.InitVals();
+            }
         }
     }
     public void ChangingOptionsDialog(bool isOpening)
@@ -136,6 +150,11 @@ public class OptionsPanel : MonoBehaviour
                 generalPanel.SetVals(closing: true);
             }
         }
+    }
+
+    public void SetScene(CampusSimulator.SceneSelE curscene)
+    {
+        SyncOptionsTabState();
     }
     public void OptionsTabToggle()
     {

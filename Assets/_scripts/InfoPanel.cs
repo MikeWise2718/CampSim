@@ -97,10 +97,14 @@ public class InfoPanel : MonoBehaviour
         var simtime = Time.time.ToString("f1");
         var gcmem = (float)(System.GC.GetTotalMemory(false) / 1e6);
         string extext = string.Format(" {0:0.0} ms\n {1:0.0} fps GC:{2:0.0} mb", msec, fps,gcmem);
-        if (MapSetPanel.isLoadingMaps)
+        if (Aiskwk.Map.QmapMesh.isLoading)
         {
-            var (isLoading, nbmLoaded, nbmToLoad, nelevBatchesLoaded, nelevBatchsToLoad) = sman.mpman.GetLoadingStatus();
+            var (isLoading, irupt, nbmLoaded, nbmToLoad, nelevBatchesLoaded, nelevBatchsToLoad) = sman.mpman.GetLoadingStatus();
             extext = $"\nBitmaps:{nbmLoaded}/{nbmToLoad} Elev:{nelevBatchesLoaded}/{nelevBatchsToLoad}";
+            if (irupt)
+            {
+                extext = $"IRPUT {extext}";
+            }
         }
         msg += "Upd:" + updatecount + " Sim:" + simtime + " " + extext;
         simText.text = msg;

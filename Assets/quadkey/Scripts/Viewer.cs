@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Aiskwk.Map
 {
-    public enum ViewerAvatar { SphereMan, CapsuleMan, SimpleTruck, Minehaul1, Shovel1, Dozer1, Dozer2, Rover, QuadCopter };
+    public enum ViewerAvatar { SphereMan, CapsuleMan, SimpleTruck, Minehaul1, Shovel1, Dozer1, Dozer2, Rover, QuadCopter, Car012 };
     public enum ViewerCamPosition { Eyes, FloatBehindDiv2, FloatBehind }
     public enum ViewerControl { Position, Velocity }
 
@@ -61,7 +61,7 @@ namespace Aiskwk.Map
         }
         public void InitViewer(QmapMesh qmm)
         {
-            Debug.Log("InitViewer");
+            //Debug.Log("InitViewer");
             this.qmm = qmm;
             viewerAvatar = viewerAvatarDefaultValue;
             viewerCamPosition = ViewerCamPositionDefaultValue;
@@ -69,11 +69,11 @@ namespace Aiskwk.Map
             //var (vo,_, istat) = qmm.GetWcMeshPosFromLambda(0.5f, 0.5f);
             var (vo, _, istat) = qmm.GetWcMeshPosProjectedAlongYnew(viewerDefaultPosition);
             transform.position = vo;
-            Debug.Log($"Initviwer initial position {vo}");
+            //Debug.Log($"Initviwer initial position {vo}");
             transform.localRotation = Quaternion.Euler(viewerDefaultRotation);
             qcmdescriptor = qmm.descriptor;
             BuildViewer();
-            Debug.Log("Done with InitViewer");
+            //Debug.Log("Done with InitViewer");
         }
 
 
@@ -130,13 +130,13 @@ namespace Aiskwk.Map
             transform.SetParent(parent.transform, worldPositionStays: true);// reconnect
             TranslateViewer(0, 0);
             RotateViewer(0);
-            DumpViewer();
+            //DumpViewer();
         }
 
         string[] primitivetypes = { "Capsule", "Sphere" };
         public (GameObject, float) GetAvatarPrefab(string avaname, float angle, Vector3 shift, float scale = 1)
         {
-            Debug.Log($"GetAvatarPrefab scale:{scale}");
+            //Debug.Log($"GetAvatarPrefab scale:{scale}");
             GameObject instancego = null;
 
             var height = 0f;
@@ -151,7 +151,7 @@ namespace Aiskwk.Map
                     instancego = t.gameObject;
                     height = 2.5f;
                     loaded = true;
-                    Debug.Log("Sucessfully loaded " + avaname);
+                    //Debug.Log("Sucessfully loaded " + avaname);
                 }
                 catch (System.Exception ex)
                 {
@@ -176,7 +176,7 @@ namespace Aiskwk.Map
 
             var vscale = instancego.transform.localScale * scale;
             instancego.transform.localScale = vscale;
-            Debug.Log($"Setting bodyprefab rotation for {avaname} angle:{angle}");
+            //Debug.Log($"Setting bodyprefab rotation for {avaname} angle:{angle}");
             instancego.transform.localRotation = Quaternion.Euler(0, angle, 0);
             instancego.transform.position += shift;
             instancego.transform.SetParent(body.transform, worldPositionStays: false);
@@ -254,7 +254,7 @@ namespace Aiskwk.Map
 
             visor.transform.position = vv;
             var vska = visorscale;
-            visor.transform.localScale = new Vector3(vska,vska,vska);
+            visor.transform.localScale = new Vector3(vska,vska/2,vska);
             visor.transform.localRotation = Quaternion.Euler(0, -angle, 0); ;
             visor.transform.SetParent(body.transform, worldPositionStays: false);
             qut.SetColorOfGo(visor, Color.black);
@@ -388,7 +388,7 @@ namespace Aiskwk.Map
                 case ViewerAvatar.SimpleTruck:
                     {
                         angle = 180;
-                        MakeAvatar(pfix + "DumpTruck_TS1", angle, shift, scale);
+                        MakeAvatar(pfix + "DumpTruck_TS1", angle, shift, visorscale: 0.01f);
                         break;
                     }
                 case ViewerAvatar.Minehaul1:
@@ -418,7 +418,13 @@ namespace Aiskwk.Map
                 case ViewerAvatar.Rover:
                     {
                         angle = 90;
-                        MakeAvatar(pfix + "rover2", angle, shift, scale);
+                        MakeAvatar(pfix + "rover2", angle, shift, scale, visorscale: 0.01f);
+                        break;
+                    }
+                case ViewerAvatar.Car012:
+                    {
+                        angle = 0;
+                        MakeAvatar("Cars/Car012", angle, shift, scale, visorscale: 0.01f);
                         break;
                     }
                 case ViewerAvatar.QuadCopter:
@@ -441,13 +447,44 @@ namespace Aiskwk.Map
                 case ViewerAvatar.CapsuleMan:
                     {
                         shift = new Vector3(0, 0, 0);
-                        MakeAvatar("Capsule", angle, shift, scale);
+                        MakeAvatar("Capsule", angle, shift, scale, visorscale: 0.64f);
                         //MakeGeomeryViewer(PrimitiveType.Capsule);
                         break;
                     }
             }
             TranslateViewer(0, 0);
             RotateViewer(0);
+        }
+
+        ViewerAvatar NextAvatar(ViewerAvatar curava)
+        {
+            var rv = ViewerAvatar.CapsuleMan;
+            switch (curava)
+            {
+                default:
+                case ViewerAvatar.QuadCopter:
+                    rv = ViewerAvatar.Rover;
+                    break;
+                case ViewerAvatar.Rover:
+                    rv = ViewerAvatar.CapsuleMan;
+                    break;
+                case ViewerAvatar.CapsuleMan:
+                    rv = ViewerAvatar.SimpleTruck;
+                    break;
+                case ViewerAvatar.SimpleTruck:
+                    rv = ViewerAvatar.Car012;
+                    break;
+                case ViewerAvatar.Car012:
+                    rv = ViewerAvatar.QuadCopter;
+                    break;
+            }
+            return rv;
+        }
+        void MoveToNextAvatar()
+        {
+            var nextAvatar = NextAvatar(viewerAvatar);
+            viewerAvatar = nextAvatar;
+            BuildViewer();
         }
 
         void TiltHead(float rotate)
@@ -484,7 +521,7 @@ namespace Aiskwk.Map
             altitude += ymove;
             TranslateViewerProjected(0,0);
             var posstr = transform.position.ToString("f1");
-            Debug.Log($"RaiseViewer ymove:{ymove} newpos:{posstr}");
+            //Debug.Log($"RaiseViewer ymove:{ymove} newpos:{posstr}");
         }
         void TranslateViewerProjected(float xmove, float zmove)
         {
@@ -540,7 +577,7 @@ namespace Aiskwk.Map
             }
             var pnstr = t.position.ToString("f3");
             var nrmstr = nrm.ToString("f3");
-            Debug.Log($"TranslateViewerToPosition - vn:{vn}");
+            //Debug.Log($"TranslateViewerToPosition - vn:{vn}");
         }
         bool usellmeth = true;
 
@@ -588,8 +625,7 @@ namespace Aiskwk.Map
             }
             else
             {
-                Debug.Log($"SetSceneCamToMainCam viewcam:{viewercam.name}");
-
+                //Debug.Log($"SetSceneCamToMainCam viewcam:{viewercam.name}");
             }
 #if UNITY_EDITOR
             //var svcam = UnityEditor.SceneView.lastActiveSceneView.camera;
@@ -620,7 +656,7 @@ namespace Aiskwk.Map
         public void MoveToPosition(Vector3 newpos)
         {
             TranslateViewerToPosition(newpos);
-        }
+        }      
         void DoKeys()
         {
             var altpressed = Input.GetKey(KeyCode.RightAlt) || Input.GetKey(KeyCode.LeftAlt);
@@ -629,8 +665,22 @@ namespace Aiskwk.Map
             var speedmult = 0.3f;
             if (ctrlpressed) speedmult = 3.0f;
 
-            var ainc = 10.0f * speedmult/2;
+            var ainc = 5.0f * speedmult/2;
             var inc = 1.0f * speedmult;
+
+            if (!ViewerProcessKeys)
+            {
+                var forcekeyhit = Input.GetKey(KeyCode.V) || Input.GetKey(KeyCode.W);
+                if (ctrlpressed && forcekeyhit)
+                {
+                    ViewerProcessKeys = true;
+                    Debug.LogWarning($"Forcing Viewer to processkeys");
+                }
+                else
+                {
+                    return; /// no processing keys
+                }
+            }
 
             if (doTrackThings && (Time.time - ctrlVhit < 1.0f))
             {
@@ -703,7 +753,14 @@ namespace Aiskwk.Map
                 {
                     vtm.ActivateNextTrack();
                 }
-                ctrlAhit = Time.time;
+                else if (Time.time - ctrlAhit > hitgap3)
+                {
+                    var oldav = viewerAvatar;
+                    MoveToNextAvatar();
+                    var newav = viewerAvatar;
+                    Debug.Log($"Moving to next avatar old:{oldav}  new:{newav}");
+                    ctrlAhit = Time.time;
+                }
             }
             if (Input.GetKey(KeyCode.V) && ctrlpressed)
             {
@@ -864,6 +921,12 @@ namespace Aiskwk.Map
             old_viewerCamPosition = viewerCamPosition;
             old_pinCameraToFrame = pinCameraToFrame;
             return rv;
+        }
+        public static bool ViewerProcessKeys = true;
+
+        public static void ActivateViewerKeys(bool newstat)
+        {
+            ViewerProcessKeys = newstat;
         }
         // Update is called once per frame
         void Update()
