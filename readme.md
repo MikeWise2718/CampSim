@@ -28,6 +28,37 @@
 	 - b.	This would probably be a lot faster if we removed some things that are no longer being used, like the floor plan bitmaps
 10.	Go to **Assets/Resources/TreesAndShrubs** and see if the icons look like trees and shrubs. If not left click on each of them and do a **Reimport** individually to refresh the prefab instance.
 
+## Check-in New Version
+1. Assuming you are on a feature branch, and the master is on master.
+2. Assume master is dual-remoted, one to the github repo, and one to the azurerepos for building on ADO
+3. Make sure all the version info is updated
+   - a. Build version in InfoPanel.cs
+   - b. Startup screen shot is annotated if needed
+4. Squash all the commits down to one 
+   - a. easy with lazygit, ? for help - basically s then enter)
+   - b. i to rename the git expereience
+5. Now see if it builds to a BuildWin
+6. Force push it (`git push force`) to override the `tip ahead of branch on remote` message 
+7. Go to Github and do a pull request on master - make some comments for fun
+8. It should merge, their might be conflicts (git isn't perfect')
+9. If there are conflicts - not sure how this goes - if not continue
+10. go to master branch and pull new master
+11. Push to azureepos
+12. Go to ADO and build it
+
+
+
+
+## Startup screen shot
+1. Assume you have a png - put it in _textures.
+2. Duplicate it.
+3. Change to Sprite 
+   - a. In Inspector from Project View, 
+   - b. look at Texture Type and change from `Default` to `Sprite (2D and UI)`), 
+   - c. it will have a sprite then as a sub-object
+   - d. you can change it back if you want
+4. Now go to player settings and change the startup 
+   - Warning! note that there is a seperate VR startup icon first in the list, don't change that one by mistake and think you have it
 
 ## Testing
 - TBD

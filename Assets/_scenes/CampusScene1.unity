@@ -25981,7 +25981,7 @@ MonoBehaviour:
   xdistkm: 1
   zdistkm: 3
   lod: 16
-  nodesPerQuadKey: 16
+  npqk: 16
   maptrans: {x: 0, y: 0, z: 0}
   maprot: {x: 0, y: 0, z: 0}
   useElesForNow: 0
@@ -25992,6 +25992,7 @@ MonoBehaviour:
   maplat: 47.639217376708984
   mapscale: 1
   roty2: 0
+  address: 
   InstantMapSettingsChange:
     val: 1
     inival: 1
