@@ -43,7 +43,7 @@ public class InfoPanel : MonoBehaviour
         ComplainIfNull(gman, "GarageMan", "gman");
         ComplainIfNull(vman, "VidcamMan", "vman");
 
-        trackedObject = Camera.main?.gameObject;
+        trackedObject = vman.GetCurrentCamera()?.gameObject;
 
 
         sysText = transform.Find("SysText")?.GetComponent<Text>();
@@ -88,25 +88,27 @@ public class InfoPanel : MonoBehaviour
     {
         if (Time.time - lastupdate < 0.25f) return;
 
-        var msg = vman.lastcamset + "\n";
-        msg += "Jny:" + jman.njnys + " Sspn:"+jman.nspawned+" Fspn:"+jman.nspawnfails+"\n";
+        trackedObject = vman.GetCurrentCamera()?.gameObject;
+
+        var msg = $"{vman.lastcamset}\nJny:{jman.njnys} Sspn:{jman.nspawned} Fspn:{jman.nspawnfails}\n";
 
         smoothedDeltaTime += (Time.unscaledDeltaTime - smoothedDeltaTime) * 0.1f;
         float fps = 1.0f / smoothedDeltaTime;
         float msec = smoothedDeltaTime * 1000.0f;
         var simtime = Time.time.ToString("f1");
         var gcmem = (float)(System.GC.GetTotalMemory(false) / 1e6);
-        string extext = string.Format(" {0:0.0} ms\n {1:0.0} fps GC:{2:0.0} mb", msec, fps,gcmem);
+        var lod = sman.mpman.GetLod();
+        string extext = $" {msec:0.0} ms\nlod:{lod} {fps:0.0} fps GC:{gcmem:0.0} mb";
         if (Aiskwk.Map.QmapMesh.isLoading)
         {
             var (isLoading, irupt, nbmLoaded, nbmToLoad, nelevBatchesLoaded, nelevBatchsToLoad) = sman.mpman.GetLoadingStatus();
-            extext = $"\nBitmaps:{nbmLoaded}/{nbmToLoad} Elev:{nelevBatchesLoaded}/{nelevBatchsToLoad}";
+            extext = $"\nlod:{lod} Bitmaps:{nbmLoaded}/{nbmToLoad} Elev:{nelevBatchesLoaded}/{nelevBatchsToLoad}";
             if (irupt)
             {
                 extext = $"IRPUT {extext}";
             }
         }
-        msg += "Upd:" + updatecount + " Sim:" + simtime + " " + extext;
+        msg += $"Upd:{updatecount} Sim:{simtime} {extext}";
         simText.text = msg;
         updatecount++;
 
@@ -123,8 +125,10 @@ public class InfoPanel : MonoBehaviour
                 fwd = Camera.main.transform.forward;
             }
             string txt = "";
-            txt += "Pos:" + pos.x.ToString("f2") + " " + pos.y.ToString("f2") + " " + pos.z.ToString("f2")+"\n";
-            txt += "Fwd:" + fwd.x.ToString("f2") + " " + fwd.y.ToString("f2") + " " + fwd.z.ToString("f2");
+            //txt += "Pos:" + pos.x.ToString("f2") + " " + pos.y.ToString("f2") + " " + pos.z.ToString("f2")+"\n";
+            txt += $"Pos:{pos.x,4:f2} {pos.y,4:f2} {pos.z,4:f2}\n";
+            //txt += "Fwd:" + fwd.x.ToString("f2") + " " + fwd.y.ToString("f2") + " " + fwd.z.ToString("f2");
+            txt += $"Fwd:{fwd.x,4:f2} {fwd.y,4:f2} {fwd.z,4:f2}\n";
             sysText.text = txt;
         }
         if (locman!=null)
