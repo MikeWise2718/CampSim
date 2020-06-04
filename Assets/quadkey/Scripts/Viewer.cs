@@ -490,7 +490,7 @@ namespace Aiskwk.Map
         void TiltHead(float rotate)
         {
             visor.transform.localRotation *= Quaternion.Euler(new Vector3(rotate, 0, 0));
-            Debug.Log("Rotated visor by " + rotate);
+            //Debug.Log("Rotated visor by " + rotate);
         }
         Vector3 lstnrm = Vector3.up;
         void RotateViewer(float rotate)

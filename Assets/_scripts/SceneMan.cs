@@ -289,6 +289,10 @@ namespace CampusSimulator
                 needstotalrefresh = true; 
             }
         }
+        public (bool refresh,bool totalrefresh) GetRefreshStatus()
+        {
+            return (needsrefresh, needstotalrefresh);
+        }
         public void RequestHighObjRefresh(string highobjname,string requester)
         {
             //Debug.Log("RefreshHighObjRequested by " + requester);
@@ -1470,6 +1474,7 @@ namespace CampusSimulator
         float ctrlQhitTime = 0;
         float ctrlShitTime = 0;
         float ctrlDhitTime = 0;
+        float F5hitTime = 0;
         public void KeyProcessing()
         {
             //if (Input.GetKeyDown(KeyCode.LeftShift))
@@ -1499,6 +1504,11 @@ namespace CampusSimulator
                 }
                 // CTRL + Q
                 ctrlQhitTime = Time.time;
+            }
+            if (((Time.time - F5hitTime) > 0.5) && Input.GetKeyDown(KeyCode.F5))
+            {
+                Debug.Log("F5 - Request Total Refresh");
+                this.RequestRefresh("F5 hit", totalrefresh: true);
             }
             if (ctrlhit && Input.GetKeyDown(KeyCode.C))
             {

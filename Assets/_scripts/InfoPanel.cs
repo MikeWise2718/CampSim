@@ -108,7 +108,16 @@ public class InfoPanel : MonoBehaviour
                 extext = $"IRPUT {extext}";
             }
         }
+        var (refresh, totrefresh) = sman.GetRefreshStatus();
         msg += $"Upd:{updatecount} Sim:{simtime} {extext}";
+        if (totrefresh)
+        {
+            msg += " TR";
+        }
+        else if (refresh)
+        {
+            msg += " R";
+        }
         simText.text = msg;
         updatecount++;
 
@@ -137,15 +146,15 @@ public class InfoPanel : MonoBehaviour
             var ori = locman.GetLocState();
             var gyr = locman.GetGyro();
             string txt="";
-            txt += ori + "\n" + 
-                    loc.x.ToString("F6") +" " + loc.y.ToString("F1") +" "+ loc.z.ToString("F6") + "\n";
-            txt += gyr.w.ToString("F3") + " " + gyr.x.ToString("F3") + " " + gyr.y.ToString("F3") + " " + gyr.z.ToString("F3") + "\n";
+            txt += ori + $"\n{loc.x:f6} {loc.y:f1} {loc.z:f6}\n";
+            txt += $"{gyr.w:f3} {gyr.x:f3} {gyr.y:f3} {gyr.z:f3}\n";
             geoText.text = txt;
         }
         var mmsg = "Reg:"+sman.curscene + "\n";
         mmsg += System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss zzz\n");
-        mmsg += "P:" + sman.psman.GetPersonCount()+ " V:" + sman.veman.GetVehicleCount()+
-                " B:"+sman.bdman.GetBuildingCount() + " BR:" + sman.bdman.GetBroomCount() + " VC:" + sman.vcman.GetVidcamCount();
+        mmsg += $"P:{sman.psman.GetPersonCount()} V:{sman.veman.GetVehicleCount()} "+
+                $"B:{sman.bdman.GetBuildingCount()} BR:{sman.bdman.GetBroomCount()} VC:{sman.vcman.GetVidcamCount()}\n"+
+                $"{GraphAlgos.GraphUtil.GetVersionString()}";
         mscText.text = mmsg;
 
     }
