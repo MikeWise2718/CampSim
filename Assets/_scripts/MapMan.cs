@@ -701,11 +701,7 @@ namespace CampusSimulator
                     maptrans = Vector3.zero;
                     xdistkm = 12;
                     zdistkm = 12;
-                    if (!levelOfDetail.ValueRetrived())
-                    {
-                        lod = 15;
-                        levelOfDetail.Set(lod);
-                    }
+                    lod = 15;
                     useElesForNow = true;
                     useViewer = true;
                     mapscale = 1f;
@@ -732,27 +728,6 @@ namespace CampusSimulator
                     Viewer.viewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
                     hasLLmap = false;
                     break;
-                case SceneSelE.Custom:
-                    maplat = 45.412219;
-                    maplng = -116.328921;
-                    mapscale = 3.2f;
-                    maprot = Vector3.zero;
-                    maptrans = Vector3.zero;
-                    xdistkm = 10;
-                    zdistkm = 10;
-                    if (!levelOfDetail.ValueRetrived())
-                    {
-                        lod = 13;
-                        levelOfDetail.Set(lod);
-                    }
-                    useElesForNow = true;
-                    useViewer = true;
-                    mapscale = 1f;
-                    roty2 = 0;
-                    mapscale = 1f;
-                    isCustomizable = true;
-                    Viewer.viewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
-                    break;
                 case SceneSelE.Riggins:
                     maplat = 45.412219;
                     maplng = -116.328921;
@@ -761,11 +736,7 @@ namespace CampusSimulator
                     maptrans = Vector3.zero;
                     xdistkm = 10;
                     zdistkm = 10;
-                    if (!levelOfDetail.ValueRetrived())
-                    {
-                        lod = 15;
-                        levelOfDetail.Set(lod);
-                    }
+                    lod = 15;
                     useElesForNow = true;
                     useViewer = true;
                     mapscale = 1f;

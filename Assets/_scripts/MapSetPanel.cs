@@ -83,15 +83,15 @@ public class MapSetPanel : MonoBehaviour
     double newLngKm;
 
 
-    InputField newLatLngInputField;
-    InputField newLatKmInputField;
-    InputField newLngKmInputField;
+    //InputField newLatLngInputField;
+    //InputField newLatKmInputField;
+    //InputField newLngKmInputField;
 
-    bool newPosAndExtentAvailable;
-    double newLat;
-    double newLng;
-    double newLatKm;
-    double newLngKm;
+    //bool newPosAndExtentAvailable;
+    //double newLat;
+    //double newLng;
+    //double newLatKm;
+    //double newLngKm;
 
 
     public bool needSetSceneReset;
