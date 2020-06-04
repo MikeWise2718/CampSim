@@ -442,7 +442,11 @@ public class MapSetPanel : MonoBehaviour
         s6 = "Tex Temp Info: " + s6 + "  " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
         s7 = "Ele Temp Path: " + s7;
         s8 = "Ele Temp Info: " + s8;
-        var sregkey = "User settings regkey:"+" Computer\\HKEY_CURRENT_USER\\Software\\Unity\\UnityEditor\\DefaultCompany\\campusim";
+        var sedregkey = "User settings regkey editor:"+" Computer\\HKEY_CURRENT_USER\\Software\\Unity\\UnityEditor\\DefaultCompany\\campusim";
+        var splregkey = "User settings regkey player:" + " Computer\\HKEY_CURRENT_USER\\Software\\DefaultCompany\\campusim";
+        var spllogfiles = "Log files regkey player:" + "%USERPROFILE%\\AppData\\LocalLow\\CompanyName\\ProductName\\output_log.txt";
+        
+
         persMapsPathText.text = s1;
         persMapsDataText.text = s2;
         persElevPathText.text = s3;
@@ -451,7 +455,7 @@ public class MapSetPanel : MonoBehaviour
         tempMapsDataText.text = s6;
         tempElevPathText.text = s7;
         tempElevInfoText.text = s8;
-        copyClipText = $"{s1}\n{s2}\n{s5}\n{s6}\n\n{s3}\n{s4}\n{s7}\n{s8}\n\n{sregkey}";
+        copyClipText = $"{s1}\n{s2}\n{s5}\n{s6}\n\n{s3}\n{s4}\n{s7}\n{s8}\n\n{sedregkey}\n{splregkey}\n{spllogfiles}";
     }
 
     static public bool isLoadingMaps = false;
