@@ -201,6 +201,7 @@ namespace CampusSimulator
             leditor = rgo.AddComponent<LinkEditor>();
             leditor.Init(linkcloudman, this);
         }
+
         public void SetScene( SceneSelE newscene,bool force=false )
         {
             if (newscene != curscene || force)

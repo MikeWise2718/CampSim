@@ -518,6 +518,15 @@ namespace CampusSimulator
             }
             return (s1,s2,s3,s4,s5,s6,s7,s8);
         }
+        public int GetLod()
+        {
+            var rv = 0;
+            if (qmapman!=null && qmapman.qmm!=null)
+            {
+                rv = qmapman.qmm.levelOfDetail;
+            }
+            return rv;
+        }
 
         void Initialize()
         {
