@@ -249,6 +249,7 @@ namespace CampusSimulator
                     {
                         //Debug.LogWarning($"Resetting StatusPanel for {newscene}");
                         span.Init();
+                        span.ColorizeButtonStates();
                     }
                     //Debug.Log("SetScene finished");
                 }

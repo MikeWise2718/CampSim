@@ -69,13 +69,15 @@ namespace CampusSimulator
             visButton = transform.Find("VisButton").gameObject.GetComponent<Button>();
             unkButton = transform.Find("UnkButton").gameObject.GetComponent<Button>();
             vt2dButton = transform.Find("Vt2DButton").gameObject.GetComponent<Button>();
+            runButton.onClick.AddListener(delegate { RunButton(); });
+            frameButton.onClick.AddListener(delegate { FrameButton(); });
+            vt2dButton.onClick.AddListener(delegate { Vt2DButton(); });
             linked = true;
         }
 
         public void Init()
         {
             LinkObjectsAndComponents();
-            ColorizeButtonStates();
         }
 
         public void SetButtonColor(Button butt,string hicolor,bool status,string txt,bool force=false)

@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Aiskwk.Map
 {
     public enum ViewerAvatar { SphereMan, CapsuleMan, SimpleTruck, Minehaul1, Shovel1, Dozer1, Dozer2, Rover, QuadCopter, Car012 };
-    public enum ViewerCamPosition { Eyes, FloatBehindDiv2, FloatBehind }
+    public enum ViewerCamPosition { Eyes, FloatBehindDiv2, FloatBehind, FloatBehindTimes2 }
     public enum ViewerControl { Position, Velocity }
 
     public class Viewer : MonoBehaviour
@@ -312,6 +312,11 @@ namespace Aiskwk.Map
                         camgo.transform.position = new Vector3(0, 12f/2, -24f/2);
                         break;
                     }
+                case ViewerCamPosition.FloatBehindTimes2:
+                    {
+                        camgo.transform.position = new Vector3(0, 12f, -24f);
+                        break;
+                    }
             }
         }
 
@@ -321,7 +326,7 @@ namespace Aiskwk.Map
             {
                 case ViewerCamPosition.Eyes:
                     {
-                        viewerCamPosition = ViewerCamPosition.FloatBehind;
+                        viewerCamPosition = ViewerCamPosition.FloatBehindTimes2;
                         break;
                     }
                 case ViewerCamPosition.FloatBehindDiv2:
@@ -332,6 +337,11 @@ namespace Aiskwk.Map
                 case ViewerCamPosition.FloatBehind:
                     {
                         viewerCamPosition = ViewerCamPosition.FloatBehindDiv2;
+                        break;
+                    }
+                case ViewerCamPosition.FloatBehindTimes2:
+                    {
+                        viewerCamPosition = ViewerCamPosition.FloatBehind;
                         break;
                     }
             }
@@ -388,7 +398,8 @@ namespace Aiskwk.Map
                 case ViewerAvatar.SimpleTruck:
                     {
                         angle = 180;
-                        MakeAvatar(pfix + "DumpTruck_TS1", angle, shift, visorscale: 0.01f);
+                        scale = 1 / 0.3125f;
+                        MakeAvatar(pfix + "DumpTruck_TS1", angle, shift, scale, visorscale: 0.01f);
                         break;
                     }
                 case ViewerAvatar.Minehaul1:
@@ -424,6 +435,7 @@ namespace Aiskwk.Map
                 case ViewerAvatar.Car012:
                     {
                         angle = 0;
+                        scale = 1 / 0.3125f;
                         MakeAvatar("Cars/Car012", angle, shift, scale, visorscale: 0.01f);
                         break;
                     }

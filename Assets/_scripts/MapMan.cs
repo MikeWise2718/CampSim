@@ -173,6 +173,7 @@ namespace CampusSimulator
             {
                 Debug.Log("In MapMan.Awake Could not find object of type SceneMan");
             }
+            GraphAlgos.GraphUtil.CheckVersionString();
         }
         public float GetHeight(float x,float z)
         {
