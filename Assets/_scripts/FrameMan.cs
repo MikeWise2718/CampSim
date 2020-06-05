@@ -141,7 +141,7 @@ namespace CampusSimulator
 
         public void FrameButtonPressed(bool onoff, bool reset)
         {
-            //Debug.LogWarning($"FBP {sman.curscene} onoff:{onoff} reset:{reset}");
+            Debug.LogWarning($"FBP {sman.curscene} onoff:{onoff} reset:{reset}");
             frameJourneys.SetAndSave(onoff);
             frameBuildings.SetAndSave(onoff);
             frameGarages.SetAndSave(onoff);
@@ -149,7 +149,8 @@ namespace CampusSimulator
             showCarRects.SetAndSave(onoff);
             showPersRects.SetAndSave(onoff);
             showHeadRects.SetAndSave(false);
-            visibilityTiedToDetectability.SetAndSave(true);
+            //showHeadRects.SetAndSave(false);
+            //visibilityTiedToDetectability.SetAndSave(true);
             if (reset)
             {
                 //Debug.Log("Reseting detect variables to " + onoff);
@@ -246,7 +247,7 @@ namespace CampusSimulator
             detectUnknown.GetInitial(false);
             topLabelText.GetInitial(textContentE.none);
             botLabelText.GetInitial(textContentE.name);
-            //Debug.LogWarning($"FrameMan.SetScene - showCarRects:{showCarRects.Get()} frameJouneys:{frameJourneys.Get()}");
+            Debug.LogWarning($"FrameMan.SetScene {newregion}- vt2d:{visibilityTiedToDetectability.Get()} valueretrieved:{visibilityTiedToDetectability.ValueRetrievedFromPersistentStore()}");
         }
 
         private void LateUpdate()
@@ -635,10 +636,6 @@ namespace CampusSimulator
         void Update()
         {
             updcount++;
-            if (updcount==1)
-            {
-                FrameButtonPressed(onoff: false, reset: false);
-            }
             if (forceFrameAllRooms)
             {
                 forceFramed = !forceFramed;

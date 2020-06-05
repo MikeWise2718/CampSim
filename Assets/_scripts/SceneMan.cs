@@ -16,7 +16,7 @@ namespace CampusSimulator
 {
     public enum RouteGarnishE { none, names, coords, all }
 
-    public enum SceneSelE { MsftCoreCampus, MsftB19focused, MsftRedwest, Eb12, MsftDublin, Tukwila, Seattle, MtStHelens,Riggins,Custom, None }
+    public enum SceneSelE {  MsftB19focused, Custom, Seattle, MtStHelens,Riggins, Eb12, MsftCoreCampus, MsftRedwest, MsftDublin, Tukwila, None }
 
     public class SceneMan : MonoBehaviour
     {
@@ -61,6 +61,7 @@ namespace CampusSimulator
         public bool autoerrorcorrect = false;
         private bool needsrefresh = false;
         private bool needstotalrefresh = false;
+        public SceneSelE requestScene = SceneSelE.None;
 
 
         public GameObject rmango;
@@ -109,6 +110,7 @@ namespace CampusSimulator
         public ZoneMan znman;
         public FrameMan frman;
         public CalibMan cbman;
+        public UiMan uiman;
         public string runtimestamp = DateTime.UtcNow.ToString("yyyyMMdd-HHmmss");
         public string simrundir;
         public LinkEditor leditor;
@@ -120,8 +122,17 @@ namespace CampusSimulator
 
         public bool arcoreTrack = false;
 
-        void initVars()
+        void InitPhase0()
         {
+            // In StartInitPhase0 we do structural initialzation - no logic
+            // - Find and initialize statoc component references (those that will not change during execution) so that doesn't have to be done again and again
+            // - Add any componets that need to be added
+            // - Do StartInitialization on those
+            // - (optional) do any internal initialization that does not depend on external links (because they might not have done this yet) 
+            // In StartInitPhase1 we do initialization that calls components that have done Phase0
+
+            GraphAlgos.GraphUtil.CheckVersionString();
+
             theone = this;
             loglist = new LinkedList<string>();
             GraphUtil.loglist = loglist;
@@ -157,6 +168,11 @@ namespace CampusSimulator
             statusctrl.outMode = StatusCtrl.outModeE.help;
             statusctrl.RealizeMode();
 
+            leditor = rgo.AddComponent<LinkEditor>();
+            leditor.InitPhase0(linkcloudman, this);
+
+            SetLegacy(legacyStatus);
+
 #if USE_KEYWORDRECOGNIZER
             keycount = keyman.totalKeywordCount();
 #endif
@@ -164,43 +180,58 @@ namespace CampusSimulator
             smm = FindObjectOfType<SpatialMapperMan>();
 #endif
             DisableSpatialMapping();
-            gaman = FindObjectOfType<GarageMan>();
-            bdman = FindObjectOfType<BuildingMan>();
+
+// Start of new initialzation scheme
+            uiman = FindObjectOfType<UiMan>();
             mpman = FindObjectOfType<MapMan>();
-            jnman = FindObjectOfType<JourneyMan>();
             vcman = FindObjectOfType<VidcamMan>();
-            loman = FindObjectOfType<LocationMan>();
+            bdman = FindObjectOfType<BuildingMan>();
+            gaman = FindObjectOfType<GarageMan>();
+            znman = FindObjectOfType<ZoneMan>();
+            jnman = FindObjectOfType<JourneyMan>();
+            //loman = FindObjectOfType<LocationMan>(); // Only for handhelds (Android, iPhone, etc)
+                                                       // causes lots of error messages
             psman = FindObjectOfType<PersonMan>();
             veman = FindObjectOfType<VehicleMan>();
-            znman = FindObjectOfType<ZoneMan>();
             frman = FindObjectOfType<FrameMan>();
 
-            bdman.sman = this;
-            znman.sman = this;
-            gaman.sman = this;
-            jnman.sman = this;
-            frman.sman = this;
+            uiman.sman = this;
+            mpman.sman = this;
             vcman.sman = this;
+            bdman.sman = this;
+            gaman.sman = this;
+            znman.sman = this;
+            jnman.sman = this;
+            //loman.sman = this;
+            psman.sman = this;
+            veman.sman = this;
+            frman.sman = this;
 
             bool subbordinatethemall = false;
             if (subbordinatethemall)
             {
-                gaman.transform.parent = rgo.transform;
-                bdman.transform.parent = rgo.transform;
+                uiman.transform.parent = rgo.transform;
                 mpman.transform.parent = rgo.transform;
-                jnman.transform.parent = rgo.transform;
                 vcman.transform.parent = rgo.transform;
-                loman.transform.parent = rgo.transform;
+                bdman.transform.parent = rgo.transform;
+                gaman.transform.parent = rgo.transform;
+                znman.transform.parent = rgo.transform;
+                jnman.transform.parent = rgo.transform;
+                //loman.transform.parent = rgo.transform;
                 psman.transform.parent = rgo.transform;
                 veman.transform.parent = rgo.transform;
-                znman.transform.parent = rgo.transform;
                 frman.transform.parent = rgo.transform;
             }
-            SetLegacy(legacyStatus);
 
-            leditor = rgo.AddComponent<LinkEditor>();
-            leditor.Init(linkcloudman, this);
+            uiman.InitPhase0();
+            mpman.InitPhase0();
+            vcman.InitPhase0();
         }
+
+        void InitPhase1()
+        {
+        }
+
 
         public void SetScene( SceneSelE newscene,bool force=false )
         {
@@ -217,39 +248,38 @@ namespace CampusSimulator
                     UxUtils.UxSettingsMan.SetScenario(newscene.ToString());
                     jnman.DeleteAllJourneys();
                     curscene = newscene;
-                    var oldglblm = rmango.GetComponent<LegLatLngMap>();
+                    //var oldglblm = rmango.GetComponent<LegLatLngMap>();
                     glbllm = rmango.AddComponent<LatLongMap>();
                     glbllm.InitMapFromSceneSel(newscene.ToString(),0); // to do uncomment
 
+                    uiman.SetScene(newscene);
+
                     linkcloudman.SetScene(newscene);
+
                     mpman.SetScene(newscene);
                     gaman.SetScene(newscene);
                     vcman.SetScene(newscene);
 
                     bdman.SetScene(newscene);// building details, but no nodes and links
                     DeleteLinkCloud();
+
                     linkcloudman.SetScene2(newscene); // create or read in most nodes and links
+
                     RealizeFloorPlanStatus();
-                    //CreateLinkCloud();
                     psman.SetScene(newscene); // needs to be before we populate the buildings
                     veman.SetScene(newscene); // needs to be before we populate the garages
+
                     bdman.SetScenePostLinkCloud(newscene);// building details that need nodes and links
                     gaman.SetScenePostLinkCloud(newscene);// garage details that need nodes and links
+
                     znman.SetScene(newscene);
                     jnman.SetScene(newscene);
                     frman.SetScene(newscene);
+
                     linkcloudman.SetScene3(newscene);  // realize latelinks    
-                    var optpan = FindObjectOfType<OptionsPanel>();
-                    if (optpan != null)
-                    {
-                        optpan.SetScene(newscene);
-                    }
-                    var span = FindObjectOfType<StatusPanel>();
-                    if (span != null)
-                    {
-                        //Debug.LogWarning($"Resetting StatusPanel for {newscene}");
-                        span.Init();
-                    }
+                    // TODO - put this stuff in a Uiman
+                    uiman.SetScene(newscene);
+
                     //Debug.Log("SetScene finished");
                 }
                 catch(Exception ex)
@@ -261,7 +291,10 @@ namespace CampusSimulator
             {
                 Debug.Log("Scene already set to " + newscene + " so this is a noop");
             }
+            requestScene = SceneSelE.None;
         }
+
+
 
         public void SetArcoreTracking()
         {
@@ -279,7 +312,7 @@ namespace CampusSimulator
 #endif
         }
 
-        public void RequestRefresh(string requester,bool totalrefresh=false)
+        public void RequestRefresh(string requester,bool totalrefresh=false, SceneSelE requestedScene = SceneSelE.None)
         {
             Debug.Log($"RefreshRequested by {requester} total:{totalrefresh}");    
             needsrefresh = true;
@@ -288,10 +321,14 @@ namespace CampusSimulator
                 // note that just setting this to totalrefresh would overwrite other totalrefresh requests
                 needstotalrefresh = true; 
             }
+            if (requestedScene!=SceneSelE.None)
+            {
+                this.requestScene = requestedScene;
+            }
         }
-        public (bool refresh,bool totalrefresh) GetRefreshStatus()
+        public (bool refresh,bool totalrefresh,SceneSelE requestScene) GetRefreshStatus()
         {
-            return (needsrefresh, needstotalrefresh);
+            return (this.needsrefresh, this.needstotalrefresh, this.requestScene);
         }
         public void RequestHighObjRefresh(string highobjname,string requester)
         {
@@ -1408,7 +1445,9 @@ namespace CampusSimulator
 
         private void Start()
         {
-            initVars();
+            Debug.Log("SceneMan.Start called");
+            InitPhase0();
+            InitPhase1();
             var esi = SceneMan.GetInitialSceneOption();
             curscene = SceneSelE.None; // force it to execute - kind of a kludge
             SetScene(esi);
@@ -1533,6 +1572,8 @@ namespace CampusSimulator
         int updateCount = 0;
         private void Update()
         {
+            //Debug.Log($"SceneMan.Update called {updateCount}");
+
             //if (autoerrorcorrect)
             //{
             //    if (errmarkctrl.nMarksInList >= errmarkctrl.nErrmarkIntervalsInSet)
@@ -1561,17 +1602,28 @@ namespace CampusSimulator
 
             if (needsrefresh)
             {
+                var sw1 = new StopWatch();
                 if (needstotalrefresh)
                 {
-                    SetScene(curscene, force: true);
-                    RefreshSceneManGos(); // in update
+                    var sceneToRefresh = curscene;
+                    if (requestScene!=SceneSelE.None)
+                    {
+                        sceneToRefresh = requestScene;
+                    }
+                    var sw2 = new StopWatch();
+                    SetScene(sceneToRefresh, force: true);
+                    sw2.Stop();
+                    Debug.Log($"TotalRefresh SetScene took {sw2.ElapSecs()} secs");
                 }
-                else
-                {
-                    RefreshSceneManGos(); // in update
-                }
+                var sw3 = new StopWatch();
+                RefreshSceneManGos(); // in update
+                sw3.Stop();
+                Debug.Log($"RefreshSceneManGos took {sw3.ElapSecs()} secs");
+                uiman.SyncState();
                 needstotalrefresh = false;
                 needsrefresh = false;
+                sw1.Stop();
+                Debug.Log($"Refresh took {sw1.ElapSecs()} secs");
             }
             KeyProcessing();
             updateCount++;
@@ -1584,7 +1636,8 @@ namespace CampusSimulator
         {
             if (Application.isEditor)
             {
-                SceneView.onSceneGUIDelegate += OnScene;
+                //SceneView.onSceneGUIDelegate += OnScene;
+                SceneView.duringSceneGui += OnScene;
             }
         }
 

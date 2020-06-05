@@ -7,36 +7,26 @@ using GraphAlgos;
 
 public class HelpPanel : MonoBehaviour
 {
+    public CampusSimulator.SceneMan sman;
+
     Text helpText;
 
 
-    // Start is called before the first frame update
-    void Start()
+    public void Init0()
     {
-        InitVals();
+        LinkObjectsAndComponents();
+        FillHelpPanel();
     }
 
 
     void LinkObjectsAndComponents()
     {
-        var go = gameObject;
-        var name = go.name;
         helpText = transform.Find("HelpText").GetComponent<Text>();
     }
-
-    public void InitVals()
-    {
-    }
-
 
 
     public void FillHelpPanel()
     {
-        if (helpText == null)
-        {
-            LinkObjectsAndComponents();
-            InitVals();
-        }
 
         var sysver = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
         var utc = System.DateTime.UtcNow;
@@ -54,18 +44,20 @@ public class HelpPanel : MonoBehaviour
             msg += "\nCtrl-M Ctrl-M   - Copy scene camera to main camera (editor only)";
             msg += "\nCtrl-M Ctrl-S   - Copy main camera to scene camera (editor only)";
 #endif
+            msg += "\nF5                - Total Refresh of Scene";
             msg += "\nCtrl-E            - Shift Camera position on viewer";
             msg += "\nCtrl-A            - Shift Camera position on viewer";
             msg += "\nCtrl-W            - Force Viewer to respond to keys";
-            msg += "\\nnCtrl-C            - Interrupt bitmap loading";
+            msg += "\\nnCtrl-C          - Interrupt bitmap loading";
             msg += "\n\nCtrl-Q Ctrl-Q   - Quit Application (hit ctrl-q twice)";
         }
         catch (Exception ex)
         {
             msg += "\n" + ex.Message;
+            Debug.LogError("Error filling help text");
+            Debug.LogError(ex.ToString());
         }
         helpText.text = msg;
-        //Debug.Log("msg:" + msg);
     }
 
 

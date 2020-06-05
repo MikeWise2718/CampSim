@@ -27,6 +27,8 @@ namespace CampusSimulator
 
         public bool showPersRects;
 
+
+        // To do - get rid of bldmode and treemode regions in BuildingMan
         #region bldMode
         public enum BldModeE { none, full };
         public UxEnumSetting<BldModeE> bldMode = new UxEnumSetting<BldModeE>("BuildingMode",BldModeE.full);

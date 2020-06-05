@@ -12,12 +12,12 @@ public class GeneralPanel : MonoBehaviour
     Text fastModeText;
 
 
-    SceneMan sman;
+    public SceneMan sman;
     FrameMan fman;
 
     bool panelActive = false;
 
-    void Start()
+    public void Init0()
     {
         panelActive = false;
         LinkObjectsAndComponents();
@@ -25,21 +25,9 @@ public class GeneralPanel : MonoBehaviour
 
     public void LinkObjectsAndComponents()
     {
-        sman = FindObjectOfType<SceneMan>();
-        if (sman == null)
-        {
-            throw new UnityException("General panel could not find RegionMan");
-        }
-        fman = FindObjectOfType<FrameMan>();
+        fman = sman.frman;
 
-        if (fman == null)
-        {
-            Debug.Log("lman null");
-        }
-        {
-            var go = transform.Find("FastModeToggle").gameObject;
-            fastModeToggle = go.GetComponent<Toggle>();
-        }
+        fastModeToggle = transform.Find("FastModeToggle").gameObject.GetComponent<Toggle>();
 
         panelActive = true;
     }
@@ -68,11 +56,4 @@ public class GeneralPanel : MonoBehaviour
         sman.RequestRefresh("GeneralPanel-SetVals");
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (panelActive)
-        {
-        }
-    }
 }

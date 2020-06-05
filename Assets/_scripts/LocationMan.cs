@@ -6,7 +6,7 @@ namespace CampusSimulator
 {
     public class LocationMan : MonoBehaviour
     {
-        private SceneMan sman;
+        public  SceneMan sman;
 
         public string locstate = "unstarted";
         public bool running = false;
