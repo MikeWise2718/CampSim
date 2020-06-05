@@ -448,11 +448,13 @@ namespace UxUtils
             }
             valueRetrievedFromPersistentSTore = true;
             var sar = s.Split(',');
-            Vector3 rv0 = new Vector3(
-                UxSettingsMan.TryParse<float>(sar[0]),
-                UxSettingsMan.TryParse<float>(sar[1]),
-                UxSettingsMan.TryParse<float>(sar[2])
-                );
+            var s0 = sar[0].Remove(0, 1);// remove leading '('
+            var s1 = sar[1];
+            var s2 = sar[2].Remove(sar[2].Length-1,1);//   remove trailing ')'
+            var f0 = UxSettingsMan.TryParse<float>(s0);
+            var f1 = UxSettingsMan.TryParse<float>(s1);
+            var f2 = UxSettingsMan.TryParse<float>(s2);
+            Vector3 rv0 = new Vector3(f0, f1, f2);
             return rv0;
         }
         public Vector3 GetInitial()
