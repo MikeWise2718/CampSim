@@ -135,7 +135,7 @@ public class InfoPanel : MonoBehaviour
             }
             string txt = "";
             //txt += "Pos:" + pos.x.ToString("f2") + " " + pos.y.ToString("f2") + " " + pos.z.ToString("f2")+"\n";
-            txt += $"Pos:{pos.x,4:f2} {pos.y,4:f2} {pos.z,4:f2}\n";
+            txt += $"Pos:{pos.x,4:f2} {pos.y,4:f2} {pos.z,4:f2}  vt2d:{sman.frman.visibilityTiedToDetectability.Get()}\n";
             //txt += "Fwd:" + fwd.x.ToString("f2") + " " + fwd.y.ToString("f2") + " " + fwd.z.ToString("f2");
             txt += $"Fwd:{fwd.x,4:f2} {fwd.y,4:f2} {fwd.z,4:f2}\n";
             sysText.text = txt;

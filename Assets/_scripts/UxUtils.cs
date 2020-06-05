@@ -198,6 +198,11 @@ namespace UxUtils
         public void Save()
         {
             var skeyname = UxSettingsMan.ScenarioKey(keyname);
+            //if (skeyname=="Custom/levelOfDetail")
+            //{
+            //    Debug.Log("Here I am");
+            //}
+            //Debug.Log($"Saving {skeyname} as {val.ToString()}");
             PlayerPrefs.SetString(skeyname, val.ToString());
         }
 
@@ -315,7 +320,7 @@ namespace UxUtils
         public void Save()
         {
             var skeyname = UxSettingsMan.ScenarioKey(keyname);
-            Debug.Log("UxEnumSettings - saving " + skeyname + " to val "+val);
+            //Debug.Log("UxEnumSettings - saving " + skeyname + " to val "+val);
             PlayerPrefs.SetString(skeyname, val.ToString());
         }
 

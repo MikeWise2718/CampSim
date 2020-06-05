@@ -26,6 +26,9 @@ namespace CampusSimulator
         Button visButton;
         Button unkButton;
         Button vt2dButton;
+        Button goButton;
+        Button optionsButton;
+        Button mapfitButton;
         Canvas canvas;
         GameObject freeFlyPanel;
         // Start is called before the first frame update
@@ -61,6 +64,9 @@ namespace CampusSimulator
             frameButton = transform.Find("FrameButton").gameObject.GetComponent<Button>();
             evacButton = transform.Find("EvacButton").gameObject.GetComponent<Button>();
             unevacButton = transform.Find("EvacButton").gameObject.GetComponent<Button>();
+            goButton = transform.Find("GoButton").gameObject.GetComponent<Button>();
+            optionsButton = transform.Find("OptionsButton").gameObject.GetComponent<Button>();
+            mapfitButton = transform.Find("MapFitButton").gameObject.GetComponent<Button>();
             freeFlyButton = transform.Find("FreeFlyButton").gameObject.GetComponent<Button>();
             freeFlyPanel = transform.Find("FreeFlyHelpPanel").gameObject;
             fteButton = transform.Find("FteButton").gameObject.GetComponent<Button>();
@@ -71,7 +77,18 @@ namespace CampusSimulator
             vt2dButton = transform.Find("Vt2DButton").gameObject.GetComponent<Button>();
             runButton.onClick.AddListener(delegate { RunButton(); });
             frameButton.onClick.AddListener(delegate { FrameButton(); });
+            evacButton.onClick.AddListener(delegate { EvacButton(); });
+            unevacButton.onClick.AddListener(delegate { UnevacButton(); });
+            unevacButton.onClick.AddListener(delegate { UnevacButton(); });
             vt2dButton.onClick.AddListener(delegate { Vt2DButton(); });
+            freeFlyButton.onClick.AddListener(delegate { FreeFlyButton(); });
+            fteButton.onClick.AddListener(delegate { DetectFteButton(); });
+            conButton.onClick.AddListener(delegate { DetectConButton(); });
+            secButton.onClick.AddListener(delegate { DetectSecButton(); });
+            visButton.onClick.AddListener(delegate { DetectVisButton(); });
+            unkButton.onClick.AddListener(delegate { DetectUnkButton(); });
+            goButton.onClick.AddListener(delegate { GoButton(); });
+            optionsButton.onClick.AddListener(delegate { OptionsButton(); });
             linked = true;
         }
 
@@ -184,7 +201,7 @@ namespace CampusSimulator
         }
 
 
-         public void GoButton()
+        public void GoButton()
         {
             sman.jnman.LaunchArnie();
         }
@@ -224,7 +241,7 @@ namespace CampusSimulator
             SetButtonColor(secButton, "lightblue", sman.frman.detectSecurity.Get(), "S");
             SetButtonColor(visButton, "lightblue", sman.frman.detectVisitor.Get(), "V");
             SetButtonColor(unkButton, "lightblue", sman.frman.detectUnknown.Get(), "U");
-            //Debug.Log($"ColorizeButtonStates Vt2D:{sman.frman.visibilityTiedToDetectability.Get()}");
+            //Debug.LogWarning($"ColorizeButtonStates Vt2D:{sman.frman.visibilityTiedToDetectability.Get()}");
             SetButtonColor(vt2dButton, "lightblue", sman.frman.visibilityTiedToDetectability.Get(), "Vt2D");
             SetButtonColor(frameButton, "pink", sman.frman.frameJourneys.Get(), "Frame");
             SetButtonColor(freeFlyButton, "pink", sman.vcman.InFreeFly(), "FreeFly");

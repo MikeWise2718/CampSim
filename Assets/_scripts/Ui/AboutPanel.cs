@@ -243,6 +243,8 @@ public class AboutPanel : MonoBehaviour
         catch (Exception ex)
         {
             msg += "\n" + ex.Message;
+            Debug.LogError("Error filling about box text");
+            Debug.LogError(ex.ToString());
         }
         aboutText.text = msg;
         //Debug.Log("msg:" + msg);

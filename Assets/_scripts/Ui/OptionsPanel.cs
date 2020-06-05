@@ -46,20 +46,24 @@ public class OptionsPanel : MonoBehaviour
         generalPanel = generalPanelGo.GetComponent<GeneralPanel>();
         helpPanelGo = transform.Find("HelpPanel").gameObject;
         helpPanel = helpPanelGo.GetComponent<HelpPanel>();
-        var vgo = transform.Find("VisualsToggle").gameObject;
-        visualToggle = vgo.GetComponent<Toggle>();
-        var mgo = transform.Find("MapSetToggle").gameObject;
-        mapsetToggle = mgo.GetComponent<Toggle>();
-        var fgo = transform.Find("FrameToggle").gameObject;
-        frameToggle = fgo.GetComponent<Toggle>();
-        var bgo = transform.Find("B19Toggle").gameObject;
-        b19Toggle = bgo.GetComponent<Toggle>();
-        var ggo = transform.Find("GeneralToggle").gameObject;
-        generalToggle = ggo.GetComponent<Toggle>();
-        var hgo = transform.Find("HelpToggle").gameObject;
-        helpToggle = hgo.GetComponent<Toggle>();
-        var ago = transform.Find("AboutToggle").gameObject;
-        aboutToggle = ago.GetComponent<Toggle>();
+
+        visualToggle = transform.Find("VisualsToggle").GetComponent<Toggle>();
+        mapsetToggle = transform.Find("MapSetToggle").GetComponent<Toggle>();
+        frameToggle = transform.Find("FrameToggle").GetComponent<Toggle>();
+        b19Toggle = transform.Find("B19Toggle").GetComponent<Toggle>();
+        generalToggle = transform.Find("GeneralToggle").GetComponent<Toggle>();
+        helpToggle = transform.Find("HelpToggle").GetComponent<Toggle>();
+        aboutToggle = transform.Find("AboutToggle").GetComponent<Toggle>();
+
+        visualToggle.onValueChanged.AddListener(delegate { OptionsTabToggle(); });
+        mapsetToggle.onValueChanged.AddListener(delegate { OptionsTabToggle(); });
+        frameToggle.onValueChanged.AddListener(delegate { OptionsTabToggle(); });
+        b19Toggle.onValueChanged.AddListener(delegate { OptionsTabToggle(); });
+        generalToggle.onValueChanged.AddListener(delegate { OptionsTabToggle(); });
+        helpToggle.onValueChanged.AddListener(delegate { OptionsTabToggle(); });
+        aboutToggle.onValueChanged.AddListener(delegate { OptionsTabToggle(); });
+
+
         togGroup = GetComponent<ToggleGroup>();
         togGroup.allowSwitchOff = true; // otherwise it does not save state correctly when we turn off the panel
         SyncOptionsTabState();

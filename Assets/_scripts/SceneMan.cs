@@ -16,7 +16,7 @@ namespace CampusSimulator
 {
     public enum RouteGarnishE { none, names, coords, all }
 
-    public enum SceneSelE { MsftCoreCampus, MsftB19focused, MsftRedwest, Eb12, MsftDublin, Tukwila, Seattle, MtStHelens,Riggins,Custom, None }
+    public enum SceneSelE {  MsftB19focused, Custom, Seattle, MtStHelens,Riggins, Eb12, MsftCoreCampus, MsftRedwest, MsftDublin, Tukwila, None }
 
     public class SceneMan : MonoBehaviour
     {
@@ -239,18 +239,9 @@ namespace CampusSimulator
                     jnman.SetScene(newscene);
                     frman.SetScene(newscene);
                     linkcloudman.SetScene3(newscene);  // realize latelinks    
-                    var optpan = FindObjectOfType<OptionsPanel>();
-                    if (optpan != null)
-                    {
-                        optpan.SetScene(newscene);
-                    }
-                    var span = FindObjectOfType<StatusPanel>();
-                    if (span != null)
-                    {
-                        //Debug.LogWarning($"Resetting StatusPanel for {newscene}");
-                        span.Init();
-                        span.ColorizeButtonStates();
-                    }
+                    // TODO - put this stuff in a Uiman
+                    SetUiScene(newscene);
+
                     //Debug.Log("SetScene finished");
                 }
                 catch(Exception ex)
@@ -261,6 +252,26 @@ namespace CampusSimulator
             else
             {
                 Debug.Log("Scene already set to " + newscene + " so this is a noop");
+            }
+        }
+
+        public void SetUiScene(SceneSelE newscene)
+        {
+            var optpan = FindObjectOfType<OptionsPanel>();
+            if (optpan != null)
+            {
+                optpan.SetScene(newscene);
+            }
+            var span = FindObjectOfType<StatusPanel>();
+            if (span != null)
+            {
+                //Debug.LogWarning($"Resetting StatusPanel for {newscene}");
+                span.Init();
+                span.ColorizeButtonStates();
+            }
+            else
+            {
+                Debug.LogWarning("SceneMan.SetScene - span is null ");
             }
         }
 
@@ -1571,6 +1582,7 @@ namespace CampusSimulator
                 {
                     RefreshSceneManGos(); // in update
                 }
+                SetUiScene(curscene);
                 needstotalrefresh = false;
                 needsrefresh = false;
             }

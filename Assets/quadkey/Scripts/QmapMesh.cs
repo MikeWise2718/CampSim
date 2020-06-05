@@ -137,7 +137,7 @@ namespace Aiskwk.Map
 
         public void DisposeOfThings()
         {
-
+            DestroyViewer();
         }
 
         public bool CheckWebReleventChange()
@@ -227,7 +227,7 @@ namespace Aiskwk.Map
             var zlng = llmapuscoords.maps.lngmap.Map(0, 0);
             var zx = llmapuscoords.maps.xmap.Map(0, 0);
             var zz = llmapuscoords.maps.zmap.Map(0, 0);
-            Debug.Log($"Finishmappoints zlat:{zlat} zlng:{zlng}   - zx:{zx}   zz:{zz}");
+            //Debug.Log($"Finishmappoints zlat:{zlat} zlng:{zlng}   - zx:{zx}   zz:{zz}");
         }
 
         List<QmeshDeco> decolist = new List<QmeshDeco>();
@@ -929,9 +929,13 @@ namespace Aiskwk.Map
         {
             if (viewerobj != null)
             {
+                viewer = viewerobj.GetComponent<Viewer>();
+                viewer.DeleteGos();
                 Destroy(viewerobj);
                 viewerobj = null;
             }
+            Viewer.InvalidateViewerCamera();
+            //Debug.LogWarning("Invalidated viewer");
         }
         public void BuildViewer()
         {
@@ -1020,6 +1024,7 @@ namespace Aiskwk.Map
             // Elevations
             (var elok, var nElRetrived) = await GetElevations(execute, forceload);
             //Debug.Log($"Retrived {nElRetrived} elevations");
+            DestroyViewer();
 
             var nVertRowsTodo = nVertSecs;
             var nVertRowsDone = 0;

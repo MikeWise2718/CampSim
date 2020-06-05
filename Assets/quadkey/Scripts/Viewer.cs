@@ -47,6 +47,10 @@ namespace Aiskwk.Map
         {
             return viewercam;
         }
+        public static void InvalidateViewerCamera()
+        {
+            viewercam = null;
+        }
 
         // Start is called before the first frame update
         void Start()
@@ -215,6 +219,7 @@ namespace Aiskwk.Map
                 Destroy(rodgo);
                 rodgo = null;
             }
+            viewercam = null;
         }
         void DestroyGo(ref GameObject go)
         {
@@ -231,6 +236,7 @@ namespace Aiskwk.Map
             DestroyGo(ref camgo);
             DestroyGo(ref body);
             DestroyGo(ref moveplane);
+            viewercam = null;
         }
         public bool pinCameraToFrame = false;
         public bool showNormalRod = false;
@@ -591,7 +597,6 @@ namespace Aiskwk.Map
             var nrmstr = nrm.ToString("f3");
             //Debug.Log($"TranslateViewerToPosition - vn:{vn}");
         }
-        bool usellmeth = true;
 
 
         int ndrop = 0;
