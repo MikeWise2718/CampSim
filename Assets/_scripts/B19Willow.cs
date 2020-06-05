@@ -137,7 +137,7 @@ public class B19Willow : MonoBehaviour
             if (sman!=null)
             {
                 yoff = sman.mpman.GetHeight(defpos.x, defpos.z);
-                Debug.Log($"B19 yoff:{yoff}");
+                //Debug.Log($"B19 yoff:{yoff}");
                 defpos = new Vector3(defpos.x, yoff+defpos.y, defpos.z);
             }
             var obprefab = Resources.Load<GameObject>("Willow/B19-Willow");

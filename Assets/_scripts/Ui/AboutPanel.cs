@@ -9,6 +9,8 @@ using CampusSimulator;
 
 public class AboutPanel : MonoBehaviour
 {
+    public SceneMan sman;
+
     Text aboutText;
 
     Button closeButton;
@@ -21,21 +23,19 @@ public class AboutPanel : MonoBehaviour
     public float myCPU;
     public float myRAM;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        Init();
-    }
 
 
     void LinkObjectsAndComponents()
     {
-        var go = gameObject;
-        var name = go.name;
         aboutText = transform.Find("AboutText").GetComponent<Text>();
         closeButton = transform.Find("CloseButton").gameObject.GetComponent<Button>();
         copyClipboardButton = transform.Find("CopyClipboardButton").gameObject.GetComponent<Button>();
         deleteSettingsButton = transform.Find("DeleteSettingsButton").gameObject.GetComponent<Button>();
+    }
+
+    public void Init0()
+    {
+        LinkObjectsAndComponents();
     }
 
     public float getCurrentCpuUsage()
@@ -55,13 +55,23 @@ public class AboutPanel : MonoBehaviour
     void Init()
     {
         Debug.Log("Initing AboutPanel");
-        cpuCounter = new System.Diagnostics.PerformanceCounter();
+        try
+        {
+            cpuCounter = new System.Diagnostics.PerformanceCounter();
 
-        cpuCounter.CategoryName = "Processor";
-        cpuCounter.CounterName = "% Processor Time";
-        cpuCounter.InstanceName = "_Total";
+            cpuCounter.CategoryName = "Processor";
+            cpuCounter.CounterName = "% Processor Time";
+            cpuCounter.InstanceName = "_Total";
 
-        ramCounter = new System.Diagnostics.PerformanceCounter("Memory", "Available MBytes");
+            ramCounter = new System.Diagnostics.PerformanceCounter("Memory", "Available MBytes");
+        }
+        catch(Exception ex)
+        {
+            Debug.LogError($"Could Not init perf counters");
+            Debug.LogError(ex.ToString());
+            cpuCounter = null;
+            ramCounter = null;
+        }
 
         //FillAboutPanel();
         if (!buttonsInited)
@@ -166,7 +176,6 @@ public class AboutPanel : MonoBehaviour
     {
         if (aboutText == null)
         {
-            LinkObjectsAndComponents();
             Init();
         }
 
@@ -243,6 +252,8 @@ public class AboutPanel : MonoBehaviour
         catch (Exception ex)
         {
             msg += "\n" + ex.Message;
+            Debug.LogError("Error filling about box text");
+            Debug.LogError(ex.ToString());
         }
         aboutText.text = msg;
         //Debug.Log("msg:" + msg);

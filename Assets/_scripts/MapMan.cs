@@ -8,14 +8,14 @@ namespace CampusSimulator
 {
     public class MapMan : MonoBehaviour
     {
-        SceneMan sman;
+        public SceneMan sman;
 
         GameObject qmapgo;
         QmapMan qmapman;
  
         public double xdistkm = 1;
         public double zdistkm = 3;
-        //public float hmultForNow;
+
         public int lod = 16;
         public int npqk = 16;
         public Vector3 maptrans;
@@ -45,16 +45,15 @@ namespace CampusSimulator
         #endregion Map Visuals
 
 
-
-
         public UxEnumSetting<MapProvider> reqMapProv = new UxEnumSetting<MapProvider>("MapProvider", MapProvider.BingSatelliteRoads);
+        // todo - think we can eliminate MapPRovider and 
         #region MapProvider
         static List<string> mapProviderOptions = new List<string>(System.Enum.GetNames(typeof(MapProvider)));
         static string initialMapProviderKey = "MapProvider";
-        public static List<string> GetMapProviderList()
-        {
-            return mapProviderOptions;
-        }
+        //public static List<string> GetMapProviderList()
+        //{
+        //    return mapProviderOptions;
+        //}
         public static string GetMapProviderString(int ival)
         {
             return mapProviderOptions[ival];
@@ -81,6 +80,12 @@ namespace CampusSimulator
         }
         #endregion MapProvider
 
+
+        public List<string> GetMapProviderList()
+        {
+            var rv = reqMapProv.GetOptionsAsList();
+            return rv;
+        }
 
         public UxEnumSetting<ElevProvider> reqEleProv = new UxEnumSetting<ElevProvider>("ElevProvider", ElevProvider.BingElev);
         #region ElevProvider
@@ -116,6 +121,7 @@ namespace CampusSimulator
         }
         #endregion ElevProvider
 
+        public UxSetting<int> modeSetCount = new UxSetting<int>("ModeSetCount", 0);
         public UxSetting<int> numNodesPerQktile = new UxSetting<int>("NumNodesPerQktile", 4);
         public UxSetting<int> levelOfDetail = new UxSetting<int>("levelOfDetail", 14);
         public UxSettingBool InstantMapSettingsChange = new UxSettingBool("InstantMapSettingsChange", true);
@@ -137,12 +143,47 @@ namespace CampusSimulator
         public UxSetting<double> custom_latkm = new UxSetting<double>("custom_latkm", 1);
         public UxSetting<double> custom_lngkm = new UxSetting<double>("custom_lngkm", 1);
 
+        public UxSetting<float> mapScale = new UxSetting<float>("mapScale", 1);
+        public UxSettingVector3 mapRot= new UxSettingVector3("mapRot", Vector3.zero);
+        public UxSettingVector3 mapTrans = new UxSettingVector3("mapTrans", Vector3.zero);
+
+        public UxSettingBool HasLLmap = new UxSettingBool("hasLLmap", false);
+        public UxSettingBool locIsCustomizable = new UxSettingBool("locIsCustomizable", false);
+
+        //Viewer.viewerDefaultPosition = Vector3.zero;
+        //    Viewer.viewerDefaultRotation = Vector3.zero;
+        //    Viewer.viewerAvatarDefaultValue = ViewerAvatar.CapsuleMan;
+        //    Viewer.ViewerCamPositionDefaultValue = ViewerCamPosition.FloatBehind;
+        //    Viewer.ViewerControlDefaultValue = ViewerControl.Velocity;
+
+        public UxSettingVector3 viewerPosition = new UxSettingVector3("viewerPosition", Vector3.zero);
+        public UxSettingVector3 viewerRotation = new UxSettingVector3("viewerRotation", Vector3.zero);
+        public UxEnumSetting<ViewerAvatar> viewerAvatar = new UxEnumSetting<ViewerAvatar>("viewerAvatar", ViewerAvatar.QuadCopter);
+        public UxEnumSetting<ViewerCamPosition> viewerCamPosition = new UxEnumSetting<ViewerCamPosition>("viewerCamPosition", ViewerCamPosition.FloatBehind);
+        public UxEnumSetting<ViewerControl> viewerControl = new UxEnumSetting<ViewerControl>("viewerControl", ViewerControl.Velocity);
+
         public UxSetting<float> hmult = new UxSetting<float>("Hmult", 1f );
 
-        public void GetInitialSettings()
+        public void GetSceneModeDependentInitialPersistentSettings()
         {
+            modeSetCount.GetInitial();
+
+            lod = levelOfDetail.GetInitial();
+            npqk = numNodesPerQktile.GetInitial();
+            address = inputAddress.GetInitial();
+            maplat = custom_maplat.GetInitial();
+            maplng = custom_maplng.GetInitial();
+            zdistkm = custom_latkm.GetInitial();
+            xdistkm = custom_lngkm.GetInitial();
+
+            mapScale.GetInitial();
+            mapRot.GetInitial();
+            mapTrans.GetInitial();
+
+            HasLLmap.GetInitial();
+            locIsCustomizable.GetInitial();
+
             numNodesPerQktile.GetInitial();
-            levelOfDetail.GetInitial(lod);
 
             mapVisiblity.GetInitial();
             reqEleProv.GetInitial();
@@ -150,10 +191,8 @@ namespace CampusSimulator
             useElevations.GetInitial();
 
             frameQuadkeys.GetInitial();
-            Debug.Log($"GetInitialSettings frameQuadkeys:{frameQuadkeys.val}");
             viewerBreadCrumbs.GetInitial();
             triPoints.GetInitial();
-            Debug.Log($"GetInitialSettings triPoints:{frameQuadkeys.val}");
             nodeMarkers.GetInitial();
             meshGrid.GetInitial();
             meshPoints.GetInitial();
@@ -162,18 +201,21 @@ namespace CampusSimulator
 
             flatTris.GetInitial();
             hmult.GetInitial();
+
+            viewerPosition.GetInitial();
+            viewerRotation.GetInitial();
+            viewerAvatar.GetInitial();
+            viewerCamPosition.GetInitial();
+            viewerControl.GetInitial();
+        }
+
+        public void InitPhase0()
+        {
         }
 
 
         // Use this for initialization
-        void Awake()
-        {
-            sman = FindObjectOfType<SceneMan>();
-            if (sman==null)
-            {
-                Debug.Log("In MapMan.Awake Could not find object of type SceneMan");
-            }
-        }
+
         public float GetHeight(float x,float z)
         {
             if (qmapman == null || qmapman.qmm==null) return 0;
@@ -196,21 +238,8 @@ namespace CampusSimulator
             RealizeMapVisuals();
             qmapman.qmapMode = QmapMan.QmapModeE.Bespoke;
             //var fak = 2*0.4096f;
-            var fak = 1;  
             //qmapman.bespoke = new BespokeSpec(lastregionset.ToString(), maplat,maplng, fak*zscale, fak*xscale,lod:17 );
-            lod = levelOfDetail.GetInitial(lod);
-            npqk = numNodesPerQktile.GetInitial(npqk);
-            if (isCustomizable)
-            {
-                var befaddress = address;
-                address = inputAddress.GetInitial(address);
-                //Debug.LogWarning($"RealizeQmap address before:{befaddress}  after GetInitial:{address}");
-                maplat = custom_maplat.GetInitial(maplat);
-                maplng = custom_maplng.GetInitial(maplng);
-                zdistkm = custom_latkm.GetInitial(zdistkm);
-                xdistkm = custom_lngkm.GetInitial(xdistkm);
-            }
-            qmapman.bespoke = new BespokeSpec(lastregionset.ToString(), maplat,maplng, fak*zdistkm, fak*xdistkm,lod:lod,nodesPerQuadKey:npqk );
+            qmapman.bespoke = new BespokeSpec(lastregionset.ToString(), maplat,maplng, zdistkm, xdistkm,lod:lod,nodesPerQuadKey:npqk );
 
             qmapman.bespoke.mapProv = reqMapProv.Get();
             qmapman.bespoke.eleProv = reqEleProv.Get();
@@ -232,11 +261,14 @@ namespace CampusSimulator
             qmapman.bespoke.mappoints = new List<MappingPoint>();
             if (hasLLmap)
             {
-                var mapdata = sman.glbllm.mapcoord.mapdata;
-                foreach (var p in mapdata)
+                var mapdata = sman?.glbllm?.mapcoord?.mapdata;
+                if (mapdata != null)
                 {
-                    qmapman.bespoke.mappoints.Add(new MappingPoint(p.lat, p.lng, p.x, p.z));
-                    //Debug.Log($"ptcnt:{qmapman.bespoke.mappoints.Count}");
+                    foreach (var p in mapdata)
+                    {
+                        qmapman.bespoke.mappoints.Add(new MappingPoint(p.lat, p.lng, p.x, p.z));
+                        //Debug.Log($"ptcnt:{qmapman.bespoke.mappoints.Count}");
+                    }
                 }
             }
             var (nbm,nel) = await qmapman.SetMode(qmapman.qmapMode);
@@ -458,7 +490,7 @@ namespace CampusSimulator
             Debug.Log("Deleting Scene Maps");
             qmapman.qmm.DeleteSceneData();
         }
-        public void LoadMaps()
+        public async void LoadMaps()
         {
             Debug.Log("Loading Scene Maps");
             QkMan.nbmLoaded = 0;
@@ -466,17 +498,18 @@ namespace CampusSimulator
             qmapman.bespoke.lod = lod;
             qmapman.bespoke.llbox.lod = lod;
             qmapman.bespoke.nodesPerQuadKey = npqk;
-            qmapman.SetMode(qmapman.qmapMode,forceload:true);
+            await qmapman.SetMode(qmapman.qmapMode,forceload:true);
         }
-        public (bool isLoading,bool irupt,int nbmLoaded,int nbmToLoad,int nelevBatchesLoaded, int nelevBatchsToLoad) GetLoadingStatus()
+        public (bool isLoading,bool irupt,int lodLoading,int nbmLoaded,int nbmToLoad,int nelevBatchesLoaded, int nelevBatchsToLoad) GetLoadingStatus()
         {
             var isLoading = qmapman.qmm == null;
             var irupt = Aiskwk.Map.QkMan.interruptLoading;
             var nbmLoaded = QkMan.nbmLoaded;
             var nbmToLoad = QkMan.nbmToLoad;
+            var lodLoading = QkMan.lodLoading;
             var nelevBatchesLoaded = QmapElevation.nblkdone;
             var nelevBatchsToLoad = QmapElevation.nblktodo;
-            return (isLoading, irupt, nbmLoaded, nbmToLoad, nelevBatchesLoaded, nelevBatchsToLoad);
+            return (isLoading, irupt,lodLoading, nbmLoaded, nbmToLoad, nelevBatchesLoaded, nelevBatchsToLoad);
         }
 
         public (string, string,string, string, string, string,string,string) GetGeoDataStoragePaths()
@@ -573,10 +606,10 @@ namespace CampusSimulator
         SceneSelE lastregionset = SceneSelE.None;
         public void SetScene(SceneSelE newregion)
         {
-            Debug.Log($"SetRegion for mapman {newregion}");
-            GetInitialSettings();
-            Debug.Log($"  after GetIntialSettings lod:{levelOfDetail.Get()}");
-            
+            Debug.Log($"MapMan.SetRegion: {newregion}");
+            GetSceneModeDependentInitialPersistentSettings();
+
+
             RealizeMapVisuals();
             if (newregion == lastregionset)
             {
@@ -597,177 +630,220 @@ namespace CampusSimulator
             npqk = numNodesPerQktile.Get();// Was 16
             hasLLmap = false;
             isCustomizable = false;
-            Viewer.viewerDefaultPosition = Vector3.zero;
-            Viewer.viewerDefaultRotation = Vector3.zero;
-            Viewer.viewerAvatarDefaultValue = ViewerAvatar.CapsuleMan;
-            Viewer.ViewerCamPositionDefaultValue = ViewerCamPosition.FloatBehind;
-            Viewer.ViewerControlDefaultValue = ViewerControl.Velocity;
-            switch (newregion)
-            {
-                default:
-                case SceneSelE.MsftRedwest:
-                    maplat = 47.659377;
-                    maplng = -122.140189;
-                    mapscale = 3.2f;
-                    maprot = new Vector3(0, 71.1f, 0);
-                    maptrans = new Vector3(-6 - 1970.0f + 4, 0, 17 - 1122.0f - 16);
-                    xdistkm = 1;
-                    zdistkm = 1;
-                    Viewer.viewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
-                    Viewer.viewerDefaultPosition = new Vector3(-2035.2f, 3.8f, -1173.5f);
-                    Viewer.viewerDefaultRotation = new Vector3(0, 163.310f, 0);
-                    hasLLmap = true;
-                    break;
-                case SceneSelE.MsftB19focused:
-                    maplat = 47.639217;
-                    maplng = -122.134216;
-                    mapscale = 3.2f;
-                    maprot = new Vector3(0, 71.1f, 0);
-                    maptrans = new Vector3(-6, 0, 17);
-                    //xdistkm = 1;
-                    //zdistkm = 2;
-                    xdistkm = 2;
-                    zdistkm = 3;
-                    //nodesPerQuadKey = 4;
-                    lod = 16;
-                    hasLLmap = true;
-                    Viewer.viewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
-                    Viewer.viewerDefaultPosition = new Vector3(-451.5f,3f,98.3f);
-                    Viewer.viewerDefaultRotation = new Vector3(0, -60, 0);
-                    break;
-                case SceneSelE.Eb12:
-                    // better with google maps
-                    maplat = 49.993311;
-                    maplng =  8.678343;
-                    mapscale = 3.2f;
-                    //nodesPerQuadKey = 8;
-                    maprot = new Vector3(0,-90, 0);
-                    xdistkm = 1;
-                    zdistkm = 1;
-                    lod = 15;
-                    hasLLmap = true;
-                    Viewer.viewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
-                    Viewer.viewerDefaultPosition = new Vector3(0,0,0);
-                    Viewer.viewerDefaultRotation = new Vector3(0,0,0);
-                    break;
-                case SceneSelE.Tukwila:
-                    // better with google maps
-                    maplat = 47.456970; 
-                    maplng = -122.258825;
-                    mapscale = 3.2f;
-                    xdistkm = 1;
-                    zdistkm = 1;
-                    //lod = defaultlod;
-                    hasLLmap = true;
-                    break;
-                case SceneSelE.MsftDublin:
-                    maplat = 53.268998;
-                    maplng = -6.196680;
-                    xdistkm = 2;
-                    zdistkm = 1;
-                    //lod = defaultlod;
-                    mapscale = 3.2f;
-                    hasLLmap = true;
-                    Viewer.viewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
-                    break;
-                case SceneSelE.MsftCoreCampus:
-                    maplat = 47.639217;
-                    maplng = -122.134216;
-                    mapscale = 3.2f;
-                    maprot = new Vector3(0, 71.1f, 0);
-                    maptrans = new Vector3(-6, 0, 17);
-                    xdistkm = 2;
-                    zdistkm = 6;
-                    //lod = defaultlod;
-                    hasLLmap = true;
-                    Viewer.viewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
-                    Viewer.viewerDefaultPosition = new Vector3(-451.5f, 3f, 98.3f);
-                    Viewer.viewerDefaultRotation = new Vector3(0, -60, 0);
-                    break;
-                case SceneSelE.Seattle:
-                    maplat = 47.619992;
-                    maplng = -122.3373495;
-                    mapscale = 3.2f;
-                    maprot = Vector3.zero;
-                    maptrans = Vector3.zero;
-                    xdistkm = 14.84f / (2*0.4096f);
-                    zdistkm = 25.17f / (2*0.4096f);
-                    lod = 12;
-                    //hmultForNow = 10;
-                    useElesForNow = true;
-                    useViewer = true;
-                    mapscale = 1f;
-                    roty2 = 0;
-                    //nodesPerQuadKey = 8;
-                    Viewer.viewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
-                    hasLLmap = false;
-                    break;
-                case SceneSelE.MtStHelens:
-                    maplat = 46.198428;
-                    maplng = -122.188841;
-                    mapscale = 3.2f;
-                    maprot = Vector3.zero;
-                    maptrans = Vector3.zero;
-                    xdistkm = 12;
-                    zdistkm = 12;
-                    lod = 15;
-                    useElesForNow = true;
-                    useViewer = true;
-                    mapscale = 1f;
-                    roty2 = 0;
-                    Viewer.viewerAvatarDefaultValue = ViewerAvatar.Rover;
-                    mapscale = 1f;
-                    hasLLmap = false;
-                    break;
-                case SceneSelE.Custom:
-                    maplat = 45.412219;
-                    maplng = -116.328921;
-                    mapscale = 3.2f;
-                    maprot = Vector3.zero;
-                    maptrans = Vector3.zero;
-                    xdistkm = 10;
-                    zdistkm = 10;
-                    lod = 13;
-                    useElesForNow = true;
-                    useViewer = true;
-                    mapscale = 1f;
-                    roty2 = 0;
-                    mapscale = 1f;
-                    isCustomizable = true;
-                    Viewer.viewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
-                    hasLLmap = false;
-                    break;
-                case SceneSelE.Riggins:
-                    maplat = 45.412219;
-                    maplng = -116.328921;
-                    mapscale = 3.2f;
-                    maprot = Vector3.zero;
-                    maptrans = Vector3.zero;
-                    xdistkm = 10;
-                    zdistkm = 10;
-                    lod = 15;
-                    useElesForNow = true;
-                    useViewer = true;
-                    mapscale = 1f;
-                    roty2 = 0;
-                    mapscale = 1f;
-                    Viewer.viewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
-                    hasLLmap = false;
-                    break;
-                    //        var llmid = new LatLng(45.412219, -116.328921, "Riggins");
-                    //        var llbox = new LatLngBox(llmid, 10.0, 10.0, "Riggins box", lod: 15);
-                    //        Debug.Log("riggins-llbox llmid:" + llbox.midll.ToString());
-                    //        (qmm, _, _) = await MakeMeshFromLlbox("riggins", llbox, tpqk: 16, hmult: 1, mapprov: mapprov);
-                    //        //var qcm = InitMesh("dozers", "", 15, ll1, ll2, 16, 10, mapprov: mapprov);
-                    //        qmm.nodefak = 0.2f;
+            var vviewerDefaultPosition = Vector3.zero;
+            var vviewerDefaultRotation = Vector3.zero;
+            var vviewerAvatarDefaultValue = ViewerAvatar.CapsuleMan;
+            var vviewerCamPositionDefaultValue = ViewerCamPosition.FloatBehind;
+            var vviewerControlDefaultValue = ViewerControl.Velocity;
 
+            var msc = modeSetCount.Get();
+            if (msc == 0)
+            {
+                switch (newregion)
+                {
+                    default:
+                    case SceneSelE.MsftB19focused:
+                        maplat = 47.639217;
+                        maplng = -122.134216;
+                        mapscale = 3.2f;
+                        maprot = new Vector3(0, 71.1f, 0);
+                        maptrans = new Vector3(-6, 0, 17);
+                        //xdistkm = 1;
+                        //zdistkm = 2;
+                        xdistkm = 2;
+                        zdistkm = 3;
+                        //nodesPerQuadKey = 4;
+                        lod = 16;
+                        hasLLmap = true;
+                        vviewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
+                        vviewerDefaultPosition = new Vector3(-451.5f, 3f, 98.3f);
+                        vviewerDefaultRotation = new Vector3(0, -60, 0);
+                        isCustomizable = false;
+                        break;
+                    case SceneSelE.MsftRedwest:
+                        maplat = 47.659377;
+                        maplng = -122.140189;
+                        mapscale = 3.2f;
+                        maprot = new Vector3(0, 71.1f, 0);
+                        maptrans = new Vector3(-6 - 1970.0f + 4, 0, 17 - 1122.0f - 16);
+                        xdistkm = 1;
+                        zdistkm = 1;
+                        vviewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
+                        vviewerDefaultPosition = new Vector3(-2035.2f, 3.8f, -1173.5f);
+                        vviewerDefaultRotation = new Vector3(0, 163.310f, 0);
+                        isCustomizable = false;
+                        hasLLmap = true;
+                        break;
+                    case SceneSelE.Eb12:
+                        // better with google maps
+                        maplat = 49.993311;
+                        maplng = 8.678343;
+                        mapscale = 3.2f;
+                        //nodesPerQuadKey = 8;
+                        maprot = new Vector3(0, -90, 0);
+                        xdistkm = 1;
+                        zdistkm = 1;
+                        lod = 15;
+                        hasLLmap = true;
+                        isCustomizable = false;
+                        vviewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
+                        vviewerDefaultPosition = new Vector3(0, 0, 0);
+                        vviewerDefaultRotation = new Vector3(0, 0, 0);
+                        break;
+                    case SceneSelE.Tukwila:
+                        // better with google maps
+                        maplat = 47.456970;
+                        maplng = -122.258825;
+                        mapscale = 3.2f;
+                        xdistkm = 1;
+                        zdistkm = 1;
+                        //lod = defaultlod;
+                        hasLLmap = true;
+                        isCustomizable = false;
+                        break;
+                    case SceneSelE.MsftDublin:
+                        maplat = 53.268998;
+                        maplng = -6.196680;
+                        xdistkm = 2;
+                        zdistkm = 1;
+                        //lod = defaultlod;
+                        mapscale = 3.2f;
+                        hasLLmap = true;
+                        isCustomizable = false;
+                        vviewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
+                        break;
+                    case SceneSelE.MsftCoreCampus:
+                        maplat = 47.639217;
+                        maplng = -122.134216;
+                        mapscale = 3.2f;
+                        maprot = new Vector3(0, 71.1f, 0);
+                        maptrans = new Vector3(-6, 0, 17);
+                        xdistkm = 2;
+                        zdistkm = 6;
+                        //lod = defaultlod;
+                        hasLLmap = true;
+                        isCustomizable = false;
+                        vviewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
+                        vviewerDefaultPosition = new Vector3(-451.5f, 3f, 98.3f);
+                        vviewerDefaultRotation = new Vector3(0, -60, 0);
+                        break;
+                    case SceneSelE.Seattle:
+                        maplat = 47.619992;
+                        maplng = -122.3373495;
+                        mapscale = 3.2f;
+                        maprot = Vector3.zero;
+                        maptrans = Vector3.zero;
+                        xdistkm = 14.84f / (2 * 0.4096f);
+                        zdistkm = 25.17f / (2 * 0.4096f);
+                        lod = 12;
+                        //hmultForNow = 10;
+                        useElesForNow = true;
+                        useViewer = true;
+                        mapscale = 1f;
+                        roty2 = 0;
+                        //nodesPerQuadKey = 8;
+                        vviewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
+                        hasLLmap = false;
+                        isCustomizable = false;
+                        break;
+                    case SceneSelE.MtStHelens:
+                        maplat = 46.198428;
+                        maplng = -122.188841;
+                        mapscale = 3.2f;
+                        maprot = Vector3.zero;
+                        maptrans = Vector3.zero;
+                        xdistkm = 12;
+                        zdistkm = 12;
+                        lod = 15;
+                        useElesForNow = true;
+                        useViewer = true;
+                        roty2 = 0;
+                        vviewerAvatarDefaultValue = ViewerAvatar.Rover;
+                        vviewerDefaultPosition = new Vector3(0, -60, 0);
+                        //vviewerDefaultRotation = new Vector3(0,  90, 0); // bug only zero rotation works at the moment
+                        vviewerDefaultRotation = new Vector3(0, 0, 0);
+                        mapscale = 1f;
+                        isCustomizable = false;
+                        hasLLmap = false;
+                        break;
+                    case SceneSelE.Custom:
+                        maplat = 45.412219;
+                        maplng = -116.328921;
+                        mapscale = 3.2f;
+                        maprot = Vector3.zero;
+                        maptrans = Vector3.zero;
+                        xdistkm = 10;
+                        zdistkm = 10;
+                        lod = 13;
+                        useElesForNow = true;
+                        useViewer = true;
+                        roty2 = 0;
+                        mapscale = 1f;
+                        isCustomizable = true;
+                        vviewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
+                        hasLLmap = false;
+                        break;
+                    case SceneSelE.Riggins:
+                        maplat = 45.412219;
+                        maplng = -116.328921;
+                        maprot = Vector3.zero;
+                        maptrans = Vector3.zero;
+                        xdistkm = 10;
+                        zdistkm = 10;
+                        lod = 14;
+                        useElesForNow = true;
+                        useViewer = true;
+                        roty2 = 0;
+                        mapscale = 1f;
+                        vviewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
+                        hasLLmap = false;
+                        isCustomizable = false;
+                        break;
+                }
+                mapScale.SetAndSave(mapscale);
+                mapRot.SetAndSave(maprot);
+                mapTrans.SetAndSave(maptrans);
+                HasLLmap.SetAndSave(hasLLmap);
+                custom_maplat.SetAndSave(maplat);
+                custom_maplng.SetAndSave(maplng);
+                custom_latkm.SetAndSave(zdistkm);
+                custom_lngkm.SetAndSave(xdistkm);
+                viewerPosition.SetAndSave(vviewerDefaultPosition);
+                viewerRotation.SetAndSave(vviewerDefaultRotation);
+                viewerAvatar.SetAndSave(vviewerAvatarDefaultValue);
+                viewerCamPosition.SetAndSave(vviewerCamPositionDefaultValue);
+                viewerControl.SetAndSave(vviewerControlDefaultValue);
+                levelOfDetail.SetAndSave(lod);
+                locIsCustomizable.SetAndSave(isCustomizable);
             }
+
+            Viewer.viewerDefaultPosition = viewerPosition.Get();
+            Viewer.viewerDefaultRotation = viewerRotation.Get();
+            Viewer.viewerAvatarDefaultValue = viewerAvatar.Get();
+            Viewer.ViewerCamPositionDefaultValue = viewerCamPosition.Get();
+            Viewer.ViewerControlDefaultValue = viewerControl.Get();
+
+            maplat = custom_maplat.Get();
+            maplng = custom_maplng.Get();
+            zdistkm = custom_latkm.Get();
+            xdistkm = custom_lngkm.Get();
+            if (zdistkm <= 0) zdistkm = 1f;// backstop, this should never really hapen
+            if (xdistkm <= 0) xdistkm = 1f;
+
+            mapscale = mapScale.Get();
+            maprot = mapRot.Get();
+            maptrans = mapTrans.Get();
+
+            hasLLmap = HasLLmap.Get();
+            isCustomizable = locIsCustomizable.Get();
+
+            modeSetCount.SetAndSave(msc + 1);
             transform.localRotation = Quaternion.identity;
             transform.Rotate(maprot.x, maprot.y, maprot.z);
             transform.position = maptrans;
             transform.localScale = new Vector3(mapscale, mapscale, mapscale);
             lastregionset = newregion;
-            Debug.Log($"MapMan Set Position - scale:{mapscale} rot:{maprot} trans:{maptrans} ");
+            Debug.Log($"MapMan.SetScene {msc} {newregion} - lod:{lod} scale:{mapscale} rot:{maprot} trans:{maptrans} ");
             Initialize();
         }
     }

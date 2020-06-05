@@ -712,7 +712,7 @@ namespace GraphAlgos
         }
 
 
-        static string _verstring = "2020.06.04.2";
+        static string _verstring = "2020.06.07.1";
         static DateTime _buildDate=DateTime.UtcNow;
         private static void getsysdata()
         {
@@ -736,6 +736,45 @@ namespace GraphAlgos
         {
             getsysdata();
             return (_verstring);
+        }
+        public static bool CheckVersionString()
+        {
+            var ok = true;
+            var msg = "";
+            var sar = _verstring.Split('.');
+            while(true)
+            {
+                if (sar.Length < 3)
+                {
+                    msg = $"_verstring \"{_verstring}\" does not have enough components:{sar.Length}";
+                    ok = false;
+                    break;
+                }
+                var yyfok = int.TryParse(sar[0], out var yy);
+                var mmfok = int.TryParse(sar[1], out var mm);
+                var ddfok = int.TryParse(sar[2], out var dd);
+                if (!yyfok || !mmfok || !ddfok)
+                {
+                    msg = $"_verstring \"{_verstring}\" format error - yyfok:{yyfok}  mmfok:{mmfok}  ddfok:{ddfok}";
+                    ok = false;
+                    break;
+                }
+                var yyvok = yy == DateTime.Now.Year;
+                var mmvok = mm == DateTime.Now.Month;
+                var ddvok = dd == DateTime.Now.Day;
+                if (!yyvok || !mmvok || !ddvok)
+                {
+                    msg = $"_verstring \"{_verstring}\" value error - yyvok:{yyvok}  mmvok:{mmvok}  ddfok:{ddvok}";
+                    ok = false;
+                    break;
+                }
+                break;
+            }
+            if (!ok)
+            {
+                Debug.LogError(msg);
+            }
+            return ok;
         }
         public static string GetBuildDate()
         {

@@ -137,7 +137,7 @@ namespace Aiskwk.Map
 
         public void DisposeOfThings()
         {
-
+            QMeshDestroyViewer();
         }
 
         public bool CheckWebReleventChange()
@@ -227,7 +227,7 @@ namespace Aiskwk.Map
             var zlng = llmapuscoords.maps.lngmap.Map(0, 0);
             var zx = llmapuscoords.maps.xmap.Map(0, 0);
             var zz = llmapuscoords.maps.zmap.Map(0, 0);
-            Debug.Log($"Finishmappoints zlat:{zlat} zlng:{zlng}   - zx:{zx}   zz:{zz}");
+            //Debug.Log($"Finishmappoints zlat:{zlat} zlng:{zlng}   - zx:{zx}   zz:{zz}");
         }
 
         List<QmeshDeco> decolist = new List<QmeshDeco>();
@@ -342,7 +342,7 @@ namespace Aiskwk.Map
         }
 
         [HideInInspector] // these are for debugging with a decorator
-        public Vector3 bpt1, bpt2, bpt3, bptm;
+        public Vector3 bpt1, bpt2, bpt3, bptm, bptmnorm;
 
         (Vector3, Vector3) Bary1(float x, float z, int ix1, int iz1, int ix2, int iz2, int ix3, int iz3)
         {
@@ -377,6 +377,7 @@ namespace Aiskwk.Map
             //Debug.Log($"Bary1 b:{bs}  x:" + x + " z:" + z + " ix1:" + ix1 + " iz1:" + iz1 + " ix2:" + ix2 + " iz2:" + iz2 + " ix3:" + ix3 + " iz3:" + iz3+" bptm:"+bptm.ToString("f3"));
             var nrm = Vector3.Cross(v2 - v1, v3 - v1);
             nrm.Normalize();
+            bptmnorm = nrm;
             return (barypt, nrm);
         }
 
@@ -920,27 +921,34 @@ namespace Aiskwk.Map
 
         public void RegenerateViewer()
         {
-            DestroyViewer();
+            QMeshDestroyViewer();
             if (!addViewer) return;
 
-            BuildViewer();
+            QmeshBuildViewer();
         }
-        void DestroyViewer()
+        void QMeshDestroyViewer()
         {
             if (viewerobj != null)
             {
+                viewer = viewerobj.GetComponent<Viewer>();
+                viewer.DeleteGos();
                 Destroy(viewerobj);
                 viewerobj = null;
             }
+            Viewer.InvalidateViewerCamera();
+            //Debug.LogWarning("Invalidated viewer");
         }
-        public void BuildViewer()
+        public void QmeshBuildViewer()
         {
-            DestroyViewer();
+            QMeshDestroyViewer();
             viewerobj = new GameObject("Viewer");
             viewer = viewerobj.AddComponent<Viewer>();
             viewer.InitViewer(this);
-            viewerobj.transform.SetParent(this.transform, worldPositionStays: true);
+            //viewerobj.transform.SetParent(this.transform, worldPositionStays: true);
+            //Debug.Log($"QmeshBuildViewer - Viewer rotation before SetParent  {viewerobj.transform.localRotation.eulerAngles}");
+            viewerobj.transform.SetParent(this.transform, worldPositionStays: false);
             viewerobj.transform.SetAsFirstSibling();
+            //Debug.Log($"QmeshBuildViewer - Viewer rotation after  SetParent  {viewerobj.transform.localRotation.eulerAngles}");
             addViewer = true;
             old_addViewer = true;
         }
@@ -1020,6 +1028,7 @@ namespace Aiskwk.Map
             // Elevations
             (var elok, var nElRetrived) = await GetElevations(execute, forceload);
             //Debug.Log($"Retrived {nElRetrived} elevations");
+            QMeshDestroyViewer();
 
             var nVertRowsTodo = nVertSecs;
             var nVertRowsDone = 0;

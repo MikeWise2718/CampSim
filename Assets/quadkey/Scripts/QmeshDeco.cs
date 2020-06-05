@@ -121,15 +121,21 @@ namespace Aiskwk.Map
     public class TriPointDeco : QmeshDeco
     {
 
-        public GameObject tpnode1;
-        public GameObject tpnode2;
-        public GameObject tpnode3;
-        public GameObject tpnodem;
+        //public GameObject tpnode1;
+        //public GameObject tpnode2;
+        //public GameObject tpnode3;
+        //public GameObject tpnodem;
+        //public GameObject tpnoden;
 
         public GameObject tpmode1;
         public GameObject tpmode2;
         public GameObject tpmode3;
         public GameObject tpmodem;
+        public GameObject tpmoden1;
+        public GameObject tpmoden2;
+        public Vector3 tpmonden_p1;
+        public Vector3 tpmonden_p2;
+        public Vector3 tpmodenorm;
 
         public override void InitDecoType()
         {
@@ -137,19 +143,12 @@ namespace Aiskwk.Map
             deconame = "tripoints";
         }
 
-        public void DoOneNode(ref GameObject tpn, string nodename, Color color,Vector3 skavek, bool wps)
+        public void DoOneNode(ref GameObject tpnobj, string nodename, Color color,Vector3 skavek, PrimitiveType ptype,bool wps=false)
         {
-            if (wps)
-            {
-                tpn = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            }
-            else
-            {
-                tpn = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                skavek *= 0.7f;
-            }
-            tpn.name = nodename;
-            tpn.transform.localScale = skavek;
+            tpnobj = GameObject.CreatePrimitive(ptype);
+            skavek *= 0.7f;
+            tpnobj.name = nodename;
+            tpnobj.transform.localScale = skavek;
 
             //if (nodename == "tpmodem")
             //{
@@ -159,9 +158,31 @@ namespace Aiskwk.Map
             //    Debug.Log($"Rot {r0}");
             //    Debug.Log($"Pos {p0}");
             //}
-            tpn.transform.SetParent(decoroot.transform,worldPositionStays:wps);
-            qut.SetColorOfGo(tpn, color);
+            tpnobj.transform.SetParent(decoroot.transform,worldPositionStays:wps);
+            qut.SetColorOfGo(tpnobj, color);
         }
+
+        public void DoOneNodeNormal(ref GameObject tpnobj, Vector3 tpnnorm, string nodename, Color color, float len, Vector3 skavek, PrimitiveType ptype,bool wps=false)
+        {
+            tpnobj = GameObject.CreatePrimitive(ptype);
+            tpnobj.name = nodename;
+            tpnobj.transform.localScale = skavek;
+            var p1 = tpnobj.transform.position;
+            var p2 = p1 + tpnnorm*len;
+            tpnobj = GpuInst.CreateCylinderGpu(null, nodename, p1, p2, 1f, "yellow");
+
+            //if (nodename == "tpmodem")
+            //{
+            //    var (s0, r0, p0) = UnpackTransform(tpmodem.transform);
+            //    Debug.Log($"Start Time {Time.time}");
+            //    Debug.Log($"Sca {s0}");
+            //    Debug.Log($"Rot {r0}");
+            //    Debug.Log($"Pos {p0}");
+            //}
+            tpnobj.transform.SetParent(decoroot.transform, worldPositionStays: wps);
+            qut.SetColorOfGo(tpnobj, color);
+        }
+
 
         public override void Construct()
         {
@@ -169,15 +190,19 @@ namespace Aiskwk.Map
             var ska = qmm.triMeshMinLeg * 0.04f;
             var skav = new Vector3(ska, ska, ska);
 
-            DoOneNode(ref tpnode1, "tpnode1", Color.red, skav, true);
-            DoOneNode(ref tpnode2, "tpnode2", Color.green, skav, true);
-            DoOneNode(ref tpnode3, "tpnode3", Color.blue, skav, true);
-            DoOneNode(ref tpnodem, "tpnodem", Color.cyan, skav, true);
+            //var ptypen = PrimitiveType.Sphere;
+            //DoOneNode(ref tpnode1, "tpnode1", Color.red, skav, ptypen, wps:true);
+            //DoOneNode(ref tpnode2, "tpnode2", Color.green, skav, ptypen, wps:true);
+            //DoOneNode(ref tpnode3, "tpnode3", Color.blue, skav, ptypen, wps:true);
+            //DoOneNode(ref tpnodem, "tpnodem", Color.cyan, skav, ptypen, wps:true);
 
-            DoOneNode(ref tpmode1, "tpmode1", Color.red, skav, false);
-            DoOneNode(ref tpmode2, "tpmode2", Color.green, skav, false);
-            DoOneNode(ref tpmode3, "tpmode3", Color.blue, skav, false);
-            DoOneNode(ref tpmodem, "tpmodem", Color.cyan, skav, false);
+            var ptype = PrimitiveType.Cube;
+
+            DoOneNode(ref tpmode1, "tpmode1", Color.red, skav, ptype, wps:false);
+            DoOneNode(ref tpmode2, "tpmode2", Color.green, skav, ptype, wps: false);
+            DoOneNode(ref tpmode3, "tpmode3", Color.blue, skav, ptype, wps: false);
+            //DoOneNode(ref tpmodem, "tpmodem", Color.cyan, skav, ptype, wps:false);
+            //DoOneNodeNormal(ref tpmodem, tpmodenorm, "norm", Color.cyan, len, skav, PrimitiveType.Capsule, wps: false);
 
 
 
@@ -229,10 +254,10 @@ namespace Aiskwk.Map
         {
             if (decoroot != null)
             {
-                tpnode1.transform.position = qmm.bpt1;
-                tpnode2.transform.position = qmm.bpt2;
-                tpnode3.transform.position = qmm.bpt3;
-                tpnodem.transform.position = qmm.bptm;
+                //tpnode1.transform.position = qmm.bpt1;
+                //tpnode2.transform.position = qmm.bpt2;
+                //tpnode3.transform.position = qmm.bpt3;
+                //tpnodem.transform.position = qmm.bptm;
 
                 //MoveObjectTo(tpmode1.transform, qmm.bpt1);
                 //MoveObjectTo(tpmode2.transform, qmm.bpt2);
@@ -255,16 +280,101 @@ namespace Aiskwk.Map
                 tpmode3.transform.position = qmm.bpt3;
                 tpmode3.transform.SetParent(decoroot.transform, worldPositionStays: false);
 
-                var (s0, r0, p0) = UnpackTransform(tpmodem.transform);
-                //tpmodem.transform.parent = null;
-                tpmodem.transform.SetParent(null, worldPositionStays: false);// must be false or will accumulate rotation
-                var (s1, r1, p1) = UnpackTransform(tpmodem.transform);
-                tpmodem.transform.position = qmm.bptm;
-                //tpmodem.transform.localEulerAngles = r0;
-                var (s2, r2, p2) = UnpackTransform(tpmodem.transform);
-                tpmodem.transform.SetParent(decoroot.transform, worldPositionStays: false);
-                var (s3, r3, p3) = UnpackTransform(tpmodem.transform);
-                //Debug.Log($"Time {Time.time}");
+                tpmodenorm = qmm.bptmnorm;
+
+                var d1 = Vector3.Distance(qmm.bpt1, qmm.bpt2);
+                var d2 = Vector3.Distance(qmm.bpt2, qmm.bpt3);
+                var d3 = Vector3.Distance(qmm.bpt3, qmm.bpt1);
+                var len = Mathf.Max(new float[] { d1, d2, d3 })/4;
+
+                var p1 = qmm.bptm - qmm.bptmnorm * len;
+                var p2 = qmm.bptm + qmm.bptmnorm * len;
+
+                var useQuatRot = false;
+                var useQuatRot2 = true;
+                var useDualPoint = true; ;
+                if (tpmonden_p1 != p1 || tpmonden_p2 != p2)
+                {
+                    if (useQuatRot)
+                    {
+                        if (tpmoden1 != null)
+                        {
+                            Destroy(tpmoden1);
+                        }
+                        var llen = len / 3;
+                        var pp1 = qmm.bptm - llen * Vector3.up;
+                        var pp2 = qmm.bptm + llen * Vector3.up;
+                        tpmoden1 = GpuInst.CreateCylinderGpu(null, "tp_normal_1", pp1, pp2, 0.25f, "purple");
+                        tpmoden1.transform.SetParent(decoroot.transform, worldPositionStays: false);
+                        var nrm = qmm.bptmnorm;
+                        if (Vector3.Dot(Vector3.up, nrm) < 0)
+                        {
+                            nrm = -nrm;
+                        }
+                        var nrmrot = Quaternion.FromToRotation(Vector3.up, nrm);
+                        tpmoden1.transform.localRotation = nrmrot;
+                    }
+                    if (useQuatRot2)
+                    {
+                        if (tpmoden1 != null)
+                        {
+                            Destroy(tpmoden1);
+                        }
+                        tpmoden1 = new GameObject("tp_modem_green");
+                        tpmoden1.transform.position = qmm.bptm;
+                        {
+                            var rod = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+                            var rodheight = len/3;
+                            rod.transform.localScale = new Vector3(0.2f, rodheight, 0.2f);
+                            rod.transform.position = new Vector3(0, rodheight * 0.75f, 0);
+                            rod.transform.SetParent(tpmoden1.transform, worldPositionStays: false);
+                            qut.SetColorOfGo(rod, Color.green);
+                        }
+                        tpmoden1.transform.SetParent(decoroot.transform, worldPositionStays: false);
+                        var nrm = qmm.bptmnorm;
+                        if (Vector3.Dot(Vector3.up, nrm) < 0)
+                        {
+                            nrm = -nrm;
+                        }
+                        var nrmrot = Quaternion.FromToRotation(Vector3.up, nrm);
+                        tpmoden1.transform.localRotation = nrmrot;
+                    }
+                    if (useDualPoint)
+                    {
+                        if (tpmoden2 != null)
+                        {
+                            Destroy(tpmoden2);
+                        }
+                        var len2 = len / 4;
+                        var pp1 = qmm.bptm - len2*qmm.bptmnorm;
+                        var pp2 = qmm.bptm + len2*qmm.bptmnorm;
+                        tpmoden2 = GpuInst.CreateCylinderGpu(null, "tp_normal_2", pp1, pp2, 0.5f, "yellow");
+                        tpmoden2.transform.SetParent(decoroot.transform, worldPositionStays: false);
+                    }
+                    tpmonden_p1 = p1;
+                    tpmonden_p2 = p2;
+                    //Debug.Log($"d1:{d1} d2:{d2} d3:{d3} len:{len}");
+                }
+
+                //if (nodename == "tpmodem")
+                //{
+                //    var (s0, r0, p0) = UnpackTransform(tpmodem.transform);
+                //    Debug.Log($"Start Time {Time.time}");
+                //    Debug.Log($"Sca {s0}");
+                //    Debug.Log($"Rot {r0}");
+                //    Debug.Log($"Pos {p0}");
+                //}
+
+                //var (s0, r0, p0) = UnpackTransform(tpmodem.transform);
+                ////tpmodem.transform.parent = null;
+                //tpmodem.transform.SetParent(null, worldPositionStays: false);// must be false or will accumulate rotation
+                //var (s1, r1, p1) = UnpackTransform(tpmodem.transform);
+                //tpmodem.transform.position = qmm.bptm;
+                ////tpmodem.transform.localEulerAngles = r0;
+                //var (s2, r2, p2) = UnpackTransform(tpmodem.transform);
+                //tpmodem.transform.SetParent(decoroot.transform, worldPositionStays: false);
+                //var (s3, r3, p3) = UnpackTransform(tpmodem.transform);
+                ////Debug.Log($"Time {Time.time}");
                 //Debug.Log($"Sca {s0} {s1}  {s2}  {s3}");
                 //Debug.Log($"Rot {r0} {r1}  {r2}  {r3}");
                 //Debug.Log($"Pos {p0} {p1}  {p2}  {p3}");

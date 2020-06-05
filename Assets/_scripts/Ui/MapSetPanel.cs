@@ -104,21 +104,10 @@ public class MapSetPanel : MonoBehaviour
     bool buttonsInited = false;
     bool linked = false;
 
-    void Start()
-    {
-        //Debug.Log("MapSetPanel Start called");
-        panelActive = true;
-        LinkObjectsAndComponents();
-    }
 
     public void LinkObjectsAndComponents()
     {
         //Debug.Log("MapSetPanel LinkObjectsAndComponents called");
-        sman = FindObjectOfType<SceneMan>();
-        if (sman == null)
-        {
-            Debug.LogError("MapSet panel could not find SceneMan");
-        }
         mman = FindObjectOfType<MapMan>();
         if (mman == null)
         {
@@ -184,6 +173,11 @@ public class MapSetPanel : MonoBehaviour
         linked = true;
     }
 
+    public void Init0()
+    {
+        LinkObjectsAndComponents();
+    }
+
     public void InitCheckNeedSetModeRefresh()
     {
         needSetSceneReset = false;
@@ -200,7 +194,7 @@ public class MapSetPanel : MonoBehaviour
 
     public void InitVals()
     {
-       // Debug.Log("MapSetPanel.InitVals called");
+        Debug.Log($"MapSetPanel.InitVals called scene:{sman.curscene} iscustomizable:{mman.isCustomizable}");
         if (!linked)
         {
             LinkObjectsAndComponents();
@@ -212,7 +206,7 @@ public class MapSetPanel : MonoBehaviour
         var errmsg = "Error in MapSetPanel.InitVals-";
         try
         {
-            var opts = MapMan.GetMapProviderList();
+            var opts = mman.GetMapProviderList();
             var inival = mman.reqMapProv.Get().ToString();
             //Debug.Log($"InitVals get:{inival}");
             var idx = opts.FindIndex(s => s == inival);
@@ -587,8 +581,9 @@ public class MapSetPanel : MonoBehaviour
         s8 = "Ele Temp Info: " + s8;
         var sedregkey = "User settings regkey editor:"+" Computer\\HKEY_CURRENT_USER\\Software\\Unity\\UnityEditor\\DefaultCompany\\campusim";
         var splregkey = "User settings regkey player:" + " Computer\\HKEY_CURRENT_USER\\Software\\DefaultCompany\\campusim";
-        var spllogfiles = "Log files regkey player:" + "%USERPROFILE%\\AppData\\LocalLow\\CompanyName\\ProductName\\output_log.txt";
-        
+        //var spllogfiles = "Log files regkey player:" + "%USERPROFILE%\\AppData\\LocalLow\\DefaultCompany\\campusim\\Player.log";
+        var spllogfiles = "Log files regkey player:" + "C:\\Users\\mike\\AppData\\LocalLow\\DefaultCompany\\campusim\\Player.log";
+
 
         persMapsPathText.text = s1;
         persMapsDataText.text = s2;
@@ -628,7 +623,7 @@ public class MapSetPanel : MonoBehaviour
         if (isLoadingMaps && Time.time-lastLoadCheck>checkLoadInterval)
         {
             var msg = "";
-            var (isLoading, irupt, nbmLoaded, nbmToLoad, nelevBatchesLoaded, nelevBatchsToLoad) = mman.GetLoadingStatus();
+            var (isLoading, irupt,lodLoading, nbmLoaded, nbmToLoad, nelevBatchesLoaded, nelevBatchsToLoad) = mman.GetLoadingStatus();
             var numstr = $"{nbmLoaded}/{nbmToLoad}  {nelevBatchesLoaded}/{nelevBatchsToLoad}";
             if (irupt)
             {
