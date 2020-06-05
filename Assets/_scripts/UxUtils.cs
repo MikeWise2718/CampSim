@@ -154,9 +154,8 @@ namespace UxUtils
                 case TypeCode.Single:
                     inVariable = (T)(object)Convert.ToSingle(inValue);
                     break;
-
                 default:
-                    throw new Exception("Blow up in fantastic ways!");
+                    throw new Exception("TryParseAlt Not Implented for this type");
             }
             return inVariable;
         }
@@ -218,15 +217,14 @@ namespace UxUtils
                 return val;
             }
             valueRetrievedFromPersistentSTore = true;
-            T rv1 = UxSettingsMan.TryParse<T>(s);
-            //T rv2 = UxSettingsMan.TryParseAlt<T>(val,s);
-            return rv1;
+            T rv = UxSettingsMan.TryParse<T>(s);
+            return rv;
         }
         public T GetInitial()
         {
-            var rv1 = Retrieve();
-            val = rv1;
-            return rv1;
+            var rv = Retrieve();
+            val = rv;
+            return rv;
         }
         public T GetInitial(T defval)
         {
@@ -392,5 +390,111 @@ namespace UxUtils
             return val;
         }
     }
+    [System.Serializable]
+    public class UxSettingVector3
+    {
+        [SerializeField]
+        public Vector3 val;
+        public Vector3 inival;
+        [SerializeField]
+        public string keyname;
+        [SerializeField]
+        string typename;
+        bool valueRetrievedFromPersistentSTore = false;
+        public bool ValueRetrievedFromPersistentStore()
+        {
+            return valueRetrievedFromPersistentSTore;
+        }
+        public UxSettingVector3(string keyname, Vector3 inival)
+        {
+            this.keyname = keyname;
+            GetTypeName();
+            UxSettingsMan.Add(keyname, typename);
+            this.inival = inival;
+            val = inival;
+        }
+        private void GetTypeName()
+        {
+            if (val == null)
+            {
+                this.typename = "".GetType().ToString();
+            }
+            else
+            {
+                this.typename = val.GetType().ToString();
+            }
+        }
+        public void Save()
+        {
+            var skeyname = UxSettingsMan.ScenarioKey(keyname);
+            //if (skeyname=="Custom/levelOfDetail")
+            //{
+            //    Debug.Log("Here I am");
+            //}
+            //Debug.Log($"Saving {skeyname} as {val.ToString()}");
+            PlayerPrefs.SetString(skeyname, val.ToString());
+        }
 
+        public Vector3 Retrieve()
+        {
+            var skeyname = UxSettingsMan.ScenarioKey(keyname);
+            var s = PlayerPrefs.GetString(skeyname);
+            if (String.IsNullOrEmpty(s))
+            {
+                valueRetrievedFromPersistentSTore = false;
+                val = inival;
+                Save(); // it must have been the first time we tried to retrive it
+                return val;
+            }
+            valueRetrievedFromPersistentSTore = true;
+            var sar = s.Split(',');
+            Vector3 rv0 = new Vector3(
+                UxSettingsMan.TryParse<float>(sar[0]),
+                UxSettingsMan.TryParse<float>(sar[1]),
+                UxSettingsMan.TryParse<float>(sar[2])
+                );
+            return rv0;
+        }
+        public Vector3 GetInitial()
+        {
+            var rv1 = Retrieve();
+            val = rv1;
+            return rv1;
+        }
+        public Vector3 GetInitial(Vector3 defval)
+        {
+            var rv = Retrieve();
+            if (!ValueRetrievedFromPersistentStore())
+            {
+                SetAndSave(defval);
+                return defval;
+            }
+            else
+            {
+                val = rv;
+                return rv;
+            }
+        }
+        public bool Set(Vector3 sval)
+        {
+            var oval = val;
+            val = sval;
+            return !oval.Equals(val);
+        }
+        public bool SetAndSave(Vector3 sval)
+        {
+            var oval = val;
+            val = sval;
+            var chg = !oval.Equals(val);
+            if (chg)
+            {
+                Save();
+            }
+            return chg;
+        }
+        public Vector3 Get()
+        {
+            return val;
+        }
+    }
 }
