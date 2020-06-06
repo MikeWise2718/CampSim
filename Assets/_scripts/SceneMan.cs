@@ -109,6 +109,7 @@ namespace CampusSimulator
         public ZoneMan znman;
         public FrameMan frman;
         public CalibMan cbman;
+        public UiMan uiman;
         public string runtimestamp = DateTime.UtcNow.ToString("yyyyMMdd-HHmmss");
         public string simrundir;
         public LinkEditor leditor;
@@ -120,8 +121,17 @@ namespace CampusSimulator
 
         public bool arcoreTrack = false;
 
-        void initVars()
+        void InitPhase0()
         {
+            // In StartInitPhase0 we do structural initialzation - no logic
+            // - Find and initialize statoc component references (those that will not change during execution) so that doesn't have to be done again and again
+            // - Add any componets that need to be added
+            // - Do StartInitialization on those
+            // - (optional) do any internal initialization that does not depend on external links (because they might not have done this yet) 
+            // In StartInitPhase1 we do initialization that calls components that have done Phase0
+
+            GraphAlgos.GraphUtil.CheckVersionString();
+
             theone = this;
             loglist = new LinkedList<string>();
             GraphUtil.loglist = loglist;
@@ -157,6 +167,11 @@ namespace CampusSimulator
             statusctrl.outMode = StatusCtrl.outModeE.help;
             statusctrl.RealizeMode();
 
+            leditor = rgo.AddComponent<LinkEditor>();
+            leditor.InitPhase0(linkcloudman, this);
+
+            SetLegacy(legacyStatus);
+
 #if USE_KEYWORDRECOGNIZER
             keycount = keyman.totalKeywordCount();
 #endif
@@ -164,15 +179,18 @@ namespace CampusSimulator
             smm = FindObjectOfType<SpatialMapperMan>();
 #endif
             DisableSpatialMapping();
-            gaman = FindObjectOfType<GarageMan>();
-            bdman = FindObjectOfType<BuildingMan>();
+
+// Start of new initialzation scheme
+            uiman = FindObjectOfType<UiMan>();
             mpman = FindObjectOfType<MapMan>();
-            jnman = FindObjectOfType<JourneyMan>();
             vcman = FindObjectOfType<VidcamMan>();
+            bdman = FindObjectOfType<BuildingMan>();
+            gaman = FindObjectOfType<GarageMan>();
+            znman = FindObjectOfType<ZoneMan>();
+            jnman = FindObjectOfType<JourneyMan>();
             loman = FindObjectOfType<LocationMan>();
             psman = FindObjectOfType<PersonMan>();
             veman = FindObjectOfType<VehicleMan>();
-            znman = FindObjectOfType<ZoneMan>();
             frman = FindObjectOfType<FrameMan>();
 
             bdman.sman = this;
@@ -181,26 +199,33 @@ namespace CampusSimulator
             jnman.sman = this;
             frman.sman = this;
             vcman.sman = this;
+            uiman.sman = this;
 
             bool subbordinatethemall = false;
             if (subbordinatethemall)
             {
-                gaman.transform.parent = rgo.transform;
-                bdman.transform.parent = rgo.transform;
+                uiman.transform.parent = rgo.transform;
                 mpman.transform.parent = rgo.transform;
-                jnman.transform.parent = rgo.transform;
                 vcman.transform.parent = rgo.transform;
+                bdman.transform.parent = rgo.transform;
+                gaman.transform.parent = rgo.transform;
+                znman.transform.parent = rgo.transform;
+                jnman.transform.parent = rgo.transform;
                 loman.transform.parent = rgo.transform;
                 psman.transform.parent = rgo.transform;
                 veman.transform.parent = rgo.transform;
-                znman.transform.parent = rgo.transform;
                 frman.transform.parent = rgo.transform;
             }
-            SetLegacy(legacyStatus);
 
-            leditor = rgo.AddComponent<LinkEditor>();
-            leditor.Init(linkcloudman, this);
+            uiman.InitPhase0();
+            mpman.InitPhase0();
+            vcman.InitPhase0();
         }
+
+        void InitPhase1()
+        {
+        }
+
 
         public void SetScene( SceneSelE newscene,bool force=false )
         {
@@ -217,27 +242,34 @@ namespace CampusSimulator
                     UxUtils.UxSettingsMan.SetScenario(newscene.ToString());
                     jnman.DeleteAllJourneys();
                     curscene = newscene;
-                    var oldglblm = rmango.GetComponent<LegLatLngMap>();
+                    //var oldglblm = rmango.GetComponent<LegLatLngMap>();
                     glbllm = rmango.AddComponent<LatLongMap>();
                     glbllm.InitMapFromSceneSel(newscene.ToString(),0); // to do uncomment
 
+                    uiman.SetScene(newscene);
+
                     linkcloudman.SetScene(newscene);
+
                     mpman.SetScene(newscene);
                     gaman.SetScene(newscene);
                     vcman.SetScene(newscene);
 
                     bdman.SetScene(newscene);// building details, but no nodes and links
                     DeleteLinkCloud();
+
                     linkcloudman.SetScene2(newscene); // create or read in most nodes and links
+
                     RealizeFloorPlanStatus();
-                    //CreateLinkCloud();
                     psman.SetScene(newscene); // needs to be before we populate the buildings
                     veman.SetScene(newscene); // needs to be before we populate the garages
+
                     bdman.SetScenePostLinkCloud(newscene);// building details that need nodes and links
                     gaman.SetScenePostLinkCloud(newscene);// garage details that need nodes and links
+
                     znman.SetScene(newscene);
                     jnman.SetScene(newscene);
                     frman.SetScene(newscene);
+
                     linkcloudman.SetScene3(newscene);  // realize latelinks    
                     // TODO - put this stuff in a Uiman
                     SetUiScene(newscene);
@@ -1420,7 +1452,8 @@ namespace CampusSimulator
 
         private void Start()
         {
-            initVars();
+            InitPhase0();
+            InitPhase1();
             var esi = SceneMan.GetInitialSceneOption();
             curscene = SceneSelE.None; // force it to execute - kind of a kludge
             SetScene(esi);

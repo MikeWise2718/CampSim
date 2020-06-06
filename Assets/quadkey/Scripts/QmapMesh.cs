@@ -342,7 +342,7 @@ namespace Aiskwk.Map
         }
 
         [HideInInspector] // these are for debugging with a decorator
-        public Vector3 bpt1, bpt2, bpt3, bptm;
+        public Vector3 bpt1, bpt2, bpt3, bptm, bptmnorm;
 
         (Vector3, Vector3) Bary1(float x, float z, int ix1, int iz1, int ix2, int iz2, int ix3, int iz3)
         {
@@ -377,6 +377,7 @@ namespace Aiskwk.Map
             //Debug.Log($"Bary1 b:{bs}  x:" + x + " z:" + z + " ix1:" + ix1 + " iz1:" + iz1 + " ix2:" + ix2 + " iz2:" + iz2 + " ix3:" + ix3 + " iz3:" + iz3+" bptm:"+bptm.ToString("f3"));
             var nrm = Vector3.Cross(v2 - v1, v3 - v1);
             nrm.Normalize();
+            bptmnorm = nrm;
             return (barypt, nrm);
         }
 

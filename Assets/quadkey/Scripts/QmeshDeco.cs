@@ -121,15 +121,17 @@ namespace Aiskwk.Map
     public class TriPointDeco : QmeshDeco
     {
 
-        public GameObject tpnode1;
-        public GameObject tpnode2;
-        public GameObject tpnode3;
-        public GameObject tpnodem;
+        //public GameObject tpnode1;
+        //public GameObject tpnode2;
+        //public GameObject tpnode3;
+        //public GameObject tpnodem;
+        //public GameObject tpnoden;
 
         public GameObject tpmode1;
         public GameObject tpmode2;
         public GameObject tpmode3;
         public GameObject tpmodem;
+        public GameObject tpmoden;
 
         public override void InitDecoType()
         {
@@ -137,19 +139,12 @@ namespace Aiskwk.Map
             deconame = "tripoints";
         }
 
-        public void DoOneNode(ref GameObject tpn, string nodename, Color color,Vector3 skavek, bool wps)
+        public void DoOneNode(ref GameObject tpnobj, string nodename, Color color,Vector3 skavek, PrimitiveType ptype,bool wps=false)
         {
-            if (wps)
-            {
-                tpn = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            }
-            else
-            {
-                tpn = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                skavek *= 0.7f;
-            }
-            tpn.name = nodename;
-            tpn.transform.localScale = skavek;
+            tpnobj = GameObject.CreatePrimitive(ptype);
+            skavek *= 0.7f;
+            tpnobj.name = nodename;
+            tpnobj.transform.localScale = skavek;
 
             //if (nodename == "tpmodem")
             //{
@@ -159,9 +154,28 @@ namespace Aiskwk.Map
             //    Debug.Log($"Rot {r0}");
             //    Debug.Log($"Pos {p0}");
             //}
-            tpn.transform.SetParent(decoroot.transform,worldPositionStays:wps);
-            qut.SetColorOfGo(tpn, color);
+            tpnobj.transform.SetParent(decoroot.transform,worldPositionStays:wps);
+            qut.SetColorOfGo(tpnobj, color);
         }
+
+        public void DoOneNodeNormal(ref GameObject tpnobj, ref GameObject tnnnorm, string nodename, Color color, Vector3 skavek, PrimitiveType ptype,bool wps=false)
+        {
+            tpnobj = GameObject.CreatePrimitive(ptype);
+            tpnobj.name = nodename;
+            tpnobj.transform.localScale = skavek;
+
+            //if (nodename == "tpmodem")
+            //{
+            //    var (s0, r0, p0) = UnpackTransform(tpmodem.transform);
+            //    Debug.Log($"Start Time {Time.time}");
+            //    Debug.Log($"Sca {s0}");
+            //    Debug.Log($"Rot {r0}");
+            //    Debug.Log($"Pos {p0}");
+            //}
+            tpnobj.transform.SetParent(decoroot.transform, worldPositionStays: wps);
+            qut.SetColorOfGo(tpnobj, color);
+        }
+
 
         public override void Construct()
         {
@@ -169,15 +183,18 @@ namespace Aiskwk.Map
             var ska = qmm.triMeshMinLeg * 0.04f;
             var skav = new Vector3(ska, ska, ska);
 
-            DoOneNode(ref tpnode1, "tpnode1", Color.red, skav, true);
-            DoOneNode(ref tpnode2, "tpnode2", Color.green, skav, true);
-            DoOneNode(ref tpnode3, "tpnode3", Color.blue, skav, true);
-            DoOneNode(ref tpnodem, "tpnodem", Color.cyan, skav, true);
+            //var ptypen = PrimitiveType.Sphere;
+            //DoOneNode(ref tpnode1, "tpnode1", Color.red, skav, ptypen, wps:true);
+            //DoOneNode(ref tpnode2, "tpnode2", Color.green, skav, ptypen, wps:true);
+            //DoOneNode(ref tpnode3, "tpnode3", Color.blue, skav, ptypen, wps:true);
+            //DoOneNode(ref tpnodem, "tpnodem", Color.cyan, skav, ptypen, wps:true);
 
-            DoOneNode(ref tpmode1, "tpmode1", Color.red, skav, false);
-            DoOneNode(ref tpmode2, "tpmode2", Color.green, skav, false);
-            DoOneNode(ref tpmode3, "tpmode3", Color.blue, skav, false);
-            DoOneNode(ref tpmodem, "tpmodem", Color.cyan, skav, false);
+            var ptype = PrimitiveType.Cube;
+            DoOneNode(ref tpmode1, "tpmode1", Color.red, skav, ptype, wps:false);
+            DoOneNode(ref tpmode2, "tpmode2", Color.green, skav, ptype, wps: false);
+            DoOneNode(ref tpmode3, "tpmode3", Color.blue, skav, ptype, wps: false);
+            //DoOneNode(ref tpmodem, "tpmodem", Color.cyan, skav, ptype, wps:false);
+            DoOneNodeNormal(ref tpmodem, ref tpmoden, "norm", Color.cyan, skav, PrimitiveType.Capsule, wps: false);
 
 
 
@@ -229,10 +246,10 @@ namespace Aiskwk.Map
         {
             if (decoroot != null)
             {
-                tpnode1.transform.position = qmm.bpt1;
-                tpnode2.transform.position = qmm.bpt2;
-                tpnode3.transform.position = qmm.bpt3;
-                tpnodem.transform.position = qmm.bptm;
+                //tpnode1.transform.position = qmm.bpt1;
+                //tpnode2.transform.position = qmm.bpt2;
+                //tpnode3.transform.position = qmm.bpt3;
+                //tpnodem.transform.position = qmm.bptm;
 
                 //MoveObjectTo(tpmode1.transform, qmm.bpt1);
                 //MoveObjectTo(tpmode2.transform, qmm.bpt2);

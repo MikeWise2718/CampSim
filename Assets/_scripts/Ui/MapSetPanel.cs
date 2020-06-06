@@ -193,7 +193,7 @@ public class MapSetPanel : MonoBehaviour
         var errmsg = "Error in MapSetPanel.InitVals-";
         try
         {
-            var opts = MapMan.GetMapProviderList();
+            var opts = mman.GetMapProviderList();
             var inival = mman.reqMapProv.Get().ToString();
             //Debug.Log($"InitVals get:{inival}");
             var idx = opts.FindIndex(s => s == inival);

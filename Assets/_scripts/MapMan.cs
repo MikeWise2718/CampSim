@@ -15,7 +15,7 @@ namespace CampusSimulator
  
         public double xdistkm = 1;
         public double zdistkm = 3;
-        //public float hmultForNow;
+
         public int lod = 16;
         public int npqk = 16;
         public Vector3 maptrans;
@@ -45,16 +45,15 @@ namespace CampusSimulator
         #endregion Map Visuals
 
 
-
-
         public UxEnumSetting<MapProvider> reqMapProv = new UxEnumSetting<MapProvider>("MapProvider", MapProvider.BingSatelliteRoads);
+        // todo - think we can eliminate MapPRovider and 
         #region MapProvider
         static List<string> mapProviderOptions = new List<string>(System.Enum.GetNames(typeof(MapProvider)));
         static string initialMapProviderKey = "MapProvider";
-        public static List<string> GetMapProviderList()
-        {
-            return mapProviderOptions;
-        }
+        //public static List<string> GetMapProviderList()
+        //{
+        //    return mapProviderOptions;
+        //}
         public static string GetMapProviderString(int ival)
         {
             return mapProviderOptions[ival];
@@ -81,6 +80,12 @@ namespace CampusSimulator
         }
         #endregion MapProvider
 
+
+        public List<string> GetMapProviderList()
+        {
+            var rv = reqMapProv.GetOptionsAsList();
+            return rv;
+        }
 
         public UxEnumSetting<ElevProvider> reqEleProv = new UxEnumSetting<ElevProvider>("ElevProvider", ElevProvider.BingElev);
         #region ElevProvider
@@ -158,7 +163,7 @@ namespace CampusSimulator
 
         public UxSetting<float> hmult = new UxSetting<float>("Hmult", 1f );
 
-        public void GetInitialPersistentSettings()
+        public void GetSceneModeDependentInitialPersistentSettings()
         {
             modeSetCount.GetInitial();
 
@@ -202,17 +207,13 @@ namespace CampusSimulator
             viewerControl.GetInitial();
         }
 
+        public void InitPhase0()
+        {
+        }
+
 
         // Use this for initialization
-        void Awake()
-        {
-            sman = FindObjectOfType<SceneMan>();
-            if (sman==null)
-            {
-                Debug.Log("In MapMan.Awake Could not find object of type SceneMan");
-            }
-            GraphAlgos.GraphUtil.CheckVersionString();
-        }
+
         public float GetHeight(float x,float z)
         {
             if (qmapman == null || qmapman.qmm==null) return 0;
@@ -599,10 +600,10 @@ namespace CampusSimulator
         SceneSelE lastregionset = SceneSelE.None;
         public void SetScene(SceneSelE newregion)
         {
-            Debug.Log($"SetRegion for mapman {newregion}");
-            GetInitialPersistentSettings();
-            Debug.Log($"  after GetIntialSettings lod:{levelOfDetail.Get()}");
-            
+            Debug.Log($"MapMan.SetRegion: {newregion}");
+            GetSceneModeDependentInitialPersistentSettings();
+
+
             RealizeMapVisuals();
             if (newregion == lastregionset)
             {
