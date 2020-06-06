@@ -135,6 +135,7 @@ namespace Aiskwk.Map
                 Debug.LogError($"{t.name} s == 0");
             }
             transform.SetParent(parent.transform, worldPositionStays: true);// reconnect
+            transform.localRotation = Quaternion.Euler(viewerDefaultRotation); /// Think this has to be zero? Causes a bug if it is not
             TranslateViewer(0, 0);
             RotateViewer(0);
             Debug.Log($"ReAdjustViewerInitialPosition - after  scale:{transform.localScale} rotation:{transform.localRotation.eulerAngles}");

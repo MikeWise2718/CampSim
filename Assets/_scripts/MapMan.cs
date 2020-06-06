@@ -259,11 +259,14 @@ namespace CampusSimulator
             qmapman.bespoke.mappoints = new List<MappingPoint>();
             if (hasLLmap)
             {
-                var mapdata = sman.glbllm.mapcoord.mapdata;
-                foreach (var p in mapdata)
+                var mapdata = sman?.glbllm?.mapcoord?.mapdata;
+                if (mapdata != null)
                 {
-                    qmapman.bespoke.mappoints.Add(new MappingPoint(p.lat, p.lng, p.x, p.z));
-                    //Debug.Log($"ptcnt:{qmapman.bespoke.mappoints.Count}");
+                    foreach (var p in mapdata)
+                    {
+                        qmapman.bespoke.mappoints.Add(new MappingPoint(p.lat, p.lng, p.x, p.z));
+                        //Debug.Log($"ptcnt:{qmapman.bespoke.mappoints.Count}");
+                    }
                 }
             }
             var (nbm,nel) = await qmapman.SetMode(qmapman.qmapMode);
@@ -750,7 +753,7 @@ namespace CampusSimulator
                         roty2 = 0;
                         vviewerAvatarDefaultValue = ViewerAvatar.Rover;
                         vviewerDefaultPosition = new Vector3(0, -60, 0);
-                        vviewerDefaultRotation = new Vector3(0,   0, 0);
+                        vviewerDefaultRotation = new Vector3(0,  90, 0);
                         mapscale = 1f;
                         hasLLmap = false;
                         break;

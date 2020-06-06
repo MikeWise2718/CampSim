@@ -301,9 +301,10 @@ namespace Aiskwk.Map
                         {
                             Destroy(tpmoden1);
                         }
-                        var pp1 = qmm.bptm - len * Vector3.up;
-                        var pp2 = qmm.bptm + len * Vector3.up;
-                        tpmoden1 = GpuInst.CreateCylinderGpu(null, "tp_normal_1", pp1, pp2, 1f, "purple");
+                        var llen = len / 3;
+                        var pp1 = qmm.bptm - llen * Vector3.up;
+                        var pp2 = qmm.bptm + llen * Vector3.up;
+                        tpmoden1 = GpuInst.CreateCylinderGpu(null, "tp_normal_1", pp1, pp2, 0.25f, "purple");
                         tpmoden1.transform.SetParent(decoroot.transform, worldPositionStays: false);
                         var nrm = qmm.bptmnorm;
                         if (Vector3.Dot(Vector3.up, nrm) < 0)
@@ -323,7 +324,7 @@ namespace Aiskwk.Map
                         tpmoden1.transform.position = qmm.bptm;
                         {
                             var rod = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-                            var rodheight = len;
+                            var rodheight = len/3;
                             rod.transform.localScale = new Vector3(0.2f, rodheight, 0.2f);
                             rod.transform.position = new Vector3(0, rodheight * 0.75f, 0);
                             rod.transform.SetParent(tpmoden1.transform, worldPositionStays: false);
@@ -344,10 +345,10 @@ namespace Aiskwk.Map
                         {
                             Destroy(tpmoden2);
                         }
-                        var len2 = len / 2;
+                        var len2 = len / 4;
                         var pp1 = qmm.bptm - len2*qmm.bptmnorm;
                         var pp2 = qmm.bptm + len2*qmm.bptmnorm;
-                        tpmoden2 = GpuInst.CreateCylinderGpu(null, "tp_normal_2", pp1, pp2, 2f, "yellow");
+                        tpmoden2 = GpuInst.CreateCylinderGpu(null, "tp_normal_2", pp1, pp2, 0.5f, "yellow");
                         tpmoden2.transform.SetParent(decoroot.transform, worldPositionStays: false);
                     }
                     tpmonden_p1 = p1;
