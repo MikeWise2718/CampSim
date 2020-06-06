@@ -132,6 +132,9 @@ namespace Aiskwk.Map
         public GameObject tpmode3;
         public GameObject tpmodem;
         public GameObject tpmoden;
+        public Vector3 tpmonden_p1;
+        public Vector3 tpmonden_p2;
+        public Vector3 tpmodenorm;
 
         public override void InitDecoType()
         {
@@ -158,11 +161,14 @@ namespace Aiskwk.Map
             qut.SetColorOfGo(tpnobj, color);
         }
 
-        public void DoOneNodeNormal(ref GameObject tpnobj, ref GameObject tnnnorm, string nodename, Color color, Vector3 skavek, PrimitiveType ptype,bool wps=false)
+        public void DoOneNodeNormal(ref GameObject tpnobj, Vector3 tpnnorm, string nodename, Color color, float len, Vector3 skavek, PrimitiveType ptype,bool wps=false)
         {
             tpnobj = GameObject.CreatePrimitive(ptype);
             tpnobj.name = nodename;
             tpnobj.transform.localScale = skavek;
+            var p1 = tpnobj.transform.position;
+            var p2 = p1 + tpnnorm*len;
+            tpnobj = GpuInst.CreateCylinderGpu(null, nodename, p1, p2, 1f, "yellow");
 
             //if (nodename == "tpmodem")
             //{
@@ -190,11 +196,12 @@ namespace Aiskwk.Map
             //DoOneNode(ref tpnodem, "tpnodem", Color.cyan, skav, ptypen, wps:true);
 
             var ptype = PrimitiveType.Cube;
+
             DoOneNode(ref tpmode1, "tpmode1", Color.red, skav, ptype, wps:false);
             DoOneNode(ref tpmode2, "tpmode2", Color.green, skav, ptype, wps: false);
             DoOneNode(ref tpmode3, "tpmode3", Color.blue, skav, ptype, wps: false);
             //DoOneNode(ref tpmodem, "tpmodem", Color.cyan, skav, ptype, wps:false);
-            DoOneNodeNormal(ref tpmodem, ref tpmoden, "norm", Color.cyan, skav, PrimitiveType.Capsule, wps: false);
+            //DoOneNodeNormal(ref tpmodem, tpmodenorm, "norm", Color.cyan, len, skav, PrimitiveType.Capsule, wps: false);
 
 
 
@@ -272,16 +279,48 @@ namespace Aiskwk.Map
                 tpmode3.transform.position = qmm.bpt3;
                 tpmode3.transform.SetParent(decoroot.transform, worldPositionStays: false);
 
-                var (s0, r0, p0) = UnpackTransform(tpmodem.transform);
-                //tpmodem.transform.parent = null;
-                tpmodem.transform.SetParent(null, worldPositionStays: false);// must be false or will accumulate rotation
-                var (s1, r1, p1) = UnpackTransform(tpmodem.transform);
-                tpmodem.transform.position = qmm.bptm;
-                //tpmodem.transform.localEulerAngles = r0;
-                var (s2, r2, p2) = UnpackTransform(tpmodem.transform);
-                tpmodem.transform.SetParent(decoroot.transform, worldPositionStays: false);
-                var (s3, r3, p3) = UnpackTransform(tpmodem.transform);
-                //Debug.Log($"Time {Time.time}");
+                tpmodenorm = qmm.bptmnorm;
+
+                var d1 = Vector3.Distance(qmm.bpt1, qmm.bpt2);
+                var d2 = Vector3.Distance(qmm.bpt2, qmm.bpt3);
+                var d3 = Vector3.Distance(qmm.bpt3, qmm.bpt1);
+                var len = Mathf.Max(new float[] { d1, d2, d3 })/4;
+
+                var p1 = qmm.bptm - qmm.bptmnorm * len;
+                var p2 = qmm.bptm + qmm.bptmnorm * len;
+   
+                if (tpmonden_p1 != p1 || tpmonden_p2 != p2)
+                {
+                    if (tpmoden != null)
+                    {
+                        Destroy(tpmoden);
+                    }
+                    tpmoden = GpuInst.CreateCylinderGpu(null, "tp_normal", p1, p2, 1f, "yellow");
+                    tpmoden.transform.SetParent(decoroot.transform, worldPositionStays: false);
+                    tpmonden_p1 = p1;
+                    tpmonden_p2 = p2;
+                    //Debug.Log($"d1:{d1} d2:{d2} d3:{d3} len:{len}");
+                }
+
+                //if (nodename == "tpmodem")
+                //{
+                //    var (s0, r0, p0) = UnpackTransform(tpmodem.transform);
+                //    Debug.Log($"Start Time {Time.time}");
+                //    Debug.Log($"Sca {s0}");
+                //    Debug.Log($"Rot {r0}");
+                //    Debug.Log($"Pos {p0}");
+                //}
+
+                //var (s0, r0, p0) = UnpackTransform(tpmodem.transform);
+                ////tpmodem.transform.parent = null;
+                //tpmodem.transform.SetParent(null, worldPositionStays: false);// must be false or will accumulate rotation
+                //var (s1, r1, p1) = UnpackTransform(tpmodem.transform);
+                //tpmodem.transform.position = qmm.bptm;
+                ////tpmodem.transform.localEulerAngles = r0;
+                //var (s2, r2, p2) = UnpackTransform(tpmodem.transform);
+                //tpmodem.transform.SetParent(decoroot.transform, worldPositionStays: false);
+                //var (s3, r3, p3) = UnpackTransform(tpmodem.transform);
+                ////Debug.Log($"Time {Time.time}");
                 //Debug.Log($"Sca {s0} {s1}  {s2}  {s3}");
                 //Debug.Log($"Rot {r0} {r1}  {r2}  {r3}");
                 //Debug.Log($"Pos {p0} {p1}  {p2}  {p3}");
