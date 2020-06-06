@@ -35,7 +35,7 @@ namespace CampusSimulator
         void Start()
         {
             //Debug.Log("Status Panel Start");
-            Init();
+            InitPhase0();
         }
         bool linked = false;
         void LinkObjectsAndComponents()
@@ -92,7 +92,7 @@ namespace CampusSimulator
             linked = true;
         }
 
-        public void Init()
+        public void InitPhase0()
         {
             LinkObjectsAndComponents();
         }

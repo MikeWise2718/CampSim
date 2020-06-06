@@ -108,7 +108,7 @@ public class InfoPanel : MonoBehaviour
                 extext = $"IRPUT {extext}";
             }
         }
-        var (refresh, totrefresh) = sman.GetRefreshStatus();
+        var (refresh, totrefresh, _) = sman.GetRefreshStatus();
         msg += $"Upd:{updatecount} Sim:{simtime} {extext}";
         if (totrefresh)
         {

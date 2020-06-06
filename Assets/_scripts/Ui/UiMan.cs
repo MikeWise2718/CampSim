@@ -11,15 +11,31 @@ namespace CampusSimulator
         // Start is called before the first frame update
 
         public GameObject uigo;
+        public OptionsPanel optpan;
+        public StatusPanel span;
     
         public void InitPhase0()
         {
             uigo = GameObject.Find("SimParkUICanvas");
+            optpan = FindObjectOfType<OptionsPanel>();
+            span = FindObjectOfType<StatusPanel>();
+            span.InitPhase0();
         }
 
-        public void SetScene(SceneSelE newregion)
+        public void SetScene(SceneSelE newscene)
         {
-            Debug.Log($"UiMan.SetRegion: {newregion}");
+            Debug.Log($"UiMan.SetScene: {newscene}");
+            var optpan = FindObjectOfType<OptionsPanel>();
+            if (optpan != null)
+            {
+                optpan.SetScene(newscene);
+            }
+            SyncState();
+        }
+
+        public void SyncState()
+        {
+            span.ColorizeButtonStates();
         }
 
         void Start()

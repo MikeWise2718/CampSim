@@ -61,6 +61,7 @@ namespace CampusSimulator
         public bool autoerrorcorrect = false;
         private bool needsrefresh = false;
         private bool needstotalrefresh = false;
+        public SceneSelE requestScene = SceneSelE.None;
 
 
         public GameObject rmango;
@@ -272,7 +273,7 @@ namespace CampusSimulator
 
                     linkcloudman.SetScene3(newscene);  // realize latelinks    
                     // TODO - put this stuff in a Uiman
-                    SetUiScene(newscene);
+                    uiman.SetScene(newscene);
 
                     //Debug.Log("SetScene finished");
                 }
@@ -285,27 +286,10 @@ namespace CampusSimulator
             {
                 Debug.Log("Scene already set to " + newscene + " so this is a noop");
             }
+            requestScene = SceneSelE.None;
         }
 
-        public void SetUiScene(SceneSelE newscene)
-        {
-            var optpan = FindObjectOfType<OptionsPanel>();
-            if (optpan != null)
-            {
-                optpan.SetScene(newscene);
-            }
-            var span = FindObjectOfType<StatusPanel>();
-            if (span != null)
-            {
-                //Debug.LogWarning($"Resetting StatusPanel for {newscene}");
-                span.Init();
-                span.ColorizeButtonStates();
-            }
-            else
-            {
-                Debug.LogWarning("SceneMan.SetScene - span is null ");
-            }
-        }
+
 
         public void SetArcoreTracking()
         {
@@ -323,7 +307,7 @@ namespace CampusSimulator
 #endif
         }
 
-        public void RequestRefresh(string requester,bool totalrefresh=false)
+        public void RequestRefresh(string requester,bool totalrefresh=false, SceneSelE requestedScene = SceneSelE.None)
         {
             Debug.Log($"RefreshRequested by {requester} total:{totalrefresh}");    
             needsrefresh = true;
@@ -332,10 +316,14 @@ namespace CampusSimulator
                 // note that just setting this to totalrefresh would overwrite other totalrefresh requests
                 needstotalrefresh = true; 
             }
+            if (requestedScene!=SceneSelE.None)
+            {
+                this.requestScene = requestedScene;
+            }
         }
-        public (bool refresh,bool totalrefresh) GetRefreshStatus()
+        public (bool refresh,bool totalrefresh,SceneSelE requestScene) GetRefreshStatus()
         {
-            return (needsrefresh, needstotalrefresh);
+            return (this.needsrefresh, this.needstotalrefresh, this.requestScene);
         }
         public void RequestHighObjRefresh(string highobjname,string requester)
         {
@@ -1608,14 +1596,15 @@ namespace CampusSimulator
             {
                 if (needstotalrefresh)
                 {
-                    SetScene(curscene, force: true);
-                    RefreshSceneManGos(); // in update
+                    var sceneToRefresh = curscene;
+                    if (requestScene!=SceneSelE.None)
+                    {
+                        sceneToRefresh = requestScene;
+                    }
+                    SetScene(sceneToRefresh, force: true);
                 }
-                else
-                {
-                    RefreshSceneManGos(); // in update
-                }
-                SetUiScene(curscene);
+                RefreshSceneManGos(); // in update
+                uiman.SyncState();
                 needstotalrefresh = false;
                 needsrefresh = false;
             }
@@ -1630,7 +1619,8 @@ namespace CampusSimulator
         {
             if (Application.isEditor)
             {
-                SceneView.onSceneGUIDelegate += OnScene;
+                //SceneView.onSceneGUIDelegate += OnScene;
+                SceneView.duringSceneGui += OnScene;
             }
         }
 

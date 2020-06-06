@@ -248,11 +248,12 @@ public class VisualsPanel : MonoBehaviour
         {
             var curregionstr = SceneMan.GetSceneOptionsString(initialScene.value);
             SceneMan.SetInitialSceneOption(curregionstr);
-            var curregion = SceneMan.GetSceneOptionsEnum(curregionstr);
-            if (curregion != sman.curscene)
+            var reqScene = SceneMan.GetSceneOptionsEnum(curregionstr);
+            if (reqScene != sman.curscene)
             {
                 chg = true;
-                sman.SetScene(curregion);
+                sman.RequestRefresh("VisualsPanel.SetVals", totalrefresh: true,requestedScene:reqScene);
+                //sman.SetScene(curregion);
             }
         }
         catch (Exception ex)
