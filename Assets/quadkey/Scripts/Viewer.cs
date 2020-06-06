@@ -112,13 +112,16 @@ namespace Aiskwk.Map
         }
         public void ReAdjustViewerInitialPosition()
         {
-            Debug.Log($"ReAdjustViewerInitialPosition - current scale:{transform.localScale}");
+            Debug.Log($"ReAdjustViewerInitialPosition - before scale:{transform.localScale} rotation:{transform.localRotation.eulerAngles}");
+            bodyPrefabRotation = Quaternion.identity;
+            bodyPlaneRotation = Quaternion.identity;
             var scale = transform.localScale;
 
             var parent = transform.parent;
             transform.SetParent(null, worldPositionStays: false);// disconnect
             transform.position = viewerDefaultPosition;
             transform.localRotation = Quaternion.Euler(viewerDefaultRotation);
+            Debug.Log($"ReAdjustViewerInitialPosition - viewerDefaultRotation:{viewerDefaultRotation}");
             var t = GetRootTransform(parent.transform);
             var s = t.localScale.x;
             if (s != 0)
@@ -134,6 +137,7 @@ namespace Aiskwk.Map
             transform.SetParent(parent.transform, worldPositionStays: true);// reconnect
             TranslateViewer(0, 0);
             RotateViewer(0);
+            Debug.Log($"ReAdjustViewerInitialPosition - after  scale:{transform.localScale} rotation:{transform.localRotation.eulerAngles}");
             //DumpViewer();
         }
 
@@ -243,6 +247,9 @@ namespace Aiskwk.Map
         public bool showDroppings = false;
         public void MakeAvatar(string avaname, float angle, Vector3 shift, float scale = 1,float visorscale=2)
         {
+            Debug.Log($"MakeAvatar {avaname} angle:{angle}");
+            Debug.Log($"MakeAvatar - Viewer rotation before  {transform.localRotation.eulerAngles}");
+
             DestroyAvatar();
             moveplane = new GameObject("moveplane");
             body = new GameObject("body");
@@ -261,7 +268,7 @@ namespace Aiskwk.Map
             visor.transform.position = vv;
             var vska = visorscale;
             visor.transform.localScale = new Vector3(vska,vska/2,vska);
-            visor.transform.localRotation = Quaternion.Euler(0, -angle, 0); ;
+            visor.transform.localRotation = Quaternion.Euler(0, -angle, 0); 
             visor.transform.SetParent(body.transform, worldPositionStays: false);
             qut.SetColorOfGo(visor, Color.black);
 
@@ -298,6 +305,7 @@ namespace Aiskwk.Map
                 qut.SetColorOfGo(rod, Color.blue);
             }
             rodgo.transform.SetParent(transform, worldPositionStays: false);
+            Debug.Log($"MakeAvatar - Viewer rotation after  {transform.localRotation.eulerAngles}");
         }
         public void SetCamPosition()
         {
@@ -393,10 +401,14 @@ namespace Aiskwk.Map
         public void BuildViewer()
         {
             //Debug.Log("BuildViewer");
+            Debug.Log($"BuildViewer - Viewer rotation before  {transform.localRotation.eulerAngles}");
+
             DeleteGos();
             var shift = Vector3.zero;
             var scale = 1.0f;
             var angle = 0;
+            bodyPrefabRotation = Quaternion.identity;
+            bodyPlaneRotation = Quaternion.identity;
             var pfix = "obj3d/";
             followGround = true;
             switch (viewerAvatar)
@@ -434,12 +446,15 @@ namespace Aiskwk.Map
                     }
                 case ViewerAvatar.Rover:
                     {
-                        angle = 90;
+                        angle = 90; 
                         MakeAvatar(pfix + "rover2", angle, shift, scale, visorscale: 0.01f);
                         break;
                     }
                 case ViewerAvatar.Car012:
                     {
+                        bodyPrefabRotation = Quaternion.identity;
+                        bodyPlaneRotation = Quaternion.identity;
+
                         angle = 0;
                         scale = 1 / 0.3125f;
                         MakeAvatar("Cars/Car012", angle, shift, scale, visorscale: 0.01f);
@@ -472,6 +487,7 @@ namespace Aiskwk.Map
             }
             TranslateViewer(0, 0);
             RotateViewer(0);
+            Debug.Log($"BuildViewer - Viewer rotation after  {transform.localRotation.eulerAngles}");
         }
 
         ViewerAvatar NextAvatar(ViewerAvatar curava)
@@ -521,6 +537,8 @@ namespace Aiskwk.Map
 
         void RotateViewer(float rotate)
         {
+            Debug.Log($"RotateViewer - Viewer rotation before  {transform.localRotation.eulerAngles}");
+
             bodyPlaneRotation *= Quaternion.Euler(new Vector3(0, rotate, 0));
             moveplane.transform.localRotation = bodyPlaneRotation;
             bodyPrefabRotation *= Quaternion.Euler(new Vector3(0, rotate, 0));
@@ -528,6 +546,7 @@ namespace Aiskwk.Map
             {
                 body.transform.localRotation = Quaternion.FromToRotation(Vector3.up, lstnrm) * bodyPrefabRotation;
             }
+            Debug.Log($"RotateViewer - Viewer rotation after   {transform.localRotation.eulerAngles}");
             //bodypose.transform.localRotation = Quaternion.Euler(new Vector3(0, rotate, 0)) * Quaternion.FromToRotation(Vector3.up, lstnrm) ;
             //Debug.Log($"RotateViewer: {rotate}");
         }
@@ -539,7 +558,7 @@ namespace Aiskwk.Map
             var t = transform;
             var po = t.position;
             var (vo, _, _) = qmm.GetWcMeshPosProjectedAlongYnew(po);
-            var pnstar = po + zmove*bto.forward + xmove * bto.right;
+            var pnstar = po + zmove*bto.forward + xmove*bto.right;
 
             var (vn, nrm, _) = qmm.GetWcMeshPosProjectedAlongYnew(pnstar);
             var pn = vn + altitude*Vector3.up;
@@ -557,12 +576,12 @@ namespace Aiskwk.Map
                 //body.transform.localRotation = bodyPrefabRotation * nrmrot; // this did not work
                 rodgo.transform.localRotation = nrmrot;
             }
-            var fwdstr = bto.forward.ToString("f2");
-            var postr = po.ToString("f3");
-            var pnstr = pn.ToString("f3");
-            var nrmstr = nrm.ToString("f3");
-            Debug.Log($"TranslateViewerLatLng -  xmove:{xmove} zmove:{zmove} po:{postr}  pn:{pnstr}  fwd:{fwdstr}  nrm:{nrm}");
-            Debug.Log($"TranslateViewerLatLng - vo:{vo} vn:{vn}  pos:{t.position}");
+            //var fwdstr = bto.forward.ToString("f2");
+            //var postr = po.ToString("f3");
+            //var pnstr = pn.ToString("f3");
+            //var nrmstr = nrm.ToString("f3");
+            //Debug.Log($"TranslateViewerLatLng -  xmove:{xmove} zmove:{zmove} po:{postr}  pn:{pnstr}  fwd:{fwdstr}  nrm:{nrm}");
+            //Debug.Log($"TranslateViewerLatLng - vo:{vo} vn:{vn}  pos:{t.position}");
         }
 
 

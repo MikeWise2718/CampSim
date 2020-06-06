@@ -749,6 +749,8 @@ namespace CampusSimulator
                         useViewer = true;
                         roty2 = 0;
                         vviewerAvatarDefaultValue = ViewerAvatar.Rover;
+                        vviewerDefaultPosition = new Vector3(0, -60, 0);
+                        vviewerDefaultRotation = new Vector3(0,   0, 0);
                         mapscale = 1f;
                         hasLLmap = false;
                         break;

@@ -290,7 +290,8 @@ namespace Aiskwk.Map
                 var p1 = qmm.bptm - qmm.bptmnorm * len;
                 var p2 = qmm.bptm + qmm.bptmnorm * len;
 
-                var useQuatRot = true;
+                var useQuatRot = false;
+                var useQuatRot2 = true;
                 var useDualPoint = true; ;
                 if (tpmonden_p1 != p1 || tpmonden_p2 != p2)
                 {
@@ -300,9 +301,34 @@ namespace Aiskwk.Map
                         {
                             Destroy(tpmoden1);
                         }
-                        var pp1 = qmm.bptm - len*Vector3.up;
-                        var pp2 = qmm.bptm + len*Vector3.up;
+                        var pp1 = qmm.bptm - len * Vector3.up;
+                        var pp2 = qmm.bptm + len * Vector3.up;
                         tpmoden1 = GpuInst.CreateCylinderGpu(null, "tp_normal_1", pp1, pp2, 1f, "purple");
+                        tpmoden1.transform.SetParent(decoroot.transform, worldPositionStays: false);
+                        var nrm = qmm.bptmnorm;
+                        if (Vector3.Dot(Vector3.up, nrm) < 0)
+                        {
+                            nrm = -nrm;
+                        }
+                        var nrmrot = Quaternion.FromToRotation(Vector3.up, nrm);
+                        tpmoden1.transform.localRotation = nrmrot;
+                    }
+                    if (useQuatRot2)
+                    {
+                        if (tpmoden1 != null)
+                        {
+                            Destroy(tpmoden1);
+                        }
+                        tpmoden1 = new GameObject("tp_modem_green");
+                        tpmoden1.transform.position = qmm.bptm;
+                        {
+                            var rod = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+                            var rodheight = len;
+                            rod.transform.localScale = new Vector3(0.2f, rodheight, 0.2f);
+                            rod.transform.position = new Vector3(0, rodheight * 0.75f, 0);
+                            rod.transform.SetParent(tpmoden1.transform, worldPositionStays: false);
+                            qut.SetColorOfGo(rod, Color.green);
+                        }
                         tpmoden1.transform.SetParent(decoroot.transform, worldPositionStays: false);
                         var nrm = qmm.bptmnorm;
                         if (Vector3.Dot(Vector3.up, nrm) < 0)

@@ -137,7 +137,7 @@ namespace Aiskwk.Map
 
         public void DisposeOfThings()
         {
-            DestroyViewer();
+            QMeshDestroyViewer();
         }
 
         public bool CheckWebReleventChange()
@@ -921,12 +921,12 @@ namespace Aiskwk.Map
 
         public void RegenerateViewer()
         {
-            DestroyViewer();
+            QMeshDestroyViewer();
             if (!addViewer) return;
 
-            BuildViewer();
+            QmeshBuildViewer();
         }
-        void DestroyViewer()
+        void QMeshDestroyViewer()
         {
             if (viewerobj != null)
             {
@@ -938,14 +938,17 @@ namespace Aiskwk.Map
             Viewer.InvalidateViewerCamera();
             //Debug.LogWarning("Invalidated viewer");
         }
-        public void BuildViewer()
+        public void QmeshBuildViewer()
         {
-            DestroyViewer();
+            QMeshDestroyViewer();
             viewerobj = new GameObject("Viewer");
             viewer = viewerobj.AddComponent<Viewer>();
             viewer.InitViewer(this);
-            viewerobj.transform.SetParent(this.transform, worldPositionStays: true);
+            //viewerobj.transform.SetParent(this.transform, worldPositionStays: true);
+            Debug.Log($"QmeshBuildViewer - Viewer rotation before SetParent  {viewerobj.transform.localRotation.eulerAngles}");
+            viewerobj.transform.SetParent(this.transform, worldPositionStays: false);
             viewerobj.transform.SetAsFirstSibling();
+            Debug.Log($"QmeshBuildViewer - Viewer rotation after  SetParent  {viewerobj.transform.localRotation.eulerAngles}");
             addViewer = true;
             old_addViewer = true;
         }
@@ -1025,7 +1028,7 @@ namespace Aiskwk.Map
             // Elevations
             (var elok, var nElRetrived) = await GetElevations(execute, forceload);
             //Debug.Log($"Retrived {nElRetrived} elevations");
-            DestroyViewer();
+            QMeshDestroyViewer();
 
             var nVertRowsTodo = nVertSecs;
             var nVertRowsDone = 0;
