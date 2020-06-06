@@ -510,7 +510,15 @@ namespace Aiskwk.Map
             visor.transform.localRotation *= Quaternion.Euler(new Vector3(rotate, 0, 0));
             //Debug.Log("Rotated visor by " + rotate);
         }
-        Vector3 lstnrm = Vector3.up;
+
+        void RaiseViewer(float ymove)
+        {
+            altitude += ymove;
+            TranslateViewerProjected(0, 0);
+            var posstr = transform.position.ToString("f1");
+            //Debug.Log($"RaiseViewer ymove:{ymove} newpos:{posstr}");
+        }
+
         void RotateViewer(float rotate)
         {
             bodyPlaneRotation *= Quaternion.Euler(new Vector3(0, rotate, 0));
@@ -524,35 +532,19 @@ namespace Aiskwk.Map
             //Debug.Log($"RotateViewer: {rotate}");
         }
 
-        Vector3 FlattenForward(Vector3 fwd)
-        {
-            if (fwd.x == 0 && fwd.z == 0)
-            {
-                return Vector3.forward;
-            }
-            var rv = new Vector3(fwd.x, 0, fwd.z);
-            rv.Normalize();
-            return rv;
-        }
-        void RaiseViewer(float ymove)
-        {
-            altitude += ymove;
-            TranslateViewerProjected(0,0);
-            var posstr = transform.position.ToString("f1");
-            //Debug.Log($"RaiseViewer ymove:{ymove} newpos:{posstr}");
-        }
+        Vector3 lstnrm = Vector3.up;
         void TranslateViewerProjected(float xmove, float zmove)
         {
-            var bt = moveplane.transform;
+            var bto = moveplane.transform;
             var t = transform;
-            var p = t.position;
-            var postr = t.position.ToString("f3");
-            var (vo, nrm, _) = qmm.GetWcMeshPosProjectedAlongYnew(p);
-            var fwd = bt.forward;
-            p += zmove * fwd + xmove * bt.right;
-            var fwdstr = fwd.ToString("f2");
-            var (vn, _, _) = qmm.GetWcMeshPosProjectedAlongYnew(p);
-            t.position = vn + altitude*Vector3.up;
+            var po = t.position;
+            var (vo, _, _) = qmm.GetWcMeshPosProjectedAlongYnew(po);
+            var pnstar = po + zmove*bto.forward + xmove * bto.right;
+
+            var (vn, nrm, _) = qmm.GetWcMeshPosProjectedAlongYnew(pnstar);
+            var pn = vn + altitude*Vector3.up;
+            t.position = pn;
+
             if (followGround)
             {
                 if (Vector3.Dot(Vector3.up, nrm) < 0)
@@ -562,22 +554,25 @@ namespace Aiskwk.Map
                 lstnrm = nrm;
                 var nrmrot = Quaternion.FromToRotation(Vector3.up, nrm);
                 body.transform.localRotation = nrmrot * bodyPrefabRotation;
+                //body.transform.localRotation = bodyPrefabRotation * nrmrot; // this did not work
                 rodgo.transform.localRotation = nrmrot;
             }
-            var pnstr = t.position.ToString("f3");
+            var fwdstr = bto.forward.ToString("f2");
+            var postr = po.ToString("f3");
+            var pnstr = pn.ToString("f3");
             var nrmstr = nrm.ToString("f3");
-            //Debug.Log($"TranslateViewerLatLng -  xmove:{xmove} zmove:{zmove} po:{postr}  pn:{pnstr}  fwd:{fwdstr}");
-            //Debug.Log($"TranslateViewerLatLng - vo:{vo} vn:{vn}  pos:{t.position}");
+            Debug.Log($"TranslateViewerLatLng -  xmove:{xmove} zmove:{zmove} po:{postr}  pn:{pnstr}  fwd:{fwdstr}  nrm:{nrm}");
+            Debug.Log($"TranslateViewerLatLng - vo:{vo} vn:{vn}  pos:{t.position}");
         }
 
 
 
         void TranslateViewerToPosition(Vector3 p)
         {
-            var (vo, nrm, _) = qmm.GetWcMeshPosProjectedAlongY(p);
+            var (vo, _, _) = qmm.GetWcMeshPosProjectedAlongY(p);
             var bt = moveplane.transform;
             var t = transform;
-            var (vn, _, _) = qmm.GetWcMeshPosProjectedAlongY(p);
+            var (vn, nrm, _) = qmm.GetWcMeshPosProjectedAlongY(p);
             //t.position = p + Vector3.up * (vn.y - vo.y);
             t.position = vn;
             if (followGround)
@@ -590,7 +585,6 @@ namespace Aiskwk.Map
                 lstnrm = nrm;
                 var nrmrot = Quaternion.FromToRotation(Vector3.up, nrm);
                 body.transform.localRotation = nrmrot * bodyPrefabRotation;
-                //bodypose.transform.localRotation = nrmrot;
                 rodgo.transform.localRotation = nrmrot;
             }
             var pnstr = t.position.ToString("f3");

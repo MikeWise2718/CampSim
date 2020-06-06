@@ -131,7 +131,8 @@ namespace Aiskwk.Map
         public GameObject tpmode2;
         public GameObject tpmode3;
         public GameObject tpmodem;
-        public GameObject tpmoden;
+        public GameObject tpmoden1;
+        public GameObject tpmoden2;
         public Vector3 tpmonden_p1;
         public Vector3 tpmonden_p2;
         public Vector3 tpmodenorm;
@@ -288,15 +289,41 @@ namespace Aiskwk.Map
 
                 var p1 = qmm.bptm - qmm.bptmnorm * len;
                 var p2 = qmm.bptm + qmm.bptmnorm * len;
-   
+
+                var useQuatRot = true;
+                var useDualPoint = true; ;
                 if (tpmonden_p1 != p1 || tpmonden_p2 != p2)
                 {
-                    if (tpmoden != null)
+                    if (useQuatRot)
                     {
-                        Destroy(tpmoden);
+                        if (tpmoden1 != null)
+                        {
+                            Destroy(tpmoden1);
+                        }
+                        var pp1 = qmm.bptm - len*Vector3.up;
+                        var pp2 = qmm.bptm + len*Vector3.up;
+                        tpmoden1 = GpuInst.CreateCylinderGpu(null, "tp_normal_1", pp1, pp2, 1f, "purple");
+                        tpmoden1.transform.SetParent(decoroot.transform, worldPositionStays: false);
+                        var nrm = qmm.bptmnorm;
+                        if (Vector3.Dot(Vector3.up, nrm) < 0)
+                        {
+                            nrm = -nrm;
+                        }
+                        var nrmrot = Quaternion.FromToRotation(Vector3.up, nrm);
+                        tpmoden1.transform.localRotation = nrmrot;
                     }
-                    tpmoden = GpuInst.CreateCylinderGpu(null, "tp_normal", p1, p2, 1f, "yellow");
-                    tpmoden.transform.SetParent(decoroot.transform, worldPositionStays: false);
+                    if (useDualPoint)
+                    {
+                        if (tpmoden2 != null)
+                        {
+                            Destroy(tpmoden2);
+                        }
+                        var len2 = len / 2;
+                        var pp1 = qmm.bptm - len2*qmm.bptmnorm;
+                        var pp2 = qmm.bptm + len2*qmm.bptmnorm;
+                        tpmoden2 = GpuInst.CreateCylinderGpu(null, "tp_normal_2", pp1, pp2, 2f, "yellow");
+                        tpmoden2.transform.SetParent(decoroot.transform, worldPositionStays: false);
+                    }
                     tpmonden_p1 = p1;
                     tpmonden_p2 = p2;
                     //Debug.Log($"d1:{d1} d2:{d2} d3:{d3} len:{len}");
