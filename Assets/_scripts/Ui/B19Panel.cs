@@ -6,6 +6,7 @@ using CampusSimulator;
 
 public class B19Panel : MonoBehaviour
 {
+    public SceneMan sman;
 
     Toggle b19_model;
     Toggle b19_level1;
@@ -17,27 +18,20 @@ public class B19Panel : MonoBehaviour
     Dropdown b19_matmode;
 
 
-    SceneMan sman;
     BuildingMan bman;
     B19Willow b19comp;
 
     bool panelActive = false;
     bool linked = false;
 
-    void Start()
+    public void Init0()
     {
+        bman = sman.bdman;
         panelActive = false;
-        LinkObjectsAndComponents();
     }
 
-    public void LinkObjectsAndComponents()
+    public void SceneLinkObjectsAndComponents()
     {
-        sman = FindObjectOfType<SceneMan>();
-        if (sman == null)
-        {
-            throw new UnityException("Frame panel could not find RegionMan");
-        }
-        bman = FindObjectOfType<BuildingMan>();
         var bld = bman?.GetBuilding("Bld19");
         if (bld != null)
         {
@@ -46,6 +40,7 @@ public class B19Panel : MonoBehaviour
         else
         {
             Debug.LogWarning("B19 Panel can not find Bld19");
+            return;
         }
         b19_model = transform.Find("B19Model").GetComponent<Toggle>();
         b19_level1 = transform.Find("Level1").GetComponent<Toggle>();
@@ -61,10 +56,10 @@ public class B19Panel : MonoBehaviour
     }
     public void InitVals()
     {
-        Debug.Log("B19Panel InitVals called");
+        Debug.Log($"B19Panel InitVals called linked:{linked}");
         if (!linked)
         {
-            LinkObjectsAndComponents();
+            SceneLinkObjectsAndComponents();
         }
         if (b19comp == null) return;
         b19_model.isOn = b19comp.loadmodel.Get();

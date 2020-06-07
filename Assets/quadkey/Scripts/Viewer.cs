@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Aiskwk.Map
 {
     public enum ViewerAvatar { SphereMan, CapsuleMan, SimpleTruck, Minehaul1, Shovel1, Dozer1, Dozer2, Rover, QuadCopter, Car012 };
-    public enum ViewerCamPosition { Eyes, FloatBehindDiv2, FloatBehind, FloatBehindTimes2 }
+    public enum ViewerCamPosition { Eyes, FloatBehindDiv2, FloatBehind, FloatBehindTimes2, FloatBehindTimes4 }
     public enum ViewerControl { Position, Velocity }
 
     public class Viewer : MonoBehaviour
@@ -135,7 +135,8 @@ namespace Aiskwk.Map
                 Debug.LogError($"{t.name} s == 0");
             }
             transform.SetParent(parent.transform, worldPositionStays: true);// reconnect
-            transform.localRotation = Quaternion.Euler(viewerDefaultRotation); /// Think this has to be zero? Causes a bug if it is not
+            transform.localRotation = Quaternion.Euler(viewerDefaultRotation); // Think this has to match the rotation it was built with
+                                                                               // or we get problems when we follownormal along the mesh
             TranslateViewer(0, 0);
             RotateViewer(0);
             Debug.Log($"ReAdjustViewerInitialPosition - after  scale:{transform.localScale} rotation:{transform.localRotation.eulerAngles}");
@@ -248,8 +249,8 @@ namespace Aiskwk.Map
         public bool showDroppings = false;
         public void MakeAvatar(string avaname, float angle, Vector3 shift, float scale = 1,float visorscale=2)
         {
-            Debug.Log($"MakeAvatar {avaname} angle:{angle}");
-            Debug.Log($"MakeAvatar - Viewer rotation before  {transform.localRotation.eulerAngles}");
+            //Debug.Log($"MakeAvatar {avaname} angle:{angle}");
+            //Debug.Log($"MakeAvatar - Viewer rotation before  {transform.localRotation.eulerAngles}");
 
             DestroyAvatar();
             moveplane = new GameObject("moveplane");
@@ -306,7 +307,7 @@ namespace Aiskwk.Map
                 qut.SetColorOfGo(rod, Color.blue);
             }
             rodgo.transform.SetParent(transform, worldPositionStays: false);
-            Debug.Log($"MakeAvatar - Viewer rotation after  {transform.localRotation.eulerAngles}");
+            //Debug.Log($"MakeAvatar - Viewer rotation after  {transform.localRotation.eulerAngles}");
         }
         public void SetCamPosition()
         {
@@ -332,6 +333,11 @@ namespace Aiskwk.Map
                         camgo.transform.position = new Vector3(0, 12f, -24f);
                         break;
                     }
+                case ViewerCamPosition.FloatBehindTimes4:
+                    {
+                        camgo.transform.position = new Vector3(0, 24f, -48f);
+                        break;
+                    }
             }
         }
 
@@ -341,7 +347,7 @@ namespace Aiskwk.Map
             {
                 case ViewerCamPosition.Eyes:
                     {
-                        viewerCamPosition = ViewerCamPosition.FloatBehindTimes2;
+                        viewerCamPosition = ViewerCamPosition.FloatBehindTimes4;
                         break;
                     }
                 case ViewerCamPosition.FloatBehindDiv2:
@@ -357,6 +363,11 @@ namespace Aiskwk.Map
                 case ViewerCamPosition.FloatBehindTimes2:
                     {
                         viewerCamPosition = ViewerCamPosition.FloatBehind;
+                        break;
+                    }
+                case ViewerCamPosition.FloatBehindTimes4:
+                    {
+                        viewerCamPosition = ViewerCamPosition.FloatBehindTimes2;
                         break;
                     }
             }
@@ -402,7 +413,7 @@ namespace Aiskwk.Map
         public void BuildViewer()
         {
             //Debug.Log("BuildViewer");
-            Debug.Log($"BuildViewer - Viewer rotation before  {transform.localRotation.eulerAngles}");
+            //Debug.Log($"BuildViewer - Viewer rotation before  {transform.localRotation.eulerAngles}");
 
             DeleteGos();
             var shift = Vector3.zero;
@@ -488,7 +499,7 @@ namespace Aiskwk.Map
             }
             TranslateViewer(0, 0);
             RotateViewer(0);
-            Debug.Log($"BuildViewer - Viewer rotation after  {transform.localRotation.eulerAngles}");
+            //Debug.Log($"BuildViewer - Viewer rotation after  {transform.localRotation.eulerAngles}");
         }
 
         ViewerAvatar NextAvatar(ViewerAvatar curava)
@@ -538,16 +549,17 @@ namespace Aiskwk.Map
 
         void RotateViewer(float rotate)
         {
-            Debug.Log($"RotateViewer - Viewer rotation before  {transform.localRotation.eulerAngles}");
+            //Debug.Log($"RotateViewer - Viewer rotation before  {transform.localRotation.eulerAngles} followGround:{followGround}");
 
             bodyPlaneRotation *= Quaternion.Euler(new Vector3(0, rotate, 0));
             moveplane.transform.localRotation = bodyPlaneRotation;
             bodyPrefabRotation *= Quaternion.Euler(new Vector3(0, rotate, 0));
-            if (followGround)
-            {
-                body.transform.localRotation = Quaternion.FromToRotation(Vector3.up, lstnrm) * bodyPrefabRotation;
-            }
-            Debug.Log($"RotateViewer - Viewer rotation after   {transform.localRotation.eulerAngles}");
+            body.transform.localRotation = Quaternion.FromToRotation(Vector3.up, lstnrm) * bodyPrefabRotation;
+            //if (followGround)
+            //{
+            //    body.transform.localRotation = Quaternion.FromToRotation(Vector3.up, lstnrm) * bodyPrefabRotation;
+            //}
+            //Debug.Log($"RotateViewer - Viewer rotation after   {transform.localRotation.eulerAngles}");
             //bodypose.transform.localRotation = Quaternion.Euler(new Vector3(0, rotate, 0)) * Quaternion.FromToRotation(Vector3.up, lstnrm) ;
             //Debug.Log($"RotateViewer: {rotate}");
         }

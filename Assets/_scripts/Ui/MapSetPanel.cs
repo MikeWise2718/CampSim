@@ -93,21 +93,10 @@ public class MapSetPanel : MonoBehaviour
     bool buttonsInited = false;
     bool linked = false;
 
-    void Start()
-    {
-        //Debug.Log("MapSetPanel Start called");
-        panelActive = true;
-        LinkObjectsAndComponents();
-    }
 
     public void LinkObjectsAndComponents()
     {
         //Debug.Log("MapSetPanel LinkObjectsAndComponents called");
-        sman = FindObjectOfType<SceneMan>();
-        if (sman == null)
-        {
-            Debug.LogError("MapSet panel could not find SceneMan");
-        }
         mman = FindObjectOfType<MapMan>();
         if (mman == null)
         {
@@ -165,6 +154,11 @@ public class MapSetPanel : MonoBehaviour
         linked = true;
     }
 
+    public void Init0()
+    {
+        LinkObjectsAndComponents();
+    }
+
     public void InitCheckNeedSetModeRefresh()
     {
         needSetSceneReset = false;
@@ -181,7 +175,7 @@ public class MapSetPanel : MonoBehaviour
 
     public void InitVals()
     {
-       // Debug.Log("MapSetPanel.InitVals called");
+        Debug.Log($"MapSetPanel.InitVals called scene:{sman.curscene} iscustomizable:{mman.isCustomizable}");
         if (!linked)
         {
             LinkObjectsAndComponents();
@@ -470,7 +464,7 @@ public class MapSetPanel : MonoBehaviour
         if (isLoadingMaps && Time.time-lastLoadCheck>checkLoadInterval)
         {
             var msg = "";
-            var (isLoading, irupt, nbmLoaded, nbmToLoad, nelevBatchesLoaded, nelevBatchsToLoad) = mman.GetLoadingStatus();
+            var (isLoading, irupt,lodLoading, nbmLoaded, nbmToLoad, nelevBatchesLoaded, nelevBatchsToLoad) = mman.GetLoadingStatus();
             var numstr = $"{nbmLoaded}/{nbmToLoad}  {nelevBatchesLoaded}/{nelevBatchsToLoad}";
             if (irupt)
             {

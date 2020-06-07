@@ -9,6 +9,8 @@ using CampusSimulator;
 
 public class AboutPanel : MonoBehaviour
 {
+    public SceneMan sman;
+
     Text aboutText;
 
     Button closeButton;
@@ -21,21 +23,20 @@ public class AboutPanel : MonoBehaviour
     public float myCPU;
     public float myRAM;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        Init();
-    }
 
 
     void LinkObjectsAndComponents()
     {
-        var go = gameObject;
-        var name = go.name;
         aboutText = transform.Find("AboutText").GetComponent<Text>();
         closeButton = transform.Find("CloseButton").gameObject.GetComponent<Button>();
         copyClipboardButton = transform.Find("CopyClipboardButton").gameObject.GetComponent<Button>();
         deleteSettingsButton = transform.Find("DeleteSettingsButton").gameObject.GetComponent<Button>();
+    }
+
+    public void Init0()
+    {
+        LinkObjectsAndComponents();
+        Init();
     }
 
     public float getCurrentCpuUsage()

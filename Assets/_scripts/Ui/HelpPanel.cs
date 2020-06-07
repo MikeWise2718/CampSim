@@ -7,36 +7,26 @@ using GraphAlgos;
 
 public class HelpPanel : MonoBehaviour
 {
+    public CampusSimulator.SceneMan sman;
+
     Text helpText;
 
 
-    // Start is called before the first frame update
-    void Start()
+    public void Init0()
     {
-        InitVals();
+        LinkObjectsAndComponents();
+        FillHelpPanel();
     }
 
 
     void LinkObjectsAndComponents()
     {
-        var go = gameObject;
-        var name = go.name;
         helpText = transform.Find("HelpText").GetComponent<Text>();
     }
-
-    public void InitVals()
-    {
-    }
-
 
 
     public void FillHelpPanel()
     {
-        if (helpText == null)
-        {
-            LinkObjectsAndComponents();
-            InitVals();
-        }
 
         var sysver = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
         var utc = System.DateTime.UtcNow;

@@ -21,58 +21,52 @@ public class FramePanel : MonoBehaviour
     Dropdown topTextDropdown;
     Dropdown botTextDropdown;
 
-    SceneMan sman;
+    public SceneMan sman;
     FrameMan fman;
 
     bool linked = false;
 
     bool panelActive = false;
 
-    void Start()
+    public void Init0()
     {
-        Debug.Log("FramePanel Start called");
-
         panelActive = false;
         LinkObjectsAndComponents();
     }
-
     public void LinkObjectsAndComponents()
     {
-        Debug.Log("FramePanel LinkObjectsAndComponents called");
+        visTiedToggle = transform.Find("VisibilityTiedToggle").gameObject.GetComponent<Toggle>();
+        showCarsToggle = transform.Find("ShowCarRectsToggle").gameObject.GetComponent<Toggle>();
+        showPersToggle = transform.Find("ShowPersRectsToggle").gameObject.GetComponent<Toggle>();
+        showHeadToggle = transform.Find("ShowHeadRectsToggle").gameObject.GetComponent<Toggle>();
+        frameJourneys = transform.Find("FrameJourneysToggle").gameObject.GetComponent<Toggle>();
+        frameBuildings = transform.Find("FrameBuildingsToggle").gameObject.GetComponent<Toggle>();
+        frameGarages = transform.Find("FrameGaragesToggle").gameObject.GetComponent<Toggle>();
+        frameZones = transform.Find("FrameZonesToggle").gameObject.GetComponent<Toggle>();
+        topTextDropdown = transform.Find("TopTextDropdown").gameObject.GetComponent<Dropdown>();
+        botTextDropdown = transform.Find("BotTextDropdown").gameObject.GetComponent<Dropdown>();
+        panelActive = true;
+    }
 
-        sman = FindObjectOfType<SceneMan>();
-        if (sman == null)
-        {
-            throw new UnityException("Frame panel could not find RegionMan");
-        }
+
+    public void SceneLinkObjectsAndComponents()
+    {
+        Debug.Log("FramePanel SceneLinkObjectsAndComponents called");
+
         fman = FindObjectOfType<FrameMan>();
-
         if (fman == null)
         {
-            Debug.Log("lman null");
-        }
-        {
-            visTiedToggle = transform.Find("VisibilityTiedToggle").gameObject.GetComponent<Toggle>();
-            showCarsToggle = transform.Find("ShowCarRectsToggle").gameObject.GetComponent<Toggle>();
-            showPersToggle = transform.Find("ShowPersRectsToggle").gameObject.GetComponent<Toggle>();
-            showHeadToggle = transform.Find("ShowHeadRectsToggle").gameObject.GetComponent<Toggle>();
-            frameJourneys = transform.Find("FrameJourneysToggle").gameObject.GetComponent<Toggle>();
-            frameBuildings = transform.Find("FrameBuildingsToggle").gameObject.GetComponent<Toggle>();
-            frameGarages = transform.Find("FrameGaragesToggle").gameObject.GetComponent<Toggle>();
-            frameZones = transform.Find("FrameZonesToggle").gameObject.GetComponent<Toggle>();
-            topTextDropdown = transform.Find("TopTextDropdown").gameObject.GetComponent<Dropdown>();
-            botTextDropdown = transform.Find("BotTextDropdown").gameObject.GetComponent<Dropdown>();
+            Debug.LogError("FrameMan cound not be found");
+            return;
         }
         linked = true;
         panelActive = true;
     }
     public void InitVals()
     {
-        Debug.Log("FramePanel InitVals called");
-
         if (!linked)
         {
-            LinkObjectsAndComponents();
+            SceneLinkObjectsAndComponents();
         }
         visTiedToggle.isOn = fman.visibilityTiedToDetectability.Get();
         showCarsToggle.isOn = fman.showCarRects.Get();

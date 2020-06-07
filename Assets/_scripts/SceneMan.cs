@@ -194,13 +194,17 @@ namespace CampusSimulator
             veman = FindObjectOfType<VehicleMan>();
             frman = FindObjectOfType<FrameMan>();
 
-            bdman.sman = this;
-            znman.sman = this;
-            gaman.sman = this;
-            jnman.sman = this;
-            frman.sman = this;
-            vcman.sman = this;
             uiman.sman = this;
+            mpman.sman = this;
+            vcman.sman = this;
+            bdman.sman = this;
+            gaman.sman = this;
+            znman.sman = this;
+            jnman.sman = this;
+            loman.sman = this;
+            psman.sman = this;
+            veman.sman = this;
+            frman.sman = this;
 
             bool subbordinatethemall = false;
             if (subbordinatethemall)
@@ -1440,6 +1444,7 @@ namespace CampusSimulator
 
         private void Start()
         {
+            Debug.Log("SceneMan.Start called");
             InitPhase0();
             InitPhase1();
             var esi = SceneMan.GetInitialSceneOption();
@@ -1566,6 +1571,8 @@ namespace CampusSimulator
         int updateCount = 0;
         private void Update()
         {
+            //Debug.Log($"SceneMan.Update called {updateCount}");
+
             //if (autoerrorcorrect)
             //{
             //    if (errmarkctrl.nMarksInList >= errmarkctrl.nErrmarkIntervalsInSet)
@@ -1594,6 +1601,7 @@ namespace CampusSimulator
 
             if (needsrefresh)
             {
+                var sw1 = new StopWatch();
                 if (needstotalrefresh)
                 {
                     var sceneToRefresh = curscene;
@@ -1601,12 +1609,20 @@ namespace CampusSimulator
                     {
                         sceneToRefresh = requestScene;
                     }
+                    var sw2 = new StopWatch();
                     SetScene(sceneToRefresh, force: true);
+                    sw2.Stop();
+                    Debug.Log($"TotalRefresh SetScene took {sw2.ElapSecs()} secs");
                 }
+                var sw3 = new StopWatch();
                 RefreshSceneManGos(); // in update
+                sw3.Stop();
+                Debug.Log($"RefreshSceneManGos took {sw3.ElapSecs()} secs");
                 uiman.SyncState();
                 needstotalrefresh = false;
                 needsrefresh = false;
+                sw1.Stop();
+                Debug.Log($"Refresh took {sw1.ElapSecs()} secs");
             }
             KeyProcessing();
             updateCount++;

@@ -6,7 +6,7 @@ using CampusSimulator;
 
 public class InfoPanel : MonoBehaviour
 {
-    SceneMan sman;
+    public SceneMan sman;
     VidcamMan vman;
     JourneyMan jman;
     GarageMan gman;
@@ -18,11 +18,10 @@ public class InfoPanel : MonoBehaviour
 
     GameObject trackedObject = null;
 
-    // Start is called before the first frame update
-    void Start()
+    public void Init0()
     {
         LinkObjectsAndComponents();
-        Init();
+        InitoInfoPanels();
     }
 
     public void ComplainIfNull(object oman,string tname,string oname)
@@ -34,16 +33,15 @@ public class InfoPanel : MonoBehaviour
     }
     public void LinkObjectsAndComponents()
     {
-        sman = FindObjectOfType<SceneMan>();
-        jman = FindObjectOfType<JourneyMan>();
-        gman = FindObjectOfType<GarageMan>();
-        vman = FindObjectOfType<VidcamMan>();
+        jman = sman.jnman;
+        gman = sman.gaman;
+        vman = sman.vcman;
+        locman = sman.loman;
+
         ComplainIfNull(sman, "SceneMan", "sman");
         ComplainIfNull(jman, "JourneyMan", "jman");
         ComplainIfNull(gman, "GarageMan", "gman");
         ComplainIfNull(vman, "VidcamMan", "vman");
-
-        trackedObject = vman.GetCurrentCamera()?.gameObject;
 
 
         sysText = transform.Find("SysText")?.GetComponent<Text>();
@@ -51,11 +49,10 @@ public class InfoPanel : MonoBehaviour
         geoText = transform.Find("GeoText")?.GetComponent<Text>();
         mscText = transform.Find("MscText")?.GetComponent<Text>();
 
-        locman = FindObjectOfType<LocationMan>();
-
+        
         //Debug.Log("assigned sysText and simText");
     }
-    void Init()
+    void InitoInfoPanels()
     {
 
         var arial = (Font)Resources.GetBuiltinResource(typeof(Font), "Arial.ttf");
@@ -101,8 +98,8 @@ public class InfoPanel : MonoBehaviour
         string extext = $" {msec:0.0} ms\nlod:{lod} {fps:0.0} fps GC:{gcmem:0.0} mb";
         if (Aiskwk.Map.QmapMesh.isLoading)
         {
-            var (isLoading, irupt, nbmLoaded, nbmToLoad, nelevBatchesLoaded, nelevBatchsToLoad) = sman.mpman.GetLoadingStatus();
-            extext = $"\nlod:{lod} Bitmaps:{nbmLoaded}/{nbmToLoad} Elev:{nelevBatchesLoaded}/{nelevBatchsToLoad}";
+            var (isLoading, irupt, lodLoading, nbmLoaded, nbmToLoad, nelevBatchesLoaded, nelevBatchsToLoad) = sman.mpman.GetLoadingStatus();
+            extext = $"\nlod:{lodLoading} Bitmaps:{nbmLoaded}/{nbmToLoad} Elev:{nelevBatchesLoaded}/{nelevBatchsToLoad}";
             if (irupt)
             {
                 extext = $"IRPUT {extext}";

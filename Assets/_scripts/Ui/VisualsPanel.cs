@@ -31,24 +31,22 @@ public class VisualsPanel : MonoBehaviour
 
     bool panelActive = false;
 
-    void Start()
+    public void Init0()
     {
         panelActive = false;
         LinkObjectsAndComponents();
     }
     public void LinkObjectsAndComponents()
     {
-        sman = FindObjectOfType<SceneMan>();
-        if (sman == null)
-        {
-            throw new UnityException("Options panel could not find RegionMan");
-        }
-        bman = FindObjectOfType<BuildingMan>();
-        lman = FindObjectOfType<LinkCloudMan>();
-        gman = FindObjectOfType<GarageMan>();
-        mman = FindObjectOfType<MapMan>();
-        vman = FindObjectOfType<VidcamMan>();
+        bman = sman.bdman;
+        lman = sman.linkcloudman;
+        gman = sman.gaman;
+        mman = sman.mpman;
+        vman = sman.vcman;
 
+    }
+    public void SceneLinkObjectsAndComponents()
+    {
         initialScene = transform.Find("InitialSceneDropdown").gameObject.GetComponent<Dropdown>(); ;
         treeOptions = transform.Find("TreeModeDropdown").gameObject.GetComponent<Dropdown>();
         bldOptions = transform.Find("BuildingModeDropdown").gameObject.GetComponent<Dropdown>();
@@ -65,11 +63,8 @@ public class VisualsPanel : MonoBehaviour
     }
     public void InitVals()
     {
-        if (sman==null)
-        {
             //Debug.Log("sman is null in VisualsPanel.InitVals");
-            LinkObjectsAndComponents();
-        }
+        SceneLinkObjectsAndComponents();
         var errmsg = "Error in VisualsPanels.InitVals-";
         try
         {
@@ -241,7 +236,7 @@ public class VisualsPanel : MonoBehaviour
     }
     public void SetVals(bool closing=false)
     {
-        Debug.Log($"VisualsPanel/SetVals called - closing:{closing}");
+        //Debug.Log($"VisualsPanel/SetVals called - closing:{closing}");
         var chg = false;
         var errmsg = "Error in VisualsPanels.SetVals-";
         try

@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class OptionsPanel : MonoBehaviour
 {
+    public CampusSimulator.SceneMan sman;
 
     public GameObject visualPanelGo;
     public VisualsPanel visualsPanel;
@@ -29,7 +30,7 @@ public class OptionsPanel : MonoBehaviour
     public Toggle aboutToggle;
     public ToggleGroup togGroup;
     // Start is called before the first frame update
-    void Start()
+    public void Init0()
     {
         //Debug.Log("Options Panel Start:"+name);
         aboutPanelGo = transform.Find("AboutPanel").gameObject;
@@ -66,7 +67,7 @@ public class OptionsPanel : MonoBehaviour
 
         togGroup = GetComponent<ToggleGroup>();
         togGroup.allowSwitchOff = true; // otherwise it does not save state correctly when we turn off the panel
-        SyncOptionsTabState();
+        //SyncOptionsTabState();
     }
     public void SyncOptionsTabState()
     {
@@ -79,47 +80,33 @@ public class OptionsPanel : MonoBehaviour
         generalPanelGo.SetActive(generalToggle.isOn);
         helpPanelGo.SetActive(helpToggle.isOn);
         aboutPanelGo.SetActive(aboutToggle.isOn);
-        var heavyInit = false;
-        if (heavyInit)
+        if (aboutToggle.isOn)
         {
             aboutPanel.FillAboutPanel();
-            visualsPanel.InitVals();
-            mapSetPanel.InitVals();
-            framePanel.InitVals();
-            b19Panel.InitVals();
-            helpPanel.FillHelpPanel();
-            generalPanel.InitVals();
         }
-        else
+        if (visualToggle.isOn)
         {
-            if (aboutToggle.isOn)
-            {
-                aboutPanel.FillAboutPanel();
-            }
-            if (visualToggle.isOn)
-            {
-                visualsPanel.InitVals();
-            }
-            if (mapsetToggle.isOn)
-            {
-                mapSetPanel.InitVals();
-            }
-            if (frameToggle.isOn)
-            {
-                framePanel.InitVals();
-            }
-            if (b19Toggle.isOn)
-            {
-                b19Panel.InitVals();
-            }
-            if (helpToggle.isOn)
-            {
-                helpPanel.FillHelpPanel();
-            }
-            if (generalToggle.isOn)
-            {
-                generalPanel.InitVals();
-            }
+            visualsPanel.InitVals();
+        }
+        if (mapsetToggle.isOn)
+        {
+            mapSetPanel.InitVals();
+        }
+        if (frameToggle.isOn)
+        {
+            framePanel.InitVals();
+        }
+        if (b19Toggle.isOn)
+        {
+            b19Panel.InitVals();
+        }
+        if (helpToggle.isOn)
+        {
+            helpPanel.FillHelpPanel();
+        }
+        if (generalToggle.isOn)
+        {
+            generalPanel.InitVals();
         }
     }
     public void ChangingOptionsDialog(bool isOpening)

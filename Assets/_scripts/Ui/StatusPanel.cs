@@ -8,7 +8,7 @@ namespace CampusSimulator
 {
     public class StatusPanel : MonoBehaviour
     {
-        SceneMan sman;
+        public SceneMan sman;
         JourneyMan jman;
         GarageMan gman;
         LocationMan lman;
@@ -32,20 +32,11 @@ namespace CampusSimulator
         Canvas canvas;
         GameObject freeFlyPanel;
         // Start is called before the first frame update
-        void Start()
-        {
-            //Debug.Log("Status Panel Start");
-            InitPhase0();
-        }
+
         bool linked = false;
         void LinkObjectsAndComponents()
         {
             if (linked) return;
-            sman = FindObjectOfType<SceneMan>();
-            if (sman == null)
-            {
-                Debug.Log("Cound not find RegionMan");
-            }
             jman = sman.jnman;
             gman = sman.gaman;
             lman = sman.loman;
@@ -75,6 +66,7 @@ namespace CampusSimulator
             visButton = transform.Find("VisButton").gameObject.GetComponent<Button>();
             unkButton = transform.Find("UnkButton").gameObject.GetComponent<Button>();
             vt2dButton = transform.Find("Vt2DButton").gameObject.GetComponent<Button>();
+
             runButton.onClick.AddListener(delegate { RunButton(); });
             frameButton.onClick.AddListener(delegate { FrameButton(); });
             evacButton.onClick.AddListener(delegate { EvacButton(); });
@@ -92,7 +84,7 @@ namespace CampusSimulator
             linked = true;
         }
 
-        public void InitPhase0()
+        public void Init0()
         {
             LinkObjectsAndComponents();
         }
@@ -146,7 +138,7 @@ namespace CampusSimulator
             {
                 sman.frman.saveLabelListContinuously = true;
             }
-            Debug.Log("Toggled run to " + sman.jnman.spawnjourneys);
+            //Debug.Log("Toggled run to " + sman.jnman.spawnjourneys);
             ColorizeButtonStates();
             btnclk++;
         }
@@ -208,7 +200,7 @@ namespace CampusSimulator
         public void OptionsButton()
         {
             var newstate = !optionsPanelGo.activeSelf;
-            Debug.Log($"Options Button Pushed optionsPanelGo.activeSelf:{optionsPanelGo.activeSelf} -> newstate:{newstate}");
+            //Debug.Log($"Options Button Pushed optionsPanelGo.activeSelf:{optionsPanelGo.activeSelf} -> newstate:{newstate}");
             optionsPanelGo.SetActive(newstate);// this does immediately take effect
             optionsPanel.ChangingOptionsDialog(newstate);
         }
@@ -217,12 +209,12 @@ namespace CampusSimulator
         {
             ffpanstat = !ffpanstat;
             freeFlyPanel.SetActive(ffpanstat);
-            Debug.Log("Turned FreeFlyPanel " + ffpanstat);
+            //Debug.Log("Turned FreeFlyPanel " + ffpanstat);
         }
         //bool ffstat=false;
         public void FreeFlyButton()
         {
-            Debug.Log("FreeFlyButton Pushed");
+            //Debug.Log("FreeFlyButton Pushed");
             var ffstat = sman.vcman.ToggleFreeFly();
             if (freeFlyPanel)
             {

@@ -459,6 +459,7 @@ namespace Aiskwk.Map
         }
         public static int nbmLoaded = 0;
         public static int nbmToLoad = 0;
+        public static int lodLoading = 0;
 
 
         Texture2D vertex = null;
@@ -480,6 +481,7 @@ namespace Aiskwk.Map
             int nqktodo = nqk.x * nqk.y;
             nbmLoaded = 0;
             nbmToLoad = nqktodo;
+            lodLoading = levelOfDetail;
             bool getquadkeyok = false;
             bool hortexnull = true;
             vertex = null;

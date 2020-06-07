@@ -945,10 +945,10 @@ namespace Aiskwk.Map
             viewer = viewerobj.AddComponent<Viewer>();
             viewer.InitViewer(this);
             //viewerobj.transform.SetParent(this.transform, worldPositionStays: true);
-            Debug.Log($"QmeshBuildViewer - Viewer rotation before SetParent  {viewerobj.transform.localRotation.eulerAngles}");
+            //Debug.Log($"QmeshBuildViewer - Viewer rotation before SetParent  {viewerobj.transform.localRotation.eulerAngles}");
             viewerobj.transform.SetParent(this.transform, worldPositionStays: false);
             viewerobj.transform.SetAsFirstSibling();
-            Debug.Log($"QmeshBuildViewer - Viewer rotation after  SetParent  {viewerobj.transform.localRotation.eulerAngles}");
+            //Debug.Log($"QmeshBuildViewer - Viewer rotation after  SetParent  {viewerobj.transform.localRotation.eulerAngles}");
             addViewer = true;
             old_addViewer = true;
         }
