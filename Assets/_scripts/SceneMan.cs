@@ -189,7 +189,8 @@ namespace CampusSimulator
             gaman = FindObjectOfType<GarageMan>();
             znman = FindObjectOfType<ZoneMan>();
             jnman = FindObjectOfType<JourneyMan>();
-            loman = FindObjectOfType<LocationMan>();
+            //loman = FindObjectOfType<LocationMan>(); // Only for handhelds (Android, iPhone, etc)
+                                                       // causes lots of error messages
             psman = FindObjectOfType<PersonMan>();
             veman = FindObjectOfType<VehicleMan>();
             frman = FindObjectOfType<FrameMan>();
@@ -201,7 +202,7 @@ namespace CampusSimulator
             gaman.sman = this;
             znman.sman = this;
             jnman.sman = this;
-            loman.sman = this;
+            //loman.sman = this;
             psman.sman = this;
             veman.sman = this;
             frman.sman = this;
@@ -216,7 +217,7 @@ namespace CampusSimulator
                 gaman.transform.parent = rgo.transform;
                 znman.transform.parent = rgo.transform;
                 jnman.transform.parent = rgo.transform;
-                loman.transform.parent = rgo.transform;
+                //loman.transform.parent = rgo.transform;
                 psman.transform.parent = rgo.transform;
                 veman.transform.parent = rgo.transform;
                 frman.transform.parent = rgo.transform;

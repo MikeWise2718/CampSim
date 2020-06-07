@@ -427,8 +427,9 @@ public class MapSetPanel : MonoBehaviour
         s8 = "Ele Temp Info: " + s8;
         var sedregkey = "User settings regkey editor:"+" Computer\\HKEY_CURRENT_USER\\Software\\Unity\\UnityEditor\\DefaultCompany\\campusim";
         var splregkey = "User settings regkey player:" + " Computer\\HKEY_CURRENT_USER\\Software\\DefaultCompany\\campusim";
-        var spllogfiles = "Log files regkey player:" + "%USERPROFILE%\\AppData\\LocalLow\\CompanyName\\ProductName\\output_log.txt";
-        
+        //var spllogfiles = "Log files regkey player:" + "%USERPROFILE%\\AppData\\LocalLow\\DefaultCompany\\campusim\\Player.log";
+        var spllogfiles = "Log files regkey player:" + "C:\\Users\\mike\\AppData\\LocalLow\\DefaultCompany\\campusim\\Player.log";
+
 
         persMapsPathText.text = s1;
         persMapsDataText.text = s2;

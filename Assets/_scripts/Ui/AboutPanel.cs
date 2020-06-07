@@ -36,7 +36,6 @@ public class AboutPanel : MonoBehaviour
     public void Init0()
     {
         LinkObjectsAndComponents();
-        Init();
     }
 
     public float getCurrentCpuUsage()
@@ -56,13 +55,23 @@ public class AboutPanel : MonoBehaviour
     void Init()
     {
         Debug.Log("Initing AboutPanel");
-        cpuCounter = new System.Diagnostics.PerformanceCounter();
+        try
+        {
+            cpuCounter = new System.Diagnostics.PerformanceCounter();
 
-        cpuCounter.CategoryName = "Processor";
-        cpuCounter.CounterName = "% Processor Time";
-        cpuCounter.InstanceName = "_Total";
+            cpuCounter.CategoryName = "Processor";
+            cpuCounter.CounterName = "% Processor Time";
+            cpuCounter.InstanceName = "_Total";
 
-        ramCounter = new System.Diagnostics.PerformanceCounter("Memory", "Available MBytes");
+            ramCounter = new System.Diagnostics.PerformanceCounter("Memory", "Available MBytes");
+        }
+        catch(Exception ex)
+        {
+            Debug.LogError($"Could Not init perf counters");
+            Debug.LogError(ex.ToString());
+            cpuCounter = null;
+            ramCounter = null;
+        }
 
         //FillAboutPanel();
         if (!buttonsInited)
@@ -167,7 +176,6 @@ public class AboutPanel : MonoBehaviour
     {
         if (aboutText == null)
         {
-            LinkObjectsAndComponents();
             Init();
         }
 

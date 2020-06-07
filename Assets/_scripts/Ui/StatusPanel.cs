@@ -11,7 +11,6 @@ namespace CampusSimulator
         public SceneMan sman;
         JourneyMan jman;
         GarageMan gman;
-        LocationMan lman;
         public int btnclk;
         GameObject optionsPanelGo;
         OptionsPanel optionsPanel;
@@ -39,7 +38,6 @@ namespace CampusSimulator
             if (linked) return;
             jman = sman.jnman;
             gman = sman.gaman;
-            lman = sman.loman;
             var cango = GameObject.Find("SimParkUICanvas");
             canvas = cango.GetComponent<Canvas>();
             canvas = cango.GetComponent<Canvas>();
