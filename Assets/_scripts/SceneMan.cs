@@ -329,11 +329,7 @@ namespace CampusSimulator
         {
             return (this.needsrefresh, this.needstotalrefresh, this.requestScene);
         }
-        public (bool refresh,bool totalrefresh) GetRefreshStatus()
-        {
-            return (needsrefresh, needstotalrefresh);
-        }
-        public void RequestHighObjRefresh(string highobjname,string requester)
+         public void RequestHighObjRefresh(string highobjname,string requester)
         {
             //Debug.Log("RefreshHighObjRequested by " + requester);
             needsrefresh = true;
