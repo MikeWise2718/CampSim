@@ -232,7 +232,6 @@ namespace CampusSimulator
         {
         }
 
-
         public void SetScene( SceneSelE newscene,bool force=false )
         {
             if (newscene != curscene || force)
@@ -329,6 +328,10 @@ namespace CampusSimulator
         public (bool refresh,bool totalrefresh,SceneSelE requestScene) GetRefreshStatus()
         {
             return (this.needsrefresh, this.needstotalrefresh, this.requestScene);
+        }
+        public (bool refresh,bool totalrefresh) GetRefreshStatus()
+        {
+            return (needsrefresh, needstotalrefresh);
         }
         public void RequestHighObjRefresh(string highobjname,string requester)
         {
