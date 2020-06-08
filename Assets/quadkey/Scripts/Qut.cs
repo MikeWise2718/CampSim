@@ -447,7 +447,7 @@ namespace Aiskwk.Map
             return tmp;
         }
 
-        public static void CopyTextToClipboard(string textToCopy)
+        public static void CopyTextToClipboard(string textToCopy,string caller="",bool reportToLog=false)
         {
             TextEditor editor = new TextEditor
             {
@@ -455,6 +455,11 @@ namespace Aiskwk.Map
             };
             editor.SelectAll();
             editor.Copy();
+            if (reportToLog)
+            {
+                Debug.Log($"{caller} copied {textToCopy.Length} characters to clipboard");
+            }
+
         }
     }
 

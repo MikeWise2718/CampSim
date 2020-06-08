@@ -46,7 +46,7 @@ namespace CampusSimulator
             Selection.selectionChanged += OnSelectionChange;
 #endif
         }
-        public void Init(LinkCloudMan lm,SceneMan sm)
+        public void InitPhase0(LinkCloudMan lm,SceneMan sm)
         {
             this.lm = lm;
             this.sm = sm;

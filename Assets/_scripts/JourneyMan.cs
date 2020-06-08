@@ -939,7 +939,7 @@ namespace CampusSimulator
             if (nbldcnt == 0)
             {
                 nspawnfails++;
-                Debug.LogWarning("Cannot spawn jouneys withoug buildings nbldcnt:" + nbldcnt + " tries:" + nspawntries + " fails:" + nspawnfails);
+                Debug.LogWarning("Cannot spawn jouneys without buildings nbldcnt:" + nbldcnt + " tries:" + nspawntries + " fails:" + nspawnfails);
                 return; // no buildings so no journeys
             }
             if (nspawntries == 0 || (Time.time - lastspawn) > spawninterval)

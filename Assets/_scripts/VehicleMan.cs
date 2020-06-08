@@ -181,11 +181,6 @@ namespace CampusSimulator
             DeleteGos();
             CreateGos();
         }
-        private void Awake()
-        {
-            sman = FindObjectOfType<SceneMan>();
-        }
-
         // Use this for initialization
         void Start()
         {

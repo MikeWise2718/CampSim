@@ -318,8 +318,8 @@ namespace Aiskwk.Map
             var ny = pixbr.y - pixur.y;
             var nqkx = (nx / pixperqktile) + 1;
             var nqky = (ny / pixperqktile) + 1;
-            Debug.Log($"GetTileSizeOld pixbr:{pixbr}  pixbl:{pixbl}  pixur:{pixur}");
-            Debug.Log($"GetTileSizeOld nx:{nx} nqkx:{nqkx}     ny:{ny} nqky:{nqky}");
+            //Debug.Log($"GetTileSizeOld pixbr:{pixbr}  pixbl:{pixbl}  pixur:{pixur}");
+            //Debug.Log($"GetTileSizeOld nx:{nx} nqkx:{nqkx}     ny:{ny} nqky:{nqky}");
             var rv = (nqkx,nqky);
             return rv;
         }

@@ -25,7 +25,7 @@ namespace CampusSimulator
         public UxEnumSetting<BackGroundTypeE> backType = new UxEnumSetting<BackGroundTypeE>("BackgroundType",BackGroundTypeE.None);
 
 
-        private void Awake()
+        public void InitPhase0()
         {
             vmcamgo = new GameObject("Vmain Camera");
             vmcam = vmcamgo.AddComponent<Camera>();

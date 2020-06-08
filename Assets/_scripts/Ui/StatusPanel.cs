@@ -8,10 +8,9 @@ namespace CampusSimulator
 {
     public class StatusPanel : MonoBehaviour
     {
-        SceneMan sman;
+        public SceneMan sman;
         JourneyMan jman;
         GarageMan gman;
-        LocationMan lman;
         public int btnclk;
         GameObject optionsPanelGo;
         OptionsPanel optionsPanel;
@@ -26,26 +25,19 @@ namespace CampusSimulator
         Button visButton;
         Button unkButton;
         Button vt2dButton;
+        Button goButton;
+        Button optionsButton;
+        Button mapfitButton;
         Canvas canvas;
         GameObject freeFlyPanel;
         // Start is called before the first frame update
-        void Start()
-        {
-            //Debug.Log("Status Panel Start");
-            Init();
-        }
+
         bool linked = false;
         void LinkObjectsAndComponents()
         {
             if (linked) return;
-            sman = FindObjectOfType<SceneMan>();
-            if (sman == null)
-            {
-                Debug.Log("Cound not find RegionMan");
-            }
             jman = sman.jnman;
             gman = sman.gaman;
-            lman = sman.loman;
             var cango = GameObject.Find("SimParkUICanvas");
             canvas = cango.GetComponent<Canvas>();
             canvas = cango.GetComponent<Canvas>();
@@ -61,6 +53,9 @@ namespace CampusSimulator
             frameButton = transform.Find("FrameButton").gameObject.GetComponent<Button>();
             evacButton = transform.Find("EvacButton").gameObject.GetComponent<Button>();
             unevacButton = transform.Find("EvacButton").gameObject.GetComponent<Button>();
+            goButton = transform.Find("GoButton").gameObject.GetComponent<Button>();
+            optionsButton = transform.Find("OptionsButton").gameObject.GetComponent<Button>();
+            mapfitButton = transform.Find("MapFitButton").gameObject.GetComponent<Button>();
             freeFlyButton = transform.Find("FreeFlyButton").gameObject.GetComponent<Button>();
             freeFlyPanel = transform.Find("FreeFlyHelpPanel").gameObject;
             fteButton = transform.Find("FteButton").gameObject.GetComponent<Button>();
@@ -69,13 +64,27 @@ namespace CampusSimulator
             visButton = transform.Find("VisButton").gameObject.GetComponent<Button>();
             unkButton = transform.Find("UnkButton").gameObject.GetComponent<Button>();
             vt2dButton = transform.Find("Vt2DButton").gameObject.GetComponent<Button>();
+
+            runButton.onClick.AddListener(delegate { RunButton(); });
+            frameButton.onClick.AddListener(delegate { FrameButton(); });
+            evacButton.onClick.AddListener(delegate { EvacButton(); });
+            unevacButton.onClick.AddListener(delegate { UnevacButton(); });
+            unevacButton.onClick.AddListener(delegate { UnevacButton(); });
+            vt2dButton.onClick.AddListener(delegate { Vt2DButton(); });
+            freeFlyButton.onClick.AddListener(delegate { FreeFlyButton(); });
+            fteButton.onClick.AddListener(delegate { DetectFteButton(); });
+            conButton.onClick.AddListener(delegate { DetectConButton(); });
+            secButton.onClick.AddListener(delegate { DetectSecButton(); });
+            visButton.onClick.AddListener(delegate { DetectVisButton(); });
+            unkButton.onClick.AddListener(delegate { DetectUnkButton(); });
+            goButton.onClick.AddListener(delegate { GoButton(); });
+            optionsButton.onClick.AddListener(delegate { OptionsButton(); });
             linked = true;
         }
 
-        public void Init()
+        public void Init0()
         {
             LinkObjectsAndComponents();
-            ColorizeButtonStates();
         }
 
         public void SetButtonColor(Button butt,string hicolor,bool status,string txt,bool force=false)
@@ -127,7 +136,7 @@ namespace CampusSimulator
             {
                 sman.frman.saveLabelListContinuously = true;
             }
-            Debug.Log("Toggled run to " + sman.jnman.spawnjourneys);
+            //Debug.Log("Toggled run to " + sman.jnman.spawnjourneys);
             ColorizeButtonStates();
             btnclk++;
         }
@@ -182,14 +191,14 @@ namespace CampusSimulator
         }
 
 
-         public void GoButton()
+        public void GoButton()
         {
             sman.jnman.LaunchArnie();
         }
         public void OptionsButton()
         {
             var newstate = !optionsPanelGo.activeSelf;
-            Debug.Log($"Options Button Pushed optionsPanelGo.activeSelf:{optionsPanelGo.activeSelf} -> newstate:{newstate}");
+            //Debug.Log($"Options Button Pushed optionsPanelGo.activeSelf:{optionsPanelGo.activeSelf} -> newstate:{newstate}");
             optionsPanelGo.SetActive(newstate);// this does immediately take effect
             optionsPanel.ChangingOptionsDialog(newstate);
         }
@@ -198,12 +207,12 @@ namespace CampusSimulator
         {
             ffpanstat = !ffpanstat;
             freeFlyPanel.SetActive(ffpanstat);
-            Debug.Log("Turned FreeFlyPanel " + ffpanstat);
+            //Debug.Log("Turned FreeFlyPanel " + ffpanstat);
         }
         //bool ffstat=false;
         public void FreeFlyButton()
         {
-            Debug.Log("FreeFlyButton Pushed");
+            //Debug.Log("FreeFlyButton Pushed");
             var ffstat = sman.vcman.ToggleFreeFly();
             if (freeFlyPanel)
             {
@@ -222,7 +231,7 @@ namespace CampusSimulator
             SetButtonColor(secButton, "lightblue", sman.frman.detectSecurity.Get(), "S");
             SetButtonColor(visButton, "lightblue", sman.frman.detectVisitor.Get(), "V");
             SetButtonColor(unkButton, "lightblue", sman.frman.detectUnknown.Get(), "U");
-            //Debug.Log($"ColorizeButtonStates Vt2D:{sman.frman.visibilityTiedToDetectability.Get()}");
+            //Debug.LogWarning($"ColorizeButtonStates Vt2D:{sman.frman.visibilityTiedToDetectability.Get()}");
             SetButtonColor(vt2dButton, "lightblue", sman.frman.visibilityTiedToDetectability.Get(), "Vt2D");
             SetButtonColor(frameButton, "pink", sman.frman.frameJourneys.Get(), "Frame");
             SetButtonColor(freeFlyButton, "pink", sman.vcman.InFreeFly(), "FreeFly");

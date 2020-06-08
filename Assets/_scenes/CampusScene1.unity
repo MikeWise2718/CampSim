@@ -858,7 +858,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1395421970}
+      - m_Target: {fileID: 0}
         m_MethodName: OptionsButton
         m_Mode: 1
         m_Arguments:
@@ -1882,7 +1882,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1395421970}
+      - m_Target: {fileID: 0}
         m_MethodName: EvacButton
         m_Mode: 1
         m_Arguments:
@@ -2232,6 +2232,7 @@ MonoBehaviour:
   movecamera: 0
   droperrormarkers: 0
   autoerrorcorrect: 0
+  requestScene: 10
   rmango: {fileID: 0}
   linkcloudman: {fileID: 0}
   hlpathctrl: {fileID: 0}
@@ -2263,6 +2264,7 @@ MonoBehaviour:
   znman: {fileID: 0}
   frman: {fileID: 0}
   cbman: {fileID: 0}
+  uiman: {fileID: 0}
   runtimestamp: 20190611-202549
   simrundir: 
   leditor: {fileID: 0}
@@ -2615,7 +2617,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &125883004
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2711,7 +2713,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 125883003}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 00b2fc3a69af3454aade8706dee23a2f, type: 3}
+  m_Script: {fileID: 11500000, guid: 126da7996b4490e49a18a651edfe16fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   needSetSceneReset: 0
@@ -4145,7 +4147,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 241366407}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 45ff1b1b56e1be5469997d18c959bfc8, type: 3}
+  m_Script: {fileID: 11500000, guid: a8c05dff4d40bda46a2f7e8dbaa3280d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &241366410
@@ -4302,7 +4304,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1395421970}
+      - m_Target: {fileID: 0}
         m_MethodName: GoButton
         m_Mode: 1
         m_Arguments:
@@ -4754,7 +4756,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 270359613}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e27462147464b6940860f9497efefb2b, type: 3}
+  m_Script: {fileID: 11500000, guid: 5f908b9f9d7cafb4aae3157c432d69e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &270359616
@@ -4940,7 +4942,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 276813370}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7dd2d4e0933a50947b45c46f5c89ab5e, type: 3}
+  m_Script: {fileID: 11500000, guid: 05917e97354f53641b77d4d82ade2ebf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   visualPanelGo: {fileID: 0}
@@ -5120,7 +5122,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1395421970}
+      - m_Target: {fileID: 0}
         m_MethodName: FreeFlyButton
         m_Mode: 1
         m_Arguments:
@@ -6354,7 +6356,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -6706,7 +6708,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1395421970}
+      - m_Target: {fileID: 0}
         m_MethodName: 
         m_Mode: 1
         m_Arguments:
@@ -6837,7 +6839,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -7202,7 +7204,7 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 276813375}
+      - m_Target: {fileID: 0}
         m_MethodName: OptionsTabToggle
         m_Mode: 1
         m_Arguments:
@@ -7483,7 +7485,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1395421970}
+      - m_Target: {fileID: 0}
         m_MethodName: DetectConButton
         m_Mode: 1
         m_Arguments:
@@ -8834,7 +8836,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1395421970}
+      - m_Target: {fileID: 0}
         m_MethodName: 
         m_Mode: 1
         m_Arguments:
@@ -9116,7 +9118,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -10068,7 +10070,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 538551596}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3797d62c05817a74ab4df93262442daf, type: 3}
+  m_Script: {fileID: 11500000, guid: 6984da3804e7bdd47aeaf0cbb7d4c32a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   myCPU: 0
@@ -10777,7 +10779,7 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 276813375}
+      - m_Target: {fileID: 0}
         m_MethodName: OptionsTabToggle
         m_Mode: 1
         m_Arguments:
@@ -11181,7 +11183,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1395421970}
+      - m_Target: {fileID: 0}
         m_MethodName: 
         m_Mode: 1
         m_Arguments:
@@ -11891,7 +11893,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1395421970}
+      - m_Target: {fileID: 0}
         m_MethodName: 
         m_Mode: 1
         m_Arguments:
@@ -12020,7 +12022,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1395421970}
+      - m_Target: {fileID: 0}
         m_MethodName: RunButton
         m_Mode: 1
         m_Arguments:
@@ -12223,7 +12225,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1395421970}
+      - m_Target: {fileID: 0}
         m_MethodName: 
         m_Mode: 1
         m_Arguments:
@@ -13057,7 +13059,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1395421970}
+      - m_Target: {fileID: 0}
         m_MethodName: DetectFteButton
         m_Mode: 1
         m_Arguments:
@@ -14781,7 +14783,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1395421970}
+      - m_Target: {fileID: 0}
         m_MethodName: UnevacButton
         m_Mode: 1
         m_Arguments:
@@ -15785,7 +15787,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -16116,7 +16118,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1395421970}
+      - m_Target: {fileID: 0}
         m_MethodName: DetectVisButton
         m_Mode: 1
         m_Arguments:
@@ -16517,7 +16519,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -17301,7 +17303,7 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 276813375}
+      - m_Target: {fileID: 0}
         m_MethodName: OptionsTabToggle
         m_Mode: 1
         m_Arguments:
@@ -17583,7 +17585,7 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 276813375}
+      - m_Target: {fileID: 0}
         m_MethodName: OptionsTabToggle
         m_Mode: 1
         m_Arguments:
@@ -18058,7 +18060,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1395421970}
+      - m_Target: {fileID: 0}
         m_MethodName: MapfitButton
         m_Mode: 1
         m_Arguments:
@@ -18737,7 +18739,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1395421970}
+      - m_Target: {fileID: 0}
         m_MethodName: Vt2DButton
         m_Mode: 1
         m_Arguments:
@@ -19516,7 +19518,7 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 276813375}
+      - m_Target: {fileID: 0}
         m_MethodName: OptionsTabToggle
         m_Mode: 1
         m_Arguments:
@@ -19826,7 +19828,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1114513946}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db69aa84118e9ef478e25831dbd593f0, type: 3}
+  m_Script: {fileID: 11500000, guid: 184c609c98ab34441a1fdc85b3761bf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &1114513949
@@ -20878,7 +20880,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1395421970}
+      - m_Target: {fileID: 0}
         m_MethodName: 
         m_Mode: 1
         m_Arguments:
@@ -21308,7 +21310,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -22107,7 +22109,7 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 276813375}
+      - m_Target: {fileID: 0}
         m_MethodName: OptionsTabToggle
         m_Mode: 1
         m_Arguments:
@@ -24099,7 +24101,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1395421966}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6fd93fb3c4e4b744a8440bbcfb036251, type: 3}
+  m_Script: {fileID: 11500000, guid: f113c3a391b88be40b8ce0dcd838b711, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   btnclk: 0
@@ -24258,7 +24260,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1395421970}
+      - m_Target: {fileID: 0}
         m_MethodName: FrameButton
         m_Mode: 1
         m_Arguments:
@@ -24553,7 +24555,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1426914891}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3713395557e5bc94d8021e5acdcf8bf9, type: 3}
+  m_Script: {fileID: 11500000, guid: 2033588fa1cf444458dad69f0108decf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   sman: {fileID: 0}
@@ -26048,6 +26050,31 @@ MonoBehaviour:
     inival: 0
     keyname: extentPoints
     typename: System.Boolean
+  mapRot:
+    val: {x: 0, y: 0, z: 0}
+    inival: {x: 0, y: 0, z: 0}
+    keyname: mapRot
+    typename: UnityEngine.Vector3
+  mapTrans:
+    val: {x: 0, y: 0, z: 0}
+    inival: {x: 0, y: 0, z: 0}
+    keyname: mapTrans
+    typename: UnityEngine.Vector3
+  HasLLmap:
+    val: 0
+    inival: 0
+    keyname: hasLLmap
+    typename: System.Boolean
+  viewerPosition:
+    val: {x: 0, y: 0, z: 0}
+    inival: {x: 0, y: 0, z: 0}
+    keyname: viewerPosition
+    typename: UnityEngine.Vector3
+  viewerRotation:
+    val: {x: 0, y: 0, z: 0}
+    inival: {x: 0, y: 0, z: 0}
+    keyname: viewerRotation
+    typename: UnityEngine.Vector3
 --- !u!1 &1552433974
 GameObject:
   m_ObjectHideFlags: 0
@@ -26278,7 +26305,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1395421970}
+      - m_Target: {fileID: 0}
         m_MethodName: DetectSecButton
         m_Mode: 1
         m_Arguments:
@@ -26562,6 +26589,54 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1582803744}
   m_CullTransparentMesh: 0
+--- !u!1 &1583220355
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1583220357}
+  - component: {fileID: 1583220356}
+  m_Layer: 0
+  m_Name: UiMan
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1583220356
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1583220355}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e9d9784bd405b840a3a524706771533, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sman: {fileID: 0}
+  uigo: {fileID: 0}
+  optpan: {fileID: 0}
+  span: {fileID: 0}
+--- !u!4 &1583220357
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1583220355}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 4046.3574, y: -3869.2285, z: 370.52344}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1782318541}
+  m_Father: {fileID: 0}
+  m_RootOrder: 15
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1585228227
 GameObject:
   m_ObjectHideFlags: 0
@@ -26950,7 +27025,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1589301479}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 12b41284127407842bef1e30585d9227, type: 3}
+  m_Script: {fileID: 11500000, guid: 25b86e8cff4f06246985cf430e3a5e6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1595470026
@@ -27415,7 +27490,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1608572165}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c9735d8984d1ac74c804a0b198e7cc8e, type: 3}
+  m_Script: {fileID: 11500000, guid: 8da9824e7005126438c3d147f179dcdb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &1608572168
@@ -30916,8 +30991,8 @@ RectTransform:
   m_Children:
   - {fileID: 1395421967}
   - {fileID: 1589301480}
-  m_Father: {fileID: 0}
-  m_RootOrder: 15
+  m_Father: {fileID: 1583220357}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -31233,7 +31308,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1395421970}
+      - m_Target: {fileID: 0}
         m_MethodName: 
         m_Mode: 1
         m_Arguments:
@@ -32184,7 +32259,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1395421970}
+      - m_Target: {fileID: 0}
         m_MethodName: DetectUnkButton
         m_Mode: 1
         m_Arguments:
@@ -32663,7 +32738,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1395421970}
+      - m_Target: {fileID: 0}
         m_MethodName: 
         m_Mode: 1
         m_Arguments:
@@ -33404,7 +33479,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1395421970}
+      - m_Target: {fileID: 0}
         m_MethodName: 
         m_Mode: 1
         m_Arguments:
@@ -36603,7 +36678,7 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 276813375}
+      - m_Target: {fileID: 0}
         m_MethodName: OptionsTabToggle
         m_Mode: 1
         m_Arguments:

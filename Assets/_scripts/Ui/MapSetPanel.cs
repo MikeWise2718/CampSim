@@ -83,15 +83,15 @@ public class MapSetPanel : MonoBehaviour
     double newLngKm;
 
 
-    //InputField newLatLngInputField;
-    //InputField newLatKmInputField;
-    //InputField newLngKmInputField;
+    InputField newLatLngInputField;
+    InputField newLatKmInputField;
+    InputField newLngKmInputField;
 
-    //bool newPosAndExtentAvailable;
-    //double newLat;
-    //double newLng;
-    //double newLatKm;
-    //double newLngKm;
+    bool newPosAndExtentAvailable;
+    double newLat;
+    double newLng;
+    double newLatKm;
+    double newLngKm;
 
 
     public bool needSetSceneReset;
@@ -104,21 +104,10 @@ public class MapSetPanel : MonoBehaviour
     bool buttonsInited = false;
     bool linked = false;
 
-    void Start()
-    {
-        //Debug.Log("MapSetPanel Start called");
-        panelActive = true;
-        LinkObjectsAndComponents();
-    }
 
     public void LinkObjectsAndComponents()
     {
         //Debug.Log("MapSetPanel LinkObjectsAndComponents called");
-        sman = FindObjectOfType<SceneMan>();
-        if (sman == null)
-        {
-            Debug.LogError("MapSet panel could not find SceneMan");
-        }
         mman = FindObjectOfType<MapMan>();
         if (mman == null)
         {
@@ -161,19 +150,32 @@ public class MapSetPanel : MonoBehaviour
         latLngText = transform.Find("LatLngText").gameObject.GetComponent<Text>();
         latKmText = transform.Find("LatKmText").gameObject.GetComponent<Text>();
         lngKmText = transform.Find("LngKmText").gameObject.GetComponent<Text>();
+<<<<<<< HEAD
+
+=======
         curFetchSizeText = transform.Find("CurFetchSizeText").gameObject.GetComponent<Text>();
         fetchSizeEstText = transform.Find("FetchSizeEstText").gameObject.GetComponent<Text>();
 
         lookupAddressButton =  transform.Find("LookupAddressButton").gameObject.GetComponent<Button>();
         lookupAddressInputField = transform.Find("LookupAddressInputField").gameObject.GetComponent<InputField>();
+>>>>>>> Mapmerge
         newLatLngInputField = transform.Find("NewLatLngInputField").gameObject.GetComponent<InputField>();
         newLatKmInputField = transform.Find("NewLatKmInputField").gameObject.GetComponent<InputField>();
         newLngKmInputField = transform.Find("NewLngKmInputField").gameObject.GetComponent<InputField>();
 
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> Mapmerge
         Debug.Log("MapSetPanel.LinkObjectsAndComponents Found everything apparently");
 
         linked = true;
+    }
+
+    public void Init0()
+    {
+        LinkObjectsAndComponents();
     }
 
     public void InitCheckNeedSetModeRefresh()
@@ -192,7 +194,7 @@ public class MapSetPanel : MonoBehaviour
 
     public void InitVals()
     {
-       // Debug.Log("MapSetPanel.InitVals called");
+        Debug.Log($"MapSetPanel.InitVals called scene:{sman.curscene} iscustomizable:{mman.isCustomizable}");
         if (!linked)
         {
             LinkObjectsAndComponents();
@@ -204,7 +206,7 @@ public class MapSetPanel : MonoBehaviour
         var errmsg = "Error in MapSetPanel.InitVals-";
         try
         {
-            var opts = MapMan.GetMapProviderList();
+            var opts = mman.GetMapProviderList();
             var inival = mman.reqMapProv.Get().ToString();
             //Debug.Log($"InitVals get:{inival}");
             var idx = opts.FindIndex(s => s == inival);
@@ -288,11 +290,20 @@ public class MapSetPanel : MonoBehaviour
         UpdateLatLngText();
 
 
+<<<<<<< HEAD
+        UpdateHmult();
+        UpdateLod();
+        UpdateNpqk();
+
+        UpdateFileText();
+
+=======
         panelActive = true;
     }
 
     public void UpdateLatLngText()
     {
+>>>>>>> Mapmerge
         var stats = mman.GetQkmeshStatistics();
         if (stats != null)
         {
@@ -332,6 +343,81 @@ public class MapSetPanel : MonoBehaviour
             }
 
         }
+    }
+
+    public void ParseLatKm()
+    {
+        var s = newLatKmInputField.text;
+        var msg = "--";
+        double f = 0f;
+        var ok = double.TryParse(s, out f);
+        if (!ok)
+        {
+           msg = "format error";
+        }
+        else if (f <= 0)
+        {
+            msg = "value must be greater zero";
+        }
+        else
+        {
+            msg = "LatKm: "+f.ToString("f3");
+            newPosAndExtentAvailable = true;
+            newLatKm = f;
+        }
+        latKmText.text = msg;
+    }
+
+    public void ParseLngKm()
+    {
+        var s = newLngKmInputField.text;
+        var msg = "--";
+        double f = 0f;
+        var ok = double.TryParse(s, out f);
+        if (!ok)
+        {
+            msg = "format error";
+        }
+        else if (f<=0)
+        {
+            msg = "value must be greater zero";
+        }
+        else
+        {
+            msg = "LngKm: " + f.ToString("f3");
+            newLngKm = f;
+            newPosAndExtentAvailable = true;
+        }
+        lngKmText.text = msg;
+    }
+
+
+<<<<<<< HEAD
+        var locactive = mman.isCustomizable;
+        newLatLngInputField.transform.gameObject.SetActive(locactive);
+        newLatKmInputField.transform.gameObject.SetActive(locactive);
+        newLngKmInputField.transform.gameObject.SetActive(locactive);
+
+        if (mman.isCustomizable)
+        {
+            var lats = stats.llbox.midll.lat.ToString("f6");
+            var lngs = stats.llbox.midll.lng.ToString("f6");
+            var latlngs = $"{lats},{lngs}";
+            newLatLngInputField.text = latlngs;
+            newLatLngInputField.onValueChanged.AddListener(delegate { ParseLatLng(); });
+            newLatKmInputField.text = stats.heightKm.ToString("f3");
+            newLatKmInputField.onValueChanged.AddListener(delegate { ParseLatKm(); });
+            newLngKmInputField.text = stats.widthKm.ToString("f3");
+            newLngKmInputField.onValueChanged.AddListener(delegate { ParseLngKm(); });
+
+            newPosAndExtentAvailable = false;
+            newLat = stats.llbox.midll.lat;
+            newLng = stats.llbox.midll.lng;
+            newLatKm = stats.heightKm;
+            newLngKm = stats.widthKm;
+        }
+
+        panelActive = true;
     }
 
     public void ParseLatKm()
@@ -430,6 +516,57 @@ public class MapSetPanel : MonoBehaviour
         latLngText.text = msg;
     }
 
+=======
+    public void ParseLatLng()
+    {
+        var sarr = newLatLngInputField.text.Split(',');
+        var msg = "--";
+        if (sarr.Length != 2)
+        {
+            msg = "Need 2 comma fields";
+        }
+        else
+        {
+            double f1 = 0f;
+            double f2 = 0f;
+            var ok1 = double.TryParse(sarr[0], out f1);
+            if (!ok1)
+            {
+                msg = "field 1 format error";
+            }
+            else
+            {
+                var ok2 = double.TryParse(sarr[1], out f2);
+                if (!ok2)
+                {
+                    msg = "field 2 format error";
+                }
+                else
+                {
+                    if (Math.Abs(f1) > 90)
+                    {
+                        msg = "field 1 not in (-90 to 90)";
+                    }
+                    else if (Math.Abs(f2) > 180)
+                    {
+                        msg = "field 2 not in (-180 to 180)";
+                    }
+                    else
+                    {
+                        var f1s = f1.ToString("f6");
+                        var f2s = f2.ToString("f6");
+                        msg = $"lat,lng: {f1s},{f2s}";
+                        newPosAndExtentAvailable = true;
+                        newLat = f1;
+                        newLng = f2;
+                    }
+                }
+            }
+        }
+        latLngText.text = msg;
+    }
+
+>>>>>>> Mapmerge
     string copyClipText;
     void UpdateFileText()
     {
@@ -444,8 +581,9 @@ public class MapSetPanel : MonoBehaviour
         s8 = "Ele Temp Info: " + s8;
         var sedregkey = "User settings regkey editor:"+" Computer\\HKEY_CURRENT_USER\\Software\\Unity\\UnityEditor\\DefaultCompany\\campusim";
         var splregkey = "User settings regkey player:" + " Computer\\HKEY_CURRENT_USER\\Software\\DefaultCompany\\campusim";
-        var spllogfiles = "Log files regkey player:" + "%USERPROFILE%\\AppData\\LocalLow\\CompanyName\\ProductName\\output_log.txt";
-        
+        //var spllogfiles = "Log files regkey player:" + "%USERPROFILE%\\AppData\\LocalLow\\DefaultCompany\\campusim\\Player.log";
+        var spllogfiles = "Log files regkey player:" + "C:\\Users\\mike\\AppData\\LocalLow\\DefaultCompany\\campusim\\Player.log";
+
 
         persMapsPathText.text = s1;
         persMapsDataText.text = s2;
@@ -468,8 +606,12 @@ public class MapSetPanel : MonoBehaviour
         mman.SetLod((int) (lodVal.value+0.5f));
         if (newPosAndExtentAvailable)
         {
+<<<<<<< HEAD
+            mman.SetLatLngAndExtent(newLat, newLng, newLatKm, newLngKm);
+=======
             var addr = lookupAddressInputField.text;
             mman.SetLatLngAndExtent(addr,newLat, newLng, newLatKm, newLngKm);
+>>>>>>> Mapmerge
         }
         mman.SetNtqk((int) (npqkVal.value+0.5f));
         mman.LoadMaps();
@@ -481,7 +623,7 @@ public class MapSetPanel : MonoBehaviour
         if (isLoadingMaps && Time.time-lastLoadCheck>checkLoadInterval)
         {
             var msg = "";
-            var (isLoading, irupt, nbmLoaded, nbmToLoad, nelevBatchesLoaded, nelevBatchsToLoad) = mman.GetLoadingStatus();
+            var (isLoading, irupt,lodLoading, nbmLoaded, nbmToLoad, nelevBatchesLoaded, nelevBatchsToLoad) = mman.GetLoadingStatus();
             var numstr = $"{nbmLoaded}/{nbmToLoad}  {nelevBatchesLoaded}/{nelevBatchsToLoad}";
             if (irupt)
             {
@@ -756,6 +898,26 @@ public class MapSetPanel : MonoBehaviour
         if (closing)
         {
             panelActive = false;
+<<<<<<< HEAD
+        }
+    }
+    float fileTextUpdate;
+    float lastCheck;
+    // Update is called once per frame
+    void Update()
+    {
+        if (panelActive && (Time.time-lastCheck)>0.2f)
+        {
+            if (nSetHmultTextValueCalled == 0)
+            {
+               SetHmultTextValues();
+            }
+            UpdateHmult();
+            UpdateLod();
+            UpdateNpqk();
+            UpdateChangables();
+            if (Time.time - fileTextUpdate > 1)
+=======
             Aiskwk.Map.Viewer.ActivateViewerKeys(true);
         }
     }
@@ -810,6 +972,7 @@ public class MapSetPanel : MonoBehaviour
         {
             Aiskwk.Map.Viewer.ActivateViewerKeys(!panelActive);
             if (panelActive )
+>>>>>>> Mapmerge
             {
                 if (nSetHmultTextValueCalled == 0)
                 {
@@ -830,7 +993,11 @@ public class MapSetPanel : MonoBehaviour
                 }
                 checkEstimateChanged();
             }
+<<<<<<< HEAD
+            lastCheck = Time.time;
+=======
             lastPanelCheck = Time.time;
+>>>>>>> Mapmerge
         }
     }
 }

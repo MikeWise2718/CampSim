@@ -63,12 +63,12 @@
 ## Testing
 - TBD
 
-## Problems and Solutions
-**public const string InstantPreviewWarningPrefabPath =            "Assets/GoogleARCore/SDK/InstantPreview/Prefabs/Instant Preview Touch Warning.prefab";**
-     -	File where (missing) line was referenced was: **D:\Unity\onefloortestforparking\Assets\GoogleARCore\SDK\InstantPreview\Scripts\InstantPreviewManager.cs**
-     -	Reference was at line  54
-     -	Saw this on both Windows and Ubuntu
+## ToDos
+- A lot of those enum regions (like in BuildingMan) can probably be elimanated 
+- Timings for builds
+- why is the quadcopter rotating when I move it?
 
+## Problems and Solutions
 - Console Error: "A Tree asset could not be loaded because the prefab is missing"
      -	Probably missed step 10 (i.e. the one about **TreesAndShrubs**) above. Otherwise you might need to re-import the **Treespackage** 
 
