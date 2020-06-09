@@ -64,7 +64,7 @@ namespace CampusSimulator
         }
         public static bool usemman = true;
 
-        public static GameObject MakeLinkGo(SceneMan sman, LcLink link, float linkRadius, string clrname,float alf,bool flatlink=false)
+        public static GameObject MakeLinkGo(SceneMan sman, LcLink link, RmLinkFormE linkForm, float linkRadius, string clrname,float alf,bool flatlink=false)
         {
             var go = new GameObject();
             var linkgo = go.AddComponent<LinkGo>();
@@ -84,7 +84,7 @@ namespace CampusSimulator
             var midpt = (p1 + p2) / 2;
             go.transform.localPosition = midpt;
             GameObject linkcyl;
-            if (flatlink)
+            if (flatlink || linkForm==RmLinkFormE.flatline)
             {
                 linkcyl = GraphUtil.CreateFlatPipe(link.name, p1, p2, linkRadius, clrname,alf);
             }
@@ -92,7 +92,7 @@ namespace CampusSimulator
             {
                 if (usemman)
                 {
-                    linkcyl = sman.mpman.AddLine(link.name, p1, p2, linkRadius, lclr:clrname, frag:true );
+                    linkcyl = sman.mpman.AddLine(link.name, p1, p2, linkForm, linkRadius, lclr:clrname, frag:true );// for flat lines?
                 }
                 else
                 {

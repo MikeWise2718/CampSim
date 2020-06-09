@@ -153,25 +153,25 @@ namespace Aiskwk.Map
         public int nTotComps = 0;
         public int nFragLines = 0;
 
-        public GameObject AddStraightLine( string lname, Vector3 pt1, Vector3 pt2, float lska = 1.0f, float nska = 1.0f, string lclr = "red", string nclr = "", int omit = -1, float widratio = 1, bool wps = true, QkCoordSys coordsys = QkCoordSys.UserWc)
+        public GameObject AddStraightLine( string lname, Vector3 pt1, Vector3 pt2, string form="pipe", float lska = 1.0f, float nska = 1.0f, string lclr = "red", string nclr = "", int omit = -1, float widratio = 1, bool wps = true, QkCoordSys coordsys = QkCoordSys.UserWc)
         {
             var lgo = GpuInst.CreateCylinderGpu(lname, pt1, pt2, lska, lclr, widratio: widratio);
             return lgo;
         }
-        public GameObject AddStraightLine(GameObject parent, string lname, Vector3 pt1, Vector3 pt2, float lska = 1.0f, float nska = 1.0f, string lclr = "red", string nclr = "", int omit = -1, float widratio = 1, bool wps = true, QkCoordSys coordsys = QkCoordSys.UserWc)
+        public GameObject AddStraightLine(GameObject parent, string lname, Vector3 pt1, Vector3 pt2, string form="pipe", float lska = 1.0f, float nska = 1.0f, string lclr = "red", string nclr = "", int omit = -1, float widratio = 1, bool wps = true, QkCoordSys coordsys = QkCoordSys.UserWc)
         {
-            var lgo = AddStraightLine(lname, pt1, pt2, lska, nska, lclr, nclr, omit, widratio, wps: wps, coordsys: coordsys);
+            var lgo = AddStraightLine(lname, pt1, pt2, form, lska, nska, lclr, nclr, omit, widratio, wps: wps, coordsys: coordsys);
             lgo.transform.SetParent(parent.transform, worldPositionStays: wps);
             return lgo;
         }
 
-        public GameObject AddFragLine(GameObject parent, string lname, Vector3 pt1, Vector3 pt2, float lska = 1.0f, float nska = 1.0f, string lclr = "red", string nclr = "", int omit = -1, float widratio = 1, bool wps=true,QkCoordSys coordsys=QkCoordSys.UserWc)
+        public GameObject AddFragLine(GameObject parent, string lname, Vector3 pt1, Vector3 pt2, string form="pipe", float lska = 1.0f, float nska = 1.0f, string lclr = "red", string nclr = "", int omit = -1, float widratio = 1, bool wps=true,QkCoordSys coordsys=QkCoordSys.UserWc)
         {
-            var frago = AddFragLine(lname, pt1, pt2, lska, nska, lclr, nclr, omit, widratio, wps: wps,coordsys:coordsys);
+            var frago = AddFragLine(lname, pt1, pt2, form, lska,  nska, lclr, nclr, omit, widratio, wps: wps,coordsys:coordsys);
             frago.transform.SetParent(parent.transform, worldPositionStays:wps);
             return frago;
         }
-        public GameObject AddFragLine(string lname, Vector3 pt1, Vector3 pt2, float lska = 1.0f, float nska = 1.0f, string lclr = "red", string nclr = "", int omit = -1, float widratio = 1, bool wps = true, QkCoordSys coordsys = QkCoordSys.UserWc)
+        public GameObject AddFragLine(string lname, Vector3 pt1, Vector3 pt2,string form="pipe", float lska = 1.0f, float nska = 1.0f, string lclr = "red", string nclr = "", int omit = -1, float widratio = 1, bool wps = true, QkCoordSys coordsys = QkCoordSys.UserWc)
         {
             var db = lname == "1202033022121033-b";
             if (db)
@@ -188,6 +188,13 @@ namespace Aiskwk.Map
             var lgo = new GameObject(lname);
             string sname;
             GameObject sphgo;
+            float alf = 1;
+            if (form=="wall")
+            {
+                lska = lska * 100;
+                widratio = widratio / 100;
+                alf = 0.25f;
+            }
 
 
             for (int i = 0; i < ptlist.Count - 1; i++)
@@ -209,8 +216,8 @@ namespace Aiskwk.Map
                     sphgo = qut.CreateMarkerSphere(sname, pit1, lska * nska, nclr);
                     sphgo.transform.SetParent(lgo.transform, worldPositionStays: wps);
                 }
-                var ptform = GpuInst.CreateCylinderGpu(llname, pit1, pit2, lska, lclr, widratio: widratio);
-                ptform.transform.parent = lgo.transform;
+                var cylgo = GpuInst.CreateCylinderGpu(llname, pit1, pit2, lska, lclr, widratio: widratio,alf:alf);
+                cylgo.transform.parent = lgo.transform;
                 if (nclr != "")
                 {
                     sname = $"{llname}_pt2_{d2.ToString("f4")}";

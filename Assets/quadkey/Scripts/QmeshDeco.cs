@@ -555,7 +555,7 @@ namespace Aiskwk.Map
                 var lambLng2 = qut.GetRanFloat(lmn, lmx, "ranlines");
                 (var vv2, _, _) = qmm.GetWcMeshPosFromLambda(lambLng2, lambLat2);
                 var lname = "ranline:" + nranplines;
-                qmm.qtt.AddFragLine(lname, vv1, vv2, ska, nclr: "black",wps:wps);
+                qmm.qtt.AddFragLine(lname, vv1, vv2,"pipe", ska, nclr: "black",wps:wps);
                 nranplines++;
             }
         }
@@ -917,14 +917,14 @@ namespace Aiskwk.Map
                 qkgo.transform.position = (pul + pur + pbl + pbr) / 4;
 
                 //qkgo.transform.parent = decoroot.transform;
-
+                var frm = "pipe";
                 if (singlepipe)
                 {
                     QsphInfo.DoInfoSphere(qkgo, "pur" + i, pur, ska, "navyblue", llur);
-                    pipeu = qtt.AddStraightLine(qkgo, qkname + "-u", pul, pur, ska, lclr: "orange", coordsys: QkCoordSys.QkWc);
-                    piper = qtt.AddStraightLine(qkgo, qkname + "-r", pur, pbr, ska, lclr: "orange", coordsys: QkCoordSys.QkWc);
-                    pipeb = qtt.AddStraightLine(qkgo, qkname + "-b", pbr, pbl, ska, lclr: "orange", coordsys: QkCoordSys.QkWc);
-                    pipel = qtt.AddStraightLine(qkgo, qkname + "-l", pbl, pul, ska, lclr: "orange", coordsys: QkCoordSys.QkWc);
+                    pipeu = qtt.AddStraightLine(qkgo, qkname + "-u", pul, pur, frm,  ska, lclr: "orange", coordsys: QkCoordSys.QkWc);
+                    piper = qtt.AddStraightLine(qkgo, qkname + "-r", pur, pbr, frm, ska, lclr: "orange", coordsys: QkCoordSys.QkWc);
+                    pipeb = qtt.AddStraightLine(qkgo, qkname + "-b", pbr, pbl, frm, ska, lclr: "orange", coordsys: QkCoordSys.QkWc);
+                    pipel = qtt.AddStraightLine(qkgo, qkname + "-l", pbl, pul, frm, ska, lclr: "orange", coordsys: QkCoordSys.QkWc);
 
                     //pipeu = GpuInst.CreateCylinderGpu(qkgo, qkname + "-u", pul, pur, ska, "cyan");
                     //piper = GpuInst.CreateCylinderGpu(qkgo, qkname + "-r", pur, pbr, ska, "cyan");
@@ -934,10 +934,10 @@ namespace Aiskwk.Map
                 else
                 {
                     QsphInfo.DoInfoSphereSlim(qkgo, "pur" + i, pur, ska, "navyblue", llur);
-                    pipeu = qtt.AddFragLine(qkgo, qkname + "-u", pul, pur, ska, lclr: "red",nclr:"blue",coordsys: QkCoordSys.QkWc);
-                    piper = qtt.AddFragLine(qkgo, qkname + "-r", pur, pbr, ska, lclr: "blue",nclr:"red", coordsys: QkCoordSys.QkWc);
-                    pipeb = qtt.AddFragLine(qkgo, qkname + "-b", pbr, pbl, ska, lclr: "green", nclr: "yellow", coordsys: QkCoordSys.QkWc);
-                    pipel = qtt.AddFragLine(qkgo, qkname + "-l", pbl, pul, ska, lclr: "yellow", nclr: "green", coordsys: QkCoordSys.QkWc);
+                    pipeu = qtt.AddFragLine(qkgo, qkname + "-u", pul, pur, frm, ska, lclr: "red",nclr:"blue",coordsys: QkCoordSys.QkWc);
+                    piper = qtt.AddFragLine(qkgo, qkname + "-r", pur, pbr, frm, ska, lclr: "blue",nclr:"red", coordsys: QkCoordSys.QkWc);
+                    pipeb = qtt.AddFragLine(qkgo, qkname + "-b", pbr, pbl, frm, ska, lclr: "green", nclr: "yellow", coordsys: QkCoordSys.QkWc);
+                    pipel = qtt.AddFragLine(qkgo, qkname + "-l", pbl, pul, frm, ska, lclr: "yellow", nclr: "green", coordsys: QkCoordSys.QkWc);
                 }
                 if (showQuadkeyLabels)
                 {
@@ -1097,10 +1097,11 @@ namespace Aiskwk.Map
             if (showFrames)
             {
                 var qtt = qmm.qtt;
-                qtt.AddFragLine(fgo, $"b-{gname}", gt.pbl, gt.pbr, ska, lclr: "blue", nclr: "blue");
-                qtt.AddFragLine(fgo, $"r-{gname}", gt.pbr, gt.pur, ska, lclr: "red", nclr: "red");
-                qtt.AddFragLine(fgo, $"u-{gname}", gt.pur, gt.pul, ska, lclr: "purple", nclr: "purple");
-                qtt.AddFragLine(fgo, $"l-{gname}", gt.pul, gt.pbl, ska, lclr: "green", nclr: "green");
+                var frm = "pipe";
+                qtt.AddFragLine(fgo, $"b-{gname}", gt.pbl, gt.pbr, frm, ska, lclr: "blue", nclr: "blue");
+                qtt.AddFragLine(fgo, $"r-{gname}", gt.pbr, gt.pur, frm, ska, lclr: "red", nclr: "red");
+                qtt.AddFragLine(fgo, $"u-{gname}", gt.pur, gt.pul, frm, ska, lclr: "purple", nclr: "purple");
+                qtt.AddFragLine(fgo, $"l-{gname}", gt.pul, gt.pbl, frm, ska, lclr: "green", nclr: "green");
             }
 
             if (showMarkers)

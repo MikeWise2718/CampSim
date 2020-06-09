@@ -455,31 +455,33 @@ namespace CampusSimulator
         }
 
 
-        public GameObject AddLine(string lname, Vector3 pt1, Vector3 pt2, float lska = 1.0f, float nska = 1.0f, string lclr = "red", string nclr = "", int omit = -1, float widratio = 1, bool wps = true, bool frag=false)
+        public GameObject AddLine(string lname, Vector3 pt1, Vector3 pt2,RmLinkFormE lnform=RmLinkFormE.pipe, float lska = 1.0f, float nska = 1.0f, string lclr = "red", string nclr = "", int omit = -1, float widratio = 1, bool wps = true, bool frag=false)
         {
             if (qmapman == null || qmapman.qmm == null) return null;
+            var frm = lnform.ToString();
             GameObject lgo;
             if (frag)
             {
-                lgo = qmapman.qmm.qtt.AddFragLine(lname, pt1, pt2, lska, nska, lclr, nclr, omit, widratio, wps);
+                lgo = qmapman.qmm.qtt.AddFragLine(lname, pt1, pt2,frm, lska, nska, lclr, nclr, omit, widratio, wps);
             }
             else
             {
-                lgo = qmapman.qmm.qtt.AddStraightLine(lname, pt1, pt2, lska, nska, lclr, nclr, omit, widratio, wps);
+                lgo = qmapman.qmm.qtt.AddStraightLine(lname, pt1, pt2, frm, lska, nska, lclr, nclr, omit, widratio, wps);
             }
             return lgo;
         }
-        public GameObject AddLine(GameObject parent,string lname, Vector3 pt1, Vector3 pt2, float lska = 1.0f, float nska = 1.0f, string lclr = "red", string nclr = "", int omit = -1, float widratio = 1, bool wps = true, bool frag = false)
+        public GameObject AddLine(GameObject parent,string lname, Vector3 pt1, Vector3 pt2, RmLinkFormE lnform=RmLinkFormE.pipe, float lska = 1.0f, float nska = 1.0f, string lclr = "red", string nclr = "", int omit = -1, float widratio = 1, bool wps = true, bool frag = false)
         {
             if (qmapman == null || qmapman.qmm == null) return null;
+            var frm = lnform.ToString();
             GameObject lgo;
             if (frag)
             {
-                lgo = qmapman.qmm.qtt.AddFragLine(parent, lname, pt1, pt2, lska, nska, lclr, nclr, omit, widratio, wps);
+                lgo = qmapman.qmm.qtt.AddFragLine(parent, lname, pt1, pt2, frm, lska, nska, lclr, nclr, omit, widratio, wps);
             }
             else
             {
-                lgo = qmapman.qmm.qtt.AddStraightLine(parent, lname, pt1, pt2, lska, nska, lclr, nclr, omit, widratio, wps);
+                lgo = qmapman.qmm.qtt.AddStraightLine(parent, lname, pt1, pt2, frm, lska, nska, lclr, nclr, omit, widratio, wps);
             }
             return lgo;
         }

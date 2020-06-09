@@ -273,7 +273,7 @@ namespace Aiskwk.Map
                         var nclr = Color.Lerp(cclr, Color.white, frac);
                         //var pipe = qut.CreatePipe(ppname, pos0, pos, nclr, skalink);
                         //var pipe = GpuInst.CreateCylinderGpu(ppname, pos0, pos, skalink, clr);
-                        var pipe = vtm.qmm.qtt.AddFragLine(ppname, pos0, pos, skalink, lclr: clr, widratio: skawid,wps:true);
+                        var pipe = vtm.qmm.qtt.AddFragLine(ppname, pos0, pos, "pipe", skalink, lclr: clr, widratio: skawid,wps:true);
                         pipe.transform.parent = vehgo.transform;
                         nlinks++;
                     }

@@ -7,7 +7,7 @@ using Aiskwk.Map;
 
 namespace CampusSimulator
 {
-
+    public enum RmLinkFormE { pipe, wall, flatline }
     public class LinkCloudMan : MonoBehaviour
     {
         private SceneMan sman;
@@ -17,6 +17,7 @@ namespace CampusSimulator
             this.sman = sman;
 
         }
+
 
         public graphSceneE graphScene = graphSceneE.gen_campus;
         public Vector2 stats_nodes_links = Vector2.zero;
@@ -181,6 +182,8 @@ namespace CampusSimulator
                     GenLinkCloud(graphSceneE.gen_tukwila, genmode);
                     break;
                 case SceneSelE.Eb12small:
+                    GenLinkCloud(graphSceneE.gen_eb12_small, genmode);
+                    break;
                 case SceneSelE.Eb12:
                     GenLinkCloud(graphSceneE.gen_eb12, genmode);
                     break;
@@ -446,7 +449,8 @@ namespace CampusSimulator
                     if (!CheckCapUseVisibility(lnk)) continue;
                     var clrname = linkcolor(lnk);
                     var linkrad = linkradius(lnk);
-                    var go = LinkGo.MakeLinkGo(sman, lnk, linkrad, clrname,1-linkTrans,this.flatlinks);
+                    var linkfrm = linkform(lnk);
+                    var go = LinkGo.MakeLinkGo(sman, lnk, linkfrm, linkrad, clrname,1-linkTrans,this.flatlinks);
                     go.transform.parent = grclinks.transform;
                 }
             }
@@ -592,6 +596,18 @@ namespace CampusSimulator
             var rad = sman.getradius(rmmode);
             //Debug.Log("link.usetype:" + link.usetype + " rmmode:" + rmmode + " rad:" + rad);
             return rad;
+        }
+        private RmLinkFormE linkform(LcLink link)
+        {
+            var linkname = link.name;
+            if (sman == null)
+            {
+                return RmLinkFormE.pipe;
+            }
+            var rmmode = linkclrdicttran[link.usetype];
+            var form = sman.getform(rmmode);
+            //Debug.Log("link.usetype:" + link.usetype + " rmmode:" + rmmode + " rad:" + rad);
+            return form;
         }
         private float nodesize(LcNode node)
         {
