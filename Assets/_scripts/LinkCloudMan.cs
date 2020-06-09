@@ -167,24 +167,42 @@ namespace CampusSimulator
         {
             //Debug.Log("SetScene2");
             var genmode = graphGenOptions.Get();
-            if (newregion == SceneSelE.MsftCoreCampus || newregion == SceneSelE.MsftB19focused || newregion == SceneSelE.MsftRedwest)
+            switch (newregion)
             {
-                GenLinkCloud(graphSceneE.gen_campus,genmode);
+                case SceneSelE.MsftCoreCampus:
+                case SceneSelE.MsftB19focused:
+                case SceneSelE.MsftRedwest:
+                    GenLinkCloud(graphSceneE.gen_campus, genmode);
+                    break;
+                case SceneSelE.MsftDublin:
+                    GenLinkCloud(graphSceneE.gen_dublin, genmode);
+                    break;
+                case SceneSelE.Tukwila:
+                    GenLinkCloud(graphSceneE.gen_tukwila, genmode);
+                    break;
+                case SceneSelE.Eb12small:
+                case SceneSelE.Eb12:
+                    GenLinkCloud(graphSceneE.gen_eb12, genmode);
+                    break;
             }
-            else if (newregion == SceneSelE.MsftDublin)
-            {
-                GenLinkCloud(graphSceneE.gen_dublin, genmode);
-            }
-            else if (newregion == SceneSelE.Tukwila)
-            {
-                GenLinkCloud(graphSceneE.gen_tukwila, genmode);
-                //CorrectPositionDiff(new Vector3(0, 0, 80));
-            }
-            else if (newregion == SceneSelE.Eb12)
-            {
-                //Debug.Log("Eb12 gen from code");
-                GenLinkCloud(graphSceneE.gen_eb12, genmode);
-            }
+            //if (newregion == SceneSelE.MsftCoreCampus || newregion == SceneSelE.MsftB19focused || newregion == SceneSelE.MsftRedwest)
+            //{
+            //    GenLinkCloud(graphSceneE.gen_campus,genmode);
+            //}
+            //else if (newregion == SceneSelE.MsftDublin)
+            //{
+            //    GenLinkCloud(graphSceneE.gen_dublin, genmode);
+            //}
+            //else if (newregion == SceneSelE.Tukwila)
+            //{
+            //    GenLinkCloud(graphSceneE.gen_tukwila, genmode);
+            //    //CorrectPositionDiff(new Vector3(0, 0, 80));
+            //}
+            //else if (newregion == SceneSelE.Eb12)
+            //{
+            //    //Debug.Log("Eb12 gen from code");
+            //    GenLinkCloud(graphSceneE.gen_eb12, genmode);
+            //}
         }
 
         public void SetScene3(SceneSelE newregion)
@@ -384,6 +402,10 @@ namespace CampusSimulator
         {
             grctrl.SaveRegionCodeFiles(path);
         }
+        public void LoadRegionBuildings(string path)
+        {
+            grctrl.SaveRegionCodeFiles(path);
+        }
 
         public void CreateNodeGo(LcNode node)
         {
@@ -544,6 +566,7 @@ namespace CampusSimulator
             { LinkUse.elecpipe,SceneMan.RmColorModeE.linkelec },
             { LinkUse.commspipe,SceneMan.RmColorModeE.linkcomms },
             { LinkUse.oilgaspipe,SceneMan.RmColorModeE.linkoilgas },
+            { LinkUse.bldwall,SceneMan.RmColorModeE.bldwall },
         };
 
 

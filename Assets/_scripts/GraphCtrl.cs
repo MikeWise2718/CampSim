@@ -459,7 +459,7 @@ namespace GraphAlgos
         public void SaveRegionFiles(string path)
         {
             var regs = regman.GetRegions();
-            Debug.Log("GraphCloud SaveRegionFiles regs:"+regs.Count);
+            Debug.Log($"GraphCloud SaveRegionFiles regs:{regs.Count}");
             foreach (var reg in regs)
             {
                 var rreg = reg;
@@ -471,10 +471,25 @@ namespace GraphAlgos
                 }
             }
         }
+        public void LoadRegionBuildings(string path)
+        {
+            var regs = regman.GetRegions();
+            Debug.Log($"GraphCloud LoadRegionBuildings regs:{regs.Count} not implemented yet");
+            //foreach (var reg in regs)
+            //{
+            //    var rreg = reg;
+            //    if (rreg.saveToFile)
+            //    {
+            //        var fname = path + rreg.name + ".region";
+            //        Debug.Log("Saving " + fname);
+            //        LcMapMaker.SaveToFile(this, fname, ref rreg);
+            //    }
+            //}
+        }
         public void SaveRegionCodeFiles(string path)
         {
             var regs = regman.GetRegions();
-            Debug.Log("GraphCloud SaveRegionCodeFiles regs:" + regs.Count);
+            Debug.Log($"GraphCloud SaveRegionCodeFiles regs:{regs.Count}");
             var codeWriter = new GraphAlgos.CodeFileSaver(this);
             path = path + "code/";
             System.IO.Directory.CreateDirectory(path);
@@ -494,7 +509,7 @@ namespace GraphAlgos
             name = gm.addprefix(name);
             if (nodedict.ContainsKey(name))
             {
-                var msg = "Duplicate Point name:" + name;
+                var msg = $"Duplicate Point name:{name}";
                 Debug.LogWarning(msg);
                 if (exceptionOnDuplicate)
                 {
@@ -943,40 +958,60 @@ namespace GraphAlgos
 
         public void RealizeLateLinks()
         {
-            foreach (var lnk in latelinks)
+            try
             {
-                var (name1, name2, usetype, regStepIdx, regid,cmt) = lnk;
-                var oname2 = name2;
-                //Debug.Log("Realize late links:" + name1 + " to " + name2 +"  "+usetype+" regStepIdx:"+regStepIdx);
-                if (name2.StartsWith("reg:"))
+                int nllnkcnt = latelinks.Count;
+                int nllnkcnt0 = nllnkcnt;
+                int maxiter = 2*nllnkcnt + 4;
+                int i = 0;
+                while (i<nllnkcnt)
                 {
-                    var regname = name2.Split(':')[1];
-                    //Debug.Log("Linking "+name1+" to region " + regname);
-                    var reg = regman.GetRegion(regname);
-                    if (reg==null)
+                    var lnk = latelinks[i];
+                    var (name1, name2, usetype, regStepIdx, regid, cmt) = lnk;
+                    var oname2 = name2;
+                    Debug.Log($"RealizeLateLinks {i}/{nllnkcnt}  :  {name1} to {name2}  {usetype} regStepIdx:{regStepIdx}");
+                    if (name2.StartsWith("reg:"))
                     {
-                        Debug.LogWarning("Bad region name:" + regname);
-                        continue;
+                        var regname = name2.Split(':')[1];
+                        //Debug.Log("Linking "+name1+" to region " + regname);
+                        var reg = regman.GetRegion(regname);
+                        if (reg == null)
+                        {
+                            Debug.LogWarning("Bad region name:" + regname);
+                            continue;
+                        }
+                        var pt = GetNode(name1).pt;
+                        var (nlnk, nppt) = FindClosestPointOnLineCloud(pt, reg);
+                        //Debug.Log("FindClosestPointOnLineCloud returned nlnk:"+nlnk.name);
+                        var nnode = PunchNewNode(nlnk, nppt, deleteparentlink: false);
+                        //Debug.Log("PunchNewNode name:"+nnode.name +" at " + nppt.ToString("f1"));
+                        name2 = nnode.name;
                     }
-                    var pt = GetNode(name1).pt;
-                    var (nlnk,nppt) = FindClosestPointOnLineCloud(pt, reg);
-                    //Debug.Log("FindClosestPointOnLineCloud returned nlnk:"+nlnk.name);
-                    var nnode = PunchNewNode(nlnk, nppt, deleteparentlink:false);
-                    //Debug.Log("PunchNewNode name:"+nnode.name +" at " + nppt.ToString("f1"));
-                    name2 = nnode.name;
+                    Debug.Log($"AddingLink name1:{name1} name2:{name2} oname2:{oname2}");
+                    var nllnk = AddLinkByNodeName(name1, name2, usetype);
+                    if (nllnk == null)
+                    {
+                        Debug.Log("Failed to RealizeLateLink");
+                    }
+                    else
+                    {
+                        nllnk.regionStepIdx = regStepIdx;
+                        nllnk.regid = regid;
+                        nllnk.node2spec = oname2;
+                    }
+                    i++;
+                    nllnkcnt = latelinks.Count;
+                    if (i>maxiter)
+                    {
+                        Debug.LogError($"Potential infinite loop detected i:{i} maxiter:{maxiter} nllnkcnt0:{nllnkcnt0}");
+                        break;
+                    }
                 }
-                //Debug.Log("AddingLink name1:" + name1 + " name2:" + name2+" oname2:"+oname2);
-                var nllnk = AddLinkByNodeName(name1, name2, usetype);
-                if (nllnk == null)
-                {
-                    Debug.Log("Failed to RealizeLateLink");
-                }
-                else
-                {
-                    nllnk.regionStepIdx = regStepIdx;
-                    nllnk.regid = regid;
-                    nllnk.node2spec = oname2;
-                }
+            }
+            catch(Exception ex)
+            {
+                Debug.LogError("Exception caught in RealizeLateLinks");
+                Debug.LogError(ex.ToString());
             }
         }
 

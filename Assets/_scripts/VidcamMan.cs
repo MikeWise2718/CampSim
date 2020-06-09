@@ -58,6 +58,7 @@ namespace CampusSimulator
                     //mcamvcam = "Ms_Redwg_KM-48";
                     break;
                 case SceneSelE.Eb12:
+                case SceneSelE.Eb12small:
                     MakeVidcams("Eb");
                     //mcamvcam = "Eb_vc_frontdoor";
                     break;

@@ -674,6 +674,7 @@ namespace CampusSimulator
                         isCustomizable = false;
                         hasLLmap = true;
                         break;
+                    case SceneSelE.Eb12small:
                     case SceneSelE.Eb12:
                         // better with google maps
                         maplat = 49.993311;

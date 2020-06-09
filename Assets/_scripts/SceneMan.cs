@@ -16,7 +16,7 @@ namespace CampusSimulator
 {
     public enum RouteGarnishE { none, names, coords, all }
 
-    public enum SceneSelE {  MsftB19focused, Custom, Seattle, MtStHelens,Riggins, Eb12, MsftCoreCampus, MsftRedwest, MsftDublin, Tukwila, None }
+    public enum SceneSelE {  MsftB19focused, Custom, Seattle, MtStHelens,Riggins, Eb12,Eb12small, MsftCoreCampus, MsftRedwest, MsftDublin, Tukwila, None }
 
     public class SceneMan : MonoBehaviour
     {
@@ -900,6 +900,11 @@ namespace CampusSimulator
             System.IO.Directory.CreateDirectory(graphsdir);
             linkcloudman.SaveRegionCodeFiles(graphsdir);
         }
+        public void LoadRegionBuildings()
+        {
+            System.IO.Directory.CreateDirectory(graphsdir);
+            linkcloudman.SaveRegionCodeFiles(graphsdir);
+        }
         public void NoiseUpNodes(float maxdist)
         {
             linkcloudman.NoiseUpNodes(maxdist);
@@ -1332,7 +1337,7 @@ namespace CampusSimulator
         //public string pathlookatcolor = "steelblue";
 
 
-        public enum RmColorModeE { nodepathstart, nodepathend, nodecloud, nodecloudx,  linkcloud,linkhighway,linkroad,linkslowroad,linkdriveway, linkwalk,linkwalknoshow, linkexcavate, linksurvey,linkwater,linkreclaimwater,linksewer, linkelec,linkcomms,linkoilgas, pathnode, pathlink, pathlookat }
+        public enum RmColorModeE { nodepathstart, nodepathend, nodecloud, nodecloudx,  linkcloud,linkhighway,linkroad,linkslowroad,linkdriveway, linkwalk,linkwalknoshow, linkexcavate, linksurvey,linkwater,linkreclaimwater,linksewer, linkelec,linkcomms,linkoilgas, pathnode, pathlink, pathlookat, bldwall }
         public Dictionary<RmColorModeE, string> lcclrdict = new Dictionary<RmColorModeE, string>()
         {
             { RmColorModeE.nodepathstart, "green"},
@@ -1359,6 +1364,8 @@ namespace CampusSimulator
             { RmColorModeE.pathnode, "cyan"},
             { RmColorModeE.pathlink, "purple"},
             { RmColorModeE.pathlookat, "steelblue"},
+
+            { RmColorModeE.bldwall, "steelblue"},
         };
 
         public Dictionary<RmColorModeE, float> lcradiusdict = new Dictionary<RmColorModeE, float>()
@@ -1387,6 +1394,8 @@ namespace CampusSimulator
             { RmColorModeE.pathnode,  0.1f},
             { RmColorModeE.pathlink,  0.1f},
             { RmColorModeE.pathlookat,  0.1f},
+
+            { RmColorModeE.bldwall,  0.1f},
         };
 
         public string getcolorname(RmColorModeE mode, string name = "")

@@ -725,7 +725,7 @@ namespace CampusSimulator
             var msg = "Go get em";
             //pers.AddNewCamera("Arnie Launcher");
             pers.GrabMainCamera();
-            if (sman.curscene == SceneSelE.Eb12 )
+            if (sman.curscene == SceneSelE.Eb12 || sman.curscene == SceneSelE.Eb12small)
             {
                 room = "eb12-12-lob";
             }

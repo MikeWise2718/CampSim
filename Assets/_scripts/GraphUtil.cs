@@ -712,7 +712,7 @@ namespace GraphAlgos
         }
 
 
-        static string _verstring = "2020.06.07.1";
+        static string _verstring = "2020.06.09.1";
         static DateTime _buildDate=DateTime.UtcNow;
         private static void getsysdata()
         {
@@ -740,6 +740,7 @@ namespace GraphAlgos
         public static bool CheckVersionString()
         {
             var ok = true;
+#if UNITY_EDITOR
             var msg = "";
             var sar = _verstring.Split('.');
             while(true)
@@ -774,6 +775,7 @@ namespace GraphAlgos
             {
                 Debug.LogError(msg);
             }
+#endif
             return ok;
         }
         public static string GetBuildDate()
