@@ -135,6 +135,7 @@ namespace CampusSimulator
                 case SceneSelE.MsftB19focused:
                     MakeGarages("MsGarage");
                     break;
+                case SceneSelE.Eb12small:
                 case SceneSelE.Eb12:
                     MakeGarages("Eb12");
                     break;

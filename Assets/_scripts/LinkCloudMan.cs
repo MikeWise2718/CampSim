@@ -7,7 +7,7 @@ using Aiskwk.Map;
 
 namespace CampusSimulator
 {
-
+    public enum RmLinkFormE { pipe, wall, flatline }
     public class LinkCloudMan : MonoBehaviour
     {
         private SceneMan sman;
@@ -17,6 +17,7 @@ namespace CampusSimulator
             this.sman = sman;
 
         }
+
 
         public graphSceneE graphScene = graphSceneE.gen_campus;
         public Vector2 stats_nodes_links = Vector2.zero;
@@ -167,24 +168,44 @@ namespace CampusSimulator
         {
             //Debug.Log("SetScene2");
             var genmode = graphGenOptions.Get();
-            if (newregion == SceneSelE.MsftCoreCampus || newregion == SceneSelE.MsftB19focused || newregion == SceneSelE.MsftRedwest)
+            switch (newregion)
             {
-                GenLinkCloud(graphSceneE.gen_campus,genmode);
+                case SceneSelE.MsftCoreCampus:
+                case SceneSelE.MsftB19focused:
+                case SceneSelE.MsftRedwest:
+                    GenLinkCloud(graphSceneE.gen_campus, genmode);
+                    break;
+                case SceneSelE.MsftDublin:
+                    GenLinkCloud(graphSceneE.gen_dublin, genmode);
+                    break;
+                case SceneSelE.Tukwila:
+                    GenLinkCloud(graphSceneE.gen_tukwila, genmode);
+                    break;
+                case SceneSelE.Eb12small:
+                    GenLinkCloud(graphSceneE.gen_eb12_small, genmode);
+                    break;
+                case SceneSelE.Eb12:
+                    GenLinkCloud(graphSceneE.gen_eb12, genmode);
+                    break;
             }
-            else if (newregion == SceneSelE.MsftDublin)
-            {
-                GenLinkCloud(graphSceneE.gen_dublin, genmode);
-            }
-            else if (newregion == SceneSelE.Tukwila)
-            {
-                GenLinkCloud(graphSceneE.gen_tukwila, genmode);
-                //CorrectPositionDiff(new Vector3(0, 0, 80));
-            }
-            else if (newregion == SceneSelE.Eb12)
-            {
-                //Debug.Log("Eb12 gen from code");
-                GenLinkCloud(graphSceneE.gen_eb12, genmode);
-            }
+            //if (newregion == SceneSelE.MsftCoreCampus || newregion == SceneSelE.MsftB19focused || newregion == SceneSelE.MsftRedwest)
+            //{
+            //    GenLinkCloud(graphSceneE.gen_campus,genmode);
+            //}
+            //else if (newregion == SceneSelE.MsftDublin)
+            //{
+            //    GenLinkCloud(graphSceneE.gen_dublin, genmode);
+            //}
+            //else if (newregion == SceneSelE.Tukwila)
+            //{
+            //    GenLinkCloud(graphSceneE.gen_tukwila, genmode);
+            //    //CorrectPositionDiff(new Vector3(0, 0, 80));
+            //}
+            //else if (newregion == SceneSelE.Eb12)
+            //{
+            //    //Debug.Log("Eb12 gen from code");
+            //    GenLinkCloud(graphSceneE.gen_eb12, genmode);
+            //}
         }
 
         public void SetScene3(SceneSelE newregion)
@@ -384,6 +405,10 @@ namespace CampusSimulator
         {
             grctrl.SaveRegionCodeFiles(path);
         }
+        public void LoadRegionBuildings(string path)
+        {
+            grctrl.SaveRegionCodeFiles(path);
+        }
 
         public void CreateNodeGo(LcNode node)
         {
@@ -424,7 +449,8 @@ namespace CampusSimulator
                     if (!CheckCapUseVisibility(lnk)) continue;
                     var clrname = linkcolor(lnk);
                     var linkrad = linkradius(lnk);
-                    var go = LinkGo.MakeLinkGo(sman, lnk, linkrad, clrname,1-linkTrans,this.flatlinks);
+                    var linkfrm = linkform(lnk);
+                    var go = LinkGo.MakeLinkGo(sman, lnk, linkfrm, linkrad, clrname,1-linkTrans,this.flatlinks);
                     go.transform.parent = grclinks.transform;
                 }
             }
@@ -544,6 +570,7 @@ namespace CampusSimulator
             { LinkUse.elecpipe,SceneMan.RmColorModeE.linkelec },
             { LinkUse.commspipe,SceneMan.RmColorModeE.linkcomms },
             { LinkUse.oilgaspipe,SceneMan.RmColorModeE.linkoilgas },
+            { LinkUse.bldwall,SceneMan.RmColorModeE.bldwall },
         };
 
 
@@ -569,6 +596,18 @@ namespace CampusSimulator
             var rad = sman.getradius(rmmode);
             //Debug.Log("link.usetype:" + link.usetype + " rmmode:" + rmmode + " rad:" + rad);
             return rad;
+        }
+        private RmLinkFormE linkform(LcLink link)
+        {
+            var linkname = link.name;
+            if (sman == null)
+            {
+                return RmLinkFormE.pipe;
+            }
+            var rmmode = linkclrdicttran[link.usetype];
+            var form = sman.getform(rmmode);
+            //Debug.Log("link.usetype:" + link.usetype + " rmmode:" + rmmode + " rad:" + rad);
+            return form;
         }
         private float nodesize(LcNode node)
         {

@@ -59,6 +59,7 @@ sysinfo.txt
 *.apk
 *.unitypackage
 /jlog/
+/graphs/
 /BuildWin/
 /BuildLinux/
 /BuildAndroid/

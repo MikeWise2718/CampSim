@@ -132,6 +132,7 @@ namespace CampusSimulator
                 case SceneSelE.MsftRedwest:
                     MakeZones("Ms-Redw");
                     break;
+                case SceneSelE.Eb12small:
                 case SceneSelE.Eb12:
                     MakeZones("Eb12");
                     break;

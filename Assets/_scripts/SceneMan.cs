@@ -16,7 +16,7 @@ namespace CampusSimulator
 {
     public enum RouteGarnishE { none, names, coords, all }
 
-    public enum SceneSelE {  MsftB19focused, Custom, Seattle, MtStHelens,Riggins, Eb12, MsftCoreCampus, MsftRedwest, MsftDublin, Tukwila, None }
+    public enum SceneSelE {  MsftB19focused, Custom, Seattle, MtStHelens,Riggins, Eb12,Eb12small, MsftCoreCampus, MsftRedwest, MsftDublin, Tukwila, None }
 
     public class SceneMan : MonoBehaviour
     {
@@ -232,6 +232,7 @@ namespace CampusSimulator
         {
         }
 
+
         public void SetScene( SceneSelE newscene,bool force=false )
         {
             if (newscene != curscene || force)
@@ -329,7 +330,7 @@ namespace CampusSimulator
         {
             return (this.needsrefresh, this.needstotalrefresh, this.requestScene);
         }
-         public void RequestHighObjRefresh(string highobjname,string requester)
+        public void RequestHighObjRefresh(string highobjname,string requester)
         {
             //Debug.Log("RefreshHighObjRequested by " + requester);
             needsrefresh = true;
@@ -899,6 +900,11 @@ namespace CampusSimulator
             System.IO.Directory.CreateDirectory(graphsdir);
             linkcloudman.SaveRegionCodeFiles(graphsdir);
         }
+        public void LoadRegionBuildings()
+        {
+            System.IO.Directory.CreateDirectory(graphsdir);
+            linkcloudman.SaveRegionCodeFiles(graphsdir);
+        }
         public void NoiseUpNodes(float maxdist)
         {
             linkcloudman.NoiseUpNodes(maxdist);
@@ -1331,62 +1337,41 @@ namespace CampusSimulator
         //public string pathlookatcolor = "steelblue";
 
 
-        public enum RmColorModeE { nodepathstart, nodepathend, nodecloud, nodecloudx,  linkcloud,linkhighway,linkroad,linkslowroad,linkdriveway, linkwalk,linkwalknoshow, linkexcavate, linksurvey,linkwater,linkreclaimwater,linksewer, linkelec,linkcomms,linkoilgas, pathnode, pathlink, pathlookat }
-        public Dictionary<RmColorModeE, string> lcclrdict = new Dictionary<RmColorModeE, string>()
+        public enum RmColorModeE { nodepathstart, nodepathend, nodecloud, nodecloudx,  linkcloud,linkhighway,linkroad,linkslowroad,linkdriveway, linkwalk,linkwalknoshow, linkexcavate, linksurvey,linkwater,linkreclaimwater,linksewer, linkelec,linkcomms,linkoilgas, pathnode, pathlink, pathlookat, bldwall }
+
+
+
+        public Dictionary<RmColorModeE, (string clr, float size, RmLinkFormE form)> linkformdict = new Dictionary<RmColorModeE, (string clr,float size, RmLinkFormE form)>()
         {
-            { RmColorModeE.nodepathstart, "green"},
-            { RmColorModeE.nodepathend, "red"},
-            { RmColorModeE.nodecloud, "navyblue"},
-            { RmColorModeE.nodecloudx, "steelblue"},
-            { RmColorModeE.linkcloud, "yellow"},
-            { RmColorModeE.linkhighway, "black"},
-            { RmColorModeE.linkroad, "darkgray"},
-            { RmColorModeE.linkslowroad, "gray"},
-            { RmColorModeE.linkdriveway, "lightgray"},
-            { RmColorModeE.linkwalk, "pink"},
-            { RmColorModeE.linkwalknoshow, "darkgray"},
+            { RmColorModeE.nodepathstart, ("green",0.1f,RmLinkFormE.pipe)},
+            { RmColorModeE.nodepathend, ("red",0.1f,RmLinkFormE.pipe)},
+            { RmColorModeE.nodecloud, ("navyblue",0.1f,RmLinkFormE.pipe)},
+            { RmColorModeE.nodecloudx, ("steelblue",0.1f,RmLinkFormE.pipe)},
+            { RmColorModeE.linkcloud, ("yellow",0.1f,RmLinkFormE.pipe)},
 
-            { RmColorModeE.linkexcavate, "white"},
-            { RmColorModeE.linksurvey, "red"},
-            { RmColorModeE.linkwater, "darkblue"},
-            { RmColorModeE.linkreclaimwater, "purple"},
-            { RmColorModeE.linksewer, "darkgreen"},
-            { RmColorModeE.linkelec, "darkorange"},
-            { RmColorModeE.linkcomms, "lightorange"},
-            { RmColorModeE.linkoilgas, "lightyellow"},
+            { RmColorModeE.linkhighway, ("black",0.4f,RmLinkFormE.pipe)},
+            { RmColorModeE.linkroad, ("darkgray",0.3f,RmLinkFormE.pipe)},
+            { RmColorModeE.linkslowroad, ("gray",0.2f,RmLinkFormE.pipe)},
+            { RmColorModeE.linkdriveway, ("lightgray",0.2f,RmLinkFormE.pipe)},
+            { RmColorModeE.linkwalk, ("pink",0.1f,RmLinkFormE.pipe)},
+            { RmColorModeE.linkwalknoshow, ("darkgray",0.2f,RmLinkFormE.pipe)},
 
-            { RmColorModeE.pathnode, "cyan"},
-            { RmColorModeE.pathlink, "purple"},
-            { RmColorModeE.pathlookat, "steelblue"},
+            { RmColorModeE.linkexcavate, ("white",0.1f,RmLinkFormE.pipe)},
+            { RmColorModeE.linksurvey, ("red",0.1f,RmLinkFormE.pipe)},
+            { RmColorModeE.linkwater, ("darkblue",0.1f,RmLinkFormE.pipe)},
+            { RmColorModeE.linkreclaimwater, ("purple",0.1f,RmLinkFormE.pipe)},
+            { RmColorModeE.linksewer, ("darkgreen",0.1f,RmLinkFormE.pipe)},
+            { RmColorModeE.linkelec, ("darkorange",0.1f,RmLinkFormE.pipe)},
+            { RmColorModeE.linkcomms, ("lightorange",0.1f,RmLinkFormE.pipe)},
+            { RmColorModeE.linkoilgas, ("lightyellow",0.1f,RmLinkFormE.pipe)},
+
+            { RmColorModeE.pathnode, ("cyan",0.1f,RmLinkFormE.pipe)},
+            { RmColorModeE.pathlink, ("purple",0.1f,RmLinkFormE.pipe)},
+            { RmColorModeE.pathlookat, ("steelblue",0.1f,RmLinkFormE.pipe)},
+
+            { RmColorModeE.bldwall, ("steelblue",0.1f,RmLinkFormE.wall)},
         };
 
-        public Dictionary<RmColorModeE, float> lcradiusdict = new Dictionary<RmColorModeE, float>()
-        {
-            { RmColorModeE.nodepathstart, 0.1f},
-            { RmColorModeE.nodepathend,  0.1f},
-            { RmColorModeE.nodecloud,  0.1f},
-            { RmColorModeE.nodecloudx,  0.1f},
-            { RmColorModeE.linkcloud,  0.1f},
-            { RmColorModeE.linkhighway,  0.4f},
-            { RmColorModeE.linkroad,  0.3f},
-            { RmColorModeE.linkslowroad,  0.2f},
-            { RmColorModeE.linkdriveway,  0.2f},
-            { RmColorModeE.linkwalk,  0.1f},
-            { RmColorModeE.linkwalknoshow,  0.02f},
-
-            { RmColorModeE.linkexcavate,  0.1f},
-            { RmColorModeE.linksurvey,  0.1f},
-            { RmColorModeE.linkwater,  0.1f},
-            { RmColorModeE.linkreclaimwater,  0.1f},
-            { RmColorModeE.linksewer,  0.1f},
-            { RmColorModeE.linkelec,  0.1f},
-            { RmColorModeE.linkcomms,  0.1f},
-            { RmColorModeE.linkoilgas,  0.1f},
-
-            { RmColorModeE.pathnode,  0.1f},
-            { RmColorModeE.pathlink,  0.1f},
-            { RmColorModeE.pathlookat,  0.1f},
-        };
 
         public string getcolorname(RmColorModeE mode, string name = "")
         {
@@ -1395,18 +1380,21 @@ namespace CampusSimulator
                 if (name == hlpathctrl.startnodename) mode = RmColorModeE.nodepathstart;
                 if (name == hlpathctrl.endnodename) mode = RmColorModeE.nodepathend;
             }
-            if (!lcclrdict.ContainsKey(mode))
+            if (!linkformdict.ContainsKey(mode))
             {
                 Debug.Log("lccclrdict does not contain the key " + mode);
 //                return (lcclrdict[RmColorModeE.linkcloud]);
             }
-            return (lcclrdict[mode]);
+            return (linkformdict[mode].clr);
         }
         public float getradius(RmColorModeE mode)
         {
-            return linknodescale*lcradiusdict[mode];
+            return linknodescale*linkformdict[mode].size;
         }
-
+        public RmLinkFormE getform(RmColorModeE mode)
+        {
+            return linkformdict[mode].form;
+        }
         public SceneSelE curscene = SceneSelE.None;
         #region SceneOptions
         static List<string> sceneOptions = new List<string>(System.Enum.GetNames(typeof(SceneSelE)));

@@ -544,7 +544,7 @@ namespace CampusSimulator
                     }
                 case "Eb12-22":
                     {
-                        if (bm.sman.curscene == SceneSelE.Eb12 )
+                        if (bm.sman.curscene == SceneSelE.Eb12 || bm.sman.curscene == SceneSelE.Eb12small)
                         {
                             bm.sman.jnman.preferedJourneyBuildingName = name;
                         }

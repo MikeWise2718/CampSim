@@ -9,7 +9,7 @@ namespace GraphAlgos
     public enum graphSceneE
     {
         gen_none, gen_circ, gen_sphere, gen_b43_1, gen_b43_2, gen_b43_3, gen_b43_4, gen_b43_1p2,
-        gen_bho, gen_small, gen_redwb_3, gen_json_file, gen_campus, gen_eb12, gen_eb12_json,
+        gen_bho, gen_small, gen_redwb_3, gen_json_file, gen_campus, gen_eb12, gen_eb12_json, gen_eb12_small,
         gen_dublin,gen_tukwila
     };
 
@@ -839,7 +839,29 @@ namespace GraphAlgos
                                 //lmd.CreatePointsForEb12streets2();
                                 //lmd.CreatePointsForEb12retail();
                                 //lmd.CreatePointsForEb12resident2();
-                                lmd.CreateGraphForOsmImport_eb12();
+                                lmd.CreateGraphForOsmImport_eb12_orig();
+                                //lmd.createPointsFor_eb12_streets();
+                                lmd.createPointsFor_eb12_resident();
+                                lmd.createPointsFor_eb12_retail();
+                                break;
+                            case GraphGenerationModeE.ReadFromFile:
+                                CreateLinksFromRegionFiles("eb12");
+                                break;
+                        }
+                        CreateEb12GarageLinks();
+                        break;
+                    }
+                case graphSceneE.gen_eb12_small:
+                    {
+                        switch (genMode)
+                        {
+                            case GraphGenerationModeE.GenFromCode:
+                                //lmd.CreatePointsForEb12streets1();
+                                //lmd.CreatePointsForEb12resident1();
+                                //lmd.CreatePointsForEb12streets2();
+                                //lmd.CreatePointsForEb12retail();
+                                //lmd.CreatePointsForEb12resident2();
+                                lmd.CreateGraphForOsmImport_eb12_small();
                                 //lmd.createPointsFor_eb12_streets();
                                 lmd.createPointsFor_eb12_resident();
                                 lmd.createPointsFor_eb12_retail();

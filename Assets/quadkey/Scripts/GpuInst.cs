@@ -68,12 +68,41 @@ namespace Aiskwk.Map
             return pdict[dictkey];
         }
 
+        static public GameObject GetShared(PrimitiveType ptype, string clr, float alpha)
+        {
+            var pdict = pdictman.GetDict(ptype);
+            var dictkey = "noclr";
+            if (!pdict.ContainsKey(dictkey))
+            {
+                var sphgo = GameObject.CreatePrimitive(ptype);
+                sphgo.name = $"Shared{ptype}-{dictkey}";
+                AddToGpuInstances(sphgo);
+                //var cclr = qut.GetColorByName(clr, alpha: 1);
+                //SetColorNewMat(sphgo, cclr);
+                pdict[dictkey] = sphgo;
+                //           Debug.Log($"Created shared {ptype} of color {clr}  cclr:{cclr} pdict.Count:{pdict.Count}");
+            }
+            return pdict[dictkey];
+        }
+
         static MaterialPropertyBlock props = new MaterialPropertyBlock();
         static public Transform Instanciate(PrimitiveType ptype, string clr)
         {
             var sharedgo = GetShared(ptype, clr);
             Transform tform = UnityEngine.Object.Instantiate<Transform>(sharedgo.transform);
             var cclr = qut.GetColorByName(clr, alpha: 1);
+            props.SetColor("_Color", cclr);
+
+            var renderer = tform.GetComponent<MeshRenderer>();
+            renderer.SetPropertyBlock(props);
+            return tform;
+        }
+
+        static public Transform Instanciate(PrimitiveType ptype, string clr, float alpha)
+        {
+            var sharedgo = GetShared(ptype, clr);
+            Transform tform = UnityEngine.Object.Instantiate<Transform>(sharedgo.transform);
+            var cclr = qut.GetColorByName(clr, alpha: alpha);
             props.SetColor("_Color", cclr);
 
             var renderer = tform.GetComponent<MeshRenderer>();
@@ -107,7 +136,7 @@ namespace Aiskwk.Map
 
         public static Transform CreateTform(PrimitiveType ptype, string name, Vector3 pt, Vector3 sz, string clr = "blue", float alf = 1, float rotx = 0, float roty = 0, float rotz = 0)
         {
-            Transform tform = Instanciate(ptype, clr);
+            Transform tform = Instanciate(ptype, clr, alf);
             if (tform == null)
             {
                 var sph = GameObject.CreatePrimitive(ptype);
@@ -167,6 +196,20 @@ namespace Aiskwk.Map
             var tform = CreateTform(PrimitiveType.Cylinder, name, pt, sz, clr, alf, anglng, anglat, 0);
             return tform.gameObject;
         }
+        public static GameObject CreateCubeCylGpu(string name, Vector3 frpt, Vector3 topt, float size = 0.1f, string clr = "yellow", float alf = 1, float widratio = 1)
+        {
+            var dst_div_2 = Vector3.Distance(frpt, topt) / 2;
+            var dlt = topt - frpt;
+            var dltxz = Mathf.Sqrt(dlt.x * dlt.x + dlt.z * dlt.z);
+            var anglng = 180 * Mathf.Atan2(dltxz, dlt.y) / Mathf.PI;
+            var anglat = 180 * Mathf.Atan2(dlt.x, dlt.z) / Mathf.PI;
+            var pt = frpt + 0.5f * dlt;
+            var sz = new Vector3(widratio * size, dst_div_2, size);
+
+            var tform = CreateTform(PrimitiveType.Cube, name, pt, sz, clr, alf, anglng, anglat, 0);
+            return tform.gameObject;
+        }
+
         public static GameObject CreateCapsuleGpu(string name, Vector3 frpt, Vector3 topt, float size = 0.1f, string clr = "yellow", float alf = 1)
         {
             var dst_div_2 = Vector3.Distance(frpt, topt) / 2;
