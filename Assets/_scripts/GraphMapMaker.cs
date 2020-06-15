@@ -754,6 +754,8 @@ namespace GraphAlgos
                                 //lmd.createPointsFor_msft_campus();
                                 lmd.CreateGraphForOsmImport_msft();
 
+                                lmd.CreateGraphForOsmImport_MsftCampusBldSmall();
+
                                 AddRedwestCalibrationMarkers();
                                 var template = grc.gm.addprefix("rm");
                                 addVoiceKeywords(template);
