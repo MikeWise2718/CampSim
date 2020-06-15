@@ -861,7 +861,8 @@ namespace GraphAlgos
                                 //lmd.CreatePointsForEb12streets2();
                                 //lmd.CreatePointsForEb12retail();
                                 //lmd.CreatePointsForEb12resident2();
-                                lmd.CreateGraphForOsmImport_eb12_small();
+                                lmd.CreateGraphForOsmImport_Eb12small();
+                                //lmd.CreateGraphForOsmImport_eb12_small();
                                 //lmd.createPointsFor_eb12_streets();
                                 lmd.createPointsFor_eb12_resident();
                                 lmd.createPointsFor_eb12_retail();
