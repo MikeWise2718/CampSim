@@ -86,7 +86,7 @@ namespace Aiskwk.Map
         }
 
         static MaterialPropertyBlock props = new MaterialPropertyBlock();
-        static public Transform Instanciate(PrimitiveType ptype, string clr)
+        static public Transform Instantiate(PrimitiveType ptype, string clr)
         {
             var sharedgo = GetShared(ptype, clr);
             Transform tform = UnityEngine.Object.Instantiate<Transform>(sharedgo.transform);
@@ -98,7 +98,7 @@ namespace Aiskwk.Map
             return tform;
         }
 
-        static public Transform Instanciate(PrimitiveType ptype, string clr, float alpha)
+        static public Transform Instantiate(PrimitiveType ptype, string clr, float alpha)
         {
             var sharedgo = GetShared(ptype, clr);
             Transform tform = UnityEngine.Object.Instantiate<Transform>(sharedgo.transform);
@@ -136,7 +136,7 @@ namespace Aiskwk.Map
 
         public static Transform CreateTform(PrimitiveType ptype, string name, Vector3 pt, Vector3 sz, string clr = "blue", float alf = 1, float rotx = 0, float roty = 0, float rotz = 0)
         {
-            Transform tform = Instanciate(ptype, clr, alf);
+            Transform tform = Instantiate(ptype, clr, alf);
             if (tform == null)
             {
                 var sph = GameObject.CreatePrimitive(ptype);

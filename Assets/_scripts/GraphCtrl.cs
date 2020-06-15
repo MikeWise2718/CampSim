@@ -647,7 +647,7 @@ namespace GraphAlgos
             }
             return new Tuple<string, bool>(newname, doLateLink);
         }
-        public LcLink AddLinkByNodeName(string lp1name, string lp2name, LinkUse usetype, string lname = "",string comment="")
+        public LcLink AddLinkByNodeName(string lp1name, string lp2name, LinkUse usetype, string lname = "",string comment="",bool inLateLinkingPhase=false)
         {
             bool doll1,doll2;
             (lp1name, doll1) = ResolveNodeName(lp1name);
@@ -655,7 +655,10 @@ namespace GraphAlgos
             var doLateLink = doll1 || doll2;
             if (doLateLink)
             {
-                AddLateLink(lp1name, lp2name, usetype,comment);
+                if (!inLateLinkingPhase)
+                {
+                    AddLateLink(lp1name, lp2name, usetype, comment);
+                }
                 regman.curNodeRegion.IncDefStepIdx();
                 return null;
             }
@@ -988,10 +991,10 @@ namespace GraphAlgos
                         name2 = nnode.name;
                     }
                     Debug.Log($"AddingLink name1:{name1} name2:{name2} oname2:{oname2}");
-                    var nllnk = AddLinkByNodeName(name1, name2, usetype);
+                    var nllnk = AddLinkByNodeName(name1, name2, usetype,inLateLinkingPhase:true);
                     if (nllnk == null)
                     {
-                        Debug.Log("Failed to RealizeLateLink");
+                        Debug.LogWarning("Failed to RealizeLateLink");
                     }
                     else
                     {
@@ -1003,7 +1006,7 @@ namespace GraphAlgos
                     nllnkcnt = latelinks.Count;
                     if (i>maxiter)
                     {
-                        Debug.LogError($"Potential infinite loop detected i:{i} maxiter:{maxiter} nllnkcnt0:{nllnkcnt0}");
+                        Debug.LogError($"Probable infinite loop detected i:{i} maxiter:{maxiter} nllnkcnt0:{nllnkcnt0}");
                         break;
                     }
                 }
