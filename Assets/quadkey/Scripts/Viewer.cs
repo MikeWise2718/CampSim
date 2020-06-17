@@ -61,7 +61,10 @@ namespace Aiskwk.Map
         {
             this.vtm = FindObjectOfType<VehicleTrackMan>();
             doTrackThings = vtm != null;
-            //Debug.Log($"SetVtm - DoTrackThings:{doTrackThings}");
+            if (doTrackThings)
+            {
+                Debug.LogWarning($"Viewer.SetVtm - DoTrackThings:{doTrackThings}");
+            }
         }
         public void InitViewer(QmapMesh qmm)
         {
@@ -538,10 +541,10 @@ namespace Aiskwk.Map
             visor.transform.localRotation *= Quaternion.Euler(new Vector3(rotate, 0, 0));
             //Debug.Log("Rotated visor by " + rotate);
         }
-
         void RaiseViewer(float ymove)
         {
-            altitude += ymove;
+            var fak = calctimefak(ref tvlastkey);
+            altitude += fak*ymove;
             TranslateViewerProjected(0, 0);
             var posstr = transform.position.ToString("f1");
             //Debug.Log($"RaiseViewer ymove:{ymove} newpos:{posstr}");
@@ -550,10 +553,11 @@ namespace Aiskwk.Map
         void RotateViewer(float rotate)
         {
             //Debug.Log($"RotateViewer - Viewer rotation before  {transform.localRotation.eulerAngles} followGround:{followGround}");
+            var fak = calctimefak(ref tvlastkey);
 
-            bodyPlaneRotation *= Quaternion.Euler(new Vector3(0, rotate, 0));
+            bodyPlaneRotation *= Quaternion.Euler(new Vector3(0, fak*rotate, 0));
             moveplane.transform.localRotation = bodyPlaneRotation;
-            bodyPrefabRotation *= Quaternion.Euler(new Vector3(0, rotate, 0));
+            bodyPrefabRotation *= Quaternion.Euler(new Vector3(0, fak*rotate, 0));
             body.transform.localRotation = Quaternion.FromToRotation(Vector3.up, lstnrm) * bodyPrefabRotation;
             //if (followGround)
             //{
@@ -625,10 +629,45 @@ namespace Aiskwk.Map
         }
 
 
+        public float calctimefak(ref float lastkeytime)
+        {
+            var altpressed = Input.GetKey(KeyCode.RightAlt) || Input.GetKey(KeyCode.LeftAlt);
+            var ctrlpressed = Input.GetKey(KeyCode.RightControl) || Input.GetKey(KeyCode.LeftControl);
+            var shiftpressed = Input.GetKey(KeyCode.RightShift) || Input.GetKey(KeyCode.LeftShift);
+
+            var timedelt = Time.time - lastkeytime;
+            if (timedelt > 0.2) timedelt = 0.2f;
+            lastkeytime = Time.time;
+            if (lastkeytime == 0)
+            {
+                lastkeytime = 0.1f;
+            }
+
+            var timefak = timedelt;
+            if (ctrlpressed)
+            {
+                timefak *= 3.0f;
+            }
+            if (shiftpressed)
+            {
+                timefak *= 3.0f;
+            }
+            if (shiftpressed && ctrlpressed)
+            {
+                timefak *= 2.0f;
+            }
+            //if (timefak > 1) timefak = 1;
+            //Debug.Log($"time:{Time.time:f2} lastkeytime:{lastkeytime:f2} timedelt:{timedelt:f2} timefak:{timefak:f2}");
+            return timefak;
+        }
+
+
         int ndrop = 0;
+        float tvlastkey = 0;
         void TranslateViewer(float xmove, float zmove)
         {
-            TranslateViewerProjected(xmove, zmove);
+            var fak = calctimefak(ref tvlastkey);
+            TranslateViewerProjected(xmove*fak, zmove*fak);
             curLatLng = qmm.GetLngLat(transform.position);
             offsetToMapMidpoint = curLatLng - qmm.stats.llbox.midll;
             offsetToOrigin = curLatLng - qmm.stats.llbox.orgll;
@@ -699,18 +738,16 @@ namespace Aiskwk.Map
         public void MoveToPosition(Vector3 newpos)
         {
             TranslateViewerToPosition(newpos);
-        }      
+        }
+
         void DoKeys()
         {
             var altpressed = Input.GetKey(KeyCode.RightAlt) || Input.GetKey(KeyCode.LeftAlt);
             var ctrlpressed = Input.GetKey(KeyCode.RightControl) || Input.GetKey(KeyCode.LeftControl);
             var shiftpressed = Input.GetKey(KeyCode.RightShift) || Input.GetKey(KeyCode.LeftShift);
-            var speedmult = 0.3f;
-            if (ctrlpressed) speedmult = 3.0f;
 
-            var ainc = 5.0f * speedmult/2;
-            var inc = 1.0f * speedmult;
-
+            var angincpersec = 15.0f; // deg per sec
+            var incpersec = 2.0f; //  m per sec
             if (!ViewerProcessKeys)
             {
                 var forcekeyhit = Input.GetKey(KeyCode.V) || Input.GetKey(KeyCode.W);
@@ -760,11 +797,11 @@ namespace Aiskwk.Map
             }
             if (Input.GetKey(KeyCode.PageDown))
             {
-                TiltHead(ainc);
+                TiltHead(angincpersec);
             }
             if (Input.GetKey(KeyCode.PageDown))
             {
-                TiltHead(-ainc);
+                TiltHead(-angincpersec);
             }
             if (Input.GetKey(KeyCode.E) && ctrlpressed && Time.time - ctrlEhit > hitgap3)
             {
@@ -859,18 +896,15 @@ namespace Aiskwk.Map
             {
                 if (altpressed)
                 {
-                    TranslateViewer(inc, 0);
+                    TranslateViewer(incpersec, 0);
                 }
-                else if (shiftpressed)
+                else if (doTrackThings && shiftpressed)
                 {
-                    if (doTrackThings)
-                    {
-                        vtm.MoveInTime(+timeinc);
-                    }
+                    vtm.MoveInTime(+timeinc);
                 }
                 else
                 {
-                    RotateViewer(ainc);
+                    RotateViewer(angincpersec);
                 }
                 rgtArrowHit = Time.time;
             }
@@ -878,7 +912,7 @@ namespace Aiskwk.Map
             {
                 if (altpressed)
                 {
-                    TranslateViewer(-inc, 0);
+                    TranslateViewer(-incpersec, 0);
                 }
                 else if (shiftpressed)
                 {
@@ -889,7 +923,7 @@ namespace Aiskwk.Map
                 }
                 else
                 {
-                    RotateViewer(-ainc);
+                    RotateViewer(-angincpersec);
                 }
                 lftArrowHit = Time.time;
             }
@@ -897,44 +931,44 @@ namespace Aiskwk.Map
             {
                 if (altpressed)
                 {
-                    TiltHead(-ainc);
+                    TiltHead(-angincpersec);
                 }
                 else
                 {
-                    TranslateViewer(0, inc);
+                    TranslateViewer(0, incpersec);
                 }
             }
             if (Input.GetKey(KeyCode.DownArrow))
             {
                 if (altpressed)
                 {
-                    TiltHead(ainc);
+                    TiltHead(angincpersec);
                 }
                 else
                 {
-                    TranslateViewer(0, -inc);
+                    TranslateViewer(0, -incpersec);
                 }
             }
             if (Input.GetKey(KeyCode.PageUp))
             {
                 if (altpressed)
                 {
-                    TiltHead(ainc);
+                    TiltHead(angincpersec);
                 }
                 else
                 {
-                    RaiseViewer(inc);
+                    RaiseViewer(incpersec);
                 }
             }
             if (Input.GetKey(KeyCode.PageDown))
             {
                 if (altpressed)
                 {
-                    TiltHead(-ainc);
+                    TiltHead(-angincpersec);
                 }
                 else
                 {
-                    RaiseViewer(-inc);
+                    RaiseViewer(-incpersec);
                 }
             }
             //var v = transform.position;

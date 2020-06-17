@@ -914,10 +914,17 @@ namespace CampusSimulator
             spawnjourneys = false;
         }
 
+
+        public void CeaseSceneActivity()
+        {
+            DeleteAllJourneys();
+        }
+
         public void SetScene(SceneSelE newregion)
         {
             DeleteAllJourneys();
         }
+
         string ObjDetClassify(string resname)
         {
             resname = resname.ToLower();

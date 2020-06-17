@@ -964,7 +964,7 @@ namespace GraphAlgos
 
         public void RealizeLateLinks()
         {
-            Debug.LogWarning("RealizeLateLinks");
+            //Debug.LogWarning("RealizeLateLinks");
             try
             {
                 int nllnkcnt = latelinks.Count;
@@ -976,7 +976,7 @@ namespace GraphAlgos
                     var lnk = latelinks[i];
                     var (name1, name2, usetype, regStepIdx, regid, cmt) = lnk;
                     var oname2 = name2;
-                    Debug.Log($"RealizeLateLinks {i}/{nllnkcnt}  :  {name1} to {name2}  {usetype} regStepIdx:{regStepIdx}");
+                    //Debug.Log($"RealizeLateLinks {i}/{nllnkcnt}  :  {name1} to {name2}  {usetype} regStepIdx:{regStepIdx}");
                     if (name2.StartsWith("reg:"))
                     {
                         var regname = name2.Split(':')[1];
@@ -994,7 +994,7 @@ namespace GraphAlgos
                         //Debug.Log("PunchNewNode name:"+nnode.name +" at " + nppt.ToString("f1"));
                         name2 = nnode.name;
                     }
-                    Debug.Log($"AddingLink name1:{name1} name2:{name2} oname2:{oname2}");
+                    //Debug.Log($"AddingLink name1:{name1} name2:{name2} oname2:{oname2}");
                     var nllnk = AddLinkByNodeName(name1, name2, usetype,inLateLinkingPhase:true);
                     if (nllnk == null)
                     {

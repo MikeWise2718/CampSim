@@ -871,7 +871,7 @@ namespace Aiskwk.Map
 
         List<MfWrap> gomflst = null;
 
-        void InitGomflst()
+        public void InitGomflst()
         {
             if (gomflst != null)
             {
@@ -1288,7 +1288,7 @@ namespace Aiskwk.Map
             uvs.Add(uv1);
         }
 
-        public void DeleteSceneData()
+        public void EraseSceneDataFromDisk()
         {
             qkm.DeleteBitmapData(scenename, mapprov);
             qmapElev.DeleteElevData(scenename, mapprov);

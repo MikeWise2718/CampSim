@@ -223,7 +223,13 @@ namespace CampusSimulator
             var (v, _, _) = qmapman.qmm.GetWcMeshPosProjectedAlongYnew(p);
             return v.y;
         }
-
+        public void DeleteQmap()
+        {
+            if (qmapman!=null)
+            {
+                qmapman.DeleteQmm();
+            }
+        }
         void CreateQmap()
         {
             qmapgo = new GameObject("QmapMan");
@@ -272,11 +278,13 @@ namespace CampusSimulator
                 }
             }
             var (nbm,nel) = await qmapman.SetMode(qmapman.qmapMode);
+            sman.PostMapLoadSetScene();
             if (nbm>0 || nel>0)
             {
                 // if we loaded bitmaps we need to redraw everything from scratch
                 sman.RequestRefresh("RealizeQmap", totalrefresh: true);
             }
+
             //Debug.Log("RealizeQmap done");
             //Debug.Log($"bespoke ptcnt:{qmapman.bespoke.mappoints.Count}");
         }
@@ -487,10 +495,10 @@ namespace CampusSimulator
         }
 
 
-        public void DeleteMaps()
+        public void EraseMapsFromDisk()
         {
-            Debug.Log("Deleting Scene Maps");
-            qmapman.qmm.DeleteSceneData();
+            Debug.Log("Erasing Scene Maps from disk");
+            qmapman.qmm.EraseSceneDataFromDisk();
         }
         public async void LoadMaps()
         {

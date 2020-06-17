@@ -540,7 +540,7 @@ public class MapSetPanel : MonoBehaviour
                 }
             case "DeleteMapsButton":
                 {
-                    mman.DeleteMaps();
+                    mman.EraseMapsFromDisk();
                     break;
                 }
             case "LookupAddressButton":
