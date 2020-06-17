@@ -38,14 +38,28 @@ namespace CampusSimulator
             if (bgim == null) return;
             bgim.RealizeBackground();
         }
-        public void SetScene(SceneSelE newregion)
+
+        public void SetScene(SceneSelE newscene)
         {
+            var vcamname = mainCamName.Get();
+            if (!vidcam.ContainsKey(vcamname))
+            {
+                vcamname = "Viewer";
+            }
+            SetMainCameraToVcam(vcamname);
+        }
+        public void PostTerrainLoadAdjustments()
+        {
+            AdjustHeightsForTerrain();
+        }
+        public void InitializeScene(SceneSelE newscene)
+        {
+            DelVidcams();
             backType.GetInitial();
             RealizeBackground();
             mainCamName.GetInitial();
-            DelVidcams();
             //string mcamvcam = "";
-            switch (newregion)
+            switch (newscene)
             {
                 case SceneSelE.MsftCoreCampus:
                 case SceneSelE.MsftB19focused:
@@ -70,12 +84,7 @@ namespace CampusSimulator
                 case SceneSelE.None:
                     break;
             }
-            var vcamname = mainCamName.Get();
-            if (!vidcam.ContainsKey(vcamname))
-            {
-                vcamname = "Viewer";
-            }
-            SetMainCameraToVcam(vcamname);
+            vidcamlist.Add("Viewer");
         }
         public bool toggleFreeFly;
         public FreeFlyCam ffc = null;
@@ -258,7 +267,8 @@ namespace CampusSimulator
             //  Debug.Log("DelVidcams called");
             var keynamelist = new List<string>(vidcam.Keys);
             keynamelist.ForEach(name => DelVidcam(name));
-            vidcam = new Dictionary<string, Vidcam>();           
+            vidcam = new Dictionary<string, Vidcam>();
+            vidcamlist = new List<string>();
         }
         List<string> vidcamlist = new List<string>();
         public void MakeVidcams(string filtername)
@@ -267,6 +277,14 @@ namespace CampusSimulator
             //Debug.Log($"Making vidcams n:{vidcamlist.Count}");
             vidcamlist.ForEach(item => MakeVidcam(item));
         }
+        public void AdjustHeightsForTerrain()
+        {
+            foreach( var vc in vidcam.Values)
+            {
+                vc.AdjustHeight();
+            }
+        }
+
         public void MakeVidcam(string name)
         {
             //Debug.Log("$Making vidcam:{name}");

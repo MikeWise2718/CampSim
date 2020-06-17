@@ -428,10 +428,16 @@ namespace Aiskwk.Map
             var qkgonull = qkgo == null;
             var llgonull = llgo == null;
             //Debug.Log($"ClearMesh qkgonull:{qkgonull}  llgonull:{llgonull}");
-            Destroy(qkgo);
-            qkgo = null;
-            Destroy(llgo);
-            llgo = null;
+            if (qkgo != null)
+            {
+                Destroy(qkgo);
+                qkgo = null;
+            }
+            if (llgo != null)
+            {
+                Destroy(llgo);
+                llgo = null;
+            }
         }
 
         public void ConfigureSystemEnvironment()
@@ -594,7 +600,17 @@ namespace Aiskwk.Map
                 Debug.LogError($"QmapMan.ExtentPoints  - decocomp is null - qmmIsNull:{qmmisnull}");
             }
         }
-
+        public void DeleteQmm()
+        {
+            ClearMesh();
+            if (qmm != null)
+            {
+                qmm.DisposeOfThings();
+                qmm.InitGomflst();
+                Destroy(qmm);
+                qmm = null;
+            }
+        }
         string gdalFilePath = "c:/transfer/gdal/";
         string trackFilePath = "c:/transfer/tracks/";
         public async Task<(int nbmloaded,int nelloaded)> SetMode(QmapModeE newmode,bool forceload=false)
@@ -602,15 +618,9 @@ namespace Aiskwk.Map
             Debug.LogWarning("SetMode:" + newmode);
             var nbm = 0;
             var nel = 0;
-            ClearMesh();
             useElevationDataStart = true;
             useFlatTrisStart = false;
-            if (qmm != null)
-            {
-                qmm.DisposeOfThings();
-                Destroy(qmm);
-                qmm = null;
-            }
+            DeleteQmm();
             switch (newmode)
             {
                 case QmapModeE.Bespoke:

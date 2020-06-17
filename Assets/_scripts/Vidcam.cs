@@ -369,8 +369,6 @@ namespace CampusSimulator
                     camimpixy = 1600;
                     break;
             }
-            var yelev = vm.sman.mpman.GetHeight(campos.x, campos.z);
-            campos = campos + yelev*Vector3.up;
             vcamera.fieldOfView = camfov;
             vcamera.transform.position = campos;
             if (camorienttype == CamOrientTypeE.lookat)
@@ -389,6 +387,14 @@ namespace CampusSimulator
                 bgim.showBackground = false;
                 bgim.showSpheres = false;
             }
+            AdjustHeight();
+        }
+
+        public void AdjustHeight()
+        {
+            var yelev = vm.sman.mpman.GetHeight(campos.x, campos.z);
+            campos = campos + yelev * Vector3.up;
+            vcamera.transform.position = campos;
         }
         public void SaveCameraShot(string path)
         {

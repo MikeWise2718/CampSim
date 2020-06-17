@@ -231,26 +231,44 @@ namespace CampusSimulator
         void InitPhase1()
         {
         }
-
+        public void InitializeScene(SceneSelE newscene)
+        {
+            // Here we do two things
+            //
+            if (runtimestamp == "")
+            {
+                runtimestamp = DateTime.UtcNow.ToString("yyyyMMdd-HHmmss");
+            }
+            simrundir = "./simrun/" + newscene + "_" + runtimestamp + "/";
+            UxUtils.UxSettingsMan.SetScenario(newscene.ToString());
+            curscene = newscene;
+        }
 
         public void SetScene( SceneSelE newscene,bool force=false )
         {
             if (newscene != curscene || force)
             {
+                Debug.LogWarning($"SceneMan-Setting scenario to {newscene} - curscene:{curscene} - force:{force}");
                 try
                 {
-                    Debug.LogWarning($"SceneMan-Setting scenario to {newscene} - curscene:{curscene} - force:{force}");
-                    if (runtimestamp == "")
-                    {
-                        runtimestamp = DateTime.UtcNow.ToString("yyyyMMdd-HHmmss");
-                    }
-                    simrundir = "./simrun/" + newscene + "_" + runtimestamp + "/";
-                    UxUtils.UxSettingsMan.SetScenario(newscene.ToString());
-                    jnman.DeleteAllJourneys();
-                    curscene = newscene;
-                    //var oldglblm = rmango.GetComponent<LegLatLngMap>();
+                    // Cease all activity
+                    jnman.CeaseSceneActivity();
+
+                    // Delete all objects
+                    psman.DelPersons();
+                    bdman.DelBuildings();
+                    gaman.DelGarages();
+                    vcman.DelVidcams();
+                    linkcloudman.DestroyLinkCloud();
+                    mpman.DeleteQmap();
+
+                    // Now do value initialization
+                    this.InitializeScene(newscene);
+                    vcman.InitializeScene(newscene);
+
+
                     glbllm = rmango.AddComponent<LatLongMap>();
-                    glbllm.InitMapFromSceneSel(newscene.ToString(),0); // to do uncomment
+                    glbllm.InitMapFromSceneSel(newscene.ToString(),0); 
 
                     uiman.SetScene(newscene);
 
@@ -294,6 +312,10 @@ namespace CampusSimulator
             requestScene = SceneSelE.None;
         }
 
+        public void PostMapLoadSetScene()
+        {
+            vcman.PostTerrainLoadAdjustments();
+        }
 
 
         public void SetArcoreTracking()

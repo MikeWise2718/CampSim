@@ -485,12 +485,16 @@ namespace CampusSimulator
             }
         }
         #region public methods
+        public void DestroyLinkCloud()
+        {
+            grctrl = null;
+            lastgenmodel = graphSceneE.gen_none;
+        }
         public void InitLinkCloud(bool forcenew = true)
         {
             if (forcenew)
             {
-                grctrl = null;
-                lastgenmodel = graphSceneE.gen_none;
+                DestroyLinkCloud();
             }
             CreateGrcGos();
         }
