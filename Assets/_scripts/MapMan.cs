@@ -239,7 +239,7 @@ namespace CampusSimulator
             qmapman.qmapMode = QmapMan.QmapModeE.Bespoke;
             //var fak = 2*0.4096f;
             //qmapman.bespoke = new BespokeSpec(lastregionset.ToString(), maplat,maplng, fak*zscale, fak*xscale,lod:17 );
-            qmapman.bespoke = new BespokeSpec(lastregionset.ToString(), maplat,maplng, zdistkm, xdistkm,lod:lod,nodesPerQuadKey:npqk );
+            qmapman.bespoke = new BespokeSpec(lastsceneset.ToString(), maplat,maplng, zdistkm, xdistkm,lod:lod,nodesPerQuadKey:npqk );
 
             qmapman.bespoke.mapProv = reqMapProv.Get();
             qmapman.bespoke.eleProv = reqEleProv.Get();
@@ -586,6 +586,11 @@ namespace CampusSimulator
         {
             SetMeshCollider(enable: true);
         }
+
+        public void InitializeScene()
+        {
+
+        }
         // Scene Parameters
         // Fixed - set in select and never changed:
         //    sceneselector
@@ -605,19 +610,16 @@ namespace CampusSimulator
         //    ntpq
         //
 
-        SceneSelE lastregionset = SceneSelE.None;
-        public void SetScene(SceneSelE newregion)
+        SceneSelE lastsceneset = SceneSelE.None;
+        public void IntializeScene(SceneSelE newscene)
         {
-            Debug.Log($"MapMan.SetRegion: {newregion}");
-            GetSceneModeDependentInitialPersistentSettings();
-
-
-            RealizeMapVisuals();
-            if (newregion == lastregionset)
+            Debug.Log($"MapMan.InitializeScene: {newscene}");
+            if (newscene == lastsceneset)
             {
-                Debug.LogWarning("MapMan.SetScene - Region " + newregion + " already set");
+                Debug.LogWarning("MapMan.SetScene - Region " + newscene + " already set");
                 //return;
             }
+            GetSceneModeDependentInitialPersistentSettings();
             maprot = Vector3.zero;
             maptrans = Vector3.zero;
             useElesForNow = false;
@@ -641,7 +643,7 @@ namespace CampusSimulator
             var msc = modeSetCount.Get();
             if (msc == 0)
             {
-                switch (newregion)
+                switch (newscene)
                 {
                     default:
                     case SceneSelE.MsftB19focused:
@@ -845,9 +847,19 @@ namespace CampusSimulator
             transform.Rotate(maprot.x, maprot.y, maprot.z);
             transform.position = maptrans;
             transform.localScale = new Vector3(mapscale, mapscale, mapscale);
-            lastregionset = newregion;
-            Debug.Log($"MapMan.SetScene {msc} {newregion} - lod:{lod} scale:{mapscale} rot:{maprot} trans:{maptrans} ");
+            lastsceneset = newscene;
+            Debug.Log($"MapMan.SetScene {msc} {newscene} - lod:{lod} scale:{mapscale} rot:{maprot} trans:{maptrans} ");
+        }
+
+        public void SetScene(SceneSelE newscene)
+        {
+            Debug.Log($"MapMan.SetScene: {newscene}");
+
+            IntializeScene(newscene);
+            RealizeMapVisuals();
             Initialize();
         }
+
+
     }
 }

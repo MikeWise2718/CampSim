@@ -179,12 +179,15 @@ namespace GraphAlgos
             var rv = new List<NodeRegion>(regionDict.Values);
             return rv;
         }
-        public NodeRegion NewNodeRegion(string name, string color, bool saveToFile, bool makeCurrent=true)
+        public NodeRegion NewNodeRegion(string name, string color, bool saveToFile, bool makeCurrent=true, bool warnondups=false)
         {
             NodeRegion newRegion;
             if (regionDict.ContainsKey(name))
             {
-                Debug.LogError("NewNodeRegion " + name + " already exists");
+                if (warnondups)
+                {
+                    Debug.LogWarning("NewNodeRegion " + name + " already exists");
+                }
                 newRegion = regionDict[name];
             }
             else
@@ -961,6 +964,7 @@ namespace GraphAlgos
 
         public void RealizeLateLinks()
         {
+            Debug.LogWarning("RealizeLateLinks");
             try
             {
                 int nllnkcnt = latelinks.Count;

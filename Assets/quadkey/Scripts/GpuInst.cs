@@ -18,6 +18,24 @@ namespace Aiskwk.Map
             rend.material.color = cclr;
         }
 
+        public static void SetColorNewMatTransparent(GameObject go, Color cclr)
+        {
+            var rend = go.GetComponent<Renderer>();
+            var shader = Shader.Find("Standard");
+            rend.material = new Material(shader);
+            rend.material.enableInstancing = true;
+            rend.material.SetColor("_Color", cclr);
+            rend.material.SetFloat("_Mode", 2);
+            rend.material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+            rend.material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+            rend.material.SetInt("_ZWrite", 0);
+            rend.material.DisableKeyword("_ALPHATEST_ON");
+            rend.material.EnableKeyword("_ALPHABLEND_ON");
+            rend.material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+            rend.material.renderQueue = 3000;
+            rend.material.color = cclr;
+        }
+
         static GameObject gpuInstancing = null;
         static void AddToGpuInstances(GameObject newobj)
         {
@@ -68,6 +86,22 @@ namespace Aiskwk.Map
             return pdict[dictkey];
         }
 
+        static public GameObject GetSharedTransparent(PrimitiveType ptype, string clr)
+        {
+            var pdict = pdictman.GetDict(ptype);
+            var dictkey = "noclr";
+            if (!pdict.ContainsKey(dictkey))
+            {
+                var sphgo = GameObject.CreatePrimitive(ptype);
+                sphgo.name = $"SharedTransparent{ptype}-{dictkey}";
+                AddToGpuInstances(sphgo);
+                var cclr = qut.GetColorByName(clr, alpha: 1);
+                SetColorNewMatTransparent(sphgo, cclr);
+                pdict[dictkey] = sphgo;
+            }
+            return pdict[dictkey];
+        }
+
         static public GameObject GetShared(PrimitiveType ptype, string clr, float alpha)
         {
             var pdict = pdictman.GetDict(ptype);
@@ -85,6 +119,7 @@ namespace Aiskwk.Map
             return pdict[dictkey];
         }
 
+
         static MaterialPropertyBlock props = new MaterialPropertyBlock();
         static public Transform Instantiate(PrimitiveType ptype, string clr)
         {
@@ -95,15 +130,42 @@ namespace Aiskwk.Map
 
             var renderer = tform.GetComponent<MeshRenderer>();
             renderer.SetPropertyBlock(props);
+            //renderer.material.shader = Shader.Find("transparent/diffuse");
             return tform;
         }
 
         static public Transform Instantiate(PrimitiveType ptype, string clr, float alpha)
         {
-            var sharedgo = GetShared(ptype, clr);
+            GameObject sharedgo;
+            if (alpha < 1)
+            {
+                sharedgo = GetShared(ptype, clr);
+            }
+            else
+            {
+                sharedgo = GetSharedTransparent(ptype, clr);
+            }
             Transform tform = UnityEngine.Object.Instantiate<Transform>(sharedgo.transform);
             var cclr = qut.GetColorByName(clr, alpha: alpha);
             props.SetColor("_Color", cclr);
+            //if (alpha < 1)
+            //{
+            //    //https://forum.unity.com/threads/access-rendering-mode-var-on-standard-shader-via-scripting.287002/
+            //    //https://forum.unity.com/threads/standard-material-shader-ignoring-setfloat-property-_mode.344557/
+            //    //https://forum.unity.com/threads/solved-materialpropertyblock-not-setting-blend-modes.628426/
+            //    props.SetFloat("_Mode", 2);
+            //    props.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+            //    props.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+            //    props.SetInt("_ZWrite", 0);
+            //    //props.DisableKeyword("_ALPHATEST_ON");
+            //    //props.EnableKeyword("_ALPHABLEND_ON");
+            //    //props.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+            //    //props.renderQueue = 3000;
+            //}
+            //else
+            //{
+            //    props.SetFloat("_Mode", 0);
+            //}
 
             var renderer = tform.GetComponent<MeshRenderer>();
             renderer.SetPropertyBlock(props);

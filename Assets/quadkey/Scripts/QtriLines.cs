@@ -193,7 +193,7 @@ namespace Aiskwk.Map
             {
                 lska = lska * 100;
                 widratio = widratio / 100;
-                alf = 0.25f;
+                alf = 0.5f;
             }
 
 
