@@ -81,7 +81,9 @@ namespace CampusSimulator
             optionsButton.onClick.AddListener(delegate { OptionsButton(); });
             linked = true;
         }
-
+        public void SetScene(CampusSimulator.SceneSelE curscene)
+        {
+        }
         public void Init0()
         {
             LinkObjectsAndComponents();

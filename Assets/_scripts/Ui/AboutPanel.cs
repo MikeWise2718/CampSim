@@ -38,6 +38,10 @@ public class AboutPanel : MonoBehaviour
         LinkObjectsAndComponents();
     }
 
+    public void SetScene(CampusSimulator.SceneSelE curscene)
+    {
+    }
+
     public float getCurrentCpuUsage()
     {
         var rv = 0f;
@@ -239,15 +243,17 @@ public class AboutPanel : MonoBehaviour
             }
 #endif
 
-            msg += "\n\nUnity Version: " + Application.unityVersion;
-            msg += "\nUnity Platform:" + Application.platform;
+            msg += $"\n\nUnity Version: {Application.unityVersion}";
+            msg += $"\nUnity Platform:{Application.platform}";
 
-            msg += "\n\nBuild Version :" + GraphUtil.GetVersionString();
-            msg += "\nAssembly Date:" + GraphUtil.GetBuildDate();
+            msg += $"\n\nBuild Version :{GraphUtil.GetVersionString()}";
+            msg += $"\nAssembly Date:{GraphUtil.GetBuildDate()}";
+
+            msg += $"\n\nSystemInfo.maxTextureSize:{SystemInfo.maxTextureSize}";
 
             var (winname, username, userdomname) = GetSecurityPrincipalNames();
-            msg += "\n\nWindows Identity:" + winname;
-            msg += "\nEnvironment.UserName:" + username + " DomainName:" + userdomname;
+            msg += $"\n\nWindows Identity:{winname}";
+            msg += $"\nEnvironment.UserName:{username} DomainName:{userdomname}";
         }
         catch (Exception ex)
         {

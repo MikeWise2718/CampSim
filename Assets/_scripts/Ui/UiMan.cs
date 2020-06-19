@@ -67,11 +67,17 @@ namespace CampusSimulator
         public void SetScene(SceneSelE newscene)
         {
             Debug.Log($"UiMan.SetScene: {newscene}");
-            var optpan = FindObjectOfType<OptionsPanel>();
-            if (optpan != null)
-            {
-                optpan.SetScene(newscene);
-            }
+            optpan.SetScene(newscene);
+            stapan.SetScene(newscene);
+
+            infpan.SetScene(newscene);
+            mappan.SetScene(newscene);
+            genpan.SetScene(newscene);
+            frapan.SetScene(newscene);
+            b19pan.SetScene(newscene);
+            helpan.SetScene(newscene);
+            abtpan.SetScene(newscene);
+
             SyncState();
         }
 

@@ -100,6 +100,11 @@ public class FramePanel : MonoBehaviour
         panelActive = true;
     }
 
+    public void SetScene(CampusSimulator.SceneSelE curscene)
+    {
+    }
+
+
     int nSetTextValuesCalled = 0;
     private void SetTextValues()
     {

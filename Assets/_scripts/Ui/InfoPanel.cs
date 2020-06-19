@@ -52,6 +52,12 @@ public class InfoPanel : MonoBehaviour
         
         //Debug.Log("assigned sysText and simText");
     }
+
+    public void SetScene(CampusSimulator.SceneSelE curscene)
+    {
+    }
+
+
     void InitoInfoPanels()
     {
 

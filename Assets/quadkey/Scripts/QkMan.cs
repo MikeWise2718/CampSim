@@ -7,6 +7,8 @@ using System.Collections;
 using UnityEngine.Networking;
 using Microsoft.MapPoint;
 using System.Linq;
+using UnityEngine.UI;
+using System.Diagnostics.Eventing.Reader;
 
 namespace Aiskwk.Map
 {
@@ -283,7 +285,7 @@ namespace Aiskwk.Map
             t3.Apply();
             return t3;
         }
-        public Texture2D CombineTexVert(Texture2D t1, Texture2D t2)
+        public Texture2D CombineTexVert(Texture2D t1, Texture2D t2,bool merget2=true)
         {
             // t3 is t2 added below t1
             var nw = Mathf.Max(t1.width, t2.width);
@@ -291,8 +293,11 @@ namespace Aiskwk.Map
             var t3 = new Texture2D(nw, nh);
             var c1 = t1.GetPixels();
             t3.SetPixels(0, 0, t1.width, t1.height, c1);
-            var c2 = t2.GetPixels();
-            t3.SetPixels(0, t1.height, t2.width, t2.height, c2);
+            if (merget2)
+            {
+                var c2 = t2.GetPixels();
+                t3.SetPixels(0, t1.height, t2.width, t2.height, c2);
+            }
             t3.Apply();
             return t3;
         }
@@ -330,21 +335,43 @@ namespace Aiskwk.Map
         public QkTile tileul, tilebr;
         //public LatLongMap llmap = null;
 
-        public void CalcQuadKeys(bool limitQuadkeys = true)
+        public (bool ok, int newlod) CheckAndReduceLod(int ntiles,int lod,int tsize=256,bool dowarn=false, string warnlab="")
         {
-            bool verbose = false;
+            var lim = SystemInfo.maxTextureSize;
+            if (lim < 256) lim = 256;
+            var npix = ntiles * tsize;
+            var ok = true;
+            var newlod = lod;
+            var _tsize = tsize;
+            while (npix>lim)
+            {
+                _tsize = _tsize / 2;
+                npix = ntiles * _tsize;
+                newlod -= 1;
+            }
+            if (dowarn)
+            {
+                Debug.Log($"Reducing {warnlab} lod due to SystemInfo.maxTextureSize:{lim} requesed lod:{lod} new lod:{newlod}");
+            }
+            return (ok, newlod);
+        }
+
+        public (bool ok,int newlod) CalcQuadKeys(bool limitQuadkeys = true)
+        {
+            bool verbose = false;          
             if (verbose)
             {
                 Debug.Log("CalcQuadKeys ll1:" + ll1 + " ll2:" + ll2 + "  lod:" + levelOfDetail);
             }
-
+            bool ok = false;
+            var newlod = levelOfDetail;
             tileul = QkTile.GetQktileFromLatLng(llbox.GetUpperLeft(), levelOfDetail);
             tilebr = QkTile.GetQktileFromLatLng(llbox.GetBottomRight(), levelOfDetail);
             qllbox = new LatLngBox(tileul.llul, tilebr.llbr, "qllbox", levelOfDetail);
             if (qmm == null)
             {
                 Debug.LogError("qmm is null");
-                return;
+                return (ok,newlod);
             }
             if (datamapname == "")
             {
@@ -365,6 +392,13 @@ namespace Aiskwk.Map
             //var nqky = (numqkpix.y / this.pixelspertile) + 1;
 
             var (nqkx, nqky) = qllbox.GetTileSizeOld(this.pixelspertile);
+            var (okx, lodx) = CheckAndReduceLod(nqkx, levelOfDetail, dowarn: true, warnlab: "x");
+            var (oky, lody) = CheckAndReduceLod(nqky, levelOfDetail, dowarn: true, warnlab: "y");
+            if (!okx || !oky)
+            {
+                newlod = Math.Min(lodx, lody);
+                levelOfDetail = newlod;
+            }
             if (limitQuadkeys)
             {
                 if (nqkx > 20)
@@ -414,10 +448,8 @@ namespace Aiskwk.Map
                 var nqkf = qktiles.Count;
                 Debug.Log("nqk:" + nqkf + "  nqk.x:" + nqk.x + "  nqk.y:" + nqk.y);
             }
+            return (ok, newlod);
         }
-
-
-
 
         public void DeleteBitmapData(string scenename, MapProvider mapprov)
         {
@@ -464,9 +496,11 @@ namespace Aiskwk.Map
 
         Texture2D vertex = null;
         Texture2D hortex = null;
+        Texture2D deftex = null;
+        Texture2D defhortex = null;
 
         public static bool interruptLoading = false;
-        async Task<(bool, string, int)> GetWwwQktilesAndMakeTex(string scenename, string tpath, string ppath, bool execute = true)
+        async Task<(bool ok, string msg, int nbmRetrived)> GetWwwQktilesAndMakeTex(string scenename, string tpath, string ppath, bool execute = true)
         {
             interruptLoading = false;
             Debug.Log($"GetWwwQktilesAndMakeTex scene - {scenename}");
@@ -483,28 +517,35 @@ namespace Aiskwk.Map
             nbmToLoad = nqktodo;
             lodLoading = levelOfDetail;
             bool getquadkeyok = false;
-            bool hortexnull = true;
             vertex = null;
             hortex = null;
+            deftex = new Texture2D(256, 256);
+            defhortex = new Texture2D(256*nqk.x, 256);
+            var npixx = 256 * nqk.x;
+            var npixy = 256 * nqk.y;
+            if (npixx>SystemInfo.maxTextureSize || npixy > SystemInfo.maxTextureSize)
+            {
+                var msg = $"Texture ({npixx},{npixy})exceeds max pixel size{SystemInfo.maxTextureSize}";
+                return (false, msg, 0);
+            }
+            Debug.Log($"Creating texture of {npixx},{npixy} - SystemInfo.maxTextureSize:{SystemInfo.maxTextureSize}");
+
+
             try
             {
                 for (int iy = 0; iy < nqk.y; iy++)
                 {
                     Debug.Log($"hortex being assigned null iy:{iy}  nqk.y:{nqk.y}");
-                    hortex = null;
+                    hortex = defhortex;
                     for (int ix = 0; ix < nqk.x; ix++)
                     {
+                        if (interruptLoading) break;
                         var qktile = qktiles[iqk];
                         if (execute)
                         {
                             Debug.Log($"iy:{iy} ix:{ix}  iqkk:{iqk}/{nqktodo}  {qktile}");
                             if (!File.Exists(tpath + qktile.name))
                             {
-                                hortexnull = hortex == null && ix > 0;
-                                if (hortexnull)
-                                {
-                                    Debug.LogWarning($"Calling GetQuadkeyAsy hortexnull:{hortexnull}  qktile.name:{qktile.name} ");
-                                }
                                 if (interruptLoading)
                                 {
                                     getquadkeyok = true;
@@ -513,34 +554,15 @@ namespace Aiskwk.Map
                                 {
                                     getquadkeyok = await GetQuadkeyAsy(qktile.name, tpath, scenename);
                                 }
-                                hortexnull = hortex == null && ix > 0;
-                                if (hortexnull)
-                                {
-                                    Debug.LogWarning($"Back    GetQuadkeyAsy hortexnull:{hortexnull} getquadkeyok:{getquadkeyok}");
-                                }
                             }
                             else
                             {
                                 Debug.Log($"Found {tpath}{qktile}");
                             }
-                            hortexnull = hortex == null && ix > 0;
-                            if (hortexnull)
-                            {
-                                Debug.LogWarning($"Calling LoadBitmap hortexnull:{hortexnull}");
-                            }
-                            Texture2D tix;
-                            if (interruptLoading)
-                            {
-                                tix = new Texture2D(256, 256);
-                            }
-                            else
+                            Texture2D tix=deftex;
+                            if (!interruptLoading)
                             {
                                 tix = LoadBitmap(tpath, qktile.name, ".png");
-                            }
-                            hortexnull = hortex == null && ix > 0;
-                            if (hortexnull)
-                            {
-                                Debug.LogWarning($"Back from LoadBitmap hortexnull:{hortexnull}");
                             }
                             if (ix == 0)
                             {
@@ -548,17 +570,7 @@ namespace Aiskwk.Map
                             }
                             else
                             {
-                                hortexnull = hortex == null && ix > 0;
-                                if (hortexnull)
-                                {
-                                    Debug.LogWarning($"CombineTexHorz iy:{iy} ix:{ix} hortexnull:{hortexnull}  getquadkeyok:{getquadkeyok}");
-                                }
                                 hortex = CombineTexHorz(hortex, tix);
-                                hortexnull = hortex == null && ix > 0;
-                                if (hortexnull)
-                                {
-                                    Debug.LogWarning($"Back   TexHorz iy:{iy} ix:{ix} hortexnull:{hortexnull}");
-                                }
                             }
                             iqk++;
                             nBmRetrieved++;
@@ -576,12 +588,25 @@ namespace Aiskwk.Map
                     {
                         if (execute)
                         {
-                            //Debug.Log($"CombineTexVert iy:{iy}");
-                            vertex = CombineTexVert(hortex, vertex);// top to bottom
-                                                                    //vertex = CombineTexVert(vertex, hortex);// bottom to top
+                            if (interruptLoading)
+                            {
+                                var yleft = nqk.y - iy - 1;
+                                var ypix = yleft * 256;
+                                Debug.Log($"Irupt Final CombineTexVert iy:{iy} yleft:{yleft} hortex.ypix:{ypix}");
+                                await Task.Delay(100);
+                                hortex = new Texture2D(256, ypix);
+                                vertex = CombineTexVert(hortex, vertex);// top to bottom
+                                ok = true;
+                                break;
+                            }
+                            else
+                            {
+                                Debug.Log($"CombineTexVert iy:{iy}");
+                                vertex = CombineTexVert(hortex, vertex);// top to bottom
+                                                                        //vertex = CombineTexVert(vertex, hortex);// bottom to top
+                            }
                         }
                     }
-
                 }
                 if (execute)
                 {
@@ -607,6 +632,7 @@ namespace Aiskwk.Map
                 Debug.LogError($"Error in GetWwwQktilesAndMakeTex ok:{ok} nBmRetrieved:{nBmRetrieved} nqktodo:{nqktodo} time:{Time.time} - Exception follows");
                 Debug.LogError($"Exception err:{errmsg} ");
             }
+            Debug.Log($"GetWwwQktilesAndMakeTex - returning ok:{ok} errmsg:{errmsg} nBmRetrieved:{nBmRetrieved}");
             return (ok, errmsg, nBmRetrieved);
         }
 

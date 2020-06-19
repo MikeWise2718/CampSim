@@ -15,13 +15,16 @@ public class HelpPanel : MonoBehaviour
     public void Init0()
     {
         LinkObjectsAndComponents();
-        FillHelpPanel();
     }
 
 
     void LinkObjectsAndComponents()
     {
         helpText = transform.Find("HelpText").GetComponent<Text>();
+    }
+    public void SetScene(CampusSimulator.SceneSelE curscene)
+    {
+        FillHelpPanel();
     }
 
 

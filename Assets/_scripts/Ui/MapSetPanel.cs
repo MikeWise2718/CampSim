@@ -158,6 +158,9 @@ public class MapSetPanel : MonoBehaviour
     {
         LinkObjectsAndComponents();
     }
+    public void SetScene(CampusSimulator.SceneSelE curscene)
+    {
+    }
 
     public void InitCheckNeedSetModeRefresh()
     {
@@ -267,6 +270,8 @@ public class MapSetPanel : MonoBehaviour
         newLatLngInputField.transform.gameObject.SetActive(locactive);
         newLatKmInputField.transform.gameObject.SetActive(locactive);
         newLngKmInputField.transform.gameObject.SetActive(locactive);
+        lookupAddressButton.gameObject.SetActive(locactive);
+        lookupAddressInputField.gameObject.SetActive(locactive);
 
         UpdateLatLngText();
 

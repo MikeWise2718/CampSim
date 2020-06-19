@@ -54,14 +54,17 @@ public class B19Panel : MonoBehaviour
         linked = true;
         panelActive = true;
     }
+    public void SetScene(CampusSimulator.SceneSelE curscene)
+    {
+        InitVals();
+    }
+
     public void InitVals()
     {
+        SceneLinkObjectsAndComponents();
         Debug.Log($"B19Panel InitVals called linked:{linked}");
-        if (!linked)
-        {
-            SceneLinkObjectsAndComponents();
-        }
         if (b19comp == null) return;
+
         b19_model.isOn = b19comp.loadmodel.Get();
         b19_level1.isOn = b19comp.level01.Get();
         b19_level2.isOn = b19comp.level02.Get();
@@ -77,10 +80,9 @@ public class B19Panel : MonoBehaviour
             if (idx <= 0) idx = 0;
             b19_matmode.ClearOptions();
             b19_matmode.AddOptions(opts);
-            Debug.Log("MatMode add options n:" + opts.Count);
+            //Debug.Log("MatMode add options n:" + opts.Count);
             b19_matmode.value = idx;
         }
-
         //visTiedToggle.isOn = fman.visibilityTiedToDetectability;
         panelActive = true;
     }
@@ -94,7 +96,7 @@ public class B19Panel : MonoBehaviour
 
     public void SetVals(bool closing = false)
     {
-        Debug.Log($"B19Panel.SetVals called - closing:{closing}");
+        //Debug.Log($"B19Panel.SetVals called - closing:{closing}");
         if (b19comp == null) return;
 
         //fman.visibilityTiedToDetectability = visTiedToggle.isOn;

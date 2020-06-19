@@ -571,15 +571,14 @@ namespace Aiskwk.Map
         Vector3 lstnrm = Vector3.up;
         void TranslateViewerProjected(float xmove, float zmove)
         {
-            var bto = moveplane.transform;
-            var t = transform;
-            var po = t.position;
+            var po = transform.position;
             var (vo, _, _) = qmm.GetWcMeshPosProjectedAlongYnew(po);
+            var bto = moveplane.transform;
             var pnstar = po + zmove*bto.forward + xmove*bto.right;
 
             var (vn, nrm, _) = qmm.GetWcMeshPosProjectedAlongYnew(pnstar);
             var pn = vn + altitude*Vector3.up;
-            t.position = pn;
+            transform.position = pn;
 
             if (followGround)
             {
@@ -602,15 +601,13 @@ namespace Aiskwk.Map
         }
 
 
-
         void TranslateViewerToPosition(Vector3 p)
         {
-            var (vo, _, _) = qmm.GetWcMeshPosProjectedAlongY(p);
-            var bt = moveplane.transform;
-            var t = transform;
+            //var (vo, _, _) = qmm.GetWcMeshPosProjectedAlongY(p);
+            //var bt = moveplane.transform;
             var (vn, nrm, _) = qmm.GetWcMeshPosProjectedAlongY(p);
             //t.position = p + Vector3.up * (vn.y - vo.y);
-            t.position = vn;
+            transform.position = vn;
             if (followGround)
             {
                 //bt.position = t.position;
@@ -623,7 +620,7 @@ namespace Aiskwk.Map
                 body.transform.localRotation = nrmrot * bodyPrefabRotation;
                 rodgo.transform.localRotation = nrmrot;
             }
-            var pnstr = t.position.ToString("f3");
+            var pnstr = transform.position.ToString("f3");
             var nrmstr = nrm.ToString("f3");
             //Debug.Log($"TranslateViewerToPosition - vn:{vn}");
         }
@@ -735,6 +732,35 @@ namespace Aiskwk.Map
         //float hitgap1 = 0.1f;
         //float hitgap2 = 0.2f;
         float hitgap3 = 0.3f;
+
+
+        float shiftpressedElapTime = 0;
+        float shiftpressedStartTime = 0;
+        float shiftMultiplier = 1;
+
+        void CheckShiftTime()
+        {
+            var shiftpressed = Input.GetKey(KeyCode.RightShift) || Input.GetKey(KeyCode.LeftShift);
+            if (!shiftpressed)
+            {
+                shiftpressedElapTime = 0;
+                shiftpressedStartTime = 0;
+                shiftMultiplier = 1;
+            }
+            else
+            {
+                if (shiftpressedStartTime==0)
+                {
+                    shiftpressedStartTime = Time.time;
+                }
+                shiftpressedElapTime = Time.time - shiftpressedStartTime;
+                shiftMultiplier = shiftpressedElapTime / 0.2f;
+            }
+        }
+
+
+
+
         public void MoveToPosition(Vector3 newpos)
         {
             TranslateViewerToPosition(newpos);
@@ -745,9 +771,10 @@ namespace Aiskwk.Map
             var altpressed = Input.GetKey(KeyCode.RightAlt) || Input.GetKey(KeyCode.LeftAlt);
             var ctrlpressed = Input.GetKey(KeyCode.RightControl) || Input.GetKey(KeyCode.LeftControl);
             var shiftpressed = Input.GetKey(KeyCode.RightShift) || Input.GetKey(KeyCode.LeftShift);
+            CheckShiftTime();
 
             var angincpersec = 15.0f; // deg per sec
-            var incpersec = 2.0f; //  m per sec
+            var incpersec = shiftMultiplier * 2.0f; //  m per sec
             if (!ViewerProcessKeys)
             {
                 var forcekeyhit = Input.GetKey(KeyCode.V) || Input.GetKey(KeyCode.W);
@@ -828,7 +855,7 @@ namespace Aiskwk.Map
             }
             if (Input.GetKey(KeyCode.A) && ctrlpressed)
             {
-                Debug.Log($"hit A {Time.time - ctrlAhit} hitgap3:{hitgap3} doTrackThings:{doTrackThings}");
+                //Debug.Log($"hit A {Time.time - ctrlAhit} hitgap3:{hitgap3} doTrackThings:{doTrackThings}");
                 if (doTrackThings && Time.time - ctrlAhit > hitgap3)
                 {
                     vtm.ActivateNextTrack();
@@ -838,9 +865,19 @@ namespace Aiskwk.Map
                     var oldav = viewerAvatar;
                     MoveToNextAvatar();
                     var newav = viewerAvatar;
-                    Debug.Log($"Moving to next avatar old:{oldav}  new:{newav}");
+                    //Debug.Log($"Moving to next avatar old:{oldav}  new:{newav}");
                     ctrlAhit = Time.time;
                 }
+            }
+            if (Input.GetKey(KeyCode.Alpha0))
+            {
+                //if (doTrackThings && Time.time - ctrlVhit > hitgap3)
+                //{
+                //    vtm.AddRandomVehicleToFirstActiveTrack();
+                //}
+                //Debug.Log("Ctrl-KeyCode.Alpha0 hit");
+                altitude = 0;
+                TranslateViewerProjected(0,0);
             }
             if (Input.GetKey(KeyCode.V) && ctrlpressed)
             {
@@ -914,12 +951,9 @@ namespace Aiskwk.Map
                 {
                     TranslateViewer(-incpersec, 0);
                 }
-                else if (shiftpressed)
+                else if (doTrackThings && shiftpressed)
                 {
-                    if (doTrackThings)
-                    {
-                        vtm.MoveInTime(-timeinc);
-                    }
+                    vtm.MoveInTime(-timeinc);
                 }
                 else
                 {
