@@ -223,9 +223,9 @@ namespace CampusSimulator
                 frman.transform.parent = rgo.transform;
             }
 
-            uiman.InitPhase0();
             mpman.InitPhase0();
             vcman.InitPhase0();
+            uiman.InitPhase0();
         }
 
         void InitPhase1()

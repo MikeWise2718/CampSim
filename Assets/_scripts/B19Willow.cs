@@ -164,6 +164,7 @@ public class B19Willow : MonoBehaviour
         else if(!loadmodel.Get() && _b19_WillowModel)
         {
             Destroy(willgo);
+            willgo = null;
             loadmodel.SetAndSave( false );
             _b19_WillowModel = false;
             level01.SetAndSave( false );
@@ -176,7 +177,7 @@ public class B19Willow : MonoBehaviour
             _b19_hvac = false;
 
         }
-        if (level01.Get() != _b19_level01)
+        if (willgo && level01.Get() != _b19_level01)
         {
             //Debug.Log("Fixing 1");
             var stat = level01.Get();
@@ -184,7 +185,7 @@ public class B19Willow : MonoBehaviour
             //SetChildVis("L01-ME", stat);
             _b19_level01 = stat;
         }
-        if (level02.Get() != _b19_level02)
+        if (willgo && level02.Get() != _b19_level02)
         {
             //Debug.Log("Fixing 2");
             var stat = level02.Get();
@@ -192,7 +193,7 @@ public class B19Willow : MonoBehaviour
             //SetChildVis("L02-ME", stat);
             _b19_level02 = stat;
         }
-        if (level03.Get() != _b19_level03)
+        if (willgo && level03.Get() != _b19_level03)
         {
             //Debug.Log("Fixing 3");
             var stat = level03.Get();
@@ -200,7 +201,7 @@ public class B19Willow : MonoBehaviour
             //SetChildVis("L03-ME", stat);
             _b19_level03 = stat;
         }
-        if (floors.Get() != _b19_floors)
+        if (willgo && floors.Get() != _b19_floors)
         {
             //Debug.Log("Fixing floors");
             var stat = floors.Get();
@@ -209,7 +210,7 @@ public class B19Willow : MonoBehaviour
             SetChildVis2("L03-AR", "Solid", stat);
             _b19_floors = stat;
         }
-        if (doors.Get() != _b19_doors)
+        if (willgo && doors.Get() != _b19_doors)
         {
             //Debug.Log("Fixing doors");
             var stat = doors.Get();
@@ -218,7 +219,7 @@ public class B19Willow : MonoBehaviour
             SetChildVis2("L03-AR", "Composite_Part", stat);
             _b19_doors = stat;
         }
-        if (hvac.Get() != _b19_hvac)
+        if (willgo && hvac.Get() != _b19_hvac)
         {
             //Debug.Log("Fixing hvac");
             var stat = hvac.Get();
@@ -227,7 +228,10 @@ public class B19Willow : MonoBehaviour
             SetChildVis("L03-ME", stat);
             _b19_hvac = stat;
         }
-        ActuateMaterialMode();
+        if (willgo)
+        {
+            ActuateMaterialMode();
+        }
     }
 
 
@@ -471,7 +475,7 @@ public class B19Willow : MonoBehaviour
             //Debug.Log("ChangeHappened");
             MakeItSo();
         }
-        if (lastMaterialMode!=b19_materialMode.Get())
+        if (willgo && lastMaterialMode!=b19_materialMode.Get())
         {
             ActuateMaterialMode();
             lastMaterialMode = b19_materialMode.Get();

@@ -382,7 +382,7 @@ public class VisualsPanel : MonoBehaviour
         {
             sman.RequestRefresh("VisualPanel-SetVals");
         }
-        Debug.Log("Setvals done");
+        //Debug.Log("Setvals done");
     }
 
     // Update is called once per frame
