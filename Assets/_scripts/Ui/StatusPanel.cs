@@ -21,6 +21,7 @@ namespace CampusSimulator
         Button unevacButton;
         Button freeFlyButton;
         Button quitButton;
+        Button hideUiButton;
         Button fteButton;
         Button conButton;
         Button secButton;
@@ -59,6 +60,7 @@ namespace CampusSimulator
             mapfitButton = transform.Find("MapFitButton").gameObject.GetComponent<Button>();
             freeFlyButton = transform.Find("FreeFlyButton").gameObject.GetComponent<Button>();
             quitButton = transform.Find("QuitButton").gameObject.GetComponent<Button>();
+            hideUiButton = transform.Find("HideUiButton").gameObject.GetComponent<Button>();
             freeFlyPanel = transform.Find("FreeFlyHelpPanel").gameObject;
             fteButton = transform.Find("FteButton").gameObject.GetComponent<Button>();
             conButton = transform.Find("ConButton").gameObject.GetComponent<Button>();
@@ -75,6 +77,7 @@ namespace CampusSimulator
             vt2dButton.onClick.AddListener(delegate { Vt2DButton(); });
             freeFlyButton.onClick.AddListener(delegate { FreeFlyButton(); });
             quitButton.onClick.AddListener(delegate { QuitButton(); });
+            hideUiButton.onClick.AddListener(delegate { uiman.HideUi(); });
             fteButton.onClick.AddListener(delegate { DetectFteButton(); });
             conButton.onClick.AddListener(delegate { DetectConButton(); });
             secButton.onClick.AddListener(delegate { DetectSecButton(); });

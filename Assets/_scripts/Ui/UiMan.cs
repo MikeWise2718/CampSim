@@ -23,6 +23,8 @@ namespace CampusSimulator
         public HelpPanel helpan;
         public AboutPanel abtpan;
 
+        public bool listenForKeys = false;
+
         public void InitPhase0()
         {
             uigo = GameObject.Find("SimParkUICanvas");
@@ -62,6 +64,8 @@ namespace CampusSimulator
             b19pan.Init0();
             helpan.Init0();
             abtpan.Init0();
+
+            listenForKeys = false;
         }
 
         public void SetScene(SceneSelE newscene)
@@ -89,7 +93,24 @@ namespace CampusSimulator
         {
             stapan.CloseButton();
         }
+        public void HideUi()
+        {
+            uigo.SetActive(false);
+            listenForKeys = true;
+        }
+        public void ShowUi()
+        {
+            uigo.SetActive(true);
+            listenForKeys = false;
+        }
 
+        public void DoKeys()
+        {
+            if (Input.GetKey(KeyCode.Escape))
+            {
+                ShowUi();
+            }
+        }
         void Start()
         {
 
@@ -98,7 +119,10 @@ namespace CampusSimulator
         // Update is called once per frame
         void Update()
         {
-
+            if (listenForKeys)
+            {
+                DoKeys();
+            }
         }
     }
 }
