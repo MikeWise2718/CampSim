@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using CampusSimulator;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,32 +7,34 @@ using UnityEngine.UI;
 public class OptionsPanel : MonoBehaviour
 {
     public CampusSimulator.SceneMan sman;
+    UiMan uiman;
 
-    public GameObject visualPanelGo;
-    public VisualsPanel visualsPanel;
-    public GameObject mapSetGo;
-    public MapSetPanel mapSetPanel;
-    public GameObject framePanelGo;
-    public FramePanel framePanel;
-    public GameObject b19PanelGo;
-    public B19Panel b19Panel;
-    public GameObject generalPanelGo;
-    public GeneralPanel generalPanel;
-    public GameObject helpPanelGo;
-    public HelpPanel helpPanel;
-    public GameObject aboutPanelGo;
-    public AboutPanel aboutPanel;
-    public Toggle visualToggle;
-    public Toggle mapsetToggle;
-    public Toggle frameToggle;
-    public Toggle b19Toggle;
-    public Toggle generalToggle;
-    public Toggle helpToggle;
-    public Toggle aboutToggle;
-    public ToggleGroup togGroup;
+    GameObject visualPanelGo;
+    VisualsPanel visualsPanel;
+    GameObject mapSetGo;
+    MapSetPanel mapSetPanel;
+    GameObject framePanelGo;
+    FramePanel framePanel;
+    GameObject b19PanelGo;
+    B19Panel b19Panel;
+    GameObject generalPanelGo;
+    GeneralPanel generalPanel;
+    GameObject helpPanelGo;
+    HelpPanel helpPanel;
+    GameObject aboutPanelGo;
+    AboutPanel aboutPanel;
+    Toggle visualToggle;
+    Toggle mapsetToggle;
+    Toggle frameToggle;
+    Toggle b19Toggle;
+    Toggle generalToggle;
+    Toggle helpToggle;
+    Toggle aboutToggle;
+    ToggleGroup togGroup;
     // Start is called before the first frame update
     public void Init0()
     {
+        uiman = sman.uiman;
         //Debug.Log("Options Panel Start:"+name);
         aboutPanelGo = transform.Find("AboutPanel").gameObject;
         aboutPanel = aboutPanelGo.GetComponent<AboutPanel>();

@@ -7,6 +7,7 @@ using CampusSimulator;
 public class B19Panel : MonoBehaviour
 {
     public SceneMan sman;
+    UiMan uiman;
 
     Toggle b19_model;
     Toggle b19_level1;
@@ -16,7 +17,7 @@ public class B19Panel : MonoBehaviour
     Toggle b19_floors;
     Toggle b19_doors;
     Dropdown b19_matmode;
-
+    Button closeButton;
 
     BuildingMan bman;
     B19Willow b19comp;
@@ -26,6 +27,7 @@ public class B19Panel : MonoBehaviour
     public void Init0()
     {
         bman = sman.bdman;
+        uiman = sman.uiman;
         b19_model = transform.Find("B19Model").GetComponent<Toggle>();
         b19_level1 = transform.Find("Level1").GetComponent<Toggle>();
         b19_level2 = transform.Find("Level2").GetComponent<Toggle>();
@@ -34,13 +36,11 @@ public class B19Panel : MonoBehaviour
         b19_floors = transform.Find("Floors").GetComponent<Toggle>();
         b19_doors = transform.Find("Doors").GetComponent<Toggle>();
         b19_matmode = transform.Find("MaterialMode").GetComponent<Dropdown>();
-        panelActive = false;
+
+        closeButton = transform.Find("CloseButton").gameObject.GetComponent<Button>();
+        closeButton.onClick.AddListener(delegate { uiman.ClosePanel(); });
     }
 
-    public void SceneLinkObjectsAndComponents()
-    {
-
-    }
     public void SetScene(CampusSimulator.SceneSelE curscene)
     {
         InitVals();

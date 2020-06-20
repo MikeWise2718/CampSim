@@ -8,6 +8,14 @@ using System;
 
 public class VisualsPanel : MonoBehaviour
 {
+    public SceneMan sman;
+    UiMan uiman;
+    LinkCloudMan lman;
+    MapMan mman;
+    BuildingMan bman;
+    GarageMan gman;
+    VidcamMan vman;
+
     Dropdown initialScene;
     Dropdown treeOptions;
     Dropdown bldOptions;
@@ -18,16 +26,12 @@ public class VisualsPanel : MonoBehaviour
     Dropdown camSelection;
     TMP_Dropdown graphGenMode;
 
+    Button closeButton;
+
     Slider linkTrans;
     float oldLinkTrans;
     Text linkTransText;
 
-    public SceneMan sman;
-    public LinkCloudMan lman;
-    public MapMan mman;
-    public BuildingMan bman;
-    public GarageMan gman;
-    public VidcamMan vman;
 
     bool panelActive = false;
 
@@ -38,6 +42,7 @@ public class VisualsPanel : MonoBehaviour
     }
     public void LinkObjectsAndComponents()
     {
+        uiman = sman.uiman;
         bman = sman.bdman;
         lman = sman.linkcloudman;
         gman = sman.gaman;
@@ -60,10 +65,15 @@ public class VisualsPanel : MonoBehaviour
 
         var linkTransTextGo = linkTrans.transform.Find("LinkVisualsTransparencyText").gameObject;
         linkTransText = linkTransTextGo.GetComponent<Text>();
+
+        closeButton = transform.Find("CloseButton").gameObject.GetComponent<Button>();
+        closeButton.onClick.AddListener(delegate { uiman.ClosePanel(); });
     }
+
+
     public void InitVals()
     {
-            //Debug.Log("sman is null in VisualsPanel.InitVals");
+        //Debug.Log("sman is null in VisualsPanel.InitVals");
         SceneLinkObjectsAndComponents();
         var errmsg = "Error in VisualsPanels.InitVals-";
         try
@@ -76,7 +86,7 @@ public class VisualsPanel : MonoBehaviour
             initialScene.AddOptions(soopts);
             initialScene.value = soidx;
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             Debug.LogError($"{errmsg}1:{ex.Message}");
         }
@@ -234,7 +244,7 @@ public class VisualsPanel : MonoBehaviour
             sman.RequestRefresh("VisualPanel-SetLinkTransText");
         }
     }
-    public void SetVals(bool closing=false)
+    public void SetVals(bool closing = false)
     {
         //Debug.Log($"VisualsPanel/SetVals called - closing:{closing}");
         var chg = false;
@@ -247,7 +257,7 @@ public class VisualsPanel : MonoBehaviour
             if (reqScene != sman.curscene)
             {
                 chg = true;
-                sman.RequestRefresh("VisualsPanel.SetVals", totalrefresh: true,requestedScene:reqScene);
+                sman.RequestRefresh("VisualsPanel.SetVals", totalrefresh: true, requestedScene: reqScene);
                 //sman.SetScene(curregion);
             }
         }
@@ -322,7 +332,7 @@ public class VisualsPanel : MonoBehaviour
         {
             var mvopts = mman.mapVisiblity.GetOptionsAsList();
             var newval = mvopts[mapVisuals.value];
-            var lchg =  mman.mapVisiblity.SetAndSave(newval);
+            var lchg = mman.mapVisiblity.SetAndSave(newval);
             if (lchg)
             {
                 mman.RealizeMapVisuals();
@@ -383,6 +393,19 @@ public class VisualsPanel : MonoBehaviour
             sman.RequestRefresh("VisualPanel-SetVals");
         }
         //Debug.Log("Setvals done");
+    }
+
+    void ButtonClick(string buttonname)
+    {
+        //Debug.Log("Clicked \"" + buttonname+"\" "+buttonClickCount);
+        switch (buttonname)
+        {
+            case "CloseButton":
+                {
+                    uiman.ClosePanel();
+                    break;
+                }
+        }
     }
 
     // Update is called once per frame

@@ -6,14 +6,15 @@ using CampusSimulator;
 
 public class GeneralPanel : MonoBehaviour
 {
+    public SceneMan sman;
+    FrameMan fman;
+    UiMan uiman;
 
     Toggle fastModeToggle;
     bool oldFastMode;
     Text fastModeText;
 
-
-    public SceneMan sman;
-    FrameMan fman;
+    Button closeButton;
 
     bool panelActive = false;
 
@@ -25,9 +26,14 @@ public class GeneralPanel : MonoBehaviour
 
     public void LinkObjectsAndComponents()
     {
+        sman = FindObjectOfType<SceneMan>();
+        uiman = sman.uiman;
         fman = sman.frman;
 
         fastModeToggle = transform.Find("FastModeToggle").gameObject.GetComponent<Toggle>();
+
+        closeButton = transform.Find("CloseButton").gameObject.GetComponent<Button>();
+        closeButton.onClick.AddListener(delegate { uiman.ClosePanel();  });
 
         panelActive = true;
     }

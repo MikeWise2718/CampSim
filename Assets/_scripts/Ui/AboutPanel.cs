@@ -10,13 +10,13 @@ using CampusSimulator;
 public class AboutPanel : MonoBehaviour
 {
     public SceneMan sman;
+    UiMan uiman;
 
     Text aboutText;
 
     Button closeButton;
     Button copyClipboardButton;
     Button deleteSettingsButton;
-    bool buttonsInited = false;
 
     System.Diagnostics.PerformanceCounter cpuCounter;
     System.Diagnostics.PerformanceCounter ramCounter;
@@ -27,10 +27,15 @@ public class AboutPanel : MonoBehaviour
 
     void LinkObjectsAndComponents()
     {
+        uiman = sman.uiman;
         aboutText = transform.Find("AboutText").GetComponent<Text>();
         closeButton = transform.Find("CloseButton").gameObject.GetComponent<Button>();
         copyClipboardButton = transform.Find("CopyClipboardButton").gameObject.GetComponent<Button>();
         deleteSettingsButton = transform.Find("DeleteSettingsButton").gameObject.GetComponent<Button>();
+
+        closeButton.onClick.AddListener(delegate { uiman.ClosePanel(); });
+        copyClipboardButton.onClick.AddListener(delegate { ButtonClick(copyClipboardButton.name); });
+        deleteSettingsButton.onClick.AddListener(delegate { ButtonClick(deleteSettingsButton.name); });
     }
 
     public void Init0()
@@ -77,14 +82,6 @@ public class AboutPanel : MonoBehaviour
             ramCounter = null;
         }
 
-        //FillAboutPanel();
-        if (!buttonsInited)
-        {
-            closeButton.onClick.AddListener(delegate { ButtonClick(closeButton.name); });
-            copyClipboardButton.onClick.AddListener(delegate { ButtonClick(copyClipboardButton.name); });
-            deleteSettingsButton.onClick.AddListener(delegate { ButtonClick(deleteSettingsButton.name); });
-            buttonsInited = true;
-        }
         Debug.Log("Initing AboutPanel done");
     }
 

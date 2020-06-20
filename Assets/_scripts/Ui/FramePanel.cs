@@ -6,6 +6,9 @@ using CampusSimulator;
 
 public class FramePanel : MonoBehaviour
 {
+    public SceneMan sman;
+    FrameMan fman;
+    UiMan uiman;
 
     Toggle visTiedToggle;
 
@@ -21,10 +24,8 @@ public class FramePanel : MonoBehaviour
     Dropdown topTextDropdown;
     Dropdown botTextDropdown;
 
-    public SceneMan sman;
-    FrameMan fman;
+    Button closeButton;
 
-    bool linked = false;
 
     bool panelActive = false;
 
@@ -35,6 +36,8 @@ public class FramePanel : MonoBehaviour
     }
     public void LinkObjectsAndComponents()
     {
+        uiman = sman.uiman;
+        fman = sman.frman;
         visTiedToggle = transform.Find("VisibilityTiedToggle").gameObject.GetComponent<Toggle>();
         showCarsToggle = transform.Find("ShowCarRectsToggle").gameObject.GetComponent<Toggle>();
         showPersToggle = transform.Find("ShowPersRectsToggle").gameObject.GetComponent<Toggle>();
@@ -46,28 +49,14 @@ public class FramePanel : MonoBehaviour
         topTextDropdown = transform.Find("TopTextDropdown").gameObject.GetComponent<Dropdown>();
         botTextDropdown = transform.Find("BotTextDropdown").gameObject.GetComponent<Dropdown>();
         panelActive = true;
+
+        closeButton = transform.Find("CloseButton").gameObject.GetComponent<Button>();
+        closeButton.onClick.AddListener(delegate { uiman.ClosePanel(); });
     }
 
 
-    public void SceneLinkObjectsAndComponents()
-    {
-        Debug.Log("FramePanel SceneLinkObjectsAndComponents called");
-
-        fman = FindObjectOfType<FrameMan>();
-        if (fman == null)
-        {
-            Debug.LogError("FrameMan cound not be found");
-            return;
-        }
-        linked = true;
-        panelActive = true;
-    }
     public void InitVals()
     {
-        if (!linked)
-        {
-            SceneLinkObjectsAndComponents();
-        }
         visTiedToggle.isOn = fman.visibilityTiedToDetectability.Get();
         showCarsToggle.isOn = fman.showCarRects.Get();
         showPersToggle.isOn = fman.showPersRects.Get();
@@ -136,8 +125,6 @@ public class FramePanel : MonoBehaviour
             fman.botLabelText.SetAndSave(newval);
             Debug.Log("SetAndSave botLabelText default to " + newval);
         }
-
-
         panelActive = false;
         sman.RequestRefresh("FramePanel-SetVals");
     }

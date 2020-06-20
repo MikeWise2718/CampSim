@@ -85,6 +85,10 @@ namespace CampusSimulator
         {
             stapan.ColorizeButtonStates();
         }
+        public void ClosePanel()
+        {
+            stapan.CloseButton();
+        }
 
         void Start()
         {

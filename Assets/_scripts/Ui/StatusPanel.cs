@@ -9,6 +9,7 @@ namespace CampusSimulator
     public class StatusPanel : MonoBehaviour
     {
         public SceneMan sman;
+        UiMan uiman;
         JourneyMan jman;
         GarageMan gman;
         public int btnclk;
@@ -32,10 +33,9 @@ namespace CampusSimulator
         GameObject freeFlyPanel;
         // Start is called before the first frame update
 
-        bool linked = false;
         void LinkObjectsAndComponents()
         {
-            if (linked) return;
+            uiman = sman.uiman;
             jman = sman.jnman;
             gman = sman.gaman;
             var cango = GameObject.Find("SimParkUICanvas");
@@ -79,7 +79,6 @@ namespace CampusSimulator
             unkButton.onClick.AddListener(delegate { DetectUnkButton(); });
             goButton.onClick.AddListener(delegate { GoButton(); });
             optionsButton.onClick.AddListener(delegate { OptionsButton(); });
-            linked = true;
         }
         public void SetScene(CampusSimulator.SceneSelE curscene)
         {
@@ -203,6 +202,12 @@ namespace CampusSimulator
             //Debug.Log($"Options Button Pushed optionsPanelGo.activeSelf:{optionsPanelGo.activeSelf} -> newstate:{newstate}");
             optionsPanelGo.SetActive(newstate);// this does immediately take effect
             optionsPanel.ChangingOptionsDialog(newstate);
+        }
+        public void CloseButton()
+        {
+            //Debug.Log($"Options Button Pushed optionsPanelGo.activeSelf:{optionsPanelGo.activeSelf} -> newstate:{newstate}");
+            optionsPanelGo.SetActive(false);// this does immediately take effect
+            optionsPanel.ChangingOptionsDialog(false);
         }
         bool ffpanstat = false;
         public void ToggleFreeFlyPanel()

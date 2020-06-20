@@ -8,6 +8,7 @@ using CampusSimulator;
 public class MapSetPanel : MonoBehaviour
 {
 
+
     Toggle instantChangeToggle;
     Dropdown mapProv;
     Dropdown eleProv;
@@ -87,24 +88,25 @@ public class MapSetPanel : MonoBehaviour
 
 
     public SceneMan sman;
-    public MapMan mman;
+    UiMan uiman;
+    MapMan mman;
 
     bool panelActive = false;
-    bool buttonsInited = false;
-    bool linked = false;
 
 
     public void LinkObjectsAndComponents()
     {
         //Debug.Log("MapSetPanel LinkObjectsAndComponents called");
-        mman = FindObjectOfType<MapMan>();
+        uiman = sman.uiman;
+        mman = sman.mpman;
+
         if (mman == null)
         {
             Debug.LogError("MapSet panel could not find MapMan");
         }
         instantChangeToggle = transform.Find("InstantChangeToggle").gameObject.GetComponent<Toggle>();
-        mapProv = transform.Find("MapProvDropdown").gameObject.GetComponent<Dropdown>(); 
-        eleProv = transform.Find("EleProvDropdown").gameObject.GetComponent<Dropdown>(); 
+        mapProv = transform.Find("MapProvDropdown").gameObject.GetComponent<Dropdown>();
+        eleProv = transform.Find("EleProvDropdown").gameObject.GetComponent<Dropdown>();
         useElevationsToggle = transform.Find("UseElevationsToggle").gameObject.GetComponent<Toggle>();
         flatTrisToggle = transform.Find("FlatTrisToggle").gameObject.GetComponent<Toggle>();
         frameQuadkeysToggle = transform.Find("FrameQuadkeysToggle").gameObject.GetComponent<Toggle>();
@@ -142,16 +144,22 @@ public class MapSetPanel : MonoBehaviour
         curFetchSizeText = transform.Find("CurFetchSizeText").gameObject.GetComponent<Text>();
         fetchSizeEstText = transform.Find("FetchSizeEstText").gameObject.GetComponent<Text>();
 
-        lookupAddressButton =  transform.Find("LookupAddressButton").gameObject.GetComponent<Button>();
+        lookupAddressButton = transform.Find("LookupAddressButton").gameObject.GetComponent<Button>();
         lookupAddressInputField = transform.Find("LookupAddressInputField").gameObject.GetComponent<InputField>();
         newLatLngInputField = transform.Find("NewLatLngInputField").gameObject.GetComponent<InputField>();
         newLatKmInputField = transform.Find("NewLatKmInputField").gameObject.GetComponent<InputField>();
         newLngKmInputField = transform.Find("NewLngKmInputField").gameObject.GetComponent<InputField>();
 
 
+        closeButton.onClick.AddListener(delegate { uiman.ClosePanel(); });
+        copyClipboardButton.onClick.AddListener(delegate { ButtonClick(copyClipboardButton.name); });
+        deleteSettingsButton.onClick.AddListener(delegate { ButtonClick(deleteSettingsButton.name); });
+        deleteMapsButton.onClick.AddListener(delegate { ButtonClick(deleteMapsButton.name); });
+        loadMapsButton.onClick.AddListener(delegate { ButtonClick(loadMapsButton.name); });
+        lookupAddressButton.onClick.AddListener(delegate { ButtonClick(lookupAddressButton.name); });
+
         Debug.Log("MapSetPanel.LinkObjectsAndComponents Found everything apparently");
 
-        linked = true;
     }
 
     public void Init0()
@@ -179,10 +187,6 @@ public class MapSetPanel : MonoBehaviour
     public void InitVals()
     {
         Debug.Log($"MapSetPanel.InitVals called scene:{sman.curscene} iscustomizable:{mman.isCustomizable}");
-        if (!linked)
-        {
-            LinkObjectsAndComponents();
-        }
 
         InitCheckNeedSetModeRefresh();
 
@@ -254,16 +258,7 @@ public class MapSetPanel : MonoBehaviour
 
 
 
-        if (!buttonsInited)
-        {
-            lookupAddressButton.onClick.AddListener(delegate { ButtonClick(lookupAddressButton.name); });
-            closeButton.onClick.AddListener(delegate { ButtonClick(closeButton.name); });
-            copyClipboardButton.onClick.AddListener(delegate { ButtonClick(copyClipboardButton.name); });
-            deleteSettingsButton.onClick.AddListener(delegate { ButtonClick(deleteSettingsButton.name); });
-            deleteMapsButton.onClick.AddListener(delegate { ButtonClick(deleteMapsButton.name); });
-            loadMapsButton.onClick.AddListener(delegate { ButtonClick(loadMapsButton.name); });
-            buttonsInited = true;
-        }
+
 
 
         var locactive = mman.isCustomizable;
@@ -522,8 +517,7 @@ public class MapSetPanel : MonoBehaviour
         {
             case "CloseButton":
                 {
-                    var spcomp = FindObjectOfType<StatusPanel>();
-                    spcomp.OptionsButton();
+                    uiman.ClosePanel();
                     break;
                 }
             case "ClipboardCopyButton":
