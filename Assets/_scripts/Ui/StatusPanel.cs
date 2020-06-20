@@ -20,6 +20,7 @@ namespace CampusSimulator
         Button evacButton;
         Button unevacButton;
         Button freeFlyButton;
+        Button quitButton;
         Button fteButton;
         Button conButton;
         Button secButton;
@@ -57,6 +58,7 @@ namespace CampusSimulator
             optionsButton = transform.Find("OptionsButton").gameObject.GetComponent<Button>();
             mapfitButton = transform.Find("MapFitButton").gameObject.GetComponent<Button>();
             freeFlyButton = transform.Find("FreeFlyButton").gameObject.GetComponent<Button>();
+            quitButton = transform.Find("QuitButton").gameObject.GetComponent<Button>();
             freeFlyPanel = transform.Find("FreeFlyHelpPanel").gameObject;
             fteButton = transform.Find("FteButton").gameObject.GetComponent<Button>();
             conButton = transform.Find("ConButton").gameObject.GetComponent<Button>();
@@ -72,6 +74,7 @@ namespace CampusSimulator
             unevacButton.onClick.AddListener(delegate { UnevacButton(); });
             vt2dButton.onClick.AddListener(delegate { Vt2DButton(); });
             freeFlyButton.onClick.AddListener(delegate { FreeFlyButton(); });
+            quitButton.onClick.AddListener(delegate { QuitButton(); });
             fteButton.onClick.AddListener(delegate { DetectFteButton(); });
             conButton.onClick.AddListener(delegate { DetectConButton(); });
             secButton.onClick.AddListener(delegate { DetectSecButton(); });
@@ -229,6 +232,12 @@ namespace CampusSimulator
                 }
             }
             ColorizeButtonStates();
+        }
+
+        public void QuitButton()
+        {
+            Debug.Log($"Activating QuitButton");
+            //Application.Quit();
         }
 
         public void ColorizeButtonStates()
