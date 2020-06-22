@@ -93,6 +93,8 @@ public class MapSetPanel : MonoBehaviour
 
     bool panelActive = false;
 
+    Color textColorDef = Color.gray;
+
 
     public void LinkObjectsAndComponents()
     {
@@ -143,6 +145,7 @@ public class MapSetPanel : MonoBehaviour
         lngKmText = transform.Find("LngKmText").gameObject.GetComponent<Text>();
         curFetchSizeText = transform.Find("CurFetchSizeText").gameObject.GetComponent<Text>();
         fetchSizeEstText = transform.Find("FetchSizeEstText").gameObject.GetComponent<Text>();
+        textColorDef = fetchSizeEstText.color;
 
         lookupAddressButton = transform.Find("LookupAddressButton").gameObject.GetComponent<Button>();
         lookupAddressInputField = transform.Find("LookupAddressInputField").gameObject.GetComponent<InputField>();
@@ -237,17 +240,17 @@ public class MapSetPanel : MonoBehaviour
 
         hmultVal.minValue = 0;
         hmultVal.maxValue = 15;
-        oldHmultVal = -9e9f;
+        oldHmultVal = float.MinValue;
         hmultVal.value = mman.hmult.Get();
 
         lodVal.minValue = 0;
         lodVal.maxValue = 19;
-        oldLodVal = -9e9f;
+        oldLodVal = float.MinValue;
         lodVal.value = 15;
 
         npqkVal.minValue = 1;
         npqkVal.maxValue = 48;
-        oldHmultVal = -9e9f;
+        oldHmultVal = float.MinValue;
         npqkVal.value = mman.npqk;
 
         UpdateHmult();
@@ -374,38 +377,38 @@ public class MapSetPanel : MonoBehaviour
         }
         else
         {
-            double f1 = 0f;
-            double f2 = 0f;
-            var ok1 = double.TryParse(sarr[0], out f1);
+            double v1 = 0;
+            double v2 = 0;
+            var ok1 = double.TryParse(sarr[0], out v1);
             if (!ok1)
             {
                 msg = "field 1 format error";
             }
             else
             {
-                var ok2 = double.TryParse(sarr[1], out f2);
+                var ok2 = double.TryParse(sarr[1], out v2);
                 if (!ok2)
                 {
                     msg = "field 2 format error";
                 }
                 else
                 {
-                    if (Math.Abs(f1) > 90)
+                    if (Math.Abs(v1) > 90)
                     {
                         msg = "field 1 not in (-90 to 90)";
                     }
-                    else if (Math.Abs(f2) > 180)
+                    else if (Math.Abs(v2) > 180)
                     {
                         msg = "field 2 not in (-180 to 180)";
                     }
                     else
                     {
-                        var f1s = f1.ToString("f6");
-                        var f2s = f2.ToString("f6");
-                        msg = $"lat,lng: {f1s},{f2s}";
+                        var v1s = v1.ToString("f6");
+                        var v2s = v2.ToString("f6");
+                        msg = $"lat,lng: {v1s},{v2s}";
                         newPosAndExtentAvailable = true;
-                        newLat = f1;
-                        newLng = f2;
+                        newLat = v1;
+                        newLng = v2;
                     }
                 }
             }
@@ -446,10 +449,17 @@ public class MapSetPanel : MonoBehaviour
     float loadStartTime = 0;
     (bool oktoload,string errmsg) StartLoading()
     {
+        if (!loadererrmsg.StartsWith("ok"))
+        {
+            loadStatusText.color = Color.red;
+            loadStatusText.text = loadererrmsg;
+            return (false,loadererrmsg);
+        }
         isLoadingMaps = true;
         loadStartTime = Time.time;
         //mman.DeleteMaps();
-        mman.SetLod((int) (lodVal.value+0.5f));
+        var newlod = (int)(lodVal.value + 0.5f);
+        mman.SetLod(newlod);
         if (newPosAndExtentAvailable)
         {
             var addr = lookupAddressInputField.text;
@@ -482,6 +492,7 @@ public class MapSetPanel : MonoBehaviour
             {
                 msg = numstr + " Loading " + elaps;
             }
+            loadStatusText.color = textColorDef;
             loadStatusText.text = msg;
         }
     }
@@ -743,6 +754,7 @@ public class MapSetPanel : MonoBehaviour
             Aiskwk.Map.Viewer.ActivateViewerKeys(true);
         }
     }
+    string loadererrmsg = "";
     int estimateCheckedCount = 0;
     public void checkEstimateChanged()
     {
@@ -777,20 +789,36 @@ public class MapSetPanel : MonoBehaviour
                 var pixx = nqkx * 256;
                 var pixy = nqky * 256;
                 var imsz = pixx*1f*pixy*4f / 1e6;
-                fetchSizeEstText.color = Color.black;
-                var errmsg = "";
                 var pixlim = SystemInfo.maxTextureSize;
-                if (pixy > pixlim)
-                {
-                    errmsg = $"ypix>{pixlim}";
-                    fetchSizeEstText.color = Color.red;
-                }
+                var imszlim = 100;
+                var nbmlim = 200;
                 if (pixx > pixlim)
                 {
-                    errmsg = $"xpix>{pixlim}";
+                    loadererrmsg = $"xpix>{pixlim}";
                     fetchSizeEstText.color = Color.red;
                 }
-                fetchSizeEstText.text = $"nbm:{nbm} ({nqkx}x{nqky}) (pix:{pixx}x{pixy}) ({imsz:f1} MB)  nelev:{nel}  lod:{nlod}  npqk:{npqk}  {errmsg}";
+                else if (pixy > pixlim)
+                {
+                    loadererrmsg = $"ypix>{pixlim}";
+                    fetchSizeEstText.color = Color.red;
+                }
+                else if (imsz>imszlim)
+                {
+                    loadererrmsg = $"ok - image size>{imszlim} MB";
+                    fetchSizeEstText.color = Color.yellow;
+                }
+                else if (nbm>nbmlim)
+                {
+                    loadererrmsg = $"ok - nbm>{nbmlim}";
+                    fetchSizeEstText.color = Color.yellow;
+                }
+                else 
+                {
+                    loadererrmsg = $"ok";
+                    fetchSizeEstText.color = textColorDef;
+                }
+
+                fetchSizeEstText.text = $"nbm:{nbm} ({nqkx}x{nqky}) (pix:{pixx}x{pixy}) ({imsz:f1} MB)  nelev:{nel}  lod:{nlod}  npqk:{npqk}  {loadererrmsg}";
                 if (estimateCheckedCount==0)
                 {
                     var (onqkx, onqky) = stats.llbox.GetTileSize();
