@@ -444,7 +444,7 @@ public class MapSetPanel : MonoBehaviour
 
     static public bool isLoadingMaps = false;
     float loadStartTime = 0;
-    void StartLoading()
+    (bool oktoload,string errmsg) StartLoading()
     {
         isLoadingMaps = true;
         loadStartTime = Time.time;
@@ -457,6 +457,7 @@ public class MapSetPanel : MonoBehaviour
         }
         mman.SetNtqk((int) (npqkVal.value+0.5f));
         mman.LoadMaps();
+        return (true, "");
     }
     float checkLoadInterval = 0.25f;
     float lastLoadCheck = 0;
@@ -773,12 +774,33 @@ public class MapSetPanel : MonoBehaviour
                 var maxElevationsPerRequest = 1024; // https://docs.microsoft.com/en-us/bingmaps/rest-services/elevations/get-elevations
                 var nel = (nbm * npqk * npqk / maxElevationsPerRequest) + 1;
                 var nllhkm = nllbox.extentMetersBadEstimate.y;
-                fetchSizeEstText.text = $"nbm:{nbm} ({nqkx}x{nqky})  nelev:{nel}  lod:{nlod}  npqk:{npqk}";
+                var pixx = nqkx * 256;
+                var pixy = nqky * 256;
+                var imsz = pixx*1f*pixy*4f / 1e6;
+                fetchSizeEstText.color = Color.black;
+                var errmsg = "";
+                var pixlim = SystemInfo.maxTextureSize;
+                if (pixy > pixlim)
+                {
+                    errmsg = $"ypix>{pixlim}";
+                    fetchSizeEstText.color = Color.red;
+                }
+                if (pixx > pixlim)
+                {
+                    errmsg = $"xpix>{pixlim}";
+                    fetchSizeEstText.color = Color.red;
+                }
+                fetchSizeEstText.text = $"nbm:{nbm} ({nqkx}x{nqky}) (pix:{pixx}x{pixy}) ({imsz:f1} MB)  nelev:{nel}  lod:{nlod}  npqk:{npqk}  {errmsg}";
                 if (estimateCheckedCount==0)
                 {
                     var (onqkx, onqky) = stats.llbox.GetTileSize();
                     var onbm = onqkx * onqky;
-                    curFetchSizeText.text = $"nbm:{onbm} ({onqkx}x{onqky})  nelev:{nel}  lod:{olod}  npqk:{onpqk}";
+                    var opixx = onqkx * 256;
+                    var opixy = onqky * 256;
+                    var oimsz = opixx*1f*opixy*4f / 1e6;
+
+
+                    curFetchSizeText.text = $"nbm:{onbm} ({onqkx}x{onqky}) (pix:{opixx}x{opixy}) ({imsz:f1} MB) nelev:{nel}  lod:{olod}  npqk:{onpqk}";
                 }
                 estimateCheckedCount++;
             }
