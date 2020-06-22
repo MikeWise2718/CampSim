@@ -4,24 +4,33 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using GraphAlgos;
+using CampusSimulator;
 
 public class HelpPanel : MonoBehaviour
 {
     public CampusSimulator.SceneMan sman;
+    UiMan uiman;
 
     Text helpText;
+    Button closeButton;
 
 
     public void Init0()
     {
         LinkObjectsAndComponents();
-        FillHelpPanel();
     }
 
 
     void LinkObjectsAndComponents()
     {
+        uiman = sman.uiman;
         helpText = transform.Find("HelpText").GetComponent<Text>();
+        closeButton = transform.Find("CloseButton").gameObject.GetComponent<Button>();
+        closeButton.onClick.AddListener(delegate { uiman.ClosePanel(); });
+    }
+    public void SetScene(CampusSimulator.SceneSelE curscene)
+    {
+        FillHelpPanel();
     }
 
 

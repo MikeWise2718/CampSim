@@ -7,10 +7,12 @@ using CampusSimulator;
 public class InfoPanel : MonoBehaviour
 {
     public SceneMan sman;
+    UiMan uiman;
     VidcamMan vman;
     JourneyMan jman;
     GarageMan gman;
     LocationMan locman;
+
     Text sysText;
     Text simText;
     Text geoText;
@@ -24,25 +26,13 @@ public class InfoPanel : MonoBehaviour
         InitoInfoPanels();
     }
 
-    public void ComplainIfNull(object oman,string tname,string oname)
-    {
-        if (oman==null)
-        {
-            Debug.LogError($"{oname} of type {tname} is null");
-        }
-    }
     public void LinkObjectsAndComponents()
     {
+        uiman = sman.uiman;
         jman = sman.jnman;
         gman = sman.gaman;
         vman = sman.vcman;
         locman = sman.loman;
-
-        ComplainIfNull(sman, "SceneMan", "sman");
-        ComplainIfNull(jman, "JourneyMan", "jman");
-        ComplainIfNull(gman, "GarageMan", "gman");
-        ComplainIfNull(vman, "VidcamMan", "vman");
-
 
         sysText = transform.Find("SysText")?.GetComponent<Text>();
         simText = transform.Find("SimText")?.GetComponent<Text>();
@@ -52,6 +42,12 @@ public class InfoPanel : MonoBehaviour
         
         //Debug.Log("assigned sysText and simText");
     }
+
+    public void SetScene(CampusSimulator.SceneSelE curscene)
+    {
+    }
+
+
     void InitoInfoPanels()
     {
 

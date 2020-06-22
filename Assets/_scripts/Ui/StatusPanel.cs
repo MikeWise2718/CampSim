@@ -9,6 +9,7 @@ namespace CampusSimulator
     public class StatusPanel : MonoBehaviour
     {
         public SceneMan sman;
+        UiMan uiman;
         JourneyMan jman;
         GarageMan gman;
         public int btnclk;
@@ -19,6 +20,8 @@ namespace CampusSimulator
         Button evacButton;
         Button unevacButton;
         Button freeFlyButton;
+        Button quitButton;
+        Button hideUiButton;
         Button fteButton;
         Button conButton;
         Button secButton;
@@ -32,10 +35,9 @@ namespace CampusSimulator
         GameObject freeFlyPanel;
         // Start is called before the first frame update
 
-        bool linked = false;
         void LinkObjectsAndComponents()
         {
-            if (linked) return;
+            uiman = sman.uiman;
             jman = sman.jnman;
             gman = sman.gaman;
             var cango = GameObject.Find("SimParkUICanvas");
@@ -57,6 +59,8 @@ namespace CampusSimulator
             optionsButton = transform.Find("OptionsButton").gameObject.GetComponent<Button>();
             mapfitButton = transform.Find("MapFitButton").gameObject.GetComponent<Button>();
             freeFlyButton = transform.Find("FreeFlyButton").gameObject.GetComponent<Button>();
+            quitButton = transform.Find("QuitButton").gameObject.GetComponent<Button>();
+            hideUiButton = transform.Find("HideUiButton").gameObject.GetComponent<Button>();
             freeFlyPanel = transform.Find("FreeFlyHelpPanel").gameObject;
             fteButton = transform.Find("FteButton").gameObject.GetComponent<Button>();
             conButton = transform.Find("ConButton").gameObject.GetComponent<Button>();
@@ -72,6 +76,8 @@ namespace CampusSimulator
             unevacButton.onClick.AddListener(delegate { UnevacButton(); });
             vt2dButton.onClick.AddListener(delegate { Vt2DButton(); });
             freeFlyButton.onClick.AddListener(delegate { FreeFlyButton(); });
+            quitButton.onClick.AddListener(delegate { QuitButton(); });
+            hideUiButton.onClick.AddListener(delegate { uiman.HideUi(); });
             fteButton.onClick.AddListener(delegate { DetectFteButton(); });
             conButton.onClick.AddListener(delegate { DetectConButton(); });
             secButton.onClick.AddListener(delegate { DetectSecButton(); });
@@ -79,9 +85,10 @@ namespace CampusSimulator
             unkButton.onClick.AddListener(delegate { DetectUnkButton(); });
             goButton.onClick.AddListener(delegate { GoButton(); });
             optionsButton.onClick.AddListener(delegate { OptionsButton(); });
-            linked = true;
         }
-
+        public void SetScene(CampusSimulator.SceneSelE curscene)
+        {
+        }
         public void Init0()
         {
             LinkObjectsAndComponents();
@@ -202,6 +209,12 @@ namespace CampusSimulator
             optionsPanelGo.SetActive(newstate);// this does immediately take effect
             optionsPanel.ChangingOptionsDialog(newstate);
         }
+        public void CloseButton()
+        {
+            //Debug.Log($"Options Button Pushed optionsPanelGo.activeSelf:{optionsPanelGo.activeSelf} -> newstate:{newstate}");
+            optionsPanelGo.SetActive(false);// this does immediately take effect
+            optionsPanel.ChangingOptionsDialog(false);
+        }
         bool ffpanstat = false;
         public void ToggleFreeFlyPanel()
         {
@@ -222,6 +235,12 @@ namespace CampusSimulator
                 }
             }
             ColorizeButtonStates();
+        }
+
+        public void QuitButton()
+        {
+            Debug.Log($"Activating QuitButton");
+            //Application.Quit();
         }
 
         public void ColorizeButtonStates()

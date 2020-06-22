@@ -10,13 +10,13 @@ using CampusSimulator;
 public class AboutPanel : MonoBehaviour
 {
     public SceneMan sman;
+    UiMan uiman;
 
     Text aboutText;
 
     Button closeButton;
     Button copyClipboardButton;
     Button deleteSettingsButton;
-    bool buttonsInited = false;
 
     System.Diagnostics.PerformanceCounter cpuCounter;
     System.Diagnostics.PerformanceCounter ramCounter;
@@ -27,15 +27,24 @@ public class AboutPanel : MonoBehaviour
 
     void LinkObjectsAndComponents()
     {
+        uiman = sman.uiman;
         aboutText = transform.Find("AboutText").GetComponent<Text>();
         closeButton = transform.Find("CloseButton").gameObject.GetComponent<Button>();
         copyClipboardButton = transform.Find("CopyClipboardButton").gameObject.GetComponent<Button>();
         deleteSettingsButton = transform.Find("DeleteSettingsButton").gameObject.GetComponent<Button>();
+
+        closeButton.onClick.AddListener(delegate { uiman.ClosePanel(); });
+        copyClipboardButton.onClick.AddListener(delegate { ButtonClick(copyClipboardButton.name); });
+        deleteSettingsButton.onClick.AddListener(delegate { ButtonClick(deleteSettingsButton.name); });
     }
 
     public void Init0()
     {
         LinkObjectsAndComponents();
+    }
+
+    public void SetScene(CampusSimulator.SceneSelE curscene)
+    {
     }
 
     public float getCurrentCpuUsage()
@@ -73,14 +82,6 @@ public class AboutPanel : MonoBehaviour
             ramCounter = null;
         }
 
-        //FillAboutPanel();
-        if (!buttonsInited)
-        {
-            closeButton.onClick.AddListener(delegate { ButtonClick(closeButton.name); });
-            copyClipboardButton.onClick.AddListener(delegate { ButtonClick(copyClipboardButton.name); });
-            deleteSettingsButton.onClick.AddListener(delegate { ButtonClick(deleteSettingsButton.name); });
-            buttonsInited = true;
-        }
         Debug.Log("Initing AboutPanel done");
     }
 
@@ -239,15 +240,17 @@ public class AboutPanel : MonoBehaviour
             }
 #endif
 
-            msg += "\n\nUnity Version: " + Application.unityVersion;
-            msg += "\nUnity Platform:" + Application.platform;
+            msg += $"\n\nUnity Version: {Application.unityVersion}";
+            msg += $"\nUnity Platform:{Application.platform}";
 
-            msg += "\n\nBuild Version :" + GraphUtil.GetVersionString();
-            msg += "\nAssembly Date:" + GraphUtil.GetBuildDate();
+            msg += $"\n\nBuild Version :{GraphUtil.GetVersionString()}";
+            msg += $"\nAssembly Date:{GraphUtil.GetBuildDate()}";
+
+            msg += $"\n\nSystemInfo.maxTextureSize:{SystemInfo.maxTextureSize}";
 
             var (winname, username, userdomname) = GetSecurityPrincipalNames();
-            msg += "\n\nWindows Identity:" + winname;
-            msg += "\nEnvironment.UserName:" + username + " DomainName:" + userdomname;
+            msg += $"\n\nWindows Identity:{winname}";
+            msg += $"\nEnvironment.UserName:{username} DomainName:{userdomname}";
         }
         catch (Exception ex)
         {

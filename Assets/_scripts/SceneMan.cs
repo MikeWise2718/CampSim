@@ -223,9 +223,9 @@ namespace CampusSimulator
                 frman.transform.parent = rgo.transform;
             }
 
-            uiman.InitPhase0();
             mpman.InitPhase0();
             vcman.InitPhase0();
+            uiman.InitPhase0();
         }
 
         void InitPhase1()
@@ -270,8 +270,6 @@ namespace CampusSimulator
                     glbllm = rmango.AddComponent<LatLongMap>();
                     glbllm.InitMapFromSceneSel(newscene.ToString(),0); 
 
-                    uiman.SetScene(newscene);
-
                     linkcloudman.SetScene(newscene);
 
                     mpman.SetScene(newscene);
@@ -295,7 +293,7 @@ namespace CampusSimulator
                     frman.SetScene(newscene);
 
                     linkcloudman.SetScene3(newscene);  // realize latelinks    
-                    // TODO - put this stuff in a Uiman
+
                     uiman.SetScene(newscene);
 
                     //Debug.Log("SetScene finished");

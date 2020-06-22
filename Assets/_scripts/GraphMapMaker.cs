@@ -755,6 +755,8 @@ namespace GraphAlgos
                                 lmd.CreateGraphForOsmImport_msft();
 
                                 lmd.CreateGraphForOsmImport_MsftCampusBldSmall();
+                                lmd.CreateGraphForOsmImport_msftcommons();
+                                lmd.CreateGraphForOsmImport_msftredwest();
 
                                 AddRedwestCalibrationMarkers();
                                 var template = grc.gm.addprefix("rm");

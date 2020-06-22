@@ -7,6 +7,7 @@ using CampusSimulator;
 public class B19Panel : MonoBehaviour
 {
     public SceneMan sman;
+    UiMan uiman;
 
     Toggle b19_model;
     Toggle b19_level1;
@@ -16,32 +17,17 @@ public class B19Panel : MonoBehaviour
     Toggle b19_floors;
     Toggle b19_doors;
     Dropdown b19_matmode;
-
+    Button closeButton;
 
     BuildingMan bman;
     B19Willow b19comp;
 
     bool panelActive = false;
-    bool linked = false;
 
     public void Init0()
     {
         bman = sman.bdman;
-        panelActive = false;
-    }
-
-    public void SceneLinkObjectsAndComponents()
-    {
-        var bld = bman?.GetBuilding("Bld19");
-        if (bld != null)
-        {
-            b19comp = bld.GetComponent<B19Willow>();
-        }
-        else
-        {
-            Debug.LogWarning("B19 Panel can not find Bld19");
-            return;
-        }
+        uiman = sman.uiman;
         b19_model = transform.Find("B19Model").GetComponent<Toggle>();
         b19_level1 = transform.Find("Level1").GetComponent<Toggle>();
         b19_level2 = transform.Find("Level2").GetComponent<Toggle>();
@@ -51,50 +37,87 @@ public class B19Panel : MonoBehaviour
         b19_doors = transform.Find("Doors").GetComponent<Toggle>();
         b19_matmode = transform.Find("MaterialMode").GetComponent<Dropdown>();
 
-        linked = true;
-        panelActive = true;
+        closeButton = transform.Find("CloseButton").gameObject.GetComponent<Button>();
+        closeButton.onClick.AddListener(delegate { uiman.ClosePanel(); });
     }
+
+    public void SetScene(CampusSimulator.SceneSelE curscene)
+    {
+        InitVals();
+    }
+
+
+    public void EnableComponents(bool state)
+    {
+        b19_model.enabled = state;
+        b19_level1.enabled = state;
+        b19_level2.enabled = state;
+        b19_level3.enabled = state;
+        b19_hvac.enabled = state;
+        b19_floors.enabled = state;
+        b19_doors.enabled = state;
+    }
+
+
     public void InitVals()
     {
-        Debug.Log($"B19Panel InitVals called linked:{linked}");
-        if (!linked)
+        b19comp = null;
+        var bld = bman?.GetBuilding("Bld19");
+        if (bld != null)
         {
-            SceneLinkObjectsAndComponents();
+            b19comp = bld.GetComponent<B19Willow>();
+            if (b19comp==null)
+            {
+                Debug.LogWarning("B19 Panel could not find B19Willow component that it needs to operate");
+            }
         }
-        if (b19comp == null) return;
-        b19_model.isOn = b19comp.loadmodel.Get();
-        b19_level1.isOn = b19comp.level01.Get();
-        b19_level2.isOn = b19comp.level02.Get();
-        b19_level3.isOn = b19comp.level03.Get();
-        b19_hvac.isOn = b19comp.hvac.Get();
-        b19_floors.isOn = b19comp.floors.Get();
-        b19_doors.isOn = b19comp.doors.Get();
-
+        else
         {
-            var opts = b19comp.b19_materialMode.GetOptionsAsList();
-            var inival = b19comp.b19_materialMode.Get().ToString();
-            var idx = opts.FindIndex(s => s == inival);
-            if (idx <= 0) idx = 0;
+            Debug.LogWarning("B19 Panel can not find Bld19 in bman");
+        }
+        if (b19comp == null)
+        {
+            EnableComponents(false);
+            b19_model.isOn = false;
+            b19_level1.isOn = false;
+            b19_level2.isOn = false;
+            b19_level3.isOn = false;
+            b19_hvac.isOn = false;
+            b19_floors.isOn = false;
+            b19_doors.isOn = false;
+
             b19_matmode.ClearOptions();
-            b19_matmode.AddOptions(opts);
-            Debug.Log("MatMode add options n:" + opts.Count);
-            b19_matmode.value = idx;
         }
+        else
+        {
+            EnableComponents(true);
+            b19_model.isOn = b19comp.loadmodel.Get();
+            b19_level1.isOn = b19comp.level01.Get();
+            b19_level2.isOn = b19comp.level02.Get();
+            b19_level3.isOn = b19comp.level03.Get();
+            b19_hvac.isOn = b19comp.hvac.Get();
+            b19_floors.isOn = b19comp.floors.Get();
+            b19_doors.isOn = b19comp.doors.Get();
 
-        //visTiedToggle.isOn = fman.visibilityTiedToDetectability;
+            {
+                var opts = b19comp.b19_materialMode.GetOptionsAsList();
+                var inival = b19comp.b19_materialMode.Get().ToString();
+                var idx = opts.FindIndex(s => s == inival);
+                if (idx <= 0) idx = 0;
+                b19_matmode.ClearOptions();
+                b19_matmode.AddOptions(opts);
+                //Debug.Log("MatMode add options n:" + opts.Count);
+                b19_matmode.value = idx;
+            }
+            //visTiedToggle.isOn = fman.visibilityTiedToDetectability;
+        }
         panelActive = true;
-    }
-
-    int nSetTextValuesCalled = 0;
-    private void SetTextValues()
-    {
-        nSetTextValuesCalled += 1;
     }
 
 
     public void SetVals(bool closing = false)
     {
-        Debug.Log($"B19Panel.SetVals called - closing:{closing}");
+        //Debug.Log($"B19Panel.SetVals called - closing:{closing}");
         if (b19comp == null) return;
 
         //fman.visibilityTiedToDetectability = visTiedToggle.isOn;
