@@ -132,7 +132,9 @@ public class B19Willow : MonoBehaviour
     {
         if (loadmodel.Get() && !_b19_WillowModel)
         {
-            Vector3 defpos = new Vector3(-474.3f, 4.72f, 87.6f);
+            var xoff = -3;
+            var zoff = -3;
+            Vector3 defpos = new Vector3(-474.3f+xoff, 4.72f, 87.6f+zoff);
             var yoff = 0f;
             if (sman!=null)
             {

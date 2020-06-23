@@ -754,7 +754,8 @@ namespace GraphAlgos
                                 //lmd.createPointsFor_msft_campus();
                                 lmd.CreateGraphForOsmImport_msft();
 
-                                lmd.CreateGraphForOsmImport_MsftCampusBldSmall();
+                                //lmd.CreateGraphForOsmImport_MsftCampusBldSmall();
+                                lmd.CreateGraphForOsmImport_msftb19area();
                                 lmd.CreateGraphForOsmImport_msftcommons();
                                 lmd.CreateGraphForOsmImport_msftredwest();
 

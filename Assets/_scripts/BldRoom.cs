@@ -93,7 +93,7 @@ namespace CampusSimulator {
                 //Debug.Log($"name:{name} aa:{this.alignang}");
                 //floor.transform.localRotation = Quaternion.Euler(0, -17, 0);
                 var crenderer = floor.GetComponent<Renderer>();
-                crenderer.material.color = Color.blue;
+                crenderer.material.color = Color.gray;
                 crenderer.material.shader = Shader.Find("Diffuse");
                 //map.AddDrawingElement(new OnlineMapsDrawingRect(new Vector2(2, 2), new Vector2(1, 1), Color.green, 1,Color.blue));
             }
