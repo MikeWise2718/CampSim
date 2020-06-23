@@ -60,7 +60,7 @@ namespace CampusSimulator
                 "Ms_c_B19_topview",
                 "Ms_c_B19_bird1",
                 "Ms_c_B19_lobby",
-                "Ms_c_B11_raspipole",
+                //"Ms_c_B11_raspipole",
             };
             l.RemoveAll(item => !item.StartsWith(filter));
             l.Add("Viewer");
@@ -302,17 +302,17 @@ namespace CampusSimulator
                     camimpixx = 1600;
                     camimpixy = 1600;
                     break;
-                case "Ms_c_B11_raspipole":
-                    campos = new Vector3(-131.42f, 3f, 223.8f);
-                    camrotate = new Vector3(33.4f, 0, 0);
-                    camfov = 60f;
-                    camorienttype = CamOrientTypeE.rotate;
-                    vcamera.enabled = enablecams;
-                    vcamera.depth = 0;
-                    camimage = "";
-                    camimpixx = 1600;
-                    camimpixy = 1600;
-                    break;
+                //case "Ms_c_B11_raspipole":
+                //    campos = new Vector3(-131.42f, 3f, 223.8f);
+                //    camrotate = new Vector3(33.4f, 0, 0);
+                //    camfov = 60f;
+                //    camorienttype = CamOrientTypeE.rotate;
+                //    vcamera.enabled = enablecams;
+                //    vcamera.depth = 0;
+                //    camimage = "";
+                //    camimpixx = 1600;
+                //    camimpixy = 1600;
+                //    break;
                 case "Ms_c_B19_raspipole":
                     campos = new Vector3(-451.5f, 3f, 98.3f);
                     camrotate = new Vector3(30f, -60f, 0);

@@ -24,7 +24,7 @@ namespace CampusSimulator
         {
             var l = new List<string>
             {
-                "Bld11",
+                //"Bld11",
                 "Bld19",
                 "Bld40",
                 "Bld43",
@@ -124,13 +124,13 @@ namespace CampusSimulator
             destnodes = new List<string>();
             switch (name)
             {
-                case "Bld11":
-                    {
-                        maingaragename = "Garage11_1";
-                        destnodes = new List<string> { "b11-f01-lobby" };
-                        shortname = "b11";
-                        break;
-                    }
+                //case "Bld11":
+                //    {
+                //        maingaragename = "Garage11_1";
+                //        destnodes = new List<string> { "b11-f01-lobby" };
+                //        shortname = "b11";
+                //        break;
+                //    }
                 case "Bld19":
                     {
                         maingaragename = "Garage19_1";
