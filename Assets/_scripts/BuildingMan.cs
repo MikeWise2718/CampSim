@@ -255,6 +255,7 @@ namespace CampusSimulator
         public void AddRoomsToBuildings()
         {
             var bldlst = new List<Building>(bldlookup.Values);
+            bldlst.ForEach(bld => bld.DefineBuildingConstants());
             bldlst.ForEach(bld => bld.AddRoomsToBuilding());
         }
         public void PopulateBuildings()

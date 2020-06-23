@@ -1,7 +1,7 @@
 # CampSim
 
 - Author: Mike Wise
-- Last Updated: 20 April 2020 - 15:08
+- Last Updated: 23 June 2020 - 15:08
 
 ## Prerequisites
 - At least 20 GB of free space, 8 GB of memory, and as much CPU/GPU as possible, although GPU is not stricly necessary. 
@@ -32,7 +32,7 @@
 1. Assuming you are on a feature branch, and the master is on master.
 2. Assume master is dual-remoted, one to the github repo, and one to the azurerepos for building on ADO
 3. Make sure all the version info is updated
-   - a. Build version in InfoPanel.cs
+   - a. Build version in GraphUtil.cs (search for `_verstring`)
    - b. Startup screen shot is annotated if needed
 4. Squash all the commits down to one 
    - a. easy with lazygit, ? for help - basically s then enter)

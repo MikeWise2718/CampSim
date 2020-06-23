@@ -413,10 +413,10 @@ namespace GraphAlgos
         {
             grc.regman.SetRegion("default"); // as long as the garages are defined in code, their links probably should be too
 
-            // Garage 11
-            CreateGarageLinks("MsGarage11_1", "b11-os1-o03", "dw-B11-c01",
-                          d_order: connectOrderE.inc, d_exit: exitDirE.back, d_len: 5f,
-                          w_order: connectOrderE.inc, w_exit: exitDirE.back, w_len: 7f);
+            //// Garage 11
+            //CreateGarageLinks("MsGarage11_1", "b11-os1-o03", "dw-B11-c01",
+            //              d_order: connectOrderE.inc, d_exit: exitDirE.back, d_len: 5f,
+            //              w_order: connectOrderE.inc, w_exit: exitDirE.back, w_len: 7f);
 
             // Garage 19
             CreateGarageLinks("MsGarage19_1", "b19-os1-o03", "dw-B19-c02",
@@ -742,7 +742,7 @@ namespace GraphAlgos
                                 //lmd.CreatePointsForBredwB3floor(height: 9, bldname: "BldRWB");
                                 //lmd.CreatePointsForBsx();
 
-                                lmd.createPointsFor_msft_b11();
+                                //lmd.createPointsFor_msft_b11();
                                 lmd.createPointsFor_msft_b19();
                                 lmd.createPointsFor_msft_b40();
                                 lmd.createPointsFor_msft_b43();
@@ -754,7 +754,8 @@ namespace GraphAlgos
                                 //lmd.createPointsFor_msft_campus();
                                 lmd.CreateGraphForOsmImport_msft();
 
-                                lmd.CreateGraphForOsmImport_MsftCampusBldSmall();
+                                //lmd.CreateGraphForOsmImport_MsftCampusBldSmall();
+                                lmd.CreateGraphForOsmImport_msftb19area();
                                 lmd.CreateGraphForOsmImport_msftcommons();
                                 lmd.CreateGraphForOsmImport_msftredwest();
 

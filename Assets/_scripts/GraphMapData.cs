@@ -3697,140 +3697,1435 @@ namespace GraphAlgos
             grc.yfloor = 0;
         }
         // =================== generated code
-        public void createPointsFor_msft_b11o()    // machine generated - do not edit
-        {
-            grc.regman.NewNodeRegion("msft-b11", "purple", saveToFile: true);
-            grc.AddNodePtxyz("b11-f01-lobby", -123.670, 0.000, 219.400, comment: ""); //  1 nn:1 nl:0
-            grc.LinkToPtxyz("b11-f01-lobby", "b11-os1-o01", -123.670, 0.000, 225.850, LinkUse.walkway, comment: ""); //  2 nn:1 nl:1
-            grc.LinkToPtxyz("b11-os1-o01", "b11-os1-o02", -106.900, 0.000, 232.940, LinkUse.walkway, comment: ""); //  3 nn:1 nl:1
-            grc.LinkToPtxyz("b11-os1-o02", "b11-os1-o03", -105.600, 0.000, 236.400, LinkUse.walkway, comment: ""); //  4 nn:1 nl:1
-
-            grc.AddNodePtxyz("dw-B11-c01", -103.230, 0.000, 241.700, comment: ""); //  1 nn:1 nl:0
-            grc.LinkToPtxyz("dw-B11-c01", "st-B11-c02", -112.310, 0.000, 238.830, LinkUse.driveway, comment: ""); //  2 nn:1 nl:1
-            grc.AddLinkByNodeName("st-B11-c02", "st-B11-c02", LinkUse.driveway); //  3 nn:0 nl:1
-            grc.LinkToPtxyz("st-B11-c02", "st-B11-c04", -128.940, 0.000, 243.850, LinkUse.driveway, comment: ""); //  4 nn:1 nl:1
-            grc.AddLinkByNodeName("st-B11-c04", "reg:msft-campus", LinkUse.driveway); //  30 nn:0 nl:1
-            grc.regman.SetRegion("default");
-        }
-        public void createPointsFor_msft_b11()  // machine generated - do not edit
-        {
-            grc.regman.NewNodeRegion("msft-b11", "purple", saveToFile: true);
-            grc.AddNodePtxyz("b11-f01-lobby", -123.670, 0.000, 219.400, comment: ""); //  1 nn:1 nl:0
-            grc.LinkToPtxyz("b11-f01-lobby", "b11-os1-o01", -123.670, 0.000, 225.850, LinkUse.walkway, comment: ""); //  2 nn:1 nl:1
-            grc.LinkToPtxyz("b11-os1-o01", "b11-os1-o02", -106.900, 0.000, 232.940, LinkUse.walkway, comment: ""); //  3 nn:1 nl:1
-            grc.LinkToPtxyz("b11-os1-o02", "b11-os1-o03", -105.600, 0.000, 236.400, LinkUse.walkway, comment: ""); //  4 nn:1 nl:1
-            grc.AddNodePtxyz("dw-B11-c01", -103.230, 0.000, 241.700, comment: ""); //  5 nn:1 nl:0
-            grc.LinkToPtxyz("dw-B11-c01", "st-B11-c02", -112.310, 0.000, 238.830, LinkUse.driveway, comment: ""); //  6 nn:1 nl:1
-            grc.AddLinkByNodeName("st-B11-c02", "st-B11-c02", LinkUse.driveway); //  7 nn:0 nl:1
-            grc.LinkToPtxyz("st-B11-c02", "st-B11-c04", -128.940, 0.000, 243.850, LinkUse.driveway, comment: ""); //  8 nn:1 nl:1
-            grc.AddLinkByNodeName("st-B11-c04", "reg:msft-campus", LinkUse.driveway); //  9 nn:0 nl:1
-            grc.regman.SetRegion("default");
-        }
+        //public void createPointsFor_msft_b11()  // machine generated - do not edit
+        //{
+        //    grc.regman.NewNodeRegion("msft-b11", "purple", saveToFile: true);
+        //    grc.AddNodePtxyz("b11-f01-lobby", -123.670, 0.000, 219.400, comment: ""); //  1 nn:1 nl:0
+        //    grc.LinkToPtxyz("b11-f01-lobby", "b11-os1-o01", -123.670, 0.000, 225.850, LinkUse.walkway, comment: ""); //  2 nn:1 nl:1
+        //    grc.LinkToPtxyz("b11-os1-o01", "b11-os1-o02", -106.900, 0.000, 232.940, LinkUse.walkway, comment: ""); //  3 nn:1 nl:1
+        //    grc.LinkToPtxyz("b11-os1-o02", "b11-os1-o03", -105.600, 0.000, 236.400, LinkUse.walkway, comment: ""); //  4 nn:1 nl:1
+        //    grc.AddNodePtxyz("dw-B11-c01", -103.230, 0.000, 241.700, comment: ""); //  5 nn:1 nl:0
+        //    grc.LinkToPtxyz("dw-B11-c01", "st-B11-c02", -112.310, 0.000, 238.830, LinkUse.driveway, comment: ""); //  6 nn:1 nl:1
+        //    grc.AddLinkByNodeName("st-B11-c02", "st-B11-c02", LinkUse.driveway); //  7 nn:0 nl:1
+        //    grc.LinkToPtxyz("st-B11-c02", "st-B11-c04", -128.940, 0.000, 243.850, LinkUse.driveway, comment: ""); //  8 nn:1 nl:1
+        //    grc.AddLinkByNodeName("st-B11-c04", "reg:msft-campus", LinkUse.driveway); //  9 nn:0 nl:1
+        //    grc.regman.SetRegion("default");
+        //}
 
         public void createPointsFor_msft_b19()  // machine generated - do not edit
         {
             grc.regman.NewNodeRegion("msft-b19", "purple", saveToFile: true);
-            grc.AddNodePtxyz("b19-f01-lobby", -474.400, 0.000, 95.700, comment: ""); //  1 nn:1 nl:0
-            grc.LinkToPtxyz("b19-f01-lobby", "b19-os1-o00b", -471.000, 0.000, 98.900, LinkUse.walkway, comment: ""); //  2 nn:1 nl:1
-            grc.LinkToPtxyz("b19-os1-o00b", "b19-os1-o00a", -467.400, 0.000, 99.700, LinkUse.walkway, comment: ""); //  3 nn:1 nl:1
-            grc.LinkToPtxyz("b19-os1-o00a", "b19-os1-o00", -459.500, 0.000, 105.600, LinkUse.walkway, comment: ""); //  4 nn:1 nl:1
-            grc.LinkToPtxyz("b19-os1-o00", "b19-os1-o01", -458.300, 0.000, 112.900, LinkUse.walkway, comment: ""); //  5 nn:1 nl:1
-            grc.LinkToPtxyz("b19-os1-o01", "b19-os1-o02", -462.000, 0.000, 118.400, LinkUse.walkway, comment: ""); //  6 nn:1 nl:1
-            grc.LinkToPtxyz("b19-os1-o02", "b19-os1-o03", -459.400, 0.000, 132.300, LinkUse.walkway, comment: ""); //  7 nn:1 nl:1
-            grc.LinkToPtxyz("b19-os1-o00", "b19-os2-o01", -450.400, 0.000, 101.100, LinkUse.walkway, comment: ""); //  8 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-lobby", "b19-f01-lbba", -469.000, 0.000, 92.900, LinkUse.walkway, comment: ""); //  9 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-lbba", "b19-f01-cp00", -467.100, 0.000, 93.400, LinkUse.walkway, comment: ""); //  10 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-lbba", "b19-f01-cp001", -465.900, 0.000, 93.700, LinkUse.walkway, comment: ""); //  11 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-lobby", "b19-f01-rm1003", -483.400, 0.000, 93.900, LinkUse.walkway, comment: ""); //  12 nn:1 nl:1
+            var xs = -3;
+            var zs = -3;
+            //xs = 0;
+            //zs = 0;
+            grc.AddNodePtxyz("b19-f01-lobby", -474.400+xs, 0.000, 95.700 + zs, comment: ""); //  1 nn:1 nl:0
+            grc.LinkToPtxyz("b19-f01-lobby", "b19-os1-o00b", -471.000 + xs, 0.000, 98.900 + zs, LinkUse.walkway, comment: ""); //  2 nn:1 nl:1
+            grc.LinkToPtxyz("b19-os1-o00b", "b19-os1-o00a", -467.400 + xs, 0.000, 99.700 + zs, LinkUse.walkway, comment: ""); //  3 nn:1 nl:1
+            grc.LinkToPtxyz("b19-os1-o00a", "b19-os1-o00", -459.500 + xs, 0.000, 105.600 + zs, LinkUse.walkway, comment: ""); //  4 nn:1 nl:1
+            grc.LinkToPtxyz("b19-os1-o00", "b19-os1-o01", -458.300 + xs, 0.000, 112.900 + zs, LinkUse.walkway, comment: ""); //  5 nn:1 nl:1
+            grc.LinkToPtxyz("b19-os1-o01", "b19-os1-o02", -462.000 + xs, 0.000, 118.400 + zs, LinkUse.walkway, comment: ""); //  6 nn:1 nl:1
+            grc.LinkToPtxyz("b19-os1-o02", "b19-os1-o03", -459.400 + xs, 0.000, 132.300 + zs, LinkUse.walkway, comment: ""); //  7 nn:1 nl:1
+            grc.LinkToPtxyz("b19-os1-o00", "b19-os2-o01", -450.400 + xs, 0.000, 101.100 + zs, LinkUse.walkway, comment: ""); //  8 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-lobby", "b19-f01-lbba", -469.000 + xs, 0.000, 92.900 + zs, LinkUse.walkway, comment: ""); //  9 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-lbba", "b19-f01-cp00", -467.100 + xs, 0.000, 93.400 + zs, LinkUse.walkway, comment: ""); //  10 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-lbba", "b19-f01-cp001", -465.900 + xs, 0.000, 93.700 + zs, LinkUse.walkway, comment: ""); //  11 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-lobby", "b19-f01-rm1003", -483.400 + xs, 0.000, 93.900 + zs, LinkUse.walkway, comment: ""); //  12 nn:1 nl:1
             grc.AddLinkByNodeName("b19-os1-o00b", "b19-f01-lbba", LinkUse.walkway); //  13 nn:0 nl:1
-            grc.LinkToPtxyz("b19-os1-o00b", "b19-f01-cp0b0", -471.200, 0.000, 99.800, LinkUse.walkway, comment: ""); //  14 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp0b0", "b19-f01-cp0b1", -471.600, 0.000, 101.200, LinkUse.walkway, comment: ""); //  15 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp0b0", "b19-f01-cp0b2", -474.000, 0.000, 99.500, LinkUse.walkway, comment: ""); //  16 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp001", "b19-f01-cp01", -463.400, 0.000, 94.940, LinkUse.walkway, comment: ""); //  17 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp01", "b19-f01-cp02", -462.560, 0.000, 95.300, LinkUse.walkway, comment: ""); //  18 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp001", "b19-f01-rm1004", -467.600, 0.000, 96.500, LinkUse.walkway, comment: ""); //  19 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp01", "b19-f01-rm1005", -465.100, 0.000, 97.400, LinkUse.walkway, comment: ""); //  20 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp02", "b19-f01-rm1006", -462.000, 0.000, 98.100, LinkUse.walkway, comment: ""); //  21 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp00", "b19-f01-cp021", -465.100, 0.000, 87.880, LinkUse.walkway, comment: ""); //  22 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp021", "b19-f01-cp031", -468.100, 0.000, 86.900, LinkUse.walkway, comment: ""); //  23 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp031", "b19-f01-rm1001", -469.000, 0.000, 89.800, LinkUse.walkway, comment: ""); //  24 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp031", "b19-f01-cp032", -472.150, 0.000, 85.670, LinkUse.walkway, comment: ""); //  25 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp032", "b19-f01-rm1002", -472.900, 0.000, 88.500, LinkUse.walkway, comment: ""); //  26 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp021", "b19-f01-cp022", -464.060, 0.000, 84.800, LinkUse.walkway, comment: ""); //  27 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp022", "b19-f01-cp023", -463.800, 0.000, 84.000, LinkUse.walkway, comment: ""); //  28 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp023", "b19-f01-cp024", -462.700, 0.000, 80.800, LinkUse.walkway, comment: ""); //  29 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp024", "b19-f01-cp025", -461.700, 0.000, 78.000, LinkUse.walkway, comment: ""); //  30 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp025", "b19-f01-cp026", -461.000, 0.000, 76.100, LinkUse.walkway, comment: ""); //  31 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp026", "b19-f01-cp027", -461.000, 0.000, 74.140, LinkUse.walkway, comment: ""); //  32 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp027", "b19-f01-cp028", -458.100, 0.000, 68.000, LinkUse.walkway, comment: ""); //  33 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp028", "b19-f01-cp029", -457.900, 0.000, 67.200, LinkUse.walkway, comment: ""); //  34 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp029", "b19-f01-cp041", -456.500, 0.000, 68.300, LinkUse.walkway, comment: ""); //  35 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp029", "b19-f01-cp029a", -456.100, 0.000, 64.800, LinkUse.walkway, comment: ""); //  36 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp024", "b19-f01-cp051", -458.000, 0.000, 82.700, LinkUse.walkway, comment: ""); //  37 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp051", "b19-f01-cp052", -456.900, 0.000, 82.800, LinkUse.walkway, comment: ""); //  38 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp052", "b19-f01-cp053", -451.600, 0.000, 84.800, LinkUse.walkway, comment: ""); //  39 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp053", "b19-f01-cp054", -450.200, 0.000, 85.100, LinkUse.walkway, comment: ""); //  40 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp054", "b19-f01-cp054a", -447.300, 0.000, 86.100, LinkUse.walkway, comment: ""); //  41 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp054", "b19-f01-cp055", -449.700, 0.000, 87.100, LinkUse.walkway, comment: ""); //  42 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp055", "b19-f01-cp056", -451.000, 0.000, 90.400, LinkUse.walkway, comment: ""); //  43 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp056", "b19-f01-cp057", -452.500, 0.000, 91.740, LinkUse.walkway, comment: ""); //  44 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp057", "b19-f01-cp058", -457.600, 0.000, 94.300, LinkUse.walkway, comment: ""); //  45 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp058", "b19-f01-cp059", -458.250, 0.000, 94.620, LinkUse.walkway, comment: ""); //  46 nn:1 nl:1
+            grc.LinkToPtxyz("b19-os1-o00b", "b19-f01-cp0b0", -471.200 + xs, 0.000, 99.800 + zs, LinkUse.walkway, comment: ""); //  14 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp0b0", "b19-f01-cp0b1", -471.600 + xs, 0.000, 101.200 + zs, LinkUse.walkway, comment: ""); //  15 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp0b0", "b19-f01-cp0b2", -474.000 + xs, 0.000, 99.500 + zs, LinkUse.walkway, comment: ""); //  16 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp001", "b19-f01-cp01", -463.400 + xs, 0.000, 94.940 + zs, LinkUse.walkway, comment: ""); //  17 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp01", "b19-f01-cp02", -462.560 + xs, 0.000, 95.300 + zs, LinkUse.walkway, comment: ""); //  18 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp001", "b19-f01-rm1004", -467.600 + xs, 0.000, 96.500 + zs, LinkUse.walkway, comment: ""); //  19 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp01", "b19-f01-rm1005", -465.100 + xs, 0.000, 97.400 + zs, LinkUse.walkway, comment: ""); //  20 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp02", "b19-f01-rm1006", -462.000 + xs, 0.000, 98.100 + zs, LinkUse.walkway, comment: ""); //  21 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp00", "b19-f01-cp021", -465.100 + xs, 0.000, 87.880 + zs, LinkUse.walkway, comment: ""); //  22 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp021", "b19-f01-cp031", -468.100 + xs, 0.000, 86.900 + zs, LinkUse.walkway, comment: ""); //  23 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp031", "b19-f01-rm1001", -469.000 + xs, 0.000, 89.800 + zs, LinkUse.walkway, comment: ""); //  24 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp031", "b19-f01-cp032", -472.150 + xs, 0.000, 85.670 + zs, LinkUse.walkway, comment: ""); //  25 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp032", "b19-f01-rm1002", -472.900 + xs, 0.000, 88.500 + zs, LinkUse.walkway, comment: ""); //  26 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp021", "b19-f01-cp022", -464.060 + xs, 0.000, 84.800 + zs, LinkUse.walkway, comment: ""); //  27 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp022", "b19-f01-cp023", -463.800 + xs, 0.000, 84.000 + zs, LinkUse.walkway, comment: ""); //  28 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp023", "b19-f01-cp024", -462.700 + xs, 0.000, 80.800 + zs, LinkUse.walkway, comment: ""); //  29 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp024", "b19-f01-cp025", -461.700 + xs, 0.000, 78.000 + zs, LinkUse.walkway, comment: ""); //  30 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp025", "b19-f01-cp026", -461.000 + xs, 0.000, 76.100 + zs, LinkUse.walkway, comment: ""); //  31 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp026", "b19-f01-cp027", -461.000 + xs, 0.000, 74.140 + zs, LinkUse.walkway, comment: ""); //  32 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp027", "b19-f01-cp028", -458.100 + xs, 0.000, 68.000 + zs, LinkUse.walkway, comment: ""); //  33 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp028", "b19-f01-cp029", -457.900 + xs, 0.000, 67.200 + zs, LinkUse.walkway, comment: ""); //  34 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp029", "b19-f01-cp041", -456.500 + xs, 0.000, 68.300 + zs, LinkUse.walkway, comment: ""); //  35 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp029", "b19-f01-cp029a", -456.100 + xs, 0.000, 64.800 + zs, LinkUse.walkway, comment: ""); //  36 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp024", "b19-f01-cp051", -458.000 + xs, 0.000, 82.700 + zs, LinkUse.walkway, comment: ""); //  37 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp051", "b19-f01-cp052", -456.900 + xs, 0.000, 82.800 + zs, LinkUse.walkway, comment: ""); //  38 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp052", "b19-f01-cp053", -451.600 + xs, 0.000, 84.800 + zs, LinkUse.walkway, comment: ""); //  39 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp053", "b19-f01-cp054", -450.200 + xs, 0.000, 85.100 + zs, LinkUse.walkway, comment: ""); //  40 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp054", "b19-f01-cp054a", -447.300 + xs, 0.000, 86.100 + zs, LinkUse.walkway, comment: ""); //  41 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp054", "b19-f01-cp055", -449.700 + xs, 0.000, 87.100 + zs, LinkUse.walkway, comment: ""); //  42 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp055", "b19-f01-cp056", -451.000 + xs, 0.000, 90.400 + zs, LinkUse.walkway, comment: ""); //  43 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp056", "b19-f01-cp057", -452.500 + xs, 0.000, 91.740 + zs, LinkUse.walkway, comment: ""); //  44 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp057", "b19-f01-cp058", -457.600 + xs, 0.000, 94.300 + zs, LinkUse.walkway, comment: ""); //  45 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp058", "b19-f01-cp059", -458.250 + xs, 0.000, 94.620 + zs, LinkUse.walkway, comment: ""); //  46 nn:1 nl:1
             grc.AddLinkByNodeName("b19-f01-cp059", "b19-f01-cp02", LinkUse.walkway); //  47 nn:0 nl:1
-            grc.LinkToPtxyz("b19-f01-cp051", "b19-f01-cp051a", -458.850, 0.000, 85.050, LinkUse.walkway, comment: ""); //  48 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp051a", "b19-f01-cp051b", -460.200, 0.000, 88.840, LinkUse.walkway, comment: ""); //  49 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp051", "b19-f01-cp051a", -458.850 + xs, 0.000, 85.050 + zs, LinkUse.walkway, comment: ""); //  48 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp051a", "b19-f01-cp051b", -460.200 + xs, 0.000, 88.840 + zs, LinkUse.walkway, comment: ""); //  49 nn:1 nl:1
             grc.AddLinkByNodeName("b19-f01-cp051b", "b19-f01-cp02", LinkUse.walkway); //  50 nn:0 nl:1
-            grc.LinkToPtxyz("b19-f01-cp022", "b19-f01-rm1012", -467.100, 0.000, 84.900, LinkUse.walkway, comment: ""); //  51 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-rm1012", "b19-f01-rm1012a", -471.000, 0.000, 83.800, LinkUse.walkway, comment: ""); //  52 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp023", "b19-f01-rm1013", -466.400, 0.000, 82.300, LinkUse.walkway, comment: ""); //  53 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp024", "b19-f01-rm1014", -466.100, 0.000, 79.900, LinkUse.walkway, comment: ""); //  54 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp025", "b19-f01-rm1015", -465.100, 0.000, 78.000, LinkUse.walkway, comment: ""); //  55 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp026", "b19-f01-rm1016", -464.000, 0.000, 75.300, LinkUse.walkway, comment: ""); //  56 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp027", "b19-f01-rm1017", -462.500, 0.000, 70.400, LinkUse.walkway, comment: ""); //  57 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp029", "b19-f01-rm1018", -461.000, 0.000, 67.200, LinkUse.walkway, comment: ""); //  58 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp029", "b19-f01-rm1019", -460.000, 0.000, 63.900, LinkUse.walkway, comment: ""); //  59 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp052", "b19-f01-rm1021", -454.300, 0.000, 80.400, LinkUse.walkway, comment: ""); //  60 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp053", "b19-f01-rm1022", -450.900, 0.000, 81.600, LinkUse.walkway, comment: ""); //  61 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp054", "b19-f01-rm1023", -448.200, 0.000, 82.800, LinkUse.walkway, comment: ""); //  62 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp054a", "b19-f01-rm1024", -445.600, 0.000, 83.500, LinkUse.walkway, comment: ""); //  63 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp055", "b19-f01-rm1025", -447.900, 0.000, 89.100, LinkUse.walkway, comment: ""); //  64 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp056", "b19-f01-rm1026", -449.200, 0.000, 92.600, LinkUse.walkway, comment: ""); //  65 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp057", "b19-f01-rm1027", -452.300, 0.000, 94.700, LinkUse.walkway, comment: ""); //  66 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp058", "b19-f01-rm1028", -455.300, 0.000, 96.400, LinkUse.walkway, comment: ""); //  67 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp059", "b19-f01-rm1029", -458.200, 0.000, 97.600, LinkUse.walkway, comment: ""); //  68 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp051", "b19-f01-cp061", -455.600, 0.000, 75.900, LinkUse.walkway, comment: ""); //  69 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp061", "b19-f01-cp062", -455.110, 0.000, 74.440, LinkUse.walkway, comment: ""); //  70 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp061", "b19-f01-cp061a", -460.200, 0.000, 74.300, LinkUse.walkway, comment: ""); //  71 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp062", "b19-f01-cp063", -453.400, 0.000, 69.600, LinkUse.walkway, comment: ""); //  72 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp063", "b19-f01-cp064", -451.300, 0.000, 69.600, LinkUse.walkway, comment: ""); //  73 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp064", "b19-f01-cp065", -448.200, 0.000, 68.400, LinkUse.walkway, comment: ""); //  74 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp065", "b19-f01-cp066", -445.400, 0.000, 73.600, LinkUse.walkway, comment: ""); //  75 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp066", "b19-f01-cp067a", -445.700, 0.000, 77.600, LinkUse.walkway, comment: ""); //  76 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp066", "b19-f01-cp067b", -446.600, 0.000, 78.000, LinkUse.walkway, comment: ""); //  77 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp022", "b19-f01-rm1012", -467.100 + xs, 0.000, 84.900 + zs, LinkUse.walkway, comment: ""); //  51 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-rm1012", "b19-f01-rm1012a", -471.000 + xs, 0.000, 83.800 + zs, LinkUse.walkway, comment: ""); //  52 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp023", "b19-f01-rm1013", -466.400 + xs, 0.000, 82.300 + zs, LinkUse.walkway, comment: ""); //  53 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp024", "b19-f01-rm1014", -466.100 + xs, 0.000, 79.900 + zs, LinkUse.walkway, comment: ""); //  54 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp025", "b19-f01-rm1015", -465.100 + xs, 0.000, 78.000 + zs, LinkUse.walkway, comment: ""); //  55 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp026", "b19-f01-rm1016", -464.000 + xs, 0.000, 75.300 + zs, LinkUse.walkway, comment: ""); //  56 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp027", "b19-f01-rm1017", -462.500 + xs, 0.000, 70.400 + zs, LinkUse.walkway, comment: ""); //  57 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp029", "b19-f01-rm1018", -461.000 + xs, 0.000, 67.200 + zs, LinkUse.walkway, comment: ""); //  58 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp029", "b19-f01-rm1019", -460.000 + xs, 0.000, 63.900 + zs, LinkUse.walkway, comment: ""); //  59 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp052", "b19-f01-rm1021", -454.300 + xs, 0.000, 80.400 + zs, LinkUse.walkway, comment: ""); //  60 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp053", "b19-f01-rm1022", -450.900 + xs, 0.000, 81.600 + zs, LinkUse.walkway, comment: ""); //  61 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp054", "b19-f01-rm1023", -448.200 + xs, 0.000, 82.800 + zs, LinkUse.walkway, comment: ""); //  62 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp054a", "b19-f01-rm1024", -445.600 + xs, 0.000, 83.500 + zs, LinkUse.walkway, comment: ""); //  63 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp055", "b19-f01-rm1025", -447.900 + xs, 0.000, 89.100 + zs, LinkUse.walkway, comment: ""); //  64 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp056", "b19-f01-rm1026", -449.200 + xs, 0.000, 92.600 + zs, LinkUse.walkway, comment: ""); //  65 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp057", "b19-f01-rm1027", -452.300 + xs, 0.000, 94.700 + zs, LinkUse.walkway, comment: ""); //  66 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp058", "b19-f01-rm1028", -455.300 + xs, 0.000, 96.400 + zs, LinkUse.walkway, comment: ""); //  67 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp059", "b19-f01-rm1029", -458.200 + xs, 0.000, 97.600 + zs, LinkUse.walkway, comment: ""); //  68 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp051", "b19-f01-cp061", -455.600 + xs, 0.000, 75.900 + zs, LinkUse.walkway, comment: ""); //  69 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp061", "b19-f01-cp062", -455.110 + xs, 0.000, 74.440 + zs, LinkUse.walkway, comment: ""); //  70 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp061", "b19-f01-cp061a", -460.200 + xs, 0.000, 74.300 + zs, LinkUse.walkway, comment: ""); //  71 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp062", "b19-f01-cp063", -453.400 + xs, 0.000, 69.600 + zs, LinkUse.walkway, comment: ""); //  72 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp063", "b19-f01-cp064", -451.300 + xs, 0.000, 69.600 + zs, LinkUse.walkway, comment: ""); //  73 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp064", "b19-f01-cp065", -448.200 + xs, 0.000, 68.400 + zs, LinkUse.walkway, comment: ""); //  74 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp065", "b19-f01-cp066", -445.400 + xs, 0.000, 73.600 + zs, LinkUse.walkway, comment: ""); //  75 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp066", "b19-f01-cp067a", -445.700 + xs, 0.000, 77.600 + zs, LinkUse.walkway, comment: ""); //  76 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp066", "b19-f01-cp067b", -446.600 + xs, 0.000, 78.000 + zs, LinkUse.walkway, comment: ""); //  77 nn:1 nl:1
             grc.AddLinkByNodeName("b19-f01-cp067a", "b19-f01-cp067b", LinkUse.walkway); //  78 nn:0 nl:1
             grc.AddLinkByNodeName("b19-f01-cp063", "b19-f01-cp041", LinkUse.walkway); //  79 nn:0 nl:1
             grc.AddLinkByNodeName("b19-f01-cp061a", "b19-f01-cp027", LinkUse.walkway); //  80 nn:0 nl:1
-            grc.LinkToPtxyz("b19-f01-cp029a", "b19-f01-rm1030", -456.100, 0.000, 62.200, LinkUse.walkway, comment: ""); //  81 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp041", "b19-f01-rm1031", -454.400, 0.000, 65.900, LinkUse.walkway, comment: ""); //  82 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp064", "b19-f01-rm1032", -451.300, 0.000, 67.000, LinkUse.walkway, comment: ""); //  83 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp065", "b19-f01-rm1033", -448.700, 0.000, 64.500, LinkUse.walkway, comment: ""); //  84 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-rm1033", "b19-f01-rm1033a", -452.200, 0.000, 63.600, LinkUse.walkway, comment: ""); //  85 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp067a", "b19-f01-rm1034", -443.500, 0.000, 77.100, LinkUse.walkway, comment: ""); //  86 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp067a", "b19-f01-rm1035", -444.400, 0.000, 79.900, LinkUse.walkway, comment: ""); //  87 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp067b", "b19-f01-rm1036", -450.000, 0.000, 78.500, LinkUse.walkway, comment: ""); //  88 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp067b", "b19-f01-rm1037", -448.700, 0.000, 75.900, LinkUse.walkway, comment: ""); //  89 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp061", "b19-f01-rm1038", -453.100, 0.000, 77.400, LinkUse.walkway, comment: ""); //  90 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp061", "b19-f01-rm1039", -452.300, 0.000, 74.800, LinkUse.walkway, comment: ""); //  91 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp021", "b19-f01-sp1003", -463.735, 0.180, 88.964, LinkUse.walkway, comment: ""); //  92 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp058", "b19-f01-sp1030", -457.491, 0.180, 92.681, LinkUse.walkway, comment: ""); //  93 nn:1 nl:1
-            grc.LinkToPtxyz("b19-f01-cp052", "b19-f01-sp1029", -456.760, 0.180, 85.280, LinkUse.walkway, comment: ""); //  94 nn:1 nl:1
-            grc.AddNodePtxyz("dw-B19-c01", -525.500, 0.000, 106.400, comment: ""); //  95 nn:1 nl:0
-            grc.LinkToPtxyz("dw-B19-c01", "dw-B19-c02", -520.260, 0.000, 105.260, LinkUse.driveway, comment: ""); //  96 nn:1 nl:1
-            grc.AddLinkByNodeName("dw-B19-c01", "reg:msft-campus", LinkUse.driveway); //  97 nn:0 nl:1
+            grc.LinkToPtxyz("b19-f01-cp029a", "b19-f01-rm1030", -456.100 + xs, 0.000, 62.200 + zs, LinkUse.walkway, comment: ""); //  81 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp041", "b19-f01-rm1031", -454.400 + xs, 0.000, 65.900 + zs, LinkUse.walkway, comment: ""); //  82 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp064", "b19-f01-rm1032", -451.300 + xs, 0.000, 67.000 + zs, LinkUse.walkway, comment: ""); //  83 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp065", "b19-f01-rm1033", -448.700 + xs, 0.000, 64.500 + zs, LinkUse.walkway, comment: ""); //  84 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-rm1033", "b19-f01-rm1033a", -452.200 + xs, 0.000, 63.600 + zs, LinkUse.walkway, comment: ""); //  85 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp067a", "b19-f01-rm1034", -443.500 + xs, 0.000, 77.100 + zs, LinkUse.walkway, comment: ""); //  86 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp067a", "b19-f01-rm1035", -444.400 + xs, 0.000, 79.900 + zs, LinkUse.walkway, comment: ""); //  87 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp067b", "b19-f01-rm1036", -450.000 + xs, 0.000, 78.500 + zs, LinkUse.walkway, comment: ""); //  88 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp067b", "b19-f01-rm1037", -448.700 + xs, 0.000, 75.900 + zs, LinkUse.walkway, comment: ""); //  89 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp061", "b19-f01-rm1038", -453.100 + xs, 0.000, 77.400 + zs, LinkUse.walkway, comment: ""); //  90 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp061", "b19-f01-rm1039", -452.300 + xs, 0.000, 74.800 + zs, LinkUse.walkway, comment: ""); //  91 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp021", "b19-f01-sp1003", -463.735 + xs, 0.180, 88.964 + zs, LinkUse.walkway, comment: ""); //  92 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp058", "b19-f01-sp1030", -457.491 + xs, 0.180, 92.681 + zs, LinkUse.walkway, comment: ""); //  93 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-cp052", "b19-f01-sp1029", -456.760 + xs, 0.180, 85.280 + zs, LinkUse.walkway, comment: ""); //  94 nn:1 nl:1
+            grc.AddNodePtxyz("dw-B19-c01", -525.500 + xs, 0.000, 106.400 + zs, comment: ""); //  95 nn:1 nl:0
+            grc.LinkToPtxyz("dw-B19-c01", "dw-B19-c02", -520.260 + xs, 0.000, 105.260 + zs, LinkUse.driveway, comment: ""); //  96 nn:1 nl:1
+            //grc.AddLinkByNodeName("dw-B19-c01", "reg:msft-campus", LinkUse.driveway); //  97 nn:0 nl:1
+            grc.LinkToPtxyz("dw-B19-c01", "dw-B19-d01", -525.500 + xs, 0.000, 117.000 + zs, LinkUse.driveway, comment: ""); //  96 nn:1 nl:1
+            grc.LinkToPtxyz("dw-B19-d01", "dw-B19-d02", -521.500 + xs, 0.000, 128.000 + zs, LinkUse.driveway, comment: ""); //  96 nn:1 nl:1
+            grc.LinkToPtxyz("dw-B19-d02", "dw-B19-d03", -438.500 + xs, 0.000, 154.400 + zs, LinkUse.driveway, comment: ""); //  96 nn:1 nl:1
+            grc.LinkToPtxyz("dw-B19-d03", "dw-B19-d04", -430.160 + xs, 0.000, 150.400 + zs, LinkUse.driveway, comment: ""); //  96 nn:1 nl:1
+            grc.AddLinkByNodeName("dw-B19-d04", "reg:msft-campus", LinkUse.driveway); //  97 nn:0 nl:1
             grc.regman.SetRegion("default");
         }
 
-        public void CreateGraphForOsmImport_MsftCampusBldSmall()  // machine generated on 2020-06-15 19:56:11.299291 local time  - do not edit
+        public void CreateGraphForOsmImport_msftb19area()  // machine generated on 2020-06-23 13:25:36.547991 local time  - do not edit
+        {
+            grc.regman.NewNodeRegion("Microsoft B19 Area", "green", saveToFile: true);
+            var xs = 0;  // offsets for error correction
+            var zs = 0;
+            grc.AddNodePtxz("osm7473295912", -784.539 + xs, 188.724 + zs);
+            grc.AddNodePtxz("osm409799028", -738.025 + xs, 121.077 + zs);
+            grc.AddNodePtxz("osm2671027615", -647.710 + xs, 217.878 + zs);
+            grc.AddNodePtxz("osm2671027616", -659.672 + xs, 251.988 + zs);
+            grc.AddNodePtxz("osm2671027619", -568.654 + xs, 208.354 + zs);
+            grc.AddNodePtxz("osm2671027618", -602.852 + xs, 196.385 + zs);
+            grc.AddNodePtxz("osm3834803720", -818.985 + xs, 405.929 + zs);
+            grc.AddNodePtxz("osm4753326325", -697.765 + xs, 420.971 + zs);
+            grc.AddNodePtxz("osm4758568841", -588.438 + xs, 436.084 + zs);
+            grc.AddNodePtxz("osm4758568844", -566.889 + xs, 447.691 + zs);
+            grc.AddNodePtxz("osm4740268536", -615.800 + xs, 427.089 + zs);
+            grc.AddNodePtxz("osm4753326326", -721.622 + xs, 433.146 + zs);
+            grc.AddNodePtxz("osm4760408332", -707.537 + xs, 419.804 + zs);
+            grc.AddNodePtxz("osm4775434185", -667.702 + xs, 284.275 + zs);
+            grc.AddNodePtxz("osm2670280688", -626.733 + xs, 204.194 + zs);
+            grc.AddNodePtxz("osm4779937956", -892.888 + xs, 369.785 + zs);
+            grc.AddNodePtxz("osm4983712038", -637.026 + xs, -4.294 + zs);
+            grc.AddNodePtxz("osm2672290205", -592.146 + xs, 275.113 + zs);
+            grc.AddNodePtxz("osm7065046248", -472.236 + xs, 102.825 + zs);
+            grc.AddNodePtxz("osm4753326215", -631.774 + xs, 472.531 + zs);
+            grc.AddNodePtxz("osm4806471174", -552.890 + xs, 274.856 + zs);
+            grc.AddNodePtxz("osm4806471175", -559.047 + xs, 272.669 + zs);
+            grc.AddNodePtxz("osm4098517739", -578.096 + xs, 279.146 + zs);
+            grc.AddNodePtxz("osm4098517743", -597.539 + xs, 288.729 + zs);
+            grc.AddNodePtxz("osm4098517744", -613.362 + xs, 300.366 + zs);
+            grc.AddNodePtxz("osm4806537128", -614.671 + xs, 304.196 + zs);
+            grc.AddNodePtxz("osm4773452876", -612.845 + xs, 294.793 + zs);
+            grc.AddNodePtxz("osm4098517727", -552.755 + xs, 305.962 + zs);
+            grc.AddNodePtxz("osm4098517737", -591.866 + xs, 324.962 + zs);
+            grc.AddNodePtxz("osm7120384994", -813.784 + xs, 417.089 + zs);
+            grc.AddNodePtxz("osm7120525634", -780.098 + xs, 190.323 + zs);
+            grc.AddNodePtxz("osm7120525642", -795.152 + xs, 222.051 + zs);
+            grc.AddNodePtxz("osm2675737178", -702.083 + xs, 49.669 + zs);
+            grc.AddNodePtxz("osm336768326", -723.129 + xs, 87.949 + zs);
+            grc.AddNodePtxz("osm336768316", -713.715 + xs, 61.601 + zs);
+            grc.AddNodePtxz("osm336772826", -685.630 + xs, 48.101 + zs);
+            grc.AddNodePtxz("osm336772818", -658.859 + xs, 57.401 + zs);
+            grc.AddNodePtxz("osm2671035422", -538.063 + xs, 221.425 + zs);
+            grc.AddNodePtxz("osm4773716039", -603.632 + xs, 253.120 + zs);
+            grc.AddNodePtxz("osm7123400113", -653.026 + xs, 205.127 + zs);
+            grc.AddNodePtxz("osm4777391860", -609.842 + xs, 184.003 + zs);
+            grc.AddNodePtxz("osm7123470523", -510.943 + xs, 97.686 + zs);
+            grc.AddNodePtxz("osm7123470544", -481.265 + xs, 68.152 + zs);
+            grc.AddNodePtxz("osm4779937955", -845.372 + xs, 394.156 + zs);
+            grc.AddNodePtxz("osm7132304286", -876.850 + xs, 354.442 + zs);
+            grc.AddNodePtxz("osm7132304293", -812.626 + xs, 343.619 + zs);
+            grc.AddNodePtxz("osm7132371562", -572.944 + xs, 43.967 + zs);
+            grc.AddNodePtxz("osm7132371567", -562.631 + xs, 80.157 + zs);
+            grc.AddNodePtxz("osm2675681645", -644.467 + xs, 167.872 + zs);
+            grc.AddNodePtxz("osm7132371575", -624.827 + xs, 138.371 + zs);
+            grc.AddNodePtxz("osm4806537131", -679.457 + xs, 164.678 + zs);
+            grc.AddNodePtxz("osm7132384717", -564.540 + xs, 474.406 + zs);
+            grc.AddNodePtxz("osm7132384722", -561.593 + xs, 472.595 + zs);
+            grc.AddNodePtxz("osm4753385702", -784.379 + xs, 426.213 + zs);
+            grc.AddNodePtxz("osm4983712048", -660.980 + xs, -21.652 + zs);
+            grc.AddNodePtxz("osm4781518455", -708.283 + xs, 175.247 + zs);
+            grc.AddNodePtxz("osm4806471176", -556.231 + xs, 330.619 + zs);
+            grc.AddNodePtxz("osm4773452875", -570.413 + xs, 337.749 + zs);
+            grc.AddNodePtxz("osm4773476250", -681.155 + xs, 244.966 + zs);
+            grc.AddNodePtxz("osm4779937984", -706.109 + xs, 241.682 + zs);
+            grc.AddNodePtxz("osm4060068699", -560.638 + xs, 185.654 + zs);
+            grc.AddNodePtxz("osm4806471180", -547.884 + xs, 164.847 + zs);
+            grc.AddNodePtxz("osm7132384719", -591.803 + xs, 539.034 + zs);
+            grc.AddNodePtxz("osm4806537129", -603.069 + xs, 119.236 + zs);
+            grc.AddNodePtxz("osm7472985454", -447.827 + xs, 67.971 + zs);
+            grc.AddNodePtxz("osm7484825433", -838.399 + xs, 261.872 + zs);
+            grc.AddNodePtxz("osm3516771316", -807.549 + xs, 251.790 + zs);
+            grc.AddNodePtxz("osm7484830111", -782.119 + xs, 234.593 + zs);
+            grc.AddNodePtxz("osm4985583154", -782.964 + xs, 37.672 + zs);
+            grc.AddNodePtxz("osm4985583152", -721.040 + xs, 22.410 + zs);
+            grc.AddNodePtxz("osm4985583151", -711.675 + xs, 17.948 + zs);
+            grc.AddNodePtxz("osm321406063", -488.626 + xs, 110.902 + zs);
+            grc.AddNodePtxz("osm321406064", -507.757 + xs, 104.234 + zs);
+            grc.AddNodePtxz("osm7473295815", -510.352 + xs, 98.823 + zs);
+            grc.AddNodePtxz("osm7473295819", -511.578 + xs, 96.470 + zs);
+            grc.AddNodePtxz("osm321406065", -513.707 + xs, 92.216 + zs);
+            grc.AddNodePtxz("osm321406066", -510.374 + xs, 82.521 + zs);
+            grc.AddNodePtxz("osm6323327743", -503.733 + xs, 79.028 + zs);
+            grc.AddNodePtxz("osm6323327701", -463.281 + xs, 59.401 + zs);
+            grc.AddNodePtxz("osm321406067", -460.539 + xs, 58.177 + zs);
+            grc.AddNodePtxz("osm321406068", -450.904 + xs, 61.412 + zs);
+            grc.AddNodePtxz("osm321406069", -444.777 + xs, 74.069 + zs);
+            grc.AddNodePtxz("osm321406070", -451.226 + xs, 92.710 + zs);
+            grc.AddNodePtxz("osm6323327724", -463.123 + xs, 98.372 + zs);
+            grc.AddNodePtxz("osm7473295813", -486.518 + xs, 109.802 + zs);
+            grc.AddNodePtxz("osm321406158", -616.769 + xs, 115.346 + zs);
+            grc.AddNodePtxz("osm2660169201", -611.932 + xs, 117.026 + zs);
+            grc.AddNodePtxz("osm2660169203", -611.289 + xs, 115.162 + zs);
+            grc.AddNodePtxz("osm2660169196", -602.700 + xs, 118.150 + zs);
+            grc.AddNodePtxz("osm2660169206", -603.306 + xs, 119.876 + zs);
+            grc.AddNodePtxz("osm321406159", -598.610 + xs, 121.555 + zs);
+            grc.AddNodePtxz("osm321406160", -607.658 + xs, 147.330 + zs);
+            grc.AddNodePtxz("osm321406161", -589.745 + xs, 153.367 + zs);
+            grc.AddNodePtxz("osm2660169277", -591.437 + xs, 158.254 + zs);
+            grc.AddNodePtxz("osm2660169274", -589.776 + xs, 158.799 + zs);
+            grc.AddNodePtxz("osm2660169269", -592.731 + xs, 167.451 + zs);
+            grc.AddNodePtxz("osm2660169271", -594.478 + xs, 166.917 + zs);
+            grc.AddNodePtxz("osm321406162", -596.053 + xs, 171.471 + zs);
+            grc.AddNodePtxz("osm321406163", -605.495 + xs, 168.357 + zs);
+            grc.AddNodePtxz("osm7469570210", -610.158 + xs, 181.407 + zs);
+            grc.AddNodePtxz("osm321406164", -610.933 + xs, 183.582 + zs);
+            grc.AddNodePtxz("osm7469570217", -606.820 + xs, 185.006 + zs);
+            grc.AddNodePtxz("osm321406165", -601.387 + xs, 186.802 + zs);
+            grc.AddNodePtxz("osm2660169266", -603.071 + xs, 191.565 + zs);
+            grc.AddNodePtxz("osm2660169264", -601.345 + xs, 192.227 + zs);
+            grc.AddNodePtxz("osm2660169258", -604.376 + xs, 200.695 + zs);
+            grc.AddNodePtxz("osm2660169261", -606.089 + xs, 200.061 + zs);
+            grc.AddNodePtxz("osm321406166", -607.836 + xs, 204.905 + zs);
+            grc.AddNodePtxz("osm7350890235", -622.026 + xs, 199.825 + zs);
+            grc.AddNodePtxz("osm321406167", -623.048 + xs, 200.418 + zs);
+            grc.AddNodePtxz("osm321406168", -623.501 + xs, 202.648 + zs);
+            grc.AddNodePtxz("osm321406169", -629.476 + xs, 205.489 + zs);
+            grc.AddNodePtxz("osm321406170", -632.862 + xs, 205.455 + zs);
+            grc.AddNodePtxz("osm321406171", -637.725 + xs, 219.308 + zs);
+            grc.AddNodePtxz("osm2660169253", -642.448 + xs, 217.572 + zs);
+            grc.AddNodePtxz("osm2660169251", -643.144 + xs, 219.489 + zs);
+            grc.AddNodePtxz("osm2660169248", -651.612 + xs, 216.558 + zs);
+            grc.AddNodePtxz("osm2660169256", -650.946 + xs, 214.695 + zs);
+            grc.AddNodePtxz("osm321406172", -655.808 + xs, 212.951 + zs);
+            grc.AddNodePtxz("osm7469570234", -653.856 + xs, 207.457 + zs);
+            grc.AddNodePtxz("osm321406173", -652.535 + xs, 203.695 + zs);
+            grc.AddNodePtxz("osm7469570224", -654.086 + xs, 203.172 + zs);
+            grc.AddNodePtxz("osm321406174", -667.945 + xs, 198.459 + zs);
+            grc.AddNodePtxz("osm321406175", -671.301 + xs, 207.853 + zs);
+            grc.AddNodePtxz("osm2660169232", -676.049 + xs, 206.188 + zs);
+            grc.AddNodePtxz("osm2660169230", -676.699 + xs, 208.041 + zs);
+            grc.AddNodePtxz("osm2660169227", -685.219 + xs, 205.021 + zs);
+            grc.AddNodePtxz("osm2660169235", -684.638 + xs, 203.367 + zs);
+            grc.AddNodePtxz("osm321406176", -689.396 + xs, 201.698 + zs);
+            grc.AddNodePtxz("osm321406177", -683.129 + xs, 183.810 + zs);
+            grc.AddNodePtxz("osm7469570230", -707.440 + xs, 175.535 + zs);
+            grc.AddNodePtxz("osm321406178", -709.121 + xs, 174.912 + zs);
+            grc.AddNodePtxz("osm2660169219", -707.546 + xs, 170.192 + zs);
+            grc.AddNodePtxz("osm2660169216", -709.176 + xs, 169.626 + zs);
+            grc.AddNodePtxz("osm2660169212", -706.227 + xs, 160.987 + zs);
+            grc.AddNodePtxz("osm2660169222", -704.504 + xs, 161.593 + zs);
+            grc.AddNodePtxz("osm321406179", -702.838 + xs, 156.745 + zs);
+            grc.AddNodePtxz("osm7469570328", -682.135 + xs, 163.737 + zs);
+            grc.AddNodePtxz("osm7469570335", -678.751 + xs, 164.952 + zs);
+            grc.AddNodePtxz("osm321406180", -676.848 + xs, 165.682 + zs);
+            grc.AddNodePtxz("osm7469570331", -673.629 + xs, 156.344 + zs);
+            grc.AddNodePtxz("osm2675681594", -673.488 + xs, 155.941 + zs);
+            grc.AddNodePtxz("osm2675681602", -671.227 + xs, 156.691 + zs);
+            grc.AddNodePtxz("osm2660169245", -668.630 + xs, 157.627 + zs);
+            grc.AddNodePtxz("osm2660169237", -668.020 + xs, 155.856 + zs);
+            grc.AddNodePtxz("osm2660169240", -659.400 + xs, 158.791 + zs);
+            grc.AddNodePtxz("osm2660169243", -660.013 + xs, 160.538 + zs);
+            grc.AddNodePtxz("osm321406182", -655.196 + xs, 162.242 + zs);
+            grc.AddNodePtxz("osm7469570252", -655.832 + xs, 164.052 + zs);
+            grc.AddNodePtxz("osm321406183", -658.633 + xs, 171.965 + zs);
+            grc.AddNodePtxz("osm321406184", -651.379 + xs, 174.591 + zs);
+            grc.AddNodePtxz("osm2660169209", -647.635 + xs, 172.697 + zs);
+            grc.AddNodePtxz("osm2675681636", -646.763 + xs, 169.003 + zs);
+            grc.AddNodePtxz("osm2675681646", -642.042 + xs, 166.611 + zs);
+            grc.AddNodePtxz("osm321406187", -638.396 + xs, 168.556 + zs);
+            grc.AddNodePtxz("osm321406188", -634.752 + xs, 166.611 + zs);
+            grc.AddNodePtxz("osm321406189", -632.150 + xs, 159.232 + zs);
+            grc.AddNodePtxz("osm7469570271", -640.186 + xs, 156.481 + zs);
+            grc.AddNodePtxz("osm7469570264", -641.702 + xs, 155.962 + zs);
+            grc.AddNodePtxz("osm321406190", -641.944 + xs, 155.879 + zs);
+            grc.AddNodePtxz("osm7469570262", -641.298 + xs, 153.970 + zs);
+            grc.AddNodePtxz("osm2660169284", -640.319 + xs, 151.081 + zs);
+            grc.AddNodePtxz("osm2660169282", -642.078 + xs, 150.479 + zs);
+            grc.AddNodePtxz("osm2660169279", -639.110 + xs, 141.957 + zs);
+            grc.AddNodePtxz("osm2660169287", -637.312 + xs, 142.581 + zs);
+            grc.AddNodePtxz("osm2675681628", -636.370 + xs, 139.798 + zs);
+            grc.AddNodePtxz("osm2675681627", -635.681 + xs, 137.768 + zs);
+            grc.AddNodePtxz("osm7469570245", -635.471 + xs, 137.840 + zs);
+            grc.AddNodePtxz("osm321406192", -625.771 + xs, 141.193 + zs);
+            grc.AddNodePtxz("osm7469570241", -625.095 + xs, 139.167 + zs);
+            grc.AddNodePtxz("osm7469570189", -623.924 + xs, 135.797 + zs);
+            grc.AddNodePtxz("osm321406211", -826.301 + xs, 340.735 + zs);
+            grc.AddNodePtxz("osm4779937963", -814.433 + xs, 344.933 + zs);
+            grc.AddNodePtxz("osm4779937962", -813.840 + xs, 343.179 + zs);
+            grc.AddNodePtxz("osm4779937961", -804.443 + xs, 346.420 + zs);
+            grc.AddNodePtxz("osm321406212", -805.176 + xs, 348.474 + zs);
+            grc.AddNodePtxz("osm4779937960", -799.483 + xs, 350.471 + zs);
+            grc.AddNodePtxz("osm321406213", -820.309 + xs, 409.936 + zs);
+            grc.AddNodePtxz("osm321406214", -812.328 + xs, 412.740 + zs);
+            grc.AddNodePtxz("osm4779937954", -814.111 + xs, 418.055 + zs);
+            grc.AddNodePtxz("osm4779937953", -812.127 + xs, 418.789 + zs);
+            grc.AddNodePtxz("osm4779937952", -815.739 + xs, 428.777 + zs);
+            grc.AddNodePtxz("osm4779937951", -817.525 + xs, 428.118 + zs);
+            grc.AddNodePtxz("osm321406215", -821.791 + xs, 440.037 + zs);
+            grc.AddNodePtxz("osm321406216", -840.756 + xs, 433.402 + zs);
+            grc.AddNodePtxz("osm4781664647", -858.029 + xs, 481.536 + zs);
+            grc.AddNodePtxz("osm321406217", -860.781 + xs, 480.602 + zs);
+            grc.AddNodePtxz("osm4781664644", -861.021 + xs, 481.288 + zs);
+            grc.AddNodePtxz("osm4781664648", -862.016 + xs, 484.020 + zs);
+            grc.AddNodePtxz("osm321406218", -864.535 + xs, 483.198 + zs);
+            grc.AddNodePtxz("osm4781664649", -864.775 + xs, 483.813 + zs);
+            grc.AddNodePtxz("osm321406219", -871.478 + xs, 481.502 + zs);
+            grc.AddNodePtxz("osm7346635974", -875.564 + xs, 480.103 + zs);
+            grc.AddNodePtxz("osm4781664650", -875.275 + xs, 479.212 + zs);
+            grc.AddNodePtxz("osm7346635975", -877.722 + xs, 478.351 + zs);
+            grc.AddNodePtxz("osm4781664643", -876.892 + xs, 476.021 + zs);
+            grc.AddNodePtxz("osm4781664651", -876.561 + xs, 475.009 + zs);
+            grc.AddNodePtxz("osm321406220", -879.455 + xs, 473.947 + zs);
+            grc.AddNodePtxz("osm321406221", -852.666 + xs, 399.073 + zs);
+            grc.AddNodePtxz("osm321406222", -847.600 + xs, 400.672 + zs);
+            grc.AddNodePtxz("osm321406223", -843.756 + xs, 389.552 + zs);
+            grc.AddNodePtxz("osm321406224", -892.404 + xs, 373.412 + zs);
+            grc.AddNodePtxz("osm4779937957", -891.403 + xs, 370.325 + zs);
+            grc.AddNodePtxz("osm321406225", -894.825 + xs, 369.051 + zs);
+            grc.AddNodePtxz("osm321406226", -889.432 + xs, 353.620 + zs);
+            grc.AddNodePtxz("osm4779937958", -885.848 + xs, 354.871 + zs);
+            grc.AddNodePtxz("osm321406227", -884.707 + xs, 351.721 + zs);
+            grc.AddNodePtxz("osm321406228", -835.982 + xs, 368.584 + zs);
+            grc.AddNodePtxz("osm325609441", -553.036 + xs, 164.097 + zs);
+            grc.AddNodePtxz("osm2672290200", -548.177 + xs, 165.681 + zs);
+            grc.AddNodePtxz("osm2672290197", -547.538 + xs, 163.928 + zs);
+            grc.AddNodePtxz("osm2672290193", -539.131 + xs, 166.798 + zs);
+            grc.AddNodePtxz("osm2672290202", -539.768 + xs, 168.711 + zs);
+            grc.AddNodePtxz("osm325609443", -534.939 + xs, 170.380 + zs);
+            grc.AddNodePtxz("osm325609445", -549.748 + xs, 212.972 + zs);
+            grc.AddNodePtxz("osm2671035405", -548.455 + xs, 213.423 + zs);
+            grc.AddNodePtxz("osm2671035407", -549.156 + xs, 215.520 + zs);
+            grc.AddNodePtxz("osm325609446", -545.585 + xs, 216.774 + zs);
+            grc.AddNodePtxz("osm325609447", -547.352 + xs, 221.841 + zs);
+            grc.AddNodePtxz("osm2671035411", -545.890 + xs, 222.381 + zs);
+            grc.AddNodePtxz("osm2671035409", -545.567 + xs, 221.462 + zs);
+            grc.AddNodePtxz("osm2671035420", -544.080 + xs, 221.963 + zs);
+            grc.AddNodePtxz("osm2671035418", -533.360 + xs, 225.538 + zs);
+            grc.AddNodePtxz("osm2671035414", -532.046 + xs, 225.995 + zs);
+            grc.AddNodePtxz("osm2671035416", -532.452 + xs, 227.116 + zs);
+            grc.AddNodePtxz("osm325609450", -530.864 + xs, 227.668 + zs);
+            grc.AddNodePtxz("osm325609451", -527.553 + xs, 217.933 + zs);
+            grc.AddNodePtxz("osm6326434701", -525.863 + xs, 218.496 + zs);
+            grc.AddNodePtxz("osm2671035403", -522.764 + xs, 219.549 + zs);
+            grc.AddNodePtxz("osm2671035395", -522.080 + xs, 217.668 + zs);
+            grc.AddNodePtxz("osm2671035398", -513.617 + xs, 220.644 + zs);
+            grc.AddNodePtxz("osm2671035401", -514.239 + xs, 222.349 + zs);
+            grc.AddNodePtxz("osm325609452", -509.454 + xs, 224.042 + zs);
+            grc.AddNodePtxz("osm325609453", -531.829 + xs, 287.650 + zs);
+            grc.AddNodePtxz("osm2671035390", -530.034 + xs, 288.320 + zs);
+            grc.AddNodePtxz("osm2671035392", -530.906 + xs, 290.668 + zs);
+            grc.AddNodePtxz("osm325609454", -527.296 + xs, 291.911 + zs);
+            grc.AddNodePtxz("osm6325521614", -533.175 + xs, 308.324 + zs);
+            grc.AddNodePtxz("osm325609456", -542.528 + xs, 334.399 + zs);
+            grc.AddNodePtxz("osm2671035386", -547.303 + xs, 332.812 + zs);
+            grc.AddNodePtxz("osm2671035380", -547.979 + xs, 334.601 + zs);
+            grc.AddNodePtxz("osm2671035383", -556.559 + xs, 331.655 + zs);
+            grc.AddNodePtxz("osm2671035493", -555.915 + xs, 329.753 + zs);
+            grc.AddNodePtxz("osm2671035491", -560.429 + xs, 328.160 + zs);
+            grc.AddNodePtxz("osm2671035485", -545.616 + xs, 285.457 + zs);
+            grc.AddNodePtxz("osm2671035487", -547.070 + xs, 284.928 + zs);
+            grc.AddNodePtxz("osm2671035489", -546.338 + xs, 282.842 + zs);
+            grc.AddNodePtxz("osm2671035455", -549.924 + xs, 281.630 + zs);
+            grc.AddNodePtxz("osm2671035468", -548.164 + xs, 276.616 + zs);
+            grc.AddNodePtxz("osm4098517730", -556.203 + xs, 273.674 + zs);
+            grc.AddNodePtxz("osm2671035466", -564.572 + xs, 270.698 + zs);
+            grc.AddNodePtxz("osm2671035459", -567.985 + xs, 280.421 + zs);
+            grc.AddNodePtxz("osm2671035374", -572.751 + xs, 278.806 + zs);
+            grc.AddNodePtxz("osm2671035463", -573.411 + xs, 280.790 + zs);
+            grc.AddNodePtxz("osm2671035461", -581.842 + xs, 277.888 + zs);
+            grc.AddNodePtxz("osm2671035377", -581.174 + xs, 276.017 + zs);
+            grc.AddNodePtxz("osm2671035457", -586.062 + xs, 274.415 + zs);
+            grc.AddNodePtxz("osm2671035477", -584.358 + xs, 269.731 + zs);
+            grc.AddNodePtxz("osm2671027641", -577.847 + xs, 251.047 + zs);
+            grc.AddNodePtxz("osm4806471178", -563.907 + xs, 211.064 + zs);
+            grc.AddNodePtxz("osm4806471179", -569.015 + xs, 209.315 + zs);
+            grc.AddNodePtxz("osm325610115", -572.450 + xs, 346.074 + zs);
+            grc.AddNodePtxz("osm2671027714", -574.141 + xs, 345.479 + zs);
+            grc.AddNodePtxz("osm325610116", -575.893 + xs, 350.369 + zs);
+            grc.AddNodePtxz("osm6326434733", -601.384 + xs, 341.658 + zs);
+            grc.AddNodePtxz("osm325610118", -618.668 + xs, 335.780 + zs);
+            grc.AddNodePtxz("osm2671027716", -617.556 + xs, 332.478 + zs);
+            grc.AddNodePtxz("osm2671027717", -620.063 + xs, 331.722 + zs);
+            grc.AddNodePtxz("osm325610119", -619.461 + xs, 329.940 + zs);
+            grc.AddNodePtxz("osm325610120", -683.279 + xs, 307.982 + zs);
+            grc.AddNodePtxz("osm2671027721", -681.671 + xs, 303.201 + zs);
+            grc.AddNodePtxz("osm2671027718", -683.264 + xs, 302.664 + zs);
+            grc.AddNodePtxz("osm2671027719", -680.427 + xs, 294.446 + zs);
+            grc.AddNodePtxz("osm2671027720", -678.674 + xs, 295.030 + zs);
+            grc.AddNodePtxz("osm325610121", -677.058 + xs, 290.158 + zs);
+            grc.AddNodePtxz("osm325610122", -667.198 + xs, 293.493 + zs);
+            grc.AddNodePtxz("osm2671027724", -666.660 + xs, 292.062 + zs);
+            grc.AddNodePtxz("osm2671027723", -667.529 + xs, 291.645 + zs);
+            grc.AddNodePtxz("osm2671027728", -667.048 + xs, 290.210 + zs);
+            grc.AddNodePtxz("osm2671027727", -663.518 + xs, 279.885 + zs);
+            grc.AddNodePtxz("osm2671027722", -663.003 + xs, 278.517 + zs);
+            grc.AddNodePtxz("osm2671027725", -662.103 + xs, 278.809 + zs);
+            grc.AddNodePtxz("osm325610123", -661.530 + xs, 277.143 + zs);
+            grc.AddNodePtxz("osm325610124", -666.582 + xs, 275.438 + zs);
+            grc.AddNodePtxz("osm325610126", -665.367 + xs, 271.909 + zs);
+            grc.AddNodePtxz("osm2671027730", -667.552 + xs, 271.177 + zs);
+            grc.AddNodePtxz("osm2671027729", -667.110 + xs, 269.783 + zs);
+            grc.AddNodePtxz("osm2672290044", -705.547 + xs, 256.482 + zs);
+            grc.AddNodePtxz("osm325610127", -709.916 + xs, 255.081 + zs);
+            grc.AddNodePtxz("osm325610128", -708.156 + xs, 250.099 + zs);
+            grc.AddNodePtxz("osm325610131", -709.821 + xs, 249.569 + zs);
+            grc.AddNodePtxz("osm325610133", -707.005 + xs, 241.376 + zs);
+            grc.AddNodePtxz("osm325610135", -705.404 + xs, 241.924 + zs);
+            grc.AddNodePtxz("osm325610137", -703.638 + xs, 236.825 + zs);
+            grc.AddNodePtxz("osm325610142", -658.242 + xs, 252.485 + zs);
+            grc.AddNodePtxz("osm325610144", -659.859 + xs, 257.326 + zs);
+            grc.AddNodePtxz("osm2670280676", -619.816 + xs, 271.264 + zs);
+            grc.AddNodePtxz("osm2671035483", -600.978 + xs, 277.856 + zs);
+            grc.AddNodePtxz("osm2671035470", -596.255 + xs, 279.322 + zs);
+            grc.AddNodePtxz("osm2671027704", -597.913 + xs, 284.046 + zs);
+            grc.AddNodePtxz("osm2671035473", -596.130 + xs, 284.648 + zs);
+            grc.AddNodePtxz("osm2671035471", -599.031 + xs, 292.979 + zs);
+            grc.AddNodePtxz("osm2671027703", -600.843 + xs, 292.327 + zs);
+            grc.AddNodePtxz("osm325610146", -602.445 + xs, 296.959 + zs);
+            grc.AddNodePtxz("osm2671035453", -612.437 + xs, 293.530 + zs);
+            grc.AddNodePtxz("osm2671035451", -613.181 + xs, 295.818 + zs);
+            grc.AddNodePtxz("osm2671035449", -611.952 + xs, 296.247 + zs);
+            grc.AddNodePtxz("osm2671035431", -616.337 + xs, 309.044 + zs);
+            grc.AddNodePtxz("osm2671035434", -617.514 + xs, 308.633 + zs);
+            grc.AddNodePtxz("osm2671035436", -618.134 + xs, 310.464 + zs);
+            grc.AddNodePtxz("osm2671035447", -613.007 + xs, 312.125 + zs);
+            grc.AddNodePtxz("osm2671035438", -614.261 + xs, 315.664 + zs);
+            grc.AddNodePtxz("osm2671035440", -612.010 + xs, 316.442 + zs);
+            grc.AddNodePtxz("osm2671035429", -612.562 + xs, 317.949 + zs);
+            grc.AddNodePtxz("osm325610155", -569.474 + xs, 332.486 + zs);
+            grc.AddNodePtxz("osm2671027713", -571.267 + xs, 337.528 + zs);
+            grc.AddNodePtxz("osm2671027712", -569.626 + xs, 337.994 + zs);
+            grc.AddNodePtxz("osm325618934", -787.212 + xs, 440.603 + zs);
+            grc.AddNodePtxz("osm4760407215", -783.086 + xs, 428.343 + zs);
+            grc.AddNodePtxz("osm4760407216", -784.912 + xs, 427.797 + zs);
+            grc.AddNodePtxz("osm4760407203", -781.569 + xs, 418.375 + zs);
+            grc.AddNodePtxz("osm4760407202", -779.468 + xs, 419.078 + zs);
+            grc.AddNodePtxz("osm325618935", -777.635 + xs, 414.026 + zs);
+            grc.AddNodePtxz("osm325618936", -717.657 + xs, 434.519 + zs);
+            grc.AddNodePtxz("osm325618937", -712.034 + xs, 418.400 + zs);
+            grc.AddNodePtxz("osm4760408331", -706.316 + xs, 420.191 + zs);
+            grc.AddNodePtxz("osm4760408330", -705.634 + xs, 418.452 + zs);
+            grc.AddNodePtxz("osm4760408328", -696.273 + xs, 421.458 + zs);
+            grc.AddNodePtxz("osm4760408327", -697.050 + xs, 423.537 + zs);
+            grc.AddNodePtxz("osm325618938", -685.250 + xs, 427.798 + zs);
+            grc.AddNodePtxz("osm325618939", -694.606 + xs, 454.285 + zs);
+            grc.AddNodePtxz("osm325618940", -653.923 + xs, 468.078 + zs);
+            grc.AddNodePtxz("osm325618941", -654.924 + xs, 471.165 + zs);
+            grc.AddNodePtxz("osm4773476253", -652.988 + xs, 471.899 + zs);
+            grc.AddNodePtxz("osm4760407208", -651.782 + xs, 472.431 + zs);
+            grc.AddNodePtxz("osm7346644190", -652.673 + xs, 474.969 + zs);
+            grc.AddNodePtxz("osm7346644189", -651.768 + xs, 475.247 + zs);
+            grc.AddNodePtxz("osm7346644188", -655.183 + xs, 485.580 + zs);
+            grc.AddNodePtxz("osm7346644187", -656.113 + xs, 485.238 + zs);
+            grc.AddNodePtxz("osm325618943", -656.983 + xs, 487.919 + zs);
+            grc.AddNodePtxz("osm4753326321", -659.603 + xs, 486.982 + zs);
+            grc.AddNodePtxz("osm325618944", -660.554 + xs, 486.633 + zs);
+            grc.AddNodePtxz("osm325618945", -661.683 + xs, 489.914 + zs);
+            grc.AddNodePtxz("osm4760407207", -695.352 + xs, 478.490 + zs);
+            grc.AddNodePtxz("osm325618946", -728.956 + xs, 466.574 + zs);
+            grc.AddNodePtxz("osm325618948", -727.177 + xs, 461.171 + zs);
+            grc.AddNodePtxz("osm4753326324", -731.261 + xs, 459.733 + zs);
+            grc.AddNodePtxz("osm325618949", -737.721 + xs, 457.601 + zs);
+            grc.AddNodePtxz("osm325618950", -752.064 + xs, 497.724 + zs);
+            grc.AddNodePtxz("osm325618951", -755.145 + xs, 496.653 + zs);
+            grc.AddNodePtxz("osm4760407211", -755.589 + xs, 497.919 + zs);
+            grc.AddNodePtxz("osm4753385704", -756.274 + xs, 500.037 + zs);
+            grc.AddNodePtxz("osm4760407214", -758.609 + xs, 499.230 + zs);
+            grc.AddNodePtxz("osm325618952", -758.915 + xs, 500.068 + zs);
+            grc.AddNodePtxz("osm325618953", -769.891 + xs, 496.382 + zs);
+            grc.AddNodePtxz("osm4760407213", -769.573 + xs, 495.445 + zs);
+            grc.AddNodePtxz("osm4753385703", -771.952 + xs, 494.591 + zs);
+            grc.AddNodePtxz("osm4760407212", -771.199 + xs, 492.313 + zs);
+            grc.AddNodePtxz("osm325618955", -770.728 + xs, 490.938 + zs);
+            grc.AddNodePtxz("osm325618956", -773.646 + xs, 489.939 + zs);
+            grc.AddNodePtxz("osm325618957", -759.541 + xs, 450.194 + zs);
+            grc.AddNodePtxz("osm409798994", -706.014 + xs, 15.228 + zs);
+            grc.AddNodePtxz("osm409798995", -726.634 + xs, 25.208 + zs);
+            grc.AddNodePtxz("osm6331166445", -729.265 + xs, 33.171 + zs);
+            grc.AddNodePtxz("osm409798996", -732.012 + xs, 41.166 + zs);
+            grc.AddNodePtxz("osm336768305", -777.030 + xs, 25.572 + zs);
+            grc.AddNodePtxz("osm336768301", -778.471 + xs, 29.610 + zs);
+            grc.AddNodePtxz("osm4983743928", -777.712 + xs, 29.869 + zs);
+            grc.AddNodePtxz("osm4983743927", -778.155 + xs, 31.064 + zs);
+            grc.AddNodePtxz("osm7350734412", -779.649 + xs, 30.514 + zs);
+            grc.AddNodePtxz("osm7350734411", -779.816 + xs, 30.955 + zs);
+            grc.AddNodePtxz("osm7484830129", -782.070 + xs, 30.184 + zs);
+            grc.AddNodePtxz("osm7484830240", -784.523 + xs, 37.139 + zs);
+            grc.AddNodePtxz("osm7484830245", -783.501 + xs, 37.488 + zs);
+            grc.AddNodePtxz("osm7350734410", -782.261 + xs, 37.889 + zs);
+            grc.AddNodePtxz("osm7350734409", -782.389 + xs, 38.218 + zs);
+            grc.AddNodePtxz("osm4983712060", -781.062 + xs, 38.640 + zs);
+            grc.AddNodePtxz("osm336768295", -781.471 + xs, 39.839 + zs);
+            grc.AddNodePtxz("osm4983712057", -782.003 + xs, 39.673 + zs);
+            grc.AddNodePtxz("osm336768292", -783.439 + xs, 43.799 + zs);
+            grc.AddNodePtxz("osm4985583153", -779.039 + xs, 45.377 + zs);
+            grc.AddNodePtxz("osm6331167729", -775.591 + xs, 46.613 + zs);
+            grc.AddNodePtxz("osm336768291", -767.650 + xs, 49.331 + zs);
+            grc.AddNodePtxz("osm336768288", -773.046 + xs, 64.301 + zs);
+            grc.AddNodePtxz("osm336768285", -780.836 + xs, 61.689 + zs);
+            grc.AddNodePtxz("osm4983712059", -782.201 + xs, 65.745 + zs);
+            grc.AddNodePtxz("osm336768282", -781.521 + xs, 66.026 + zs);
+            grc.AddNodePtxz("osm4983712058", -781.896 + xs, 67.062 + zs);
+            grc.AddNodePtxz("osm7350734407", -783.647 + xs, 66.470 + zs);
+            grc.AddNodePtxz("osm7350734408", -783.828 + xs, 66.986 + zs);
+            grc.AddNodePtxz("osm336768280", -786.220 + xs, 66.104 + zs);
+            grc.AddNodePtxz("osm336768278", -788.586 + xs, 72.946 + zs);
+            grc.AddNodePtxz("osm7350734406", -786.485 + xs, 73.681 + zs);
+            grc.AddNodePtxz("osm7350734405", -786.661 + xs, 74.184 + zs);
+            grc.AddNodePtxz("osm4983712056", -784.780 + xs, 74.772 + zs);
+            grc.AddNodePtxz("osm336768275", -785.175 + xs, 75.865 + zs);
+            grc.AddNodePtxz("osm4983712055", -785.846 + xs, 75.659 + zs);
+            grc.AddNodePtxz("osm336768272", -787.252 + xs, 79.732 + zs);
+            grc.AddNodePtxz("osm6331167737", -771.324 + xs, 85.272 + zs);
+            grc.AddNodePtxz("osm336768330", -729.640 + xs, 99.542 + zs);
+            grc.AddNodePtxz("osm7473295910", -728.355 + xs, 95.847 + zs);
+            grc.AddNodePtxz("osm4983712053", -728.196 + xs, 95.395 + zs);
+            grc.AddNodePtxz("osm4983712054", -728.770 + xs, 95.214 + zs);
+            grc.AddNodePtxz("osm336768329", -728.502 + xs, 94.284 + zs);
+            grc.AddNodePtxz("osm7350734404", -726.734 + xs, 94.858 + zs);
+            grc.AddNodePtxz("osm7350734403", -726.570 + xs, 94.391 + zs);
+            grc.AddNodePtxz("osm336768327", -724.201 + xs, 95.170 + zs);
+            grc.AddNodePtxz("osm7473295906", -724.077 + xs, 94.817 + zs);
+            grc.AddNodePtxz("osm7473295908", -721.980 + xs, 88.809 + zs);
+            grc.AddNodePtxz("osm4983712062", -721.841 + xs, 88.413 + zs);
+            grc.AddNodePtxz("osm7350734402", -723.885 + xs, 87.682 + zs);
+            grc.AddNodePtxz("osm7350734401", -723.723 + xs, 87.222 + zs);
+            grc.AddNodePtxz("osm4983712063", -725.696 + xs, 86.523 + zs);
+            grc.AddNodePtxz("osm7350734390", -725.320 + xs, 85.385 + zs);
+            grc.AddNodePtxz("osm336768325", -724.760 + xs, 85.537 + zs);
+            grc.AddNodePtxz("osm6331167700", -724.203 + xs, 83.850 + zs);
+            grc.AddNodePtxz("osm336768323", -723.450 + xs, 81.605 + zs);
+            grc.AddNodePtxz("osm336768322", -739.130 + xs, 76.063 + zs);
+            grc.AddNodePtxz("osm336768320", -733.684 + xs, 60.817 + zs);
+            grc.AddNodePtxz("osm336768318", -717.831 + xs, 66.371 + zs);
+            grc.AddNodePtxz("osm6331167699", -716.778 + xs, 63.301 + zs);
+            grc.AddNodePtxz("osm7350734391", -716.393 + xs, 62.205 + zs);
+            grc.AddNodePtxz("osm7350734392", -717.014 + xs, 61.992 + zs);
+            grc.AddNodePtxz("osm4983712068", -716.697 + xs, 61.055 + zs);
+            grc.AddNodePtxz("osm7350734400", -715.006 + xs, 61.650 + zs);
+            grc.AddNodePtxz("osm7350734399", -714.852 + xs, 61.212 + zs);
+            grc.AddNodePtxz("osm336768313", -712.535 + xs, 62.037 + zs);
+            grc.AddNodePtxz("osm7473295893", -712.379 + xs, 61.591 + zs);
+            grc.AddNodePtxz("osm336768312", -709.982 + xs, 54.966 + zs);
+            grc.AddNodePtxz("osm7350734398", -712.498 + xs, 54.168 + zs);
+            grc.AddNodePtxz("osm7350734397", -712.323 + xs, 53.602 + zs);
+            grc.AddNodePtxz("osm336768309", -713.852 + xs, 53.118 + zs);
+            grc.AddNodePtxz("osm7350734394", -713.531 + xs, 52.103 + zs);
+            grc.AddNodePtxz("osm7350734393", -712.874 + xs, 52.280 + zs);
+            grc.AddNodePtxz("osm336768307", -711.474 + xs, 48.157 + zs);
+            grc.AddNodePtxz("osm7473295897", -709.192 + xs, 48.883 + zs);
+            grc.AddNodePtxz("osm2675737180", -707.623 + xs, 49.388 + zs);
+            grc.AddNodePtxz("osm2675737179", -705.043 + xs, 48.220 + zs);
+            grc.AddNodePtxz("osm4983712067", -703.849 + xs, 50.499 + zs);
+            grc.AddNodePtxz("osm409798997", -700.133 + xs, 48.752 + zs);
+            grc.AddNodePtxz("osm2675737181", -701.214 + xs, 46.354 + zs);
+            grc.AddNodePtxz("osm2675737182", -698.417 + xs, 44.904 + zs);
+            grc.AddNodePtxz("osm336772832", -697.243 + xs, 41.527 + zs);
+            grc.AddNodePtxz("osm2675737186", -693.125 + xs, 42.937 + zs);
+            grc.AddNodePtxz("osm336772831", -692.850 + xs, 42.152 + zs);
+            grc.AddNodePtxz("osm2675737185", -691.891 + xs, 42.512 + zs);
+            grc.AddNodePtxz("osm7350734396", -692.578 + xs, 44.471 + zs);
+            grc.AddNodePtxz("osm7350734395", -692.052 + xs, 44.651 + zs);
+            grc.AddNodePtxz("osm2675737184", -692.768 + xs, 46.727 + zs);
+            grc.AddNodePtxz("osm336772828", -685.945 + xs, 49.031 + zs);
+            grc.AddNodePtxz("osm4983712052", -685.307 + xs, 47.182 + zs);
+            grc.AddNodePtxz("osm2675737188", -684.965 + xs, 47.283 + zs);
+            grc.AddNodePtxz("osm2675737187", -684.174 + xs, 45.162 + zs);
+            grc.AddNodePtxz("osm2675737189", -683.005 + xs, 45.562 + zs);
+            grc.AddNodePtxz("osm2675737190", -683.190 + xs, 46.124 + zs);
+            grc.AddNodePtxz("osm7473295876", -682.193 + xs, 46.442 + zs);
+            grc.AddNodePtxz("osm336772824", -678.979 + xs, 47.471 + zs);
+            grc.AddNodePtxz("osm336772822", -673.525 + xs, 31.967 + zs);
+            grc.AddNodePtxz("osm336772821", -658.307 + xs, 37.176 + zs);
+            grc.AddNodePtxz("osm336772820", -663.804 + xs, 52.904 + zs);
+            grc.AddNodePtxz("osm7473295875", -660.661 + xs, 53.932 + zs);
+            grc.AddNodePtxz("osm4983712041", -659.540 + xs, 54.300 + zs);
+            grc.AddNodePtxz("osm4983712040", -659.306 + xs, 53.533 + zs);
+            grc.AddNodePtxz("osm4983712039", -658.112 + xs, 53.894 + zs);
+            grc.AddNodePtxz("osm7350734424", -658.851 + xs, 56.033 + zs);
+            grc.AddNodePtxz("osm7350734423", -658.456 + xs, 56.152 + zs);
+            grc.AddNodePtxz("osm336772816", -659.194 + xs, 58.355 + zs);
+            grc.AddNodePtxz("osm336772815", -652.447 + xs, 60.776 + zs);
+            grc.AddNodePtxz("osm7350734422", -651.553 + xs, 58.064 + zs);
+            grc.AddNodePtxz("osm7350734421", -651.156 + xs, 58.176 + zs);
+            grc.AddNodePtxz("osm4983712042", -650.577 + xs, 56.426 + zs);
+            grc.AddNodePtxz("osm336772812", -649.280 + xs, 56.830 + zs);
+            grc.AddNodePtxz("osm4983712043", -649.618 + xs, 57.792 + zs);
+            grc.AddNodePtxz("osm336772811", -645.747 + xs, 59.133 + zs);
+            grc.AddNodePtxz("osm336772809", -625.212 + xs, 2.143 + zs);
+            grc.AddNodePtxz("osm4983712044", -629.440 + xs, 0.711 + zs);
+            grc.AddNodePtxz("osm4983712045", -629.643 + xs, 1.291 + zs);
+            grc.AddNodePtxz("osm7350734420", -630.750 + xs, 0.849 + zs);
+            grc.AddNodePtxz("osm7350734419", -630.121 + xs, -1.011 + zs);
+            grc.AddNodePtxz("osm336772807", -630.564 + xs, -1.194 + zs);
+            grc.AddNodePtxz("osm336772806", -629.818 + xs, -3.252 + zs);
+            grc.AddNodePtxz("osm336772805", -636.562 + xs, -5.616 + zs);
+            grc.AddNodePtxz("osm7350734418", -637.301 + xs, -3.509 + zs);
+            grc.AddNodePtxz("osm7350734417", -637.723 + xs, -3.653 + zs);
+            grc.AddNodePtxz("osm336772800", -638.400 + xs, -1.723 + zs);
+            grc.AddNodePtxz("osm4983712047", -639.570 + xs, -2.155 + zs);
+            grc.AddNodePtxz("osm4983712046", -639.357 + xs, -2.763 + zs);
+            grc.AddNodePtxz("osm7473375080", -639.588 + xs, -2.842 + zs);
+            grc.AddNodePtxz("osm336772798", -643.564 + xs, -4.187 + zs);
+            grc.AddNodePtxz("osm336772796", -646.275 + xs, 3.638 + zs);
+            grc.AddNodePtxz("osm336772795", -661.538 + xs, -1.746 + zs);
+            grc.AddNodePtxz("osm336772793", -655.917 + xs, -17.558 + zs);
+            grc.AddNodePtxz("osm4983712049", -660.116 + xs, -18.971 + zs);
+            grc.AddNodePtxz("osm336772791", -660.328 + xs, -18.300 + zs);
+            grc.AddNodePtxz("osm4983712037", -661.450 + xs, -18.699 + zs);
+            grc.AddNodePtxz("osm7350734416", -660.756 + xs, -20.711 + zs);
+            grc.AddNodePtxz("osm7350734415", -661.248 + xs, -20.888 + zs);
+            grc.AddNodePtxz("osm7484830204", -660.781 + xs, -22.185 + zs);
+            grc.AddNodePtxz("osm336772790", -660.582 + xs, -22.719 + zs);
+            grc.AddNodePtxz("osm336772789", -667.331 + xs, -24.967 + zs);
+            grc.AddNodePtxz("osm7350734414", -667.918 + xs, -23.227 + zs);
+            grc.AddNodePtxz("osm7350734413", -668.437 + xs, -23.396 + zs);
+            grc.AddNodePtxz("osm336772788", -669.308 + xs, -20.780 + zs);
+            grc.AddNodePtxz("osm4983712051", -670.796 + xs, -21.313 + zs);
+            grc.AddNodePtxz("osm4983712050", -670.436 + xs, -22.306 + zs);
+            grc.AddNodePtxz("osm336772786", -674.172 + xs, -23.593 + zs);
+            grc.AddNodePtxz("osm6331166457", -687.942 + xs, 14.729 + zs);
+            grc.AddNodePtxz("osm409798978", -690.076 + xs, 20.874 + zs);
+            grc.AddNodePtxz("osm7484830133", -695.396 + xs, 18.990 + zs);
+            grc.AddNodePtxz("osm345261389", -568.458 + xs, 31.521 + zs);
+            grc.AddNodePtxz("osm345261390", -549.736 + xs, 37.875 + zs);
+            grc.AddNodePtxz("osm345261392", -549.296 + xs, 36.655 + zs);
+            grc.AddNodePtxz("osm7473295809", -540.400 + xs, 39.709 + zs);
+            grc.AddNodePtxz("osm345261393", -539.747 + xs, 39.933 + zs);
+            grc.AddNodePtxz("osm345261394", -540.637 + xs, 42.400 + zs);
+            grc.AddNodePtxz("osm345261395", -527.441 + xs, 46.783 + zs);
+            grc.AddNodePtxz("osm345261396", -540.255 + xs, 83.659 + zs);
+            grc.AddNodePtxz("osm345261397", -554.037 + xs, 79.099 + zs);
+            grc.AddNodePtxz("osm345261398", -554.726 + xs, 81.128 + zs);
+            grc.AddNodePtxz("osm7472994604", -557.727 + xs, 80.133 + zs);
+            grc.AddNodePtxz("osm7350890253", -559.312 + xs, 79.606 + zs);
+            grc.AddNodePtxz("osm7350890252", -559.851 + xs, 81.109 + zs);
+            grc.AddNodePtxz("osm7350890251", -565.681 + xs, 79.097 + zs);
+            grc.AddNodePtxz("osm7350890245", -565.166 + xs, 77.563 + zs);
+            grc.AddNodePtxz("osm7350890250", -566.976 + xs, 76.974 + zs);
+            grc.AddNodePtxz("osm345261400", -570.014 + xs, 75.982 + zs);
+            grc.AddNodePtxz("osm345261401", -568.804 + xs, 72.467 + zs);
+            grc.AddNodePtxz("osm345261402", -579.877 + xs, 68.724 + zs);
+            grc.AddNodePtxz("osm7350890244", -576.880 + xs, 59.785 + zs);
+            grc.AddNodePtxz("osm7350890243", -578.305 + xs, 59.273 + zs);
+            grc.AddNodePtxz("osm7350890242", -577.273 + xs, 56.331 + zs);
+            grc.AddNodePtxz("osm7350890241", -575.803 + xs, 56.850 + zs);
+            grc.AddNodePtxz("osm345261403", -571.980 + xs, 45.857 + zs);
+            grc.AddNodePtxz("osm345261404", -573.441 + xs, 45.349 + zs);
+            grc.AddNodePtxz("osm7486062633", -571.943 + xs, 41.181 + zs);
+            grc.AddNodePtxz("osm7486062637", -571.060 + xs, 38.734 + zs);
+            grc.AddNodePtxz("osm345266071", -615.279 + xs, 425.604 + zs);
+            grc.AddNodePtxz("osm345266072", -588.033 + xs, 434.963 + zs);
+            grc.AddNodePtxz("osm345266073", -589.431 + xs, 438.913 + zs);
+            grc.AddNodePtxz("osm7346301662", -569.909 + xs, 445.707 + zs);
+            grc.AddNodePtxz("osm7346301661", -570.216 + xs, 446.616 + zs);
+            grc.AddNodePtxz("osm345266076", -559.274 + xs, 450.330 + zs);
+            grc.AddNodePtxz("osm345266077", -564.782 + xs, 466.893 + zs);
+            grc.AddNodePtxz("osm345266080", -560.147 + xs, 468.512 + zs);
+            grc.AddNodePtxz("osm4740268535", -562.499 + xs, 475.145 + zs);
+            grc.AddNodePtxz("osm4740268533", -566.204 + xs, 473.837 + zs);
+            grc.AddNodePtxz("osm345266082", -589.504 + xs, 539.845 + zs);
+            grc.AddNodePtxz("osm7132384720", -594.328 + xs, 538.194 + zs);
+            grc.AddNodePtxz("osm7346301671", -599.259 + xs, 551.604 + zs);
+            grc.AddNodePtxz("osm4758634644", -602.125 + xs, 557.918 + zs);
+            grc.AddNodePtxz("osm345266086", -607.346 + xs, 568.995 + zs);
+            grc.AddNodePtxz("osm4753578018", -610.997 + xs, 567.634 + zs);
+            grc.AddNodePtxz("osm7345287876", -615.028 + xs, 566.246 + zs);
+            grc.AddNodePtxz("osm7345287877", -616.584 + xs, 570.847 + zs);
+            grc.AddNodePtxz("osm7345287878", -628.605 + xs, 566.644 + zs);
+            grc.AddNodePtxz("osm7345287879", -626.993 + xs, 562.087 + zs);
+            grc.AddNodePtxz("osm345266093", -646.787 + xs, 555.461 + zs);
+            grc.AddNodePtxz("osm345266097", -647.894 + xs, 558.750 + zs);
+            grc.AddNodePtxz("osm345266099", -660.677 + xs, 554.366 + zs);
+            grc.AddNodePtxz("osm4758634648", -654.374 + xs, 536.276 + zs);
+            grc.AddNodePtxz("osm7346301669", -652.354 + xs, 530.655 + zs);
+            grc.AddNodePtxz("osm7346301670", -654.808 + xs, 529.783 + zs);
+            grc.AddNodePtxz("osm7346301668", -653.561 + xs, 526.297 + zs);
+            grc.AddNodePtxz("osm7346301667", -651.098 + xs, 527.179 + zs);
+            grc.AddNodePtxz("osm4781654488", -650.619 + xs, 525.846 + zs);
+            grc.AddNodePtxz("osm7346301666", -641.104 + xs, 498.337 + zs);
+            grc.AddNodePtxz("osm7346301665", -640.412 + xs, 498.582 + zs);
+            grc.AddNodePtxz("osm7070870706", -639.560 + xs, 496.157 + zs);
+            grc.AddNodePtxz("osm7346301664", -638.550 + xs, 493.247 + zs);
+            grc.AddNodePtxz("osm7346301663", -639.155 + xs, 493.087 + zs);
+            grc.AddNodePtxz("osm7070870702", -636.572 + xs, 486.066 + zs);
+            grc.AddNodePtxz("osm409799024", -796.703 + xs, 103.564 + zs);
+            grc.AddNodePtxz("osm6331167730", -808.341 + xs, 135.543 + zs);
+            grc.AddNodePtxz("osm6331167764", -820.210 + xs, 170.230 + zs);
+            grc.AddNodePtxz("osm6331167765", -815.368 + xs, 172.197 + zs);
+            grc.AddNodePtxz("osm409799025", -817.280 + xs, 177.175 + zs);
+            grc.AddNodePtxz("osm6331167761", -788.961 + xs, 187.139 + zs);
+            grc.AddNodePtxz("osm6331167768", -779.292 + xs, 190.615 + zs);
+            grc.AddNodePtxz("osm6331167762", -766.458 + xs, 195.223 + zs);
+            grc.AddNodePtxz("osm6331167763", -764.798 + xs, 191.030 + zs);
+            grc.AddNodePtxz("osm409799026", -756.967 + xs, 193.624 + zs);
+            grc.AddNodePtxz("osm409799027", -732.795 + xs, 123.248 + zs);
+            grc.AddNodePtxz("osm6331167751", -737.203 + xs, 121.390 + zs);
+            grc.AddNodePtxz("osm6331167742", -738.766 + xs, 120.800 + zs);
+            grc.AddNodePtxz("osm6331167766", -751.885 + xs, 116.198 + zs);
+            grc.AddNodePtxz("osm4983743924", -750.753 + xs, 113.108 + zs);
+            grc.AddNodePtxz("osm4983743925", -788.068 + xs, 100.238 + zs);
+            grc.AddNodePtxz("osm4983743926", -790.235 + xs, 105.873 + zs);
+            grc.AddNodePtxz("osm2671035478", -587.722 + xs, 268.524 + zs);
+            grc.AddNodePtxz("osm2671035479", -591.835 + xs, 270.696 + zs);
+            grc.AddNodePtxz("osm2671035476", -590.120 + xs, 274.111 + zs);
+            grc.AddNodePtxz("osm2671035475", -593.864 + xs, 275.871 + zs);
+            grc.AddNodePtxz("osm2671035480", -595.501 + xs, 272.435 + zs);
+            grc.AddNodePtxz("osm2671035482", -599.835 + xs, 274.635 + zs);
+            grc.AddNodePtxz("osm2671027633", -618.293 + xs, 268.134 + zs);
+            grc.AddNodePtxz("osm2671027631", -616.512 + xs, 264.910 + zs);
+            grc.AddNodePtxz("osm2671027632", -614.722 + xs, 262.195 + zs);
+            grc.AddNodePtxz("osm2671027630", -612.647 + xs, 259.848 + zs);
+            grc.AddNodePtxz("osm2671027635", -610.422 + xs, 257.608 + zs);
+            grc.AddNodePtxz("osm2671027634", -607.914 + xs, 255.741 + zs);
+            grc.AddNodePtxz("osm2671027636", -605.434 + xs, 254.087 + zs);
+            grc.AddNodePtxz("osm2671027628", -602.280 + xs, 252.394 + zs);
+            grc.AddNodePtxz("osm2671027638", -599.112 + xs, 251.166 + zs);
+            grc.AddNodePtxz("osm2671027637", -596.259 + xs, 250.297 + zs);
+            grc.AddNodePtxz("osm2671027640", -593.010 + xs, 249.880 + zs);
+            grc.AddNodePtxz("osm2671027629", -590.033 + xs, 249.466 + zs);
+            grc.AddNodePtxz("osm2671027639", -584.189 + xs, 249.621 + zs);
+            grc.AddNodePtxz("osm3516771343", -832.502 + xs, 217.044 + zs);
+            grc.AddNodePtxz("osm6333379830", -834.661 + xs, 222.824 + zs);
+            grc.AddNodePtxz("osm3516771344", -836.249 + xs, 227.081 + zs);
+            grc.AddNodePtxz("osm3516771341", -830.544 + xs, 238.991 + zs);
+            grc.AddNodePtxz("osm7484825441", -841.853 + xs, 244.324 + zs);
+            grc.AddNodePtxz("osm3516771345", -842.618 + xs, 244.688 + zs);
+            grc.AddNodePtxz("osm3516771346", -846.093 + xs, 254.485 + zs);
+            grc.AddNodePtxz("osm7484825440", -837.580 + xs, 257.423 + zs);
+            grc.AddNodePtxz("osm4802527987", -836.930 + xs, 257.654 + zs);
+            grc.AddNodePtxz("osm3516771340", -840.137 + xs, 266.893 + zs);
+            grc.AddNodePtxz("osm3516771335", -830.564 + xs, 270.337 + zs);
+            grc.AddNodePtxz("osm3516771328", -817.775 + xs, 264.219 + zs);
+            grc.AddNodePtxz("osm7484825472", -816.996 + xs, 261.998 + zs);
+            grc.AddNodePtxz("osm3516771327", -814.571 + xs, 255.090 + zs);
+            grc.AddNodePtxz("osm3516771315", -801.757 + xs, 249.068 + zs);
+            grc.AddNodePtxz("osm7484825468", -794.317 + xs, 251.702 + zs);
+            grc.AddNodePtxz("osm3516771306", -793.164 + xs, 252.112 + zs);
+            grc.AddNodePtxz("osm7484830121", -790.794 + xs, 251.007 + zs);
+            grc.AddNodePtxz("osm7484830115", -781.143 + xs, 246.500 + zs);
+            grc.AddNodePtxz("osm3516771296", -780.256 + xs, 246.091 + zs);
+            grc.AddNodePtxz("osm7484830103", -779.402 + xs, 243.658 + zs);
+            grc.AddNodePtxz("osm3516771294", -776.842 + xs, 236.400 + zs);
+            grc.AddNodePtxz("osm7484830102", -778.369 + xs, 235.877 + zs);
+            grc.AddNodePtxz("osm4802528011", -786.205 + xs, 233.194 + zs);
+            grc.AddNodePtxz("osm3516771307", -782.790 + xs, 224.137 + zs);
+            grc.AddNodePtxz("osm3516771317", -792.354 + xs, 220.768 + zs);
+            grc.AddNodePtxz("osm7484830093", -798.964 + xs, 223.804 + zs);
+            grc.AddNodePtxz("osm3516771324", -804.714 + xs, 226.438 + zs);
+            grc.AddNodePtxz("osm7484830094", -807.674 + xs, 220.553 + zs);
+            grc.AddNodePtxz("osm3516771334", -810.715 + xs, 214.529 + zs);
+            grc.AddNodePtxz("osm3516771339", -820.095 + xs, 211.207 + zs);
+
+            grc.AddLinkByNodeName("osm321406064", "osm321406063", usetype: LinkUse.bldwall, comment: "Microsoft Building 19.link1");
+            grc.AddLinkByNodeName("osm7473295815", "osm321406064", usetype: LinkUse.bldwall, comment: "Microsoft Building 19.link2");
+            grc.AddLinkByNodeName("osm7123470523", "osm7473295815", usetype: LinkUse.bldwall, comment: "Microsoft Building 19.link3");
+            grc.AddLinkByNodeName("osm7473295819", "osm7123470523", usetype: LinkUse.bldwall, comment: "Microsoft Building 19.link4");
+            grc.AddLinkByNodeName("osm321406065", "osm7473295819", usetype: LinkUse.bldwall, comment: "Microsoft Building 19.link5");
+            grc.AddLinkByNodeName("osm321406066", "osm321406065", usetype: LinkUse.bldwall, comment: "Microsoft Building 19.link6");
+            grc.AddLinkByNodeName("osm6323327743", "osm321406066", usetype: LinkUse.bldwall, comment: "Microsoft Building 19.link7");
+            grc.AddLinkByNodeName("osm7123470544", "osm6323327743", usetype: LinkUse.bldwall, comment: "Microsoft Building 19.link8");
+            grc.AddLinkByNodeName("osm6323327701", "osm7123470544", usetype: LinkUse.bldwall, comment: "Microsoft Building 19.link9");
+            grc.AddLinkByNodeName("osm321406067", "osm6323327701", usetype: LinkUse.bldwall, comment: "Microsoft Building 19.link10");
+            grc.AddLinkByNodeName("osm321406068", "osm321406067", usetype: LinkUse.bldwall, comment: "Microsoft Building 19.link11");
+            grc.AddLinkByNodeName("osm7472985454", "osm321406068", usetype: LinkUse.bldwall, comment: "Microsoft Building 19.link12");
+            grc.AddLinkByNodeName("osm321406069", "osm7472985454", usetype: LinkUse.bldwall, comment: "Microsoft Building 19.link13");
+            grc.AddLinkByNodeName("osm321406070", "osm321406069", usetype: LinkUse.bldwall, comment: "Microsoft Building 19.link14");
+            grc.AddLinkByNodeName("osm6323327724", "osm321406070", usetype: LinkUse.bldwall, comment: "Microsoft Building 19.link15");
+            grc.AddLinkByNodeName("osm7065046248", "osm6323327724", usetype: LinkUse.bldwall, comment: "Microsoft Building 19.link16");
+            grc.AddLinkByNodeName("osm7473295813", "osm7065046248", usetype: LinkUse.bldwall, comment: "Microsoft Building 19.link17");
+            grc.AddLinkByNodeName("osm321406063", "osm7473295813", usetype: LinkUse.bldwall, comment: "Microsoft Building 19.link18");
+
+            grc.AddLinkByNodeName("osm2660169201", "osm321406158", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link1");
+            grc.AddLinkByNodeName("osm2660169203", "osm2660169201", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link2");
+            grc.AddLinkByNodeName("osm2660169196", "osm2660169203", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link3");
+            grc.AddLinkByNodeName("osm4806537129", "osm2660169196", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link4");
+            grc.AddLinkByNodeName("osm2660169206", "osm4806537129", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link5");
+            grc.AddLinkByNodeName("osm321406159", "osm2660169206", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link6");
+            grc.AddLinkByNodeName("osm321406160", "osm321406159", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link7");
+            grc.AddLinkByNodeName("osm321406161", "osm321406160", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link8");
+            grc.AddLinkByNodeName("osm2660169277", "osm321406161", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link9");
+            grc.AddLinkByNodeName("osm2660169274", "osm2660169277", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link10");
+            grc.AddLinkByNodeName("osm2660169269", "osm2660169274", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link11");
+            grc.AddLinkByNodeName("osm2660169271", "osm2660169269", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link12");
+            grc.AddLinkByNodeName("osm321406162", "osm2660169271", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link13");
+            grc.AddLinkByNodeName("osm321406163", "osm321406162", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link14");
+            grc.AddLinkByNodeName("osm7469570210", "osm321406163", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link15");
+            grc.AddLinkByNodeName("osm321406164", "osm7469570210", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link16");
+            grc.AddLinkByNodeName("osm4777391860", "osm321406164", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link17");
+            grc.AddLinkByNodeName("osm7469570217", "osm4777391860", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link18");
+            grc.AddLinkByNodeName("osm321406165", "osm7469570217", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link19");
+            grc.AddLinkByNodeName("osm2660169266", "osm321406165", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link20");
+            grc.AddLinkByNodeName("osm2660169264", "osm2660169266", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link21");
+            grc.AddLinkByNodeName("osm2671027618", "osm2660169264", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link22");
+            grc.AddLinkByNodeName("osm2660169258", "osm2671027618", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link23");
+            grc.AddLinkByNodeName("osm2660169261", "osm2660169258", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link24");
+            grc.AddLinkByNodeName("osm321406166", "osm2660169261", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link25");
+            grc.AddLinkByNodeName("osm7350890235", "osm321406166", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link26");
+            grc.AddLinkByNodeName("osm321406167", "osm7350890235", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link27");
+            grc.AddLinkByNodeName("osm321406168", "osm321406167", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link28");
+            grc.AddLinkByNodeName("osm2670280688", "osm321406168", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link29");
+            grc.AddLinkByNodeName("osm321406169", "osm2670280688", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link30");
+            grc.AddLinkByNodeName("osm321406170", "osm321406169", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link31");
+            grc.AddLinkByNodeName("osm321406171", "osm321406170", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link32");
+            grc.AddLinkByNodeName("osm2660169253", "osm321406171", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link33");
+            grc.AddLinkByNodeName("osm2660169251", "osm2660169253", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link34");
+            grc.AddLinkByNodeName("osm2671027615", "osm2660169251", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link35");
+            grc.AddLinkByNodeName("osm2660169248", "osm2671027615", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link36");
+            grc.AddLinkByNodeName("osm2660169256", "osm2660169248", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link37");
+            grc.AddLinkByNodeName("osm321406172", "osm2660169256", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link38");
+            grc.AddLinkByNodeName("osm7469570234", "osm321406172", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link39");
+            grc.AddLinkByNodeName("osm7123400113", "osm7469570234", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link40");
+            grc.AddLinkByNodeName("osm321406173", "osm7123400113", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link41");
+            grc.AddLinkByNodeName("osm7469570224", "osm321406173", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link42");
+            grc.AddLinkByNodeName("osm321406174", "osm7469570224", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link43");
+            grc.AddLinkByNodeName("osm321406175", "osm321406174", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link44");
+            grc.AddLinkByNodeName("osm2660169232", "osm321406175", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link45");
+            grc.AddLinkByNodeName("osm2660169230", "osm2660169232", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link46");
+            grc.AddLinkByNodeName("osm2660169227", "osm2660169230", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link47");
+            grc.AddLinkByNodeName("osm2660169235", "osm2660169227", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link48");
+            grc.AddLinkByNodeName("osm321406176", "osm2660169235", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link49");
+            grc.AddLinkByNodeName("osm321406177", "osm321406176", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link50");
+            grc.AddLinkByNodeName("osm7469570230", "osm321406177", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link51");
+            grc.AddLinkByNodeName("osm4781518455", "osm7469570230", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link52");
+            grc.AddLinkByNodeName("osm321406178", "osm4781518455", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link53");
+            grc.AddLinkByNodeName("osm2660169219", "osm321406178", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link54");
+            grc.AddLinkByNodeName("osm2660169216", "osm2660169219", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link55");
+            grc.AddLinkByNodeName("osm2660169212", "osm2660169216", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link56");
+            grc.AddLinkByNodeName("osm2660169222", "osm2660169212", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link57");
+            grc.AddLinkByNodeName("osm321406179", "osm2660169222", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link58");
+            grc.AddLinkByNodeName("osm7469570328", "osm321406179", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link59");
+            grc.AddLinkByNodeName("osm4806537131", "osm7469570328", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link60");
+            grc.AddLinkByNodeName("osm7469570335", "osm4806537131", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link61");
+            grc.AddLinkByNodeName("osm321406180", "osm7469570335", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link62");
+            grc.AddLinkByNodeName("osm7469570331", "osm321406180", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link63");
+            grc.AddLinkByNodeName("osm2675681594", "osm7469570331", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link64");
+            grc.AddLinkByNodeName("osm2675681602", "osm2675681594", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link65");
+            grc.AddLinkByNodeName("osm2660169245", "osm2675681602", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link66");
+            grc.AddLinkByNodeName("osm2660169237", "osm2660169245", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link67");
+            grc.AddLinkByNodeName("osm2660169240", "osm2660169237", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link68");
+            grc.AddLinkByNodeName("osm2660169243", "osm2660169240", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link69");
+            grc.AddLinkByNodeName("osm321406182", "osm2660169243", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link70");
+            grc.AddLinkByNodeName("osm7469570252", "osm321406182", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link71");
+            grc.AddLinkByNodeName("osm321406183", "osm7469570252", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link72");
+            grc.AddLinkByNodeName("osm321406184", "osm321406183", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link73");
+            grc.AddLinkByNodeName("osm2660169209", "osm321406184", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link74");
+            grc.AddLinkByNodeName("osm2675681636", "osm2660169209", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link75");
+            grc.AddLinkByNodeName("osm2675681645", "osm2675681636", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link76");
+            grc.AddLinkByNodeName("osm2675681646", "osm2675681645", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link77");
+            grc.AddLinkByNodeName("osm321406187", "osm2675681646", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link78");
+            grc.AddLinkByNodeName("osm321406188", "osm321406187", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link79");
+            grc.AddLinkByNodeName("osm321406189", "osm321406188", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link80");
+            grc.AddLinkByNodeName("osm7469570271", "osm321406189", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link81");
+            grc.AddLinkByNodeName("osm7469570264", "osm7469570271", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link82");
+            grc.AddLinkByNodeName("osm321406190", "osm7469570264", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link83");
+            grc.AddLinkByNodeName("osm7469570262", "osm321406190", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link84");
+            grc.AddLinkByNodeName("osm2660169284", "osm7469570262", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link85");
+            grc.AddLinkByNodeName("osm2660169282", "osm2660169284", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link86");
+            grc.AddLinkByNodeName("osm2660169279", "osm2660169282", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link87");
+            grc.AddLinkByNodeName("osm2660169287", "osm2660169279", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link88");
+            grc.AddLinkByNodeName("osm2675681628", "osm2660169287", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link89");
+            grc.AddLinkByNodeName("osm2675681627", "osm2675681628", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link90");
+            grc.AddLinkByNodeName("osm7469570245", "osm2675681627", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link91");
+            grc.AddLinkByNodeName("osm321406192", "osm7469570245", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link92");
+            grc.AddLinkByNodeName("osm7469570241", "osm321406192", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link93");
+            grc.AddLinkByNodeName("osm7132371575", "osm7469570241", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link94");
+            grc.AddLinkByNodeName("osm7469570189", "osm7132371575", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link95");
+            grc.AddLinkByNodeName("osm321406158", "osm7469570189", usetype: LinkUse.bldwall, comment: "Microsoft Building 18.link96");
+
+            grc.AddLinkByNodeName("osm4779937963", "osm321406211", usetype: LinkUse.bldwall, comment: "Microsoft Building 35.link1");
+            grc.AddLinkByNodeName("osm4779937962", "osm4779937963", usetype: LinkUse.bldwall, comment: "Microsoft Building 35.link2");
+            grc.AddLinkByNodeName("osm7132304293", "osm4779937962", usetype: LinkUse.bldwall, comment: "Microsoft Building 35.link3");
+            grc.AddLinkByNodeName("osm4779937961", "osm7132304293", usetype: LinkUse.bldwall, comment: "Microsoft Building 35.link4");
+            grc.AddLinkByNodeName("osm321406212", "osm4779937961", usetype: LinkUse.bldwall, comment: "Microsoft Building 35.link5");
+            grc.AddLinkByNodeName("osm4779937960", "osm321406212", usetype: LinkUse.bldwall, comment: "Microsoft Building 35.link6");
+            grc.AddLinkByNodeName("osm3834803720", "osm4779937960", usetype: LinkUse.bldwall, comment: "Microsoft Building 35.link7");
+            grc.AddLinkByNodeName("osm321406213", "osm3834803720", usetype: LinkUse.bldwall, comment: "Microsoft Building 35.link8");
+            grc.AddLinkByNodeName("osm321406214", "osm321406213", usetype: LinkUse.bldwall, comment: "Microsoft Building 35.link9");
+            grc.AddLinkByNodeName("osm7120384994", "osm321406214", usetype: LinkUse.bldwall, comment: "Microsoft Building 35.link10");
+            grc.AddLinkByNodeName("osm4779937954", "osm7120384994", usetype: LinkUse.bldwall, comment: "Microsoft Building 35.link11");
+            grc.AddLinkByNodeName("osm4779937953", "osm4779937954", usetype: LinkUse.bldwall, comment: "Microsoft Building 35.link12");
+            grc.AddLinkByNodeName("osm4779937952", "osm4779937953", usetype: LinkUse.bldwall, comment: "Microsoft Building 35.link13");
+            grc.AddLinkByNodeName("osm4779937951", "osm4779937952", usetype: LinkUse.bldwall, comment: "Microsoft Building 35.link14");
+            grc.AddLinkByNodeName("osm321406215", "osm4779937951", usetype: LinkUse.bldwall, comment: "Microsoft Building 35.link15");
+            grc.AddLinkByNodeName("osm321406216", "osm321406215", usetype: LinkUse.bldwall, comment: "Microsoft Building 35.link16");
+            grc.AddLinkByNodeName("osm4781664647", "osm321406216", usetype: LinkUse.bldwall, comment: "Microsoft Building 35.link17");
+            grc.AddLinkByNodeName("osm321406217", "osm4781664647", usetype: LinkUse.bldwall, comment: "Microsoft Building 35.link18");
+            grc.AddLinkByNodeName("osm4781664644", "osm321406217", usetype: LinkUse.bldwall, comment: "Microsoft Building 35.link19");
+            grc.AddLinkByNodeName("osm4781664648", "osm4781664644", usetype: LinkUse.bldwall, comment: "Microsoft Building 35.link20");
+            grc.AddLinkByNodeName("osm321406218", "osm4781664648", usetype: LinkUse.bldwall, comment: "Microsoft Building 35.link21");
+            grc.AddLinkByNodeName("osm4781664649", "osm321406218", usetype: LinkUse.bldwall, comment: "Microsoft Building 35.link22");
+            grc.AddLinkByNodeName("osm321406219", "osm4781664649", usetype: LinkUse.bldwall, comment: "Microsoft Building 35.link23");
+            grc.AddLinkByNodeName("osm7346635974", "osm321406219", usetype: LinkUse.bldwall, comment: "Microsoft Building 35.link24");
+            grc.AddLinkByNodeName("osm4781664650", "osm7346635974", usetype: LinkUse.bldwall, comment: "Microsoft Building 35.link25");
+            grc.AddLinkByNodeName("osm7346635975", "osm4781664650", usetype: LinkUse.bldwall, comment: "Microsoft Building 35.link26");
+            grc.AddLinkByNodeName("osm4781664643", "osm7346635975", usetype: LinkUse.bldwall, comment: "Microsoft Building 35.link27");
+            grc.AddLinkByNodeName("osm4781664651", "osm4781664643", usetype: LinkUse.bldwall, comment: "Microsoft Building 35.link28");
+            grc.AddLinkByNodeName("osm321406220", "osm4781664651", usetype: LinkUse.bldwall, comment: "Microsoft Building 35.link29");
+            grc.AddLinkByNodeName("osm321406221", "osm321406220", usetype: LinkUse.bldwall, comment: "Microsoft Building 35.link30");
+            grc.AddLinkByNodeName("osm321406222", "osm321406221", usetype: LinkUse.bldwall, comment: "Microsoft Building 35.link31");
+            grc.AddLinkByNodeName("osm4779937955", "osm321406222", usetype: LinkUse.bldwall, comment: "Microsoft Building 35.link32");
+            grc.AddLinkByNodeName("osm321406223", "osm4779937955", usetype: LinkUse.bldwall, comment: "Microsoft Building 35.link33");
+            grc.AddLinkByNodeName("osm321406224", "osm321406223", usetype: LinkUse.bldwall, comment: "Microsoft Building 35.link34");
+            grc.AddLinkByNodeName("osm4779937957", "osm321406224", usetype: LinkUse.bldwall, comment: "Microsoft Building 35.link35");
+            grc.AddLinkByNodeName("osm4779937956", "osm4779937957", usetype: LinkUse.bldwall, comment: "Microsoft Building 35.link36");
+            grc.AddLinkByNodeName("osm321406225", "osm4779937956", usetype: LinkUse.bldwall, comment: "Microsoft Building 35.link37");
+            grc.AddLinkByNodeName("osm321406226", "osm321406225", usetype: LinkUse.bldwall, comment: "Microsoft Building 35.link38");
+            grc.AddLinkByNodeName("osm4779937958", "osm321406226", usetype: LinkUse.bldwall, comment: "Microsoft Building 35.link39");
+            grc.AddLinkByNodeName("osm321406227", "osm4779937958", usetype: LinkUse.bldwall, comment: "Microsoft Building 35.link40");
+            grc.AddLinkByNodeName("osm7132304286", "osm321406227", usetype: LinkUse.bldwall, comment: "Microsoft Building 35.link41");
+            grc.AddLinkByNodeName("osm321406228", "osm7132304286", usetype: LinkUse.bldwall, comment: "Microsoft Building 35.link42");
+            grc.AddLinkByNodeName("osm321406211", "osm321406228", usetype: LinkUse.bldwall, comment: "Microsoft Building 35.link43");
+
+            grc.AddLinkByNodeName("osm2672290200", "osm325609441", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link1");
+            grc.AddLinkByNodeName("osm4806471180", "osm2672290200", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link2");
+            grc.AddLinkByNodeName("osm2672290197", "osm4806471180", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link3");
+            grc.AddLinkByNodeName("osm2672290193", "osm2672290197", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link4");
+            grc.AddLinkByNodeName("osm2672290202", "osm2672290193", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link5");
+            grc.AddLinkByNodeName("osm325609443", "osm2672290202", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link6");
+            grc.AddLinkByNodeName("osm325609445", "osm325609443", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link7");
+            grc.AddLinkByNodeName("osm2671035405", "osm325609445", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link8");
+            grc.AddLinkByNodeName("osm2671035407", "osm2671035405", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link9");
+            grc.AddLinkByNodeName("osm325609446", "osm2671035407", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link10");
+            grc.AddLinkByNodeName("osm325609447", "osm325609446", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link11");
+            grc.AddLinkByNodeName("osm2671035411", "osm325609447", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link12");
+            grc.AddLinkByNodeName("osm2671035409", "osm2671035411", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link13");
+            grc.AddLinkByNodeName("osm2671035420", "osm2671035409", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link14");
+            grc.AddLinkByNodeName("osm2671035422", "osm2671035420", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link15");
+            grc.AddLinkByNodeName("osm2671035418", "osm2671035422", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link16");
+            grc.AddLinkByNodeName("osm2671035414", "osm2671035418", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link17");
+            grc.AddLinkByNodeName("osm2671035416", "osm2671035414", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link18");
+            grc.AddLinkByNodeName("osm325609450", "osm2671035416", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link19");
+            grc.AddLinkByNodeName("osm325609451", "osm325609450", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link20");
+            grc.AddLinkByNodeName("osm6326434701", "osm325609451", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link21");
+            grc.AddLinkByNodeName("osm2671035403", "osm6326434701", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link22");
+            grc.AddLinkByNodeName("osm2671035395", "osm2671035403", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link23");
+            grc.AddLinkByNodeName("osm2671035398", "osm2671035395", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link24");
+            grc.AddLinkByNodeName("osm2671035401", "osm2671035398", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link25");
+            grc.AddLinkByNodeName("osm325609452", "osm2671035401", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link26");
+            grc.AddLinkByNodeName("osm325609453", "osm325609452", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link27");
+            grc.AddLinkByNodeName("osm2671035390", "osm325609453", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link28");
+            grc.AddLinkByNodeName("osm2671035392", "osm2671035390", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link29");
+            grc.AddLinkByNodeName("osm325609454", "osm2671035392", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link30");
+            grc.AddLinkByNodeName("osm6325521614", "osm325609454", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link31");
+            grc.AddLinkByNodeName("osm325609456", "osm6325521614", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link32");
+            grc.AddLinkByNodeName("osm2671035386", "osm325609456", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link33");
+            grc.AddLinkByNodeName("osm2671035380", "osm2671035386", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link34");
+            grc.AddLinkByNodeName("osm2671035383", "osm2671035380", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link35");
+            grc.AddLinkByNodeName("osm4806471176", "osm2671035383", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link36");
+            grc.AddLinkByNodeName("osm2671035493", "osm4806471176", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link37");
+            grc.AddLinkByNodeName("osm2671035491", "osm2671035493", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link38");
+            grc.AddLinkByNodeName("osm4098517727", "osm2671035491", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link39");
+            grc.AddLinkByNodeName("osm2671035485", "osm4098517727", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link40");
+            grc.AddLinkByNodeName("osm2671035487", "osm2671035485", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link41");
+            grc.AddLinkByNodeName("osm2671035489", "osm2671035487", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link42");
+            grc.AddLinkByNodeName("osm2671035455", "osm2671035489", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link43");
+            grc.AddLinkByNodeName("osm2671035468", "osm2671035455", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link44");
+            grc.AddLinkByNodeName("osm4806471174", "osm2671035468", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link45");
+            grc.AddLinkByNodeName("osm4098517730", "osm4806471174", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link46");
+            grc.AddLinkByNodeName("osm4806471175", "osm4098517730", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link47");
+            grc.AddLinkByNodeName("osm2671035466", "osm4806471175", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link48");
+            grc.AddLinkByNodeName("osm2671035459", "osm2671035466", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link49");
+            grc.AddLinkByNodeName("osm2671035374", "osm2671035459", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link50");
+            grc.AddLinkByNodeName("osm2671035463", "osm2671035374", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link51");
+            grc.AddLinkByNodeName("osm4098517739", "osm2671035463", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link52");
+            grc.AddLinkByNodeName("osm2671035461", "osm4098517739", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link53");
+            grc.AddLinkByNodeName("osm2671035377", "osm2671035461", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link54");
+            grc.AddLinkByNodeName("osm2671035457", "osm2671035377", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link55");
+            grc.AddLinkByNodeName("osm2671035477", "osm2671035457", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link56");
+            grc.AddLinkByNodeName("osm2671027641", "osm2671035477", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link57");
+            grc.AddLinkByNodeName("osm4806471178", "osm2671027641", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link58");
+            grc.AddLinkByNodeName("osm4806471179", "osm4806471178", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link59");
+            grc.AddLinkByNodeName("osm2671027619", "osm4806471179", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link60");
+            grc.AddLinkByNodeName("osm4060068699", "osm2671027619", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link61");
+            grc.AddLinkByNodeName("osm325609441", "osm4060068699", usetype: LinkUse.bldwall, comment: "Microsoft Building 16.link62");
+
+            grc.AddLinkByNodeName("osm2671027714", "osm325610115", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link1");
+            grc.AddLinkByNodeName("osm325610116", "osm2671027714", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link2");
+            grc.AddLinkByNodeName("osm6326434733", "osm325610116", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link3");
+            grc.AddLinkByNodeName("osm325610118", "osm6326434733", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link4");
+            grc.AddLinkByNodeName("osm2671027716", "osm325610118", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link5");
+            grc.AddLinkByNodeName("osm2671027717", "osm2671027716", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link6");
+            grc.AddLinkByNodeName("osm325610119", "osm2671027717", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link7");
+            grc.AddLinkByNodeName("osm325610120", "osm325610119", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link8");
+            grc.AddLinkByNodeName("osm2671027721", "osm325610120", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link9");
+            grc.AddLinkByNodeName("osm2671027718", "osm2671027721", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link10");
+            grc.AddLinkByNodeName("osm2671027719", "osm2671027718", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link11");
+            grc.AddLinkByNodeName("osm2671027720", "osm2671027719", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link12");
+            grc.AddLinkByNodeName("osm325610121", "osm2671027720", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link13");
+            grc.AddLinkByNodeName("osm325610122", "osm325610121", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link14");
+            grc.AddLinkByNodeName("osm2671027724", "osm325610122", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link15");
+            grc.AddLinkByNodeName("osm2671027723", "osm2671027724", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link16");
+            grc.AddLinkByNodeName("osm2671027728", "osm2671027723", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link17");
+            grc.AddLinkByNodeName("osm4775434185", "osm2671027728", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link18");
+            grc.AddLinkByNodeName("osm2671027727", "osm4775434185", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link19");
+            grc.AddLinkByNodeName("osm2671027722", "osm2671027727", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link20");
+            grc.AddLinkByNodeName("osm2671027725", "osm2671027722", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link21");
+            grc.AddLinkByNodeName("osm325610123", "osm2671027725", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link22");
+            grc.AddLinkByNodeName("osm325610124", "osm325610123", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link23");
+            grc.AddLinkByNodeName("osm325610126", "osm325610124", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link24");
+            grc.AddLinkByNodeName("osm2671027730", "osm325610126", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link25");
+            grc.AddLinkByNodeName("osm2671027729", "osm2671027730", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link26");
+            grc.AddLinkByNodeName("osm2672290044", "osm2671027729", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link27");
+            grc.AddLinkByNodeName("osm325610127", "osm2672290044", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link28");
+            grc.AddLinkByNodeName("osm325610128", "osm325610127", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link29");
+            grc.AddLinkByNodeName("osm325610131", "osm325610128", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link30");
+            grc.AddLinkByNodeName("osm325610133", "osm325610131", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link31");
+            grc.AddLinkByNodeName("osm4779937984", "osm325610133", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link32");
+            grc.AddLinkByNodeName("osm325610135", "osm4779937984", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link33");
+            grc.AddLinkByNodeName("osm325610137", "osm325610135", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link34");
+            grc.AddLinkByNodeName("osm4773476250", "osm325610137", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link35");
+            grc.AddLinkByNodeName("osm2671027616", "osm4773476250", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link36");
+            grc.AddLinkByNodeName("osm325610142", "osm2671027616", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link37");
+            grc.AddLinkByNodeName("osm325610144", "osm325610142", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link38");
+            grc.AddLinkByNodeName("osm2670280676", "osm325610144", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link39");
+            grc.AddLinkByNodeName("osm2671035483", "osm2670280676", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link40");
+            grc.AddLinkByNodeName("osm2671035470", "osm2671035483", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link41");
+            grc.AddLinkByNodeName("osm2671027704", "osm2671035470", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link42");
+            grc.AddLinkByNodeName("osm2671035473", "osm2671027704", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link43");
+            grc.AddLinkByNodeName("osm4098517743", "osm2671035473", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link44");
+            grc.AddLinkByNodeName("osm2671035471", "osm4098517743", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link45");
+            grc.AddLinkByNodeName("osm2671027703", "osm2671035471", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link46");
+            grc.AddLinkByNodeName("osm325610146", "osm2671027703", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link47");
+            grc.AddLinkByNodeName("osm2671035453", "osm325610146", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link48");
+            grc.AddLinkByNodeName("osm4773452876", "osm2671035453", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link49");
+            grc.AddLinkByNodeName("osm2671035451", "osm4773452876", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link50");
+            grc.AddLinkByNodeName("osm2671035449", "osm2671035451", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link51");
+            grc.AddLinkByNodeName("osm4098517744", "osm2671035449", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link52");
+            grc.AddLinkByNodeName("osm4806537128", "osm4098517744", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link53");
+            grc.AddLinkByNodeName("osm2671035431", "osm4806537128", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link54");
+            grc.AddLinkByNodeName("osm2671035434", "osm2671035431", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link55");
+            grc.AddLinkByNodeName("osm2671035436", "osm2671035434", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link56");
+            grc.AddLinkByNodeName("osm2671035447", "osm2671035436", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link57");
+            grc.AddLinkByNodeName("osm2671035438", "osm2671035447", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link58");
+            grc.AddLinkByNodeName("osm2671035440", "osm2671035438", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link59");
+            grc.AddLinkByNodeName("osm2671035429", "osm2671035440", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link60");
+            grc.AddLinkByNodeName("osm4098517737", "osm2671035429", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link61");
+            grc.AddLinkByNodeName("osm325610155", "osm4098517737", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link62");
+            grc.AddLinkByNodeName("osm2671027713", "osm325610155", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link63");
+            grc.AddLinkByNodeName("osm4773452875", "osm2671027713", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link64");
+            grc.AddLinkByNodeName("osm2671027712", "osm4773452875", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link65");
+            grc.AddLinkByNodeName("osm325610115", "osm2671027712", usetype: LinkUse.bldwall, comment: "Microsoft Building 17.link66");
+
+            grc.AddLinkByNodeName("osm4760407215", "osm325618934", usetype: LinkUse.bldwall, comment: "Microsoft Building 34.link1");
+            grc.AddLinkByNodeName("osm4760407216", "osm4760407215", usetype: LinkUse.bldwall, comment: "Microsoft Building 34.link2");
+            grc.AddLinkByNodeName("osm4753385702", "osm4760407216", usetype: LinkUse.bldwall, comment: "Microsoft Building 34.link3");
+            grc.AddLinkByNodeName("osm4760407203", "osm4753385702", usetype: LinkUse.bldwall, comment: "Microsoft Building 34.link4");
+            grc.AddLinkByNodeName("osm4760407202", "osm4760407203", usetype: LinkUse.bldwall, comment: "Microsoft Building 34.link5");
+            grc.AddLinkByNodeName("osm325618935", "osm4760407202", usetype: LinkUse.bldwall, comment: "Microsoft Building 34.link6");
+            grc.AddLinkByNodeName("osm4753326326", "osm325618935", usetype: LinkUse.bldwall, comment: "Microsoft Building 34.link7");
+            grc.AddLinkByNodeName("osm325618936", "osm4753326326", usetype: LinkUse.bldwall, comment: "Microsoft Building 34.link8");
+            grc.AddLinkByNodeName("osm325618937", "osm325618936", usetype: LinkUse.bldwall, comment: "Microsoft Building 34.link9");
+            grc.AddLinkByNodeName("osm4760408332", "osm325618937", usetype: LinkUse.bldwall, comment: "Microsoft Building 34.link10");
+            grc.AddLinkByNodeName("osm4760408331", "osm4760408332", usetype: LinkUse.bldwall, comment: "Microsoft Building 34.link11");
+            grc.AddLinkByNodeName("osm4760408330", "osm4760408331", usetype: LinkUse.bldwall, comment: "Microsoft Building 34.link12");
+            grc.AddLinkByNodeName("osm4753326325", "osm4760408330", usetype: LinkUse.bldwall, comment: "Microsoft Building 34.link13");
+            grc.AddLinkByNodeName("osm4760408328", "osm4753326325", usetype: LinkUse.bldwall, comment: "Microsoft Building 34.link14");
+            grc.AddLinkByNodeName("osm4760408327", "osm4760408328", usetype: LinkUse.bldwall, comment: "Microsoft Building 34.link15");
+            grc.AddLinkByNodeName("osm325618938", "osm4760408327", usetype: LinkUse.bldwall, comment: "Microsoft Building 34.link16");
+            grc.AddLinkByNodeName("osm325618939", "osm325618938", usetype: LinkUse.bldwall, comment: "Microsoft Building 34.link17");
+            grc.AddLinkByNodeName("osm325618940", "osm325618939", usetype: LinkUse.bldwall, comment: "Microsoft Building 34.link18");
+            grc.AddLinkByNodeName("osm325618941", "osm325618940", usetype: LinkUse.bldwall, comment: "Microsoft Building 34.link19");
+            grc.AddLinkByNodeName("osm4773476253", "osm325618941", usetype: LinkUse.bldwall, comment: "Microsoft Building 34.link20");
+            grc.AddLinkByNodeName("osm4760407208", "osm4773476253", usetype: LinkUse.bldwall, comment: "Microsoft Building 34.link21");
+            grc.AddLinkByNodeName("osm7346644190", "osm4760407208", usetype: LinkUse.bldwall, comment: "Microsoft Building 34.link22");
+            grc.AddLinkByNodeName("osm7346644189", "osm7346644190", usetype: LinkUse.bldwall, comment: "Microsoft Building 34.link23");
+            grc.AddLinkByNodeName("osm7346644188", "osm7346644189", usetype: LinkUse.bldwall, comment: "Microsoft Building 34.link24");
+            grc.AddLinkByNodeName("osm7346644187", "osm7346644188", usetype: LinkUse.bldwall, comment: "Microsoft Building 34.link25");
+            grc.AddLinkByNodeName("osm325618943", "osm7346644187", usetype: LinkUse.bldwall, comment: "Microsoft Building 34.link26");
+            grc.AddLinkByNodeName("osm4753326321", "osm325618943", usetype: LinkUse.bldwall, comment: "Microsoft Building 34.link27");
+            grc.AddLinkByNodeName("osm325618944", "osm4753326321", usetype: LinkUse.bldwall, comment: "Microsoft Building 34.link28");
+            grc.AddLinkByNodeName("osm325618945", "osm325618944", usetype: LinkUse.bldwall, comment: "Microsoft Building 34.link29");
+            grc.AddLinkByNodeName("osm4760407207", "osm325618945", usetype: LinkUse.bldwall, comment: "Microsoft Building 34.link30");
+            grc.AddLinkByNodeName("osm325618946", "osm4760407207", usetype: LinkUse.bldwall, comment: "Microsoft Building 34.link31");
+            grc.AddLinkByNodeName("osm325618948", "osm325618946", usetype: LinkUse.bldwall, comment: "Microsoft Building 34.link32");
+            grc.AddLinkByNodeName("osm4753326324", "osm325618948", usetype: LinkUse.bldwall, comment: "Microsoft Building 34.link33");
+            grc.AddLinkByNodeName("osm325618949", "osm4753326324", usetype: LinkUse.bldwall, comment: "Microsoft Building 34.link34");
+            grc.AddLinkByNodeName("osm325618950", "osm325618949", usetype: LinkUse.bldwall, comment: "Microsoft Building 34.link35");
+            grc.AddLinkByNodeName("osm325618951", "osm325618950", usetype: LinkUse.bldwall, comment: "Microsoft Building 34.link36");
+            grc.AddLinkByNodeName("osm4760407211", "osm325618951", usetype: LinkUse.bldwall, comment: "Microsoft Building 34.link37");
+            grc.AddLinkByNodeName("osm4753385704", "osm4760407211", usetype: LinkUse.bldwall, comment: "Microsoft Building 34.link38");
+            grc.AddLinkByNodeName("osm4760407214", "osm4753385704", usetype: LinkUse.bldwall, comment: "Microsoft Building 34.link39");
+            grc.AddLinkByNodeName("osm325618952", "osm4760407214", usetype: LinkUse.bldwall, comment: "Microsoft Building 34.link40");
+            grc.AddLinkByNodeName("osm325618953", "osm325618952", usetype: LinkUse.bldwall, comment: "Microsoft Building 34.link41");
+            grc.AddLinkByNodeName("osm4760407213", "osm325618953", usetype: LinkUse.bldwall, comment: "Microsoft Building 34.link42");
+            grc.AddLinkByNodeName("osm4753385703", "osm4760407213", usetype: LinkUse.bldwall, comment: "Microsoft Building 34.link43");
+            grc.AddLinkByNodeName("osm4760407212", "osm4753385703", usetype: LinkUse.bldwall, comment: "Microsoft Building 34.link44");
+            grc.AddLinkByNodeName("osm325618955", "osm4760407212", usetype: LinkUse.bldwall, comment: "Microsoft Building 34.link45");
+            grc.AddLinkByNodeName("osm325618956", "osm325618955", usetype: LinkUse.bldwall, comment: "Microsoft Building 34.link46");
+            grc.AddLinkByNodeName("osm325618957", "osm325618956", usetype: LinkUse.bldwall, comment: "Microsoft Building 34.link47");
+            grc.AddLinkByNodeName("osm325618934", "osm325618957", usetype: LinkUse.bldwall, comment: "Microsoft Building 34.link48");
+
+            grc.AddLinkByNodeName("osm4985583151", "osm409798994", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link1");
+            grc.AddLinkByNodeName("osm4985583152", "osm4985583151", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link2");
+            grc.AddLinkByNodeName("osm409798995", "osm4985583152", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link3");
+            grc.AddLinkByNodeName("osm6331166445", "osm409798995", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link4");
+            grc.AddLinkByNodeName("osm409798996", "osm6331166445", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link5");
+            grc.AddLinkByNodeName("osm336768305", "osm409798996", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link6");
+            grc.AddLinkByNodeName("osm336768301", "osm336768305", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link7");
+            grc.AddLinkByNodeName("osm4983743928", "osm336768301", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link8");
+            grc.AddLinkByNodeName("osm4983743927", "osm4983743928", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link9");
+            grc.AddLinkByNodeName("osm7350734412", "osm4983743927", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link10");
+            grc.AddLinkByNodeName("osm7350734411", "osm7350734412", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link11");
+            grc.AddLinkByNodeName("osm7484830129", "osm7350734411", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link12");
+            grc.AddLinkByNodeName("osm7484830240", "osm7484830129", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link13");
+            grc.AddLinkByNodeName("osm7484830245", "osm7484830240", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link14");
+            grc.AddLinkByNodeName("osm4985583154", "osm7484830245", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link15");
+            grc.AddLinkByNodeName("osm7350734410", "osm4985583154", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link16");
+            grc.AddLinkByNodeName("osm7350734409", "osm7350734410", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link17");
+            grc.AddLinkByNodeName("osm4983712060", "osm7350734409", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link18");
+            grc.AddLinkByNodeName("osm336768295", "osm4983712060", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link19");
+            grc.AddLinkByNodeName("osm4983712057", "osm336768295", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link20");
+            grc.AddLinkByNodeName("osm336768292", "osm4983712057", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link21");
+            grc.AddLinkByNodeName("osm4985583153", "osm336768292", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link22");
+            grc.AddLinkByNodeName("osm6331167729", "osm4985583153", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link23");
+            grc.AddLinkByNodeName("osm336768291", "osm6331167729", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link24");
+            grc.AddLinkByNodeName("osm336768288", "osm336768291", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link25");
+            grc.AddLinkByNodeName("osm336768285", "osm336768288", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link26");
+            grc.AddLinkByNodeName("osm4983712059", "osm336768285", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link27");
+            grc.AddLinkByNodeName("osm336768282", "osm4983712059", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link28");
+            grc.AddLinkByNodeName("osm4983712058", "osm336768282", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link29");
+            grc.AddLinkByNodeName("osm7350734407", "osm4983712058", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link30");
+            grc.AddLinkByNodeName("osm7350734408", "osm7350734407", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link31");
+            grc.AddLinkByNodeName("osm336768280", "osm7350734408", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link32");
+            grc.AddLinkByNodeName("osm336768278", "osm336768280", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link33");
+            grc.AddLinkByNodeName("osm7350734406", "osm336768278", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link34");
+            grc.AddLinkByNodeName("osm7350734405", "osm7350734406", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link35");
+            grc.AddLinkByNodeName("osm4983712056", "osm7350734405", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link36");
+            grc.AddLinkByNodeName("osm336768275", "osm4983712056", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link37");
+            grc.AddLinkByNodeName("osm4983712055", "osm336768275", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link38");
+            grc.AddLinkByNodeName("osm336768272", "osm4983712055", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link39");
+            grc.AddLinkByNodeName("osm6331167737", "osm336768272", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link40");
+            grc.AddLinkByNodeName("osm336768330", "osm6331167737", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link41");
+            grc.AddLinkByNodeName("osm7473295910", "osm336768330", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link42");
+            grc.AddLinkByNodeName("osm4983712053", "osm7473295910", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link43");
+            grc.AddLinkByNodeName("osm4983712054", "osm4983712053", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link44");
+            grc.AddLinkByNodeName("osm336768329", "osm4983712054", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link45");
+            grc.AddLinkByNodeName("osm7350734404", "osm336768329", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link46");
+            grc.AddLinkByNodeName("osm7350734403", "osm7350734404", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link47");
+            grc.AddLinkByNodeName("osm336768327", "osm7350734403", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link48");
+            grc.AddLinkByNodeName("osm7473295906", "osm336768327", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link49");
+            grc.AddLinkByNodeName("osm7473295908", "osm7473295906", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link50");
+            grc.AddLinkByNodeName("osm4983712062", "osm7473295908", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link51");
+            grc.AddLinkByNodeName("osm336768326", "osm4983712062", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link52");
+            grc.AddLinkByNodeName("osm7350734402", "osm336768326", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link53");
+            grc.AddLinkByNodeName("osm7350734401", "osm7350734402", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link54");
+            grc.AddLinkByNodeName("osm4983712063", "osm7350734401", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link55");
+            grc.AddLinkByNodeName("osm7350734390", "osm4983712063", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link56");
+            grc.AddLinkByNodeName("osm336768325", "osm7350734390", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link57");
+            grc.AddLinkByNodeName("osm6331167700", "osm336768325", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link58");
+            grc.AddLinkByNodeName("osm336768323", "osm6331167700", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link59");
+            grc.AddLinkByNodeName("osm336768322", "osm336768323", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link60");
+            grc.AddLinkByNodeName("osm336768320", "osm336768322", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link61");
+            grc.AddLinkByNodeName("osm336768318", "osm336768320", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link62");
+            grc.AddLinkByNodeName("osm6331167699", "osm336768318", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link63");
+            grc.AddLinkByNodeName("osm7350734391", "osm6331167699", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link64");
+            grc.AddLinkByNodeName("osm7350734392", "osm7350734391", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link65");
+            grc.AddLinkByNodeName("osm4983712068", "osm7350734392", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link66");
+            grc.AddLinkByNodeName("osm7350734400", "osm4983712068", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link67");
+            grc.AddLinkByNodeName("osm7350734399", "osm7350734400", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link68");
+            grc.AddLinkByNodeName("osm336768316", "osm7350734399", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link69");
+            grc.AddLinkByNodeName("osm336768313", "osm336768316", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link70");
+            grc.AddLinkByNodeName("osm7473295893", "osm336768313", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link71");
+            grc.AddLinkByNodeName("osm336768312", "osm7473295893", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link72");
+            grc.AddLinkByNodeName("osm7350734398", "osm336768312", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link73");
+            grc.AddLinkByNodeName("osm7350734397", "osm7350734398", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link74");
+            grc.AddLinkByNodeName("osm336768309", "osm7350734397", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link75");
+            grc.AddLinkByNodeName("osm7350734394", "osm336768309", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link76");
+            grc.AddLinkByNodeName("osm7350734393", "osm7350734394", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link77");
+            grc.AddLinkByNodeName("osm336768307", "osm7350734393", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link78");
+            grc.AddLinkByNodeName("osm7473295897", "osm336768307", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link79");
+            grc.AddLinkByNodeName("osm2675737180", "osm7473295897", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link80");
+            grc.AddLinkByNodeName("osm2675737179", "osm2675737180", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link81");
+            grc.AddLinkByNodeName("osm4983712067", "osm2675737179", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link82");
+            grc.AddLinkByNodeName("osm2675737178", "osm4983712067", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link83");
+            grc.AddLinkByNodeName("osm409798997", "osm2675737178", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link84");
+            grc.AddLinkByNodeName("osm2675737181", "osm409798997", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link85");
+            grc.AddLinkByNodeName("osm2675737182", "osm2675737181", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link86");
+            grc.AddLinkByNodeName("osm336772832", "osm2675737182", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link87");
+            grc.AddLinkByNodeName("osm2675737186", "osm336772832", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link88");
+            grc.AddLinkByNodeName("osm336772831", "osm2675737186", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link89");
+            grc.AddLinkByNodeName("osm2675737185", "osm336772831", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link90");
+            grc.AddLinkByNodeName("osm7350734396", "osm2675737185", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link91");
+            grc.AddLinkByNodeName("osm7350734395", "osm7350734396", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link92");
+            grc.AddLinkByNodeName("osm2675737184", "osm7350734395", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link93");
+            grc.AddLinkByNodeName("osm336772828", "osm2675737184", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link94");
+            grc.AddLinkByNodeName("osm336772826", "osm336772828", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link95");
+            grc.AddLinkByNodeName("osm4983712052", "osm336772826", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link96");
+            grc.AddLinkByNodeName("osm2675737188", "osm4983712052", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link97");
+            grc.AddLinkByNodeName("osm2675737187", "osm2675737188", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link98");
+            grc.AddLinkByNodeName("osm2675737189", "osm2675737187", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link99");
+            grc.AddLinkByNodeName("osm2675737190", "osm2675737189", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link100");
+            grc.AddLinkByNodeName("osm7473295876", "osm2675737190", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link101");
+            grc.AddLinkByNodeName("osm336772824", "osm7473295876", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link102");
+            grc.AddLinkByNodeName("osm336772822", "osm336772824", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link103");
+            grc.AddLinkByNodeName("osm336772821", "osm336772822", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link104");
+            grc.AddLinkByNodeName("osm336772820", "osm336772821", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link105");
+            grc.AddLinkByNodeName("osm7473295875", "osm336772820", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link106");
+            grc.AddLinkByNodeName("osm4983712041", "osm7473295875", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link107");
+            grc.AddLinkByNodeName("osm4983712040", "osm4983712041", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link108");
+            grc.AddLinkByNodeName("osm4983712039", "osm4983712040", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link109");
+            grc.AddLinkByNodeName("osm7350734424", "osm4983712039", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link110");
+            grc.AddLinkByNodeName("osm7350734423", "osm7350734424", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link111");
+            grc.AddLinkByNodeName("osm336772818", "osm7350734423", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link112");
+            grc.AddLinkByNodeName("osm336772816", "osm336772818", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link113");
+            grc.AddLinkByNodeName("osm336772815", "osm336772816", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link114");
+            grc.AddLinkByNodeName("osm7350734422", "osm336772815", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link115");
+            grc.AddLinkByNodeName("osm7350734421", "osm7350734422", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link116");
+            grc.AddLinkByNodeName("osm4983712042", "osm7350734421", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link117");
+            grc.AddLinkByNodeName("osm336772812", "osm4983712042", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link118");
+            grc.AddLinkByNodeName("osm4983712043", "osm336772812", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link119");
+            grc.AddLinkByNodeName("osm336772811", "osm4983712043", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link120");
+            grc.AddLinkByNodeName("osm336772809", "osm336772811", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link121");
+            grc.AddLinkByNodeName("osm4983712044", "osm336772809", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link122");
+            grc.AddLinkByNodeName("osm4983712045", "osm4983712044", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link123");
+            grc.AddLinkByNodeName("osm7350734420", "osm4983712045", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link124");
+            grc.AddLinkByNodeName("osm7350734419", "osm7350734420", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link125");
+            grc.AddLinkByNodeName("osm336772807", "osm7350734419", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link126");
+            grc.AddLinkByNodeName("osm336772806", "osm336772807", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link127");
+            grc.AddLinkByNodeName("osm336772805", "osm336772806", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link128");
+            grc.AddLinkByNodeName("osm4983712038", "osm336772805", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link129");
+            grc.AddLinkByNodeName("osm7350734418", "osm4983712038", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link130");
+            grc.AddLinkByNodeName("osm7350734417", "osm7350734418", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link131");
+            grc.AddLinkByNodeName("osm336772800", "osm7350734417", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link132");
+            grc.AddLinkByNodeName("osm4983712047", "osm336772800", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link133");
+            grc.AddLinkByNodeName("osm4983712046", "osm4983712047", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link134");
+            grc.AddLinkByNodeName("osm7473375080", "osm4983712046", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link135");
+            grc.AddLinkByNodeName("osm336772798", "osm7473375080", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link136");
+            grc.AddLinkByNodeName("osm336772796", "osm336772798", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link137");
+            grc.AddLinkByNodeName("osm336772795", "osm336772796", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link138");
+            grc.AddLinkByNodeName("osm336772793", "osm336772795", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link139");
+            grc.AddLinkByNodeName("osm4983712049", "osm336772793", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link140");
+            grc.AddLinkByNodeName("osm336772791", "osm4983712049", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link141");
+            grc.AddLinkByNodeName("osm4983712037", "osm336772791", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link142");
+            grc.AddLinkByNodeName("osm7350734416", "osm4983712037", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link143");
+            grc.AddLinkByNodeName("osm7350734415", "osm7350734416", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link144");
+            grc.AddLinkByNodeName("osm4983712048", "osm7350734415", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link145");
+            grc.AddLinkByNodeName("osm7484830204", "osm4983712048", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link146");
+            grc.AddLinkByNodeName("osm336772790", "osm7484830204", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link147");
+            grc.AddLinkByNodeName("osm336772789", "osm336772790", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link148");
+            grc.AddLinkByNodeName("osm7350734414", "osm336772789", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link149");
+            grc.AddLinkByNodeName("osm7350734413", "osm7350734414", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link150");
+            grc.AddLinkByNodeName("osm336772788", "osm7350734413", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link151");
+            grc.AddLinkByNodeName("osm4983712051", "osm336772788", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link152");
+            grc.AddLinkByNodeName("osm4983712050", "osm4983712051", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link153");
+            grc.AddLinkByNodeName("osm336772786", "osm4983712050", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link154");
+            grc.AddLinkByNodeName("osm6331166457", "osm336772786", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link155");
+            grc.AddLinkByNodeName("osm409798978", "osm6331166457", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link156");
+            grc.AddLinkByNodeName("osm7484830133", "osm409798978", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link157");
+            grc.AddLinkByNodeName("osm409798994", "osm7484830133", usetype: LinkUse.bldwall, comment: "Microsoft Building 25.link158");
+
+            grc.AddLinkByNodeName("osm345261390", "osm345261389", usetype: LinkUse.bldwall, comment: "Microsoft Building 20.link1");
+            grc.AddLinkByNodeName("osm345261392", "osm345261390", usetype: LinkUse.bldwall, comment: "Microsoft Building 20.link2");
+            grc.AddLinkByNodeName("osm7473295809", "osm345261392", usetype: LinkUse.bldwall, comment: "Microsoft Building 20.link3");
+            grc.AddLinkByNodeName("osm345261393", "osm7473295809", usetype: LinkUse.bldwall, comment: "Microsoft Building 20.link4");
+            grc.AddLinkByNodeName("osm345261394", "osm345261393", usetype: LinkUse.bldwall, comment: "Microsoft Building 20.link5");
+            grc.AddLinkByNodeName("osm345261395", "osm345261394", usetype: LinkUse.bldwall, comment: "Microsoft Building 20.link6");
+            grc.AddLinkByNodeName("osm345261396", "osm345261395", usetype: LinkUse.bldwall, comment: "Microsoft Building 20.link7");
+            grc.AddLinkByNodeName("osm345261397", "osm345261396", usetype: LinkUse.bldwall, comment: "Microsoft Building 20.link8");
+            grc.AddLinkByNodeName("osm345261398", "osm345261397", usetype: LinkUse.bldwall, comment: "Microsoft Building 20.link9");
+            grc.AddLinkByNodeName("osm7472994604", "osm345261398", usetype: LinkUse.bldwall, comment: "Microsoft Building 20.link10");
+            grc.AddLinkByNodeName("osm7350890253", "osm7472994604", usetype: LinkUse.bldwall, comment: "Microsoft Building 20.link11");
+            grc.AddLinkByNodeName("osm7350890252", "osm7350890253", usetype: LinkUse.bldwall, comment: "Microsoft Building 20.link12");
+            grc.AddLinkByNodeName("osm7132371567", "osm7350890252", usetype: LinkUse.bldwall, comment: "Microsoft Building 20.link13");
+            grc.AddLinkByNodeName("osm7350890251", "osm7132371567", usetype: LinkUse.bldwall, comment: "Microsoft Building 20.link14");
+            grc.AddLinkByNodeName("osm7350890245", "osm7350890251", usetype: LinkUse.bldwall, comment: "Microsoft Building 20.link15");
+            grc.AddLinkByNodeName("osm7350890250", "osm7350890245", usetype: LinkUse.bldwall, comment: "Microsoft Building 20.link16");
+            grc.AddLinkByNodeName("osm345261400", "osm7350890250", usetype: LinkUse.bldwall, comment: "Microsoft Building 20.link17");
+            grc.AddLinkByNodeName("osm345261401", "osm345261400", usetype: LinkUse.bldwall, comment: "Microsoft Building 20.link18");
+            grc.AddLinkByNodeName("osm345261402", "osm345261401", usetype: LinkUse.bldwall, comment: "Microsoft Building 20.link19");
+            grc.AddLinkByNodeName("osm7350890244", "osm345261402", usetype: LinkUse.bldwall, comment: "Microsoft Building 20.link20");
+            grc.AddLinkByNodeName("osm7350890243", "osm7350890244", usetype: LinkUse.bldwall, comment: "Microsoft Building 20.link21");
+            grc.AddLinkByNodeName("osm7350890242", "osm7350890243", usetype: LinkUse.bldwall, comment: "Microsoft Building 20.link22");
+            grc.AddLinkByNodeName("osm7350890241", "osm7350890242", usetype: LinkUse.bldwall, comment: "Microsoft Building 20.link23");
+            grc.AddLinkByNodeName("osm345261403", "osm7350890241", usetype: LinkUse.bldwall, comment: "Microsoft Building 20.link24");
+            grc.AddLinkByNodeName("osm345261404", "osm345261403", usetype: LinkUse.bldwall, comment: "Microsoft Building 20.link25");
+            grc.AddLinkByNodeName("osm7132371562", "osm345261404", usetype: LinkUse.bldwall, comment: "Microsoft Building 20.link26");
+            grc.AddLinkByNodeName("osm7486062633", "osm7132371562", usetype: LinkUse.bldwall, comment: "Microsoft Building 20.link27");
+            grc.AddLinkByNodeName("osm7486062637", "osm7486062633", usetype: LinkUse.bldwall, comment: "Microsoft Building 20.link28");
+            grc.AddLinkByNodeName("osm345261389", "osm7486062637", usetype: LinkUse.bldwall, comment: "Microsoft Building 20.link29");
+
+            grc.AddLinkByNodeName("osm345266072", "osm345266071", usetype: LinkUse.bldwall, comment: "Microsoft Building 33.link1");
+            grc.AddLinkByNodeName("osm4758568841", "osm345266072", usetype: LinkUse.bldwall, comment: "Microsoft Building 33.link2");
+            grc.AddLinkByNodeName("osm345266073", "osm4758568841", usetype: LinkUse.bldwall, comment: "Microsoft Building 33.link3");
+            grc.AddLinkByNodeName("osm7346301662", "osm345266073", usetype: LinkUse.bldwall, comment: "Microsoft Building 33.link4");
+            grc.AddLinkByNodeName("osm7346301661", "osm7346301662", usetype: LinkUse.bldwall, comment: "Microsoft Building 33.link5");
+            grc.AddLinkByNodeName("osm4758568844", "osm7346301661", usetype: LinkUse.bldwall, comment: "Microsoft Building 33.link6");
+            grc.AddLinkByNodeName("osm345266076", "osm4758568844", usetype: LinkUse.bldwall, comment: "Microsoft Building 33.link7");
+            grc.AddLinkByNodeName("osm345266077", "osm345266076", usetype: LinkUse.bldwall, comment: "Microsoft Building 33.link8");
+            grc.AddLinkByNodeName("osm345266080", "osm345266077", usetype: LinkUse.bldwall, comment: "Microsoft Building 33.link9");
+            grc.AddLinkByNodeName("osm7132384722", "osm345266080", usetype: LinkUse.bldwall, comment: "Microsoft Building 33.link10");
+            grc.AddLinkByNodeName("osm4740268535", "osm7132384722", usetype: LinkUse.bldwall, comment: "Microsoft Building 33.link11");
+            grc.AddLinkByNodeName("osm7132384717", "osm4740268535", usetype: LinkUse.bldwall, comment: "Microsoft Building 33.link12");
+            grc.AddLinkByNodeName("osm4740268533", "osm7132384717", usetype: LinkUse.bldwall, comment: "Microsoft Building 33.link13");
+            grc.AddLinkByNodeName("osm345266082", "osm4740268533", usetype: LinkUse.bldwall, comment: "Microsoft Building 33.link14");
+            grc.AddLinkByNodeName("osm7132384719", "osm345266082", usetype: LinkUse.bldwall, comment: "Microsoft Building 33.link15");
+            grc.AddLinkByNodeName("osm7132384720", "osm7132384719", usetype: LinkUse.bldwall, comment: "Microsoft Building 33.link16");
+            grc.AddLinkByNodeName("osm7346301671", "osm7132384720", usetype: LinkUse.bldwall, comment: "Microsoft Building 33.link17");
+            grc.AddLinkByNodeName("osm4758634644", "osm7346301671", usetype: LinkUse.bldwall, comment: "Microsoft Building 33.link18");
+            grc.AddLinkByNodeName("osm345266086", "osm4758634644", usetype: LinkUse.bldwall, comment: "Microsoft Building 33.link19");
+            grc.AddLinkByNodeName("osm4753578018", "osm345266086", usetype: LinkUse.bldwall, comment: "Microsoft Building 33.link20");
+            grc.AddLinkByNodeName("osm7345287876", "osm4753578018", usetype: LinkUse.bldwall, comment: "Microsoft Building 33.link21");
+            grc.AddLinkByNodeName("osm7345287877", "osm7345287876", usetype: LinkUse.bldwall, comment: "Microsoft Building 33.link22");
+            grc.AddLinkByNodeName("osm7345287878", "osm7345287877", usetype: LinkUse.bldwall, comment: "Microsoft Building 33.link23");
+            grc.AddLinkByNodeName("osm7345287879", "osm7345287878", usetype: LinkUse.bldwall, comment: "Microsoft Building 33.link24");
+            grc.AddLinkByNodeName("osm345266093", "osm7345287879", usetype: LinkUse.bldwall, comment: "Microsoft Building 33.link25");
+            grc.AddLinkByNodeName("osm345266097", "osm345266093", usetype: LinkUse.bldwall, comment: "Microsoft Building 33.link26");
+            grc.AddLinkByNodeName("osm345266099", "osm345266097", usetype: LinkUse.bldwall, comment: "Microsoft Building 33.link27");
+            grc.AddLinkByNodeName("osm4758634648", "osm345266099", usetype: LinkUse.bldwall, comment: "Microsoft Building 33.link28");
+            grc.AddLinkByNodeName("osm7346301669", "osm4758634648", usetype: LinkUse.bldwall, comment: "Microsoft Building 33.link29");
+            grc.AddLinkByNodeName("osm7346301670", "osm7346301669", usetype: LinkUse.bldwall, comment: "Microsoft Building 33.link30");
+            grc.AddLinkByNodeName("osm7346301668", "osm7346301670", usetype: LinkUse.bldwall, comment: "Microsoft Building 33.link31");
+            grc.AddLinkByNodeName("osm7346301667", "osm7346301668", usetype: LinkUse.bldwall, comment: "Microsoft Building 33.link32");
+            grc.AddLinkByNodeName("osm4781654488", "osm7346301667", usetype: LinkUse.bldwall, comment: "Microsoft Building 33.link33");
+            grc.AddLinkByNodeName("osm7346301666", "osm4781654488", usetype: LinkUse.bldwall, comment: "Microsoft Building 33.link34");
+            grc.AddLinkByNodeName("osm7346301665", "osm7346301666", usetype: LinkUse.bldwall, comment: "Microsoft Building 33.link35");
+            grc.AddLinkByNodeName("osm7070870706", "osm7346301665", usetype: LinkUse.bldwall, comment: "Microsoft Building 33.link36");
+            grc.AddLinkByNodeName("osm7346301664", "osm7070870706", usetype: LinkUse.bldwall, comment: "Microsoft Building 33.link37");
+            grc.AddLinkByNodeName("osm7346301663", "osm7346301664", usetype: LinkUse.bldwall, comment: "Microsoft Building 33.link38");
+            grc.AddLinkByNodeName("osm7070870702", "osm7346301663", usetype: LinkUse.bldwall, comment: "Microsoft Building 33.link39");
+            grc.AddLinkByNodeName("osm4753326215", "osm7070870702", usetype: LinkUse.bldwall, comment: "Microsoft Building 33.link40");
+            grc.AddLinkByNodeName("osm4740268536", "osm4753326215", usetype: LinkUse.bldwall, comment: "Microsoft Building 33.link41");
+            grc.AddLinkByNodeName("osm345266071", "osm4740268536", usetype: LinkUse.bldwall, comment: "Microsoft Building 33.link42");
+
+            grc.AddLinkByNodeName("osm6331167730", "osm409799024", usetype: LinkUse.bldwall, comment: "parking01.link1");
+            grc.AddLinkByNodeName("osm6331167764", "osm6331167730", usetype: LinkUse.bldwall, comment: "parking01.link2");
+            grc.AddLinkByNodeName("osm6331167765", "osm6331167764", usetype: LinkUse.bldwall, comment: "parking01.link3");
+            grc.AddLinkByNodeName("osm409799025", "osm6331167765", usetype: LinkUse.bldwall, comment: "parking01.link4");
+            grc.AddLinkByNodeName("osm6331167761", "osm409799025", usetype: LinkUse.bldwall, comment: "parking01.link5");
+            grc.AddLinkByNodeName("osm7473295912", "osm6331167761", usetype: LinkUse.bldwall, comment: "parking01.link6");
+            grc.AddLinkByNodeName("osm7120525634", "osm7473295912", usetype: LinkUse.bldwall, comment: "parking01.link7");
+            grc.AddLinkByNodeName("osm6331167768", "osm7120525634", usetype: LinkUse.bldwall, comment: "parking01.link8");
+            grc.AddLinkByNodeName("osm6331167762", "osm6331167768", usetype: LinkUse.bldwall, comment: "parking01.link9");
+            grc.AddLinkByNodeName("osm6331167763", "osm6331167762", usetype: LinkUse.bldwall, comment: "parking01.link10");
+            grc.AddLinkByNodeName("osm409799026", "osm6331167763", usetype: LinkUse.bldwall, comment: "parking01.link11");
+            grc.AddLinkByNodeName("osm409799027", "osm409799026", usetype: LinkUse.bldwall, comment: "parking01.link12");
+            grc.AddLinkByNodeName("osm6331167751", "osm409799027", usetype: LinkUse.bldwall, comment: "parking01.link13");
+            grc.AddLinkByNodeName("osm409799028", "osm6331167751", usetype: LinkUse.bldwall, comment: "parking01.link14");
+            grc.AddLinkByNodeName("osm6331167742", "osm409799028", usetype: LinkUse.bldwall, comment: "parking01.link15");
+            grc.AddLinkByNodeName("osm6331167766", "osm6331167742", usetype: LinkUse.bldwall, comment: "parking01.link16");
+            grc.AddLinkByNodeName("osm4983743924", "osm6331167766", usetype: LinkUse.bldwall, comment: "parking01.link17");
+            grc.AddLinkByNodeName("osm4983743925", "osm4983743924", usetype: LinkUse.bldwall, comment: "parking01.link18");
+            grc.AddLinkByNodeName("osm4983743926", "osm4983743925", usetype: LinkUse.bldwall, comment: "parking01.link19");
+            grc.AddLinkByNodeName("osm409799024", "osm4983743926", usetype: LinkUse.bldwall, comment: "parking01.link20");
+
+            grc.AddLinkByNodeName("osm2671035478", "osm2671035477", usetype: LinkUse.bldwall, comment: "Microsoft Cafe 16.link1");
+            grc.AddLinkByNodeName("osm2671035479", "osm2671035478", usetype: LinkUse.bldwall, comment: "Microsoft Cafe 16.link2");
+            grc.AddLinkByNodeName("osm2671035476", "osm2671035479", usetype: LinkUse.bldwall, comment: "Microsoft Cafe 16.link3");
+            grc.AddLinkByNodeName("osm2672290205", "osm2671035476", usetype: LinkUse.bldwall, comment: "Microsoft Cafe 16.link4");
+            grc.AddLinkByNodeName("osm2671035475", "osm2672290205", usetype: LinkUse.bldwall, comment: "Microsoft Cafe 16.link5");
+            grc.AddLinkByNodeName("osm2671035480", "osm2671035475", usetype: LinkUse.bldwall, comment: "Microsoft Cafe 16.link6");
+            grc.AddLinkByNodeName("osm2671035482", "osm2671035480", usetype: LinkUse.bldwall, comment: "Microsoft Cafe 16.link7");
+            grc.AddLinkByNodeName("osm2671035483", "osm2671035482", usetype: LinkUse.bldwall, comment: "Microsoft Cafe 16.link8");
+            grc.AddLinkByNodeName("osm2670280676", "osm2671035483", usetype: LinkUse.bldwall, comment: "Microsoft Cafe 16.link9");
+            grc.AddLinkByNodeName("osm2671027633", "osm2670280676", usetype: LinkUse.bldwall, comment: "Microsoft Cafe 16.link10");
+            grc.AddLinkByNodeName("osm2671027631", "osm2671027633", usetype: LinkUse.bldwall, comment: "Microsoft Cafe 16.link11");
+            grc.AddLinkByNodeName("osm2671027632", "osm2671027631", usetype: LinkUse.bldwall, comment: "Microsoft Cafe 16.link12");
+            grc.AddLinkByNodeName("osm2671027630", "osm2671027632", usetype: LinkUse.bldwall, comment: "Microsoft Cafe 16.link13");
+            grc.AddLinkByNodeName("osm2671027635", "osm2671027630", usetype: LinkUse.bldwall, comment: "Microsoft Cafe 16.link14");
+            grc.AddLinkByNodeName("osm2671027634", "osm2671027635", usetype: LinkUse.bldwall, comment: "Microsoft Cafe 16.link15");
+            grc.AddLinkByNodeName("osm2671027636", "osm2671027634", usetype: LinkUse.bldwall, comment: "Microsoft Cafe 16.link16");
+            grc.AddLinkByNodeName("osm4773716039", "osm2671027636", usetype: LinkUse.bldwall, comment: "Microsoft Cafe 16.link17");
+            grc.AddLinkByNodeName("osm2671027628", "osm4773716039", usetype: LinkUse.bldwall, comment: "Microsoft Cafe 16.link18");
+            grc.AddLinkByNodeName("osm2671027638", "osm2671027628", usetype: LinkUse.bldwall, comment: "Microsoft Cafe 16.link19");
+            grc.AddLinkByNodeName("osm2671027637", "osm2671027638", usetype: LinkUse.bldwall, comment: "Microsoft Cafe 16.link20");
+            grc.AddLinkByNodeName("osm2671027640", "osm2671027637", usetype: LinkUse.bldwall, comment: "Microsoft Cafe 16.link21");
+            grc.AddLinkByNodeName("osm2671027629", "osm2671027640", usetype: LinkUse.bldwall, comment: "Microsoft Cafe 16.link22");
+            grc.AddLinkByNodeName("osm2671027639", "osm2671027629", usetype: LinkUse.bldwall, comment: "Microsoft Cafe 16.link23");
+            grc.AddLinkByNodeName("osm2671027641", "osm2671027639", usetype: LinkUse.bldwall, comment: "Microsoft Cafe 16.link24");
+            grc.AddLinkByNodeName("osm2671035477", "osm2671027641", usetype: LinkUse.bldwall, comment: "Microsoft Cafe 16.link25");
+
+            grc.AddLinkByNodeName("osm6333379830", "osm3516771343", usetype: LinkUse.bldwall, comment: "Microsoft Living Well Health Center.link1");
+            grc.AddLinkByNodeName("osm3516771344", "osm6333379830", usetype: LinkUse.bldwall, comment: "Microsoft Living Well Health Center.link2");
+            grc.AddLinkByNodeName("osm3516771341", "osm3516771344", usetype: LinkUse.bldwall, comment: "Microsoft Living Well Health Center.link3");
+            grc.AddLinkByNodeName("osm7484825441", "osm3516771341", usetype: LinkUse.bldwall, comment: "Microsoft Living Well Health Center.link4");
+            grc.AddLinkByNodeName("osm3516771345", "osm7484825441", usetype: LinkUse.bldwall, comment: "Microsoft Living Well Health Center.link5");
+            grc.AddLinkByNodeName("osm3516771346", "osm3516771345", usetype: LinkUse.bldwall, comment: "Microsoft Living Well Health Center.link6");
+            grc.AddLinkByNodeName("osm7484825440", "osm3516771346", usetype: LinkUse.bldwall, comment: "Microsoft Living Well Health Center.link7");
+            grc.AddLinkByNodeName("osm4802527987", "osm7484825440", usetype: LinkUse.bldwall, comment: "Microsoft Living Well Health Center.link8");
+            grc.AddLinkByNodeName("osm7484825433", "osm4802527987", usetype: LinkUse.bldwall, comment: "Microsoft Living Well Health Center.link9");
+            grc.AddLinkByNodeName("osm3516771340", "osm7484825433", usetype: LinkUse.bldwall, comment: "Microsoft Living Well Health Center.link10");
+            grc.AddLinkByNodeName("osm3516771335", "osm3516771340", usetype: LinkUse.bldwall, comment: "Microsoft Living Well Health Center.link11");
+            grc.AddLinkByNodeName("osm3516771328", "osm3516771335", usetype: LinkUse.bldwall, comment: "Microsoft Living Well Health Center.link12");
+            grc.AddLinkByNodeName("osm7484825472", "osm3516771328", usetype: LinkUse.bldwall, comment: "Microsoft Living Well Health Center.link13");
+            grc.AddLinkByNodeName("osm3516771327", "osm7484825472", usetype: LinkUse.bldwall, comment: "Microsoft Living Well Health Center.link14");
+            grc.AddLinkByNodeName("osm3516771316", "osm3516771327", usetype: LinkUse.bldwall, comment: "Microsoft Living Well Health Center.link15");
+            grc.AddLinkByNodeName("osm3516771315", "osm3516771316", usetype: LinkUse.bldwall, comment: "Microsoft Living Well Health Center.link16");
+            grc.AddLinkByNodeName("osm7484825468", "osm3516771315", usetype: LinkUse.bldwall, comment: "Microsoft Living Well Health Center.link17");
+            grc.AddLinkByNodeName("osm3516771306", "osm7484825468", usetype: LinkUse.bldwall, comment: "Microsoft Living Well Health Center.link18");
+            grc.AddLinkByNodeName("osm7484830121", "osm3516771306", usetype: LinkUse.bldwall, comment: "Microsoft Living Well Health Center.link19");
+            grc.AddLinkByNodeName("osm7484830115", "osm7484830121", usetype: LinkUse.bldwall, comment: "Microsoft Living Well Health Center.link20");
+            grc.AddLinkByNodeName("osm3516771296", "osm7484830115", usetype: LinkUse.bldwall, comment: "Microsoft Living Well Health Center.link21");
+            grc.AddLinkByNodeName("osm7484830103", "osm3516771296", usetype: LinkUse.bldwall, comment: "Microsoft Living Well Health Center.link22");
+            grc.AddLinkByNodeName("osm3516771294", "osm7484830103", usetype: LinkUse.bldwall, comment: "Microsoft Living Well Health Center.link23");
+            grc.AddLinkByNodeName("osm7484830102", "osm3516771294", usetype: LinkUse.bldwall, comment: "Microsoft Living Well Health Center.link24");
+            grc.AddLinkByNodeName("osm7484830111", "osm7484830102", usetype: LinkUse.bldwall, comment: "Microsoft Living Well Health Center.link25");
+            grc.AddLinkByNodeName("osm4802528011", "osm7484830111", usetype: LinkUse.bldwall, comment: "Microsoft Living Well Health Center.link26");
+            grc.AddLinkByNodeName("osm3516771307", "osm4802528011", usetype: LinkUse.bldwall, comment: "Microsoft Living Well Health Center.link27");
+            grc.AddLinkByNodeName("osm3516771317", "osm3516771307", usetype: LinkUse.bldwall, comment: "Microsoft Living Well Health Center.link28");
+            grc.AddLinkByNodeName("osm7120525642", "osm3516771317", usetype: LinkUse.bldwall, comment: "Microsoft Living Well Health Center.link29");
+            grc.AddLinkByNodeName("osm7484830093", "osm7120525642", usetype: LinkUse.bldwall, comment: "Microsoft Living Well Health Center.link30");
+            grc.AddLinkByNodeName("osm3516771324", "osm7484830093", usetype: LinkUse.bldwall, comment: "Microsoft Living Well Health Center.link31");
+            grc.AddLinkByNodeName("osm7484830094", "osm3516771324", usetype: LinkUse.bldwall, comment: "Microsoft Living Well Health Center.link32");
+            grc.AddLinkByNodeName("osm3516771334", "osm7484830094", usetype: LinkUse.bldwall, comment: "Microsoft Living Well Health Center.link33");
+            grc.AddLinkByNodeName("osm3516771339", "osm3516771334", usetype: LinkUse.bldwall, comment: "Microsoft Living Well Health Center.link34");
+            grc.AddLinkByNodeName("osm3516771343", "osm3516771339", usetype: LinkUse.bldwall, comment: "Microsoft Living Well Health Center.link35");
+            grc.regman.SetRegion("default");
+            // Area msftb19area machine generated 638 nodes and 642 links on 2020-06-23 13:25:36.547991
+        }
+
+        public void CreateGraphForOsmImport_MsftCampusBldSmall_old()  // machine generated on 2020-06-15 19:56:11.299291 local time  - do not edit
         {
             grc.regman.NewNodeRegion("msft-campus-bld", "blue", saveToFile: true);
             grc.AddNodePtxz("osm7473295912", -784.539, 188.724);
@@ -8522,260 +9817,262 @@ namespace GraphAlgos
         }
 
 
-        public void CreateGraphForOsmImport_msftredwest()  // machine generated on 2020-06-22 18:26:55.078992 local time  - do not edit
+        public void CreateGraphForOsmImport_msftredwest()  // machine generated on 2020-06-23 12:58:22.113967 local time  - do not edit
         {
             grc.regman.NewNodeRegion("Microsoft Redwest", "green", saveToFile: true);
-            grc.AddNodePtxz("osm335766940", -1899.108, -917.067);
-            grc.AddNodePtxz("osm7213747649", -1930.995, -1167.715);
-            grc.AddNodePtxz("osm1491834340", -1968.730, -1145.209);
-            grc.AddNodePtxz("osm6882828264", -1953.384, -1140.296);
-            grc.AddNodePtxz("osm335765565", -1947.042, -1138.267);
-            grc.AddNodePtxz("osm335765564", -1946.625, -1144.462);
-            grc.AddNodePtxz("osm335765563", -1941.729, -1141.843);
-            grc.AddNodePtxz("osm335765562", -1933.944, -1164.827);
-            grc.AddNodePtxz("osm5173096233", -1858.337, -1168.086);
-            grc.AddNodePtxz("osm5173096269", -1871.623, -1087.520);
-            grc.AddNodePtxz("osm7209647493", -1842.240, -1086.736);
-            grc.AddNodePtxz("osm6882937913", -2008.092, -1052.665);
-            grc.AddNodePtxz("osm6882937914", -2005.742, -1080.433);
-            grc.AddNodePtxz("osm7209647564", -1989.199, -934.720);
-            grc.AddNodePtxz("osm6882946808", -1910.574, -935.686);
-            grc.AddNodePtxz("osm6882946816", -1952.066, -1042.658);
-            grc.AddNodePtxz("osm6882946817", -1964.767, -1047.980);
-            grc.AddNodePtxz("osm7191950148", -1836.149, -1080.025);
-            grc.AddNodePtxz("osm7191950150", -2029.712, -1083.498);
-            grc.AddNodePtxz("osm7191950154", -2069.977, -1097.037);
-            grc.AddNodePtxz("osm7191950164", -1930.810, -1009.882);
-            grc.AddNodePtxz("osm7191950167", -2035.978, -984.582);
-            grc.AddNodePtxz("osm7209647538", -1849.811, -1031.962);
-            grc.AddNodePtxz("osm7209647548", -1877.957, -1030.793);
-            grc.AddNodePtxz("osm7209647559", -2024.085, -963.718);
-            grc.AddNodePtxz("osm7209647560", -2002.533, -994.599);
-            grc.AddNodePtxz("osm7209690428", -1833.064, -1149.643);
-            grc.AddNodePtxz("osm7209690431", -1818.546, -1162.369);
-            grc.AddNodePtxz("osm7209690432", -1844.934, -1164.123);
-            grc.AddNodePtxz("osm7209690436", -1874.160, -1011.092);
-            grc.AddNodePtxz("osm7209690437", -1988.502, -978.580);
-            grc.AddNodePtxz("osm7209690453", -1802.418, -1158.979);
-            grc.AddNodePtxz("osm7209690454", -1893.056, -1206.699);
-            grc.AddNodePtxz("osm7209690456", -1879.918, -1190.153);
-            grc.AddNodePtxz("osm7209690458", -1878.484, -1219.176);
-            grc.AddNodePtxz("osm6882937946", -1878.977, -997.975);
-            grc.AddNodePtxz("osm7209755270", -1874.187, -1232.122);
-            grc.AddNodePtxz("osm7209775492", -2060.672, -1142.734);
-            grc.AddNodePtxz("osm7209775497", -2056.991, -1124.554);
-            grc.AddNodePtxz("osm7209775526", -2082.716, -1105.913);
-            grc.AddNodePtxz("osm7209775532", -2078.755, -1119.314);
-            grc.AddNodePtxz("osm5173096266", -1844.478, -1045.812);
-            grc.AddNodePtxz("osm7213677047", -1960.918, -1202.618);
-            grc.AddNodePtxz("osm7213677048", -1966.420, -1186.877);
-            grc.AddNodePtxz("osm7213735607", -1934.783, -1031.600);
-            grc.AddNodePtxz("osm3413319587", -2045.164, -922.923);
-            grc.AddNodePtxz("osm7213682293", -1994.934, -934.647);
-            grc.AddNodePtxz("osm5173096221", -1950.919, -1258.193);
-            grc.AddNodePtxz("osm7213682297", -1883.824, -1176.740);
-            grc.AddNodePtxz("osm7213682298", -1955.249, -1244.815);
-            grc.AddNodePtxz("osm7213682300", -1979.587, -1129.875);
-            grc.AddNodePtxz("osm7213682344", -1993.009, -1048.919);
-            grc.AddNodePtxz("osm6882946814", -1899.219, -933.185);
-            grc.AddNodePtxz("osm7213735608", -1925.776, -1057.461);
-            grc.AddNodePtxz("osm7213747671", -1884.627, -1092.518);
-            grc.AddNodePtxz("osm323546805", -1875.664, -1188.728);
-            grc.AddNodePtxz("osm323546806", -1880.932, -1190.492);
-            grc.AddNodePtxz("osm323546807", -1879.460, -1194.820);
-            grc.AddNodePtxz("osm323546808", -1895.348, -1200.172);
-            grc.AddNodePtxz("osm323546809", -1889.191, -1217.677);
-            grc.AddNodePtxz("osm323546811", -1881.775, -1215.344);
-            grc.AddNodePtxz("osm323546812", -1880.226, -1219.757);
-            grc.AddNodePtxz("osm323546813", -1874.891, -1217.986);
-            grc.AddNodePtxz("osm323546814", -1870.591, -1230.907);
-            grc.AddNodePtxz("osm323546815", -1875.390, -1232.526);
-            grc.AddNodePtxz("osm323546816", -1873.900, -1237.007);
-            grc.AddNodePtxz("osm7209647496", -1890.832, -1242.811);
-            grc.AddNodePtxz("osm7209647497", -1891.204, -1241.584);
-            grc.AddNodePtxz("osm7209647499", -1899.482, -1244.283);
-            grc.AddNodePtxz("osm7209647498", -1899.047, -1245.623);
-            grc.AddNodePtxz("osm323546818", -1948.163, -1262.446);
-            grc.AddNodePtxz("osm323546819", -1949.800, -1257.818);
-            grc.AddNodePtxz("osm323546822", -1954.923, -1259.524);
-            grc.AddNodePtxz("osm323546824", -1959.367, -1246.225);
-            grc.AddNodePtxz("osm323546825", -1954.112, -1244.425);
-            grc.AddNodePtxz("osm323546826", -1955.595, -1240.133);
-            grc.AddNodePtxz("osm323546827", -1923.377, -1229.143);
-            grc.AddNodePtxz("osm323546828", -1929.545, -1211.538);
-            grc.AddNodePtxz("osm323546829", -1953.363, -1219.740);
-            grc.AddNodePtxz("osm323546831", -1954.765, -1215.475);
-            grc.AddNodePtxz("osm323546841", -1960.446, -1217.206);
-            grc.AddNodePtxz("osm323546842", -1965.115, -1204.039);
-            grc.AddNodePtxz("osm323546844", -1959.781, -1202.229);
-            grc.AddNodePtxz("osm323546845", -1961.268, -1197.755);
-            grc.AddNodePtxz("osm323546846", -1887.700, -1172.958);
-            grc.AddNodePtxz("osm323546847", -1886.098, -1177.487);
-            grc.AddNodePtxz("osm323546851", -1880.250, -1175.564);
-            grc.AddNodePtxz("osm334982882", -1898.162, -1000.891);
-            grc.AddNodePtxz("osm334983078", -1898.673, -999.569);
-            grc.AddNodePtxz("osm334983079", -1881.798, -993.871);
-            grc.AddNodePtxz("osm334983080", -1880.273, -998.483);
-            grc.AddNodePtxz("osm334983081", -1874.987, -996.435);
-            grc.AddNodePtxz("osm334983082", -1870.539, -1009.915);
-            grc.AddNodePtxz("osm334983083", -1875.908, -1011.658);
-            grc.AddNodePtxz("osm334983084", -1874.312, -1016.340);
-            grc.AddNodePtxz("osm334983086", -1882.026, -1018.561);
-            grc.AddNodePtxz("osm334983087", -1876.150, -1036.210);
-            grc.AddNodePtxz("osm334983088", -1852.411, -1028.084);
-            grc.AddNodePtxz("osm334983089", -1850.917, -1032.341);
-            grc.AddNodePtxz("osm334982584", -1845.433, -1030.455);
-            grc.AddNodePtxz("osm334982585", -1840.533, -1044.414);
-            grc.AddNodePtxz("osm334982586", -1845.784, -1046.260);
-            grc.AddNodePtxz("osm334982587", -1844.376, -1050.269);
-            grc.AddNodePtxz("osm334982588", -1877.466, -1061.597);
-            grc.AddNodePtxz("osm334982590", -1878.037, -1059.971);
-            grc.AddNodePtxz("osm334982591", -1885.757, -1062.614);
-            grc.AddNodePtxz("osm334982592", -1885.330, -1063.964);
-            grc.AddNodePtxz("osm334982593", -1918.399, -1074.913);
-            grc.AddNodePtxz("osm334982867", -1919.768, -1071.184);
-            grc.AddNodePtxz("osm334982868", -1925.053, -1072.898);
-            grc.AddNodePtxz("osm334982869", -1929.769, -1058.891);
-            grc.AddNodePtxz("osm334982870", -1924.749, -1057.094);
-            grc.AddNodePtxz("osm334982871", -1926.248, -1052.822);
-            grc.AddNodePtxz("osm334982872", -1909.961, -1047.667);
-            grc.AddNodePtxz("osm334982873", -1916.103, -1029.768);
-            grc.AddNodePtxz("osm334982874", -1931.965, -1035.293);
-            grc.AddNodePtxz("osm334982875", -1933.388, -1031.138);
-            grc.AddNodePtxz("osm334982876", -1938.576, -1032.859);
-            grc.AddNodePtxz("osm334982877", -1943.062, -1019.843);
-            grc.AddNodePtxz("osm334982878", -1937.864, -1018.151);
-            grc.AddNodePtxz("osm334982879", -1939.618, -1013.119);
-            grc.AddNodePtxz("osm334982880", -1906.648, -1002.022);
-            grc.AddNodePtxz("osm334982881", -1905.879, -1003.810);
-            grc.AddNodePtxz("osm335764627", -2037.756, -964.564);
-            grc.AddNodePtxz("osm335764629", -2035.933, -969.857);
-            grc.AddNodePtxz("osm335764631", -2040.524, -971.397);
-            grc.AddNodePtxz("osm335764632", -2026.588, -1011.873);
-            grc.AddNodePtxz("osm335764633", -2025.240, -1011.443);
-            grc.AddNodePtxz("osm335764634", -2022.383, -1019.717);
-            grc.AddNodePtxz("osm335764636", -2023.789, -1020.214);
-            grc.AddNodePtxz("osm335764639", -2012.642, -1052.710);
-            grc.AddNodePtxz("osm335764640", -2008.561, -1051.297);
-            grc.AddNodePtxz("osm335764643", -2006.683, -1056.714);
-            grc.AddNodePtxz("osm335764644", -1993.425, -1052.238);
-            grc.AddNodePtxz("osm335764646", -1994.102, -1050.276);
-            grc.AddNodePtxz("osm335764647", -1992.699, -1049.803);
-            grc.AddNodePtxz("osm335764648", -1993.791, -1046.660);
-            grc.AddNodePtxz("osm335764649", -1990.424, -1045.531);
-            grc.AddNodePtxz("osm335764650", -1996.035, -1029.209);
-            grc.AddNodePtxz("osm335764651", -1978.576, -1023.359);
-            grc.AddNodePtxz("osm335764652", -1970.144, -1047.381);
-            grc.AddNodePtxz("osm335764655", -1965.495, -1045.837);
-            grc.AddNodePtxz("osm335764656", -1963.643, -1051.247);
-            grc.AddNodePtxz("osm335764658", -1950.576, -1047.003);
-            grc.AddNodePtxz("osm335764659", -1952.385, -1041.713);
-            grc.AddNodePtxz("osm335764660", -1947.795, -1040.071);
-            grc.AddNodePtxz("osm335764662", -1961.455, -1000.079);
-            grc.AddNodePtxz("osm335764664", -1963.143, -1000.546);
-            grc.AddNodePtxz("osm335764665", -1966.112, -991.787);
-            grc.AddNodePtxz("osm335764667", -1964.696, -991.350);
-            grc.AddNodePtxz("osm335764669", -1970.583, -974.243);
-            grc.AddNodePtxz("osm335764671", -1974.918, -975.775);
-            grc.AddNodePtxz("osm335764672", -1976.520, -971.143);
-            grc.AddNodePtxz("osm335764673", -1989.464, -975.471);
-            grc.AddNodePtxz("osm335764674", -1987.925, -980.426);
-            grc.AddNodePtxz("osm335764675", -1992.672, -981.924);
-            grc.AddNodePtxz("osm335764677", -1989.722, -990.364);
-            grc.AddNodePtxz("osm335764679", -2007.903, -996.374);
-            grc.AddNodePtxz("osm335764680", -2018.697, -964.717);
-            grc.AddNodePtxz("osm335764681", -2023.225, -966.235);
-            grc.AddNodePtxz("osm335764682", -2025.235, -960.373);
-            grc.AddNodePtxz("osm335765396", -1975.916, -1128.737);
-            grc.AddNodePtxz("osm335765397", -1980.315, -1115.802);
-            grc.AddNodePtxz("osm335765398", -1985.712, -1117.499);
-            grc.AddNodePtxz("osm5173096317", -1987.212, -1113.125);
-            grc.AddNodePtxz("osm335765400", -2019.407, -1123.474);
-            grc.AddNodePtxz("osm335765401", -2025.362, -1106.375);
-            grc.AddNodePtxz("osm335765402", -2001.538, -1098.290);
-            grc.AddNodePtxz("osm335765403", -2003.155, -1093.853);
-            grc.AddNodePtxz("osm335765404", -1997.495, -1091.796);
-            grc.AddNodePtxz("osm335765405", -2001.855, -1079.173);
-            grc.AddNodePtxz("osm335765406", -2007.484, -1080.982);
-            grc.AddNodePtxz("osm335765407", -2009.146, -1076.449);
-            grc.AddNodePtxz("osm335765408", -2049.445, -1090.095);
-            grc.AddNodePtxz("osm335765409", -2049.013, -1091.357);
-            grc.AddNodePtxz("osm335765410", -2057.529, -1094.185);
-            grc.AddNodePtxz("osm335765411", -2057.999, -1092.881);
-            grc.AddNodePtxz("osm335765412", -2082.329, -1101.035);
-            grc.AddNodePtxz("osm335765413", -2080.828, -1105.243);
-            grc.AddNodePtxz("osm335765414", -2086.430, -1107.232);
-            grc.AddNodePtxz("osm335765415", -2081.981, -1120.276);
-            grc.AddNodePtxz("osm335765418", -2076.440, -1118.617);
-            grc.AddNodePtxz("osm335765419", -2074.935, -1122.973);
-            grc.AddNodePtxz("osm335765420", -2059.292, -1117.832);
-            grc.AddNodePtxz("osm335765421", -2053.387, -1135.392);
-            grc.AddNodePtxz("osm335765423", -2060.339, -1137.835);
-            grc.AddNodePtxz("osm335765424", -2058.905, -1142.121);
-            grc.AddNodePtxz("osm335765425", -2064.741, -1144.150);
-            grc.AddNodePtxz("osm335765427", -2060.322, -1157.007);
-            grc.AddNodePtxz("osm335765428", -2055.030, -1155.211);
-            grc.AddNodePtxz("osm335765429", -2053.407, -1159.836);
-            grc.AddNodePtxz("osm335765430", -2036.473, -1154.205);
-            grc.AddNodePtxz("osm335765431", -2036.839, -1153.095);
-            grc.AddNodePtxz("osm335765432", -2029.133, -1150.512);
-            grc.AddNodePtxz("osm335765433", -2028.702, -1151.640);
-            grc.AddNodePtxz("osm335765434", -1979.431, -1134.653);
-            grc.AddNodePtxz("osm335765435", -1980.979, -1130.312);
-            grc.AddNodePtxz("osm335765554", -1978.080, -1187.771);
-            grc.AddNodePtxz("osm335765555", -1975.456, -1186.778);
-            grc.AddNodePtxz("osm335765557", -1974.554, -1189.550);
-            grc.AddNodePtxz("osm335765559", -1946.392, -1180.281);
-            grc.AddNodePtxz("osm335765561", -1929.467, -1169.212);
-            grc.AddNodePtxz("osm335765567", -1977.124, -1147.845);
-            grc.AddNodePtxz("osm335765568", -1976.095, -1150.376);
-            grc.AddNodePtxz("osm335765569", -1987.612, -1154.501);
-            grc.AddNodePtxz("osm335765570", -1982.093, -1170.759);
-            grc.AddNodePtxz("osm335765571", -1984.961, -1171.765);
-            grc.AddNodePtxz("osm335765572", -1982.154, -1180.064);
-            grc.AddNodePtxz("osm335765573", -1980.806, -1179.603);
-            grc.AddNodePtxz("osm335766392", -1814.454, -1166.735);
-            grc.AddNodePtxz("osm335766393", -1801.232, -1162.391);
-            grc.AddNodePtxz("osm335766394", -1803.036, -1157.186);
-            grc.AddNodePtxz("osm335766397", -1798.288, -1155.656);
-            grc.AddNodePtxz("osm335766398", -1806.760, -1130.681);
-            grc.AddNodePtxz("osm335766399", -1808.315, -1131.190);
-            grc.AddNodePtxz("osm335766400", -1810.889, -1123.587);
-            grc.AddNodePtxz("osm335766401", -1809.341, -1123.057);
-            grc.AddNodePtxz("osm335766402", -1823.617, -1082.254);
-            grc.AddNodePtxz("osm335766403", -1828.354, -1083.915);
-            grc.AddNodePtxz("osm335766404", -1830.264, -1078.137);
-            grc.AddNodePtxz("osm335766405", -1843.690, -1082.639);
-            grc.AddNodePtxz("osm335766406", -1841.793, -1088.009);
-            grc.AddNodePtxz("osm335766407", -1846.311, -1089.556);
-            grc.AddNodePtxz("osm335766408", -1837.818, -1113.819);
-            grc.AddNodePtxz("osm335766409", -1855.437, -1119.850);
-            grc.AddNodePtxz("osm335766410", -1866.576, -1087.748);
-            grc.AddNodePtxz("osm335766411", -1871.000, -1089.326);
-            grc.AddNodePtxz("osm335766412", -1872.924, -1083.711);
-            grc.AddNodePtxz("osm335766413", -1886.140, -1087.903);
-            grc.AddNodePtxz("osm335766414", -1884.359, -1093.313);
-            grc.AddNodePtxz("osm321710561", -1888.459, -1094.741);
-            grc.AddNodePtxz("osm335766415", -1871.833, -1143.651);
-            grc.AddNodePtxz("osm335766416", -1870.380, -1143.288);
-            grc.AddNodePtxz("osm335766417", -1867.613, -1151.237);
-            grc.AddNodePtxz("osm335766418", -1868.977, -1151.719);
-            grc.AddNodePtxz("osm335766419", -1863.264, -1168.299);
-            grc.AddNodePtxz("osm335766421", -1858.771, -1166.848);
-            grc.AddNodePtxz("osm335766423", -1856.911, -1172.113);
-            grc.AddNodePtxz("osm335766424", -1843.685, -1167.815);
-            grc.AddNodePtxz("osm335766427", -1845.399, -1162.730);
-            grc.AddNodePtxz("osm335766428", -1841.227, -1161.310);
-            grc.AddNodePtxz("osm335766429", -1843.812, -1153.339);
-            grc.AddNodePtxz("osm335766430", -1826.011, -1147.221);
-            grc.AddNodePtxz("osm335766431", -1820.679, -1163.115);
-            grc.AddNodePtxz("osm335766432", -1816.203, -1161.551);
-            grc.AddNodePtxz("osm2363328703", -2045.203, -928.861);
-            grc.AddNodePtxz("osm4220218971", -2039.777, -928.928);
-            grc.AddNodePtxz("osm4220218972", -2039.814, -934.098);
-            grc.AddNodePtxz("osm2363328704", -1899.237, -935.821);
-            grc.AddNodePtxz("osm2363328706", -1898.987, -898.355);
-            grc.AddNodePtxz("osm2363328705", -2044.991, -896.564);
+            var xs = 8.5;  // offsets for error correction
+            var zs = 10.0;
+            grc.AddNodePtxz("osm335766940", -1899.108 + xs, -917.067 + zs);
+            grc.AddNodePtxz("osm7213747649", -1930.995 + xs, -1167.715 + zs);
+            grc.AddNodePtxz("osm1491834340", -1968.730 + xs, -1145.209 + zs);
+            grc.AddNodePtxz("osm6882828264", -1953.384 + xs, -1140.296 + zs);
+            grc.AddNodePtxz("osm335765565", -1947.042 + xs, -1138.267 + zs);
+            grc.AddNodePtxz("osm335765564", -1946.625 + xs, -1144.462 + zs);
+            grc.AddNodePtxz("osm335765563", -1941.729 + xs, -1141.843 + zs);
+            grc.AddNodePtxz("osm335765562", -1933.944 + xs, -1164.827 + zs);
+            grc.AddNodePtxz("osm5173096233", -1858.337 + xs, -1168.086 + zs);
+            grc.AddNodePtxz("osm5173096269", -1871.623 + xs, -1087.520 + zs);
+            grc.AddNodePtxz("osm7209647493", -1842.240 + xs, -1086.736 + zs);
+            grc.AddNodePtxz("osm6882937913", -2008.092 + xs, -1052.665 + zs);
+            grc.AddNodePtxz("osm6882937914", -2005.742 + xs, -1080.433 + zs);
+            grc.AddNodePtxz("osm7209647564", -1989.199 + xs, -934.720 + zs);
+            grc.AddNodePtxz("osm6882946808", -1910.574 + xs, -935.686 + zs);
+            grc.AddNodePtxz("osm6882946816", -1952.066 + xs, -1042.658 + zs);
+            grc.AddNodePtxz("osm6882946817", -1964.767 + xs, -1047.980 + zs);
+            grc.AddNodePtxz("osm7191950148", -1836.149 + xs, -1080.025 + zs);
+            grc.AddNodePtxz("osm7191950150", -2029.712 + xs, -1083.498 + zs);
+            grc.AddNodePtxz("osm7191950154", -2069.977 + xs, -1097.037 + zs);
+            grc.AddNodePtxz("osm7191950164", -1930.810 + xs, -1009.882 + zs);
+            grc.AddNodePtxz("osm7191950167", -2035.978 + xs, -984.582 + zs);
+            grc.AddNodePtxz("osm7209647538", -1849.811 + xs, -1031.962 + zs);
+            grc.AddNodePtxz("osm7209647548", -1877.957 + xs, -1030.793 + zs);
+            grc.AddNodePtxz("osm7209647559", -2024.085 + xs, -963.718 + zs);
+            grc.AddNodePtxz("osm7209647560", -2002.533 + xs, -994.599 + zs);
+            grc.AddNodePtxz("osm7209690428", -1833.064 + xs, -1149.643 + zs);
+            grc.AddNodePtxz("osm7209690431", -1818.546 + xs, -1162.369 + zs);
+            grc.AddNodePtxz("osm7209690432", -1844.934 + xs, -1164.123 + zs);
+            grc.AddNodePtxz("osm7209690436", -1874.160 + xs, -1011.092 + zs);
+            grc.AddNodePtxz("osm7209690437", -1988.502 + xs, -978.580 + zs);
+            grc.AddNodePtxz("osm7209690453", -1802.418 + xs, -1158.979 + zs);
+            grc.AddNodePtxz("osm7209690454", -1893.056 + xs, -1206.699 + zs);
+            grc.AddNodePtxz("osm7209690456", -1879.918 + xs, -1190.153 + zs);
+            grc.AddNodePtxz("osm7209690458", -1878.484 + xs, -1219.176 + zs);
+            grc.AddNodePtxz("osm6882937946", -1878.977 + xs, -997.975 + zs);
+            grc.AddNodePtxz("osm7209755270", -1874.187 + xs, -1232.122 + zs);
+            grc.AddNodePtxz("osm7209775492", -2060.672 + xs, -1142.734 + zs);
+            grc.AddNodePtxz("osm7209775497", -2056.991 + xs, -1124.554 + zs);
+            grc.AddNodePtxz("osm7209775526", -2082.716 + xs, -1105.913 + zs);
+            grc.AddNodePtxz("osm7209775532", -2078.755 + xs, -1119.314 + zs);
+            grc.AddNodePtxz("osm5173096266", -1844.478 + xs, -1045.812 + zs);
+            grc.AddNodePtxz("osm7213677047", -1960.918 + xs, -1202.618 + zs);
+            grc.AddNodePtxz("osm7213677048", -1966.420 + xs, -1186.877 + zs);
+            grc.AddNodePtxz("osm7213735607", -1934.783 + xs, -1031.600 + zs);
+            grc.AddNodePtxz("osm3413319587", -2045.164 + xs, -922.923 + zs);
+            grc.AddNodePtxz("osm7213682293", -1994.934 + xs, -934.647 + zs);
+            grc.AddNodePtxz("osm5173096221", -1950.919 + xs, -1258.193 + zs);
+            grc.AddNodePtxz("osm7213682297", -1883.824 + xs, -1176.740 + zs);
+            grc.AddNodePtxz("osm7213682298", -1955.249 + xs, -1244.815 + zs);
+            grc.AddNodePtxz("osm7213682300", -1979.587 + xs, -1129.875 + zs);
+            grc.AddNodePtxz("osm7213682344", -1993.009 + xs, -1048.919 + zs);
+            grc.AddNodePtxz("osm6882946814", -1899.219 + xs, -933.185 + zs);
+            grc.AddNodePtxz("osm7213735608", -1925.776 + xs, -1057.461 + zs);
+            grc.AddNodePtxz("osm7213747671", -1884.627 + xs, -1092.518 + zs);
+            grc.AddNodePtxz("osm323546805", -1875.664 + xs, -1188.728 + zs);
+            grc.AddNodePtxz("osm323546806", -1880.932 + xs, -1190.492 + zs);
+            grc.AddNodePtxz("osm323546807", -1879.460 + xs, -1194.820 + zs);
+            grc.AddNodePtxz("osm323546808", -1895.348 + xs, -1200.172 + zs);
+            grc.AddNodePtxz("osm323546809", -1889.191 + xs, -1217.677 + zs);
+            grc.AddNodePtxz("osm323546811", -1881.775 + xs, -1215.344 + zs);
+            grc.AddNodePtxz("osm323546812", -1880.226 + xs, -1219.757 + zs);
+            grc.AddNodePtxz("osm323546813", -1874.891 + xs, -1217.986 + zs);
+            grc.AddNodePtxz("osm323546814", -1870.591 + xs, -1230.907 + zs);
+            grc.AddNodePtxz("osm323546815", -1875.390 + xs, -1232.526 + zs);
+            grc.AddNodePtxz("osm323546816", -1873.900 + xs, -1237.007 + zs);
+            grc.AddNodePtxz("osm7209647496", -1890.832 + xs, -1242.811 + zs);
+            grc.AddNodePtxz("osm7209647497", -1891.204 + xs, -1241.584 + zs);
+            grc.AddNodePtxz("osm7209647499", -1899.482 + xs, -1244.283 + zs);
+            grc.AddNodePtxz("osm7209647498", -1899.047 + xs, -1245.623 + zs);
+            grc.AddNodePtxz("osm323546818", -1948.163 + xs, -1262.446 + zs);
+            grc.AddNodePtxz("osm323546819", -1949.800 + xs, -1257.818 + zs);
+            grc.AddNodePtxz("osm323546822", -1954.923 + xs, -1259.524 + zs);
+            grc.AddNodePtxz("osm323546824", -1959.367 + xs, -1246.225 + zs);
+            grc.AddNodePtxz("osm323546825", -1954.112 + xs, -1244.425 + zs);
+            grc.AddNodePtxz("osm323546826", -1955.595 + xs, -1240.133 + zs);
+            grc.AddNodePtxz("osm323546827", -1923.377 + xs, -1229.143 + zs);
+            grc.AddNodePtxz("osm323546828", -1929.545 + xs, -1211.538 + zs);
+            grc.AddNodePtxz("osm323546829", -1953.363 + xs, -1219.740 + zs);
+            grc.AddNodePtxz("osm323546831", -1954.765 + xs, -1215.475 + zs);
+            grc.AddNodePtxz("osm323546841", -1960.446 + xs, -1217.206 + zs);
+            grc.AddNodePtxz("osm323546842", -1965.115 + xs, -1204.039 + zs);
+            grc.AddNodePtxz("osm323546844", -1959.781 + xs, -1202.229 + zs);
+            grc.AddNodePtxz("osm323546845", -1961.268 + xs, -1197.755 + zs);
+            grc.AddNodePtxz("osm323546846", -1887.700 + xs, -1172.958 + zs);
+            grc.AddNodePtxz("osm323546847", -1886.098 + xs, -1177.487 + zs);
+            grc.AddNodePtxz("osm323546851", -1880.250 + xs, -1175.564 + zs);
+            grc.AddNodePtxz("osm334982882", -1898.162 + xs, -1000.891 + zs);
+            grc.AddNodePtxz("osm334983078", -1898.673 + xs, -999.569 + zs);
+            grc.AddNodePtxz("osm334983079", -1881.798 + xs, -993.871 + zs);
+            grc.AddNodePtxz("osm334983080", -1880.273 + xs, -998.483 + zs);
+            grc.AddNodePtxz("osm334983081", -1874.987 + xs, -996.435 + zs);
+            grc.AddNodePtxz("osm334983082", -1870.539 + xs, -1009.915 + zs);
+            grc.AddNodePtxz("osm334983083", -1875.908 + xs, -1011.658 + zs);
+            grc.AddNodePtxz("osm334983084", -1874.312 + xs, -1016.340 + zs);
+            grc.AddNodePtxz("osm334983086", -1882.026 + xs, -1018.561 + zs);
+            grc.AddNodePtxz("osm334983087", -1876.150 + xs, -1036.210 + zs);
+            grc.AddNodePtxz("osm334983088", -1852.411 + xs, -1028.084 + zs);
+            grc.AddNodePtxz("osm334983089", -1850.917 + xs, -1032.341 + zs);
+            grc.AddNodePtxz("osm334982584", -1845.433 + xs, -1030.455 + zs);
+            grc.AddNodePtxz("osm334982585", -1840.533 + xs, -1044.414 + zs);
+            grc.AddNodePtxz("osm334982586", -1845.784 + xs, -1046.260 + zs);
+            grc.AddNodePtxz("osm334982587", -1844.376 + xs, -1050.269 + zs);
+            grc.AddNodePtxz("osm334982588", -1877.466 + xs, -1061.597 + zs);
+            grc.AddNodePtxz("osm334982590", -1878.037 + xs, -1059.971 + zs);
+            grc.AddNodePtxz("osm334982591", -1885.757 + xs, -1062.614 + zs);
+            grc.AddNodePtxz("osm334982592", -1885.330 + xs, -1063.964 + zs);
+            grc.AddNodePtxz("osm334982593", -1918.399 + xs, -1074.913 + zs);
+            grc.AddNodePtxz("osm334982867", -1919.768 + xs, -1071.184 + zs);
+            grc.AddNodePtxz("osm334982868", -1925.053 + xs, -1072.898 + zs);
+            grc.AddNodePtxz("osm334982869", -1929.769 + xs, -1058.891 + zs);
+            grc.AddNodePtxz("osm334982870", -1924.749 + xs, -1057.094 + zs);
+            grc.AddNodePtxz("osm334982871", -1926.248 + xs, -1052.822 + zs);
+            grc.AddNodePtxz("osm334982872", -1909.961 + xs, -1047.667 + zs);
+            grc.AddNodePtxz("osm334982873", -1916.103 + xs, -1029.768 + zs);
+            grc.AddNodePtxz("osm334982874", -1931.965 + xs, -1035.293 + zs);
+            grc.AddNodePtxz("osm334982875", -1933.388 + xs, -1031.138 + zs);
+            grc.AddNodePtxz("osm334982876", -1938.576 + xs, -1032.859 + zs);
+            grc.AddNodePtxz("osm334982877", -1943.062 + xs, -1019.843 + zs);
+            grc.AddNodePtxz("osm334982878", -1937.864 + xs, -1018.151 + zs);
+            grc.AddNodePtxz("osm334982879", -1939.618 + xs, -1013.119 + zs);
+            grc.AddNodePtxz("osm334982880", -1906.648 + xs, -1002.022 + zs);
+            grc.AddNodePtxz("osm334982881", -1905.879 + xs, -1003.810 + zs);
+            grc.AddNodePtxz("osm335764627", -2037.756 + xs, -964.564 + zs);
+            grc.AddNodePtxz("osm335764629", -2035.933 + xs, -969.857 + zs);
+            grc.AddNodePtxz("osm335764631", -2040.524 + xs, -971.397 + zs);
+            grc.AddNodePtxz("osm335764632", -2026.588 + xs, -1011.873 + zs);
+            grc.AddNodePtxz("osm335764633", -2025.240 + xs, -1011.443 + zs);
+            grc.AddNodePtxz("osm335764634", -2022.383 + xs, -1019.717 + zs);
+            grc.AddNodePtxz("osm335764636", -2023.789 + xs, -1020.214 + zs);
+            grc.AddNodePtxz("osm335764639", -2012.642 + xs, -1052.710 + zs);
+            grc.AddNodePtxz("osm335764640", -2008.561 + xs, -1051.297 + zs);
+            grc.AddNodePtxz("osm335764643", -2006.683 + xs, -1056.714 + zs);
+            grc.AddNodePtxz("osm335764644", -1993.425 + xs, -1052.238 + zs);
+            grc.AddNodePtxz("osm335764646", -1994.102 + xs, -1050.276 + zs);
+            grc.AddNodePtxz("osm335764647", -1992.699 + xs, -1049.803 + zs);
+            grc.AddNodePtxz("osm335764648", -1993.791 + xs, -1046.660 + zs);
+            grc.AddNodePtxz("osm335764649", -1990.424 + xs, -1045.531 + zs);
+            grc.AddNodePtxz("osm335764650", -1996.035 + xs, -1029.209 + zs);
+            grc.AddNodePtxz("osm335764651", -1978.576 + xs, -1023.359 + zs);
+            grc.AddNodePtxz("osm335764652", -1970.144 + xs, -1047.381 + zs);
+            grc.AddNodePtxz("osm335764655", -1965.495 + xs, -1045.837 + zs);
+            grc.AddNodePtxz("osm335764656", -1963.643 + xs, -1051.247 + zs);
+            grc.AddNodePtxz("osm335764658", -1950.576 + xs, -1047.003 + zs);
+            grc.AddNodePtxz("osm335764659", -1952.385 + xs, -1041.713 + zs);
+            grc.AddNodePtxz("osm335764660", -1947.795 + xs, -1040.071 + zs);
+            grc.AddNodePtxz("osm335764662", -1961.455 + xs, -1000.079 + zs);
+            grc.AddNodePtxz("osm335764664", -1963.143 + xs, -1000.546 + zs);
+            grc.AddNodePtxz("osm335764665", -1966.112 + xs, -991.787 + zs);
+            grc.AddNodePtxz("osm335764667", -1964.696 + xs, -991.350 + zs);
+            grc.AddNodePtxz("osm335764669", -1970.583 + xs, -974.243 + zs);
+            grc.AddNodePtxz("osm335764671", -1974.918 + xs, -975.775 + zs);
+            grc.AddNodePtxz("osm335764672", -1976.520 + xs, -971.143 + zs);
+            grc.AddNodePtxz("osm335764673", -1989.464 + xs, -975.471 + zs);
+            grc.AddNodePtxz("osm335764674", -1987.925 + xs, -980.426 + zs);
+            grc.AddNodePtxz("osm335764675", -1992.672 + xs, -981.924 + zs);
+            grc.AddNodePtxz("osm335764677", -1989.722 + xs, -990.364 + zs);
+            grc.AddNodePtxz("osm335764679", -2007.903 + xs, -996.374 + zs);
+            grc.AddNodePtxz("osm335764680", -2018.697 + xs, -964.717 + zs);
+            grc.AddNodePtxz("osm335764681", -2023.225 + xs, -966.235 + zs);
+            grc.AddNodePtxz("osm335764682", -2025.235 + xs, -960.373 + zs);
+            grc.AddNodePtxz("osm335765396", -1975.916 + xs, -1128.737 + zs);
+            grc.AddNodePtxz("osm335765397", -1980.315 + xs, -1115.802 + zs);
+            grc.AddNodePtxz("osm335765398", -1985.712 + xs, -1117.499 + zs);
+            grc.AddNodePtxz("osm5173096317", -1987.212 + xs, -1113.125 + zs);
+            grc.AddNodePtxz("osm335765400", -2019.407 + xs, -1123.474 + zs);
+            grc.AddNodePtxz("osm335765401", -2025.362 + xs, -1106.375 + zs);
+            grc.AddNodePtxz("osm335765402", -2001.538 + xs, -1098.290 + zs);
+            grc.AddNodePtxz("osm335765403", -2003.155 + xs, -1093.853 + zs);
+            grc.AddNodePtxz("osm335765404", -1997.495 + xs, -1091.796 + zs);
+            grc.AddNodePtxz("osm335765405", -2001.855 + xs, -1079.173 + zs);
+            grc.AddNodePtxz("osm335765406", -2007.484 + xs, -1080.982 + zs);
+            grc.AddNodePtxz("osm335765407", -2009.146 + xs, -1076.449 + zs);
+            grc.AddNodePtxz("osm335765408", -2049.445 + xs, -1090.095 + zs);
+            grc.AddNodePtxz("osm335765409", -2049.013 + xs, -1091.357 + zs);
+            grc.AddNodePtxz("osm335765410", -2057.529 + xs, -1094.185 + zs);
+            grc.AddNodePtxz("osm335765411", -2057.999 + xs, -1092.881 + zs);
+            grc.AddNodePtxz("osm335765412", -2082.329 + xs, -1101.035 + zs);
+            grc.AddNodePtxz("osm335765413", -2080.828 + xs, -1105.243 + zs);
+            grc.AddNodePtxz("osm335765414", -2086.430 + xs, -1107.232 + zs);
+            grc.AddNodePtxz("osm335765415", -2081.981 + xs, -1120.276 + zs);
+            grc.AddNodePtxz("osm335765418", -2076.440 + xs, -1118.617 + zs);
+            grc.AddNodePtxz("osm335765419", -2074.935 + xs, -1122.973 + zs);
+            grc.AddNodePtxz("osm335765420", -2059.292 + xs, -1117.832 + zs);
+            grc.AddNodePtxz("osm335765421", -2053.387 + xs, -1135.392 + zs);
+            grc.AddNodePtxz("osm335765423", -2060.339 + xs, -1137.835 + zs);
+            grc.AddNodePtxz("osm335765424", -2058.905 + xs, -1142.121 + zs);
+            grc.AddNodePtxz("osm335765425", -2064.741 + xs, -1144.150 + zs);
+            grc.AddNodePtxz("osm335765427", -2060.322 + xs, -1157.007 + zs);
+            grc.AddNodePtxz("osm335765428", -2055.030 + xs, -1155.211 + zs);
+            grc.AddNodePtxz("osm335765429", -2053.407 + xs, -1159.836 + zs);
+            grc.AddNodePtxz("osm335765430", -2036.473 + xs, -1154.205 + zs);
+            grc.AddNodePtxz("osm335765431", -2036.839 + xs, -1153.095 + zs);
+            grc.AddNodePtxz("osm335765432", -2029.133 + xs, -1150.512 + zs);
+            grc.AddNodePtxz("osm335765433", -2028.702 + xs, -1151.640 + zs);
+            grc.AddNodePtxz("osm335765434", -1979.431 + xs, -1134.653 + zs);
+            grc.AddNodePtxz("osm335765435", -1980.979 + xs, -1130.312 + zs);
+            grc.AddNodePtxz("osm335765554", -1978.080 + xs, -1187.771 + zs);
+            grc.AddNodePtxz("osm335765555", -1975.456 + xs, -1186.778 + zs);
+            grc.AddNodePtxz("osm335765557", -1974.554 + xs, -1189.550 + zs);
+            grc.AddNodePtxz("osm335765559", -1946.392 + xs, -1180.281 + zs);
+            grc.AddNodePtxz("osm335765561", -1929.467 + xs, -1169.212 + zs);
+            grc.AddNodePtxz("osm335765567", -1977.124 + xs, -1147.845 + zs);
+            grc.AddNodePtxz("osm335765568", -1976.095 + xs, -1150.376 + zs);
+            grc.AddNodePtxz("osm335765569", -1987.612 + xs, -1154.501 + zs);
+            grc.AddNodePtxz("osm335765570", -1982.093 + xs, -1170.759 + zs);
+            grc.AddNodePtxz("osm335765571", -1984.961 + xs, -1171.765 + zs);
+            grc.AddNodePtxz("osm335765572", -1982.154 + xs, -1180.064 + zs);
+            grc.AddNodePtxz("osm335765573", -1980.806 + xs, -1179.603 + zs);
+            grc.AddNodePtxz("osm335766392", -1814.454 + xs, -1166.735 + zs);
+            grc.AddNodePtxz("osm335766393", -1801.232 + xs, -1162.391 + zs);
+            grc.AddNodePtxz("osm335766394", -1803.036 + xs, -1157.186 + zs);
+            grc.AddNodePtxz("osm335766397", -1798.288 + xs, -1155.656 + zs);
+            grc.AddNodePtxz("osm335766398", -1806.760 + xs, -1130.681 + zs);
+            grc.AddNodePtxz("osm335766399", -1808.315 + xs, -1131.190 + zs);
+            grc.AddNodePtxz("osm335766400", -1810.889 + xs, -1123.587 + zs);
+            grc.AddNodePtxz("osm335766401", -1809.341 + xs, -1123.057 + zs);
+            grc.AddNodePtxz("osm335766402", -1823.617 + xs, -1082.254 + zs);
+            grc.AddNodePtxz("osm335766403", -1828.354 + xs, -1083.915 + zs);
+            grc.AddNodePtxz("osm335766404", -1830.264 + xs, -1078.137 + zs);
+            grc.AddNodePtxz("osm335766405", -1843.690 + xs, -1082.639 + zs);
+            grc.AddNodePtxz("osm335766406", -1841.793 + xs, -1088.009 + zs);
+            grc.AddNodePtxz("osm335766407", -1846.311 + xs, -1089.556 + zs);
+            grc.AddNodePtxz("osm335766408", -1837.818 + xs, -1113.819 + zs);
+            grc.AddNodePtxz("osm335766409", -1855.437 + xs, -1119.850 + zs);
+            grc.AddNodePtxz("osm335766410", -1866.576 + xs, -1087.748 + zs);
+            grc.AddNodePtxz("osm335766411", -1871.000 + xs, -1089.326 + zs);
+            grc.AddNodePtxz("osm335766412", -1872.924 + xs, -1083.711 + zs);
+            grc.AddNodePtxz("osm335766413", -1886.140 + xs, -1087.903 + zs);
+            grc.AddNodePtxz("osm335766414", -1884.359 + xs, -1093.313 + zs);
+            grc.AddNodePtxz("osm321710561", -1888.459 + xs, -1094.741 + zs);
+            grc.AddNodePtxz("osm335766415", -1871.833 + xs, -1143.651 + zs);
+            grc.AddNodePtxz("osm335766416", -1870.380 + xs, -1143.288 + zs);
+            grc.AddNodePtxz("osm335766417", -1867.613 + xs, -1151.237 + zs);
+            grc.AddNodePtxz("osm335766418", -1868.977 + xs, -1151.719 + zs);
+            grc.AddNodePtxz("osm335766419", -1863.264 + xs, -1168.299 + zs);
+            grc.AddNodePtxz("osm335766421", -1858.771 + xs, -1166.848 + zs);
+            grc.AddNodePtxz("osm335766423", -1856.911 + xs, -1172.113 + zs);
+            grc.AddNodePtxz("osm335766424", -1843.685 + xs, -1167.815 + zs);
+            grc.AddNodePtxz("osm335766427", -1845.399 + xs, -1162.730 + zs);
+            grc.AddNodePtxz("osm335766428", -1841.227 + xs, -1161.310 + zs);
+            grc.AddNodePtxz("osm335766429", -1843.812 + xs, -1153.339 + zs);
+            grc.AddNodePtxz("osm335766430", -1826.011 + xs, -1147.221 + zs);
+            grc.AddNodePtxz("osm335766431", -1820.679 + xs, -1163.115 + zs);
+            grc.AddNodePtxz("osm335766432", -1816.203 + xs, -1161.551 + zs);
+            grc.AddNodePtxz("osm2363328703", -2045.203 + xs, -928.861 + zs);
+            grc.AddNodePtxz("osm4220218971", -2039.777 + xs, -928.928 + zs);
+            grc.AddNodePtxz("osm4220218972", -2039.814 + xs, -934.098 + zs);
+            grc.AddNodePtxz("osm2363328704", -1899.237 + xs, -935.821 + zs);
+            grc.AddNodePtxz("osm2363328706", -1898.987 + xs, -898.355 + zs);
+            grc.AddNodePtxz("osm2363328705", -2044.991 + xs, -896.564 + zs);
 
             grc.AddLinkByNodeName("osm7209690456", "osm323546805", usetype: LinkUse.bldwall, comment: "RedWest-A.link1");
             grc.AddLinkByNodeName("osm323546806", "osm7209690456", usetype: LinkUse.bldwall, comment: "RedWest-A.link2");
@@ -9035,9 +10332,11 @@ namespace GraphAlgos
             grc.AddLinkByNodeName("osm3413319587", "osm2363328705", usetype: LinkUse.bldwall, comment: "bld001.link11");
             grc.AddLinkByNodeName("osm2363328703", "osm3413319587", usetype: LinkUse.bldwall, comment: "bld001.link12");
             grc.regman.SetRegion("default");
-            // Area msftredwest machine generated 251 nodes and 251 links on 2020-06-22 18:26:55.078992
+            // Area msftredwest machine generated 251 nodes and 251 links on 2020-06-23 12:58:22.113967
         }
 
+
+    
 
 
         public void createPointsFor_msft_b40o()    // machine generated - do not edit

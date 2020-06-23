@@ -84,7 +84,7 @@ namespace CampusSimulator
                 case SceneSelE.None:
                     break;
             }
-            vidcamlist.Add("Viewer");
+            vidcamlist.Insert(0,"Viewer");
         }
         public bool toggleFreeFly;
         public FreeFlyCam ffc = null;

@@ -24,7 +24,7 @@ namespace CampusSimulator
         {
             var l = new List<string>
             {
-                "Bld11",
+                //"Bld11",
                 "Bld19",
                 "Bld40",
                 "Bld43",
@@ -124,13 +124,13 @@ namespace CampusSimulator
             destnodes = new List<string>();
             switch (name)
             {
-                case "Bld11":
-                    {
-                        maingaragename = "Garage11_1";
-                        destnodes = new List<string> { "b11-f01-lobby" };
-                        shortname = "b11";
-                        break;
-                    }
+                //case "Bld11":
+                //    {
+                //        maingaragename = "Garage11_1";
+                //        destnodes = new List<string> { "b11-f01-lobby" };
+                //        shortname = "b11";
+                //        break;
+                //    }
                 case "Bld19":
                     {
                         maingaragename = "Garage19_1";
@@ -513,15 +513,128 @@ namespace CampusSimulator
             var beac = ago.AddComponent<BldEvacAlarm>();
             beac.Init(this, apos);  
         }
+        public void DefineBuildingConstants()
+        {
+            defPeoplePerRoom = 2;
+            defPercentFull = 1.0f;
+            defRoomArea = 10;
+            var bmode = bm.bldMode.Get();
+            switch (name)
+            {
+                case "DubBld1":
+                    {
+                        if (bmode == BuildingMan.BldModeE.full)
+                        {
+                            AddBlock("blk1", new Vector3(108, 20, 80), 23.3, new Vector3(-60.9f, 10, 18.9f));
+                            AddBlock("blk2", new Vector3(40, 10, 22), -15.5, new Vector3(12.6f, 5, 21.8f));
+                        }
+                        break;
+                    }
+                case "Eb12-test":
+                    {
+                        //AddHouse("testhouse", Vector3.one, 0, new Vector3(-6.6f, 1, -97.6f));
+                        if (bmode == BuildingMan.BldModeE.full)
+                        {
+                            AddQuadHouse("testhouse", Vector3.one, 0, Vector3.zero);
+                        }
+                        break;
+                    }
+                case "Eb12-22":
+                    {
+                        defPeoplePerRoom = 10;
+                        defPercentFull = 1.0f;
+                        defRoomArea = 10;
+                        defAngAlign = 0;
+                        break;
+                    }
+                case "EbRewe":
+                    {
+                        defPeoplePerRoom = 5; // 20
+                        defPercentFull = 1.0f;
+                        defRoomArea = 100;
+                        break;
+                    }
+                case "BldRWB":
+                    { 
+                        defPeoplePerRoom = 2;
+                        if (bm.sman.curscene == SceneSelE.MsftB19focused)
+                        {
+                            defPercentFull = 0.05f;
+                        }
+                        else
+                        {
+                            defPercentFull = 0.95f;
+                        }
+                        defRoomArea = 10;
+                        defAngAlign = -10;
+                        if (bm.sman.curscene == SceneSelE.MsftRedwest)
+                        {
+                            bm.sman.jnman.preferedJourneyBuildingName = name;
+                        }
+                        break;
+                    }
+                case "Bld11":
+                    {
+                        defPeoplePerRoom = 20;
+                        defPercentFull = 1.0f;
+                        defRoomArea = 40;
+                        break;
+                    }
+                case "Bld19":
+                    {
+                        if (bm.sman.curscene == SceneSelE.MsftB19focused)
+                        {
+                            bm.sman.jnman.preferedJourneyBuildingName = name;
+                        }
+                        defPeoplePerRoom = 8;
+                        defPercentFull = 0.80f;
+                        defRoomArea = 16;
+                        defAngAlign = 24.0f;
+                        break;
+                    }
+                case "Bld40":
+                    {
+                        defPeoplePerRoom = 20;
+                        defPercentFull = 1.0f;
+                        defRoomArea = 40;
+                        break;
+                    }
+                case "Bld43":
+                    {
+                        defPeoplePerRoom = 4;
+                        defPercentFull = 1.0f;
+                        defRoomArea = 15;
+                        break;
+                    }
+                case "Bld99":
+                    {
+                        defPeoplePerRoom = 20;
+                        defPercentFull = 1.0f;
+                        defRoomArea = 40;
+                        break;
+                    }
+                case "BldSX":
+                    {
+                        defPeoplePerRoom = 20;
+                        defPercentFull = 1.0f;
+                        defRoomArea = 40;
+                        break;
+                    }
+                default:
+                    {
+                        Debug.Log("No building gos for " + name);
+                        break;
+                    }
+            }
+            //AddPeopleToRooms();
+        }
+
 
         public void CreateObjects()
         {
             bldgos = new List<GameObject>();
             var bmode = bm.bldMode.Get();
             var tmode = bm.treeMode.Get();
-            defPeoplePerRoom = 2;
-            defPercentFull = 1.0f;
-            defRoomArea = 10;
             switch (name)
             {
                 case "DubBld1":
@@ -549,10 +662,6 @@ namespace CampusSimulator
                             bm.sman.jnman.preferedJourneyBuildingName = name;
                         }
                         AddEb12Alarms();
-                        defPeoplePerRoom = 10;
-                        defPercentFull = 1.0f;
-                        defRoomArea = 10;
-                        defAngAlign = 0;
                         if (bmode == BuildingMan.BldModeE.full)
                         {
                             AddQuadHouse("blk1", new Vector3(23, 8, 14), -1.343, new Vector3(15.26f, 2f, 34.92f), rufcolor: "darkslategray");
@@ -664,9 +773,6 @@ namespace CampusSimulator
                     }
                 case "EbRewe":
                     {
-                        defPeoplePerRoom = 5; // 20
-                        defPercentFull = 1.0f;
-                        defRoomArea = 100;
                         if (bmode == BuildingMan.BldModeE.full)
                         {
                             AddQuadHouse("blk1", new Vector3(60, 5, 60), -28.82 + 90, new Vector3(300.5f, 2.5f, 156.1f), rufcolor: "darkgreen");
@@ -677,7 +783,6 @@ namespace CampusSimulator
                     {
                         //AddResource("pine1", "TreesAndShrubs/PineTree", new Vector3(0.4f, 0.4f, 0.4f), 180, new Vector3(-1987.0f, 0, -1167.7f));
                         //AddResource("pine2", "TreesAndShrubs/PineTree", new Vector3(0.4f, 0.4f, 0.4f), 180, new Vector3(-1959.9f, 0, -1242.6f));
-                        defPeoplePerRoom = 2;
                         if (bm.sman.curscene == SceneSelE.MsftB19focused)
                         {
                             defPercentFull = 0.05f;
@@ -685,12 +790,6 @@ namespace CampusSimulator
                         else
                         {
                             defPercentFull = 0.95f;
-                        }
-                        defRoomArea = 10;
-                        defAngAlign = -18.0f;
-                        if (bm.sman.curscene == SceneSelE.MsftRedwest)
-                        {
-                            bm.sman.jnman.preferedJourneyBuildingName = name;
                         }
                         if (tmode == BuildingMan.TreeModeE.full)
                         {
@@ -717,23 +816,12 @@ namespace CampusSimulator
                     }
                 case "Bld11":
                     {
-                        defPeoplePerRoom = 20;
-                        defPercentFull = 1.0f;
-                        defRoomArea = 40;
                         AddBldMarker("Bld11mark", 47.639792f, -122.131383f);
                         AddBldPoleCamera("Bld11raspipole", -131.42f, 223.8f, 0f, 2f);
                         break;
                     }
                 case "Bld19":
                     {
-                        if (bm.sman.curscene == SceneSelE.MsftB19focused)
-                        {
-                            bm.sman.jnman.preferedJourneyBuildingName = name;
-                        }
-                        defPeoplePerRoom = 8;
-                        defPercentFull = 0.80f;
-                        defRoomArea = 16;
-                        defAngAlign = 24.0f;
                         AddBldMarker("Bld19mark", 47.643061f, -122.131348f);
                         AddBldPoleCamera("Bld19raspipole", -451.5f, 98.3f,-44.0f, 2f);
                         AddB19Alarms();
@@ -741,34 +829,22 @@ namespace CampusSimulator
                     }
                 case "Bld40":
                     {
-                        defPeoplePerRoom = 20;
-                        defPercentFull = 1.0f;
-                        defRoomArea = 40;
                         AddBldMarker("Bld40mark", 47.636579f, -122.133196f);
                         break;
                     }
                 case "Bld43":
                     {
-                        defPeoplePerRoom = 4;
-                        defPercentFull = 1.0f;
-                        defRoomArea = 15;
                         AddBldMarker("Bld43mark", 47.659378f, -122.133196f);
                         AddBldPoleCamera("Bld43raspipole", 35.87f, -13.31f, -160.8f,2f);
                         break;
                     }
                 case "Bld99":
                     {
-                        defPeoplePerRoom = 20;
-                        defPercentFull = 1.0f;
-                        defRoomArea = 40;
                         AddBldMarker("Bld99mark", 47.642388f, -122.142093f);
                         break;
                     }
                 case "BldSX":
                     {
-                        defPeoplePerRoom = 20;
-                        defPercentFull = 1.0f;
-                        defRoomArea = 40;
                         AddBldMarker("BldSXmark", 47.641363f, -122.136217f);
                         break;
                     }
@@ -778,7 +854,6 @@ namespace CampusSimulator
                         break;
                     }
             }
-            //AddPeopleToRooms();
         }
         public void AddRedwestBAlarms()
         {

@@ -89,6 +89,9 @@ namespace CampusSimulator {
                 floor.transform.parent = roomformgo.transform;
                 floor.name = "floor";
                 floor.transform.localScale = new Vector3(length, 0.01f, width);
+                floor.transform.localRotation = Quaternion.Euler(0, this.alignang, 0);
+                //Debug.Log($"name:{name} aa:{this.alignang}");
+                //floor.transform.localRotation = Quaternion.Euler(0, -17, 0);
                 var crenderer = floor.GetComponent<Renderer>();
                 crenderer.material.color = Color.gray;
                 crenderer.material.shader = Shader.Find("Diffuse");
@@ -134,7 +137,7 @@ namespace CampusSimulator {
                         var roompt = lclc.GetNode(this.roomNodeName);
                         var diff = nodept.pt - roompt.pt;
                         //var roomrotate = Quaternion.EulerAngles(0, this.alignang, 0);// wierd, apparently EulerAngles is in Radians?
-                        var roomrotate = Quaternion.Euler(0, r2d*this.alignang, 0);
+                        var roomrotate = Quaternion.Euler(0, r2d*this.alignang, 0);// this may be wrong?
                         var diffa = roomrotate * diff;
                         persgo.transform.position = diffa;
                     }
