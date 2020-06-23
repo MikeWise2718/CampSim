@@ -844,6 +844,11 @@ namespace Aiskwk.Map
                 case "MsftRedwest":
                 case "MsftCoreCampus":
                 case "MsftB19focused":
+                    // current calibration points
+
+                    ////mapcoord.AddRowLatLng(47.65945816, -122.14133453, -1960.446 + 8.31, -1217.206 + 7.53);
+                    //mapcoord.AddRowLatLng(47.65945816, -122.14133453, 0,0);
+
                     mapcoord.AddRowLatLng(47.640490, -122.133797, -149.1, 0.2);
                     mapcoord.AddRowLatLng(47.639079, -122.134960, 28.0, -31.4);
                     mapcoord.AddRowLatLng(47.638526, -122.134519, 75.4, 19.9);

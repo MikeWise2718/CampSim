@@ -19,8 +19,8 @@ namespace CampusSimulator
         public string nodeName;
         public Vector3 nodePt;
         public Vector3 nodePtWc;
-        public float lng;
-        public float lat;
+        public double lng;
+        public double lat;
         public string strans0;
         public string strans1;
         public string strans2;
