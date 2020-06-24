@@ -223,10 +223,10 @@ namespace Aiskwk.Map
                 return;
             }
             llmapuscoords.CalcRegressionMaps();
-            var zlat = llmapuscoords.maps.latmap.Map(0, 0);
-            var zlng = llmapuscoords.maps.lngmap.Map(0, 0);
-            var zx = llmapuscoords.maps.xmap.Map(0, 0);
-            var zz = llmapuscoords.maps.zmap.Map(0, 0);
+            //var zlat = llmapuscoords.maps.latmap.Map(0, 0);
+            //var zlng = llmapuscoords.maps.lngmap.Map(0, 0);
+            //var zx = llmapuscoords.maps.xmap.Map(0, 0);
+            //var zz = llmapuscoords.maps.zmap.Map(0, 0);
             //Debug.Log($"Finishmappoints zlat:{zlat} zlng:{zlng}   - zx:{zx}   zz:{zz}");
         }
 
