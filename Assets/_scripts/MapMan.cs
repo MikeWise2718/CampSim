@@ -311,14 +311,14 @@ namespace CampusSimulator
             return (nbm, nel);
         }
 
-        public void SetMap(MapProvider map)
+        public void SetMapPovider(MapProvider map)
         {
             Debug.Log($"SetMap:{map}");
             reqMapProv.SetAndSave(map);
             //qmapman.mapprov = map;
             qmapman.qmm.mapprov = map;
         }
-        public void SetEle(ElevProvider ele)
+        public void SetEleProvider(ElevProvider ele)
         {
             reqEleProv.SetAndSave(ele);
             //qmapman.elevprov = ele;

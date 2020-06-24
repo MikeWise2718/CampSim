@@ -107,7 +107,7 @@ namespace CampusSimulator
             var textcomp = textgo.GetComponent<Text>();
             if (status)
             {
-                var clr = GraphAlgos.GraphUtil.getcolorbyname(hicolor);
+                var clr = GraphAlgos.GraphUtil.GetColorByName(hicolor);
                 //Debug.Log("Setting button color to:"+clr.ToString());
                 colors.normalColor = clr;
                 colors.highlightedColor = clr;

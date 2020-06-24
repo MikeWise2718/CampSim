@@ -98,7 +98,7 @@ namespace CampusSimulator
             tm.text = text;
             tm.fontSize = 12;
             tm.anchor = TextAnchor.UpperCenter;
-            tm.color = GraphUtil.getcolorbyname(colorname);
+            tm.color = GraphUtil.GetColorByName(colorname);
             float sfak = 0.1f;
             tm.transform.localScale = new Vector3(sfak, sfak, sfak);
             tm.transform.Rotate(0, yrot, 0);
@@ -207,7 +207,7 @@ namespace CampusSimulator
                         screensize = 12;
                         tm.fontSize = 10;
                         tm.anchor = TextAnchor.UpperCenter;
-                        tm.color = GraphUtil.getcolorbyname("white");
+                        tm.color = GraphUtil.GetColorByName("white");
                         break;
                     }
                 case outModeE.voiceCmdHistory:
@@ -215,7 +215,7 @@ namespace CampusSimulator
                         screensize = 12;
                         tm.fontSize = 8;
                         tm.anchor = TextAnchor.UpperCenter;
-                        tm.color = GraphUtil.getcolorbyname("pink");
+                        tm.color = GraphUtil.GetColorByName("pink");
                         break;
                     }
                 case outModeE.trace:
@@ -223,7 +223,7 @@ namespace CampusSimulator
                         screensize = 16;
                         tm.fontSize = 8;
                         tm.anchor = TextAnchor.UpperCenter;
-                        tm.color = GraphUtil.getcolorbyname("forestgreen");
+                        tm.color = GraphUtil.GetColorByName("forestgreen");
                         break;
                     }
                 case outModeE.help:
@@ -231,7 +231,7 @@ namespace CampusSimulator
                         screensize = 10;
                         tm.fontSize = 12;
                         tm.anchor = TextAnchor.UpperCenter;
-                        tm.color = GraphUtil.getcolorbyname("blue");
+                        tm.color = GraphUtil.GetColorByName("blue");
                         break;
                     }
 

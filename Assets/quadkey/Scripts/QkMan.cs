@@ -646,7 +646,7 @@ namespace Aiskwk.Map
             }
             var tex = new Texture2D(sz.x, sz.y);
             var cname = "goldenrod";
-            if (qut.iscolorname(synthSpec)) cname = synthSpec;
+            if (qut.isColorName(synthSpec)) cname = synthSpec;
             var npix = sz.x * sz.y;
             var clr = qut.GetColorByName(cname);
             //Debug.Log("clr:" + clr.ToString());

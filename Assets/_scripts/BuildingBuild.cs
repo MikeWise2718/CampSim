@@ -263,7 +263,7 @@ namespace CampusSimulator
             if (cname != "")
             {
                 var rrenderer = bgo.GetComponent<Renderer>();
-                rrenderer.material.color = GraphAlgos.GraphUtil.getcolorbyname(cname,alpha:0.7f);
+                rrenderer.material.color = GraphAlgos.GraphUtil.GetColorByName(cname,alpha:0.7f);
                 rrenderer.material.shader = Shader.Find("Transparent/Diffuse");
             }
         }
@@ -378,7 +378,7 @@ namespace CampusSimulator
             if (cname != "")
             {
                 var rrenderer = bgo.GetComponent<Renderer>();
-                rrenderer.material.color = GraphAlgos.GraphUtil.getcolorbyname(cname);
+                rrenderer.material.color = GraphAlgos.GraphUtil.GetColorByName(cname);
             }
             bldgos.Add(bgo);
         }
@@ -396,7 +396,7 @@ namespace CampusSimulator
             if (cname != "")
             {
                 var rrenderer = bgo.GetComponent<Renderer>();
-                rrenderer.material.color = GraphAlgos.GraphUtil.getcolorbyname(cname);
+                rrenderer.material.color = GraphAlgos.GraphUtil.GetColorByName(cname);
             }
             bldgos.Add(bgo);
         }

@@ -178,18 +178,110 @@ namespace Aiskwk.Map
             var rv = fmin + (i * (fmax - fmin) / maxi);
             return rv;
         }
-        static string colornames = "red,pink,darkorange,orange,lightorange,brown,saddlebrown,darkbrown,olive,darkgreen,forestgreen,seagreen,limegreen,darkblue,navy,navyblue,steelblue," +
-                                   "blue,green,magenta,lightpurple,lilac,purple,yellow,lightyellow,cyan,black,white,clear,silver,lightgray,lightgrey,gray,grey,dirtyred,darkred" +
-                                   "crimsom,firebrick,deeppurple,violet,darkpurple,muave,phlox,goldenrod";
-        public static bool iscolorname(string name)
-        {
-            return (colornames.IndexOf(name) >= 0);
-        }
 
         public static Color rgbbyte(int r, int g, int b, float alpha = 1)
         {
             return new Color(r / 255f, g / 255f, b / 255f, alpha);
         }
+        static Dictionary<string, Color> colorTable = null;
+        public static bool isColorName(string name)
+        {
+            if (colorTable == null)
+            {
+                InitColorTable();
+            }
+            return colorTable.ContainsKey(name);
+        }
+        static void InitColorTable()
+        {
+            colorTable = new Dictionary<string, Color>();
+            // reds
+            colorTable["red"] = new Color(1, 0, 0);
+            colorTable["crimsom"] = rgbbyte(220, 20, 60);
+            colorTable["coral"] = rgbbyte(255, 127, 80);
+            colorTable["firebrick"] = rgbbyte(178, 34, 34);
+            colorTable["darkred"] = rgbbyte(139, 0, 0);
+            colorTable["dirtyred"] = rgbbyte(117, 10, 10);
+            colorTable["pink"] = new Color(1, 0.412f, 0.71f);
+            colorTable["scarlet"] = new Color(1, 0.14f, 0.0f);
+            // yellows
+            colorTable["yellow"] = new Color(1, 1, 0);
+            colorTable["lightyellow"] = new Color(1, 1, 0.5f);
+            // oranges
+            colorTable["orange"] = new Color(1, 0.5f, 0);
+            colorTable["lightorange"] = new Color(1, 0.75f, 0);
+            colorTable["darkorange"] = new Color(0.75f, 0.25f, 0);
+            colorTable["brown"] = new Color(0.647f, 0.164f, 0.164f);
+            colorTable["saddlebrown"] = new Color(0.545f, 0.271f, 0.075f);
+            colorTable["darkbrown"] = new Color(0.396f, 0.263f, 0.129f);
+            // greens
+            colorTable["green"] = new Color(0, 1, 0);
+            colorTable["olive"] = new Color(0.5f, 0.5f, 0f);
+            colorTable["darkgreen1"] = new Color(0.004f, 0.196f, 0.125f);
+            colorTable["darkgreen"] = new Color(0.012f, 0.296f, 0.225f);
+            colorTable["forestgreen"] = new Color(0.132f, 0.543f, 0.132f);
+            colorTable["limegreen"] = new Color(0.195f, 0.8f, 0.195f);
+            colorTable["seagreen"] = new Color(0.33f, 1.0f, 0.62f);
+            // cyans
+            colorTable["cyan"] = new Color(0, 1, 1);
+            colorTable["turquoise"] =
+            colorTable["turquis"] = rgbbyte(64, 224, 208);
+            colorTable["teal"] = rgbbyte(0, 128, 128);
+            colorTable["aquamarine"] = rgbbyte(128, 255, 212);
+            // blues
+            colorTable["blue"] = new Color(0, 0, 1);
+            colorTable["steelblue"] = new Color(0.27f, 0.51f, 0.71f);
+            colorTable["lightblue"] = rgbbyte(173, 216, 230);
+            colorTable["azure"] = rgbbyte(0, 127, 255);
+            colorTable["skyblue"] = rgbbyte(135, 206, 235);
+            colorTable["darkblue"] = new Color(0.0f, 0.0f, 0.500f);
+            colorTable["navyblue"] = new Color(0.0f, 0.0f, 0.398f);
+            // purples
+            colorTable["magenta"] = new Color(1, 0, 1);
+            colorTable["violet"] = new Color(0.75f, 0, 0.75f);
+            colorTable["indigo"] = rgbbyte(43, 34, 170);
+            colorTable["purple"] = new Color(0.5f, 0, 0.5f);
+            colorTable["deeppurple"] = new Color(0.4f, 0, 0.4f);
+            colorTable["darkpurple"] = rgbbyte(48, 25, 52);
+            colorTable["phlox"] = rgbbyte(223, 0, 255);
+            colorTable["mauve"] = rgbbyte(224, 176, 255);
+            colorTable["fuchsia"] = rgbbyte(255, 0, 255);
+            colorTable["lilac"] = new Color(0.86f, 0.8130f, 1.0f);
+            // whites and grays
+            colorTable["white"] = new Color(1, 1, 1);
+            colorTable["chinawhite"] = new Color(0.937f, 0.910f, 0.878f);
+            colorTable["clear"] = Color.clear;
+            colorTable["silver"] = rgbbyte(192, 192, 192);
+            colorTable["lightgrey"] =
+            colorTable["lightgray"] = rgbbyte(211, 211, 211);
+            colorTable["slategray"] =
+            colorTable["slategrey"] = rgbbyte(112, 128, 144);
+            colorTable["darkslategray"] =
+            colorTable["darkslategrey"] = rgbbyte(74, 85, 83);
+            colorTable["darkgray"] =
+            colorTable["darkgrey"] =
+            colorTable["dimgray"] =
+            colorTable["dimgrey"] = rgbbyte(105, 105, 105);
+            colorTable["grey"] =
+            colorTable["gray"] = rgbbyte(128, 128, 128);
+            colorTable["black"] = new Color(0, 0, 0);
+        }
+        public static Color GetColorByName(string name)
+        {
+            if (!isColorName(name))
+            {
+                Debug.LogError($"color {name} not defined in colortable");
+                return Color.gray;
+            }
+            return colorTable[name];
+        }
+        public static Color GetColorByName(string name, float alpha = 0.4f)
+        {
+            var clr = GetColorByName(name);
+            var rv = new Color(clr.r, clr.g, clr.b, alpha);
+            return rv;
+        }
+
         public static byte[] StringToByteArrayFastest(string hex)
         {
             if (hex.Length % 2 == 1)
@@ -235,75 +327,7 @@ namespace Aiskwk.Map
             var hexstr = $"#{rs}{gs}{bs}";
             return (hexstr, clr.a);
         }
-        public static Color GetColorByName(string name, float alpha = 0.4f)
-        {
-            // this is a hack that voids a wierd error message about constants not being available
-            if (name[0] == '#')
-            {
-                return (rgbhex(name, alpha));
-            }
-            switch (name)
-            {
-                case "red": return (new Color(1, 0, 0, alpha));
-                case "crimsom": return rgbbyte(220, 20, 60, alpha);
-                case "firebrick": return rgbbyte(178, 34, 34, alpha);
-                case "darkred": return rgbbyte(139, 0, 0, alpha);
-                case "dirtyred": return rgbbyte(117, 10, 10, alpha);
-                case "pink": return (new Color(1, 0.412f, 0.71f, alpha));
-                case "scarlet": return (new Color(1, 0.14f, 0.0f, alpha));
-                case "orange": return (new Color(1, 0.5f, 0, alpha));
-                case "lightorange": return (new Color(1, 0.75f, 0, alpha));
-                case "darkorange": return (new Color(0.75f, 0.25f, 0, alpha));
-                case "brown": return (new Color(0.647f, 0.164f, 0.164f, alpha));
-                case "saddlebrown": return (new Color(0.545f, 0.271f, 0.075f, alpha));
-                case "darkbrown": return (new Color(0.396f, 0.263f, 0.129f, alpha));
-                case "olive": return (new Color(0.5f, 0.5f, 0f, alpha));
-                case "darkgreen1": return (new Color(0.004f, 0.196f, 0.125f, alpha));
-                case "darkgreen": return (new Color(0.012f, 0.296f, 0.225f, alpha));
-                case "forestgreen": return (new Color(0.132f, 0.543f, 0.132f, alpha));
-                case "seagreen": return (new Color(0.33f, 1.0f, 0.62f, alpha));
-                case "limegreen": return (new Color(0.195f, 0.8f, 0.195f, alpha));
-                case "steelblue": return (new Color(0.27f, 0.51f, 0.71f, alpha));
-                case "lightblue": return rgbbyte(173, 216, 230);
-                case "darkblue": return new Color(0.0f, 0.0f, 0.500f);
-                case "navy":
-                case "navyblue": return new Color(0.0f, 0.0f, 0.398f);
-                case "blue": return (new Color(0, 0, 1, alpha));
-                case "green": return (new Color(0, 1, 0, alpha));
-                case "magenta": return (new Color(1, 0, 1, alpha));
-                case "violet": return (new Color(0.75f, 0, 0.75f, alpha));
-                case "purple": return (new Color(0.5f, 0, 0.5f, alpha));
-                case "deeppurple": return (new Color(0.4f, 0, 0.4f, alpha));
-                case "darkpurple": return rgbbyte(48, 25, 52);
-                case "phlox": return rgbbyte(223, 0, 255);
-                case "mauve": return rgbbyte(224, 176, 255);
-                case "lightpurple":
-                case "lilac": return new Color(0.86f, 0.8130f, 1.0f, alpha);
-                case "goldenrod": return rgbbyte(248, 224, 142, alpha);
-                case "lightyellow": return (new Color(1, 1, 0.5f, alpha));
-                case "yellow": return (new Color(1, 1, 0, alpha));
-                case "cyan": return (new Color(0, 1, 1, alpha));
-                case "black": return (new Color(0, 0, 0, alpha));
-                case "white": return (new Color(1, 1, 1, alpha));
-                case "chinawhite": return new Color(0.937f, 0.910f, 0.878f, alpha);
-                case "clear": return Color.clear;
-                case "silver": return rgbbyte(192, 192, 192, alpha);
-                case "lightgrey":
-                case "lightgray": return rgbbyte(211, 211, 211, alpha);
-                case "slategray":
-                case "slategrey": return rgbbyte(112, 128, 144, alpha);
-                case "darkslategray":
-                case "darkslategrey": return rgbbyte(74, 85, 83, alpha);
-                case "darkgray":
-                case "darkgrey":
-                case "dimgray":
-                case "dimgrey": return rgbbyte(105, 105, 105, alpha);
-                case "grey":
-                case "gray":
-                default:
-                    return (new Color(128, 128, 128, alpha));
-            }
-        }
+ 
         static Shader transShader = null;
         public static void SetColorOfGo(GameObject go, Color cclr)
         {
