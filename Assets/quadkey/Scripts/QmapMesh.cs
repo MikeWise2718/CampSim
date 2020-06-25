@@ -91,7 +91,6 @@ namespace Aiskwk.Map
         public NormalAvgMethod normmethod = NormalAvgMethod.Avg;
         public int nElevSamples = 0;
 
-
         [Header("Garnish")]
         public bool regenMesh;
         public bool regenMeshNormals;

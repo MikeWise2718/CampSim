@@ -360,8 +360,6 @@ namespace Aiskwk.Map
             return mat;
         }
 
-
-
         public static void SetColorOfGo(GameObject go, string clrname, float alf = 1.0f)
         {
             SetColorOfGo(go, GetColorByName(clrname, alf));
@@ -383,19 +381,53 @@ namespace Aiskwk.Map
             return (sph);
         }
 
+
+        public static GameObject Create4ptQuad(string qname, Vector3 pt0, Vector3 pt1, Vector3 pt2, Vector3 pt3, string clr = "blue", float alf = 1, bool onesided = false)
+        {
+            var go = new GameObject(qname);
+            MeshRenderer meshRenderer = go.AddComponent<MeshRenderer>();
+            meshRenderer.sharedMaterial = new Material(Shader.Find("Standard"));
+
+            MeshFilter meshFilter = go.AddComponent<MeshFilter>();
+
+            Mesh mesh = new Mesh();
+            Vector3[] vertices;
+            int[] tris;
+            Vector2[] uv;
+            if (onesided)
+            {
+                vertices = new Vector3[] { pt0, pt1, pt2, pt3 };
+                tris = new int[] { 0, 1, 2, 2, 1, 3 };
+                uv = new Vector2[] { new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1), new Vector2(1, 1) };
+            }
+            else
+            {
+                vertices = new Vector3[] { pt0, pt1, pt2, pt3, pt0, pt1, pt2, pt3 };
+                tris = new int[] { 0, 1, 2, 2, 1, 3, 1 + 4, 0 + 4, 2 + 4, 1 + 4, 2 + 4, 3 + 4 };
+                uv = new Vector2[] { 
+                    new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1), new Vector2(1, 1),
+                    new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1), new Vector2(1, 1),
+                };
+            }
+            mesh.vertices = vertices;
+            mesh.triangles = tris;
+            mesh.uv = uv;
+            mesh.RecalculateNormals();
+            meshFilter.mesh = mesh;
+            qut.SetColorOfGo(go, clr, alf);
+            return go;
+        }
         public static GameObject CreatePipe(string pname, Vector3 frpt, Vector3 topt, float size = 0.1f, string clr = "yellow", float alf = 1)
         {
             var cclr = GetColorByName(clr, alf);
             return CreatePipe(pname, frpt, topt, cclr, size);
-
         }
-
 
         public static GameObject CreatePipe(string pname, Vector3 frpt, Vector3 topt, Color cclr, float size = 0.1f)
         {
             var dst_div_2 = Vector3.Distance(frpt, topt) / 2;
             var dlt = topt - frpt;
-            var dltxz = Mathf.Sqrt(dlt.x * dlt.x + dlt.z * dlt.z);
+            var dltxz = Mathf.Sqrt( dlt.x*dlt.x + dlt.z*dlt.z );
             var anglng = 180 * Mathf.Atan2(dltxz, dlt.y) / Mathf.PI;
             var anglat = 180 * Mathf.Atan2(dlt.x, dlt.z) / Mathf.PI;
 
@@ -457,7 +489,7 @@ namespace Aiskwk.Map
             var tgo = new GameObject(parpargo.name + "-tmp");
             tgo.transform.position = parpargo.transform.position;
             var tmp = tgo.AddComponent<TMPro.TextMeshPro>();
-            int linecount = text.Split('\n').Length;
+            //int linecount = text.Split('\n').Length;
             //tm.text = "<mark=#000000>"+text+"</mark>"; // this only works with an alpha of less than 1
             tmp.text = text;
             tmp.fontSize = 14;
@@ -483,7 +515,6 @@ namespace Aiskwk.Map
             {
                 Debug.Log($"{caller} copied {textToCopy.Length} characters to clipboard");
             }
-
         }
     }
 
