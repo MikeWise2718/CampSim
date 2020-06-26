@@ -10,7 +10,10 @@ public class BldPolyGenTest : MonoBehaviour
     void Start()
     {
         bpg = new BldPolyGen();
-        var cgo = bpg.GenCircle("circle", Vector3.zero, 20, 1f, 2f, 0.5f,clr:"indigo",alf:0.5f);
+        bpg.SetGenForm(BldPolyGenForm.pipes);
+        bpg.SetGenForm(BldPolyGenForm.walls);
+        bpg.SetGenForm(BldPolyGenForm.wallsmesh);
+        var cgo = bpg.GenCylinderBuilding("circle", Vector3.zero, 20, 1f, 2f, 0.5f,clr:"indigo",alf:0.5f);
         cgo.transform.parent = this.transform;
     }
 
