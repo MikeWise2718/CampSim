@@ -9,76 +9,55 @@ public class BldPolyGenTest : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GenStar(dowalls:false,doceil:true,dofloor:false,dbOutline:true);
+        // debug one layer only
+        GenObj(ObjForm.circle, dowalls:false,doceil:true,dofloor:false,dbOutline:false);
+        //GenObj(ObjForm.circle,onesided:false);
     }
 
-    void GenCylinder()
-    {
-        var alf = 0.5f;
-        alf = 1;
 
-        bpg = new BldPolyGen();
-        bpg.GenCylinderOutline(Vector3.zero, 20, 1f);
-        bpg.SetGenForm(BldPolyGenForm.wallsmesh);
-        var walgo = bpg.GenMesh("walls",2, clr: "red", alf:alf);
-        walgo.transform.parent = this.transform;
-        bpg.SetGenForm(BldPolyGenForm.tesselate);
-        var ceigo = bpg.GenMesh("ceiling", 2, clr: "blue", alf:alf);
-        ceigo.transform.parent = this.transform;
-        bpg.SetGenForm(BldPolyGenForm.tesselate);
-        var fl1go = bpg.GenMesh("floor1", 1, clr: "green", alf:alf);
-        fl1go.transform.parent = this.transform;
-    }
-
-    void GenStar(bool dowalls=true,bool doceil=true,bool dofloor=true,bool dbOutline=false)
+    enum ObjForm { star, cross, circle }
+    void GenObj(ObjForm objform, bool dowalls = true, bool doceil = true, bool dofloor = true, bool dbOutline = false, bool onesided=false)
     {
         var alf = 0.5f;
         //alf = 1;
 
         bpg = new BldPolyGen();
-        bpg.GenStarOutline(Vector3.zero, 8, 0.5f,3f);
+        switch (objform)
+        {
+            default:
+            case ObjForm.star:
+                {
+                    bpg.GenStarOutline(Vector3.zero, 8, 0.5f, 3f);
+                    break;
+                }
+            case ObjForm.cross:
+                {
+                    bpg.GenCrossOutline(Vector3.zero,  2f );
+                    break;
+                }
+            case ObjForm.circle:
+                {
+                    bpg.GenCylinderOutline(Vector3.zero, 20, 1f);
+                    break;
+                }
+        }
         if (dowalls)
         {
             bpg.SetGenForm(BldPolyGenForm.wallsmesh);
-            var walgo = bpg.GenMesh("walls", 2, clr: "blue", alf: alf,dbout:dbOutline);
+            var walgo = bpg.GenMesh("walls", height: 2, clr: "blue", alf: alf,dbout:dbOutline, onesided:onesided);
             walgo.transform.parent = this.transform;
         }
         if (doceil)
         {
             bpg.SetGenForm(BldPolyGenForm.tesselate);
-            var ceigo = bpg.GenMesh("ceiling", 2, clr: "blue", alf: alf, dbout: dbOutline);
+            var ceigo = bpg.GenMesh("ceiling", height: 2, clr: "blue", alf: alf, dbout: dbOutline, onesided: onesided);
             ceigo.transform.parent = this.transform;
         }
         if (dofloor)
         {
             bpg.SetGenForm(BldPolyGenForm.tesselate);
-            var fl1go = bpg.GenMesh("floor1", 1, clr: "blue", alf: alf, dbout: dbOutline);
+            var fl1go = bpg.GenMesh("floor1", height: 1, clr: "blue", alf: alf, dbout: dbOutline, onesided: onesided);
             fl1go.transform.parent = this.transform;
         }
-    }
-
-
-    void GenCross()
-    {
-        var alf = 0.5f;
-        alf = 1;
-
-        bpg = new BldPolyGen();
-        bpg.GenCrossOutline(Vector3.zero, 2);
-        bpg.SetGenForm(BldPolyGenForm.walls);
-        var walgo = bpg.GenMesh("walls", 2, clr: "red", alf:alf);
-        walgo.transform.parent = this.transform;
-        bpg.SetGenForm(BldPolyGenForm.tesselate);
-        //var ceigo = bpg.GenMesh("ceiling", 2, clr: "blue", alf:alf);
-        //ceigo.transform.parent = this.transform;
-        var fl1go = bpg.GenMesh("floor1", 1, clr: "green", alf:alf);
-        fl1go.transform.parent = this.transform;
-    }
-
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

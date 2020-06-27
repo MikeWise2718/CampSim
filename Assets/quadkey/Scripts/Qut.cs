@@ -196,7 +196,9 @@ namespace Aiskwk.Map
         {
             colorTable = new Dictionary<string, Color>();
             // reds
+            colorTable["r"] = 
             colorTable["red"] = new Color(1, 0, 0);
+            colorTable["dr"] = new Color(0.5f, 0, 0);
             colorTable["crimsom"] = rgbbyte(220, 20, 60);
             colorTable["coral"] = rgbbyte(255, 127, 80);
             colorTable["firebrick"] = rgbbyte(178, 34, 34);
@@ -205,7 +207,9 @@ namespace Aiskwk.Map
             colorTable["pink"] = new Color(1, 0.412f, 0.71f);
             colorTable["scarlet"] = new Color(1, 0.14f, 0.0f);
             // yellows
+            colorTable["y"] = 
             colorTable["yellow"] = new Color(1, 1, 0);
+            colorTable["dy"] = new Color(0.5f, 0.5f, 0);
             colorTable["lightyellow"] = new Color(1, 1, 0.5f);
             // oranges
             colorTable["orange"] = new Color(1, 0.5f, 0);
@@ -215,21 +219,27 @@ namespace Aiskwk.Map
             colorTable["saddlebrown"] = new Color(0.545f, 0.271f, 0.075f);
             colorTable["darkbrown"] = new Color(0.396f, 0.263f, 0.129f);
             // greens
+            colorTable["g"] = 
             colorTable["green"] = new Color(0, 1, 0);
+            colorTable["dg"] = new Color(0, 0.5f, 0);
             colorTable["olive"] = new Color(0.5f, 0.5f, 0f);
+            colorTable["darkgreen"] = new Color(0, 0.5f, 0);
             colorTable["darkgreen1"] = new Color(0.004f, 0.196f, 0.125f);
-            colorTable["darkgreen"] = new Color(0.012f, 0.296f, 0.225f);
             colorTable["forestgreen"] = new Color(0.132f, 0.543f, 0.132f);
             colorTable["limegreen"] = new Color(0.195f, 0.8f, 0.195f);
             colorTable["seagreen"] = new Color(0.33f, 1.0f, 0.62f);
             // cyans
+            colorTable["c"] = 
             colorTable["cyan"] = new Color(0, 1, 1);
+            colorTable["dc"] = new Color(0, 0.5f, 0.5f);
             colorTable["turquoise"] =
             colorTable["turquis"] = rgbbyte(64, 224, 208);
             colorTable["teal"] = rgbbyte(0, 128, 128);
             colorTable["aquamarine"] = rgbbyte(128, 255, 212);
             // blues
+            colorTable["b"] = 
             colorTable["blue"] = new Color(0, 0, 1);
+            colorTable["db"] = new Color(0, 0, 0.5f);
             colorTable["steelblue"] = new Color(0.27f, 0.51f, 0.71f);
             colorTable["lightblue"] = rgbbyte(173, 216, 230);
             colorTable["azure"] = rgbbyte(0, 127, 255);
@@ -237,10 +247,12 @@ namespace Aiskwk.Map
             colorTable["darkblue"] = new Color(0.0f, 0.0f, 0.500f);
             colorTable["navyblue"] = new Color(0.0f, 0.0f, 0.398f);
             // purples
+            colorTable["m"] = 
             colorTable["magenta"] = new Color(1, 0, 1);
+            colorTable["dm"] = 
+            colorTable["purple"] = new Color(0.5f, 0, 0.5f);
             colorTable["violet"] = new Color(0.75f, 0, 0.75f);
             colorTable["indigo"] = rgbbyte(43, 34, 170);
-            colorTable["purple"] = new Color(0.5f, 0, 0.5f);
             colorTable["deeppurple"] = new Color(0.4f, 0, 0.4f);
             colorTable["darkpurple"] = rgbbyte(48, 25, 52);
             colorTable["phlox"] = rgbbyte(223, 0, 255);
@@ -248,6 +260,7 @@ namespace Aiskwk.Map
             colorTable["fuchsia"] = rgbbyte(255, 0, 255);
             colorTable["lilac"] = new Color(0.86f, 0.8130f, 1.0f);
             // whites and grays
+            colorTable["w"] = 
             colorTable["white"] = new Color(1, 1, 1);
             colorTable["chinawhite"] = new Color(0.937f, 0.910f, 0.878f);
             colorTable["clear"] = Color.clear;
@@ -264,6 +277,7 @@ namespace Aiskwk.Map
             colorTable["dimgrey"] = rgbbyte(105, 105, 105);
             colorTable["grey"] =
             colorTable["gray"] = rgbbyte(128, 128, 128);
+            colorTable["blk"] = 
             colorTable["black"] = new Color(0, 0, 0);
         }
         public static Color GetColorByName(string name)
@@ -280,6 +294,22 @@ namespace Aiskwk.Map
             var clr = GetColorByName(name);
             var rv = new Color(clr.r, clr.g, clr.b, alpha);
             return rv;
+        }
+
+        static string[] dcolorseq = { "dr", "dg", "db", "dm", "dy", "dc" };
+        static string[] colorseq = { "r", "g", "b", "m", "y", "c" };
+        public static string GetColorBySeq(int idx,bool dark=true)
+        {
+            string name;
+            if (dark)
+            {
+                name = dcolorseq[idx % dcolorseq.Length];
+            }
+            else
+            {
+                name = colorseq[idx % colorseq.Length];
+            }
+            return name;
         }
 
         public static byte[] StringToByteArrayFastest(string hex)

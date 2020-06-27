@@ -12,7 +12,7 @@ public enum BldPolyGenForm { pipes, walls, wallsmesh, tesselate }
 public class BldPolyGen
 {
 
-    private List<(int id,Vector3 pt)> outline;
+    private List<(int id, Vector3 pt)> outline;
     private BldPolyGenForm genform;
     private float wallheight = 1f;
     private float wallalf = 1f;
@@ -23,17 +23,17 @@ public class BldPolyGen
         outline = new List<(int id, Vector3 pt)>();
     }
 
-    public void AddOutlinePoint(int id,Vector3 pt)
+    public void AddOutlinePoint(int id, Vector3 pt)
     {
-        outline.Add((id,pt));
+        outline.Add((id, pt));
     }
-    public void AddOutlinePoint(int id,float x,float y, float z)
+    public void AddOutlinePoint(int id, float x, float y, float z)
     {
-        outline.Add((id,new Vector3(x,y,z)));
+        outline.Add((id, new Vector3(x, y, z)));
     }
 
-    List<(int id, Vector3 pt)> ptsbuf=null;
-    List<int> tribuf=null;
+    List<(int id, Vector3 pt)> ptsbuf = null;
+    List<int> tribuf = null;
     List<Vector2> uvbuf = null;
     int iseg;
 
@@ -48,7 +48,7 @@ public class BldPolyGen
     {
         var newuvbuf = new List<Vector2>();
         var nseg = uvbuf.Count / 2;
-        for (int i = 0; i < nseg; i++ )
+        for (int i = 0; i < nseg; i++)
         {
             Vector2 v2 = uvbuf[i];
             var newv2 = new Vector2(v2.x / nseg, v2.y);
@@ -56,26 +56,67 @@ public class BldPolyGen
         }
         uvbuf = newuvbuf;
     }
-
-    public void PlotOutline(GameObject parent,List<(int id, Vector3 pt)> outline,float height,string clr)
+    public void PlotTri(GameObject parent, Vector3 pt1, Vector3 pt2, Vector3 pt3, string txt, float height, string clr)
+    {
+        pt1 = new Vector3(pt1.x, height, pt1.z);
+        pt2 = new Vector3(pt2.x, height, pt2.z);
+        pt3 = new Vector3(pt3.x, height, pt3.z);
+        var pcen = (pt1 + pt2 + pt3) / 3;
+        pt1 = Vector3.Lerp(pt1, pcen, 0.2f);
+        pt2 = Vector3.Lerp(pt2, pcen, 0.2f);
+        pt3 = Vector3.Lerp(pt3, pcen, 0.2f);
+        var mgo1 = qut.CreateMarkerSphere("marker1", pt1, clr: clr);
+        mgo1.transform.parent = parent.transform;
+        var mgo2 = qut.CreateMarkerSphere("marker2", pt2, clr: clr);
+        mgo2.transform.parent = parent.transform;
+        var mgo3 = qut.CreateMarkerSphere("marker2", pt3, clr: clr);
+        mgo3.transform.parent = parent.transform;
+        var pgo1 = qut.CreatePipe("pipe_1", pt1, pt2, clr: clr);
+        pgo1.transform.parent = parent.transform;
+        var pgo2 = qut.CreatePipe("pipe_2", pt2, pt3, clr: clr);
+        pgo2.transform.parent = parent.transform;
+        var pgo3 = qut.CreatePipe("pipe_3", pt3, pt1, clr: clr);
+        pgo3.transform.parent = parent.transform;
+    }
+    public void PlotOutline(GameObject parent, List<(int id, Vector3 pt)> outline, string centxt, float height, string clr)
     {
         Vector3 lstpt = Vector3.zero;
+        Vector3 fstpt = Vector3.zero;
         int i = 0;
-        foreach(var p in outline)
+        Vector3 psum = Vector3.zero;
+        foreach (var p in outline)
         {
             var pt = new Vector3(p.pt.x, height, p.pt.z);
-            var mgo = qut.CreateMarkerSphere("marker" + p.id, pt,clr:clr);
+            if (i == 0)
+            {
+                fstpt = pt;
+            }
+            psum += pt;
+
+            var mgo = qut.CreateMarkerSphere("marker" + p.id, pt, clr: clr);
             mgo.transform.parent = parent.transform;
             var txt = p.id.ToString();
-            var txgo = qut.MakeTextGo(mgo,txt,yoff:0.5f);
-            if (i>0)
+            var txgo = qut.MakeTextGo(mgo, txt, yoff: 0.2f, sfak: 0.1f);
+            if (i > 0)
             {
                 var pgo = qut.CreatePipe("pipe_" + i, lstpt, pt, clr: clr);
+                pgo.transform.parent = parent.transform;
             }
             lstpt = pt;
             i++;
         }
-
+        if (i > 0)
+        {
+            var pcen = psum / i;
+            var mgo = qut.CreateMarkerSphere("cen", pcen, size: 0.05f, clr: clr);
+            mgo.transform.parent = parent.transform;
+            var txgo = qut.MakeTextGo(mgo, centxt, yoff: 0.1f, sfak: 0.1f);
+        }
+        if (i > 2)
+        {
+            var pgo = qut.CreatePipe("pipe_" + i, fstpt, lstpt, clr: "blk");
+            pgo.transform.parent = parent.transform;
+        }
     }
 
     public void AddSegment(Vector3 pt0, Vector3 pt1, float height, bool onesided = true)
@@ -87,10 +128,11 @@ public class BldPolyGen
         var idx1 = pcnt + 1;
         var idx2 = pcnt + 2;
         var idx3 = pcnt + 3;
-        ptsbuf.Add((idx0,pt0));
-        ptsbuf.Add((idx1,pt1));
-        ptsbuf.Add((idx2,pt2h));
-        ptsbuf.Add((idx3,pt3h));
+        ptsbuf.Add((idx0, pt0));
+        ptsbuf.Add((idx1, pt1));
+        ptsbuf.Add((idx2, pt2h));
+        ptsbuf.Add((idx3, pt3h));
+
 
         tribuf.Add(idx0);
         tribuf.Add(idx1);
@@ -98,6 +140,7 @@ public class BldPolyGen
         tribuf.Add(idx2);
         tribuf.Add(idx1);
         tribuf.Add(idx3);
+
         if (!onesided)
         {
             pcnt = ptsbuf.Count;
@@ -106,10 +149,10 @@ public class BldPolyGen
             idx2 = pcnt + 2;
             idx3 = pcnt + 3;
 
-            ptsbuf.Add((idx0,pt0));
-            ptsbuf.Add((idx1,pt1));
-            ptsbuf.Add((idx2,pt2h));
-            ptsbuf.Add((idx3,pt3h));
+            ptsbuf.Add((idx0, pt0));
+            ptsbuf.Add((idx1, pt1));
+            ptsbuf.Add((idx2, pt2h));
+            ptsbuf.Add((idx3, pt3h));
 
             tribuf.Add(idx1);
             tribuf.Add(idx0);
@@ -124,11 +167,11 @@ public class BldPolyGen
         uvbuf.Add(new Vector2(iseg, 1));
         iseg++;
     }
-    Vector3 [] GetPtsBufArray()
+    Vector3[] GetPtsBufArray()
     {
         var rv = new Vector3[ptsbuf.Count];
         int i = 0;
-        foreach(var p in ptsbuf)
+        foreach (var p in ptsbuf)
         {
             rv[i++] = p.pt;
         }
@@ -137,12 +180,12 @@ public class BldPolyGen
     public GameObject GetAccumulatedMesh(string meshname)
     {
         var go = new GameObject(meshname);
-        MeshRenderer meshRenderer = go.AddComponent<MeshRenderer>();
+        var meshRenderer = go.AddComponent<MeshRenderer>();
         meshRenderer.sharedMaterial = new Material(Shader.Find("Standard"));
 
-        MeshFilter meshFilter = go.AddComponent<MeshFilter>();
+        var meshFilter = go.AddComponent<MeshFilter>();
 
-        Mesh mesh = new Mesh();
+        var mesh = new Mesh();
         mesh.vertices = GetPtsBufArray();
         mesh.triangles = tribuf.ToArray();
         NormalizeUvbuf();
@@ -155,22 +198,22 @@ public class BldPolyGen
         return go;
     }
 
-    public void GenCylinderOutline(Vector3 cen, int nseg, float radius, float ripple=0)
+    public void GenCylinderOutline(Vector3 cen, int nseg, float radius, float ripple = 0)
     {
         for (int i = 0; i < nseg; i++)
         {
-            var angdeg = (360f*i) / nseg;
+            var angdeg = (360f * i) / nseg;
             var ang = Mathf.PI * angdeg / 180;
             //Debug.Log($"i:{i} angdeg:{angdeg}  ang:{ang}");
-            var x = radius * Mathf.Sin(ang)  + cen.x;
+            var x = radius * Mathf.Sin(ang) + cen.x;
             var ripoff = ripple * Mathf.Sin(ang);
-            var y = cen.y + ripoff*ripoff;
-            var z = radius * Mathf.Cos(ang)  + cen.z;
-            AddOutlinePoint(i,x, y, z);
+            var y = cen.y + ripoff * ripoff;
+            var z = radius * Mathf.Cos(ang) + cen.z;
+            AddOutlinePoint(i, x, y, z);
         }
     }
 
-    public void GenStarOutline(Vector3 cen, int nseg, float rad1,float rad2, float ripple = 0)
+    public void GenStarOutline(Vector3 cen, int nseg, float rad1, float rad2, float ripple = 0)
     {
         for (int i = 0; i < nseg; i++)
         {
@@ -186,13 +229,13 @@ public class BldPolyGen
             var ripoff = ripple * Mathf.Sin(ang);
             var y = cen.y + ripoff * ripoff;
             var z = radius * Mathf.Cos(ang) + cen.z;
-            AddOutlinePoint(i,cen.x+x, cen.y+y, cen.z+z);
+            AddOutlinePoint(i, cen.x + x, cen.y + y, cen.z + z);
         }
     }
 
     public void GenCrossOutline(Vector3 cen, float radius, float ripple = 0)
     {
-        var o2 = new List<Vector2>() { 
+        var o2 = new List<Vector2>() {
             new Vector2(-3, -1), new Vector2(-3, +1), new Vector2(-1, +1),
             new Vector2(-1, +3), new Vector2(+1, +3), new Vector2(+1, +1),
             new Vector2(+3, +1), new Vector2(+3, -1), new Vector2(+1, -1),
@@ -201,17 +244,17 @@ public class BldPolyGen
         for (int i = 0; i < o2.Count; i++)
         {
             var pt = o2[i];
-            AddOutlinePoint(i, pt.y+cen.x, 0+cen.y, pt.x+cen.z);
+            AddOutlinePoint(i, pt.y + cen.x, 0 + cen.y, pt.x + cen.z);
         }
     }
 
-    public GameObject GenMesh(string name, float height = 1, string clr = "indigo", float alf = 1,bool dbout=false)
+    public GameObject GenMesh(string name, float height = 1, string clr = "indigo", float alf = 1, bool dbout = false, bool onesided=false)
     {
         var go = new GameObject(name);
         this.wallheight = height;
         this.wallalf = alf;
         this.wallclr = clr;
-        Generate(go,dbout);
+        Generate(go, dbout,onesided:onesided);
         return go;
     }
 
@@ -225,10 +268,7 @@ public class BldPolyGen
         this.wallheight = height;
     }
 
-
-    //public static GameObject CreatePipe(string pname, Vector3 frpt, Vector3 topt, float size = 0.1f, string clr = "yellow", float alf = 1)
-
-    public GameObject Create4ptQuad(string qname, Vector3 pt0, Vector3 pt1, Vector3 pt2, Vector3 pt3, string clr = "blue",float alf=1, bool onesided = false )
+    public GameObject Create4ptQuad(string qname, Vector3 pt0, Vector3 pt1, Vector3 pt2, Vector3 pt3, string clr = "blue", float alf = 1, bool onesided = false)
     {
         var go = new GameObject(qname);
         MeshRenderer meshRenderer = go.AddComponent<MeshRenderer>();
@@ -249,8 +289,8 @@ public class BldPolyGen
         else
         {
             vertices = new Vector3[] { pt0, pt1, pt2, pt3, pt0, pt1, pt2, pt3 };
-            tris = new int[] { 0,1,2, 2,1,3, 1+4,0+4,2+4, 1+4,2+4,3+4 };
-            uv = new Vector2[] { 
+            tris = new int[] { 0, 1, 2, 2, 1, 3, 1 + 4, 0 + 4, 2 + 4, 1 + 4, 2 + 4, 3 + 4 };
+            uv = new Vector2[] {
                 new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1), new Vector2(1, 1),
                 new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1), new Vector2(1, 1),
             };
@@ -264,9 +304,9 @@ public class BldPolyGen
         return go;
     }
 
-    public GameObject CreateForm(string frmname,Vector3 pt0, Vector3 pt1,float height)
+    public GameObject CreateForm(string frmname, Vector3 pt0, Vector3 pt1, float height)
     {
-        GameObject rv=null;
+        GameObject rv;
         switch (genform)
         {
             default:
@@ -279,46 +319,46 @@ public class BldPolyGen
                 }
             case BldPolyGenForm.pipes:
                 {
-                    rv = qut.CreatePipe(frmname, pt0, pt1, clr: wallclr,size:height, alf:wallalf);
+                    rv = qut.CreatePipe(frmname, pt0, pt1, clr: wallclr, size: height, alf: wallalf);
                     break;
                 }
         }
         return rv;
     }
-    public void Generate(GameObject parent,bool dbout)
+    public void Generate(GameObject parent, bool dbout,bool onesided=false)
     {
         switch (genform)
         {
             case BldPolyGenForm.pipes:
                 {
-                    GenerateBySegment(parent,wallheight);
+                    GenerateBySegment(parent, wallheight,onesided:onesided);
                     break;
                 }
             case BldPolyGenForm.walls:
                 {
-                    GenerateBySegment(parent,wallheight);
+                    GenerateBySegment(parent, wallheight, onesided: onesided);
                     break;
                 }
             case BldPolyGenForm.wallsmesh:
                 {
-                    GenerateBySegment(parent,wallheight,asmesh:true);
+                    GenerateBySegment(parent, wallheight, asmesh: true, onesided: onesided);
                     break;
                 }
             case BldPolyGenForm.tesselate:
                 {
-                    Tesselate(parent,wallheight,dbout:dbout);
+                    TessleateYup(parent, wallheight, dbout: dbout, onesided:onesided);
                     break;
                 }
         }
     }
-    static int moduloInc(int i,int inc,int n)
+    static int moduloInc(int i, int inc, int n)
     {
         var inew = i + inc;
         if (inew < 0) inew += n;
         if (inew >= n) inew -= n;
         return inew;
     }
-    public static (float val,int idx) FindLargestCrossProduct( List<(int id, Vector3 pt)> ptlist,Vector3 upvek)
+    public static (float val, int idx) FindLargestCrossProductYcomponent(List<(int id, Vector3 pt)> ptlist)
     {
         var cpvalmax = float.MinValue;
         var cpvalmaxidx = -1;
@@ -333,7 +373,7 @@ public class BldPolyGen
             var v2 = ptlist[i2].pt;
             var cv1 = v0 - v1;
             var cv2 = v2 - v1;
-            var cpval = Vector3.Dot(upvek, Vector3.Cross(cv2, cv1));
+            var cpval = Vector3.Cross(cv2, cv1).y;
             if (cpval > cpvalmax)
             {
                 cpvalmax = cpval;
@@ -342,11 +382,29 @@ public class BldPolyGen
         }
         return (cpvalmax, cpvalmaxidx);
     }
-    public static (float val, int idx) FindSmallestPositiveCrossProduct(List<(int id,Vector3 pt)> ptlist, Vector3 upvek)
+
+    public static float CalcAreaWithYup(List<(int id, Vector3 pt)> ptlist)
+    {
+        // returns a positive area if the points are anti-clockwise in the x-z plane with y pointed up and LHS (i.e. Unity conventions)
+        if (ptlist.Count == 0) return 0f;
+        //Debug.Log($"CalcArea pts:{ptlist.Count}");
+        var sum = 0f;
+        var fstpt = ptlist[0].pt;
+        var lstpt = fstpt;
+        for (int i = 1; i < ptlist.Count; i++)
+        {
+            var pt = ptlist[i].pt;
+            sum += (pt.x-lstpt.x)*(pt.z+lstpt.z);
+            lstpt = pt;
+        }
+        sum +=  (fstpt.x-lstpt.x)*(fstpt.z+lstpt.z);
+        return sum;
+    }
+    public static (float val, int idx) FindSmallestPositiveCrossProductYcomponent(List<(int id,Vector3 pt)> ptlist)
     {
         var cpvalmin = float.MaxValue;
         var cpvalminidx = -1;
-        Debug.Log($"FSPCP pts:{ptlist.Count}");
+        //Debug.Log($"FSPCP pts:{ptlist.Count}");
         for (int i = 0; i < ptlist.Count; i++)
         {
             var i0 = moduloInc(i, -1, ptlist.Count);
@@ -358,48 +416,21 @@ public class BldPolyGen
             var v2 = ptlist[i2].pt;
             var cv1 = v0 - v1;
             var cv2 = v2 - v1;
-            var cpval = Vector3.Dot(upvek, Vector3.Cross(cv1, cv2));
-            var v1s = v1.ToString("f3");
-            Debug.Log($"    i:{i} cpval:{cpval} v1:{v1s}");
+            var cpval = Vector3.Cross(cv2, cv1).y;
+            //var v1s = v1.ToString("f3");
+            //Debug.Log($"    i:{i} cpval:{cpval} v1:{v1s}");
             if (0<cpval && cpval < cpvalmin)
             {
                 cpvalmin = cpval;
                 cpvalminidx = i;
             }
         }
-        Debug.Log($"FSPCP cpvalmin:{cpvalmin} idx:{cpvalminidx}");
+        //Debug.Log($"FSPCP cpvalmin:{cpvalmin} idx:{cpvalminidx}");
         return (cpvalmin, cpvalminidx);
     }
 
-    public float CalcArea(List<(int id,Vector3 pt)> ptlist, Vector3 upvek)
-    {
-        var areasum = 0f;
-        for (int i = 0; i < ptlist.Count; i++)
-        {
-            var i0 = moduloInc(i, -1, ptlist.Count);
-            var i1 = i;
-            var i2 = moduloInc(i, +1, ptlist.Count);
 
-            var v0 = ptlist[i0].pt;
-            var v1 = ptlist[i1].pt;
-            var v2 = ptlist[i2].pt;
-            var cv1 = v0 - v1;
-            var cv2 = v2 - v1;
-            var cpval = Vector3.Dot(upvek, Vector3.Cross(cv1, cv2));
-            areasum += cpval;
-        }
-        return areasum;
-    }
-
-    public GameObject Tesselate(GameObject parent,float height,bool onesided=false,bool dbout=false)
-    {
-        var rv = Tesselate(parent,height,Vector3.up,onesided,dbout);
-        return rv;
-    }
-
-
-
-    public GameObject Tesselate(GameObject parent,float height,Vector3 upvek,bool onesided=false, bool dbout = false)
+    public GameObject TessleateYup(GameObject parent,float height,bool onesided=false, bool dbout = false)
     {
         if (outline.Count<=3)
         {
@@ -407,26 +438,36 @@ public class BldPolyGen
             return null;
         }
         var woutline = new List<(int id,Vector3 pt)>(outline);
-        var area = CalcArea(woutline,upvek);
+        var area = CalcAreaWithYup(woutline);
+        var dbheight = height + 0.5f;
+        int iclr = 0;
+        if (dbout)
+        {
+            var centxt = "Area:" + area.ToString("f2");
+            var clr = qut.GetColorBySeq(iclr++);
+            PlotOutline(parent, woutline, centxt, dbheight, clr);
+            dbheight += 2;
+        }
         if (area<0)
         {
-            Debug.Log($"Reversing area:{area}");
+            Debug.Log($"Reversing point order to make points CCW - new area:{area}");
             woutline = new List<(int id, Vector3 pt)>(woutline.Reverse<(int id, Vector3 pt)>());
-            area = CalcArea(woutline, upvek);
-            Debug.Log($"new area:{area}");
-        }
-        var (maxval, maxidx) = FindSmallestPositiveCrossProduct(woutline, upvek);
-        StartAccumulatingSegments();
-        var dbheight = height + 0.5f;
-        while (true)
-        {
+            area = CalcAreaWithYup(woutline);
             if (dbout)
             {
-                PlotOutline(parent, woutline, dbheight, "red");
-                dbheight += 1;
-                Debug.Log($"Slicing out {maxidx} val:{maxval} ptsleft:{woutline.Count}");
-
+                var centxt = "Rev Area:" + area.ToString("f2");
+                var clr = qut.GetColorBySeq(iclr++);
+                PlotOutline(parent, woutline, centxt, dbheight, clr);
+                dbheight += 2;
             }
+            Debug.Log($"new area:{area}");
+        }
+        var (maxval, maxidx) = FindSmallestPositiveCrossProductYcomponent(woutline);
+        //var (maxval, maxidx) = FindLargestCrossProductYcomponent(woutline);
+        StartAccumulatingSegments();
+
+        while (true)
+        {
             var i0 = moduloInc(maxidx, -1, woutline.Count);
             var i1 = maxidx;
             var i2 = moduloInc(maxidx, +1, woutline.Count);
@@ -436,8 +477,18 @@ public class BldPolyGen
             var w0 = new Vector3(v0.x, height, v0.z);
             var w1 = new Vector3(v1.x, height, v1.z);
             var w2 = new Vector3(v2.x, height, v2.z);
-            var v1s = v1.ToString("f3");
-            Debug.Log($"Removing at {i1} - v1:{v1s}");
+            if (dbout)
+            {
+                var clr = qut.GetColorBySeq(iclr++);
+                PlotTri(parent, v0, v1, v2, "", height, clr);
+                var v1s = v1.ToString("f3");
+                Debug.Log($"Removing at {i1} - v1:{v1s} woutline.Count:{woutline.Count}");
+
+                var centxt = "Remove pt:" + woutline[i1].id;
+                PlotOutline(parent, woutline, centxt,   dbheight, clr);
+                dbheight += 2;
+                Debug.Log($"Slicing out {maxidx} val:{maxval} ptsleft:{woutline.Count}");
+            }
             woutline.RemoveAt(i1);
             var pidx = ptsbuf.Count;
             ptsbuf.Add((i0,w0));
@@ -457,7 +508,9 @@ public class BldPolyGen
                 tribuf.Add(pidx + 1);
             }
             if (woutline.Count < 3) break; // done
-            (maxval, maxidx) = FindSmallestPositiveCrossProduct(woutline, upvek);
+            //(maxval, maxidx) = FindLargestCrossProductYcomponent(woutline);
+
+            (maxval, maxidx) = FindSmallestPositiveCrossProductYcomponent(woutline);
             if (maxidx<0)
             {
                 Debug.LogError("Tesselate maxidx is -1");
@@ -469,7 +522,7 @@ public class BldPolyGen
         return go;
     }
 
-    public void GenerateBySegment(GameObject parent,float height,bool asmesh=false)
+    public void GenerateBySegment(GameObject parent,float height,bool asmesh=false, bool onesided=false)
     {
         if (outline.Count <= 1)
         {
@@ -480,13 +533,23 @@ public class BldPolyGen
         {
             StartAccumulatingSegments();
         }
+        var woutline = new List<(int id, Vector3 pt)>(outline);
+        var area = CalcAreaWithYup(woutline);
+        if (area < 0)
+        {
+            Debug.Log($"Reversing point order to make points CCW - new area:{area}");
+            woutline = new List<(int id, Vector3 pt)>(woutline.Reverse<(int id, Vector3 pt)>());
+            area = CalcAreaWithYup(woutline);
+            Debug.Log($"new area:{area}");
+        }
+
         int i1 = 0;
         int i2 = i1 + 1;
         int nsegdone = 0;
-        while (nsegdone<outline.Count)
+        while (nsegdone< woutline.Count)
         {
-            var pt1 = outline[i1].pt;
-            var pt2 = outline[i2].pt;
+            var pt1 = woutline[i1].pt;
+            var pt2 = woutline[i2].pt;
             var pname = $"seg-{i1}";
             if (!asmesh)
             {
@@ -495,11 +558,11 @@ public class BldPolyGen
             }
             else
             {
-                AddSegment(pt1, pt2,height,onesided:false);
+                AddSegment(pt1, pt2,height,onesided:onesided);
             }
             i1 = i2;
             i2 = i1 + 1;
-            if (i2 == outline.Count) i2 = 0;
+            if (i2 == woutline.Count) i2 = 0;
             nsegdone++;
         }
         if (asmesh)
