@@ -167,6 +167,35 @@ public class BldPolyGen
         uvbuf.Add(new Vector2(iseg, 1));
         iseg++;
     }
+
+    public void GenBld(GameObject parent,string bldname,float height, int levels, string clr,float alf=1,bool dowalls=true,bool dofloors=true,bool doroof=true)
+    {
+        bool onesided = false;
+        var bldgo = new GameObject(bldname);
+        bldgo.transform.SetParent(parent.transform);
+        if (dowalls)
+        {
+            SetGenForm(BldPolyGenForm.wallsmesh);
+            var walgo = GenMesh("walls", height: height, clr: clr, alf: alf, onesided: onesided);
+            walgo.transform.SetParent(bldgo.transform);
+        }
+        if (doroof)
+        {
+            SetGenForm(BldPolyGenForm.tesselate);
+            var rufgo = GenMesh("roof", height: height, clr: clr, alf: alf, onesided: onesided);
+            rufgo.transform.SetParent(bldgo.transform);
+        }
+        if (dofloors)
+        {
+            for(int i=0; i<levels; i++)
+            {
+                var fheit = i*height / (levels-1);
+                var flrgo = GenMesh("roof", height: fheit, clr: clr, alf: alf, onesided: onesided);
+                flrgo.transform.SetParent(bldgo.transform);
+            }
+        }
+    }
+
     Vector3[] GetPtsBufArray()
     {
         var rv = new Vector3[ptsbuf.Count];

@@ -9,19 +9,22 @@ public class BldPolyGenTest : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        bpg = new BldPolyGen();
         // debug one layer only
-        GenObj(ObjForm.circle, dowalls:false,doceil:true,dofloor:false,dbOutline:false);
+        //GenObj(ObjForm.circle, dowalls:false,doceil:true,dofloor:false,dbOutline:false);
         //GenObj(ObjForm.circle,onesided:false);
+        GenBld(ObjForm.cross,48,12,"dr");
     }
 
 
-    enum ObjForm { star, cross, circle }
-    void GenObj(ObjForm objform, bool dowalls = true, bool doceil = true, bool dofloor = true, bool dbOutline = false, bool onesided=false)
+    void GenBld(ObjForm objform,float height,int levels,string clr)
     {
-        var alf = 0.5f;
-        //alf = 1;
+        GenOutline(objform);
+        bpg.GenBld(this.gameObject, "bld00", height, levels, clr, alf: 0.5f);
+    }
 
-        bpg = new BldPolyGen();
+    void GenOutline(ObjForm objform)
+    {
         switch (objform)
         {
             default:
@@ -32,7 +35,7 @@ public class BldPolyGenTest : MonoBehaviour
                 }
             case ObjForm.cross:
                 {
-                    bpg.GenCrossOutline(Vector3.zero,  2f );
+                    bpg.GenCrossOutline(Vector3.zero, 2f);
                     break;
                 }
             case ObjForm.circle:
@@ -41,17 +44,25 @@ public class BldPolyGenTest : MonoBehaviour
                     break;
                 }
         }
+    }
+
+    enum ObjForm { star, cross, circle }
+    void GenObj(ObjForm objform, bool dowalls = true, bool doroof = true, bool dofloor = true, bool dbOutline = false, bool onesided=false)
+    {
+        var alf = 0.5f;
+        //alf = 1;
+        GenOutline(objform);
         if (dowalls)
         {
             bpg.SetGenForm(BldPolyGenForm.wallsmesh);
             var walgo = bpg.GenMesh("walls", height: 2, clr: "blue", alf: alf,dbout:dbOutline, onesided:onesided);
             walgo.transform.parent = this.transform;
         }
-        if (doceil)
+        if (doroof)
         {
             bpg.SetGenForm(BldPolyGenForm.tesselate);
-            var ceigo = bpg.GenMesh("ceiling", height: 2, clr: "blue", alf: alf, dbout: dbOutline, onesided: onesided);
-            ceigo.transform.parent = this.transform;
+            var rufgo = bpg.GenMesh("ceiling", height: 2, clr: "blue", alf: alf, dbout: dbOutline, onesided: onesided);
+            rufgo.transform.parent = this.transform;
         }
         if (dofloor)
         {
