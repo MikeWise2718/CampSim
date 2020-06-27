@@ -9,38 +9,46 @@ public class BldPolyGenTest : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        bpg = new BldPolyGen();
         // debug one layer only
         //GenObj(ObjForm.circle, dowalls:false,doceil:true,dofloor:false,dbOutline:false);
         //GenObj(ObjForm.circle,onesided:false);
-        GenBld(ObjForm.cross,48,12,"dr");
+        var v = 4;
+        var l1 = new Vector3(v, 0, v);
+        GenBld(ObjForm.cross,"b11",l1,48,12,"dr");
+        var l2 = new Vector3(-v, 0, v);
+        GenBld(ObjForm.star, "b01", l2, 48, 12, "dg");
+        var l3 = new Vector3(v, 0, -v);
+        GenBld(ObjForm.circle, "b10", l3, 48, 12, "db");
+        var l4 = new Vector3(-v, 0, -v);
+        GenBld(ObjForm.cross, "b00", l4, 48, 12, "dy");
     }
 
 
-    void GenBld(ObjForm objform,float height,int levels,string clr)
+    void GenBld(ObjForm objform,string bldname,Vector3 loc,float height,int levels,string clr)
     {
-        GenOutline(objform);
-        bpg.GenBld(this.gameObject, "bld00", height, levels, clr, alf: 0.5f);
+        bpg = new BldPolyGen();
+        GenOutline(objform,loc);
+        bpg.GenBld(this.gameObject, bldname, height, levels, clr, alf: 0.5f);
     }
 
-    void GenOutline(ObjForm objform)
+    void GenOutline(ObjForm objform,Vector3 loc)
     {
         switch (objform)
         {
             default:
             case ObjForm.star:
                 {
-                    bpg.GenStarOutline(Vector3.zero, 8, 0.5f, 3f);
+                    bpg.GenStarOutline(loc, 8, 0.5f, 3f);
                     break;
                 }
             case ObjForm.cross:
                 {
-                    bpg.GenCrossOutline(Vector3.zero, 2f);
+                    bpg.GenCrossOutline(loc, 2f);
                     break;
                 }
             case ObjForm.circle:
                 {
-                    bpg.GenCylinderOutline(Vector3.zero, 20, 1f);
+                    bpg.GenCylinderOutline(loc, 10, 3f);
                     break;
                 }
         }
@@ -51,7 +59,7 @@ public class BldPolyGenTest : MonoBehaviour
     {
         var alf = 0.5f;
         //alf = 1;
-        GenOutline(objform);
+        GenOutline(objform,Vector3.zero);
         if (dowalls)
         {
             bpg.SetGenForm(BldPolyGenForm.wallsmesh);

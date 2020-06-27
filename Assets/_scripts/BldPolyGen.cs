@@ -172,7 +172,6 @@ public class BldPolyGen
     {
         bool onesided = false;
         var bldgo = new GameObject(bldname);
-        bldgo.transform.SetParent(parent.transform);
         if (dowalls)
         {
             SetGenForm(BldPolyGenForm.wallsmesh);
@@ -194,6 +193,23 @@ public class BldPolyGen
                 flrgo.transform.SetParent(bldgo.transform);
             }
         }
+        bldgo.transform.position = GetCenter();
+        bldgo.transform.SetParent(parent.transform);
+    }
+
+    Vector3 GetCenter()
+    {
+        var rv = Vector3.zero; ;
+        var ptsum = Vector3.zero;
+        if (outline.Count > 0)
+        {
+            foreach (var p in outline)
+            {
+                ptsum += p.pt;
+            }
+            rv = ptsum / outline.Count;
+        }
+        return rv;
     }
 
     Vector3[] GetPtsBufArray()
@@ -256,9 +272,9 @@ public class BldPolyGen
             //Debug.Log($"i:{i} angdeg:{angdeg}  ang:{ang}");
             var x = radius * Mathf.Sin(ang) + cen.x;
             var ripoff = ripple * Mathf.Sin(ang);
-            var y = cen.y + ripoff * ripoff;
+            var y = cen.y + ripoff*ripoff;
             var z = radius * Mathf.Cos(ang) + cen.z;
-            AddOutlinePoint(i, cen.x + x, cen.y + y, cen.z + z);
+            AddOutlinePoint(i, x, y, z);
         }
     }
 
