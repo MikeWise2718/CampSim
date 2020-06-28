@@ -798,7 +798,7 @@ namespace Aiskwk.Dataframe
                 {
                     if (icol >= lcolnames.Count)
                     {
-                        Debug.Log("Opps");
+                        continue; // probably just an extra comma at the end
                     }
                     var cname = lcolnames[icol];
                     if (idatalines == 1)
