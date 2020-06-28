@@ -31,7 +31,15 @@ public class BldPolyGen
     {
         outline.Add((id, new Vector3(x, y, z)));
     }
-
+    public void SetOutline(List<Vector3> ptlist)
+    {
+        outline = new List<(int id, Vector3 pt)>();
+        int id = 0;
+        foreach (var pt in ptlist)
+        {
+            outline.Add((id++, pt));
+        }
+    }
     List<(int id, Vector3 pt)> ptsbuf = null;
     List<int> tribuf = null;
     List<Vector2> uvbuf = null;
@@ -430,6 +438,7 @@ public class BldPolyGen
 
     public static float CalcAreaWithYup(List<(int id, Vector3 pt)> ptlist)
     {
+        // discussion: https://stackoverflow.com/a/1165943/3458744
         // returns a positive area if the points are anti-clockwise in the x-z plane with y pointed up and LHS (i.e. Unity conventions)
         if (ptlist.Count == 0) return 0f;
         //Debug.Log($"CalcArea pts:{ptlist.Count}");
@@ -443,10 +452,12 @@ public class BldPolyGen
             lstpt = pt;
         }
         sum +=  (fstpt.x-lstpt.x)*(fstpt.z+lstpt.z);
-        return sum;
+        var area = sum / 2;
+        return area;
     }
     public static (float val, int idx) FindSmallestPositiveCrossProductYcomponent(List<(int id,Vector3 pt)> ptlist)
     {
+        // find the index of the middle point of the smallest convex triangle to slice off
         var cpvalmin = float.MaxValue;
         var cpvalminidx = -1;
         //Debug.Log($"FSPCP pts:{ptlist.Count}");
@@ -464,7 +475,8 @@ public class BldPolyGen
             var cpval = Vector3.Cross(cv2, cv1).y;
             //var v1s = v1.ToString("f3");
             //Debug.Log($"    i:{i} cpval:{cpval} v1:{v1s}");
-            if (0<cpval && cpval < cpvalmin)
+            if (cpval <= 0) continue; // cpval is negative is triangle is concave
+            if (cpval < cpvalmin)
             {
                 cpvalmin = cpval;
                 cpvalminidx = i;
