@@ -116,6 +116,7 @@ namespace Aiskwk.Dataframe
     public enum DfStatus { uninit, init, reading, erroredOutOfReading, finished }
     public class SimpleDf
     {
+        public string csvFileName;
         public string name;
         public string comment;
         public DfStatus dfStatus = DfStatus.uninit;
@@ -743,6 +744,8 @@ namespace Aiskwk.Dataframe
                 }
             }
         }
+        bool warnedAboutCommas = false;
+        string fline = "";
         public void ReadCsvLine(string line, ref int idatalines, ref int ncommas, ref List<string> lcolnames)
         {
             if (line == "") return;
@@ -765,10 +768,16 @@ namespace Aiskwk.Dataframe
             if (ncommas == 0)
             {
                 ncommas = sar.Length;
+                warnedAboutCommas = false;
+                fline = line;
             }
             else if (ncommas != sar.Length)
             {
-                Debug.LogWarning($"Inconsistent number of commas first:{ncommas} current:{sar.Length}");
+                if (!warnedAboutCommas)
+                {
+                    Debug.LogWarning($"Csv file:{csvFileName} - Inconsistent number of commas in first line:{ncommas} current:{sar.Length}");
+                    warnedAboutCommas = true;
+                }
             }
             if (idatalines == 0)
             {
@@ -943,7 +952,7 @@ namespace Aiskwk.Dataframe
         }
         public static SimpleDf Subset(SimpleDf sdf, string newname = "ddf", List<bool> filter = null, bool quiet = true)
         {
-            Debug.Log("Subsetting " + newname + " on filter");
+            //Debug.Log("Subsetting " + newname + " on filter");
             var ddf = new SimpleDf(newname);
             ddf._CopyInColDefs(sdf, "Copy");
             ddf._CopyInRows(sdf, reorderIdx: null, boolMask: filter);
@@ -955,7 +964,7 @@ namespace Aiskwk.Dataframe
         }
         public static SimpleDf SubsetOnStringColVal(SimpleDf sdf,  string colname,string colval, bool quiet = true, string newname = "ddf")
         {
-            Debug.Log("Subsetting " + newname + " on col " + colname +" val "+colval );
+            //Debug.Log("Subsetting " + newname + " on col " + colname +" val "+colval );
             var ddf = new SimpleDf(newname);
             ddf._CopyInColDefs(sdf, "Copy");
             var filter = sdf.GetStringColEqVal(colname,colval);
@@ -1005,6 +1014,7 @@ namespace Aiskwk.Dataframe
             int ncommas = 0;
             linecount = 0;
             InitDf();
+            csvFileName = fname;
             dfStatus = DfStatus.reading;
             DataError.InitErrorCounts();
             try
