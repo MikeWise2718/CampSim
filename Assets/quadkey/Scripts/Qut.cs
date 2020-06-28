@@ -280,6 +280,21 @@ namespace Aiskwk.Map
             colorTable["blk"] = 
             colorTable["black"] = new Color(0, 0, 0);
         }
+        static string[] dcolorseq = { "dr", "dg", "db", "dm", "dy", "dc" };
+        static string[] colorseq = { "r", "g", "b", "m", "y", "c" };
+        public static string GetColorBySeq(int idx, bool dark = true)
+        {
+            string name;
+            if (dark)
+            {
+                name = dcolorseq[idx % dcolorseq.Length];
+            }
+            else
+            {
+                name = colorseq[idx % colorseq.Length];
+            }
+            return name;
+        }
         public static Color GetColorByName(string name)
         {
             if (!isColorName(name))
@@ -296,21 +311,7 @@ namespace Aiskwk.Map
             return rv;
         }
 
-        static string[] dcolorseq = { "dr", "dg", "db", "dm", "dy", "dc" };
-        static string[] colorseq = { "r", "g", "b", "m", "y", "c" };
-        public static string GetColorBySeq(int idx,bool dark=true)
-        {
-            string name;
-            if (dark)
-            {
-                name = dcolorseq[idx % dcolorseq.Length];
-            }
-            else
-            {
-                name = colorseq[idx % colorseq.Length];
-            }
-            return name;
-        }
+
 
         public static byte[] StringToByteArrayFastest(string hex)
         {
