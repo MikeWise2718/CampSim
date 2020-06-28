@@ -20,6 +20,8 @@ public class GrafPolyGen
     private float wallalf = 1f;
     private string wallclr;
 
+
+
     public GrafPolyGen()
     {
         outline = new List<(int id, Vector3 pt)>();

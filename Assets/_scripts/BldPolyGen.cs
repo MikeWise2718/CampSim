@@ -118,8 +118,30 @@ public class BldPolyGen
         return rv;
     }
 
+    public static List<string> ReadResource(string pathname)
+    {
+        var idx = pathname.IndexOf(".csv");
+        if (idx>0)
+        {
+            pathname = pathname.Remove(idx);
+        }
+        var asset = Resources.Load<TextAsset>(pathname);
+        return TextAssetToList(asset);
+    }
 
-    (SimpleDf ways, SimpleDf links, SimpleDf nodes) GetSimpleDfs(string areaprefix, string dname = "")
+    public static List<string> TextAssetToList(TextAsset ta)
+    {
+        var listToReturn = new List<string>();
+        var arrayString = ta.text.Split('\n');
+        foreach (var line in arrayString)
+        {
+            listToReturn.Add(line);
+        }
+        return listToReturn;
+    }
+
+
+    (SimpleDf ways, SimpleDf links, SimpleDf nodes) GetDfsFromFiles(string areaprefix, string dname = "")
     {
         if (dname == "")
         {
@@ -142,8 +164,45 @@ public class BldPolyGen
         Debug.Log($"Read {dfnodes.Nrow()} links from {fnamenodes}");
 
         return (dfways, dflinks, dfnodes);
-
     }
+
+    (SimpleDf ways, SimpleDf links, SimpleDf nodes) GetDfsFromResources(string areaprefix, string dname = "")
+    {
+        if (dname == "")
+        {
+            dname = "osmcsv/";
+        }
+
+        SimpleDf dfways;
+        {
+            var fnameways = $"{dname}{areaprefix}_ways.csv";
+            dfways = new SimpleDf(areaprefix + "_ways");
+            var wayslist = ReadResource(fnameways);
+            dfways.ReadCsv(wayslist);
+            Debug.Log($"Read {dfways.Nrow()} ways from {fnameways}");
+        }
+
+        SimpleDf dflinks;
+        {
+            var fnamelinks = $"{dname}{areaprefix}_links.csv";
+            dflinks = new SimpleDf(areaprefix + "links");
+            var linkslist = ReadResource(fnamelinks);
+            dflinks.ReadCsv(linkslist);
+            Debug.Log($"Read {dflinks.Nrow()} links from {fnamelinks}");
+        }
+
+        SimpleDf dfnodes;
+        {
+            var fnamenodes = $"{dname}{areaprefix}_nodes.csv";
+            dfnodes = new SimpleDf(areaprefix + "nodes");
+            var nodeslist = ReadResource(fnamenodes);
+            dfnodes.ReadCsv(nodeslist);
+            Debug.Log($"Read {dfnodes.Nrow()} links from {fnamenodes}");
+        }
+
+        return (dfways, dflinks, dfnodes);
+    }
+
 
     public List<Bldspec> LoadBuildingsFromCsv(string areaprefix, string dname = "")
     {
@@ -151,7 +210,8 @@ public class BldPolyGen
         sw.Start();
         var rv = new List<Bldspec>();
 
-        var (dfways, dflinks, dfnodes) = GetSimpleDfs(areaprefix, dname);
+        //var (dfways, dflinks, dfnodes) = GetDfsFromFiles(areaprefix, dname);
+        var (dfways, dflinks, dfnodes) = GetDfsFromResources(areaprefix, dname);
 
         var nid = dfnodes.GetStringCol("osm_nid");
         var nodedict = new Dictionary<string, int>();
