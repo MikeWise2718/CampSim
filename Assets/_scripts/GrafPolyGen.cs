@@ -145,7 +145,6 @@ public class GrafPolyGen
         ptsbuf.Add((idx2, pt2h));
         ptsbuf.Add((idx3, pt3h));
 
-
         tribuf.Add(idx0);
         tribuf.Add(idx1);
         tribuf.Add(idx2);
@@ -257,7 +256,7 @@ public class GrafPolyGen
         meshFilter.mesh = mesh;
         qut.SetColorOfGo(go, wallclr, wallalf);
         var ntris = tribuf.Count / 3;
-        Debug.Log($"mesh has {ptsbuf.Count} vertices and {ntris} triangles");
+        //Debug.Log($"mesh has {ptsbuf.Count} vertices and {ntris} triangles");
         return go;
     }
 

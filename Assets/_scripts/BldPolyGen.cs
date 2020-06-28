@@ -179,7 +179,7 @@ public class BldPolyGen
             dfways = new SimpleDf(areaprefix + "_ways");
             var wayslist = ReadResource(fnameways);
             dfways.ReadCsv(wayslist);
-            Debug.Log($"Read {dfways.Nrow()} ways from {fnameways}");
+            //Debug.Log($"Read {dfways.Nrow()} ways from {fnameways}");
         }
 
         SimpleDf dflinks;
@@ -188,7 +188,7 @@ public class BldPolyGen
             dflinks = new SimpleDf(areaprefix + "links");
             var linkslist = ReadResource(fnamelinks);
             dflinks.ReadCsv(linkslist);
-            Debug.Log($"Read {dflinks.Nrow()} links from {fnamelinks}");
+            //Debug.Log($"Read {dflinks.Nrow()} links from {fnamelinks}");
         }
 
         SimpleDf dfnodes;
@@ -197,7 +197,7 @@ public class BldPolyGen
             dfnodes = new SimpleDf(areaprefix + "nodes");
             var nodeslist = ReadResource(fnamenodes);
             dfnodes.ReadCsv(nodeslist);
-            Debug.Log($"Read {dfnodes.Nrow()} links from {fnamenodes}");
+            //Debug.Log($"Read {dfnodes.Nrow()} links from {fnamenodes}");
         }
 
         return (dfways, dflinks, dfnodes);
@@ -246,13 +246,18 @@ public class BldPolyGen
             var bs = new Bldspec(bname, btype, bwid, bheit, blevs);
             bs.AddPos(bllat, bllng, blx, blz);
             var outline = ExtractNodes(bname, bwid, bldwalldf, dfnodes, nodedict);
+            var area = GrafPolyGen.CalcAreaWithYup(outline);
+            if (area < 0)
+            {
+                outline.Reverse();
+            }
             bs.outline = outline;
             rv.Add(bs);
             i++;
         }
         var nbld = i;
         sw.Stop();
-        Debug.Log($"Loading and generating {nbld} builds took {sw.ElapSecs()} secs");
+        Debug.Log($"{areaprefix} Loading and generating {nbld} builds took {sw.ElapSecs()} secs");
         return rv;
     }
     void Test4(GameObject parent)
@@ -290,6 +295,7 @@ public class BldPolyGen
 
     public void LoadRegion(GameObject parent,string regionspec)
     {
+        var sw = new Aiskwk.Dataframe.StopWatch();
         var blds = new List<Bldspec>();
         var sar = regionspec.Split(',');
         foreach (var s in sar)
@@ -301,6 +307,8 @@ public class BldPolyGen
             //GenFixedFormBld(ObjForm.cross, bs.name, bs.loc, bs.height,bs.levels,"db");
             GenBld(parent, bs);
         }
+        sw.Stop();
+        Debug.Log($"Generation of {regionspec} took {sw.ElapSecs()} secs");
     }
 
     void GenOutline(ObjForm objform, Vector3 loc)
