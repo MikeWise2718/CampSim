@@ -141,7 +141,7 @@ namespace CampusSimulator
             tm.transform.position = lpt;
             //SceneMan.Log("lpt:" + lpt);
             // tm.transform.parent = go.transform;
-            tm.color = GraphUtil.getcolorbyname(colorname);
+            tm.color = GraphUtil.GetColorByName(colorname);
         }
 
         static int pathsphcnt = 0;

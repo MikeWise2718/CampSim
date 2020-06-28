@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace CampusSimulator {
-
     public class BldRoom : MonoBehaviour
     {
         public BuildingMan bm;
@@ -199,8 +198,6 @@ namespace CampusSimulator {
             occman.UnReserve(idx);
         }
 
-
-
         public Person GetRandomPerson()
         {
             var i = GraphAlgos.GraphUtil.GetRanInt(occman.GetPersonCount());
@@ -277,17 +274,5 @@ namespace CampusSimulator {
             occman.EmptyRoom();
             occman = null;
         }
-
-        // Start is called before the first frame update
-        //void Start()
-        //{
-        //}
-
-        //// Update is called once per frame
-        //void Update()
-        //{
-
-        //}
-
     }
 }

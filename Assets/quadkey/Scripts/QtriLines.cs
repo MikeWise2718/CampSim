@@ -173,14 +173,15 @@ namespace Aiskwk.Map
         }
         public GameObject AddFragLine(string lname, Vector3 pt1, Vector3 pt2,string form="pipe", float lska = 1.0f, float nska = 1.0f, string lclr = "red", string nclr = "", int omit = -1, float widratio = 1, bool wps = true, QkCoordSys coordsys = QkCoordSys.UserWc)
         {
-            var db = lname == "1202033022121033-b";
-            if (db)
-            {
-                var pt1s = pt1.ToString("f3");
-                var pt2s = pt2.ToString("f3");
-                Debug.Log($"AFL p1:{pt1s} p2:{pt2s}");
-            }
-            var ptlist = GetIsectList(lname, pt1, pt2, omit: omit, db: db,coordsys:coordsys);
+            var dowall = false;
+            //var db = lname == "1202033022121033-b";
+            //if (db)
+            //{
+            //    var pt1s = pt1.ToString("f3");
+            //    var pt2s = pt2.ToString("f3");
+            //    Debug.Log($"AFL p1:{pt1s} p2:{pt2s}");
+            //}
+            var ptlist = GetIsectList(lname, pt1, pt2, omit: omit, db: false,coordsys:coordsys);
             ntotIsects += ptlist.Count;
             nFragLines++;
             //Debug.Log($"AddFragLine found {ptlist.Count} intersections");
@@ -191,6 +192,7 @@ namespace Aiskwk.Map
             float alf = 1;
             if (form=="wall")
             {
+                dowall = true;
                 lska = lska * 100;
                 widratio = widratio / 100;
                 alf = 0.5f;
@@ -202,13 +204,13 @@ namespace Aiskwk.Map
                 var (pit1, d1) = ptlist[i];
                 var (pit2, d2) = ptlist[i+1];
                 var pit1s = pit1.ToString("f3");
-                if (db)
-                {
-                    var d1s = d1.ToString("f3");
-                    var pit2s = pit2.ToString("f3");
-                    var d2s = d2.ToString("f3");
-                    Debug.Log($"{i}  - pt1:{pit1s} l1:{d1s}   pt2:{pit2s} l2:{d2s}");
-                }
+                //if (db)
+                //{
+                //    var d1s = d1.ToString("f3");
+                //    var pit2s = pit2.ToString("f3");
+                //    var d2s = d2.ToString("f3");
+                //    Debug.Log($"{i}  - pt1:{pit1s} l1:{d1s}   pt2:{pit2s} l2:{d2s}");
+                //}
                 var llname = $"{lname}_{i}";
                 if (nclr != "" && i == 0)
                 {
@@ -216,7 +218,17 @@ namespace Aiskwk.Map
                     sphgo = qut.CreateMarkerSphere(sname, pit1, lska * nska, nclr);
                     sphgo.transform.SetParent(lgo.transform, worldPositionStays: wps);
                 }
-                var cylgo = GpuInst.CreateCylinderGpu(llname, pit1, pit2, lska, lclr, widratio: widratio,alf:alf);
+                GameObject cylgo;
+                if (dowall)
+                {
+                    var pit3 = new Vector3(pit1.x, pit1.y+10, pit1.z);
+                    var pit4 = new Vector3(pit2.x, pit2.y+10, pit2.z);
+                    cylgo = qut.Create4ptQuad(llname, pit1, pit2, pit3, pit4, clr: lclr, alf: alf);
+                }
+                else
+                {
+                    cylgo = GpuInst.CreateCylinderGpu(llname, pit1, pit2, lska, lclr, widratio: widratio, alf: alf);
+                }
                 cylgo.transform.parent = lgo.transform;
                 if (nclr != "")
                 {

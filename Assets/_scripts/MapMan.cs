@@ -311,14 +311,14 @@ namespace CampusSimulator
             return (nbm, nel);
         }
 
-        public void SetMap(MapProvider map)
+        public void SetMapPovider(MapProvider map)
         {
             Debug.Log($"SetMap:{map}");
             reqMapProv.SetAndSave(map);
             //qmapman.mapprov = map;
             qmapman.qmm.mapprov = map;
         }
-        public void SetEle(ElevProvider ele)
+        public void SetEleProvider(ElevProvider ele)
         {
             reqEleProv.SetAndSave(ele);
             //qmapman.elevprov = ele;
@@ -654,7 +654,24 @@ namespace CampusSimulator
                 switch (newscene)
                 {
                     default:
+                    case SceneSelE.MsftCoreCampus:
+                        maplat = 47.639217;
+                        maplng = -122.134216;
+                        mapscale = 3.2f;
+                        maprot = new Vector3(0, 71.1f, 0);
+                        maptrans = new Vector3(-6, 0, 17);
+                        xdistkm = 2;
+                        zdistkm = 5;
+                        //lod = defaultlod;
+                        hasLLmap = true;
+                        isCustomizable = false;
+                        vviewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
+                        vviewerDefaultPosition = new Vector3(-451.5f, 3f, 98.3f);
+                        vviewerDefaultRotation = new Vector3(0, -60, 0);
+                        break;
                     case SceneSelE.MsftB19focused:
+                        //maplat = 47.639217;
+                        //maplng = -122.134216;
                         maplat = 47.639217;
                         maplng = -122.134216;
                         mapscale = 3.2f;
@@ -725,21 +742,7 @@ namespace CampusSimulator
                         isCustomizable = false;
                         vviewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
                         break;
-                    case SceneSelE.MsftCoreCampus:
-                        maplat = 47.639217;
-                        maplng = -122.134216;
-                        mapscale = 3.2f;
-                        maprot = new Vector3(0, 71.1f, 0);
-                        maptrans = new Vector3(-6, 0, 17);
-                        xdistkm = 2;
-                        zdistkm = 6;
-                        //lod = defaultlod;
-                        hasLLmap = true;
-                        isCustomizable = false;
-                        vviewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
-                        vviewerDefaultPosition = new Vector3(-451.5f, 3f, 98.3f);
-                        vviewerDefaultRotation = new Vector3(0, -60, 0);
-                        break;
+
                     case SceneSelE.Seattle:
                         maplat = 47.619992;
                         maplng = -122.3373495;

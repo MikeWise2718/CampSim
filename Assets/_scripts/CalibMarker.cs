@@ -70,7 +70,7 @@ public class CalibMarker : MonoBehaviour
         tgo.transform.rotation = Quaternion.LookRotation(Camera.main.transform.forward);
         tgo.transform.localPosition += new Vector3(0, yoff, 0);
         tgo.transform.SetParent(sgo.transform);
-        tm.color = GraphAlgos.GraphUtil.getcolorbyname("darkblue");
+        tm.color = GraphAlgos.GraphUtil.GetColorByName("darkblue");
         tm.alpha = 1.0f; // this has to stay at the end or it gets overwritten !!
 
     }

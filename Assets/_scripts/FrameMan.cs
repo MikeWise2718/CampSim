@@ -292,7 +292,7 @@ namespace CampusSimulator
             {
                 switch (pers.empStatus)
                 {
-                    case PersonMan.empStatusE.Security: return GraphAlgos.GraphUtil.getcolorbyname("violet");
+                    case PersonMan.empStatusE.Security: return GraphAlgos.GraphUtil.GetColorByName("violet");
                     case PersonMan.empStatusE.FullTimeEmp: return Color.blue;
                     case PersonMan.empStatusE.Contractor: return Color.yellow;
                     case PersonMan.empStatusE.Visitor: return Color.green;
@@ -587,7 +587,7 @@ namespace CampusSimulator
         {
             if (Event.current.type != EventType.Repaint) return;
             // still gets called multiple times per update, but less now
-            var textcolor = GraphAlgos.GraphUtil.getcolorbyname("black",alpha:1);
+            var textcolor = GraphAlgos.GraphUtil.GetColorByName("black",alpha:1);
 
             foreach (var flab in foundLabelList)
             {

@@ -4,11 +4,10 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using CampusSimulator;
+using Aiskwk.Map;
 
 public class MapSetPanel : MonoBehaviour
 {
-
-
     Toggle instantChangeToggle;
     Dropdown mapProv;
     Dropdown eleProv;
@@ -91,9 +90,11 @@ public class MapSetPanel : MonoBehaviour
     UiMan uiman;
     MapMan mman;
 
-    bool panelActive = false;
+    bool panelTakingInput = false;
 
     Color textColorDef = Color.gray;
+    Color darkGreenColor = GraphAlgos.GraphUtil.GetColorByName("darkgreen");
+
 
 
     public void LinkObjectsAndComponents()
@@ -259,11 +260,6 @@ public class MapSetPanel : MonoBehaviour
 
         UpdateFileText();
 
-
-
-
-
-
         var locactive = mman.isCustomizable;
         newLatLngInputField.transform.gameObject.SetActive(locactive);
         newLatKmInputField.transform.gameObject.SetActive(locactive);
@@ -274,7 +270,7 @@ public class MapSetPanel : MonoBehaviour
         UpdateLatLngText();
 
 
-        panelActive = true;
+        panelTakingInput = true;
     }
 
     public void UpdateLatLngText()
@@ -447,7 +443,7 @@ public class MapSetPanel : MonoBehaviour
 
     static public bool isLoadingMaps = false;
     float loadStartTime = 0;
-    (bool oktoload,string errmsg) StartLoading()
+    (bool oktoload,string errmsg) StartLoadingTiles()
     {
         if (!loadererrmsg.StartsWith("ok"))
         {
@@ -459,6 +455,8 @@ public class MapSetPanel : MonoBehaviour
         loadStartTime = Time.time;
         //mman.DeleteMaps();
         var newlod = (int)(lodVal.value + 0.5f);
+        RealizeSelectedMapProv();
+        RealizeSelectedEleProv();
         mman.SetLod(newlod);
         if (newPosAndExtentAvailable)
         {
@@ -546,7 +544,7 @@ public class MapSetPanel : MonoBehaviour
                 }
             case "LoadMapsButton":
                 {
-                    StartLoading();
+                    StartLoadingTiles();
                     break;
                 }
             case "DeleteMapsButton":
@@ -680,6 +678,33 @@ public class MapSetPanel : MonoBehaviour
         }
     }
 
+    bool RealizeSelectedMapProv()
+    {
+        bool changed = false;
+        var curstr = MapMan.GetMapProviderString(mapProv.value);
+        var curMapProv = MapMan.GetMapProviderEnum(curstr);
+        if (curMapProv != mman.reqMapProv.Get())
+        {
+            MapMan.SetInitialMapProvider(curstr);
+            mman.SetMapPovider(curMapProv);
+            changed = true;
+        }
+        return changed;
+    }
+
+    bool RealizeSelectedEleProv()
+    {
+        bool changed = false;
+        var curstr = MapMan.GetElevProviderString(mapProv.value);
+        var curEleProv = MapMan.GetElevProviderEnum(curstr);
+        if (curEleProv != mman.reqEleProv.Get())
+        {
+            MapMan.SetInitialElevProvider(curstr);
+            mman.SetEleProvider(curEleProv);
+            changed = true;
+        }
+        return changed;
+    }
 
 
     public void SetVals(bool closing=false)
@@ -689,17 +714,10 @@ public class MapSetPanel : MonoBehaviour
         var sw = new Aiskwk.Map.StopWatch();
         sw.Start();
 
-   
         var errmsg = "Error in VisualsPanels.SetVals-";
         try
         {
-            var curstr = MapMan.GetMapProviderString(mapProv.value);
-            MapMan.SetInitialMapProvider(curstr);
-            var curmap = MapMan.GetMapProviderEnum(curstr);
-            if (curmap != mman.reqMapProv.Get())
-            {
-                mman.SetMap(curmap);
-            }
+            RealizeSelectedMapProv();
         }
         catch (Exception ex)
         {
@@ -708,13 +726,7 @@ public class MapSetPanel : MonoBehaviour
 
         try
         {
-            var curstr = MapMan.GetElevProviderString(eleProv.value);
-            MapMan.SetInitialElevProvider(curstr);
-            var curele = MapMan.GetElevProviderEnum(curstr);
-            if (curele != mman.reqEleProv.Get())
-            {
-                mman.SetEle(curele);
-            }
+            RealizeSelectedEleProv();
         }
         catch (Exception ex)
         {
@@ -726,7 +738,6 @@ public class MapSetPanel : MonoBehaviour
         UpdateHmult();
         UpdateLod();
         UpdateNpqk();
-
 
         mman.SetUseElevations(useElevationsToggle.isOn);
         mman.SetFlatTris(flatTrisToggle.isOn);
@@ -750,12 +761,13 @@ public class MapSetPanel : MonoBehaviour
         }
         if (closing)
         {
-            panelActive = false;
+            panelTakingInput = false;
             Aiskwk.Map.Viewer.ActivateViewerKeys(true);
         }
     }
     string loadererrmsg = "";
     int estimateCheckedCount = 0;
+    bool estimateChanged = false;
     public void checkEstimateChanged()
     {
         bool recheck = estimateCheckedCount>=0;
@@ -792,6 +804,11 @@ public class MapSetPanel : MonoBehaviour
                 var pixlim = SystemInfo.maxTextureSize;
                 var imszlim = 100;
                 var nbmlim = 200;
+                estimateChanged = stats.llbox.lod != nlod ||
+                                  stats.llbox.midll.lat != nll.lat ||
+                                  stats.llbox.midll.lng != nll.lng ||
+                                  stats.heightKm != (float) newLatKm ||
+                                  stats.widthKm != (float) newLngKm;
                 if (pixx > pixlim)
                 {
                     loadererrmsg = $"xpix>{pixlim}";
@@ -815,7 +832,7 @@ public class MapSetPanel : MonoBehaviour
                 else 
                 {
                     loadererrmsg = $"ok";
-                    fetchSizeEstText.color = textColorDef;
+                    fetchSizeEstText.color = estimateChanged ? darkGreenColor : textColorDef;
                 }
 
                 fetchSizeEstText.text = $"nbm:{nbm} ({nqkx}x{nqky}) (pix:{pixx}x{pixy}) ({imsz:f1} MB)  nelev:{nel}  lod:{nlod}  npqk:{npqk}  {loadererrmsg}";
@@ -841,8 +858,8 @@ public class MapSetPanel : MonoBehaviour
     {
         if ((Time.time - lastPanelCheck) > 0.2f)
         {
-            Aiskwk.Map.Viewer.ActivateViewerKeys(!panelActive);
-            if (panelActive )
+            Aiskwk.Map.Viewer.ActivateViewerKeys(!panelTakingInput);
+            if (panelTakingInput)
             {
                 if (nSetHmultTextValueCalled == 0)
                 {

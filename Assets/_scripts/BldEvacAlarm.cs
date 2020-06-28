@@ -77,8 +77,8 @@ namespace CampusSimulator
             var emissivecolor = inAlarm ? inAlarmEmissiveColor : outAlarmEmissiveColor;
             //Debug.Log(name + " color to " + cclr);
             //GraphUtil.SetColorOfGo(this.gameObject,clr);
-            var alclr = GraphUtil.getcolorbyname(albedocolor);
-            var emclr = GraphUtil.getcolorbyname(emissivecolor);
+            var alclr = GraphUtil.GetColorByName(albedocolor);
+            var emclr = GraphUtil.GetColorByName(emissivecolor);
             emclr = emclr * colorThrobFak;
             alclr = alclr * colorThrobFak;
             //Debug.Log("alclr:" + alclr + "  emclr:" + emclr);

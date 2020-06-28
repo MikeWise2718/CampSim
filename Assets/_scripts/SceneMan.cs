@@ -16,7 +16,7 @@ namespace CampusSimulator
 {
     public enum RouteGarnishE { none, names, coords, all }
 
-    public enum SceneSelE {  MsftB19focused, Custom, Seattle, MtStHelens,Riggins, Eb12,Eb12small, MsftCoreCampus, MsftRedwest, MsftDublin, Tukwila, None }
+    public enum SceneSelE { MsftCoreCampus, MsftB19focused, MsftRedwest, Custom, Seattle, MtStHelens,Riggins, Eb12,Eb12small,  MsftDublin, Tukwila, None }
 
     public class SceneMan : MonoBehaviour
     {
