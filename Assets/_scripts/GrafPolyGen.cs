@@ -7,6 +7,7 @@ using System.Text;
 using System.Linq;
 using UnityEngine.AI;
 using System.Data.Common;
+using System.Diagnostics.PerformanceData;
 
 public enum PolyGenForm { pipes, walls, wallsmesh, tesselate }
 public class GrafPolyGen
@@ -105,7 +106,7 @@ public class GrafPolyGen
             }
             psum += pt;
 
-            var mgo = qut.CreateMarkerSphere("marker" + p.id, pt, clr: clr);
+            var mgo = qut.CreateMarkerSphere("marker-id:" + p.id, pt, clr: clr);
             mgo.transform.parent = parent.transform;
             var txt = p.id.ToString();
             var txgo = qut.MakeTextGo(mgo, txt, yoff: 0.2f, sfak: 0.1f);
@@ -179,28 +180,31 @@ public class GrafPolyGen
         iseg++;
     }
 
-    public void GenBld(GameObject parent,string bldname,float height, int levels, string clr,float alf=1,bool dowalls=true,bool dofloors=true,bool doroof=true)
+    public void GenBld(GameObject parent,string bldname,float height, int levels, string clr,float alf=1,bool plotTesselation=false,bool dowalls=true,bool dofloors=true,bool doroof=true)
     {
         bool onesided = false;
         var bldgo = new GameObject(bldname);
         if (dowalls)
         {
             SetGenForm(PolyGenForm.wallsmesh);
-            var walgo = GenMesh("walls", height: height, clr: clr, alf: alf, onesided: onesided);
+            var wname = $"{bldname}-walls";
+            var walgo = GenMesh(wname, height: height, clr: clr, alf: alf, plotTesselation: plotTesselation, onesided: onesided);
             walgo.transform.SetParent(bldgo.transform);
         }
         if (doroof)
         {
             SetGenForm(PolyGenForm.tesselate);
-            var rufgo = GenMesh("roof", height: height, clr: clr, alf: alf, onesided: onesided);
+            var rname = $"{bldname}-roof";
+            var rufgo = GenMesh(rname, height: height, clr: clr, alf: alf, plotTesselation: plotTesselation, onesided: onesided);
             rufgo.transform.SetParent(bldgo.transform);
         }
         if (dofloors)
         {
             for(int i=0; i<levels; i++)
             {
+                var fname = $"{bldname}-level-{i}";
                 var fheit = levels<2 ? 0 : (i*height / (levels-1));
-                var flrgo = GenMesh($"level-{i}", height: fheit, clr: clr, alf: alf, onesided: onesided);
+                var flrgo = GenMesh(fname, height: fheit, clr: clr, alf: alf, plotTesselation: plotTesselation, onesided: onesided);
                 flrgo.transform.SetParent(bldgo.transform);
             }
         }
@@ -310,7 +314,7 @@ public class GrafPolyGen
         }
     }
 
-    public GameObject GenMesh(string name, float height = 1, string clr = "indigo", float alf = 1, bool dbout = false, bool onesided=false)
+    public GameObject GenMesh(string name, float height = 1, string clr = "indigo", float alf = 1, bool plotTesselation = false, bool onesided=false)
     {
         var go = new GameObject(name);
         var pos = GetCenter(height);
@@ -318,7 +322,7 @@ public class GrafPolyGen
         this.wallheight = height;
         this.wallalf = alf;
         this.wallclr = clr;
-        Generate(go, dbout,onesided:onesided);
+        Generate(go, plotTesselation,onesided:onesided);
         return go;
     }
 
@@ -389,7 +393,7 @@ public class GrafPolyGen
         }
         return rv;
     }
-    public void Generate(GameObject parent, bool dbout,bool onesided=false)
+    public void Generate(GameObject parent, bool plotTesselation,bool onesided=false)
     {
         switch (genform)
         {
@@ -410,7 +414,7 @@ public class GrafPolyGen
                 }
             case PolyGenForm.tesselate:
                 {
-                    TessleateYup(parent, wallheight, dbout: dbout, onesided:onesided);
+                    TessleateYup(parent, wallheight, plotTesselation: plotTesselation, onesided:onesided);
                     break;
                 }
         }
@@ -487,12 +491,15 @@ public class GrafPolyGen
     }
 
 
-    public static (float val, int idx) FindSmallestPositiveCrossProductYcomponent(List<(int id,Vector3 pt)> ptlist)
+    public static (float val, int idx) FindSmallestPositiveCrossProductYcomponent(List<(int id,Vector3 pt)> ptlist,bool dbout=false)
     {
         // find the index of the middle point of the smallest convex triangle to slice off
         var cpvalmin = float.MaxValue;
         var cpvalminidx = -1;
-        //Debug.Log($"FSPCP pts:{ptlist.Count}");
+        if (dbout)
+        {
+            Debug.Log($"FSPCP pts:{ptlist.Count}");
+        }
         for (int i = 0; i < ptlist.Count; i++)
         {
             var i0 = moduloInc(i, -1, ptlist.Count);
@@ -504,9 +511,15 @@ public class GrafPolyGen
             var v2 = ptlist[i2].pt;
             var cv1 = v0 - v1;
             var cv2 = v2 - v1;
-            var cpval = Vector3.Cross(cv2, cv1).y;
-            //var v1s = v1.ToString("f3");
-            //Debug.Log($"    i:{i} cpval:{cpval} v1:{v1s}");
+            var cpval = Vector3.Magnitude(Vector3.Cross(cv2, cv1));
+            if (dbout)
+            {
+                var cv1s = cv1.ToString("f3");
+                var cv2s = cv2.ToString("f3");
+                var cpiszero = cpval == 0;
+                var id = ptlist[i1].id;
+                Debug.Log($"    i:{i} id:{id} cpval:{cpval} cpiszero:{cpiszero}  cv1:{cv1s} cv2:{cv2s}");
+            }
             if (cpval <= 0) continue; // cpval is negative is triangle is concave
             if (cpval < cpvalmin)
             {
@@ -514,41 +527,91 @@ public class GrafPolyGen
                 cpvalminidx = i;
             }
         }
-        //Debug.Log($"FSPCP cpvalmin:{cpvalmin} idx:{cpvalminidx}");
+        if (dbout)
+        {
+            Debug.Log($"FSPCP cpvalmin:{cpvalmin} idx:{cpvalminidx}");
+        }
         return (cpvalmin, cpvalminidx);
     }
 
-
-    public GameObject TessleateYup(GameObject parent,float height,bool onesided=false, bool dbout = false)
+    GameObject GetLevParent(GameObject parent,int lev)
     {
-        if (outline.Count<=3)
+        var go = new GameObject($"lev-{lev}");
+        go.transform.parent = parent.transform;
+        return go;
+    }
+    float mindiff = float.MaxValue;
+    bool ArePtsEq(Vector3 v1,Vector3 v2,float eps)
+    {
+        var diff = Mathf.Abs(v1.x - v2.x) + Mathf.Abs(v1.z - v2.z);
+        if (diff<mindiff)
         {
-            Debug.LogError("Not enough points in outline ({outline.Count} to tesselate");
+            mindiff = diff;
+        }
+        var rv = diff < eps;
+        return rv;
+    }
+
+    public List<(int id, Vector3 pt)> RemoveAdjacentEquals(List<(int id, Vector3 pt)> inlist,float eps)
+    {
+        var outlist = new List<(int id, Vector3 pt)>();
+        var npt = inlist.Count;
+        for(int i0=0; i0<npt; i0++)
+        {
+            var i1 = moduloInc(i0, +1, npt);
+            var v0 = inlist[i0].pt;
+            var v1 = inlist[i1].pt;
+            if (!ArePtsEq(v0,v1,eps))
+            {
+                outlist.Add(inlist[i0]);
+            }
+        }
+        return outlist;
+    }
+
+    public GameObject TessleateYup(GameObject parent,float height,bool onesided=false, bool plotTesselation = false)
+    {
+        int lev = 0;
+        var eps = 1e-3f;
+
+        int starcnt = outline.Count;
+        var woutline = RemoveAdjacentEquals(outline,eps);
+        if (outline.Count < 3)
+        {
+            Debug.LogError($"Not enough distinct points:{woutline.Count} to tesselate - count before dup removeal:{outline.Count}");
             return null;
         }
-        var woutline = new List<(int id,Vector3 pt)>(outline);
         var area = CalcAreaWithYup(woutline);
         var dbheight = height + 0.5f;
         int iclr = 0;
-        if (dbout)
+        if (plotTesselation)
         {
             var centxt = "Area:" + area.ToString("f2");
             var clr = qut.GetColorBySeq(iclr++);
-            PlotOutline(parent, woutline, centxt, dbheight, clr);
+            var levpar = GetLevParent(parent, lev++);
+            PlotOutline(levpar, woutline, centxt, dbheight, clr);
             dbheight += 2;
         }
         reverseOpps++;
-        if (area<0)
+        if (area==0)
+        {
+            Debug.LogWarning("Cannot tesselate zero area polygong - terminating tesselation");
+            var go1 = GetAccumulatedMesh("accumesh");
+            go1.transform.parent = parent.transform;
+            return go1;
+        }
+        else if (area<0)
         {
             reverses++;
             Debug.Log($"Reversing point order to make points CCW - new area:{area}");
             woutline = new List<(int id, Vector3 pt)>(woutline.Reverse<(int id, Vector3 pt)>());
             area = CalcAreaWithYup(woutline);
-            if (dbout)
+            if (plotTesselation)
             {
                 var centxt = "Rev Area:" + area.ToString("f2");
                 var clr = qut.GetColorBySeq(iclr++);
-                PlotOutline(parent, woutline, centxt, dbheight, clr);
+                var levpar = GetLevParent(parent, lev++);
+                PlotOutline(levpar, woutline, centxt, dbheight, clr);
                 dbheight += 2;
             }
             Debug.Log($"new area:{area}");
@@ -556,6 +619,8 @@ public class GrafPolyGen
         var (maxval, maxidx) = FindSmallestPositiveCrossProductYcomponent(woutline);
         //var (maxval, maxidx) = FindLargestCrossProductYcomponent(woutline);
         StartAccumulatingSegments();
+        var fmaxidx = maxidx;
+
 
         while (true)
         {
@@ -563,22 +628,38 @@ public class GrafPolyGen
             var i1 = maxidx;
             var i2 = moduloInc(maxidx, +1, woutline.Count);
             var v0 = woutline[i0].pt;
+            //var id0 = woutline[i0].id;
             var v1 = woutline[i1].pt;
+            //var id1 = woutline[i1].id;
             var v2 = woutline[i2].pt;
+            //var id2 = woutline[i2].id;
+            //if (ArePtsEq(v0, v1, eps))
+            //{
+            //    //Debug.Log($"Removing {woutline[i1].id} as v0=v1");
+            //    woutline.RemoveAt(i1);
+            //    continue;
+            //}
+            //if (ArePtsEq(v1, v2, eps))
+            //{
+            //    //Debug.Log($"Removing {woutline[i1].id} as v1=v2");
+            //    woutline.RemoveAt(i1);
+            //    continue;
+            //}
             var w0 = new Vector3(v0.x, height, v0.z);
             var w1 = new Vector3(v1.x, height, v1.z);
             var w2 = new Vector3(v2.x, height, v2.z);
-            if (dbout)
+            if (plotTesselation)
             {
                 var clr = qut.GetColorBySeq(iclr++);
-                PlotTri(parent, v0, v1, v2, "", height, clr);
-                var v1s = v1.ToString("f3");
-                Debug.Log($"Removing at {i1} - v1:{v1s} woutline.Count:{woutline.Count}");
-
+                var levpar = GetLevParent(parent, lev++);
                 var centxt = "Remove pt:" + woutline[i1].id;
-                PlotOutline(parent, woutline, centxt,   dbheight, clr);
+                PlotOutline(levpar, woutline, centxt,   dbheight, clr);
                 dbheight += 2;
                 Debug.Log($"Slicing out {maxidx} val:{maxval} ptsleft:{woutline.Count}");
+
+                PlotTri(levpar, v0, v1, v2, "", height, clr);
+                var v1s = v1.ToString("f3");
+                Debug.Log($"Removing at {i1} - v1:{v1s} woutline.Count:{woutline.Count}");
             }
             woutline.RemoveAt(i1);
             var pidx = ptsbuf.Count;
@@ -604,7 +685,18 @@ public class GrafPolyGen
             (maxval, maxidx) = FindSmallestPositiveCrossProductYcomponent(woutline);
             if (maxidx<0)
             {
-                Debug.LogError("Tesselate maxidx is -1");
+                var remarea = CalcAreaWithYup(woutline);
+                var remfrac = Mathf.Abs(remarea / area);
+                if (remfrac < 0.001f)
+                {
+                    //this happens when the remaining points have zero area
+                    // not sure it should really happen
+                    break;
+                }
+                var curcnt = woutline.Count;
+                Debug.LogError($"{parent.name} Error in teslation  startcount:{starcnt} current:{curcnt} remarea:{remarea:g3} remfrac:{remfrac:g4}");
+                (maxval, maxidx) = FindSmallestPositiveCrossProductYcomponent(woutline, dbout: true);
+                Debug.LogError($"{parent.name} Tesselate maxidx is -1 - breaking tesselation  startarea:{area:g3} fmaxidx:{fmaxidx}");
                 break;
             }
         }

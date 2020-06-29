@@ -20,9 +20,10 @@ public class Bldspec
     public double lng;
     public float x;
     public float z;
+    public float ptscale;
     public Vector3 loc;
-    public List<Vector3> outline;
-    public Bldspec(string name, string bldtyp, string wid, float height = 0, int levels = 0)
+    List<Vector3> boutline;
+    public Bldspec(string name, string bldtyp, string wid, float height = 0, int levels = 0,float ptscale=1)
     {
         if (height == 0 && levels == 0)
         {
@@ -39,6 +40,7 @@ public class Bldspec
         }
         this.name = name;
         this.bldtyp = bldtyp.ToLower();
+        this.ptscale = ptscale;
         this.wid = wid;
         this.height = height;
         this.levels = levels;
@@ -47,19 +49,46 @@ public class Bldspec
     {
         this.lat = lat;
         this.lng = lng;
-        this.x = x;
-        this.z = z;
-        this.loc = new Vector3(x, 0, -z);
+        this.x = x * ptscale;
+        this.z = z * ptscale;
+        this.loc = new Vector3(this.x, 0, -this.z);
     }
+    public void SetOutline(List<Vector3> outline)
+    {
+        boutline = new List<Vector3>();
+        foreach(var pt in outline)
+        {
+            var npt = new Vector3(pt.x * ptscale, pt.y * ptscale, pt.z * ptscale);
+            boutline.Add(npt);
+        }
+    }
+    public List<Vector3> GetOutline()
+    {
+        var rv = new List<Vector3>(boutline);
+        return rv;
+    }
+
     static Dictionary<string, string> clrcvt = new Dictionary<string, string>()
         {
-            { "appartment","yellow" },
-            { "apartment","yellow" },
-            { "bld","red" },
-            { "commercial","blue" },
-            { "office","cyan" },
-            { "school","green" },
-            { "church","darkgreen" },
+            { "construction","red" },
+            { "commercial","darkgreen" },
+            { "yes","black" },
+            { "osmbld","black" },
+            { "bld","darkblue" },
+            { "house","blue" },
+            { "parking","darkred" },
+            { "garage","darkred" },
+            { "carport","darkred" },
+            { "apartments","purple" },
+            { "appartments","indigo" },
+            { "terrace","green" },
+            { "office","lightblue" },
+            { "shed","green" },
+            { "hotel","pink" },
+            { "retail","gray" },
+            { "school","orange" },
+            { "roof","green" },
+            { "church","purple" },
 
         };
     public string GetColor()
@@ -204,7 +233,7 @@ public class BldPolyGen
     }
 
 
-    public List<Bldspec> LoadBuildingsFromCsv(string areaprefix, string dname = "")
+    public List<Bldspec> LoadBuildingsFromCsv(string areaprefix, string dname = "",float ptscale=1)
     {
         var sw = new Aiskwk.Dataframe.StopWatch();
         sw.Start();
@@ -243,7 +272,7 @@ public class BldPolyGen
             var blx = (bldx == null ? 0 : bldx[i]);
             var bldwalldf = SimpleDf.SubsetOnStringColVal(dflinks, "osm_wid", bwid);
             //Debug.Log($"Found {bldwalldf.Nrow()} links for bld wid:{bwid} name:{bname}");
-            var bs = new Bldspec(bname, btype, bwid, bheit, blevs);
+            var bs = new Bldspec(bname, btype, bwid, bheit, blevs,ptscale:ptscale);
             bs.AddPos(bllat, bllng, blx, blz);
             var outline = ExtractNodes(bname, bwid, bldwalldf, dfnodes, nodedict);
             var area = GrafPolyGen.CalcAreaWithYup(outline);
@@ -251,13 +280,13 @@ public class BldPolyGen
             {
                 outline.Reverse();
             }
-            bs.outline = outline;
+            bs.SetOutline(outline);
             rv.Add(bs);
             i++;
         }
         var nbld = i;
         sw.Stop();
-        Debug.Log($"{areaprefix} Loading and generating {nbld} builds took {sw.ElapSecs()} secs");
+        Debug.Log($"{areaprefix} Loading and generating {nbld} buildings took {sw.ElapSecs()} secs");
         return rv;
     }
     void Test4(GameObject parent)
@@ -286,26 +315,56 @@ public class BldPolyGen
         pg.GenBld(parent, bldname, height, levels, clr, alf: 0.5f);
     }
 
-    public void GenBld(GameObject parent,Bldspec bs)
+    public void GenBld(GameObject parent,Bldspec bs,bool plotTesselation=false)
     {
-        pg.SetOutline(bs.outline);
+        pg.SetOutline(bs.GetOutline());
         var clr = bs.GetColor();
-        pg.GenBld(parent, bs.name, bs.height, bs.levels, clr, alf: 0.5f);
+        var bldname = $"{bs.name} ({bs.wid})";
+        bool dowalls = true;
+        bool dofloors = true;
+        bool doroof = true;
+        if (plotTesselation)
+        {
+            dowalls = false;
+            dofloors = false;
+        }
+        pg.GenBld(parent, bldname, bs.height, bs.levels, clr, alf: 0.5f,dowalls:dowalls,dofloors:dofloors,doroof:doroof, plotTesselation:plotTesselation);
     }
 
-    public void LoadRegion(GameObject parent,string regionspec)
+    public void LoadRegion(GameObject parent,string regionspec, float ptscale=1)
     {
         var sw = new Aiskwk.Dataframe.StopWatch();
         var blds = new List<Bldspec>();
         var sar = regionspec.Split(',');
         foreach (var s in sar)
         {
-            blds.AddRange(LoadBuildingsFromCsv(s));
+            blds.AddRange(LoadBuildingsFromCsv(s,ptscale:ptscale));
         }
         foreach (var bs in blds)
         {
             //GenFixedFormBld(ObjForm.cross, bs.name, bs.loc, bs.height,bs.levels,"db");
             GenBld(parent, bs);
+        }
+        sw.Stop();
+        Debug.Log($"Generation of {regionspec} took {sw.ElapSecs()} secs");
+    }
+
+    public void LoadRegionOneBld(GameObject parent, string regionspec,string bldwid,float ptscale=1)
+    {
+        var sw = new Aiskwk.Dataframe.StopWatch();
+        var blds = new List<Bldspec>();
+        var sar = regionspec.Split(',');
+        foreach (var s in sar)
+        {
+            blds.AddRange(LoadBuildingsFromCsv(s, ptscale: ptscale));
+        }
+        foreach (var bs in blds)
+        {
+            if (bs.wid == bldwid)
+            {
+                //GenFixedFormBld(ObjForm.cross, bs.name, bs.loc, bs.height,bs.levels,"db");
+                GenBld(parent, bs,plotTesselation:true);
+            }
         }
         sw.Stop();
         Debug.Log($"Generation of {regionspec} took {sw.ElapSecs()} secs");
@@ -335,7 +394,7 @@ public class BldPolyGen
     }
 
     public enum ObjForm { star, cross, circle }
-    void GenObj(GameObject parent,ObjForm objform, bool dowalls = true, bool doroof = true, bool dofloor = true, bool dbOutline = false, bool onesided = false)
+    void GenObj(GameObject parent,ObjForm objform, bool dowalls = true, bool doroof = true, bool dofloor = true, bool plotTesselation = false, bool onesided = false)
     {
         var alf = 0.5f;
         //alf = 1;
@@ -343,19 +402,19 @@ public class BldPolyGen
         if (dowalls)
         {
             pg.SetGenForm(PolyGenForm.wallsmesh);
-            var walgo = pg.GenMesh("walls", height: 2, clr: "blue", alf: alf, dbout: dbOutline, onesided: onesided);
+            var walgo = pg.GenMesh("walls", height: 2, clr: "blue", alf: alf, plotTesselation: plotTesselation, onesided: onesided);
             walgo.transform.parent = parent.transform;
         }
         if (doroof)
         {
             pg.SetGenForm(PolyGenForm.tesselate);
-            var rufgo = pg.GenMesh("ceiling", height: 2, clr: "blue", alf: alf, dbout: dbOutline, onesided: onesided);
+            var rufgo = pg.GenMesh("ceiling", height: 2, clr: "blue", alf: alf, plotTesselation: plotTesselation, onesided: onesided);
             rufgo.transform.parent = parent.transform;
         }
         if (dofloor)
         {
             pg.SetGenForm(PolyGenForm.tesselate);
-            var fl1go = pg.GenMesh("floor1", height: 1, clr: "blue", alf: alf, dbout: dbOutline, onesided: onesided);
+            var fl1go = pg.GenMesh("floor1", height: 1, clr: "blue", alf: alf, plotTesselation: plotTesselation, onesided: onesided);
             fl1go.transform.parent = parent.transform;
         }
     }
