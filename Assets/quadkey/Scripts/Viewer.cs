@@ -115,7 +115,7 @@ namespace Aiskwk.Map
         }
         public void ReAdjustViewerInitialPosition()
         {
-            Debug.Log($"ReAdjustViewerInitialPosition - before scale:{transform.localScale} rotation:{transform.localRotation.eulerAngles}");
+            //Debug.Log($"ReAdjustViewerInitialPosition - before scale:{transform.localScale} rotation:{transform.localRotation.eulerAngles}");
             bodyPrefabRotation = Quaternion.identity;
             bodyPlaneRotation = Quaternion.identity;
             var scale = transform.localScale;
@@ -124,7 +124,7 @@ namespace Aiskwk.Map
             transform.SetParent(null, worldPositionStays: false);// disconnect
             transform.position = viewerDefaultPosition;
             transform.localRotation = Quaternion.Euler(viewerDefaultRotation);
-            Debug.Log($"ReAdjustViewerInitialPosition - viewerDefaultRotation:{viewerDefaultRotation}");
+            //Debug.Log($"ReAdjustViewerInitialPosition - viewerDefaultRotation:{viewerDefaultRotation}");
             var t = GetRootTransform(parent.transform);
             var s = t.localScale.x;
             if (s != 0)
@@ -142,7 +142,7 @@ namespace Aiskwk.Map
                                                                                // or we get problems when we follownormal along the mesh
             TranslateViewer(0, 0);
             RotateViewer(0);
-            Debug.Log($"ReAdjustViewerInitialPosition - after  scale:{transform.localScale} rotation:{transform.localRotation.eulerAngles}");
+            //Debug.Log($"ReAdjustViewerInitialPosition - after  scale:{transform.localScale} rotation:{transform.localRotation.eulerAngles}");
             //DumpViewer();
         }
 

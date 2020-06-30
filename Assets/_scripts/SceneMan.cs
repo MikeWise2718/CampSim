@@ -265,6 +265,8 @@ namespace CampusSimulator
                     // Now do value initialization
                     this.InitializeScene(newscene);
                     vcman.InitializeScene(newscene);
+                    bdman.InitializeScene(newscene);
+
 
 
                     glbllm = rmango.AddComponent<LatLongMap>();

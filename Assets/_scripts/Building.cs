@@ -283,7 +283,7 @@ namespace CampusSimulator
             roomlistgo = new GameObject("Rooms");
             roomlistgo.transform.parent = this.transform;
             this.lc = bm.sman.linkcloudman;
-            Debug.Log($"AddRoomsToBuilding:{name} roomspecs.count:{roomspecs.Count} defAngAlign:{defAngAlign}");
+            //Debug.Log($"AddRoomsToBuilding:{name} roomspecs.count:{roomspecs.Count} defAngAlign:{defAngAlign}");
             if (roomspecs.Count==0)
             {
                 var rooms = GetRoomListFromNodes();

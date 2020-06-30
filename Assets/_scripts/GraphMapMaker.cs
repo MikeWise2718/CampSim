@@ -709,7 +709,7 @@ namespace GraphAlgos
         public GenGlobeParameters globpar = new GenGlobeParameters(12, 12, 10, 10);
         public GenCircParameters circpar = new GenCircParameters(12, 10, 0);
         public Range LinkFloor = new Range(0, 0);
-        public void AddGraphToLinkCloud(graphSceneE graphScene,GraphGenerationModeE genMode)
+        public void AddGraphToLinkCloud(graphSceneE graphScene,GraphGenerationModeE genMode,bool addWallLinks)
         {
             grc.maxRanHeight = LinkFloor.max;
             grc.minRanHeight = LinkFloor.min;
@@ -755,9 +755,12 @@ namespace GraphAlgos
                                 lmd.CreateGraphForOsmImport_msft();
 
                                 //lmd.CreateGraphForOsmImport_MsftCampusBldSmall();
-                                lmd.CreateGraphForOsmImport_msftb19area();
-                                lmd.CreateGraphForOsmImport_msftcommons();
-                                lmd.CreateGraphForOsmImport_msftredwest();
+                                if (addWallLinks)
+                                { 
+                                    lmd.CreateGraphForOsmImport_msftb19area();
+                                    lmd.CreateGraphForOsmImport_msftcommons();
+                                    lmd.CreateGraphForOsmImport_msftredwest();
+                                }
 
                                 AddRedwestCalibrationMarkers();
                                 var template = grc.gm.addprefix("rm");
@@ -844,7 +847,13 @@ namespace GraphAlgos
                                 //lmd.CreatePointsForEb12streets2();
                                 //lmd.CreatePointsForEb12retail();
                                 //lmd.CreatePointsForEb12resident2();
+
                                 lmd.CreateGraphForOsmImport_eb12_orig();
+
+                                if (addWallLinks)
+                                {
+                                    lmd.CreateGraphForOsmImport_Eb12small();
+                                }
                                 //lmd.createPointsFor_eb12_streets();
                                 lmd.createPointsFor_eb12_resident();
                                 lmd.createPointsFor_eb12_retail();
@@ -866,7 +875,10 @@ namespace GraphAlgos
                                 //lmd.CreatePointsForEb12streets2();
                                 //lmd.CreatePointsForEb12retail();
                                 //lmd.CreatePointsForEb12resident2();
-                                lmd.CreateGraphForOsmImport_Eb12small();
+                                if (addWallLinks)
+                                {
+                                    lmd.CreateGraphForOsmImport_Eb12small();
+                                }
                                 //lmd.CreateGraphForOsmImport_eb12_small();
                                 //lmd.createPointsFor_eb12_streets();
                                 lmd.createPointsFor_eb12_resident();

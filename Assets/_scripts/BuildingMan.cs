@@ -108,7 +108,21 @@ namespace CampusSimulator
         }
         #endregion treeMode
 
-        System.Random ranman = new System.Random();
+        public void InitializeScene(SceneSelE newregion)
+        {
+            InitializeValues();
+        }
+
+            public void InitializeValues()
+        {
+            //treeMode = GetInitialTreeMode();
+            treeMode.GetInitial();
+            bldMode.GetInitial();
+            walllinks.GetInitial();
+            osmblds.GetInitial();
+            fixedblds.GetInitial();
+        }
+
 
         public void SetScene(SceneSelE newregion)
         {
@@ -436,24 +450,6 @@ namespace CampusSimulator
         }
 
 
-        private void Awake()
-        {
-            sman = FindObjectOfType<SceneMan>();
-        }
-
-        // Use this for initialization
-        void Start()
-        {
-            //treeMode = GetInitialTreeMode();
-            treeMode.GetInitial();
-            bldMode.GetInitial();
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
 
 
 

@@ -26,7 +26,7 @@ public class B19Panel : MonoBehaviour
     BuildingMan bman;
     B19Willow b19comp;
 
-    bool panelActive = false;
+    bool panelActiveForRefreshChecks = false;
 
     public void Init0()
     {
@@ -72,18 +72,14 @@ public class B19Panel : MonoBehaviour
     public void InitVals()
     {
         b19comp = null;
-        var bld = bman?.GetBuilding("Bld19");
+        var bld = bman?.GetBuilding("Bld19",couldFail:true);
         if (bld != null)
         {
             b19comp = bld.GetComponent<B19Willow>();
             if (b19comp==null)
             {
-                Debug.LogWarning("B19 Panel could not find B19Willow component that it needs to operate");
+                Debug.LogWarning("B19Panel could not find B19Willow component in B19 building object that it needs to operate");
             }
-        }
-        else
-        {
-            Debug.LogWarning("B19 Panel can not find Bld19 in bman");
         }
         walllinks_toggle.isOn = bman.walllinks.Get();
         osmblds_toggle.isOn = bman.osmblds.Get();
@@ -127,7 +123,7 @@ public class B19Panel : MonoBehaviour
             }
             //visTiedToggle.isOn = fman.visibilityTiedToDetectability;
         }
-        panelActive = true;
+        panelActiveForRefreshChecks = true;
     }
 
 
@@ -153,18 +149,18 @@ public class B19Panel : MonoBehaviour
             }
         }
 
+        var chg = false;
+        chg = chg || bman.walllinks.SetAndSave(walllinks_toggle.isOn);
+        chg = chg || bman.osmblds.SetAndSave(osmblds_toggle.isOn);
+        chg = chg || bman.fixedblds.SetAndSave(fixedblds_toggle.isOn);
+        Debug.Log($"B19Panel.SetVals walllinks:{walllinks_toggle.isOn} osmblds:{osmblds_toggle.isOn}  fixedblds:{fixedblds_toggle.isOn} chg:{chg}");
 
-        bman.walllinks.SetAndSave(walllinks_toggle.isOn);
-        bman.osmblds.SetAndSave(osmblds_toggle.isOn);
-        bman.fixedblds.SetAndSave(fixedblds_toggle.isOn);
-        Debug.Log($"B19Panel.SetVals bman.fixedblds.SetAndSave:{fixedblds_toggle.isOn}");
-
-        panelActive = false;
-        sman.RequestRefresh("B19Panel-SetVals");
+        sman.RequestRefresh("B19Panel-SetVals",totalrefresh:chg);
+        panelActiveForRefreshChecks = false;
 
     }
 
-    public void SetVals2()
+    public void SetValsForRefresh()
     {
         if (b19comp == null) return;
 
@@ -201,11 +197,11 @@ public class B19Panel : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (panelActive)
+        if (panelActiveForRefreshChecks)
         {
             if (Time.time-lastcheck>0.5f)
             {
-                SetVals2();
+                SetValsForRefresh();
                 lastcheck = Time.time;
             }
         }

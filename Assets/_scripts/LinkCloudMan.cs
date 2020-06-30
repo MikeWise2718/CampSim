@@ -309,9 +309,10 @@ namespace CampusSimulator
             grctrl.maxRanHeight = LinkFLoor.max;
             grctrl.minRanHeight = LinkFLoor.min;
 
-
             mm.maxVoiceKeywords = this.maxVoiceKeywords;
-            mm.AddGraphToLinkCloud(graphScene,genmode);
+            var addWallLinks = sman.bdman.walllinks.Get();
+            Debug.Log($"GenLinkCloud addWallLinks:{addWallLinks}");
+            mm.AddGraphToLinkCloud(graphScene,genmode,addWallLinks);
             nVoiceKeywords = mm.nVoiceKeywords;
             if (CanGetHeights())
             {
