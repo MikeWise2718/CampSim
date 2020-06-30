@@ -28,6 +28,11 @@ namespace CampusSimulator
         public bool showPersRects;
 
 
+        public UxSettingBool walllinks = new UxSettingBool("walllinks", true);
+        public UxSettingBool osmblds = new UxSettingBool("osmblds", true);
+        public UxSettingBool fixedblds = new UxSettingBool("fixedblds", true);
+
+
         // To do - get rid of bldmode and treemode regions in BuildingMan
         #region bldMode
         public enum BldModeE { none, full };
@@ -207,7 +212,7 @@ namespace CampusSimulator
                                                          PersonMan.empStatusE.FullTimeEmp, "Typing", false, 45, hasHololens: false, hasCamera: false, flagged: true);
                     sman.psman.AddPersonToBuildingAtNode(PersonMan.GenderE.male, "b19-f01-lobby", "b19-f01-sp1030", "Clark Gabel", "Man004",
                                                          PersonMan.empStatusE.Contractor, "Typing", false, -48f, hasHololens: false, hasCamera: false, flagged: true);
-                    sman.psman.AddPersonToBuildingAtNode(PersonMan.GenderE.male, "b19-f01-lobby", "b19-f01-sp1029", "Owen Wilson", "Man010",
+                    sman.psman.AddPersonToBuildingAtNode(PersonMan.GenderE.male, "b19-f01-lobby", "b19-f01-sp1029", "Anthony Hopkins", "Man010",
                                                          PersonMan.empStatusE.FullTimeEmp, "Typing", false, 40f, hasHololens: false, hasCamera: false, flagged: true);
                     //sman.psman.b19idchange("Dave Agarwal","Visitor",flagged:true);
                     //sman.psman.b19idchange("Liam Lee", "Visitor", flagged: true);

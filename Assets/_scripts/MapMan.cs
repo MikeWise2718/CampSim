@@ -373,7 +373,7 @@ namespace CampusSimulator
         public void SetHmult(float newhmult)
         {
             hmult.SetAndSave(newhmult);
-            if (qmapman.qmm != null)
+            if (qmapman?.qmm != null)
             {
                 qmapman.qmm.hmult = newhmult;
             }
@@ -382,7 +382,7 @@ namespace CampusSimulator
         {
             flatTris.SetAndSave(flattris);
             qmapman.useFlatTrisStart = flattris;
-            if (qmapman.qmm != null)
+            if (qmapman?.qmm != null)
             {
                 qmapman.qmm.flatTriangles = flattris;
             }
