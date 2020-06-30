@@ -145,7 +145,7 @@ namespace CampusSimulator
                 case SceneSelE.Eb12small:
                 case SceneSelE.Eb12:
                     MakeBuildings("Eb");
-                    osmloadspec = "eb12";
+                    osmloadspec = "eb12small";
                     break;
                 default:
                 case SceneSelE.None:

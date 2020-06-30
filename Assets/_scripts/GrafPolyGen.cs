@@ -511,7 +511,7 @@ public class GrafPolyGen
             var v2 = ptlist[i2].pt;
             var cv1 = v0 - v1;
             var cv2 = v2 - v1;
-            var cpval = Vector3.Magnitude(Vector3.Cross(cv2, cv1));
+            var cpval = Vector3.Cross(cv2, cv1).y;
             if (dbout)
             {
                 var cv1s = cv1.ToString("f3");
