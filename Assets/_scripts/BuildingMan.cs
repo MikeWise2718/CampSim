@@ -130,12 +130,14 @@ namespace CampusSimulator
             {
                 DelBuildings();
             }
+            var osmloadspec = "";
             switch (newregion)
             {
                 case SceneSelE.MsftRedwest:
                 case SceneSelE.MsftCoreCampus:
                 case SceneSelE.MsftB19focused:
                     MakeBuildings("Bld");
+                    osmloadspec = "msftb19area,msftcommons,msftredwest"; 
                     break;
                 case SceneSelE.MsftDublin:
                     MakeBuildings("Dub");
@@ -143,11 +145,20 @@ namespace CampusSimulator
                 case SceneSelE.Eb12small:
                 case SceneSelE.Eb12:
                     MakeBuildings("Eb");
+                    osmloadspec = "eb12";
                     break;
                 default:
                 case SceneSelE.None:
                     // DelBuildings called above already
                     break;
+            }
+
+            var doosmblds = osmblds.Get();
+            Debug.Log($"doosmblds:{doosmblds} osmloadspec{osmloadspec}");
+            if (doosmblds)
+            {
+                var bpg = new BldPolyGen();
+                bpg.LoadRegion(this.gameObject, osmloadspec);
             }
         }
         public void UpdateBldStats()

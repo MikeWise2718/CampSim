@@ -118,10 +118,18 @@ namespace CampusSimulator
             sman.RequestRefresh("ZoneMan-RealizeSlotForm");
         }
 
+        public void InitializeScene(SceneSelE newregion)
+        {
+            InitializeValues();
+        }
+
+        public void InitializeValues()
+        {
+            slotform.GetInitial();
+        }
 
         public void SetScene(SceneSelE newregion)
         {
-            slotform.GetInitial();
             InterpretSlotForm();
             DelZones();
             switch (newregion)

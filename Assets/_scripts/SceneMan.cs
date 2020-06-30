@@ -266,6 +266,8 @@ namespace CampusSimulator
                     this.InitializeScene(newscene);
                     vcman.InitializeScene(newscene);
                     bdman.InitializeScene(newscene);
+                    gaman.InitializeScene(newscene);
+                    znman.InitializeScene(newscene);
 
 
 
