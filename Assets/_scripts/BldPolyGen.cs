@@ -8,6 +8,7 @@ using System.Text;
 using System.Linq;
 using UnityEngine.AI;
 using System.Data.Common;
+using System;
 
 public class Bldspec
 {
@@ -20,10 +21,10 @@ public class Bldspec
     public double lng;
     public float x;
     public float z;
-    public float ptscale;
+    public float bscale;
     public Vector3 loc;
     List<Vector3> boutline;
-    public Bldspec(string name, string bldtyp, string wid, float height = 0, int levels = 0,float ptscale=1)
+    public Bldspec(string name, string bldtyp, string wid, float height = 0, int levels = 0, float bscale = 1)
     {
         if (height == 0 && levels == 0)
         {
@@ -40,7 +41,7 @@ public class Bldspec
         }
         this.name = name;
         this.bldtyp = bldtyp.ToLower();
-        this.ptscale = ptscale;
+        this.bscale = bscale;
         this.wid = wid;
         this.height = height;
         this.levels = levels;
@@ -49,16 +50,16 @@ public class Bldspec
     {
         this.lat = lat;
         this.lng = lng;
-        this.x = x * ptscale;
-        this.z = z * ptscale;
+        this.x = x * bscale;
+        this.z = z * bscale;
         this.loc = new Vector3(this.x, 0, -this.z);
     }
     public void SetOutline(List<Vector3> outline)
     {
         boutline = new List<Vector3>();
-        foreach(var pt in outline)
+        foreach (var pt in outline)
         {
-            var npt = new Vector3(pt.x * ptscale, pt.y * ptscale, pt.z * ptscale);
+            var npt = new Vector3(pt.x * bscale, pt.y * bscale, pt.z * bscale);
             boutline.Add(npt);
         }
     }
@@ -102,16 +103,24 @@ public class Bldspec
 }
 
 
+
+
+
 public class BldPolyGen
 {
     public GrafPolyGen pg;
 
     public BldPolyGen()
     {
+        ReInit();
+    }
+
+    public void ReInit()
+    {
         pg = new GrafPolyGen();
     }
 
-    List<Vector3> ExtractNodes(string wid, string name, SimpleDf linksdf, SimpleDf nodedf, Dictionary<string, int> nodedict, float ptscale=1)
+    List<Vector3> ExtractNodes(string wid, string name, SimpleDf linksdf, SimpleDf nodedf, Dictionary<string, int> nodedict)
     {
         var rv = new List<Vector3>();
         var osm_nid_1 = linksdf.GetStringCol("osm_nid_1");
@@ -131,8 +140,8 @@ public class BldPolyGen
                 continue;
             }
             var n1idx = nodedict[n1];
-            var x = xvals[n1idx] * ptscale;
-            var z = zvals[n1idx] * ptscale;
+            var x = xvals[n1idx];
+            var z = zvals[n1idx];
             var pt1 = new Vector3(x, 0, z);
 
             //var n2 = osm_nid_2[i];
@@ -152,7 +161,7 @@ public class BldPolyGen
     public static List<string> ReadResource(string pathname)
     {
         var idx = pathname.IndexOf(".csv");
-        if (idx>0)
+        if (idx > 0)
         {
             pathname = pathname.Remove(idx);
         }
@@ -235,7 +244,7 @@ public class BldPolyGen
     }
 
 
-    public List<Bldspec> LoadBuildingsFromCsv(string areaprefix, string dname = "",float ptscale=1)
+    public List<Bldspec> LoadBuildingsFromCsv(string areaprefix, string dname = "", float ptscale = 1)
     {
         var sw = new Aiskwk.Dataframe.StopWatch();
         sw.Start();
@@ -274,7 +283,7 @@ public class BldPolyGen
             var blx = (bldx == null ? 0 : bldx[i]);
             var bldwalldf = SimpleDf.SubsetOnStringColVal(dflinks, "osm_wid", bwid);
             //Debug.Log($"Found {bldwalldf.Nrow()} links for bld wid:{bwid} name:{bname}");
-            var bs = new Bldspec(bname, btype, bwid, bheit, blevs,ptscale:ptscale);
+            var bs = new Bldspec(bname, btype, bwid, bheit, blevs, bscale: ptscale);
             bs.AddPos(bllat, bllng, blx, blz);
             var nodeoutline = ExtractNodes(bname, bwid, bldwalldf, dfnodes, nodedict);
             var area = GrafPolyGen.CalcAreaWithYup(nodeoutline);
@@ -291,67 +300,82 @@ public class BldPolyGen
         Debug.Log($"{areaprefix} Loading and generating {nbld} buildings took {sw.ElapSecs()} secs");
         return rv;
     }
-    void Test4(GameObject parent)
+    public void Test4(GameObject parent, float ptscale = 1)
     {
         // debug one layer only
         //GenObj(ObjForm.circle, dowalls:false,doceil:true,dofloor:false,dbOutline:false);
         //GenObj(ObjForm.circle,onesided:false);
 
-        var v = 4;
-        var l1 = new Vector3(v, 0, v);
-        GenFixedFormBld(parent,ObjForm.cross, "b11", l1, 48, 12, "dr");
-        var l2 = new Vector3(-v, 0, v);
-        GenFixedFormBld(parent,ObjForm.star, "b01", l2, 48, 12, "dg");
+        var v = 5;
+        var levs = 12;
+        var height = 48;
+        height = 9;
+        height = 0;
+        levs = 3;
+        ReInit();
+        //var l1 = new Vector3(v, 0, v);
+        //GenFixedFormBld(parent, ObjForm.cross, "b11", l1, height, levs, "dr", ptscale: ptscale);
+
+        //ReInit();
+        //var l2 = new Vector3(-v, 0, v);
+        //GenFixedFormBld(parent, ObjForm.star, "b01", l2, height, levs, "dg", ptscale: ptscale);
+
+        ReInit();
         var l3 = new Vector3(v, 0, -v);
-        GenFixedFormBld(parent,ObjForm.circle, "b10", l3, 48, 12, "db");
-        var l4 = new Vector3(-v, 0, -v);
-        GenFixedFormBld(parent,ObjForm.cross, "b00", l4, 48, 12, "dy");
+        //l3 = Vector3.zero;
+        GenFixedFormBld(parent, ObjForm.circle, "b10", l3, height, levs, "db", ptscale: ptscale);
+
+        //ReInit();
+        //var l4 = new Vector3(-v, 0, -v);
+        //GenFixedFormBld(parent, ObjForm.cross, "b00", l4, height, levs, "dy", ptscale: ptscale);
     }
 
 
 
 
-    public void GenFixedFormBld(GameObject parent, ObjForm objform, string bldname, Vector3 loc, float height, int levels, string clr)
+    public void GenFixedFormBld(GameObject parent, ObjForm objform, string bldname, Vector3 loc, float height, int levels, string clr, float ptscale = 1)
     {
         GenOutline(objform, loc);
-        pg.GenBld(parent, bldname, height, levels, clr, alf: 0.5f);
+        var dowalls = false;
+        var dofloors = false;
+        var doroof = true;
+        pg.GenBld(parent, bldname, height, levels, clr, alf: 1f,dowalls:dowalls,dofloors: dofloors,doroof:doroof, ptscale: ptscale);
     }
-
-    public void GenBld(GameObject parent,Bldspec bs,bool plotTesselation=false,float ptscale=1)
+    public void GenBld(GameObject parent, Bldspec bs, bool plotTesselation = false, float ptscale = 1, GetHeightDel ghd = null)
     {
         pg.SetOutline(bs.GetOutline());
         var clr = bs.GetColor();
         var bldname = $"{bs.name} ({bs.wid})";
-        bool dowalls = true;
-        bool dofloors = true;
-        bool doroof = true;
+        var dowalls = true;
+        var dofloors = true;
+        var doroof = true;
         if (plotTesselation)
         {
             dowalls = false;
             dofloors = false;
         }
-        pg.GenBld(parent, bldname, bs.height, bs.levels, clr, alf: 0.5f,dowalls:dowalls,dofloors:dofloors,doroof:doroof, plotTesselation:plotTesselation,ptscale:ptscale);
+        pg.GenBld(parent, bldname, bs.height, bs.levels, clr, alf: 0.5f, dowalls: dowalls, dofloors: dofloors, doroof: doroof, plotTesselation: plotTesselation, ptscale: ptscale, ghd: ghd);
     }
 
-    public void LoadRegion(GameObject parent,string regionspec, float ptscale=1)
+    public void LoadRegion(GameObject parent, string regionspec, float ptscale = 1)
     {
         var sw = new Aiskwk.Dataframe.StopWatch();
         var blds = new List<Bldspec>();
         var sar = regionspec.Split(',');
         foreach (var s in sar)
         {
-            blds.AddRange(LoadBuildingsFromCsv(s,ptscale:ptscale));
+            blds.AddRange(LoadBuildingsFromCsv(s, ptscale: ptscale));
         }
         foreach (var bs in blds)
         {
             //GenFixedFormBld(ObjForm.cross, bs.name, bs.loc, bs.height,bs.levels,"db");
-            GenBld(parent, bs,ptscale:ptscale);
+            GenBld(parent, bs, ptscale: ptscale);
         }
         sw.Stop();
         Debug.Log($"Generation of {regionspec} took {sw.ElapSecs()} secs");
     }
 
-    public void LoadRegionOneBld(GameObject parent, string regionspec,string bldwid,float ptscale=1)
+    public void LoadRegionOneBld(GameObject parent, string regionspec, string bldwid, float ptscale = 1)
     {
         var sw = new Aiskwk.Dataframe.StopWatch();
         var blds = new List<Bldspec>();
@@ -365,7 +389,7 @@ public class BldPolyGen
             if (bs.wid == bldwid)
             {
                 //GenFixedFormBld(ObjForm.cross, bs.name, bs.loc, bs.height,bs.levels,"db");
-                GenBld(parent, bs,plotTesselation:true,ptscale:ptscale);
+                GenBld(parent, bs, plotTesselation: true, ptscale: ptscale);
             }
         }
         sw.Stop();
@@ -374,29 +398,31 @@ public class BldPolyGen
 
     void GenOutline(ObjForm objform, Vector3 loc)
     {
+        var radiusinnner = 0.5f;
+        var radius = 5f;
         switch (objform)
         {
             default:
             case ObjForm.star:
                 {
-                    pg.GenStarOutline(loc, 8, 0.5f, 3f);
+                    pg.GenStarOutline(loc, 8, radiusinnner, radius);
                     break;
                 }
             case ObjForm.cross:
                 {
-                    pg.GenCrossOutline(loc, 2f);
+                    pg.GenCrossOutline(loc, radius);
                     break;
                 }
             case ObjForm.circle:
                 {
-                    pg.GenCylinderOutline(loc, 10, 3f);
+                    pg.GenCylinderOutline(loc, 10, radius);
                     break;
                 }
         }
     }
 
     public enum ObjForm { star, cross, circle }
-    void GenObj(GameObject parent,ObjForm objform, bool dowalls = true, bool doroof = true, bool dofloor = true, bool plotTesselation = false, bool onesided = false)
+    void GenObj(GameObject parent, ObjForm objform, bool dowalls = true, bool doroof = true, bool dofloor = true, bool plotTesselation = false, bool onesided = false)
     {
         var alf = 0.5f;
         //alf = 1;

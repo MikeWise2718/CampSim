@@ -108,9 +108,6 @@ public class BuildingsPanel : MonoBehaviour
             b19_hvac_toggle.isOn = b19comp.hvac.Get();
             b19_floors_toggle.isOn = b19comp.floors.Get();
             b19_doors_toggle.isOn = b19comp.doors.Get();
-
-
-
             {
                 var opts = b19comp.b19_materialMode.GetOptionsAsList();
                 var inival = b19comp.b19_materialMode.Get().ToString();

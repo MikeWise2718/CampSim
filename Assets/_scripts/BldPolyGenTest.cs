@@ -1,10 +1,30 @@
 ﻿using Aiskwk.Dataframe;
+using Boo.Lang;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.Versioning;
 using System.Security.Policy;
 using UnityEngine;
 using UnityEngine.UI;
+
+
+public class heightMocker
+{
+    //
+    // mocking this:             var y = sman.mpman.GetHeight(x, z);
+    //
+
+    float fixedVal = 2;
+    public heightMocker(float height)
+    {
+        fixedVal = height;
+    }
+    float GetHeight(float x,float z)
+    {
+        return fixedVal;
+    }
+}
+
 
 public class BldPolyGenTest : MonoBehaviour
 {
@@ -13,16 +33,24 @@ public class BldPolyGenTest : MonoBehaviour
     void Start()
     {
         bpg = new BldPolyGen();
+        //TestEb12();
         TestMsft();
+        //bpg.Test4(this.gameObject, 1f);
     }
     void TestMsft()
     {
-        bpg.LoadRegion(this.gameObject, "msftb19area,msftcommons,msftredwest");
+        bpg.LoadRegion(this.gameObject, "msftb19area,msftcommons,msftredwest",0.5f);
         //bpg.LoadRegion(this.gameObject, "eb12");
         //bpg.LoadRegion(this.gameObject, "eb12small");
         //bpg.LoadRegion(this.gameObject, "SanFrancisco", ptscale: 1000);
         //bpg.LoadRegionOneBld(this.gameObject, "SanFrancisco","w256586268",ptscale:1000);
         //bpg.LoadRegionOneBld(this.gameObject, "eb12small","w203793425");
+    }
+
+    void TestEb12()
+    {
+        //bpg.LoadRegion(this.gameObject, "eb12small", 0.5f);
+        bpg.LoadRegion(this.gameObject, "eb12small", 0.5f);
     }
 
     float lastDumpTime;
