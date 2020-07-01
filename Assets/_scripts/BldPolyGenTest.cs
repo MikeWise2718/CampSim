@@ -17,8 +17,9 @@ public class BldPolyGenTest : MonoBehaviour
     }
     void TestMsft()
     {
-        //bpg.LoadRegion(this.gameObject, "msftb19area,msftcommons,msftredwest");
-        bpg.LoadRegion(this.gameObject, "eb12");
+        bpg.LoadRegion(this.gameObject, "msftb19area,msftcommons,msftredwest");
+        //bpg.LoadRegion(this.gameObject, "eb12");
+        //bpg.LoadRegion(this.gameObject, "eb12small");
         //bpg.LoadRegion(this.gameObject, "SanFrancisco", ptscale: 1000);
         //bpg.LoadRegionOneBld(this.gameObject, "SanFrancisco","w256586268",ptscale:1000);
         //bpg.LoadRegionOneBld(this.gameObject, "eb12small","w203793425");

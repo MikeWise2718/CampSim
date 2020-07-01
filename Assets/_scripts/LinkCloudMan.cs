@@ -311,7 +311,7 @@ namespace CampusSimulator
 
             mm.maxVoiceKeywords = this.maxVoiceKeywords;
             var addWallLinks = sman.bdman.walllinks.Get();
-            Debug.Log($"GenLinkCloud addWallLinks:{addWallLinks}");
+            //Debug.Log($"GenLinkCloud addWallLinks:{addWallLinks}");
             mm.AddGraphToLinkCloud(graphScene,genmode,addWallLinks);
             nVoiceKeywords = mm.nVoiceKeywords;
             if (CanGetHeights())

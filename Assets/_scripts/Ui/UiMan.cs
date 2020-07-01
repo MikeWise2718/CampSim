@@ -19,7 +19,7 @@ namespace CampusSimulator
         public MapSetPanel mappan;
         public GeneralPanel genpan;
         public FramePanel frapan;
-        public B19Panel b19pan;
+        public BuildingsPanel b19pan;
         public HelpPanel helpan;
         public AboutPanel abtpan;
 
@@ -36,7 +36,7 @@ namespace CampusSimulator
             mappan = Resources.FindObjectsOfTypeAll<MapSetPanel>()[0];
             genpan = Resources.FindObjectsOfTypeAll<GeneralPanel>()[0];
             frapan = Resources.FindObjectsOfTypeAll<FramePanel>()[0];
-            b19pan = Resources.FindObjectsOfTypeAll<B19Panel>()[0];
+            b19pan = Resources.FindObjectsOfTypeAll<BuildingsPanel>()[0];
             helpan = Resources.FindObjectsOfTypeAll<HelpPanel>()[0];
             abtpan = Resources.FindObjectsOfTypeAll<AboutPanel>()[0];
 

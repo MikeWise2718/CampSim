@@ -620,7 +620,7 @@ namespace CampusSimulator
             var tmode = bm.treeMode.Get();
             var fixedbuildings = bm.fixedblds.Get();
             var dofixed = fixedbuildings && bmode == BuildingMan.BldModeE.full;
-            Debug.Log($"{name} fixedbuildings:{fixedbuildings}  bmode:{bmode}  => dofixed:{dofixed}");
+            //Debug.Log($"{name} fixedbuildings:{fixedbuildings}  bmode:{bmode}  => dofixed:{dofixed}");
             switch (name)
             {
                 case "DubBld1":

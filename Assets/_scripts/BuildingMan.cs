@@ -154,11 +154,11 @@ namespace CampusSimulator
             }
 
             var doosmblds = osmblds.Get();
-            Debug.Log($"doosmblds:{doosmblds} osmloadspec{osmloadspec}");
+            //Debug.Log($"doosmblds:{doosmblds} osmloadspec{osmloadspec}");
             if (doosmblds)
             {
                 var bpg = new BldPolyGen();
-                bpg.LoadRegion(this.gameObject, osmloadspec);
+                bpg.LoadRegion(this.gameObject, osmloadspec,0.5f);
             }
         }
         public void UpdateBldStats()

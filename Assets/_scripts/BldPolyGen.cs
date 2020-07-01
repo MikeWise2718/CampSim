@@ -71,10 +71,10 @@ public class Bldspec
     static Dictionary<string, string> clrcvt = new Dictionary<string, string>()
         {
             { "construction","red" },
-            { "commercial","darkgreen" },
+            { "commercial","darkblue" },
             { "yes","black" },
             { "osmbld","black" },
-            { "bld","darkblue" },
+            { "bld","darkgreen" },
             { "house","blue" },
             { "parking","darkred" },
             { "garage","darkred" },
@@ -111,7 +111,7 @@ public class BldPolyGen
         pg = new GrafPolyGen();
     }
 
-    List<Vector3> ExtractNodes(string wid, string name, SimpleDf linksdf, SimpleDf nodedf, Dictionary<string, int> nodedict)
+    List<Vector3> ExtractNodes(string wid, string name, SimpleDf linksdf, SimpleDf nodedf, Dictionary<string, int> nodedict, float ptscale=1)
     {
         var rv = new List<Vector3>();
         var osm_nid_1 = linksdf.GetStringCol("osm_nid_1");
@@ -131,7 +131,9 @@ public class BldPolyGen
                 continue;
             }
             var n1idx = nodedict[n1];
-            var pt1 = new Vector3(xvals[n1idx], 0, zvals[n1idx]);
+            var x = xvals[n1idx] * ptscale;
+            var z = zvals[n1idx] * ptscale;
+            var pt1 = new Vector3(x, 0, z);
 
             //var n2 = osm_nid_2[i];
             //if (!nodedict.ContainsKey(n2))
@@ -274,13 +276,13 @@ public class BldPolyGen
             //Debug.Log($"Found {bldwalldf.Nrow()} links for bld wid:{bwid} name:{bname}");
             var bs = new Bldspec(bname, btype, bwid, bheit, blevs,ptscale:ptscale);
             bs.AddPos(bllat, bllng, blx, blz);
-            var outline = ExtractNodes(bname, bwid, bldwalldf, dfnodes, nodedict);
-            var area = GrafPolyGen.CalcAreaWithYup(outline);
+            var nodeoutline = ExtractNodes(bname, bwid, bldwalldf, dfnodes, nodedict);
+            var area = GrafPolyGen.CalcAreaWithYup(nodeoutline);
             if (area < 0)
             {
-                outline.Reverse();
+                nodeoutline.Reverse();
             }
-            bs.SetOutline(outline);
+            bs.SetOutline(nodeoutline);
             rv.Add(bs);
             i++;
         }
@@ -315,7 +317,7 @@ public class BldPolyGen
         pg.GenBld(parent, bldname, height, levels, clr, alf: 0.5f);
     }
 
-    public void GenBld(GameObject parent,Bldspec bs,bool plotTesselation=false)
+    public void GenBld(GameObject parent,Bldspec bs,bool plotTesselation=false,float ptscale=1)
     {
         pg.SetOutline(bs.GetOutline());
         var clr = bs.GetColor();
@@ -328,7 +330,7 @@ public class BldPolyGen
             dowalls = false;
             dofloors = false;
         }
-        pg.GenBld(parent, bldname, bs.height, bs.levels, clr, alf: 0.5f,dowalls:dowalls,dofloors:dofloors,doroof:doroof, plotTesselation:plotTesselation);
+        pg.GenBld(parent, bldname, bs.height, bs.levels, clr, alf: 0.5f,dowalls:dowalls,dofloors:dofloors,doroof:doroof, plotTesselation:plotTesselation,ptscale:ptscale);
     }
 
     public void LoadRegion(GameObject parent,string regionspec, float ptscale=1)
@@ -343,7 +345,7 @@ public class BldPolyGen
         foreach (var bs in blds)
         {
             //GenFixedFormBld(ObjForm.cross, bs.name, bs.loc, bs.height,bs.levels,"db");
-            GenBld(parent, bs);
+            GenBld(parent, bs,ptscale:ptscale);
         }
         sw.Stop();
         Debug.Log($"Generation of {regionspec} took {sw.ElapSecs()} secs");
@@ -363,7 +365,7 @@ public class BldPolyGen
             if (bs.wid == bldwid)
             {
                 //GenFixedFormBld(ObjForm.cross, bs.name, bs.loc, bs.height,bs.levels,"db");
-                GenBld(parent, bs,plotTesselation:true);
+                GenBld(parent, bs,plotTesselation:true,ptscale:ptscale);
             }
         }
         sw.Stop();

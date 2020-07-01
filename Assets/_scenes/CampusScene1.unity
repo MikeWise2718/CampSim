@@ -11279,7 +11279,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -248, y: 685.36}
+  m_AnchoredPosition: {x: -259, y: 685.36}
   m_SizeDelta: {x: 138.94, y: 22.8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &600376145
@@ -16988,7 +16988,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: B19
+  m_Text: Buildings
 --- !u!222 &902655494
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -18595,7 +18595,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -107, y: 684.39}
+  m_AnchoredPosition: {x: -128, y: 684.39}
   m_SizeDelta: {x: 120, y: 26.75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1007009053
@@ -20707,7 +20707,7 @@ GameObject:
   - component: {fileID: 1108276463}
   - component: {fileID: 1108276464}
   m_Layer: 5
-  m_Name: B19Toggle
+  m_Name: BuildingsToggle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20731,7 +20731,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 28, y: 685.36}
+  m_AnchoredPosition: {x: 4, y: 685.36}
   m_SizeDelta: {x: 120, y: 22.8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1108276464
@@ -21988,8 +21988,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 13.3, y: -2}
-  m_SizeDelta: {x: -23, y: 11.37}
+  m_AnchoredPosition: {x: 20.3, y: -3.1}
+  m_SizeDelta: {x: -8.9, y: 13.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1156368609
 MonoBehaviour:
@@ -22022,7 +22022,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: B19
+  m_Text: Buildings
 --- !u!222 &1156368610
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -29370,7 +29370,7 @@ GameObject:
   - component: {fileID: 1608572168}
   - component: {fileID: 1608572167}
   m_Layer: 5
-  m_Name: B19Panel
+  m_Name: BuildingsPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -29417,7 +29417,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1608572165}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8da9824e7005126438c3d147f179dcdb, type: 3}
+  m_Script: {fileID: 11500000, guid: 1edcb15a711299b4c9c29743370bd764, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   sman: {fileID: 0}
@@ -39120,7 +39120,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 297, y: 683.4}
+  m_AnchoredPosition: {x: 292, y: 683.4}
   m_SizeDelta: {x: 120, y: 22.8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2064286256

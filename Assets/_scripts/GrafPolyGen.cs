@@ -15,7 +15,7 @@ public class GrafPolyGen
     public static int reverseOpps = 0;
     public static int reverses = 0;
 
-    private List<(int id, Vector3 pt)> outline;
+    private List<(int id, Vector3 pt)> poutline;
     private PolyGenForm genform;
     private float wallheight = 1f;
     private float wallalf = 1f;
@@ -25,24 +25,24 @@ public class GrafPolyGen
 
     public GrafPolyGen()
     {
-        outline = new List<(int id, Vector3 pt)>();
+        poutline = new List<(int id, Vector3 pt)>();
     }
 
     public void AddOutlinePoint(int id, Vector3 pt)
     {
-        outline.Add((id, pt));
+        poutline.Add((id, pt));
     }
     public void AddOutlinePoint(int id, float x, float y, float z)
     {
-        outline.Add((id, new Vector3(x, y, z)));
+        poutline.Add((id, new Vector3(x, y, z)));
     }
     public void SetOutline(List<Vector3> ptlist)
     {
-        outline = new List<(int id, Vector3 pt)>();
+        poutline = new List<(int id, Vector3 pt)>();
         int id = 0;
         foreach (var pt in ptlist)
         {
-            outline.Add((id++, pt));
+            poutline.Add((id++, pt));
         }
     }
     List<(int id, Vector3 pt)> ptsbuf = null;
@@ -180,49 +180,55 @@ public class GrafPolyGen
         iseg++;
     }
 
-    public void GenBld(GameObject parent,string bldname,float height, int levels, string clr,float alf=1,bool plotTesselation=false,bool dowalls=true,bool dofloors=true,bool doroof=true)
+    public void GenBld(GameObject parent,string bldname,float height, int levels, string clr,float alf=1,bool plotTesselation=false,bool dowalls=true,bool dofloors=true,bool doroof=true,float ptscale=1)
     {
         bool onesided = false;
+        var wps = false;
         var bldgo = new GameObject(bldname);
+        var ska = 1/ptscale;
+        //bldgo.transform.localScale = new Vector3(ska, ska, ska);
         if (dowalls)
         {
             SetGenForm(PolyGenForm.wallsmesh);
             var wname = $"{bldname}-walls";
             var walgo = GenMesh(wname, height: height, clr: clr, alf: alf, plotTesselation: plotTesselation, onesided: onesided);
-            walgo.transform.SetParent(bldgo.transform);
+            walgo.transform.localScale = new Vector3(ska, ska, ska);
+            walgo.transform.SetParent(bldgo.transform,worldPositionStays:wps);
         }
         if (doroof)
         {
             SetGenForm(PolyGenForm.tesselate);
             var rname = $"{bldname}-roof";
             var rufgo = GenMesh(rname, height: height, clr: clr, alf: alf, plotTesselation: plotTesselation, onesided: onesided);
-            rufgo.transform.SetParent(bldgo.transform);
+            rufgo.transform.localScale = new Vector3(ska, ska, ska);
+            rufgo.transform.SetParent(bldgo.transform, worldPositionStays: wps);
         }
         if (dofloors)
         {
             for(int i=0; i<levels; i++)
             {
-                var fname = $"{bldname}-level-{i}";
+                var fname = $"{bldname}-levvel-{i}";
                 var fheit = levels<2 ? 0 : (i*height / (levels-1));
                 var flrgo = GenMesh(fname, height: fheit, clr: clr, alf: alf, plotTesselation: plotTesselation, onesided: onesided);
-                flrgo.transform.SetParent(bldgo.transform);
+                flrgo.transform.localScale = new Vector3(ska, ska, ska);
+                flrgo.transform.SetParent(bldgo.transform, worldPositionStays: wps);
             }
         }
         bldgo.transform.position = GetCenter();
-        bldgo.transform.SetParent(parent.transform);
+        bldgo.transform.SetParent(parent.transform, worldPositionStays: true);
     }
 
     public Vector3 GetCenter()
     {
         var rv = Vector3.zero; ;
         var ptsum = Vector3.zero;
-        if (outline.Count > 0)
+        if (poutline.Count > 0)
         {
-            foreach (var p in outline)
+            foreach (var p in poutline)
             {
                 ptsum += p.pt;
             }
-            rv = ptsum / outline.Count;
+            rv = ptsum / poutline.Count;
         }
         return rv;
     }
@@ -574,11 +580,11 @@ public class GrafPolyGen
         int lev = 0;
         var eps = 1e-3f;
 
-        int starcnt = outline.Count;
-        var woutline = RemoveAdjacentEquals(outline,eps);
-        if (outline.Count < 3)
+        int starcnt = poutline.Count;
+        var woutline = RemoveAdjacentEquals(poutline,eps);
+        if (poutline.Count < 3)
         {
-            Debug.LogError($"Not enough distinct points:{woutline.Count} to tesselate - count before dup removeal:{outline.Count}");
+            Debug.LogError($"Not enough distinct points:{woutline.Count} to tesselate - count before dup removeal:{poutline.Count}");
             return null;
         }
         var area = CalcAreaWithYup(woutline);
@@ -707,7 +713,7 @@ public class GrafPolyGen
 
     public void GenerateBySegment(GameObject parent,float height,bool asmesh=false, bool onesided=false)
     {
-        if (outline.Count <= 1)
+        if (poutline.Count <= 1)
         {
             Debug.LogError("BldPolyGenForm can not generate with less than two points");
             return;
@@ -716,7 +722,7 @@ public class GrafPolyGen
         {
             StartAccumulatingSegments();
         }
-        var woutline = new List<(int id, Vector3 pt)>(outline);
+        var woutline = new List<(int id, Vector3 pt)>(poutline);
         var area = CalcAreaWithYup(woutline);
         if (area < 0)
         {

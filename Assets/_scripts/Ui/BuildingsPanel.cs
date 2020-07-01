@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using CampusSimulator;
 
-public class B19Panel : MonoBehaviour
+public class BuildingsPanel : MonoBehaviour
 {
     public SceneMan sman;
     UiMan uiman;
@@ -72,13 +72,13 @@ public class B19Panel : MonoBehaviour
     public void InitVals()
     {
         b19comp = null;
-        var bld = bman?.GetBuilding("Bld19",couldFail:true);
-        if (bld != null)
+        var b19bld = bman?.GetBuilding("Bld19",couldFail:true);
+        if (b19bld != null)
         {
-            b19comp = bld.GetComponent<B19Willow>();
+            b19comp = b19bld.GetComponent<B19Willow>();
             if (b19comp==null)
             {
-                Debug.LogWarning("B19Panel could not find B19Willow component in B19 building object that it needs to operate");
+                Debug.LogWarning("BuildingsPanel could not find B19Willow component in B19 building object that it needs to operate");
             }
         }
         walllinks_toggle.isOn = bman.walllinks.Get();
@@ -129,7 +129,7 @@ public class B19Panel : MonoBehaviour
 
     public void SetVals(bool closing = false)
     {
-        //Debug.Log($"B19Panel.SetVals called - closing:{closing}");
+        //Debug.Log($"BuildingsPanel.SetVals called - closing:{closing}");
         if (b19comp != null)
         {
 
@@ -153,44 +153,48 @@ public class B19Panel : MonoBehaviour
         chg = chg || bman.walllinks.SetAndSave(walllinks_toggle.isOn);
         chg = chg || bman.osmblds.SetAndSave(osmblds_toggle.isOn);
         chg = chg || bman.fixedblds.SetAndSave(fixedblds_toggle.isOn);
-        Debug.Log($"B19Panel.SetVals walllinks:{walllinks_toggle.isOn} osmblds:{osmblds_toggle.isOn}  fixedblds:{fixedblds_toggle.isOn} chg:{chg}");
+        Debug.Log($"BuildingsPanel.SetVals walllinks:{walllinks_toggle.isOn} osmblds:{osmblds_toggle.isOn}  fixedblds:{fixedblds_toggle.isOn} chg:{chg}");
 
-        sman.RequestRefresh("B19Panel-SetVals",totalrefresh:chg);
+        sman.RequestRefresh("BuildingsPanel-SetVals",totalrefresh:chg);
         panelActiveForRefreshChecks = false;
 
     }
 
     public void SetValsForRefresh()
     {
-        if (b19comp == null) return;
 
-        //Debug.Log("B19Panel SetVals2 called");
+        //Debug.Log("BuildingsPanel SetVals2 called");
         //fman.visibilityTiedToDetectability = visTiedToggle.isOn;
         var chg = false;
-        chg = chg || b19comp.loadmodel.SetAndSave(b19_model_toggle.isOn);
-        chg = chg || b19comp.level01.SetAndSave(b19_level1_toggle.isOn);
-        chg = chg || b19comp.level02.SetAndSave(b19_level2_toggle.isOn);
-        chg = chg || b19comp.level03.SetAndSave(b19_level3_toggle.isOn);
-        chg = chg || b19comp.hvac.SetAndSave(b19_hvac_toggle.isOn);
-        chg = chg || b19comp.floors.SetAndSave(b19_floors_toggle.isOn);
-        chg = chg || b19comp.doors.SetAndSave(b19_doors_toggle.isOn);
+        var tchg = false;
+        if (b19comp != null)
         {
-            var opts = b19comp.b19_materialMode.GetOptionsAsList();
-            var newval = opts[b19_matmode_dropdown.value];
-            //Debug.Log("Set toptextlabel default to " + newval);
-            chg = chg || b19comp.b19_materialMode.SetAndSave(newval);
+
+            chg = chg || b19comp.loadmodel.SetAndSave(b19_model_toggle.isOn);
+            chg = chg || b19comp.level01.SetAndSave(b19_level1_toggle.isOn);
+            chg = chg || b19comp.level02.SetAndSave(b19_level2_toggle.isOn);
+            chg = chg || b19comp.level03.SetAndSave(b19_level3_toggle.isOn);
+            chg = chg || b19comp.hvac.SetAndSave(b19_hvac_toggle.isOn);
+            chg = chg || b19comp.floors.SetAndSave(b19_floors_toggle.isOn);
+            chg = chg || b19comp.doors.SetAndSave(b19_doors_toggle.isOn);
+            {
+                var opts = b19comp.b19_materialMode.GetOptionsAsList();
+                var newval = opts[b19_matmode_dropdown.value];
+                //Debug.Log("Set toptextlabel default to " + newval);
+                chg = chg || b19comp.b19_materialMode.SetAndSave(newval);
+            }
         }
 
-        chg = chg || bman.walllinks.SetAndSave(walllinks_toggle.isOn);
-        chg = chg || bman.osmblds.SetAndSave(osmblds_toggle.isOn);
+        tchg = tchg || bman.walllinks.SetAndSave(walllinks_toggle.isOn);
+        tchg = tchg || bman.osmblds.SetAndSave(osmblds_toggle.isOn);
         chg = chg || bman.fixedblds.SetAndSave(fixedblds_toggle.isOn);
-        Debug.Log($"B19Panel.SetVals2 bman.fixedblds.SetAndSave:{fixedblds_toggle.isOn}");
 
 
-        //Debug.Log("SetVals2 t:" + Time.time + "   chg:" + chg);
-        if (chg)
+        Debug.Log($"SetVals2 t:{Time.time:f1}   chg:{chg} tchg:{tchg}");
+        if (chg || tchg)
         {
-            sman.RequestRefresh("B19Panel-SetVals");
+            Debug.Log($"BuildingsPanel.SetVals2 bman.fixedblds.SetAndSave:{fixedblds_toggle.isOn}");
+            sman.RequestRefresh("BuildingsPanel.SetVals", totalrefresh:tchg);
         }
     }
     float lastcheck = 0;

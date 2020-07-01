@@ -15,8 +15,8 @@ public class OptionsPanel : MonoBehaviour
     MapSetPanel mapSetPanel;
     GameObject framePanelGo;
     FramePanel framePanel;
-    GameObject b19PanelGo;
-    B19Panel b19Panel;
+    GameObject buildingsPanelGo;
+    BuildingsPanel buildingsPanel;
     GameObject generalPanelGo;
     GeneralPanel generalPanel;
     GameObject helpPanelGo;
@@ -26,7 +26,7 @@ public class OptionsPanel : MonoBehaviour
     Toggle visualToggle;
     Toggle mapsetToggle;
     Toggle frameToggle;
-    Toggle b19Toggle;
+    Toggle buildingsToggle;
     Toggle generalToggle;
     Toggle helpToggle;
     Toggle aboutToggle;
@@ -44,8 +44,8 @@ public class OptionsPanel : MonoBehaviour
         mapSetPanel = mapSetGo.GetComponent<MapSetPanel>();
         framePanelGo = transform.Find("FramePanel").gameObject;
         framePanel = framePanelGo.GetComponent<FramePanel>();
-        b19PanelGo = transform.Find("B19Panel").gameObject;
-        b19Panel = b19PanelGo.GetComponent<B19Panel>();
+        buildingsPanelGo = transform.Find("BuildingsPanel").gameObject;
+        buildingsPanel = buildingsPanelGo.GetComponent<BuildingsPanel>();
         generalPanelGo = transform.Find("GeneralPanel").gameObject;
         generalPanel = generalPanelGo.GetComponent<GeneralPanel>();
         helpPanelGo = transform.Find("HelpPanel").gameObject;
@@ -54,7 +54,7 @@ public class OptionsPanel : MonoBehaviour
         visualToggle = transform.Find("VisualsToggle").GetComponent<Toggle>();
         mapsetToggle = transform.Find("MapSetToggle").GetComponent<Toggle>();
         frameToggle = transform.Find("FrameToggle").GetComponent<Toggle>();
-        b19Toggle = transform.Find("B19Toggle").GetComponent<Toggle>();
+        buildingsToggle = transform.Find("BuildingsToggle").GetComponent<Toggle>();
         generalToggle = transform.Find("GeneralToggle").GetComponent<Toggle>();
         helpToggle = transform.Find("HelpToggle").GetComponent<Toggle>();
         aboutToggle = transform.Find("AboutToggle").GetComponent<Toggle>();
@@ -62,7 +62,7 @@ public class OptionsPanel : MonoBehaviour
         visualToggle.onValueChanged.AddListener(delegate { OptionsTabToggle(); });
         mapsetToggle.onValueChanged.AddListener(delegate { OptionsTabToggle(); });
         frameToggle.onValueChanged.AddListener(delegate { OptionsTabToggle(); });
-        b19Toggle.onValueChanged.AddListener(delegate { OptionsTabToggle(); });
+        buildingsToggle.onValueChanged.AddListener(delegate { OptionsTabToggle(); });
         generalToggle.onValueChanged.AddListener(delegate { OptionsTabToggle(); });
         helpToggle.onValueChanged.AddListener(delegate { OptionsTabToggle(); });
         aboutToggle.onValueChanged.AddListener(delegate { OptionsTabToggle(); });
@@ -79,7 +79,7 @@ public class OptionsPanel : MonoBehaviour
         visualPanelGo.SetActive(visualToggle.isOn);
         mapSetGo.SetActive(mapsetToggle.isOn);
         framePanelGo.SetActive(frameToggle.isOn);
-        b19PanelGo.SetActive(b19Toggle.isOn);
+        buildingsPanelGo.SetActive(buildingsToggle.isOn);
         generalPanelGo.SetActive(generalToggle.isOn);
         helpPanelGo.SetActive(helpToggle.isOn);
         aboutPanelGo.SetActive(aboutToggle.isOn);
@@ -99,9 +99,9 @@ public class OptionsPanel : MonoBehaviour
         {
             framePanel.InitVals();
         }
-        if (b19Toggle.isOn)
+        if (buildingsToggle.isOn)
         {
-            b19Panel.InitVals();
+            buildingsPanel.InitVals();
         }
         if (helpToggle.isOn)
         {
@@ -135,9 +135,9 @@ public class OptionsPanel : MonoBehaviour
             {
                 framePanel.SetVals(closing: true);
             }
-            if (b19Toggle.isOn)
+            if (buildingsToggle.isOn)
             {
-                b19Panel.SetVals(closing: true);
+                buildingsPanel.SetVals(closing: true);
             }
             if (generalToggle.isOn)
             {
