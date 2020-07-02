@@ -33,13 +33,13 @@ public class BldPolyGenTest : MonoBehaviour
     void Start()
     {
         bpg = new BldPolyGen();
-        //TestEb12();
-        TestMsft();
-        //bpg.Test4(this.gameObject, 1f);
+        TestEb12();
+        //TestMsft();
+        //bpg.Test4(this.gameObject, 1);
     }
     void TestMsft()
     {
-        bpg.LoadRegion(this.gameObject, "msftb19area,msftcommons,msftredwest",0.5f);
+        bpg.LoadRegion(this.gameObject, "msftb19area,msftcommons,msftredwest",1f);
         //bpg.LoadRegion(this.gameObject, "eb12");
         //bpg.LoadRegion(this.gameObject, "eb12small");
         //bpg.LoadRegion(this.gameObject, "SanFrancisco", ptscale: 1000);
@@ -50,7 +50,7 @@ public class BldPolyGenTest : MonoBehaviour
     void TestEb12()
     {
         //bpg.LoadRegion(this.gameObject, "eb12small", 0.5f);
-        bpg.LoadRegion(this.gameObject, "eb12small", 0.5f);
+        bpg.LoadRegion(this.gameObject, "eb12small", 1);
     }
 
     float lastDumpTime;

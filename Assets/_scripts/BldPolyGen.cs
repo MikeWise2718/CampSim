@@ -24,6 +24,8 @@ public class Bldspec
     public float bscale;
     public Vector3 loc;
     List<Vector3> boutline;
+    public GameObject bgo;
+
     public Bldspec(string name, string bldtyp, string wid, float height = 0, int levels = 0, float bscale = 1)
     {
         if (height == 0 && levels == 0)
@@ -45,6 +47,7 @@ public class Bldspec
         this.wid = wid;
         this.height = height;
         this.levels = levels;
+        this.bgo = null;
     }
     public void AddPos(double lat, double lng, float x, float z)
     {
@@ -305,7 +308,6 @@ public class BldPolyGen
         // debug one layer only
         //GenObj(ObjForm.circle, dowalls:false,doceil:true,dofloor:false,dbOutline:false);
         //GenObj(ObjForm.circle,onesided:false);
-
         var v = 5;
         var levs = 12;
         var height = 48;
@@ -313,17 +315,20 @@ public class BldPolyGen
         height = 0;
         levs = 3;
         ReInit();
-        //var l1 = new Vector3(v, 0, v);
-        //GenFixedFormBld(parent, ObjForm.cross, "b11", l1, height, levs, "dr", ptscale: ptscale);
+        var l1 = new Vector3(v, 0, v);
+        //l1 = Vector3.zero;
+        GenFixedFormBld(parent, ObjForm.circle, "b10", l1, height, levs, "db", ptscale: ptscale);
 
         //ReInit();
         //var l2 = new Vector3(-v, 0, v);
         //GenFixedFormBld(parent, ObjForm.star, "b01", l2, height, levs, "dg", ptscale: ptscale);
 
-        ReInit();
-        var l3 = new Vector3(v, 0, -v);
-        //l3 = Vector3.zero;
-        GenFixedFormBld(parent, ObjForm.circle, "b10", l3, height, levs, "db", ptscale: ptscale);
+
+        //ReInit();
+        //var l3 = new Vector3(v, 0, -v);
+        //GenFixedFormBld(parent, ObjForm.cross, "b10", l3, height, levs, "dr", ptscale: ptscale);
+
+
 
         //ReInit();
         //var l4 = new Vector3(-v, 0, -v);
@@ -333,15 +338,16 @@ public class BldPolyGen
 
 
 
-    public void GenFixedFormBld(GameObject parent, ObjForm objform, string bldname, Vector3 loc, float height, int levels, string clr, float ptscale = 1)
+    public GameObject GenFixedFormBld(GameObject parent, ObjForm objform, string bldname, Vector3 loc, float height, int levels, string clr, float ptscale = 1)
     {
         GenOutline(objform, loc);
         var dowalls = false;
         var dofloors = false;
         var doroof = true;
-        pg.GenBld(parent, bldname, height, levels, clr, alf: 1f,dowalls:dowalls,dofloors: dofloors,doroof:doroof, ptscale: ptscale);
+        var rv = pg.GenBld(parent, bldname, height, levels, clr, alf: 1f,dowalls:dowalls,dofloors: dofloors,doroof:doroof, ptscale: ptscale);
+        return rv;
     }
-    public void GenBld(GameObject parent, Bldspec bs, bool plotTesselation = false, float ptscale = 1, GetHeightDel ghd = null)
+    public GameObject GenBld(GameObject parent, Bldspec bs, bool plotTesselation = false, float ptscale = 1, GetHeightDel ghd = null)
     {
         pg.SetOutline(bs.GetOutline());
         var clr = bs.GetColor();
@@ -354,11 +360,13 @@ public class BldPolyGen
             dowalls = false;
             dofloors = false;
         }
-        pg.GenBld(parent, bldname, bs.height, bs.levels, clr, alf: 0.5f, dowalls: dowalls, dofloors: dofloors, doroof: doroof, plotTesselation: plotTesselation, ptscale: ptscale, ghd: ghd);
+        var rv = pg.GenBld(parent, bldname, bs.height, bs.levels, clr, alf: 0.5f, dowalls: dowalls, dofloors: dofloors, doroof: doroof, plotTesselation: plotTesselation, ptscale: ptscale, ghd: ghd);
+        return rv;
     }
 
-    public void LoadRegion(GameObject parent, string regionspec, float ptscale = 1)
+    public List<Bldspec> LoadRegion(GameObject parent, string regionspec, float ptscale = 1)
     {
+        var rv = new List<Bldspec>();
         var sw = new Aiskwk.Dataframe.StopWatch();
         var blds = new List<Bldspec>();
         var sar = regionspec.Split(',');
@@ -369,10 +377,13 @@ public class BldPolyGen
         foreach (var bs in blds)
         {
             //GenFixedFormBld(ObjForm.cross, bs.name, bs.loc, bs.height,bs.levels,"db");
-            GenBld(parent, bs, ptscale: ptscale);
+            var bldgo = GenBld(parent, bs, ptscale: ptscale);
+            bs.bgo = bldgo;
+            rv.Add(bs);
         }
         sw.Stop();
         Debug.Log($"Generation of {regionspec} took {sw.ElapSecs()} secs");
+        return rv;
     }
 
     public void LoadRegionOneBld(GameObject parent, string regionspec, string bldwid, float ptscale = 1)
@@ -427,23 +438,24 @@ public class BldPolyGen
         var alf = 0.5f;
         //alf = 1;
         GenOutline(objform, Vector3.zero);
+        var wps = true;
         if (dowalls)
         {
             pg.SetGenForm(PolyGenForm.wallsmesh);
             var walgo = pg.GenMesh("walls", height: 2, clr: "blue", alf: alf, plotTesselation: plotTesselation, onesided: onesided);
-            walgo.transform.parent = parent.transform;
+            walgo.transform.SetParent(parent.transform, worldPositionStays: wps);
         }
         if (doroof)
         {
             pg.SetGenForm(PolyGenForm.tesselate);
             var rufgo = pg.GenMesh("ceiling", height: 2, clr: "blue", alf: alf, plotTesselation: plotTesselation, onesided: onesided);
-            rufgo.transform.parent = parent.transform;
+            rufgo.transform.SetParent(parent.transform, worldPositionStays: wps);
         }
         if (dofloor)
         {
             pg.SetGenForm(PolyGenForm.tesselate);
             var fl1go = pg.GenMesh("floor1", height: 1, clr: "blue", alf: alf, plotTesselation: plotTesselation, onesided: onesided);
-            fl1go.transform.parent = parent.transform;
+            fl1go.transform.SetParent(parent.transform, worldPositionStays: wps);
         }
     }
 }

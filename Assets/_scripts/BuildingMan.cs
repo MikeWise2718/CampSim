@@ -27,6 +27,8 @@ namespace CampusSimulator
 
         public bool showPersRects;
 
+        public List<Bldspec> bldspecs;
+
 
         public UxSettingBool walllinks = new UxSettingBool("walllinks", true);
         public UxSettingBool osmblds = new UxSettingBool("osmblds", true);
@@ -110,6 +112,7 @@ namespace CampusSimulator
 
         public void InitializeScene(SceneSelE newregion)
         {
+            bldspecs = new List<Bldspec>();
             InitializeValues();
         }
 
@@ -126,10 +129,7 @@ namespace CampusSimulator
 
         public void SetScene(SceneSelE newregion)
         {
-            if (bldlookup.Count > 0)
-            {
-                DelBuildings();
-            }
+            DelBuildings();
             var osmloadspec = "";
             switch (newregion)
             {
@@ -158,7 +158,8 @@ namespace CampusSimulator
             if (doosmblds)
             {
                 var bpg = new BldPolyGen();
-                bpg.LoadRegion(this.gameObject, osmloadspec,0.5f);
+                var lbgos = bpg.LoadRegion(this.gameObject, osmloadspec,1f);
+                bldspecs.AddRange(lbgos);
             }
         }
         public void UpdateBldStats()
@@ -309,13 +310,23 @@ namespace CampusSimulator
         public void DelBuildings()
         {
             Debug.Log("DelBuildings called");
-            var namelist = new List<string>(bldlookup.Keys);
-            namelist.ForEach(name => DelBuilding(name));
+            if (bldlookup != null)
+            {
+                var namelist = new List<string>(bldlookup.Keys);
+                namelist.ForEach(name => DelBuilding(name));
+            }
+            bldlookup = new Dictionary<string, Building>();
+            if (bldspecs != null)
+            {
+                bldspecs.ForEach(bs => Destroy(bs.bgo));
+            }
+            bldspecs = new List<Bldspec>();
         }
         public void DelBuilding(string name)
         {
             //Debug.Log($"Deleting building {name} nbld:{bldlookup.Count}");
             //var go = GameObject.Find(name);
+            if (!bldlookup.ContainsKey(name)) return;
 
             var bld = bldlookup[name];
             bld.Empty(); // destroys game object as well

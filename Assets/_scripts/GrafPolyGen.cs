@@ -182,10 +182,10 @@ public class GrafPolyGen
         iseg++;
     }
 
-    public void GenBld(GameObject parent,string bldname,float height, int levels, string clr,float alf=1,bool plotTesselation=false,bool dowalls=true,bool dofloors=true,bool doroof=true,float ptscale=1,GetHeightDel ghd=null)
+    public GameObject GenBld(GameObject parent,string bldname,float height, int levels, string clr,float alf=1,bool plotTesselation=false,bool dowalls=true,bool dofloors=true,bool doroof=true,float ptscale=1,GetHeightDel ghd=null)
     {
         bool onesided = false;
-        var wps = false;
+        var wps = true;
         var bldgo = new GameObject(bldname);
         var ska = 1/ptscale;
         //bldgo.transform.localScale = new Vector3(ska, ska, ska);
@@ -220,8 +220,10 @@ public class GrafPolyGen
                 flrgo.transform.SetParent(bldgo.transform, worldPositionStays: wps);
             }
         }
-        bldgo.transform.position = GetCenter();
+        //bldgo.transform.position = GetCenter();
+        bldgo.transform.position = Vector3.zero;
         bldgo.transform.SetParent(parent.transform, worldPositionStays: true);
+        return bldgo;
     }
 
     public Vector3 GetCenter()
@@ -428,7 +430,7 @@ public class GrafPolyGen
                 }
             case PolyGenForm.tesselate:
                 {
-                    TessleateYup(parent, wallheight, plotTesselation: plotTesselation, onesided:onesided);
+                    TesselateYup(parent, wallheight, plotTesselation: plotTesselation, onesided:onesided);
                     break;
                 }
         }
@@ -603,7 +605,7 @@ public class GrafPolyGen
         }
 
     }
-    public GameObject TessleateYup(GameObject parent,float height,bool onesided=false, bool plotTesselation = false)
+    public GameObject TesselateYup(GameObject parent,float height,bool onesided=false, bool plotTesselation = false)
     {
         int lev = 0;
         var eps = 1e-3f;
@@ -631,7 +633,7 @@ public class GrafPolyGen
         {
             Debug.LogWarning("Cannot tesselate zero area polygong - terminating tesselation");
             var go1 = GetAccumulatedMesh("accumesh");
-            go1.transform.SetParent( parent.transform, worldPositionStays:false );
+            go1.transform.SetParent( parent.transform, worldPositionStays:true );
             return go1;
         }
         else if (area<0)
