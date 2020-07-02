@@ -10,14 +10,14 @@ using System.Data.Common;
 using System.Diagnostics.PerformanceData;
 
 
-public delegate Vector3 GetHeightDel(Vector3 v);
+public delegate Vector3 PolyGenVekMapDel(Vector3 v);
 public enum PolyGenForm { pipes, walls, wallsmesh, tesselate }
 public class GrafPolyGen
 {
     public static int reverseOpps = 0;
     public static int reverses = 0;
 
-    private List<(int id, Vector3 pt)> poutline;
+    private List<(int id, Vector3 pt)> _poutline;
     private PolyGenForm genform;
     private float wallheight = 1f;
     private float wallalf = 1f;
@@ -29,7 +29,7 @@ public class GrafPolyGen
 
     public GrafPolyGen()
     {
-        poutline = new List<(int id, Vector3 pt)>();
+        _poutline = new List<(int id, Vector3 pt)>();
         InitLists();
     }
 
@@ -43,16 +43,21 @@ public class GrafPolyGen
 
     public void AddOutlinePoint(int id, float x, float y, float z)
     {
-        poutline.Add((id, new Vector3(x, y, z)));
+        _poutline.Add((id, new Vector3(x, y, z)));
     }
     public void SetOutline(List<Vector3> ptlist)
     {
-        poutline = new List<(int id, Vector3 pt)>();
+        _poutline = new List<(int id, Vector3 pt)>();
         int id = 0;
         foreach (var pt in ptlist)
         {
-            poutline.Add((id++, pt));
+            _poutline.Add((id++, pt));
         }
+    }
+    public List<(int id, Vector3 pt)> GetOutline()
+    {
+        var rv = new List<(int id, Vector3 pt)>(_poutline);
+        return rv;
     }
 
     public void StartAccumulatingSegments()
@@ -182,7 +187,7 @@ public class GrafPolyGen
         iseg++;
     }
 
-    public GameObject GenBld(GameObject parent,string bldname,float height, int levels, string clr,float alf=1,bool plotTesselation=false,bool dowalls=true,bool dofloors=true,bool doroof=true,float ptscale=1,GetHeightDel ghd=null)
+    public GameObject GenBld(GameObject parent,string bldname,float height, int levels, string clr,float alf=1,bool plotTesselation=false,bool dowalls=true,bool dofloors=true,bool doroof=true,float ptscale=1,PolyGenVekMapDel pgvd=null)
     {
         bool onesided = false;
         var wps = true;
@@ -194,7 +199,7 @@ public class GrafPolyGen
             StartAccumulatingSegments();
             SetGenForm(PolyGenForm.wallsmesh);
             var wname = $"{bldname}-walls";
-            var walgo = GenMesh(wname, height: height, clr: clr, alf: alf, plotTesselation: plotTesselation, onesided: onesided,ghd:ghd);
+            var walgo = GenMesh(wname, height: height, clr: clr, alf: alf, plotTesselation: plotTesselation, onesided: onesided,pgvd:pgvd);
             walgo.transform.localScale = new Vector3(ska, ska, ska);
             walgo.transform.SetParent(bldgo.transform,worldPositionStays:wps);
         }
@@ -203,7 +208,7 @@ public class GrafPolyGen
             StartAccumulatingSegments();
             SetGenForm(PolyGenForm.tesselate);
             var rname = $"{bldname}-roof";
-            var rufgo = GenMesh(rname, height: height, clr: clr, alf: alf, plotTesselation: plotTesselation, onesided: onesided,ghd: ghd);
+            var rufgo = GenMesh(rname, height: height, clr: clr, alf: alf, plotTesselation: plotTesselation, onesided: onesided,pgvd: pgvd);
             rufgo.transform.localScale = new Vector3(ska, ska, ska);
             rufgo.transform.SetParent(bldgo.transform, worldPositionStays: wps);
         }
@@ -215,7 +220,7 @@ public class GrafPolyGen
                 SetGenForm(PolyGenForm.tesselate);
                 var fname = $"{bldname}-levvel-{i}";
                 var fheit = levels<2 ? 0 : (i*height / (levels-1));
-                var flrgo = GenMesh(fname, height: fheit, clr: clr, alf: alf, plotTesselation: plotTesselation, onesided: onesided, ghd: ghd);
+                var flrgo = GenMesh(fname, height: fheit, clr: clr, alf: alf, plotTesselation: plotTesselation, onesided: onesided, pgvd: pgvd);
                 flrgo.transform.localScale = new Vector3(ska, ska, ska);
                 flrgo.transform.SetParent(bldgo.transform, worldPositionStays: wps);
             }
@@ -230,13 +235,13 @@ public class GrafPolyGen
     {
         var rv = Vector3.zero; ;
         var ptsum = Vector3.zero;
-        if (poutline.Count > 0)
+        if (_poutline.Count > 0)
         {
-            foreach (var p in poutline)
+            foreach (var p in _poutline)
             {
                 ptsum += p.pt;
             }
-            rv = ptsum / poutline.Count;
+            rv = ptsum / _poutline.Count;
         }
         return rv;
     }
@@ -247,17 +252,27 @@ public class GrafPolyGen
         return nrv;
     }
 
-    Vector3[] GetPtsBufArray()
+    Vector3[] GetPtsBufArray(PolyGenVekMapDel pgvd = null)
     {
         var rv = new Vector3[ptsbuf.Count];
         int i = 0;
-        foreach (var p in ptsbuf)
+        if (pgvd == null)
         {
-            rv[i++] = p.pt;
+            foreach (var p in ptsbuf)
+            {
+                rv[i++] = p.pt;
+            }
+        }
+        else
+        {
+            foreach (var p in ptsbuf)
+            {
+                rv[i++] = pgvd(p.pt);
+            }
         }
         return rv;
     }
-    public GameObject GetAccumulatedMesh(string meshname)
+    public GameObject GetAccumulatedMesh(string meshname, PolyGenVekMapDel pgvd = null)
     {
         var go = new GameObject(meshname);
         var meshRenderer = go.AddComponent<MeshRenderer>();
@@ -266,7 +281,7 @@ public class GrafPolyGen
         var meshFilter = go.AddComponent<MeshFilter>();
 
         var mesh = new Mesh();
-        mesh.vertices = GetPtsBufArray();
+        mesh.vertices = GetPtsBufArray(pgvd);
         mesh.triangles = tribuf.ToArray();
         NormalizeUvbuf();
         mesh.uv = null;
@@ -330,7 +345,7 @@ public class GrafPolyGen
         }
     }
 
-    public GameObject GenMesh(string name, float height = 1, string clr = "indigo", float alf = 1, bool plotTesselation = false, bool onesided=false,GetHeightDel ghd=null)
+    public GameObject GenMesh(string name, float height = 1, string clr = "indigo", float alf = 1, bool plotTesselation = false, bool onesided=false,PolyGenVekMapDel pgvd=null)
     {
         var go = new GameObject(name);
         var pos = GetCenter(height);
@@ -338,7 +353,7 @@ public class GrafPolyGen
         this.wallheight = height;
         this.wallalf = alf;
         this.wallclr = clr;
-        Generate(go, plotTesselation,onesided:onesided);
+        Generate(go, plotTesselation,onesided:onesided, pgvd:pgvd);
         return go;
     }
 
@@ -409,28 +424,28 @@ public class GrafPolyGen
         }
         return rv;
     }
-    public void Generate(GameObject parent, bool plotTesselation,bool onesided=false,GetHeightDel ghd=null)
+    public void Generate(GameObject parent, bool plotTesselation,bool onesided=false,PolyGenVekMapDel pgvd=null)
     {
         switch (genform)
         {
             case PolyGenForm.pipes:
                 {
-                    GenerateBySegment(parent, wallheight,onesided:onesided);
+                    GenerateBySegment(parent, wallheight,onesided:onesided, pgvd:pgvd);
                     break;
                 }
             case PolyGenForm.walls:
                 {
-                    GenerateBySegment(parent, wallheight, onesided: onesided);
+                    GenerateBySegment(parent, wallheight, onesided: onesided, pgvd: pgvd);
                     break;
                 }
             case PolyGenForm.wallsmesh:
                 {
-                    GenerateBySegment(parent, wallheight, asmesh: true, onesided: onesided);
+                    GenerateBySegment(parent, wallheight, asmesh: true, onesided: onesided, pgvd: pgvd);
                     break;
                 }
             case PolyGenForm.tesselate:
                 {
-                    TesselateYup(parent, wallheight, plotTesselation: plotTesselation, onesided:onesided);
+                    TesselateYup(parent, wallheight, plotTesselation: plotTesselation, onesided:onesided, pgvd: pgvd);
                     break;
                 }
         }
@@ -605,16 +620,16 @@ public class GrafPolyGen
         }
 
     }
-    public GameObject TesselateYup(GameObject parent,float height,bool onesided=false, bool plotTesselation = false)
+    public GameObject TesselateYup(GameObject parent,float height,bool onesided=false, bool plotTesselation = false, PolyGenVekMapDel pgvd = null)
     {
         int lev = 0;
         var eps = 1e-3f;
 
-        int starcnt = poutline.Count;
-        var woutline = RemoveAdjacentEquals(poutline,eps);
-        if (poutline.Count < 3)
+        int starcnt = _poutline.Count;
+        var woutline = RemoveAdjacentEquals( GetOutline(),eps);
+        if (_poutline.Count < 3)
         {
-            Debug.LogError($"Not enough distinct points:{woutline.Count} to tesselate - count before dup removeal:{poutline.Count}");
+            Debug.LogError($"Not enough distinct points:{woutline.Count} to tesselate - count before dup removeal:{_poutline.Count}");
             return null;
         }
         var area = CalcAreaWithYup(woutline);
@@ -632,7 +647,7 @@ public class GrafPolyGen
         if (area==0)
         {
             Debug.LogWarning("Cannot tesselate zero area polygong - terminating tesselation");
-            var go1 = GetAccumulatedMesh("accumesh");
+            var go1 = GetAccumulatedMesh("accumesh",pgvd);
             go1.transform.SetParent( parent.transform, worldPositionStays:true );
             return go1;
         }
@@ -720,14 +735,14 @@ public class GrafPolyGen
                 break;
             }
         }
-        var go = GetAccumulatedMesh("accumesh");
+        var go = GetAccumulatedMesh("accumesh",pgvd);
         go.transform.parent = parent.transform;
         return go;
     }
 
-    public void GenerateBySegment(GameObject parent,float height,bool asmesh=false, bool onesided=false,GetHeightDel ghd=null)
+    public void GenerateBySegment(GameObject parent,float height,bool asmesh=false, bool onesided=false,PolyGenVekMapDel pgvd=null)
     {
-        if (poutline.Count <= 1)
+        if (_poutline.Count <= 1)
         {
             Debug.LogError("BldPolyGenForm can not generate with less than two points");
             return;
@@ -736,7 +751,7 @@ public class GrafPolyGen
         {
             StartAccumulatingSegments();
         }
-        var woutline = new List<(int id, Vector3 pt)>(poutline);
+        var woutline = GetOutline(); ;
         var area = CalcAreaWithYup(woutline);
         if (area < 0)
         {
@@ -753,10 +768,10 @@ public class GrafPolyGen
         {
             var pt1 = woutline[i1].pt;
             var pt2 = woutline[i2].pt;
-            if (ghd!=null)
+            if (pgvd!=null)
             {
-                pt1 = ghd(pt1);
-                pt2 = ghd(pt2);
+                pt1 = pgvd(pt1);
+                pt2 = pgvd(pt2);
             }
             var pname = $"seg-{i1}";
             if (!asmesh)
@@ -775,7 +790,7 @@ public class GrafPolyGen
         }
         if (asmesh)
         {
-            var go = GetAccumulatedMesh("accumesh");
+            var go = GetAccumulatedMesh("accumesh",pgvd);
             go.transform.parent = parent.transform;
         }
     }

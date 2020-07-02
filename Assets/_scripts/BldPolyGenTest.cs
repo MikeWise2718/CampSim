@@ -33,9 +33,9 @@ public class BldPolyGenTest : MonoBehaviour
     void Start()
     {
         bpg = new BldPolyGen();
-        TestEb12();
+        //TestEb12();
         //TestMsft();
-        //bpg.Test4(this.gameObject, 1);
+        bpg.Test4(this.gameObject, 1);
     }
     void TestMsft()
     {

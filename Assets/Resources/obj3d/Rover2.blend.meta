@@ -1,11 +1,8 @@
 fileFormatVersion: 2
-guid: 443d2cbfd99cad64c82b856d9ba7d670
+guid: a697006f7ed21744ea6404558580ae09
 ModelImporter:
   serializedVersion: 19300
-  internalIDToNameTable:
-  - first:
-      74: 1989289236423521904
-    second: Default Take
+  internalIDToNameTable: []
   externalObjects:
   - first:
       type: UnityEngine:Material
@@ -16,12 +13,12 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Glass
-    second: {fileID: 2100000, guid: fd5e9292a72eb9840a480f26574bb551, type: 2}
+    second: {fileID: 2100000, guid: 82e2a79fca2565d4e8b30cd0fb207b08, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Green
-    second: {fileID: 2100000, guid: 9a6937aab2919a84ebefb85f369d2f1e, type: 2}
+    second: {fileID: 2100000, guid: 12ca41f4b0e8c6d4695846f744fcb438, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
@@ -30,30 +27,30 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Material_002
-    second: {fileID: 2100000, guid: 336e4e9ac7a8693449d6fd2454761e5e, type: 2}
+      name: Material.002
+    second: {fileID: 2100000, guid: 3a271669d58f0234e89082b60f2cc74d, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Material_004
-    second: {fileID: 2100000, guid: 5ef8de8e74e8df641a897d0b6efaa2a7, type: 2}
+      name: Material.004
+    second: {fileID: 2100000, guid: ef2267a5697048f4da77a47feaed4d14, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: No Name
+    second: {fileID: 2100000, guid: 99aac7f923b068745b70d865ec826304, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Orange
-    second: {fileID: 2100000, guid: cc13bd503e458e04194723b47e700e96, type: 2}
+    second: {fileID: 2100000, guid: c4704fc5820a76e4891ca11e59367342, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: White
-    second: {fileID: 2100000, guid: 200d420f43051e645b202cc3b82337f8, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: unnamed
     second: {fileID: 2100000, guid: 8aaf144f476561e429634627b983df0c, type: 2}
   materials:
-    materialImportMode: 2
+    materialImportMode: 1
     materialName: 0
     materialSearch: 1
     materialLocation: 1
@@ -90,7 +87,7 @@ ModelImporter:
     importVisibility: 1
     importBlendShapes: 1
     importCameras: 1
-    importLights: 1
+    importLights: 0
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
