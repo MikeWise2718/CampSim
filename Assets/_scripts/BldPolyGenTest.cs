@@ -19,9 +19,14 @@ public class heightMocker
     {
         fixedVal = height;
     }
-    float GetHeight(float x,float z)
+    public float GetHeight(float x,float z)
     {
         return fixedVal;
+    }
+    public Vector3 ChangeHeight(Vector3 ipv)
+    {
+        var rv = new Vector3(ipv.x, ipv.y+fixedVal, ipv.z);
+        return rv;
     }
 }
 
@@ -35,16 +40,25 @@ public class BldPolyGenTest : MonoBehaviour
         bpg = new BldPolyGen();
         //TestEb12();
         //TestMsft();
-        bpg.Test4(this.gameObject, 1);
+        Test4();
     }
     void TestMsft()
     {
-        bpg.LoadRegion(this.gameObject, "msftb19area,msftcommons,msftredwest",1f);
+        var hmo = new heightMocker(33);
+        var pgvd = new PolyGenVekMapDel(hmo.ChangeHeight);
+        bpg.LoadRegion(this.gameObject, "msftb19area,msftcommons,msftredwest",1f,pgvd:pgvd);
         //bpg.LoadRegion(this.gameObject, "eb12");
         //bpg.LoadRegion(this.gameObject, "eb12small");
         //bpg.LoadRegion(this.gameObject, "SanFrancisco", ptscale: 1000);
         //bpg.LoadRegionOneBld(this.gameObject, "SanFrancisco","w256586268",ptscale:1000);
         //bpg.LoadRegionOneBld(this.gameObject, "eb12small","w203793425");
+    }
+
+    void Test4()
+    {
+        var hmo = new heightMocker(10);
+        var pgvd = new PolyGenVekMapDel(hmo.ChangeHeight);
+        bpg.Test4(this.gameObject, 1, pgvd: pgvd);
     }
 
     void TestEb12()

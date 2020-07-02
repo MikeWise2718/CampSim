@@ -157,8 +157,9 @@ namespace CampusSimulator
             //Debug.Log($"doosmblds:{doosmblds} osmloadspec{osmloadspec}");
             if (doosmblds)
             {
+                var pgvd = new PolyGenVekMapDel(sman.mpman.GetHeightVector3);
                 var bpg = new BldPolyGen();
-                var lbgos = bpg.LoadRegion(this.gameObject, osmloadspec,1f);
+                var lbgos = bpg.LoadRegion(this.gameObject, osmloadspec,1f,pgvd:pgvd);
                 bldspecs.AddRange(lbgos);
             }
         }

@@ -196,6 +196,8 @@ public class GrafPolyGen
         //bldgo.transform.localScale = new Vector3(ska, ska, ska);
         if (dowalls)
         {
+            //Debug.Log($"GenPolyGen.GenBld doing walls for {bldname}");
+
             StartAccumulatingSegments();
             SetGenForm(PolyGenForm.wallsmesh);
             var wname = $"{bldname}-walls";
@@ -205,6 +207,7 @@ public class GrafPolyGen
         }
         if (doroof)
         {
+            //Debug.Log($"GenPolyGen.GenBld doing roof for {bldname}");
             StartAccumulatingSegments();
             SetGenForm(PolyGenForm.tesselate);
             var rname = $"{bldname}-roof";
@@ -216,6 +219,7 @@ public class GrafPolyGen
         {
             for (int i=0; i<levels; i++)
             {
+                //Debug.Log($"GenPolyGen.GenBld doing floor {i} for {bldname}");
                 StartAccumulatingSegments();
                 SetGenForm(PolyGenForm.tesselate);
                 var fname = $"{bldname}-levvel-{i}";
@@ -600,7 +604,7 @@ public class GrafPolyGen
     }
     void AddTesselatedTriangle(Vector3 w0,Vector3 w1,Vector3 w2, int i0, int i1, int i2, bool onesided)
     {
-        Debug.Log($"ATT: w0:{w0:f2} w1:{w1:f2} w2:{w2:f2}  i0:{i0} i1:{i1} i2:{i2} onsided:{onesided}");
+        //Debug.Log($"ATT: w0:{w0:f2} w1:{w1:f2} w2:{w2:f2}  i0:{i0} i1:{i1} i2:{i2} onsided:{onesided}");
         var pidx = ptsbuf.Count;
         ptsbuf.Add((i0, w0));
         ptsbuf.Add((i1, w1));
@@ -768,11 +772,11 @@ public class GrafPolyGen
         {
             var pt1 = woutline[i1].pt;
             var pt2 = woutline[i2].pt;
-            if (pgvd!=null)
-            {
-                pt1 = pgvd(pt1);
-                pt2 = pgvd(pt2);
-            }
+            //if (pgvd!=null)
+            //{
+            //    pt1 = pgvd(pt1);
+            //    pt2 = pgvd(pt2);
+            //}
             var pname = $"seg-{i1}";
             if (!asmesh)
             {

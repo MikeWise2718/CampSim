@@ -80,7 +80,6 @@ namespace CampusSimulator
         }
         #endregion MapProvider
 
-
         public List<string> GetMapProviderList()
         {
             var rv = reqMapProv.GetOptionsAsList();
@@ -223,6 +222,17 @@ namespace CampusSimulator
             var (v, _, _) = qmapman.qmm.GetWcMeshPosProjectedAlongYnew(p);
             return v.y;
         }
+        public Vector3 GetHeightVector3(Vector3 p)
+        {
+            if (qmapman == null || qmapman.qmm == null) return Vector3.zero;
+            var oy = p.y;
+            var np = new Vector3(p.x, 0, p.z);
+            var (v, _, _) = qmapman.qmm.GetWcMeshPosProjectedAlongYnew(np);
+            var nv = new Vector3(v.x, v.y + oy, v.z);
+            return nv;
+        }
+
+
         public void DeleteQmap()
         {
             if (qmapman!=null)
@@ -313,22 +323,32 @@ namespace CampusSimulator
 
         public void SetMapPovider(MapProvider map)
         {
-            Debug.Log($"SetMap:{map}");
+            Debug.Log($"SetMapProvider:{map}");
             reqMapProv.SetAndSave(map);
-            //qmapman.mapprov = map;
-            qmapman.qmm.mapprov = map;
+            if (qmapman?.qmm != null)
+            {
+                qmapman.mapprov = map;
+                qmapman.qmm.mapprov = map;
+            }
         }
         public void SetEleProvider(ElevProvider ele)
         {
+            //Debug.Log($"SetEleProvider:{ele}");
             reqEleProv.SetAndSave(ele);
-            //qmapman.elevprov = ele;
-            qmapman.qmm.elevprov = ele;
+            if (qmapman?.qmm != null)
+            {
+                qmapman.elevprov = ele;
+                qmapman.qmm.elevprov = ele;
+            }
         }
         public void SetUseElevations(bool neweleval)
         {
             useElevations.SetAndSave(neweleval);
-            qmapman.useElevationDataStart = neweleval;
-            qmapman.qmm.useElevationData = neweleval;
+            if (qmapman?.qmm != null)
+            {
+                qmapman.useElevationDataStart = neweleval;
+                qmapman.qmm.useElevationData = neweleval;
+            }
         }
         public void SetLatLngAndExtent(string lookupaddress,double lat,double lng,double latkm,double lngkm)
         {
@@ -348,6 +368,7 @@ namespace CampusSimulator
             //Debug.LogWarning($"mman.SetLatLngAndExtent SetAndSave: lookupaddress:{lookupaddress}");
             //Debug.Log($"mman.SetLatLngAndExtent: lat:{lat} lng:{lng} latkm:{latkm} lngkm:{lngkm}");
         }
+
         public void SetLod(int newlod)
         {
             levelOfDetail.SetAndSave(newlod);
