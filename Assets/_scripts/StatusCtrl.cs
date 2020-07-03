@@ -256,9 +256,9 @@ namespace CampusSimulator
                             var campos = Camera.main.transform.position;
                             var cfwd = Camera.main.transform.forward;
                             var cpop = campos;
-                            if (sman.hlpathctrl != null && sman.hlpathctrl.path != null)
+                            if (sman.firstPersonPathCtrl != null && sman.firstPersonPathCtrl.path != null)
                             {
-                                cpop = sman.hlpathctrl.FindClosestPointOnPath(campos);
+                                cpop = sman.firstPersonPathCtrl.FindClosestPointOnPath(campos);
                             }
                             var delta = cpop - campos + new Vector3(0, sman.home_height, 0);
 

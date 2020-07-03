@@ -80,7 +80,7 @@ namespace CampusSimulator {
                 Debug.LogWarning("occman is null in BldRoom for building " + bld.name);
             }
             bool createperson = occman && occman.GetPersonCount() > 0;
-            bool createnodes = occman && bm.sman.linkcloudman.nodesvisible;
+            bool createnodes = occman && bm.sman.lcman.nodesvisible;
 
             if (createfloor)
             {
@@ -131,7 +131,7 @@ namespace CampusSimulator {
                     }
                     else
                     {
-                        var lclc = bm.sman.linkcloudman;
+                        var lclc = bm.sman.lcman;
                         var nodept = lclc.GetNode(pers.homeNode);
                         var roompt = lclc.GetNode(this.roomNodeName);
                         var diff = nodept.pt - roompt.pt;

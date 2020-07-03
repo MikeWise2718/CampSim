@@ -497,7 +497,7 @@ namespace CampusSimulator
         }
         void AddAlarmToNode(GameObject parentnode,string alarmname,string nodename,float almheight=2)
         {
-            var lc = bm.sman.linkcloudman;
+            var lc = bm.sman.lcman;
             var lclc = lc.GetGraphCtrl();
             if (!lc.IsNodeName(nodename)) return;
 

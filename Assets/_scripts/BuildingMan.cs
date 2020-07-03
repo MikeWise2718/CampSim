@@ -221,18 +221,18 @@ namespace CampusSimulator
                     }
                     //var bld = GetBuilding("BldRWB");
                     //bld.AddRedwestBAlarms();
-                    sman.linkcloudman.grctrl.AddLateLink("rwb-f03-cv0-e", "bRWB-os1-o02",GraphAlgos.LinkUse.walkway);
-                    sman.linkcloudman.grctrl.AddLateLink("rwb-f03-cv0-s", "bRWB-os2-o01", GraphAlgos.LinkUse.walkway);
-                    sman.linkcloudman.grctrl.AddLateLink("rwb-f03-cv3-s", "bRWB-os2-o04", GraphAlgos.LinkUse.walkway);
-                    sman.linkcloudman.grctrl.AddLateLink("rwb-f03-cv3-e", "bRWB-os3-o02", GraphAlgos.LinkUse.walkway);
+                    sman.lcman.grctrl.AddLateLink("rwb-f03-cv0-e", "bRWB-os1-o02",GraphAlgos.LinkUse.walkway,"walkway link for garage-RedwestB - 1");
+                    sman.lcman.grctrl.AddLateLink("rwb-f03-cv0-s", "bRWB-os2-o01", GraphAlgos.LinkUse.walkway, "walkway link for garage-RedwestB - 2");
+                    sman.lcman.grctrl.AddLateLink("rwb-f03-cv3-s", "bRWB-os2-o04", GraphAlgos.LinkUse.walkway, "walkway link for garage-RedwestB -3");
+                    sman.lcman.grctrl.AddLateLink("rwb-f03-cv3-e", "bRWB-os3-o02", GraphAlgos.LinkUse.walkway, "walkway link for garage-RedwestB- 4");
 //                    if (sman.fastMode)
 //                    {
-                        sman.linkcloudman.grctrl.AddLateLink("rwb-f03-rm3342", "g_RWB_eee-dt-wpsdoor004", GraphAlgos.LinkUse.walkway);
+                        sman.lcman.grctrl.AddLateLink("rwb-f03-rm3342", "g_RWB_eee-dt-wpsdoor004", GraphAlgos.LinkUse.walkway, "walkway link for garage-RedwestB- 5");
 //                    }
-                    sman.linkcloudman.grctrl.AddLateLink("dw-RWB-c18", "g_RWB_eee-dt-dps013", GraphAlgos.LinkUse.driveway);
-                    sman.linkcloudman.grctrl.AddLateLink("dw-RWB-c28", "g_RWB_eee-dt-dps006", GraphAlgos.LinkUse.driveway);
-                    sman.linkcloudman.grctrl.AddLateLink("dw-RWB-c28", "g_RWB_eee-dt-dps007", GraphAlgos.LinkUse.driveway);
-                    sman.linkcloudman.grctrl.AddLateLink("dw-RWB-c38", "g_RWB_eee-dt-dps001",GraphAlgos.LinkUse.driveway);
+                    sman.lcman.grctrl.AddLateLink("dw-RWB-c18", "g_RWB_eee-dt-dps013", GraphAlgos.LinkUse.driveway, "driveway link for garage at RedwestB - 1");
+                    sman.lcman.grctrl.AddLateLink("dw-RWB-c28", "g_RWB_eee-dt-dps006", GraphAlgos.LinkUse.driveway, "driveway link for garage at RedwestB - 2");
+                    sman.lcman.grctrl.AddLateLink("dw-RWB-c28", "g_RWB_eee-dt-dps007", GraphAlgos.LinkUse.driveway, "driveway link for garage at RedwestB - 3");
+                    sman.lcman.grctrl.AddLateLink("dw-RWB-c38", "g_RWB_eee-dt-dps001",GraphAlgos.LinkUse.driveway, "driveway link for garage at RedwestB - 4");
                     sman.psman.AddPersonToBuildingAtNode(PersonMan.GenderE.male,"b19-f01-lobby", "b19-f01-cp0b1", "Arnie Schwarzwald", "Businessman004",
                                                          PersonMan.empStatusE.Security, "IdleUnarmed", false,180,hasHololens:true,hasCamera:true,flagged:true);
                     sman.psman.AddPersonToBuildingAtNode(PersonMan.GenderE.female, "b19-f01-lobby", "b19-f01-sp1003", "Audrey Hepburn", "Girl005",

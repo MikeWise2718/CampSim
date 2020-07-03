@@ -168,22 +168,15 @@ namespace CampusSimulator
             }
             else
             {
-                Debug.LogWarning($"Camera name:{mcamvcam} not found - number of cams defined:{vidcam.Count}");
+                if (mcamvcam != "Viewer")
+                {
+                    Debug.LogWarning($"Camera name:{mcamvcam} not found - number of cams defined:{vidcam.Count}");
+                }
             }
             vmcam.gameObject.name = "vc-" + mcamvcam;
         }
         public void SetMainCameraToCam(Camera cam)
         {
-            //var camparent = cam.transform.parent;
-            //Quaternion quat = Quaternion.identity;
-            //Quaternion iquat = Quaternion.identity;
-            //if (camparent)
-            //{
-            //    quat = camparent.transform.localRotation;
-            //    iquat = Quaternion.Inverse(quat);
-            //    var qiq = quat * iquat;
-            //    Debug.Log("quat:" + quat.ToString()+"  Iquat:"+iquat.ToString()+"  qiq:"+qiq.ToString());
-            //}
             vmcam.transform.position = cam.transform.position;
             //mcam.transform.localRotation = cam.transform.localRotation*iquat;
             vmcam.transform.localRotation = cam.transform.localRotation;

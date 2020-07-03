@@ -616,10 +616,6 @@ namespace CampusSimulator
             SetMeshCollider(enable: true);
         }
 
-        public void InitializeScene()
-        {
-
-        }
         // Scene Parameters
         // Fixed - set in select and never changed:
         //    sceneselector
@@ -640,7 +636,7 @@ namespace CampusSimulator
         //
 
         SceneSelE lastsceneset = SceneSelE.None;
-        public void IntializeScene(SceneSelE newscene)
+        public void InitializeScene(SceneSelE newscene)
         {
             Debug.Log($"MapMan.InitializeScene: {newscene}");
             if (newscene == lastsceneset)
@@ -886,8 +882,6 @@ namespace CampusSimulator
         public void SetScene(SceneSelE newscene)
         {
             Debug.Log($"MapMan.SetScene: {newscene}");
-
-            IntializeScene(newscene);
             RealizeMapVisuals();
             Initialize();
         }

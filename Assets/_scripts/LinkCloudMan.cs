@@ -158,13 +158,14 @@ namespace CampusSimulator
             initVals();
         }
 
-        public void SetScene(SceneSelE newregion)
+        public void InitializeScene(SceneSelE newregion)
         {
             LcMapMaker.Reset();
             initVals();
         }
 
-        public void SetScene2(SceneSelE newregion)
+
+        public void SetScene(SceneSelE newregion)
         {
             //Debug.Log("SetScene2");
             var genmode = graphGenOptions.Get();
@@ -499,7 +500,7 @@ namespace CampusSimulator
             }
             CreateGrcGos();
         }
-        public void DelLinkCloud()
+        public void DelLcGos()
         {
             DeleteGrcGos();
             grctrl = null;

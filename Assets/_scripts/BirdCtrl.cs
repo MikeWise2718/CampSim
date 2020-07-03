@@ -435,7 +435,7 @@ namespace CampusSimulator
                 BirdSpeed = minspeed;
             }
         }
-        public void DeleteBird()
+        public void DeleteBirdGosAndInit()
         {
             if (birdgo != null)
             {

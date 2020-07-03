@@ -66,9 +66,9 @@ namespace CampusSimulator
 
         public GameObject rmango;
 
-        public LinkCloudMan linkcloudman = null;
-        public PathCtrl hlpathctrl = null;
-        public BirdCtrl hlbirsctrl = null;
+        public LinkCloudMan lcman = null;
+        public PathCtrl firstPersonPathCtrl = null;
+        public BirdCtrl firstPersonBirdCtrl = null;
         public StatusCtrl statusctrl = null;
         public ErrorMarkerCtrl errmarkctrl = null;
         public FloorPlanCtrl floorplanctrl = null;
@@ -139,15 +139,15 @@ namespace CampusSimulator
 
             // Create game object to hold ctrl inspectors
             rmango = this.gameObject;
-            linkcloudman = GetComponent<LinkCloudMan>();
-            linkcloudman.SetSceneMan(this);
-            hlpathctrl = rmango.AddComponent<PathCtrl>();
-            hlbirsctrl = rmango.AddComponent<BirdCtrl>();
+            lcman = GetComponent<LinkCloudMan>();
+            lcman.SetSceneMan(this);
+            firstPersonPathCtrl = rmango.AddComponent<PathCtrl>();
+            firstPersonBirdCtrl = rmango.AddComponent<BirdCtrl>();
             statusctrl = rmango.AddComponent<StatusCtrl>();
             //errmarkctrl = rmango.AddComponent<ErrorMarkerCtrl>();
             floorplanctrl = rmango.AddComponent<FloorPlanCtrl>();
-            hlpathctrl.SetSceneMan(this);
-            hlbirsctrl.sman = this;
+            firstPersonPathCtrl.SetSceneMan(this);
+            firstPersonBirdCtrl.sman = this;
             statusctrl.SetSceneMan(this);
             //errmarkctrl.SetRegMan(this);
             floorplanctrl.SetSceneMan(this);
@@ -169,7 +169,7 @@ namespace CampusSimulator
             statusctrl.RealizeMode();
 
             leditor = rgo.AddComponent<LinkEditor>();
-            leditor.InitPhase0(linkcloudman, this);
+            leditor.InitPhase0(lcman, this);
 
             SetLegacy(legacyStatus);
 
@@ -256,36 +256,46 @@ namespace CampusSimulator
 
                     // Delete all objects
                     psman.DelPersons();
+                    veman.DelVehicles();
                     bdman.DelBuildings();
                     gaman.DelGarages();
                     vcman.DelVidcams();
-                    linkcloudman.DestroyLinkCloud();
+                    lcman.DestroyLinkCloud();
                     mpman.DeleteQmap();
+                    firstPersonBirdCtrl.DeleteBirdGosAndInit();
+                    firstPersonPathCtrl.DeletePathGoesAndInit();
 
                     // Now do value initialization
                     this.InitializeScene(newscene);
+                    mpman.InitializeScene(newscene);
                     vcman.InitializeScene(newscene);
                     bdman.InitializeScene(newscene);
                     gaman.InitializeScene(newscene);
                     znman.InitializeScene(newscene);
+                    psman.InitializeScene(newscene);
+                    veman.InitializeScene(newscene);
+                    jnman.InitializeScene(newscene);
+                    lcman.InitializeScene(newscene);
+                    frman.InitializeScene(newscene);
+                    uiman.InitializeScene(newscene);
 
 
-
+                    // Now construct our graphical objects
                     glbllm = rmango.AddComponent<LatLongMap>();
                     glbllm.InitMapFromSceneSel(newscene.ToString(),0); 
 
-                    linkcloudman.SetScene(newscene);
 
                     mpman.SetScene(newscene);
+
                     gaman.SetScene(newscene);
-                    vcman.SetScene(newscene);
 
                     bdman.SetScene(newscene);// building details, but no nodes and links
-                    DeleteLinkCloud();
 
-                    linkcloudman.SetScene2(newscene); // create or read in most nodes and links
+                    lcman.SetScene(newscene); // create or read in most nodes and links
+                                              // currently needs to happen after buildings and garages are setup
 
                     RealizeFloorPlanStatus();
+                    vcman.SetScene(newscene);
                     psman.SetScene(newscene); // needs to be before we populate the buildings
                     veman.SetScene(newscene); // needs to be before we populate the garages
 
@@ -295,11 +305,9 @@ namespace CampusSimulator
                     znman.SetScene(newscene);
                     jnman.SetScene(newscene);
                     frman.SetScene(newscene);
-
-                    linkcloudman.SetScene3(newscene);  // realize latelinks    
-
                     uiman.SetScene(newscene);
 
+                    lcman.SetScene3(newscene);  // realize latelinks    
                     //Debug.Log("SetScene finished");
                 }
                 catch(Exception ex)
@@ -488,7 +496,7 @@ namespace CampusSimulator
             var maincam = Camera.main; // only works with one camera and might be better with camera.current
             var campt = maincam.transform.position;
             //campt.y = 0;
-            var pathcampt = hlpathctrl.FindClosestPointOnPath(campt);
+            var pathcampt = firstPersonPathCtrl.FindClosestPointOnPath(campt);
             //pathcampt.y = 0;
             //var ppwc = pathctrl.pathgo.transform.TransformPoint(pathcampt);
             var ppwc = pathcampt;
@@ -527,7 +535,7 @@ namespace CampusSimulator
             var campt = maincam.transform.position;
             campt.y = 0;
             float nearptpathdist = 0;
-            var pathweg = hlpathctrl.FindClosestWegOnPath(campt, out nearptpathdist);
+            var pathweg = firstPersonPathCtrl.FindClosestWegOnPath(campt, out nearptpathdist);
             var wegdir = pathweg.GetWegDirection(normalized: true);
             var wegdirwc = rgo.transform.TransformVector(wegdir);
             CorrectAngleOnVectors(wegdirwc, camfor, refresh: refresh);
@@ -536,7 +544,7 @@ namespace CampusSimulator
         public void CorrectPositionAndAngle()
         {
             var pdist = CorrectAngle();
-            var pp = hlpathctrl.path.MovePositionAlongPath(pdist);
+            var pp = firstPersonPathCtrl.path.MovePositionAlongPath(pdist);
             // var ppwc = pathctrl.pathgo.transform.TransformPoint(pp.pt); // why do we have to do this? Should be wc already?
             var ptwc = rgo.transform.TransformPoint(pp.pt);
             SceneMan.Log("Both pdist:" + pdist + "  pp.pt:" + pp.pt + "  ptwc:" + ptwc);
@@ -560,7 +568,7 @@ namespace CampusSimulator
             home_rgoTranslate = rgoTranslate;
             home_height = Camera.main.transform.position.y; // camera.current might be more performant
 
-            var lpt = linkcloudman.GetNode(newenodename);
+            var lpt = lcman.GetNode(newenodename);
             if (lpt.wegtos.Count == 0) return;
             var wa = lpt.wegtos.First(); // get the first one, it should suffice
             var lnk = wa.link;
@@ -582,7 +590,7 @@ namespace CampusSimulator
             CorrectAngleOnVectors(lnkdir, camfor);
 
             // Position
-            lpt = linkcloudman.GetNode(newenodename);
+            lpt = lcman.GetNode(newenodename);
             wa = lpt.wegtos.First();
             var wto1 = wa.toNode.pt;
             var wto1wc = rgo.transform.TransformPoint(wto1);
@@ -642,13 +650,13 @@ namespace CampusSimulator
         public void IncKeyLimit()
         {
             keywordLimit += keywordLoadInc;
-            linkcloudman.SetKeyWordLimit(keywordLimit);
+            lcman.SetKeyWordLimit(keywordLimit);
             SceneMan.Log("Keywordlimit " + keywordLimit + "  keyInc:" + keywordLoadInc);
         }
         public void DecKeyLimit()
         {
             keywordLimit -= keywordLoadInc;
-            linkcloudman.SetKeyWordLimit(keywordLimit);
+            lcman.SetKeyWordLimit(keywordLimit);
             SceneMan.Log("Keywordlimit " + keywordLimit + "  keyInc:" + keywordLoadInc);
         }
         public void Grow()
@@ -810,7 +818,7 @@ namespace CampusSimulator
         {
             if (floorplanctrl.visible)
             {
-                var lcld = linkcloudman.GetGraphCtrl();
+                var lcld = lcman.GetGraphCtrl();
                 floorplanctrl.setGraphtex(lcld.floorMan);
             }
             SceneMan.Log("Show floor plan:" + floorplanctrl.visible);
@@ -831,67 +839,67 @@ namespace CampusSimulator
         }
         public void GenCampus()
         {
-            DeleteLinkCloud();
-            linkcloudman.GenLinkCloud(graphSceneE.gen_campus, GraphGenerationModeE.GenFromCode);
+            DeleteLinkCloudGos();
+            lcman.GenLinkCloud(graphSceneE.gen_campus, GraphGenerationModeE.GenFromCode);
             //floorplanctrl.visible = true;
             RealizeFloorPlanStatus();
             //CreateLinkCloud();
         }
         public void Gen43_1()
         {
-            DeleteLinkCloud();
-            linkcloudman.GenLinkCloud(graphSceneE.gen_b43_1, GraphGenerationModeE.GenFromCode);
+            DeleteLinkCloudGos();
+            lcman.GenLinkCloud(graphSceneE.gen_b43_1, GraphGenerationModeE.GenFromCode);
             //floorplanctrl.visible = true;
             RealizeFloorPlanStatus();
             //CreateLinkCloud();
         }
         public void Gen43_2()
         {
-            DeleteLinkCloud();
-            linkcloudman.GenLinkCloud(graphSceneE.gen_b43_2, GraphGenerationModeE.GenFromCode);
+            DeleteLinkCloudGos();
+            lcman.GenLinkCloud(graphSceneE.gen_b43_2, GraphGenerationModeE.GenFromCode);
             //floorplanctrl.visible = true;
             RealizeFloorPlanStatus();
             //CreateLinkCloud();
         }
         public void Gen43_3()
         {
-            DeleteLinkCloud();
-            linkcloudman.GenLinkCloud(graphSceneE.gen_b43_3, GraphGenerationModeE.GenFromCode);
+            DeleteLinkCloudGos();
+            lcman.GenLinkCloud(graphSceneE.gen_b43_3, GraphGenerationModeE.GenFromCode);
             //floorplanctrl.visible = true;
             RealizeFloorPlanStatus();
             //CreateLinkCloud();
         }
         public void Gen43_4()
         {
-            DeleteLinkCloud();
-            linkcloudman.GenLinkCloud(graphSceneE.gen_b43_4, GraphGenerationModeE.GenFromCode);
+            DeleteLinkCloudGos();
+            lcman.GenLinkCloud(graphSceneE.gen_b43_4, GraphGenerationModeE.GenFromCode);
             //floorplanctrl.visible = true;
             RealizeFloorPlanStatus();
             //CreateLinkCloud();
         }
         public void GenBHO()
         {
-            DeleteLinkCloud();
-            linkcloudman.GenLinkCloud(graphSceneE.gen_bho, GraphGenerationModeE.GenFromCode);
+            DeleteLinkCloudGos();
+            lcman.GenLinkCloud(graphSceneE.gen_bho, GraphGenerationModeE.GenFromCode);
             //floorplanctrl.visible = true;
             RealizeFloorPlanStatus();
             //CreateLinkCloud();
         }
         public void GenSphere()
         {
-            linkcloudman.GenLinkCloud(graphSceneE.gen_sphere, GraphGenerationModeE.GenFromCode);
+            lcman.GenLinkCloud(graphSceneE.gen_sphere, GraphGenerationModeE.GenFromCode);
             RequestRefresh("SceneMan-GenSphere");
         }
         public void GenCirc()
         {
 
-            linkcloudman.GenLinkCloud(graphSceneE.gen_circ, GraphGenerationModeE.GenFromCode);
+            lcman.GenLinkCloud(graphSceneE.gen_circ, GraphGenerationModeE.GenFromCode);
             RequestRefresh("SceneMan-GenCirc");
         }
         public void Gen431p2()
         {
-            DeleteLinkCloud();
-            linkcloudman.GenLinkCloud(graphSceneE.gen_b43_1p2, GraphGenerationModeE.GenFromCode);
+            DeleteLinkCloudGos();
+            lcman.GenLinkCloud(graphSceneE.gen_b43_1p2, GraphGenerationModeE.GenFromCode);
             //floorplanctrl.visible = true;
             RealizeFloorPlanStatus();
             //CreateLinkCloud();
@@ -900,8 +908,8 @@ namespace CampusSimulator
 
          public void GenRedwb3()
         {
-            DeleteLinkCloud();
-            linkcloudman.GenLinkCloud(graphSceneE.gen_redwb_3, GraphGenerationModeE.GenFromCode);
+            DeleteLinkCloudGos();
+            lcman.GenLinkCloud(graphSceneE.gen_redwb_3, GraphGenerationModeE.GenFromCode);
             //floorplanctrl.visible = true;
             RealizeFloorPlanStatus();
             //CreateLinkCloud();
@@ -912,31 +920,31 @@ namespace CampusSimulator
             System.IO.Directory.CreateDirectory(graphsdir);
             string fname = graphsdir + curscene.ToString() + ".json";
             Debug.Log("Saving to Json file:" + fname);
-            linkcloudman.SaveToJsonFile(fname);
+            lcman.SaveToJsonFile(fname);
         }
         public void SaveRegionFiles()
         {
             System.IO.Directory.CreateDirectory(graphsdir);
-            linkcloudman.SaveRegionFiles(graphsdir);
+            lcman.SaveRegionFiles(graphsdir);
         }
         public void SaveRegionCodeFiles()
         {
             System.IO.Directory.CreateDirectory(graphsdir);
-            linkcloudman.SaveRegionCodeFiles(graphsdir);
+            lcman.SaveRegionCodeFiles(graphsdir);
         }
         public void LoadRegionBuildings()
         {
             System.IO.Directory.CreateDirectory(graphsdir);
-            linkcloudman.SaveRegionCodeFiles(graphsdir);
+            lcman.SaveRegionCodeFiles(graphsdir);
         }
         public void NoiseUpNodes(float maxdist)
         {
-            linkcloudman.NoiseUpNodes(maxdist);
+            lcman.NoiseUpNodes(maxdist);
             RequestRefresh("SceneMan-NoiseUpNodes");
         }
         public void CleanStart()
         {
-            DeleteLinkCloud();
+            DeleteLinkCloudGos();
         }
         //[MenuItem("LinkCloud/Generate")]
         //public void CreateLinkCloud()
@@ -950,16 +958,16 @@ namespace CampusSimulator
         //    //Astar();
         //    //initKeywordsWithRooms();
         //}
-        public void DeleteLinkCloud()
+        public void DeleteLinkCloudGos()
         {
             //floorplanctrl.visible = false;
-            hlbirsctrl.DeleteBird();
-            hlpathctrl.DeletePath();
-            linkcloudman.DelLinkCloud();
+            firstPersonBirdCtrl.DeleteBirdGosAndInit();
+            firstPersonPathCtrl.DeletePathGoesAndInit();
+            lcman.DelLcGos();
         }
         public void DeleteLink(string name)
         {
-            linkcloudman.DeleteLink(name);
+            lcman.DeleteLink(name);
         }
         public void SplitLink(string name)
         {
@@ -975,17 +983,17 @@ namespace CampusSimulator
         }
         public void LinkNodes(string nodename1,string nodename2)
         {
-            linkcloudman.LinkNodes(nodename1,nodename2);
+            lcman.LinkNodes(nodename1,nodename2);
         }
         public void DeleteNode(string name)
         {
-            linkcloudman.DeleteNode(name);
+            lcman.DeleteNode(name);
         }
 
         public void ToggleLinkCloudVisibily()
         {
-            linkcloudman.nodesvisible = !linkcloudman.nodesvisible;
-            linkcloudman.linksvisible = !linkcloudman.linksvisible;
+            lcman.nodesvisible = !lcman.nodesvisible;
+            lcman.linksvisible = !lcman.linksvisible;
             RequestRefresh("SceneMan-ToggleLinkCloudVisibily");
         }
         public void RotateSlotForm()
@@ -995,30 +1003,30 @@ namespace CampusSimulator
         }
         public void ShowRoute()
         {
-            linkcloudman.nodesvisible = true;
-            linkcloudman.linksvisible = true;
-            hlpathctrl.visible = true;
+            lcman.nodesvisible = true;
+            lcman.linksvisible = true;
+            firstPersonPathCtrl.visible = true;
             RequestRefresh("SceneMan-ShowRoute");
         }
         public void HideRoute()
         {
-            linkcloudman.nodesvisible = false;
-            linkcloudman.linksvisible = false;
-            hlpathctrl.visible = false;
+            lcman.nodesvisible = false;
+            lcman.linksvisible = false;
+            firstPersonPathCtrl.visible = false;
             RequestRefresh("SceneMan-HideRoute");
         }
         public void HideLinks()
         {
-            linkcloudman.nodesvisible = true;
-            linkcloudman.linksvisible = false;
-            hlpathctrl.visible = true;
+            lcman.nodesvisible = true;
+            lcman.linksvisible = false;
+            firstPersonPathCtrl.visible = true;
             RequestRefresh("SceneMan-HideLinks");
         }
         public void ShowLinks()
         {
-            linkcloudman.nodesvisible = true;
-            linkcloudman.linksvisible = true;
-            hlpathctrl.visible = true;
+            lcman.nodesvisible = true;
+            lcman.linksvisible = true;
+            firstPersonPathCtrl.visible = true;
             RequestRefresh("SceneMan-ShowLinks");
         }
 #endregion
@@ -1026,64 +1034,64 @@ namespace CampusSimulator
 #region birdcommands
         public void StartBird()
         {
-            if (hlbirsctrl.isAtGoal())
+            if (firstPersonBirdCtrl.isAtGoal())
             {
                 ReversePath();
             }
-            hlbirsctrl.StartBird();
+            firstPersonBirdCtrl.StartBird();
         }
         public void PauseBird()
         {
-            hlbirsctrl.PauseBird();
+            firstPersonBirdCtrl.PauseBird();
         }
         public void UnPauseBird()
         {
-            hlbirsctrl.UnPauseBird();
+            firstPersonBirdCtrl.UnPauseBird();
         }
         public void StopBird()
         {
-            if (hlpathctrl.path != null)
+            if (firstPersonPathCtrl.path != null)
             {
-                var bpos = hlbirsctrl.GetBirdPos();
-                var lpt = linkcloudman.PunchNewNode(bpos, deleteparentlink: true);
-                hlpathctrl.startnodename = lpt.name;
-                hlpathctrl.GenAstarPath();
+                var bpos = firstPersonBirdCtrl.GetBirdPos();
+                var lpt = lcman.PunchNewNode(bpos, deleteparentlink: true);
+                firstPersonPathCtrl.startnodename = lpt.name;
+                firstPersonPathCtrl.GenAstarPath();
                 PropagatePath();
                 RequestRefresh("SceneMan-StopBird");
             }
         }
         public void ResetCalled()
         {
-            if (hlpathctrl.path == null)
+            if (firstPersonPathCtrl.path == null)
             {
-                hlpathctrl.GenAstarPath();
+                firstPersonPathCtrl.GenAstarPath();
             }
             //birdctrl.ResetBirdToStartOfPath();
         }
         public void FasterBird()
         {
-            hlbirsctrl.AdjustSpeed(1.7f, 0.5f);
+            firstPersonBirdCtrl.AdjustSpeed(1.7f, 0.5f);
         }
         public void SlowerBird()
         {
-            hlbirsctrl.AdjustSpeed(1 / 1.7f, 0.5f);
+            firstPersonBirdCtrl.AdjustSpeed(1 / 1.7f, 0.5f);
         }
         public void SetSpeed(float newvel)
         {
-            if (hlbirsctrl.isAtStart())
+            if (firstPersonBirdCtrl.isAtStart())
             {
                 StartBird();
             }
-            hlbirsctrl.SetSpeed(newvel);
+            firstPersonBirdCtrl.SetSpeed(newvel);
         }
         public void DeleteBird()
         {
-            hlbirsctrl.DeleteBird();
+            firstPersonBirdCtrl.DeleteBirdGosAndInit();
         }
         public void NextBirdForm()
         {
-            hlbirsctrl.NextForm();
-            hlbirsctrl.RefreshBirdGos();
+            firstPersonBirdCtrl.NextForm();
+            firstPersonBirdCtrl.RefreshBirdGos();
         }
         public void NextSlotForm()
         {
@@ -1092,18 +1100,18 @@ namespace CampusSimulator
         }
         public void FlyBirdHigher()
         {
-            hlbirsctrl.AdjustBirdHeight(1.25f);
+            firstPersonBirdCtrl.AdjustBirdHeight(1.25f);
         }
         public void FlyBirdLower()
         {
-            hlbirsctrl.AdjustBirdHeight(1 / 1.25f);
+            firstPersonBirdCtrl.AdjustBirdHeight(1 / 1.25f);
         }
 #endregion
 
         public void PropagatePath()
         {
-            var path = hlpathctrl.path;
-            hlbirsctrl.SetBirdPath(path);
+            var path = firstPersonPathCtrl.path;
+            firstPersonBirdCtrl.SetBirdPath(path);
             //errmarkctrl.SetErrorMarkPath(path);
         }
 
@@ -1118,18 +1126,18 @@ namespace CampusSimulator
         #region pipecommands
         public void Astar()
         {
-            hlpathctrl.GenAstarPath();
+            firstPersonPathCtrl.GenAstarPath();
             PropagatePath();
             RequestRefresh("SceneMan-Astar");
         }
         public void SetStartNode(string newenodename)
         {
-            if (hlbirsctrl.isRunning())
+            if (firstPersonBirdCtrl.isRunning())
             {
                 StopBird();  // If we reset the endnode during running we need to stop and set a new node there
             }
-            hlpathctrl.startnodename = newenodename;
-            hlpathctrl.GenAstarPath();
+            firstPersonPathCtrl.startnodename = newenodename;
+            firstPersonPathCtrl.GenAstarPath();
             PropagatePath();
             RequestRefresh("SceneMan-SetStartNode");
         }
@@ -1199,22 +1207,22 @@ namespace CampusSimulator
         public void SetEndNode(string newenodename)
         {
             bool restartbird = false;
-            if (!linkcloudman.IsNodeName(newenodename)) return;
-            if (hlbirsctrl.isAtGoal())
+            if (!lcman.IsNodeName(newenodename)) return;
+            if (firstPersonBirdCtrl.isAtGoal())
             {
                 //var tmp = pathctrl.startnodename;
-                hlpathctrl.startnodename = hlpathctrl.endnodename;
+                firstPersonPathCtrl.startnodename = firstPersonPathCtrl.endnodename;
                 // this keeps the path from hopping away to the start point
                 // when we change the end node when we are finished and want to go somewhere else
                 // note that calling ReversePath leads to a stackoverflow
             }
-            if (hlbirsctrl.isRunning())
+            if (firstPersonBirdCtrl.isRunning())
             {
                 StopBird();  // If we reset the endnode during running we need to stop and set a new node there
                 restartbird = true;
             }
-            hlpathctrl.endnodename = newenodename;
-            hlpathctrl.GenAstarPath();
+            firstPersonPathCtrl.endnodename = newenodename;
+            firstPersonPathCtrl.GenAstarPath();
             PropagatePath();
             RequestRefresh("SceneMan-SetEndNode");
             if (restartbird)
@@ -1224,29 +1232,29 @@ namespace CampusSimulator
         }
         public void SetRandomEndNode()
         {
-            var lpt = linkcloudman.GetRandomNode();
+            var lpt = lcman.GetRandomNode();
             SetEndNode(lpt.name);
         }
         public void ReversePath()
         {
-            var tmp = hlpathctrl.startnodename;
-            hlpathctrl.startnodename = hlpathctrl.endnodename;
+            var tmp = firstPersonPathCtrl.startnodename;
+            firstPersonPathCtrl.startnodename = firstPersonPathCtrl.endnodename;
             SetEndNode(tmp);
         }
         public void RandomPath()
         {
-            hlpathctrl.GenRanPath();
+            firstPersonPathCtrl.GenRanPath();
             PropagatePath();
             RequestRefresh("SceneMan-RandomPath");
         }
         public void DeletePath()
         {
-            hlpathctrl.DeletePath();
+            firstPersonPathCtrl.DeletePathGoesAndInit();
         }
         public void TogglePathVisibily()
         {
-            hlpathctrl.visible = !hlpathctrl.visible;
-            hlpathctrl.RefreshGos();
+            firstPersonPathCtrl.visible = !firstPersonPathCtrl.visible;
+            firstPersonPathCtrl.RefreshGos();
         }
 #endregion
 
@@ -1327,9 +1335,9 @@ namespace CampusSimulator
             //            rgo.transform.Rotate(0, rgoRotate, 0);
             //            rgo.transform.Translate(rgoTranslate);
 
-            linkcloudman.RefreshGos();
-            hlpathctrl.RefreshGos();
-            hlbirsctrl.RefreshBirdGos();
+            lcman.RefreshGos();
+            firstPersonPathCtrl.RefreshGos();
+            firstPersonBirdCtrl.RefreshBirdGos();
             //errmarkctrl.RefreshGos();
             floorplanctrl.RefreshGos();
             gaman.RefreshGos();
@@ -1401,8 +1409,8 @@ namespace CampusSimulator
         {
             if (mode == RmColorModeE.nodecloud || mode == RmColorModeE.nodecloudx)
             {
-                if (name == hlpathctrl.startnodename) mode = RmColorModeE.nodepathstart;
-                if (name == hlpathctrl.endnodename) mode = RmColorModeE.nodepathend;
+                if (name == firstPersonPathCtrl.startnodename) mode = RmColorModeE.nodepathstart;
+                if (name == firstPersonPathCtrl.endnodename) mode = RmColorModeE.nodepathend;
             }
             if (!linkformdict.ContainsKey(mode))
             {
@@ -1603,9 +1611,9 @@ namespace CampusSimulator
 
             if (needsLifted)
             {
-                if (linkcloudman.CanGetHeights())
+                if (lcman.CanGetHeights())
                 {
-                    linkcloudman.CalculateHeights();
+                    lcman.CalculateHeights();
                     needsrefresh = true;
                 }
             }

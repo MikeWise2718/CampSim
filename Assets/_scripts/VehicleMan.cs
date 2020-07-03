@@ -21,19 +21,12 @@ namespace CampusSimulator
         public enum VehModeE { none, full };
         public UxEnumSetting<VehModeE> bldMode = new UxEnumSetting<VehModeE>("VehicleMode", VehModeE.full);
 
+        public void InitializeScene(SceneSelE newregion)
+        {
+        }
+
         public void SetScene(SceneSelE newregion)
         {
-            DelVehicles(); // this wipes out everyone that was created in the
-            switch (newregion)
-            {
-                case SceneSelE.MsftRedwest:
-                case SceneSelE.MsftCoreCampus:
-                case SceneSelE.MsftB19focused:
-                    break;
-                default:
-                case SceneSelE.None:
-                    break;
-            }
         }
         readonly string[] countyCodes =
         {

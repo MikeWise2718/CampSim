@@ -37,9 +37,12 @@ namespace CampusSimulator
                 bldMode.Set(PrsModeE.full);
             }
         }
-        public void SetScene(SceneSelE newregion)
+        public void InitializeScene(SceneSelE newregion)
         {
             DelPersons(); // this wipes out everyone that was created in the
+        }
+        public void SetScene(SceneSelE newregion)
+        {
             switch (newregion)
             {
                 case SceneSelE.MsftRedwest:

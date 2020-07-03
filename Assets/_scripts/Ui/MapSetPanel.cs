@@ -190,7 +190,7 @@ public class MapSetPanel : MonoBehaviour
 
     public void InitVals()
     {
-        Debug.Log($"MapSetPanel.InitVals called scene:{sman.curscene} iscustomizable:{mman.isCustomizable}");
+        //Debug.Log($"MapSetPanel.InitVals called scene:{sman.curscene} iscustomizable:{mman.isCustomizable}");
 
         InitCheckNeedSetModeRefresh();
 

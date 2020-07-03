@@ -81,12 +81,12 @@ namespace CampusSimulator
             {
                 case "Bld43":
                     {
-                        destnodelst = bm.sman.linkcloudman.FindNodes("b43-f01-rm");
+                        destnodelst = bm.sman.lcman.FindNodes("b43-f01-rm");
                         break;
                     }
                 case "BldRWB":
                     {
-                        destnodelst = bm.sman.linkcloudman.FindNodes("rwb-f03-rm");
+                        destnodelst = bm.sman.lcman.FindNodes("rwb-f03-rm");
                         break;
                     }
                 default:
@@ -282,7 +282,7 @@ namespace CampusSimulator
             roomdict = new Dictionary<string,BldRoom>();
             roomlistgo = new GameObject("Rooms");
             roomlistgo.transform.parent = this.transform;
-            this.lc = bm.sman.linkcloudman;
+            this.lc = bm.sman.lcman;
             //Debug.Log($"AddRoomsToBuilding:{name} roomspecs.count:{roomspecs.Count} defAngAlign:{defAngAlign}");
             if (roomspecs.Count==0)
             {

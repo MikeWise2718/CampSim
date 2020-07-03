@@ -143,7 +143,7 @@ namespace CampusSimulator
         [MenuItem("--LinkCloud/Delete")]
         static void DelLinkCloud()
         {
-            sman.DeleteLinkCloud();
+            sman.DeleteLinkCloudGos();
         }
 
         [MenuItem("--LinkCloud/Delete Selected Link")]
