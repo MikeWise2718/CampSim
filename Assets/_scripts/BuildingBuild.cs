@@ -139,7 +139,8 @@ namespace CampusSimulator
                         shortname = "b19";
                         journeyChoiceWeight = 20;
                         var b19comp = this.transform.gameObject.AddComponent<B19Willow>();
-                        b19comp.init();
+                        b19comp.InitializeValues(bm.sman);
+                        b19comp.MakeItSo();
                         break;
                     }
                 case "Bld40":

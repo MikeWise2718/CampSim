@@ -147,7 +147,7 @@ namespace Aiskwk.Map
             //Debug.Log("InitElevs mapextent:" + mapextent+" nrow:"+nrow+" ncol:"+ncol); 
             this.elevprov = elevprov;
             this.scenename = scenename;
-            this.mapprov = MapProvider.BingSatelliteRoads;// the only one with elevations
+            this.mapprov = MapProvider.BingSatelliteLabels;// the only one with elevations
             this.nrow = nrow;
             this.ncol = ncol;
             this.llb = llb;

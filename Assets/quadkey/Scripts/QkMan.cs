@@ -13,7 +13,7 @@ using System.Diagnostics.Eventing.Reader;
 namespace Aiskwk.Map
 {
     public enum ElevProvider { BingElev }
-    public enum MapProvider { AzureMaps, AzureSatelliteOnly, AzureSatelliteRoads, BingMaps, BingSatelliteOnly, BingSatelliteRoads, Altx , OpenStreetMaps}
+    public enum MapProvider { AzureDarkMaps, AzureSatellite,  BingMaps, BingSatelliteOnly, BingSatelliteLabels, Altx , OpenStreetMaps}
     //public enum HeightTypeE { Constant, Random, SineWave, Fetched,FetchedAndZeroed,FetchedAndOriginZeroed }
     public enum HeightSource { Constant, Random, SineWave, Fetched, FetchedPlusLidar }
     public enum HeightAdjust { NoAdjust, Zeroed, OriginZeroed }
@@ -78,21 +78,21 @@ namespace Aiskwk.Map
             var rv = "";
             switch (maprov)
             {
-                case MapProvider.AzureMaps:
+                case MapProvider.AzureDarkMaps:
                     {
-                        rv = "azure/map";
+                        rv = "azure/darkmap";
                         break;
                     }
-                case MapProvider.AzureSatelliteOnly:
+                case MapProvider.AzureSatellite:
                     {
                         rv = "azure/sat";
                         break;
                     }
-                case MapProvider.AzureSatelliteRoads:
-                    {
-                        rv = "azure/satroads";
-                        break;
-                    }
+                //case MapProvider.AzureSatelliteRoads:
+                //    {
+                //        rv = "azure/satroads";
+                //        break;
+                //    }
                 case MapProvider.OpenStreetMaps:
                     {
                         rv = "osm";
@@ -114,9 +114,9 @@ namespace Aiskwk.Map
                         rv = "bing/sat";
                         break;
                     }
-                case MapProvider.BingSatelliteRoads:
+                case MapProvider.BingSatelliteLabels:
                     {
-                        rv = "bing/satroads";
+                        rv = "bing/satlabels";
                         break;
                     }
             }
@@ -133,35 +133,36 @@ namespace Aiskwk.Map
             var uri = "";
             switch (mapprov)
             {
-                case MapProvider.AzureMaps:
+                case MapProvider.AzureDarkMaps:
                     {
+                        // Render - Get Map Tile  https://docs.microsoft.com/en-us/rest/api/maps/render/getmaptile
                         TileSystem.QuadKeyToTileXY(qkname, out var tX, out var tY, out var lod);
-                        uri = $"https://atlas.{msft}/map/tile/png?subscription-key={azkey}&api-version=1.0&layer=basic&style=main&zoom={lod}&x={tX}&y={tY}";
+                        uri = $"https://atlas.{msft}/map/tile/png?subscription-key={azkey}&api-version=1.0&layer=basic&style=dark&zoom={lod}&x={tX}&y={tY}";
                         break;
                     }
-                case MapProvider.AzureSatelliteOnly:
+                case MapProvider.AzureSatellite:
                     {
                         TileSystem.QuadKeyToTileXY(qkname, out var tX, out var tY, out var lod);
                         // Get map Imagery Tile - https://docs.microsoft.com/en-us/rest/api/maps/render/getmapimagerytile#mapimagerystyle
                         uri = $"https://atlas.{msft}/map/imagery/png?subscription-key={azkey}&api-version=1.0&style=satellite&zoom={lod}&x={tX}&y={tY}";
                         break;
                     }
-                case MapProvider.AzureSatelliteRoads:
-                    {
-                        TileSystem.QuadKeyToTileXY(qkname, out var tX, out var tY, out var lod);
-                        //uri = $"https://atlas.{msft}/map/imagery/png?subscription-key={key}&api-version=1.0&height=256&width=256&style=satellite_road_labels&zoom={lod}&x={tX}&y={tY}";
-                        // https://docs.microsoft.com/en-us/rest/api/maps/render/getmapimage#staticmaplayer 
-                        // https://docs.microsoft.com/bs-cyrl-ba/azure/azure-maps/supported-map-styles?view=azurermps-2.2.0 
-                        uri = $"https://atlas.{msft}/map/static/png?subscription-key={azkey}&api-version=1.0&style=hybrid&zoom={lod}&x={tX}&y={tY}";
-                        var layer = "layer";
-                        var style = "hybrid";
-                        var language = "en";
-                        // can't seem to get this one working, so subsituting naked satellite pictures for now - seems tile rendering (using the "imagery" directory) doesn't support roads and labels, which is odd
-                        //uri = $"https://atlas.{msft}/map/static/png?subscription-key={key}&api-version=1.0&layer={layer}&style={style}&zoom={lod}&center={center}&bbox={bbox}&height={height}&width={width}&language={language}&view={view}&pins={pins}&path={path}";
-                        uri = $"https://atlas.{msft}/map/static/png?subscription-key={azkey}&api-version=1.0&layer={layer}&style={style}&zoom={lod}&language={language}";
-                        uri = $"https://atlas.{msft}/map/imagery/png?subscription-key={azkey}&api-version=1.0&style=satellite&zoom={lod}&x={tX}&y={tY}";
-                        break;
-                    }
+                //case MapProvider.AzureSatelliteRoads:
+                //    {
+                //        TileSystem.QuadKeyToTileXY(qkname, out var tX, out var tY, out var lod);
+                //        //uri = $"https://atlas.{msft}/map/imagery/png?subscription-key={key}&api-version=1.0&height=256&width=256&style=satellite_road_labels&zoom={lod}&x={tX}&y={tY}";
+                //        // https://docs.microsoft.com/en-us/rest/api/maps/render/getmapimage#staticmaplayer 
+                //        // https://docs.microsoft.com/bs-cyrl-ba/azure/azure-maps/supported-map-styles?view=azurermps-2.2.0 
+                //        uri = $"https://atlas.{msft}/map/static/png?subscription-key={azkey}&api-version=1.0&style=hybrid&zoom={lod}&x={tX}&y={tY}";
+                //        var layer = "layer";
+                //        var style = "hybrid";
+                //        var language = "en";
+                //        // can't seem to get this one working, so subsituting naked satellite pictures for now - seems tile rendering (using the "imagery" directory) doesn't support roads and labels, which is odd
+                //        //uri = $"https://atlas.{msft}/map/static/png?subscription-key={key}&api-version=1.0&layer={layer}&style={style}&zoom={lod}&center={center}&bbox={bbox}&height={height}&width={width}&language={language}&view={view}&pins={pins}&path={path}";
+                //        uri = $"https://atlas.{msft}/map/static/png?subscription-key={azkey}&api-version=1.0&layer={layer}&style={style}&zoom={lod}&language={language}";
+                //        uri = $"https://atlas.{msft}/map/imagery/png?subscription-key={azkey}&api-version=1.0&style=satellite&zoom={lod}&x={tX}&y={tY}";
+                //        break;
+                //    }
                 case MapProvider.OpenStreetMaps:
                     {
                         TileSystem.QuadKeyToTileXY(qkname, out var tX, out var tY, out var lod);
@@ -175,7 +176,7 @@ namespace Aiskwk.Map
                         uri = $"https://mt{irnd}.goo{altx}/vt/lyrs=y&hl=en&x={tX}&y={tY}&z={lod}";
                         break;
                     }
-                case MapProvider.BingSatelliteRoads:
+                case MapProvider.BingSatelliteLabels:
                     {
                         var irnd = qut.GetRanInt(0, 3, "www");
                         var vopts = "A,L,LA";
