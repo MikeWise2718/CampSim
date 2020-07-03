@@ -45,7 +45,7 @@ namespace CampusSimulator
         #endregion Map Visuals
 
 
-        public UxEnumSetting<MapProvider> reqMapProv = new UxEnumSetting<MapProvider>("MapProvider", MapProvider.BingSatelliteRoads);
+        public UxEnumSetting<MapProvider> reqMapProv = new UxEnumSetting<MapProvider>("MapProvider", MapProvider.BingSatelliteLabels);
         // todo - think we can eliminate MapPRovider and 
         #region MapProvider
         static List<string> mapProviderOptions = new List<string>(System.Enum.GetNames(typeof(MapProvider)));
@@ -137,7 +137,7 @@ namespace CampusSimulator
         public UxSettingBool extentPoints = new UxSettingBool("extentPoints", false);
         public UxSetting<string> inputAddress = new UxSetting<string>("inputAddress", "");
 
-        public UxSetting<double> custom_maplat = new UxSetting<double>("custom_lat", 51.476852);// Greenwich
+        public UxSetting<double> custom_maplat = new UxSetting<double>("custom_lat", 51.476852);
         public UxSetting<double> custom_maplng = new UxSetting<double>("custom_lng", 0);
         public UxSetting<double> custom_latkm = new UxSetting<double>("custom_latkm", 1);
         public UxSetting<double> custom_lngkm = new UxSetting<double>("custom_lngkm", 1);
@@ -165,47 +165,45 @@ namespace CampusSimulator
 
         public void GetSceneModeDependentInitialPersistentSettings()
         {
-            modeSetCount.GetInitial();
+            modeSetCount.GetInitial(0);
 
-            lod = levelOfDetail.GetInitial();
-            npqk = numNodesPerQktile.GetInitial();
-            address = inputAddress.GetInitial();
-            maplat = custom_maplat.GetInitial();
-            maplng = custom_maplng.GetInitial();
-            zdistkm = custom_latkm.GetInitial();
-            xdistkm = custom_lngkm.GetInitial();
+            lod = levelOfDetail.GetInitial(14);
+            npqk = numNodesPerQktile.GetInitial(4);
+            address = inputAddress.GetInitial("");
+            maplat = custom_maplat.GetInitial(51.476852);// Greenwich
+            maplng = custom_maplng.GetInitial(0);
+            zdistkm = custom_latkm.GetInitial(1);
+            xdistkm = custom_lngkm.GetInitial(1);
 
-            mapScale.GetInitial();
-            mapRot.GetInitial();
-            mapTrans.GetInitial();
+            mapScale.GetInitial(1);
+            mapRot.GetInitial(Vector3.zero);
+            mapTrans.GetInitial(Vector3.zero);
 
-            HasLLmap.GetInitial();
-            locIsCustomizable.GetInitial();
+            HasLLmap.GetInitial(false);
+            locIsCustomizable.GetInitial(false);
 
-            numNodesPerQktile.GetInitial();
+            mapVisiblity.GetInitial(  MapVisualsE.MapOn  );
+            reqEleProv.GetInitial( ElevProvider.BingElev );
+            reqMapProv.GetInitial( MapProvider.BingSatelliteLabels );
+            useElevations.GetInitial(true);
 
-            mapVisiblity.GetInitial();
-            reqEleProv.GetInitial();
-            reqMapProv.GetInitial();
-            useElevations.GetInitial();
+            frameQuadkeys.GetInitial(false);
+            viewerBreadCrumbs.GetInitial(false);
+            triPoints.GetInitial(false);
+            nodeMarkers.GetInitial(false);
+            meshGrid.GetInitial(false);
+            meshPoints.GetInitial(false);
+            coordPoints.GetInitial(false);
+            extentPoints.GetInitial(false);
 
-            frameQuadkeys.GetInitial();
-            viewerBreadCrumbs.GetInitial();
-            triPoints.GetInitial();
-            nodeMarkers.GetInitial();
-            meshGrid.GetInitial();
-            meshPoints.GetInitial();
-            coordPoints.GetInitial();
-            extentPoints.GetInitial();
+            flatTris.GetInitial(false);
+            hmult.GetInitial(1);
 
-            flatTris.GetInitial();
-            hmult.GetInitial();
-
-            viewerPosition.GetInitial();
-            viewerRotation.GetInitial();
-            viewerAvatar.GetInitial();
-            viewerCamPosition.GetInitial();
-            viewerControl.GetInitial();
+            viewerPosition.GetInitial(Vector3.zero);
+            viewerRotation.GetInitial(Vector3.zero);
+            viewerAvatar.GetInitial(ViewerAvatar.QuadCopter);
+            viewerCamPosition.GetInitial(ViewerCamPosition.FloatBehind);
+            viewerControl.GetInitial(ViewerControl.Velocity);
         }
 
         public void InitPhase0()
@@ -328,6 +326,7 @@ namespace CampusSimulator
             if (qmapman?.qmm != null)
             {
                 qmapman.mapprov = map;
+                qmapman.bespoke.mapProv = map;
                 qmapman.qmm.mapprov = map;
             }
         }
@@ -338,6 +337,7 @@ namespace CampusSimulator
             if (qmapman?.qmm != null)
             {
                 qmapman.elevprov = ele;
+                qmapman.bespoke.eleProv = ele;
                 qmapman.qmm.elevprov = ele;
             }
         }

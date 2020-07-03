@@ -188,7 +188,7 @@ namespace Aiskwk.Map
             return chg;
         }
 
-        public void InitializeGrid(string scenename, LatLngBox llbox, string mapcoordname = "", MapProvider mapprov = MapProvider.BingSatelliteRoads, ElevProvider elevprov = ElevProvider.BingElev)
+        public void InitializeGrid(string scenename, LatLngBox llbox, string mapcoordname = "", MapProvider mapprov = MapProvider.BingSatelliteLabels, ElevProvider elevprov = ElevProvider.BingElev)
         {
             this.scenename = scenename;
             this.mapcoordname = mapcoordname;

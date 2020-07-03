@@ -369,7 +369,7 @@ namespace Aiskwk.Map
             useElevationData = false;
             useFlatTris = false;
             frameQuadkeys = false;
-            mapProv = MapProvider.BingSatelliteRoads;
+            mapProv = MapProvider.BingSatelliteLabels;
             eleProv = ElevProvider.BingElev;
             LatExtentKm = latkm;
             LngExtentKm = lngkm;
@@ -443,22 +443,22 @@ namespace Aiskwk.Map
         public void ConfigureSystemEnvironment()
         {
             string hostName = System.Net.Dns.GetHostName().ToLower();
-            Debug.Log($"hostname:{hostName}");
-            if (hostName == "uxie")
+            if (hostName == "absol")
             {
+                Debug.Log($"hostname :{hostName} - setting tracknames");
                 trackFilePath = "d:/transfer/tracks/";
                 gdalFilePath = "d:/transfer/gdal/";
             }
         }
 
-        public async Task<(QmapMesh, int, int)> MakeMesh(string scenename, int lod, LatLng ll1, LatLng ll2, string mapcoordname = "", int tpqk = 4, float hmult = 1, MapProvider mapprov = MapProvider.BingSatelliteRoads, ElevProvider elevprov = ElevProvider.BingElev)
+        public async Task<(QmapMesh, int, int)> MakeMesh(string scenename, int lod, LatLng ll1, LatLng ll2, string mapcoordname = "", int tpqk = 4, float hmult = 1, MapProvider mapprov = MapProvider.BingSatelliteLabels, ElevProvider elevprov = ElevProvider.BingElev)
         {
             llbox = new LatLngBox(ll1, ll2, scenename, lod: lod);
             return await MakeMeshFromLlbox(scenename, llbox, mapcoordname: mapcoordname, tpqk: tpqk, hmult: hmult, mapprov: mapprov, elevprov: elevprov);
         }
         static int mmcnt = 0;
         static int mmreentrycnt = 0;
-        public async Task<(QmapMesh qmm, int nbmloaded, int nelloaded)> MakeMeshFromLlbox(string scenename, LatLngBox llbox, int tpqk = 4, float hmult = 1, string mapcoordname = "", MapExtentTypeE mapextent = MapExtentTypeE.SnapToTiles, MapProvider mapprov = MapProvider.BingSatelliteRoads, ElevProvider elevprov = ElevProvider.BingElev, bool execute = true, bool forceload = false,
+        public async Task<(QmapMesh qmm, int nbmloaded, int nelloaded)> MakeMeshFromLlbox(string scenename, LatLngBox llbox, int tpqk = 4, float hmult = 1, string mapcoordname = "", MapExtentTypeE mapextent = MapExtentTypeE.SnapToTiles, MapProvider mapprov = MapProvider.BingSatelliteLabels, ElevProvider elevprov = ElevProvider.BingElev, bool execute = true, bool forceload = false,
                                                                bool limitQuadkeys = true, QmapMesh.sythTexMethod synthTex = QmapMesh.sythTexMethod.Quadkeys,
                                                                HeightSource heitSource = HeightSource.Fetched, HeightAdjust heitAdjust = HeightAdjust.Zeroed) //, HeightTypeE heitType= HeightTypeE.FetchedAndZeroed)
         {

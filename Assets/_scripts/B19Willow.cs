@@ -28,26 +28,22 @@ public class B19Willow : MonoBehaviour
 
     }
 
-    public void init()
+    public void InitializeValues(CampusSimulator.SceneMan sman)
     {
-        sman = FindObjectOfType<CampusSimulator.SceneMan>();
-        if (sman==null)
-        {
-            Debug.Log("Building 19 could not find SceneMan");
-        }
-        b19_materialMode.GetInitial();
-        loadmodel.GetInitial();
-        level01.GetInitial();
-        level02.GetInitial();
-        level03.GetInitial();
-        hvac.GetInitial();
-        floors.GetInitial();
-        doors.GetInitial();
+        this.sman = sman;
+        b19_materialMode.GetInitial(B19_MaterialMode.glasswalls);
+        loadmodel.GetInitial(true);
+        _b19_level01 = level01.GetInitial(true);
+        _b19_level02 = level02.GetInitial(false);
+        _b19_level03 = level03.GetInitial(false);
+        _b19_hvac = hvac.GetInitial(false);
+        _b19_floors = floors.GetInitial(false);
+        _b19_doors = doors.GetInitial(false);
     }
 
 
 
-    bool _b19_WillowModel = false;
+    bool _b19_WillowModelLoaded = false;
     bool _b19_level01 = false;
     bool _b19_level02 = false;
     bool _b19_level03 = false;
@@ -61,7 +57,7 @@ public class B19Willow : MonoBehaviour
     bool ChangeHappened()
     {
         var chg = false;
-        if (loadmodel.Get() != _b19_WillowModel) chg = true;
+        if (loadmodel.Get() != _b19_WillowModelLoaded) chg = true;
         if (level01.Get() != _b19_level01)
         {
             chg = true;
@@ -128,9 +124,10 @@ public class B19Willow : MonoBehaviour
             legot.gameObject.SetActive(active);
         }
     }
-    void MakeItSo()
+    public void MakeItSo()
     {
-        if (loadmodel.Get() && !_b19_WillowModel)
+        //Debug.Log($"MakeItSo loadModel:{loadmodel.Get()} _b19WillowModel:{_b19_WillowModelLoaded}");
+        if (loadmodel.Get() && !_b19_WillowModelLoaded)
         {
             var xoff = -3;
             var zoff = -3;
@@ -149,7 +146,7 @@ public class B19Willow : MonoBehaviour
             willgo.transform.position = defpos;
             willgo.transform.Rotate(new Vector3(-90, 26, 0));
             willgo.transform.parent = this.transform;
-            _b19_WillowModel = true;
+            _b19_WillowModelLoaded = true;
             level01.SetAndSave( true );
             _b19_level01 = true;
             level02.SetAndSave( false );
@@ -163,12 +160,12 @@ public class B19Willow : MonoBehaviour
             hvac.SetAndSave( false );
             _b19_hvac = true;
         }
-        else if(!loadmodel.Get() && _b19_WillowModel)
+        else if(!loadmodel.Get() && _b19_WillowModelLoaded)
         {
             Destroy(willgo);
             willgo = null;
             loadmodel.SetAndSave( false );
-            _b19_WillowModel = false;
+            _b19_WillowModelLoaded = false;
             level01.SetAndSave( false );
             _b19_level01 = false;
             level02.SetAndSave( false );

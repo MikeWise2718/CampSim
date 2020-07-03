@@ -80,12 +80,15 @@ namespace CampusSimulator
         public int keywordLimit = 80;
         public int keycount = 0;
         public bool fastMode = false;
-        public bool legacyStatus = false;
+        public bool legacyStatus = true;
         public int maxLegacyAvatarGen = 20;
         public int maxLegacyCarGen = 30;
         public string imagesdir = "images/";
         public string labelsdir = "labels/";
         public string graphsdir = "graphs/";
+        public string hostname = "";
+        public bool bemike = false;
+
 
 #if USE_SPATIALMAPPPER
         public SpatialMapperMan smm = null;
@@ -254,7 +257,7 @@ namespace CampusSimulator
                     // Cease all activity
                     jnman.CeaseSceneActivity();
 
-                    // Delete all objects
+                    // Delete all objects - withough knowledge of identity of new scene
                     psman.DelPersons();
                     veman.DelVehicles();
                     bdman.DelBuildings();
@@ -265,8 +268,8 @@ namespace CampusSimulator
                     firstPersonBirdCtrl.DeleteBirdGosAndInit();
                     firstPersonPathCtrl.DeletePathGoesAndInit();
 
-                    // Now do value initialization
-                    this.InitializeScene(newscene);
+                    // Now do value initialization 
+                    this.InitializeScene(newscene);// start with setting the scene
                     mpman.InitializeScene(newscene);
                     vcman.InitializeScene(newscene);
                     bdman.InitializeScene(newscene);
@@ -788,7 +791,7 @@ namespace CampusSimulator
         public void SetLegacy(bool newval)
         {
             legacyStatus = newval;
-            if (legacyStatus)
+            if (legacyStatus && bemike)
             {
                 maxLegacyAvatarGen = 50;
                 BldEvacAlarm.outAlarmAldeboColor = "deeppurple";
@@ -1386,7 +1389,7 @@ namespace CampusSimulator
             { RmColorModeE.linkslowroad, ("gray",0.2f,RmLinkFormE.pipe)},
             { RmColorModeE.linkdriveway, ("lightgray",0.2f,RmLinkFormE.pipe)},
             { RmColorModeE.linkwalk, ("pink",0.1f,RmLinkFormE.pipe)},
-            { RmColorModeE.linkwalknoshow, ("darkgray",0.2f,RmLinkFormE.pipe)},
+            { RmColorModeE.linkwalknoshow, ("darkgray",0.01f,RmLinkFormE.pipe)},
 
             { RmColorModeE.linkexcavate, ("white",0.1f,RmLinkFormE.pipe)},
             { RmColorModeE.linksurvey, ("red",0.1f,RmLinkFormE.pipe)},
@@ -1465,6 +1468,7 @@ namespace CampusSimulator
         private void Start()
         {
             Debug.Log("SceneMan.Start called");
+            IdentitySystemAndUser();
             InitPhase0();
             InitPhase1();
             var esi = SceneMan.GetInitialSceneOption();
@@ -1647,6 +1651,16 @@ namespace CampusSimulator
             KeyProcessing();
             updateCount++;
         }
+
+        public void IdentitySystemAndUser()
+        {
+            string hostName = System.Net.Dns.GetHostName().ToLower();
+            if (hostName == "absol")
+            {
+                bemike = true;
+            }
+        }
+
 
 
 #if UNITY_EDITOR

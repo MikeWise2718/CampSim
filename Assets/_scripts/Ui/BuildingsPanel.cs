@@ -166,7 +166,6 @@ public class BuildingsPanel : MonoBehaviour
         var tchg = false;
         if (b19comp != null)
         {
-
             chg = chg || b19comp.loadmodel.SetAndSave(b19_model_toggle.isOn);
             chg = chg || b19comp.level01.SetAndSave(b19_level1_toggle.isOn);
             chg = chg || b19comp.level02.SetAndSave(b19_level2_toggle.isOn);
@@ -187,11 +186,11 @@ public class BuildingsPanel : MonoBehaviour
         chg = chg || bman.fixedblds.SetAndSave(fixedblds_toggle.isOn);
 
 
-        Debug.Log($"SetVals2 t:{Time.time:f1}   chg:{chg} tchg:{tchg}");
+        //Debug.Log($"SetValsForRefresh t:{Time.time:f1}   chg:{chg} tchg:{tchg}");
         if (chg || tchg)
         {
-            Debug.Log($"BuildingsPanel.SetVals2 bman.fixedblds.SetAndSave:{fixedblds_toggle.isOn}");
-            sman.RequestRefresh("BuildingsPanel.SetVals", totalrefresh:tchg);
+            //Debug.Log($"BuildingsPanel.SetValsForRefresh bman.fixedblds.SetAndSave:{fixedblds_toggle.isOn}");
+            sman.RequestRefresh("BuildingsPanel.SetValsForRefresh", totalrefresh:tchg);
         }
     }
     float lastcheck = 0;

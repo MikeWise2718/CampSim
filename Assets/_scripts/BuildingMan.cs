@@ -30,9 +30,9 @@ namespace CampusSimulator
         public List<Bldspec> bldspecs;
 
 
-        public UxSettingBool walllinks = new UxSettingBool("walllinks", true);
+        public UxSettingBool walllinks = new UxSettingBool("walllinks", false);
         public UxSettingBool osmblds = new UxSettingBool("osmblds", true);
-        public UxSettingBool fixedblds = new UxSettingBool("fixedblds", true);
+        public UxSettingBool fixedblds = new UxSettingBool("fixedblds", false);
 
 
         // To do - get rid of bldmode and treemode regions in BuildingMan
@@ -116,14 +116,15 @@ namespace CampusSimulator
             InitializeValues();
         }
 
-            public void InitializeValues()
+        public void InitializeValues()
         {
             //treeMode = GetInitialTreeMode();
-            treeMode.GetInitial();
-            bldMode.GetInitial();
-            walllinks.GetInitial();
-            osmblds.GetInitial();
-            fixedblds.GetInitial();
+            treeMode.GetInitial(TreeModeE.full);
+            bldMode.GetInitial(BldModeE.full);
+            walllinks.GetInitial(false);
+            osmblds.GetInitial(true);
+            fixedblds.GetInitial(false);
+            Debug.Log($"BuildingMan.InitializeValues walllinks:{walllinks.Get()} osmblds:{osmblds.Get()}   fixedblds:{fixedblds.Get()}");
         }
 
 
