@@ -2234,9 +2234,9 @@ MonoBehaviour:
   autoerrorcorrect: 0
   requestScene: 10
   rmango: {fileID: 0}
-  linkcloudman: {fileID: 0}
-  hlpathctrl: {fileID: 0}
-  hlbirsctrl: {fileID: 0}
+  lcman: {fileID: 0}
+  firstPersonPathCtrl: {fileID: 0}
+  firstPersonBirdCtrl: {fileID: 0}
   statusctrl: {fileID: 0}
   errmarkctrl: {fileID: 0}
   floorplanctrl: {fileID: 0}
@@ -2250,6 +2250,8 @@ MonoBehaviour:
   imagesdir: images/
   labelsdir: labels/
   graphsdir: graphs/
+  hostname: 
+  bemike: 0
   rgoTransform: {fileID: 0}
   rgoTransformSetCount: 0
   lastRgoTransformSetCount: -1
@@ -28411,7 +28413,7 @@ MonoBehaviour:
   mappan: {fileID: 0}
   genpan: {fileID: 0}
   frapan: {fileID: 0}
-  b19pan: {fileID: 0}
+  bldpan: {fileID: 0}
   helpan: {fileID: 0}
   abtpan: {fileID: 0}
   listenForKeys: 0
