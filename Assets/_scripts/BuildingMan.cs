@@ -27,6 +27,13 @@ namespace CampusSimulator
 
         public bool showPersRects;
 
+        public List<Bldspec> bldspecs;
+
+
+        public UxSettingBool walllinks = new UxSettingBool("walllinks", true);
+        public UxSettingBool osmblds = new UxSettingBool("osmblds", true);
+        public UxSettingBool fixedblds = new UxSettingBool("fixedblds", true);
+
 
         // To do - get rid of bldmode and treemode regions in BuildingMan
         #region bldMode
@@ -103,20 +110,34 @@ namespace CampusSimulator
         }
         #endregion treeMode
 
-        System.Random ranman = new System.Random();
+        public void InitializeScene(SceneSelE newregion)
+        {
+            bldspecs = new List<Bldspec>();
+            InitializeValues();
+        }
+
+            public void InitializeValues()
+        {
+            //treeMode = GetInitialTreeMode();
+            treeMode.GetInitial();
+            bldMode.GetInitial();
+            walllinks.GetInitial();
+            osmblds.GetInitial();
+            fixedblds.GetInitial();
+        }
+
 
         public void SetScene(SceneSelE newregion)
         {
-            if (bldlookup.Count > 0)
-            {
-                DelBuildings();
-            }
+            DelBuildings();
+            var osmloadspec = "";
             switch (newregion)
             {
                 case SceneSelE.MsftRedwest:
                 case SceneSelE.MsftCoreCampus:
                 case SceneSelE.MsftB19focused:
                     MakeBuildings("Bld");
+                    osmloadspec = "msftb19area,msftcommons,msftredwest"; 
                     break;
                 case SceneSelE.MsftDublin:
                     MakeBuildings("Dub");
@@ -124,11 +145,22 @@ namespace CampusSimulator
                 case SceneSelE.Eb12small:
                 case SceneSelE.Eb12:
                     MakeBuildings("Eb");
+                    osmloadspec = "eb12small";
                     break;
                 default:
                 case SceneSelE.None:
                     // DelBuildings called above already
                     break;
+            }
+
+            var doosmblds = osmblds.Get();
+            //Debug.Log($"doosmblds:{doosmblds} osmloadspec{osmloadspec}");
+            if (doosmblds)
+            {
+                var pgvd = new PolyGenVekMapDel(sman.mpman.GetHeightVector3);
+                var bpg = new BldPolyGen();
+                var lbgos = bpg.LoadRegion(this.gameObject, osmloadspec,1f,pgvd:pgvd);
+                bldspecs.AddRange(lbgos);
             }
         }
         public void UpdateBldStats()
@@ -189,25 +221,25 @@ namespace CampusSimulator
                     }
                     //var bld = GetBuilding("BldRWB");
                     //bld.AddRedwestBAlarms();
-                    sman.linkcloudman.grctrl.AddLateLink("rwb-f03-cv0-e", "bRWB-os1-o02",GraphAlgos.LinkUse.walkway);
-                    sman.linkcloudman.grctrl.AddLateLink("rwb-f03-cv0-s", "bRWB-os2-o01", GraphAlgos.LinkUse.walkway);
-                    sman.linkcloudman.grctrl.AddLateLink("rwb-f03-cv3-s", "bRWB-os2-o04", GraphAlgos.LinkUse.walkway);
-                    sman.linkcloudman.grctrl.AddLateLink("rwb-f03-cv3-e", "bRWB-os3-o02", GraphAlgos.LinkUse.walkway);
+                    sman.lcman.grctrl.AddLateLink("rwb-f03-cv0-e", "bRWB-os1-o02",GraphAlgos.LinkUse.walkway,"walkway link for garage-RedwestB - 1");
+                    sman.lcman.grctrl.AddLateLink("rwb-f03-cv0-s", "bRWB-os2-o01", GraphAlgos.LinkUse.walkway, "walkway link for garage-RedwestB - 2");
+                    sman.lcman.grctrl.AddLateLink("rwb-f03-cv3-s", "bRWB-os2-o04", GraphAlgos.LinkUse.walkway, "walkway link for garage-RedwestB -3");
+                    sman.lcman.grctrl.AddLateLink("rwb-f03-cv3-e", "bRWB-os3-o02", GraphAlgos.LinkUse.walkway, "walkway link for garage-RedwestB- 4");
 //                    if (sman.fastMode)
 //                    {
-                        sman.linkcloudman.grctrl.AddLateLink("rwb-f03-rm3342", "g_RWB_eee-dt-wpsdoor004", GraphAlgos.LinkUse.walkway);
+                        sman.lcman.grctrl.AddLateLink("rwb-f03-rm3342", "g_RWB_eee-dt-wpsdoor004", GraphAlgos.LinkUse.walkway, "walkway link for garage-RedwestB- 5");
 //                    }
-                    sman.linkcloudman.grctrl.AddLateLink("dw-RWB-c18", "g_RWB_eee-dt-dps013", GraphAlgos.LinkUse.driveway);
-                    sman.linkcloudman.grctrl.AddLateLink("dw-RWB-c28", "g_RWB_eee-dt-dps006", GraphAlgos.LinkUse.driveway);
-                    sman.linkcloudman.grctrl.AddLateLink("dw-RWB-c28", "g_RWB_eee-dt-dps007", GraphAlgos.LinkUse.driveway);
-                    sman.linkcloudman.grctrl.AddLateLink("dw-RWB-c38", "g_RWB_eee-dt-dps001",GraphAlgos.LinkUse.driveway);
+                    sman.lcman.grctrl.AddLateLink("dw-RWB-c18", "g_RWB_eee-dt-dps013", GraphAlgos.LinkUse.driveway, "driveway link for garage at RedwestB - 1");
+                    sman.lcman.grctrl.AddLateLink("dw-RWB-c28", "g_RWB_eee-dt-dps006", GraphAlgos.LinkUse.driveway, "driveway link for garage at RedwestB - 2");
+                    sman.lcman.grctrl.AddLateLink("dw-RWB-c28", "g_RWB_eee-dt-dps007", GraphAlgos.LinkUse.driveway, "driveway link for garage at RedwestB - 3");
+                    sman.lcman.grctrl.AddLateLink("dw-RWB-c38", "g_RWB_eee-dt-dps001",GraphAlgos.LinkUse.driveway, "driveway link for garage at RedwestB - 4");
                     sman.psman.AddPersonToBuildingAtNode(PersonMan.GenderE.male,"b19-f01-lobby", "b19-f01-cp0b1", "Arnie Schwarzwald", "Businessman004",
                                                          PersonMan.empStatusE.Security, "IdleUnarmed", false,180,hasHololens:true,hasCamera:true,flagged:true);
                     sman.psman.AddPersonToBuildingAtNode(PersonMan.GenderE.female, "b19-f01-lobby", "b19-f01-sp1003", "Audrey Hepburn", "Girl005",
                                                          PersonMan.empStatusE.FullTimeEmp, "Typing", false, 45, hasHololens: false, hasCamera: false, flagged: true);
                     sman.psman.AddPersonToBuildingAtNode(PersonMan.GenderE.male, "b19-f01-lobby", "b19-f01-sp1030", "Clark Gabel", "Man004",
                                                          PersonMan.empStatusE.Contractor, "Typing", false, -48f, hasHololens: false, hasCamera: false, flagged: true);
-                    sman.psman.AddPersonToBuildingAtNode(PersonMan.GenderE.male, "b19-f01-lobby", "b19-f01-sp1029", "Owen Wilson", "Man010",
+                    sman.psman.AddPersonToBuildingAtNode(PersonMan.GenderE.male, "b19-f01-lobby", "b19-f01-sp1029", "Anthony Hopkins", "Man010",
                                                          PersonMan.empStatusE.FullTimeEmp, "Typing", false, 40f, hasHololens: false, hasCamera: false, flagged: true);
                     //sman.psman.b19idchange("Dave Agarwal","Visitor",flagged:true);
                     //sman.psman.b19idchange("Liam Lee", "Visitor", flagged: true);
@@ -279,13 +311,23 @@ namespace CampusSimulator
         public void DelBuildings()
         {
             Debug.Log("DelBuildings called");
-            var namelist = new List<string>(bldlookup.Keys);
-            namelist.ForEach(name => DelBuilding(name));
+            if (bldlookup != null)
+            {
+                var namelist = new List<string>(bldlookup.Keys);
+                namelist.ForEach(name => DelBuilding(name));
+            }
+            bldlookup = new Dictionary<string, Building>();
+            if (bldspecs != null)
+            {
+                bldspecs.ForEach(bs => Destroy(bs.bgo));
+            }
+            bldspecs = new List<Bldspec>();
         }
         public void DelBuilding(string name)
         {
             //Debug.Log($"Deleting building {name} nbld:{bldlookup.Count}");
             //var go = GameObject.Find(name);
+            if (!bldlookup.ContainsKey(name)) return;
 
             var bld = bldlookup[name];
             bld.Empty(); // destroys game object as well
@@ -431,24 +473,6 @@ namespace CampusSimulator
         }
 
 
-        private void Awake()
-        {
-            sman = FindObjectOfType<SceneMan>();
-        }
-
-        // Use this for initialization
-        void Start()
-        {
-            //treeMode = GetInitialTreeMode();
-            treeMode.GetInitial();
-            bldMode.GetInitial();
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
 
 
 

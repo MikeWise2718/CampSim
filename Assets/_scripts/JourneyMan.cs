@@ -148,7 +148,7 @@ namespace CampusSimulator
         bool NodeExists(string nodename)
         {
             if (nodename==null) return false;
-            return this.sman.linkcloudman.IsNodeName(nodename);
+            return this.sman.lcman.IsNodeName(nodename);
         }
 
         public Journey AddInterBuildingJourney(Person pers, BldRoom broom,int roomslot)
@@ -864,7 +864,7 @@ namespace CampusSimulator
         void Start()
         {
             sman = FindObjectOfType<SceneMan>();
-            linkctrl = sman.linkcloudman;
+            linkctrl = sman.lcman;
             gm = sman.gaman;
             bm = sman.bdman;
             pm = sman.psman;
@@ -883,7 +883,7 @@ namespace CampusSimulator
             {
                 jny.person.journey = null;
             }
-            jny.birdctrl.DeleteBird();
+            jny.birdctrl.DeleteBirdGosAndInit();
             // what about the animator?
             Destroy(jny.birdctrl);
             Destroy(jny.pathctrl);
@@ -905,7 +905,7 @@ namespace CampusSimulator
         {
             foreach (var jny in Journeys)
             {
-                jny.birdctrl.DeleteBird();
+                jny.birdctrl.DeleteBirdGosAndInit();
                 // what about the animator?
                 Destroy(jny);
             }
@@ -920,10 +920,15 @@ namespace CampusSimulator
             DeleteAllJourneys();
         }
 
-        public void SetScene(SceneSelE newregion)
+        public void InitializeScene(SceneSelE newregion)
         {
             DeleteAllJourneys();
         }
+
+        public void SetScene(SceneSelE newregion)
+        {
+        }
+
 
         string ObjDetClassify(string resname)
         {

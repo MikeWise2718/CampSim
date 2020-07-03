@@ -190,7 +190,7 @@ namespace CampusSimulator
  
         public void GenSlots(string gprefix, int ncols, int nrows,  Vector3 pt1, Vector3 pt2)
         {
-            var lc = zm.sman.linkcloudman;
+            var lc = zm.sman.lcman;
             var lclc = lc.GetGraphCtrl();
 
             this.gprefix = gprefix;

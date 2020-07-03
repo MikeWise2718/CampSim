@@ -190,7 +190,7 @@ public class MapSetPanel : MonoBehaviour
 
     public void InitVals()
     {
-        Debug.Log($"MapSetPanel.InitVals called scene:{sman.curscene} iscustomizable:{mman.isCustomizable}");
+        //Debug.Log($"MapSetPanel.InitVals called scene:{sman.curscene} iscustomizable:{mman.isCustomizable}");
 
         InitCheckNeedSetModeRefresh();
 
@@ -687,6 +687,7 @@ public class MapSetPanel : MonoBehaviour
         {
             MapMan.SetInitialMapProvider(curstr);
             mman.SetMapPovider(curMapProv);
+            Debug.Log($"Setting Map Provider:{curMapProv}");
             changed = true;
         }
         return changed;
@@ -695,12 +696,13 @@ public class MapSetPanel : MonoBehaviour
     bool RealizeSelectedEleProv()
     {
         bool changed = false;
-        var curstr = MapMan.GetElevProviderString(mapProv.value);
+        var curstr = MapMan.GetElevProviderString(eleProv.value);
         var curEleProv = MapMan.GetElevProviderEnum(curstr);
         if (curEleProv != mman.reqEleProv.Get())
         {
             MapMan.SetInitialElevProvider(curstr);
             mman.SetEleProvider(curEleProv);
+            Debug.Log($"Setting Elev Provider:{curEleProv}");
             changed = true;
         }
         return changed;

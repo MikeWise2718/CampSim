@@ -115,7 +115,7 @@ namespace Aiskwk.Map
         }
         public void ReAdjustViewerInitialPosition()
         {
-            Debug.Log($"ReAdjustViewerInitialPosition - before scale:{transform.localScale} rotation:{transform.localRotation.eulerAngles}");
+            //Debug.Log($"ReAdjustViewerInitialPosition - before scale:{transform.localScale} rotation:{transform.localRotation.eulerAngles}");
             bodyPrefabRotation = Quaternion.identity;
             bodyPlaneRotation = Quaternion.identity;
             var scale = transform.localScale;
@@ -124,7 +124,7 @@ namespace Aiskwk.Map
             transform.SetParent(null, worldPositionStays: false);// disconnect
             transform.position = viewerDefaultPosition;
             transform.localRotation = Quaternion.Euler(viewerDefaultRotation);
-            Debug.Log($"ReAdjustViewerInitialPosition - viewerDefaultRotation:{viewerDefaultRotation}");
+            //Debug.Log($"ReAdjustViewerInitialPosition - viewerDefaultRotation:{viewerDefaultRotation}");
             var t = GetRootTransform(parent.transform);
             var s = t.localScale.x;
             if (s != 0)
@@ -142,7 +142,7 @@ namespace Aiskwk.Map
                                                                                // or we get problems when we follownormal along the mesh
             TranslateViewer(0, 0);
             RotateViewer(0);
-            Debug.Log($"ReAdjustViewerInitialPosition - after  scale:{transform.localScale} rotation:{transform.localRotation.eulerAngles}");
+            //Debug.Log($"ReAdjustViewerInitialPosition - after  scale:{transform.localScale} rotation:{transform.localRotation.eulerAngles}");
             //DumpViewer();
         }
 
@@ -252,8 +252,8 @@ namespace Aiskwk.Map
         public bool showDroppings = false;
         public void MakeAvatar(string avaname, float angle, Vector3 shift, float scale = 1,float visorscale=2)
         {
-            //Debug.Log($"MakeAvatar {avaname} angle:{angle}");
-            //Debug.Log($"MakeAvatar - Viewer rotation before  {transform.localRotation.eulerAngles}");
+            Debug.Log($"MakeAvatar {avaname} angle:{angle}");
+            Debug.Log($"MakeAvatar - Viewer rotation before  {transform.localRotation.eulerAngles}");
 
             DestroyAvatar();
             moveplane = new GameObject("moveplane");
@@ -310,7 +310,7 @@ namespace Aiskwk.Map
                 qut.SetColorOfGo(rod, Color.blue);
             }
             rodgo.transform.SetParent(transform, worldPositionStays: false);
-            //Debug.Log($"MakeAvatar - Viewer rotation after  {transform.localRotation.eulerAngles}");
+            Debug.Log($"MakeAvatar - Viewer rotation after  {transform.localRotation.eulerAngles}");
         }
         public void SetCamPosition()
         {
@@ -346,6 +346,7 @@ namespace Aiskwk.Map
 
         public void ShiftCamPosition()
         {
+            var oldViewerCamPosition = viewerCamPosition;
             switch (viewerCamPosition)
             {
                 case ViewerCamPosition.Eyes:
@@ -374,6 +375,7 @@ namespace Aiskwk.Map
                         break;
                     }
             }
+            Debug.Log($"ShiftCamPosition old:{oldViewerCamPosition} new:{viewerCamPosition} ");
             SetCamPosition();
         }
 
@@ -830,11 +832,6 @@ namespace Aiskwk.Map
             {
                 TiltHead(-angincpersec);
             }
-            if (Input.GetKey(KeyCode.E) && ctrlpressed && Time.time - ctrlEhit > hitgap3)
-            {
-                ShiftCamPosition();
-                ctrlEhit = Time.time;
-            }
             if (Input.GetKey(KeyCode.S))
             {
                 SetSceneCamToMainCam();
@@ -853,6 +850,11 @@ namespace Aiskwk.Map
             {
                 this.gameObject.SetActive(false);
             }
+            if (Input.GetKey(KeyCode.E) && ctrlpressed && Time.time - ctrlEhit > hitgap3)
+            {
+                ShiftCamPosition();
+                ctrlEhit = Time.time;
+            }
             if (Input.GetKey(KeyCode.A) && ctrlpressed)
             {
                 //Debug.Log($"hit A {Time.time - ctrlAhit} hitgap3:{hitgap3} doTrackThings:{doTrackThings}");
@@ -865,7 +867,7 @@ namespace Aiskwk.Map
                     var oldav = viewerAvatar;
                     MoveToNextAvatar();
                     var newav = viewerAvatar;
-                    //Debug.Log($"Moving to next avatar old:{oldav}  new:{newav}");
+                    Debug.Log($"Moving to next avatar old:{oldav}  new:{newav}");
                     ctrlAhit = Time.time;
                 }
             }

@@ -105,6 +105,16 @@ namespace CampusSimulator
                     break;
             }
         }
+        public void InitializeScene(SceneSelE newregion)
+        {
+            InitializeValues();
+        }
+
+        public void InitializeValues()
+        {
+            slotform.GetInitial();
+        }
+
 
         #region SlotForm Visuals
         static List<string> slotFormOptions = new List<string>(System.Enum.GetNames(typeof(SlotFormE)));
@@ -122,7 +132,6 @@ namespace CampusSimulator
 
         public void SetScene(SceneSelE newregion)
         {
-            slotform.GetInitial();
             InterpretSlotForm();
             DelGarages();
             switch (newregion)

@@ -660,9 +660,14 @@ namespace GraphAlgos
             {
                 if (!inLateLinkingPhase)
                 {
+                    if (comment == "")
+                    {
+                        comment = $"ALBNN: usetype:{usetype} from {lp1name} to {lp2name} linkname:{lname}";
+                    }
                     AddLateLink(lp1name, lp2name, usetype, comment);
                 }
                 regman.curNodeRegion.IncDefStepIdx();
+                //Debug.Log($"doll1:{doll1} lp1name:{lp1name}  doll2:{doll2} lp2name:{lp2name}");
                 return null;
             }
             var lp1 = nodedict[lp1name];
@@ -998,7 +1003,7 @@ namespace GraphAlgos
                     var nllnk = AddLinkByNodeName(name1, name2, usetype,inLateLinkingPhase:true);
                     if (nllnk == null)
                     {
-                        Debug.LogWarning("Failed to RealizeLateLink");
+                        Debug.LogWarning($"Failed to RealizeLateLink {cmt}");
                     }
                     else
                     {

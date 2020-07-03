@@ -19,7 +19,7 @@ namespace CampusSimulator
         public MapSetPanel mappan;
         public GeneralPanel genpan;
         public FramePanel frapan;
-        public B19Panel b19pan;
+        public BuildingsPanel bldpan;
         public HelpPanel helpan;
         public AboutPanel abtpan;
 
@@ -36,7 +36,7 @@ namespace CampusSimulator
             mappan = Resources.FindObjectsOfTypeAll<MapSetPanel>()[0];
             genpan = Resources.FindObjectsOfTypeAll<GeneralPanel>()[0];
             frapan = Resources.FindObjectsOfTypeAll<FramePanel>()[0];
-            b19pan = Resources.FindObjectsOfTypeAll<B19Panel>()[0];
+            bldpan = Resources.FindObjectsOfTypeAll<BuildingsPanel>()[0];
             helpan = Resources.FindObjectsOfTypeAll<HelpPanel>()[0];
             abtpan = Resources.FindObjectsOfTypeAll<AboutPanel>()[0];
 
@@ -48,7 +48,7 @@ namespace CampusSimulator
             mappan.sman = sman;
             genpan.sman = sman;
             frapan.sman = sman;
-            b19pan.sman = sman;
+            bldpan.sman = sman;
             helpan.sman = sman;
             abtpan.sman = sman;
 
@@ -61,24 +61,30 @@ namespace CampusSimulator
             mappan.Init0();
             genpan.Init0();
             frapan.Init0();
-            b19pan.Init0();
+            bldpan.Init0();
             helpan.Init0();
             abtpan.Init0();
 
             listenForKeys = false;
         }
 
+        public void InitializeScene(SceneSelE newscene)
+        {
+            // most initialization has to happen after the scenes have set their variables, so there is not much here to do
+        }
+
         public void SetScene(SceneSelE newscene)
         {
-            Debug.Log($"UiMan.SetScene: {newscene}");
+            //Debug.Log($"UiMan.SetScene: {newscene}");
             optpan.SetScene(newscene);
             stapan.SetScene(newscene);
-
             infpan.SetScene(newscene);
+
+            // selectble tabs
             mappan.SetScene(newscene);
             genpan.SetScene(newscene);
             frapan.SetScene(newscene);
-            b19pan.SetScene(newscene);
+            bldpan.SetScene(newscene);
             helpan.SetScene(newscene);
             abtpan.SetScene(newscene);
 

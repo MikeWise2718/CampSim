@@ -54,7 +54,7 @@ namespace CampusSimulator
             runButton = transform.Find("RunButton").gameObject.GetComponent<Button>();
             frameButton = transform.Find("FrameButton").gameObject.GetComponent<Button>();
             evacButton = transform.Find("EvacButton").gameObject.GetComponent<Button>();
-            unevacButton = transform.Find("EvacButton").gameObject.GetComponent<Button>();
+            unevacButton = transform.Find("UnEvacButton").gameObject.GetComponent<Button>();
             goButton = transform.Find("GoButton").gameObject.GetComponent<Button>();
             optionsButton = transform.Find("OptionsButton").gameObject.GetComponent<Button>();
             mapfitButton = transform.Find("MapFitButton").gameObject.GetComponent<Button>();
@@ -72,7 +72,6 @@ namespace CampusSimulator
             runButton.onClick.AddListener(delegate { RunButton(); });
             frameButton.onClick.AddListener(delegate { FrameButton(); });
             evacButton.onClick.AddListener(delegate { EvacButton(); });
-            unevacButton.onClick.AddListener(delegate { UnevacButton(); });
             unevacButton.onClick.AddListener(delegate { UnevacButton(); });
             vt2dButton.onClick.AddListener(delegate { Vt2DButton(); });
             freeFlyButton.onClick.AddListener(delegate { FreeFlyButton(); });
@@ -240,7 +239,7 @@ namespace CampusSimulator
         public void QuitButton()
         {
             Debug.Log($"Activating QuitButton");
-            //Application.Quit();
+            Application.Quit();
         }
 
         public void ColorizeButtonStates()

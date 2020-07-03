@@ -497,7 +497,7 @@ namespace CampusSimulator
         }
         void AddAlarmToNode(GameObject parentnode,string alarmname,string nodename,float almheight=2)
         {
-            var lc = bm.sman.linkcloudman;
+            var lc = bm.sman.lcman;
             var lclc = lc.GetGraphCtrl();
             if (!lc.IsNodeName(nodename)) return;
 
@@ -521,24 +521,7 @@ namespace CampusSimulator
             var bmode = bm.bldMode.Get();
             switch (name)
             {
-                case "DubBld1":
-                    {
-                        if (bmode == BuildingMan.BldModeE.full)
-                        {
-                            AddBlock("blk1", new Vector3(108, 20, 80), 23.3, new Vector3(-60.9f, 10, 18.9f));
-                            AddBlock("blk2", new Vector3(40, 10, 22), -15.5, new Vector3(12.6f, 5, 21.8f));
-                        }
-                        break;
-                    }
-                case "Eb12-test":
-                    {
-                        //AddHouse("testhouse", Vector3.one, 0, new Vector3(-6.6f, 1, -97.6f));
-                        if (bmode == BuildingMan.BldModeE.full)
-                        {
-                            AddQuadHouse("testhouse", Vector3.one, 0, Vector3.zero);
-                        }
-                        break;
-                    }
+
                 case "Eb12-22":
                     {
                         defPeoplePerRoom = 10;
@@ -622,7 +605,7 @@ namespace CampusSimulator
                     }
                 default:
                     {
-                        Debug.Log("No building gos for " + name);
+                        //Debug.Log("No building gos for " + name);
                         break;
                     }
             }
@@ -635,11 +618,14 @@ namespace CampusSimulator
             bldgos = new List<GameObject>();
             var bmode = bm.bldMode.Get();
             var tmode = bm.treeMode.Get();
+            var fixedbuildings = bm.fixedblds.Get();
+            var dofixed = fixedbuildings && bmode == BuildingMan.BldModeE.full;
+            //Debug.Log($"{name} fixedbuildings:{fixedbuildings}  bmode:{bmode}  => dofixed:{dofixed}");
             switch (name)
             {
                 case "DubBld1":
                     {
-                        if (bmode == BuildingMan.BldModeE.full)
+                        if (dofixed)
                         {
                             AddBlock("blk1", new Vector3(108, 20, 80), 23.3, new Vector3(-60.9f, 10, 18.9f));
                             AddBlock("blk2", new Vector3(40, 10, 22), -15.5, new Vector3(12.6f, 5, 21.8f));
@@ -649,7 +635,7 @@ namespace CampusSimulator
                 case "Eb12-test":
                     {
                         //AddHouse("testhouse", Vector3.one, 0, new Vector3(-6.6f, 1, -97.6f));
-                        if (bmode == BuildingMan.BldModeE.full)
+                        if (dofixed)
                         {
                             AddQuadHouse("testhouse", Vector3.one, 0, Vector3.zero);
                         }
@@ -662,7 +648,7 @@ namespace CampusSimulator
                             bm.sman.jnman.preferedJourneyBuildingName = name;
                         }
                         AddEb12Alarms();
-                        if (bmode == BuildingMan.BldModeE.full)
+                        if (dofixed)
                         {
                             AddQuadHouse("blk1", new Vector3(23, 8, 14), -1.343, new Vector3(15.26f, 2f, 34.92f), rufcolor: "darkslategray");
                             AddQuadHouse("blk2", new Vector3(23, 8, 14), -1.343, new Vector3(38.16f, 2f, 38.23f), rufcolor: "darkslategray");
@@ -694,7 +680,7 @@ namespace CampusSimulator
                     }
                 case "Eb12-carport":
                     {
-                        if (bmode == BuildingMan.BldModeE.full)
+                        if (dofixed)
                         {
                             AddBlock("carport1", new Vector3(23.5f, 2, 0.1f), 0, new Vector3(21.9f, 1, -11.1f), "darkbrown");
                             AddBlock("carport2", new Vector3(0.1f, 2, 6.7f), 0, new Vector3(10.2f, 1, -7.7f), "darkbrown");
@@ -711,7 +697,7 @@ namespace CampusSimulator
                     }
                 case "Eb17":
                     {
-                        if (bmode == BuildingMan.BldModeE.full)
+                        if (dofixed)
                         {
                             AddQuadHouse("blk1", new Vector3(25.75f, 6.5f, 14.67f), -3.4 + 90, new Vector3(-17.8f, 3.25f, 34.7f), rufcolor: "dimgray");
                         }
@@ -719,7 +705,7 @@ namespace CampusSimulator
                     }
                 case "Eb19":
                     {
-                        if (bmode == BuildingMan.BldModeE.full)
+                        if (dofixed)
                         {
                             AddFlatQuadHouse("blk1", new Vector3(14.91f, 6.5f, 6.48f), -3.4, new Vector3(-24.2f, 3.25f, 9.5f), rufcolor: "dimgray");
                         }
@@ -728,7 +714,7 @@ namespace CampusSimulator
                 case "Eb30":
                     {
 
-                        if (bmode == BuildingMan.BldModeE.full)
+                        if (dofixed)
                         {
                             AddQuadHouse("blk1", new Vector3(15.7f, 6.5f, 12.17f), -3.4, new Vector3(-11.2f, 3.25f, -6.2f), rufcolor: "dimgray");
                         }
@@ -736,7 +722,7 @@ namespace CampusSimulator
                     }
                 case "EbIdb25":
                     {
-                        if (bmode == BuildingMan.BldModeE.full)
+                        if (dofixed)
                         {
                             AddQuadHouse("haus", new Vector3(28.6f, 13f, 13.91f), -3.4, new Vector3(18.9f, 3.25f, -30.1f));
                             //AddBlock("blk1", new Vector3(28.6f, 6.5f, 13.91f), -3.4, new Vector3(18.9f, 3.25f, -30.1f));
@@ -749,7 +735,7 @@ namespace CampusSimulator
                     }
                 case "EbIdb35":
                     {
-                        if (bmode == BuildingMan.BldModeE.full)
+                        if (dofixed)
                         {
                             AddQuadHouse("haus", new Vector3(26.0f, 13f, 13.91f), -3.4, new Vector3(-14.6f, 3.25f, -31.7f));
                             //AddBlock("blk1", new Vector3(26.0f, 6.5f, 13.91f),                 -3.4,     new Vector3(-14.6f, 3.25f, -31.7f));
@@ -762,7 +748,7 @@ namespace CampusSimulator
                     }
                 case "EbOphome":
                     {
-                        if (bmode == BuildingMan.BldModeE.full)
+                        if (dofixed)
                         {
                             AddFlatQuadHouse("blk1", new Vector3(26.9f, 5, 16.7f), -3.4, new Vector3(54.6f, 4f, -2.7f));
                             AddFlatQuadHouse("blk2", new Vector3(26.9f, 5, 16.7f), -3.4, new Vector3(56.53f, 4f, -35.05f));
@@ -773,7 +759,7 @@ namespace CampusSimulator
                     }
                 case "EbRewe":
                     {
-                        if (bmode == BuildingMan.BldModeE.full)
+                        if (dofixed)
                         {
                             AddQuadHouse("blk1", new Vector3(60, 5, 60), -28.82 + 90, new Vector3(300.5f, 2.5f, 156.1f), rufcolor: "darkgreen");
                         }
@@ -850,7 +836,7 @@ namespace CampusSimulator
                     }
                 default:
                     {
-                        Debug.Log("No building gos for " + name);
+                        //Debug.Log("No building gos for " + name);
                         break;
                     }
             }

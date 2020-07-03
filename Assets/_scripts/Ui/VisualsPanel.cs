@@ -44,7 +44,7 @@ public class VisualsPanel : MonoBehaviour
     {
         uiman = sman.uiman;
         bman = sman.bdman;
-        lman = sman.linkcloudman;
+        lman = sman.lcman;
         gman = sman.gaman;
         mman = sman.mpman;
         vman = sman.vcman;

@@ -94,7 +94,7 @@ namespace CampusSimulator
         {
             this.walknode = walknode;
             this.drivenode = drivenode;
-            var lclc = gm.sman.linkcloudman.GetGraphCtrl();
+            var lclc = gm.sman.lcman.GetGraphCtrl();
             this.wlkpt = lclc.GetNode(walknode).pt;
             this.drvpt = lclc.GetNode(drivenode).pt;
         }

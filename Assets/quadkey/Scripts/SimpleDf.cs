@@ -116,6 +116,7 @@ namespace Aiskwk.Dataframe
     public enum DfStatus { uninit, init, reading, erroredOutOfReading, finished }
     public class SimpleDf
     {
+        public string csvFileName;
         public string name;
         public string comment;
         public DfStatus dfStatus = DfStatus.uninit;
@@ -743,6 +744,8 @@ namespace Aiskwk.Dataframe
                 }
             }
         }
+        bool warnedAboutCommas = false;
+        string fline = "";
         public void ReadCsvLine(string line, ref int idatalines, ref int ncommas, ref List<string> lcolnames)
         {
             if (line == "") return;
@@ -765,10 +768,16 @@ namespace Aiskwk.Dataframe
             if (ncommas == 0)
             {
                 ncommas = sar.Length;
+                warnedAboutCommas = false;
+                fline = line;
             }
             else if (ncommas != sar.Length)
             {
-                Debug.LogWarning($"Inconsistent number of commas first:{ncommas} current:{sar.Length}");
+                if (!warnedAboutCommas)
+                {
+                    Debug.LogWarning($"Csv file:{csvFileName} - Inconsistent number of commas in first line:{ncommas} current:{sar.Length}");
+                    warnedAboutCommas = true;
+                }
             }
             if (idatalines == 0)
             {
@@ -789,7 +798,7 @@ namespace Aiskwk.Dataframe
                 {
                     if (icol >= lcolnames.Count)
                     {
-                        Debug.Log("Opps");
+                        continue; // probably just an extra comma at the end
                     }
                     var cname = lcolnames[icol];
                     if (idatalines == 1)
@@ -943,9 +952,22 @@ namespace Aiskwk.Dataframe
         }
         public static SimpleDf Subset(SimpleDf sdf, string newname = "ddf", List<bool> filter = null, bool quiet = true)
         {
-            Debug.Log("Subsetting " + newname);
+            //Debug.Log("Subsetting " + newname + " on filter");
             var ddf = new SimpleDf(newname);
             ddf._CopyInColDefs(sdf, "Copy");
+            ddf._CopyInRows(sdf, reorderIdx: null, boolMask: filter);
+            if (SdfConsistencyLevel == SdfConsistencyLevel.aggressive)
+            {
+                ddf.CheckConsistency("After Subset", quiet: quiet);
+            }
+            return ddf;
+        }
+        public static SimpleDf SubsetOnStringColVal(SimpleDf sdf,  string colname,string colval, bool quiet = true, string newname = "ddf")
+        {
+            //Debug.Log("Subsetting " + newname + " on col " + colname +" val "+colval );
+            var ddf = new SimpleDf(newname);
+            ddf._CopyInColDefs(sdf, "Copy");
+            var filter = sdf.GetStringColEqVal(colname,colval);
             ddf._CopyInRows(sdf, reorderIdx: null, boolMask: filter);
             if (SdfConsistencyLevel == SdfConsistencyLevel.aggressive)
             {
@@ -992,6 +1014,7 @@ namespace Aiskwk.Dataframe
             int ncommas = 0;
             linecount = 0;
             InitDf();
+            csvFileName = fname;
             dfStatus = DfStatus.reading;
             DataError.InitErrorCounts();
             try
@@ -1374,9 +1397,31 @@ namespace Aiskwk.Dataframe
             var icol = ColIdx(colname);
             switch (coltypes[icol])
             {
+                case SdfColType.dfint:
+                    {
+                        var rv = new List<float>();
+                        var ilst = intcols[colname];
+                        foreach (var iv in ilst)
+                        {
+                            rv.Add(iv);
+                        }
+                        return rv;
+                    }
+                case SdfColType.dfdouble:
+                    {
+                        var rv = new List<float>();
+                        var dlst = doubcols[colname];
+                        foreach (var dv in dlst)
+                        {
+                            rv.Add((float) dv);
+                        }
+                        return rv;
+                    }
                 case SdfColType.dffloat:
-                    var rv = new List<float>(floatcols[colname]);
-                    return rv;
+                    {
+                        var rv = new List<float>(floatcols[colname]);
+                        return rv;
+                    }
                 default:
                     return null;
             }
@@ -1392,6 +1437,17 @@ namespace Aiskwk.Dataframe
                     var rv = stringcols[colname];
                     return rv;
             }
+        }
+
+        public List<bool> GetStringColEqVal(string colname,string targval)
+        {
+            var scol = GetStringCol(colname);
+            var rv = new List<bool>();
+            foreach(var sval in scol)
+            {
+                rv.Add(sval == targval);
+            }
+            return rv;
         }
         public List<double> GetDoubleCol(string colname)
         {
@@ -1434,9 +1490,31 @@ namespace Aiskwk.Dataframe
             var icol = ColIdx(colname);
             switch (coltypes[icol])
             {
+                case SdfColType.dfdouble:
+                    {
+                        var rv = new List<int>();
+                        var dlst = doubcols[colname];
+                        foreach (var dv in dlst)
+                        {
+                            rv.Add((int)dv);
+                        }
+                        return rv;
+                    }
+                case SdfColType.dffloat:
+                    {
+                        var rv = new List<int>();
+                        var flst = floatcols[colname];
+                        foreach (var dv in flst)
+                        {
+                            rv.Add((int)dv);
+                        }
+                        return rv;
+                    }
                 case SdfColType.dfint:
-                    var rv = new List<int>(intcols[colname]);
-                    return rv;
+                    {
+                        var rv = new List<int>(intcols[colname]);
+                        return rv;
+                    }
                 default:
                     return null;
             }

@@ -100,7 +100,7 @@ namespace CampusSimulator
                 campt.y -= sman.home_height;
                 //campt.y = 0;
                 float pathlen = 0;
-                var pathcampt = sman.hlpathctrl.FindClosestPointOnPath(campt, out pathlen);
+                var pathcampt = sman.firstPersonPathCtrl.FindClosestPointOnPath(campt, out pathlen);
 
                 int i = emlist.Count;
                 var empt = new optimAnchorPoint("pt-" + i, campt, pathcampt, pathlen);

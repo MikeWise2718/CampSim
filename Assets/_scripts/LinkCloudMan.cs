@@ -158,13 +158,14 @@ namespace CampusSimulator
             initVals();
         }
 
-        public void SetScene(SceneSelE newregion)
+        public void InitializeScene(SceneSelE newregion)
         {
             LcMapMaker.Reset();
             initVals();
         }
 
-        public void SetScene2(SceneSelE newregion)
+
+        public void SetScene(SceneSelE newregion)
         {
             //Debug.Log("SetScene2");
             var genmode = graphGenOptions.Get();
@@ -309,9 +310,10 @@ namespace CampusSimulator
             grctrl.maxRanHeight = LinkFLoor.max;
             grctrl.minRanHeight = LinkFLoor.min;
 
-
             mm.maxVoiceKeywords = this.maxVoiceKeywords;
-            mm.AddGraphToLinkCloud(graphScene,genmode);
+            var addWallLinks = sman.bdman.walllinks.Get();
+            //Debug.Log($"GenLinkCloud addWallLinks:{addWallLinks}");
+            mm.AddGraphToLinkCloud(graphScene,genmode,addWallLinks);
             nVoiceKeywords = mm.nVoiceKeywords;
             if (CanGetHeights())
             {
@@ -498,7 +500,7 @@ namespace CampusSimulator
             }
             CreateGrcGos();
         }
-        public void DelLinkCloud()
+        public void DelLcGos()
         {
             DeleteGrcGos();
             grctrl = null;

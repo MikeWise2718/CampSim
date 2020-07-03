@@ -229,9 +229,14 @@ namespace CampusSimulator
             }
         }
 
-        public void SetScene(SceneSelE newregion)
+        public void InitializeScene(SceneSelE newregion)
         {
-            Debug.LogWarning($"FrameMan.SetScene setregion:{newregion}");
+            GetInitials();
+        }
+
+        public void GetInitials()
+        {
+            //Debug.Log($"FrameMan.SetScene setregion:{newregion}");
             visibilityTiedToDetectability.GetInitial(false);
             frameJourneys.GetInitial(false);
             frameBuildings.GetInitial(false);
@@ -247,10 +252,15 @@ namespace CampusSimulator
             detectUnknown.GetInitial(false);
             topLabelText.GetInitial(textContentE.none);
             botLabelText.GetInitial(textContentE.name);
-            Debug.LogWarning($"FrameMan.SetScene {newregion}- vt2d:{visibilityTiedToDetectability.Get()} valueretrieved:{visibilityTiedToDetectability.ValueRetrievedFromPersistentStore()}");
+            //Debug.Log($"FrameMan.SetScene {newregion}- vt2d:{visibilityTiedToDetectability.Get()} valueretrieved:{visibilityTiedToDetectability.ValueRetrievedFromPersistentStore()}");
         }
 
-        private void LateUpdate()
+        public void SetScene(SceneSelE newregion)
+        {
+        }
+
+
+            private void LateUpdate()
         {
             foundLabelList = new List<LabelEntry>();
             if (showCarRects.Get())

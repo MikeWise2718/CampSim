@@ -233,15 +233,15 @@ namespace CampusSimulator
         {
             if (startnodename == "")
             {
-                var sp = sman.linkcloudman.GetNode(0);
+                var sp = sman.lcman.GetNode(0);
                 startnodename = sp.name;
             }
             if (endnodename == "")
             {
-                var ep = sman.linkcloudman.GetNode(-1); // last point
+                var ep = sman.lcman.GetNode(-1); // last point
                 endnodename = ep.name;
             }
-            path = sman.linkcloudman.GenAstar(startnodename, endnodename, captype);
+            path = sman.lcman.GenAstar(startnodename, endnodename, captype);
             if (path == null)
             {
                 Debug.LogWarning("A * path was not found for captype "+captype);
@@ -262,9 +262,9 @@ namespace CampusSimulator
         }
         public void GenRanPath()
         {
-            path = sman.linkcloudman.GenRanPath(startnodename, 12);
+            path = sman.lcman.GenRanPath(startnodename, 12);
         }
-        public void DeletePath()
+        public void DeletePathGoesAndInit()
         {
             DeletePathGos();
             path = null;
