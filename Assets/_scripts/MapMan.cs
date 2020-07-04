@@ -286,7 +286,7 @@ namespace CampusSimulator
                 }
             }
             var (nbm,nel) = await qmapman.SetMode(qmapman.qmapMode);
-            sman.PostMapLoadSetScene();
+            sman.PostMapLoadSetScene(); // this has to go after the await
             if (nbm>0 || nel>0)
             {
                 // if we loaded bitmaps we need to redraw everything from scratch
@@ -800,7 +800,7 @@ namespace CampusSimulator
                         hasLLmap = false;
                         break;
                     case SceneSelE.Custom:
-                        maplat = 45.412219;
+                        maplat = 48.5126;
                         maplng = -116.328921;
                         mapscale = 3.2f;
                         maprot = Vector3.zero;
@@ -815,6 +815,38 @@ namespace CampusSimulator
                         isCustomizable = true;
                         vviewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
                         hasLLmap = false;
+                        break;
+                    case SceneSelE.HiddenLakeLookout:
+                        maplat = 45.412219;
+                        maplng = -121.2357;
+                        maprot = Vector3.zero;
+                        maptrans = Vector3.zero;
+                        xdistkm = 10;
+                        zdistkm = 10;
+                        lod = 14;
+                        useElesForNow = true;
+                        useViewer = true;
+                        roty2 = 0;
+                        mapscale = 1f;
+                        vviewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
+                        hasLLmap = false;
+                        isCustomizable = false;
+                        break;
+                    case SceneSelE.TeneriffeMtn:
+                        maplat = 47.501632;
+                        maplng = -121.708343;
+                        maprot = Vector3.zero;
+                        maptrans = Vector3.zero;
+                        xdistkm = 10;
+                        zdistkm = 10;
+                        lod = 14;
+                        useElesForNow = true;
+                        useViewer = true;
+                        roty2 = 0;
+                        mapscale = 1f;
+                        vviewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
+                        hasLLmap = false;
+                        isCustomizable = false;
                         break;
                     case SceneSelE.Riggins:
                         maplat = 45.412219;

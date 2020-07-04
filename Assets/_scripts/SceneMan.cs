@@ -16,7 +16,7 @@ namespace CampusSimulator
 {
     public enum RouteGarnishE { none, names, coords, all }
 
-    public enum SceneSelE { MsftCoreCampus, MsftB19focused, MsftRedwest, Custom, Seattle, MtStHelens,Riggins, Eb12,Eb12small,  MsftDublin, Tukwila, None }
+    public enum SceneSelE { MsftCoreCampus, MsftB19focused, MsftRedwest, Custom, Seattle, MtStHelens,Riggins, Eb12,Eb12small,  MsftDublin, Tukwila, HiddenLakeLookout,TeneriffeMtn, None }
 
     public class SceneMan : MonoBehaviour
     {
@@ -270,7 +270,7 @@ namespace CampusSimulator
 
                     // Now do value initialization 
                     this.InitializeScene(newscene);// start with setting the scene
-                    mpman.InitializeScene(newscene);
+                    mpman.InitializeScene(newscene); // Note this has an await buried in it and afterwards a call to smam.PostMapLoadSetScene below
                     vcman.InitializeScene(newscene);
                     bdman.InitializeScene(newscene);
                     gaman.InitializeScene(newscene);

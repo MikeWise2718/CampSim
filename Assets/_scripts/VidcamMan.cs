@@ -39,19 +39,7 @@ namespace CampusSimulator
             bgim.RealizeBackground();
         }
 
-        public void SetScene(SceneSelE newscene)
-        {
-            var vcamname = mainCamName.Get();
-            if (!vidcam.ContainsKey(vcamname))
-            {
-                vcamname = "Viewer";
-            }
-            SetMainCameraToVcam(vcamname);
-        }
-        public void PostTerrainLoadAdjustments()
-        {
-            AdjustHeightsForTerrain();
-        }
+
         public void InitializeScene(SceneSelE newscene)
         {
             DelVidcams();
@@ -86,6 +74,21 @@ namespace CampusSimulator
             }
             vidcamlist.Insert(0,"Viewer");
         }
+
+        public void SetScene(SceneSelE newscene)
+        {
+            var vcamname = mainCamName.Get();
+            if (!vidcam.ContainsKey(vcamname))
+            {
+                vcamname = "Viewer";
+            }
+            SetMainCameraToVcam(vcamname);
+        }
+        public void PostTerrainLoadAdjustments()
+        {
+            AdjustHeightsForTerrain();
+        }
+
         public bool toggleFreeFly;
         public FreeFlyCam ffc = null;
         public bool inFreeFly = false;

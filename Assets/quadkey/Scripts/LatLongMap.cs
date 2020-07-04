@@ -223,6 +223,7 @@ namespace Aiskwk.Map
     {
         public string name;
         public int lod;
+        public string boxSpec = "";
         public bool hasMidDefinitions = false;
         public LatLng maxll = null;
         public LatLng minll = null;
@@ -303,6 +304,7 @@ namespace Aiskwk.Map
             var dmy = (LatLng.DistanceV2d(metul, metbl) + LatLng.DistanceV2d(metur, metbr)) / 2;// long live symmetry
             extentMetersBadEstimate = new Vector2((float)dmx, (float)dmy);
             extentMeters1 = groundMetersPerPixel * extentPixels;
+            boxSpec = $"{latmin:f8},{lngmin:f8}, {latmax:f8},{lngmax:f8}";
         }
         public LatLngBox(LatLng llorg, double latExtentKm, double lngExtentKm, string name = "llbox", int lod = 16)
         {
