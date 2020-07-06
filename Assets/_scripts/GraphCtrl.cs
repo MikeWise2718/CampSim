@@ -996,7 +996,9 @@ namespace GraphAlgos
                         var reg = regman.GetRegion(regname);
                         if (reg == null)
                         {
-                            Debug.LogWarning($"Bad region name:{regname}  i:{iter} iter:{iter}");
+                            Debug.LogWarning($"Bad region name:{regname}  ilnk:{ilnk} iter:{iter} nllnkcnt:{nllnkcnt}");
+                            ilnk++;
+                            nllnkcnt = latelinks.Count;
                             continue;
                         }
                         var pt = GetNode(name1).pt;
