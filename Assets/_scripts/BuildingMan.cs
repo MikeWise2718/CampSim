@@ -132,6 +132,7 @@ namespace CampusSimulator
         {
             DelBuildings();
             var osmloadspec = "";
+            var ptscale = 1f;
             switch (newregion)
             {
                 case SceneSelE.MsftRedwest:
@@ -142,11 +143,25 @@ namespace CampusSimulator
                     break;
                 case SceneSelE.MsftDublin:
                     MakeBuildings("Dub");
+                    osmloadspec = "msftdublin";
+                    //ptscale = 1000f;
                     break;
                 case SceneSelE.Eb12small:
                 case SceneSelE.Eb12:
                     MakeBuildings("Eb");
                     osmloadspec = "eb12small";
+                    break;
+                case SceneSelE.TeneriffeMtn:
+                    osmloadspec = "tenmtn";
+                    //ptscale = 1000f;
+                    break;
+                case SceneSelE.TukSouCen:
+                    osmloadspec = "tuksoucen";
+                    //ptscale = 1000f;
+                    break;
+                case SceneSelE.HiddenLakeLookout:
+                    osmloadspec = "hidlakelook";
+                    //ptscale = 1000f;
                     break;
                 default:
                 case SceneSelE.None:
@@ -160,7 +175,11 @@ namespace CampusSimulator
             {
                 var pgvd = new PolyGenVekMapDel(sman.mpman.GetHeightVector3);
                 var bpg = new BldPolyGen();
-                var lbgos = bpg.LoadRegion(this.gameObject, osmloadspec,1f,pgvd:pgvd);
+                var llm1 = sman.glbllm;
+                var llm2 = sman.mpman.GetLatLongMap(QkCoordSys.QkWc);
+                var llm = llm1;
+                if (!llm1.isOk) llm = llm2;
+                var lbgos = bpg.LoadRegion(this.gameObject, osmloadspec,ptscale:ptscale,pgvd:pgvd,llm:llm);
                 bldspecs.AddRange(lbgos);
             }
         }
@@ -305,7 +324,8 @@ namespace CampusSimulator
             var bld = bgo.AddComponent<Building>();
             bld.AddBldDetails(this);
             AddBuildingToCollection(bld); /// has to be afterwards because of the sorted names for journeys
-            bld.llm = bgo.AddComponent<LatLongMap>(); // todo uncomment
+            //bld.llm = bgo.AddComponent<LatLongMap>(); // todo uncomment
+            bld.llm = new LatLongMap(); // todo uncomment
             //bld.llm.AddLlmDetails();
             UpdateBldStats();
         }

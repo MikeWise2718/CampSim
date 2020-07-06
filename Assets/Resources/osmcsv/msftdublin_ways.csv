@@ -1,0 +1,997 @@
+osm_wid,name,osmtype,osmsubtype,linkuse,nnodes,lat,lng,z,x,height,levels
+w4895178,motorway_link01,highway,motorway_link,highway,9,53.2700745,-6.2123100,-1.0369,0.1182,0,0
+w4895336,Leopardstown Road,highway,trunk,road,4,53.2712007,-6.2104958,-0.9162,0.2434,0,0
+w4895354,Brewery Road,highway,trunk,road,13,53.2745587,-6.1999358,-0.2140,0.6168,0,0
+w5409396,Leopardstown Road01,highway,trunk,road,5,53.2706876,-6.2110067,-0.9502,0.1864,0,0
+w5409401,Leopardstown Road02,highway,secondary,road,5,53.2705671,-6.2111380,-0.9589,0.1730,0,0
+w5409402,Leopardstown Road03,highway,secondary,road,5,53.2705929,-6.2109515,-0.9465,0.1759,0,0
+w5409403,Murphystown Road,highway,residential,slowroad,22,53.2670037,-6.2108874,-0.9423,-0.2232,0,0
+w5574002,Arena Road,highway,unclassified,road,12,53.2739217,-6.2077744,-0.7352,0.5460,0,0
+w5721586,Leopardstown Road04,highway,secondary,road,2,53.2701568,-6.2113509,-0.9731,0.1274,0,0
+w5825851,Leopardstown Road05,highway,secondary,road,2,53.2704636,-6.2111144,-0.9574,0.1615,0,0
+w6228843,residential01,highway,residential,slowroad,22,53.2650650,-6.2115940,-0.9893,-0.4388,0,0
+w6228845,Glencairn Road,highway,residential,slowroad,9,53.2649227,-6.2110553,-0.9534,-0.4546,0,0
+w6268500,unclassified01,highway,unclassified,road,21,53.2691768,-6.1942600,0.1635,0.0184,0,0
+w6268664,Brighton Road,highway,tertiary,road,30,53.2623450,-6.1791785,1.1664,-0.7413,0,0
+w6268665,Torquay Road,highway,tertiary,road,22,53.2713594,-6.1876963,0.6000,0.2611,0,0
+w6269907,service01,highway,service,driveway,9,53.2674858,-6.1946238,0.1393,-0.1696,0,0
+w6269908,service02,highway,service,driveway,2,53.2670576,-6.1958040,0.0608,-0.2173,0,0
+w6269909,service03,highway,service,driveway,15,53.2704852,-6.1943467,0.1577,0.1639,0,0
+w6269910,service04,highway,service,driveway,16,53.2647095,-6.1948401,0.1249,-0.4783,0,0
+w6270108,service05,highway,service,driveway,9,53.2721703,-6.1970714,-0.0235,0.3512,0,0
+w6288042,motorway_link02,highway,motorway_link,highway,5,53.2708153,-6.2117912,-1.0024,0.2006,0,0
+w8075811,motorway_link03,highway,motorway_link,highway,7,53.2709397,-6.2136170,-1.1238,0.2144,0,0
+w8075993,service06,highway,service,driveway,3,53.2708127,-6.1970109,-0.0195,0.2003,0,0
+w8075994,service07,highway,service,driveway,14,53.2702041,-6.1949823,0.1154,0.1326,0,0
+w9932353,service08,highway,service,driveway,9,53.2663455,-6.1856548,0.7357,-0.2964,0,0
+w9932355,service09,highway,service,driveway,9,53.2662930,-6.1877253,0.5980,-0.3023,0,0
+w9932356,service10,highway,service,driveway,5,53.2663186,-6.1865768,0.6744,-0.2994,0,0
+w9932357,Westminster Road,highway,tertiary,road,20,53.2687808,-6.1772464,1.2949,-0.0256,0,0
+w9932358,Westminister Court,highway,residential,slowroad,7,53.2668101,-6.1844978,0.8127,-0.2448,0,0
+w9935043,Burton Hall Drive,highway,tertiary,road,4,53.2720399,-6.2040065,-0.4847,0.3368,0,0
+w14179228,Glencairn Avenue,highway,residential,slowroad,9,53.2636174,-6.2096812,-0.8621,-0.5998,0,0
+w14179392,Glencairn Road01,highway,residential,slowroad,12,53.2643375,-6.2087255,-0.7985,-0.5197,0,0
+w14179458,Glencairn View,highway,residential,slowroad,4,53.2652831,-6.2105256,-0.9182,-0.4146,0,0
+w14179483,Glencairn Garth,highway,residential,slowroad,4,53.2655797,-6.2092570,-0.8338,-0.3816,0,0
+w14179530,Glencairn Chase,highway,residential,slowroad,11,53.2648665,-6.2070186,-0.6850,-0.4609,0,0
+w14179609,Glencairn Way,highway,residential,slowroad,7,53.2648892,-6.2083084,-0.7708,-0.4584,0,0
+w16584429,The Chase,highway,residential,slowroad,11,53.2735506,-6.1995880,-0.1908,0.5047,0,0
+w16584439,residential02,highway,residential,slowroad,2,53.2732970,-6.1989311,-0.1472,0.4765,0,0
+w23024719,Southern Cross Route,highway,motorway,highway,5,53.2702979,-6.2123844,-1.0418,0.1431,0,0
+w23399039,Tudor Lawns,highway,residential,slowroad,10,53.2727781,-6.1951436,0.1047,0.4188,0,0
+w23399040,Tudor Lawns01,highway,residential,slowroad,19,53.2720797,-6.1944929,0.1480,0.3412,0,0
+w23399041,service11,highway,service,driveway,6,53.2733998,-6.1965426,0.0117,0.4880,0,0
+w23399042,Burton Park,highway,residential,slowroad,3,53.2717061,-6.2081477,-0.7601,0.2996,0,0
+w23399043,service12,highway,service,driveway,21,53.2706956,-6.2077365,-0.7327,0.1873,0,0
+w23399044,service13,highway,service,driveway,12,53.2704342,-6.2066330,-0.6593,0.1582,0,0
+w23399045,Central Park,highway,service,driveway,14,53.2714720,-6.2026922,-0.3973,0.2736,0,0
+w23399047,unclassified02,highway,unclassified,road,22,53.2676808,-6.1981682,-0.0964,-0.1480,0,0
+w23399048,service14,highway,service,driveway,7,53.2690314,-6.1984414,-0.1146,0.0022,0,0
+w23399049,unclassified03,highway,unclassified,road,28,53.2689638,-6.1986517,-0.1286,-0.0053,0,0
+w23399052,service15,highway,service,driveway,3,53.2673729,-6.1983626,-0.1094,-0.1822,0,0
+w23399053,service16,highway,service,driveway,4,53.2677164,-6.1984554,-0.1155,-0.1440,0,0
+w23399054,service17,highway,service,driveway,9,53.2675681,-6.1974693,-0.0499,-0.1605,0,0
+w23399059,service18,highway,service,driveway,4,53.2694045,-6.1994345,-0.1806,0.0437,0,0
+w23399061,service19,highway,service,driveway,14,53.2692977,-6.1979120,-0.0794,0.0318,0,0
+w23399062,service20,highway,service,driveway,6,53.2701683,-6.1982228,-0.1001,0.1286,0,0
+w23399063,unclassified04,highway,unclassified,road,21,53.2709215,-6.1989998,-0.1517,0.2124,0,0
+w23399064,service21,highway,service,driveway,5,53.2712375,-6.1985299,-0.1205,0.2475,0,0
+w23399065,unclassified05,highway,unclassified,road,5,53.2710392,-6.1995613,-0.1891,0.2255,0,0
+w23399066,service22,highway,service,driveway,13,53.2705329,-6.1979456,-0.0816,0.1692,0,0
+w23399068,service23,highway,service,driveway,3,53.2707959,-6.2015240,-0.3196,0.1984,0,0
+w23399069,service24,highway,service,driveway,5,53.2713130,-6.2014590,-0.3153,0.2559,0,0
+w23399070,service25,highway,service,driveway,10,53.2690117,-6.2018880,-0.3438,0.0000,0,0
+w23399071,service26,highway,service,driveway,20,53.2687274,-6.2037877,-0.4701,-0.0316,0,0
+w23399072,service27,highway,service,driveway,7,53.2687835,-6.2030995,-0.4244,-0.0253,0,0
+w23399073,service28,highway,service,driveway,6,53.2697378,-6.2016361,-0.3270,0.0808,0,0
+w23399074,service29,highway,service,driveway,13,53.2698284,-6.2031128,-0.4252,0.0908,0,0
+w23399076,unclassified06,highway,unclassified,road,6,53.2716179,-6.2056009,-0.5907,0.2898,0,0
+w23399077,Central Park01,highway,unclassified,road,9,53.2716822,-6.2048856,-0.5431,0.2970,0,0
+w23399078,Central Park02,highway,unclassified,road,30,53.2710622,-6.2053492,-0.5740,0.2280,0,0
+w23399083,service30,highway,service,driveway,12,53.2734289,-6.1958151,0.0601,0.4912,0,0
+w24722362,Tudor Lawns02,highway,residential,slowroad,13,53.2723366,-6.1936947,0.2011,0.3697,0,0
+w27313444,Glencairn Heath,highway,residential,slowroad,5,53.2638647,-6.2106906,-0.9292,-0.5723,0,0
+w28889197,The Hedgerows,highway,service,driveway,5,53.2674530,-6.1849032,0.7857,-0.1733,0,0
+w28889315,The Coppins,highway,residential,slowroad,9,53.2649307,-6.1806709,1.0672,-0.4538,0,0
+w28889325,Avalon,highway,residential,slowroad,8,53.2649918,-6.1833591,0.8884,-0.4470,0,0
+w28889616,Brighton Lodge,highway,residential,slowroad,4,53.2656200,-6.1841035,0.8389,-0.3771,0,0
+w28889618,Brighton Lodge01,highway,residential,slowroad,3,53.2659120,-6.1837535,0.8622,-0.3446,0,0
+w28934226,The Birches,highway,residential,slowroad,9,53.2704577,-6.1830558,0.9086,0.1608,0,0
+w28934231,The By Ways,highway,residential,slowroad,2,53.2678005,-6.1814282,1.0168,-0.1346,0,0
+w29046213,The Birches01,highway,residential,slowroad,10,53.2691981,-6.1820885,0.9729,0.0208,0,0
+w34259034,cycleway01,highway,cycleway,walkway,52,53.2630649,-6.2008543,-0.2751,-0.6612,0,0
+w34259038,cycleway02,highway,cycleway,walkway,2,53.2653734,-6.2077318,-0.7324,-0.4045,0,0
+w34259040,Orby Way,highway,residential,slowroad,6,53.2641544,-6.2049614,-0.5482,-0.5401,0,0
+w34259044,Orby Court,highway,residential,slowroad,2,53.2654205,-6.2013073,-0.3052,-0.3993,0,0
+w34259045,Orby Close,highway,residential,slowroad,5,53.2645233,-6.2016501,-0.3280,-0.4991,0,0
+w34259046,Orby View,highway,residential,slowroad,10,53.2643067,-6.2029993,-0.4177,-0.5231,0,0
+w34259866,Orby Avenue,highway,residential,slowroad,3,53.2652295,-6.2014538,-0.3149,-0.4205,0,0
+w40024395,service31,highway,service,driveway,2,53.2716109,-6.1851764,0.7675,0.2890,0,0
+w49577166,service32,highway,service,driveway,20,53.2676281,-6.1987967,-0.1382,-0.1538,0,0
+w51270106,service33,highway,service,driveway,7,53.2669870,-6.1993065,-0.1721,-0.2251,0,0
+w51270107,service34,highway,service,driveway,6,53.2674191,-6.1980484,-0.0885,-0.1771,0,0
+w51270108,footway01,highway,footway,walkway,22,53.2680421,-6.1968276,-0.0073,-0.1078,0,0
+w51270109,footway02,highway,footway,walkway,3,53.2678757,-6.1969142,-0.0130,-0.1263,0,0
+w51304825,unclassified07,highway,unclassified,road,8,53.2683666,-6.1982105,-0.0992,-0.0717,0,0
+w51304974,service35,highway,service,driveway,14,53.2685249,-6.1991306,-0.1604,-0.0541,0,0
+w51341246,service36,highway,service,driveway,2,53.2654844,-6.1965506,0.0111,-0.3922,0,0
+w51445700,Leopardstown Road06,highway,trunk,road,13,53.2718418,-6.2063035,-0.6374,0.3147,0,0
+w51445702,Leopardstown Road07,highway,trunk,road,15,53.2716133,-6.2067202,-0.6651,0.2893,0,0
+w51445704,Leopardstown Road08,highway,trunk,road,3,53.2710137,-6.2103094,-0.9038,0.2226,0,0
+w64672921,service37,highway,service,driveway,26,53.2666017,-6.1955970,0.0746,-0.2680,0,0
+w64672923,service38,highway,service,driveway,2,53.2646422,-6.1955045,0.0807,-0.4858,0,0
+w64672924,service39,highway,service,driveway,2,53.2645794,-6.1961984,0.0346,-0.4928,0,0
+w64672925,service40,highway,service,driveway,2,53.2645684,-6.1953276,0.0925,-0.4940,0,0
+w64672926,service41,highway,service,driveway,7,53.2644858,-6.1953437,0.0914,-0.5032,0,0
+w64672929,service42,highway,service,driveway,2,53.2645190,-6.1951567,0.1038,-0.4995,0,0
+w70869582,South Eastern Motorway,highway,motorway,highway,9,53.2691756,-6.2086986,-0.7967,0.0183,0,0
+w80339550,Leopardstown Road09,highway,trunk,road,5,53.2708223,-6.2106394,-0.9258,0.2014,0,0
+w81176039,Leopardstown Road10,highway,trunk,road,16,53.2710665,-6.2113268,-0.9715,0.2285,0,0
+w81176040,Leopardstown Road11,highway,trunk,road,7,53.2710837,-6.2106178,-0.9243,0.2304,0,0
+w81957633,footway03,highway,footway,walkway,4,53.2699147,-6.2041277,-0.4927,0.1004,0,0
+w81957634,footway04,highway,footway,walkway,6,53.2660282,-6.2102772,-0.9017,-0.3317,0,0
+w81957641,pedestrian01,highway,pedestrian,walkway,5,53.2702052,-6.2037668,-0.4687,0.1327,0,0
+w83187000,service43,highway,service,driveway,2,53.2671232,-6.1976435,-0.0615,-0.2100,0,0
+w83187001,service44,highway,service,driveway,3,53.2671732,-6.1970262,-0.0205,-0.2044,0,0
+w83187124,Leopardstown Road12,highway,secondary,road,5,53.2733251,-6.1974823,-0.0508,0.4797,0,0
+w83187125,unclassified08,highway,unclassified,road,20,53.2706546,-6.1968525,-0.0089,0.1827,0,0
+w86207883,service45,highway,service,driveway,8,53.2691793,-6.2014530,-0.3149,0.0187,0,0
+w86207886,service46,highway,service,driveway,7,53.2692093,-6.2009270,-0.2799,0.0220,0,0
+w86207888,service47,highway,service,driveway,16,53.2700525,-6.1997546,-0.2019,0.1158,0,0
+w86207894,service48,highway,service,driveway,3,53.2697451,-6.2023015,-0.3713,0.0816,0,0
+w86207895,footway05,highway,footway,walkway,10,53.2703176,-6.2027411,-0.4005,0.1452,0,0
+w86209154,footway06,highway,footway,walkway,2,53.2727261,-6.1943629,0.1566,0.4131,0,0
+w86209155,service49,highway,service,driveway,12,53.2735159,-6.1942300,0.1655,0.5009,0,0
+w86216778,Brighton Cottages,highway,residential,slowroad,5,53.2659559,-6.1835895,0.8731,-0.3398,0,0
+w86216781,unclassified09,highway,unclassified,road,5,53.2668575,-6.1825057,0.9451,-0.2395,0,0
+w86216782,service50,highway,service,driveway,4,53.2650323,-6.1830709,0.9076,-0.4425,0,0
+w88821373,Glencairn View01,highway,residential,slowroad,5,53.2655914,-6.2085538,-0.7871,-0.3803,0,0
+w88821472,service51,highway,service,driveway,5,53.2665187,-6.2089630,-0.8143,-0.2772,0,0
+w88821496,Orby Park,highway,residential,slowroad,6,53.2644073,-6.2008653,-0.2758,-0.5120,0,0
+w89685878,service52,highway,service,driveway,2,53.2680923,-6.1943461,0.1577,-0.1022,0,0
+w89685890,service53,highway,service,driveway,6,53.2715853,-6.1979676,-0.0831,0.2862,0,0
+w89685891,service54,highway,service,driveway,7,53.2679445,-6.1945111,0.1468,-0.1186,0,0
+w89685896,service55,highway,service,driveway,20,53.2714799,-6.1974372,-0.0478,0.2745,0,0
+w89685904,service56,highway,service,driveway,3,53.2676808,-6.1944121,0.1534,-0.1480,0,0
+w89685908,service57,highway,service,driveway,2,53.2679448,-6.1943957,0.1544,-0.1186,0,0
+w89685913,service58,highway,service,driveway,5,53.2716414,-6.1966754,0.0028,0.2924,0,0
+w89685921,service59,highway,service,driveway,2,53.2678216,-6.1943899,0.1548,-0.1323,0,0
+w89685924,service60,highway,service,driveway,2,53.2647482,-6.1958192,0.0598,-0.4740,0,0
+w89685926,service61,highway,service,driveway,2,53.2647250,-6.1956057,0.0740,-0.4766,0,0
+w89695163,footway07,highway,footway,walkway,8,53.2725529,-6.1953842,0.0887,0.3938,0,0
+w89695165,footway08,highway,footway,walkway,3,53.2725371,-6.1958519,0.0576,0.3920,0,0
+w111311792,footway09,highway,footway,walkway,6,53.2709299,-6.2003057,-0.2386,0.2133,0,0
+w111311793,footway10,highway,footway,walkway,10,53.2682685,-6.2010831,-0.2903,-0.0826,0,0
+w111311794,footway11,highway,footway,walkway,2,53.2707094,-6.2007739,-0.2697,0.1888,0,0
+w111311795,footway12,highway,footway,walkway,13,53.2665869,-6.1990339,-0.1540,-0.2696,0,0
+w111311796,service62,highway,service,driveway,2,53.2689388,-6.2003945,-0.2445,-0.0081,0,0
+w112797288,Mount Eagle Park,highway,residential,slowroad,2,53.2660643,-6.2114704,-0.9810,-0.3277,0,0
+w112797290,Mount Eagle Drive,highway,residential,slowroad,11,53.2672564,-6.2118345,-1.0053,-0.1952,0,0
+w113570254,footway13,highway,footway,walkway,4,53.2648674,-6.1942657,0.1631,-0.4608,0,0
+w113570256,service63,highway,service,driveway,3,53.2650906,-6.1949558,0.1172,-0.4360,0,0
+w113570258,steps01,highway,steps,walkway,2,53.2648408,-6.1941969,0.1677,-0.4638,0,0
+w113572211,footway14,highway,footway,walkway,2,53.2647618,-6.1940835,0.1752,-0.4725,0,0
+w114532923,footway15,highway,footway,walkway,28,53.2665459,-6.1985080,-0.1190,-0.2742,0,0
+w114532925,footway16,highway,footway,walkway,13,53.2670494,-6.1984158,-0.1129,-0.2182,0,0
+w114975790,service64,highway,service,driveway,5,53.2696102,-6.1991452,-0.1614,0.0666,0,0
+w114975806,Burton Hall Road,highway,tertiary,road,5,53.2732895,-6.2019349,-0.3469,0.4757,0,0
+w118484308,footway17,highway,footway,walkway,5,53.2666184,-6.2097816,-0.8687,-0.2661,0,0
+w118484309,Murphystown Way,highway,tertiary,road,6,53.2691421,-6.2114066,-0.9768,0.0145,0,0
+w118484310,Leopardstown Road13,highway,secondary,road,3,53.2697817,-6.2116268,-0.9914,0.0857,0,0
+w135993478,Murphystown Road01,highway,residential,slowroad,9,53.2648004,-6.2122994,-1.0362,-0.4682,0,0
+w135993480,footway18,highway,footway,walkway,5,53.2658866,-6.2107074,-0.9303,-0.3475,0,0
+w142523390,service65,highway,service,driveway,2,53.2714977,-6.2055148,-0.5850,0.2765,0,0
+w142523391,service66,highway,service,driveway,3,53.2712621,-6.2055084,-0.5846,0.2503,0,0
+w161426112,unclassified10,highway,unclassified,road,19,53.2708019,-6.1969122,-0.0129,0.1991,0,0
+w224469189,Leopardstown Road14,highway,secondary,road,3,53.2697314,-6.2118964,-1.0094,0.0801,0,0
+w224469190,Murphystown Way01,highway,tertiary,road,16,53.2668733,-6.2102502,-0.8999,-0.2378,0,0
+w224469191,Murphystown Way02,highway,tertiary,road,3,53.2651972,-6.2109804,-0.9485,-0.4241,0,0
+w224469192,Murphystown Way03,highway,tertiary,road,2,53.2647379,-6.2110326,-0.9519,-0.4752,0,0
+w225978535,footway19,highway,footway,walkway,6,53.2704049,-6.2013658,-0.3091,0.1550,0,0
+w227774979,Murphystown Way04,highway,tertiary,road,5,53.2640539,-6.2110629,-0.9539,-0.5512,0,0
+w228186720,Leopardstown Road15,highway,unclassified,road,3,53.2719023,-6.2054517,-0.5808,0.3215,0,0
+w228186721,Leopardstown Road16,highway,unclassified,road,2,53.2718766,-6.2052847,-0.5697,0.3186,0,0
+w228186722,trunk_link01,highway,trunk_link,road,5,53.2717839,-6.2062570,-0.6343,0.3083,0,0
+w228186745,service67,highway,service,driveway,12,53.2716753,-6.2115457,-0.9860,0.2962,0,0
+w228186746,service68,highway,service,driveway,14,53.2716737,-6.2113411,-0.9724,0.2960,0,0
+w228186749,service69,highway,service,driveway,2,53.2727001,-6.2094072,-0.8438,0.4102,0,0
+w228186750,service70,highway,service,driveway,2,53.2724479,-6.2111981,-0.9629,0.3821,0,0
+w228186751,service71,highway,service,driveway,2,53.2722962,-6.2095871,-0.8558,0.3652,0,0
+w228186752,service72,highway,service,driveway,2,53.2722701,-6.2103794,-0.9085,0.3623,0,0
+w228186754,unclassified11,highway,unclassified,road,2,53.2717446,-6.2052397,-0.5667,0.3039,0,0
+w228186755,service73,highway,service,driveway,3,53.2724776,-6.2100659,-0.8876,0.3854,0,0
+w228186756,service74,highway,service,driveway,3,53.2715407,-6.2057060,-0.5977,0.2812,0,0
+w228186757,service75,highway,service,driveway,3,53.2718724,-6.2115050,-0.9833,0.3181,0,0
+w228186760,service76,highway,service,driveway,5,53.2720400,-6.2096198,-0.8580,0.3368,0,0
+w228186762,service77,highway,service,driveway,4,53.2721959,-6.2096878,-0.8625,0.3541,0,0
+w228186766,Central Park03,highway,unclassified,road,6,53.2715444,-6.2053546,-0.5743,0.2817,0,0
+w228186767,service78,highway,service,driveway,7,53.2719997,-6.2108730,-0.9413,0.3323,0,0
+w228186768,service79,highway,service,driveway,7,53.2709067,-6.2060693,-0.6219,0.2108,0,0
+w228186769,service80,highway,service,driveway,8,53.2725278,-6.2114442,-0.9793,0.3910,0,0
+w228197319,Murphystown Way05,highway,tertiary,road,3,53.2696153,-6.2116740,-0.9946,0.0672,0,0
+w228197332,service81,highway,service,driveway,2,53.2715806,-6.2034731,-0.4492,0.2857,0,0
+w228197336,service82,highway,service,driveway,2,53.2715048,-6.2041791,-0.4962,0.2773,0,0
+w228197339,service83,highway,service,driveway,6,53.2711389,-6.2031976,-0.4309,0.2366,0,0
+w228197341,service84,highway,service,driveway,6,53.2719182,-6.2025937,-0.3907,0.3232,0,0
+w228197342,service85,highway,service,driveway,6,53.2669838,-6.2095643,-0.8543,-0.2255,0,0
+w228197343,service86,highway,service,driveway,9,53.2724412,-6.2055034,-0.5842,0.3814,0,0
+w228206438,service87,highway,service,driveway,2,53.2736007,-6.2116824,-0.9951,0.5103,0,0
+w228212003,motorway_link04,highway,motorway_link,highway,3,53.2710480,-6.2119643,-1.0139,0.2265,0,0
+w228213713,cycleway03,highway,cycleway,walkway,4,53.2700718,-6.2113216,-0.9711,0.1179,0,0
+w228213714,cycleway04,highway,cycleway,walkway,51,53.2690157,-6.2161711,-1.2936,0.0005,0,0
+w228243893,service88,highway,service,driveway,13,53.2731600,-6.2069556,-0.6808,0.4613,0,0
+w228243899,service89,highway,service,driveway,6,53.2732074,-6.2075845,-0.7226,0.4666,0,0
+w228426710,Orby Avenue01,highway,residential,slowroad,3,53.2656616,-6.2024159,-0.3789,-0.3725,0,0
+w228427639,footway20,highway,footway,walkway,7,53.2646940,-6.2106338,-0.9254,-0.4801,0,0
+w259057367,service90,highway,service,driveway,4,53.2730910,-6.2042592,-0.5015,0.4536,0,0
+w259057368,service91,highway,service,driveway,4,53.2731921,-6.2049465,-0.5472,0.4649,0,0
+w259057369,service92,highway,service,driveway,8,53.2734833,-6.2049185,-0.5453,0.4973,0,0
+w259225219,service93,highway,service,driveway,8,53.2735587,-6.2071226,-0.6919,0.5056,0,0
+w260818636,Burton Hall Drive01,highway,tertiary,road,15,53.2729839,-6.2042798,-0.5029,0.4417,0,0
+w260818637,Leopardstown Road17,highway,trunk,road,6,53.2722485,-6.2031444,-0.4273,0.3599,0,0
+w260818638,service94,highway,service,driveway,2,53.2724813,-6.2042796,-0.5028,0.3858,0,0
+w260818639,service95,highway,service,driveway,7,53.2727513,-6.2043337,-0.5064,0.4159,0,0
+w301972642,service96,highway,service,driveway,4,53.2702457,-6.2003185,-0.2394,0.1372,0,0
+w301972643,service97,highway,service,driveway,3,53.2702041,-6.2006330,-0.2603,0.1326,0,0
+w301972645,pedestrian02,highway,pedestrian,walkway,5,53.2702590,-6.2002557,-0.2352,0.1387,0,0
+w301976137,service98,highway,service,driveway,4,53.2695801,-6.1994889,-0.1843,0.0632,0,0
+w301976139,pedestrian03,highway,pedestrian,walkway,17,53.2696822,-6.1997680,-0.2028,0.0746,0,0
+w301976140,footway21,highway,footway,walkway,3,53.2699662,-6.2000208,-0.2196,0.1062,0,0
+w301976225,footway22,highway,footway,walkway,3,53.2698376,-6.1997131,-0.1992,0.0919,0,0
+w301978564,pedestrian04,highway,pedestrian,walkway,12,53.2693417,-6.1993847,-0.1773,0.0367,0,0
+w301981617,service99,highway,service,driveway,3,53.2683201,-6.1994380,-0.1809,-0.0769,0,0
+w302051125,service100,highway,service,driveway,2,53.2679336,-6.1984071,-0.1123,-0.1198,0,0
+w302051126,service101,highway,service,driveway,2,53.2680087,-6.1986405,-0.1278,-0.1115,0,0
+w302051127,service102,highway,service,driveway,2,53.2680714,-6.1988946,-0.1447,-0.1045,0,0
+w302051128,pedestrian05,highway,pedestrian,walkway,7,53.2676739,-6.1986869,-0.1309,-0.1487,0,0
+w302051129,footway23,highway,footway,walkway,2,53.2668984,-6.1988805,-0.1438,-0.2350,0,0
+w302055001,footway24,highway,footway,walkway,2,53.2707961,-6.2043539,-0.5078,0.1984,0,0
+w302105025,service103,highway,service,driveway,7,53.2668388,-6.1973628,-0.0429,-0.2416,0,0
+w302105027,service104,highway,service,driveway,2,53.2667529,-6.1976234,-0.0602,-0.2511,0,0
+w302105028,service105,highway,service,driveway,2,53.2666880,-6.1973820,-0.0441,-0.2583,0,0
+w302105030,service106,highway,service,driveway,4,53.2670193,-6.1980821,-0.0907,-0.2215,0,0
+w302105032,service107,highway,service,driveway,3,53.2669577,-6.1976064,-0.0591,-0.2284,0,0
+w302105033,service108,highway,service,driveway,2,53.2666427,-6.1971286,-0.0273,-0.2634,0,0
+w302105037,service109,highway,service,driveway,4,53.2667465,-6.1967852,-0.0045,-0.2518,0,0
+w302105038,service110,highway,service,driveway,2,53.2666890,-6.1968764,-0.0105,-0.2582,0,0
+w302105040,pedestrian06,highway,pedestrian,walkway,9,53.2674035,-6.1979203,-0.0799,-0.1788,0,0
+w302111078,service111,highway,service,driveway,2,53.2703197,-6.1979969,-0.0850,0.1455,0,0
+w302111080,service112,highway,service,driveway,2,53.2703757,-6.1977578,-0.0691,0.1517,0,0
+w302114212,service113,highway,service,driveway,4,53.2707206,-6.1977980,-0.0718,0.1900,0,0
+w302114213,service114,highway,service,driveway,5,53.2706479,-6.1989599,-0.1491,0.1820,0,0
+w302114214,service115,highway,service,driveway,2,53.2706560,-6.1990251,-0.1534,0.1829,0,0
+w302114215,service116,highway,service,driveway,3,53.2704136,-6.1989175,-0.1463,0.1559,0,0
+w302114216,service117,highway,service,driveway,2,53.2704800,-6.1989861,-0.1508,0.1633,0,0
+w302890407,service118,highway,service,driveway,3,53.2688183,-6.1989677,-0.1496,-0.0215,0,0
+w313947486,service119,highway,service,driveway,2,53.2667225,-6.1850099,0.7786,-0.2545,0,0
+w365281154,unclassified12,highway,unclassified,road,2,53.2719812,-6.2001456,-0.2279,0.3302,0,0
+w365541748,service120,highway,service,driveway,3,53.2655916,-6.1969849,-0.0177,-0.3803,0,0
+w371240689,unclassified13,highway,unclassified,road,12,53.2711161,-6.2010435,-0.2876,0.2340,0,0
+w371478570,unclassified14,highway,unclassified,road,5,53.2727614,-6.1983955,-0.1115,0.4170,0,0
+w371478571,unclassified15,highway,unclassified,road,2,53.2730112,-6.1982164,-0.0996,0.4448,0,0
+w371478572,unclassified16,highway,unclassified,road,4,53.2722896,-6.1984706,-0.1165,0.3645,0,0
+w371478573,unclassified17,highway,unclassified,road,2,53.2720435,-6.1987018,-0.1319,0.3372,0,0
+w371480855,unclassified18,highway,unclassified,road,6,53.2717055,-6.1998794,-0.2102,0.2996,0,0
+w371480856,unclassified19,highway,unclassified,road,8,53.2715060,-6.1997949,-0.2046,0.2774,0,0
+w371480857,unclassified20,highway,unclassified,road,4,53.2718811,-6.1991993,-0.1650,0.3191,0,0
+w389138387,Leopardstown Road18,highway,trunk,road,10,53.2724542,-6.2021717,-0.3627,0.3828,0,0
+w396019567,Leopardstown Road19,highway,trunk,road,8,53.2727921,-6.2015239,-0.3196,0.4204,0,0
+w396019571,Brewery Road01,highway,trunk,road,6,53.2732476,-6.2007275,-0.2666,0.4710,0,0
+w396019573,Leopardstown Road20,highway,secondary,road,8,53.2729072,-6.2002849,-0.2372,0.4332,0,0
+w396246203,Leopardstown Road21,highway,secondary,road,3,53.2730312,-6.2006399,-0.2608,0.4470,0,0
+w396246204,Brewery Road02,highway,trunk,road,6,53.2732850,-6.2009102,-0.2788,0.4752,0,0
+w396246205,Leopardstown Road22,highway,secondary,road,2,53.2730741,-6.2009776,-0.2833,0.4518,0,0
+w399052096,footway25,highway,footway,walkway,19,53.2735429,-6.2038718,-0.4757,0.5039,0,0
+w399052101,service121,highway,service,driveway,4,53.2657893,-6.2102127,-0.8974,-0.3583,0,0
+w399060907,service122,highway,service,driveway,5,53.2667045,-6.2097126,-0.8641,-0.2565,0,0
+w399060908,service123,highway,service,driveway,6,53.2662207,-6.2083988,-0.7768,-0.3103,0,0
+w399060911,service124,highway,service,driveway,2,53.2665303,-6.2080946,-0.7565,-0.2759,0,0
+w399060912,service125,highway,service,driveway,3,53.2664683,-6.2081018,-0.7570,-0.2828,0,0
+w420131304,cycleway05,highway,cycleway,walkway,2,53.2658323,-6.2095905,-0.8560,-0.3535,0,0
+w420131306,footway26,highway,footway,walkway,3,53.2659854,-6.2101468,-0.8930,-0.3365,0,0
+w427303728,service126,highway,service,driveway,20,53.2664936,-6.2073030,-0.7039,-0.2800,0,0
+w441338291,service127,highway,service,driveway,20,53.2730523,-6.2104093,-0.9105,0.4493,0,0
+w441338293,service128,highway,service,driveway,3,53.2730346,-6.2102273,-0.8984,0.4474,0,0
+w441338295,service129,highway,service,driveway,3,53.2732941,-6.2095074,-0.8505,0.4762,0,0
+w441338296,service130,highway,service,driveway,12,53.2734636,-6.2092378,-0.8326,0.4951,0,0
+w441338297,service131,highway,service,driveway,2,53.2731036,-6.2107136,-0.9307,0.4550,0,0
+w441338299,service132,highway,service,driveway,7,53.2731806,-6.2112513,-0.9665,0.4636,0,0
+w441338300,service133,highway,service,driveway,5,53.2732065,-6.2120455,-1.0193,0.4665,0,0
+w441338301,service134,highway,service,driveway,3,53.2730737,-6.2116790,-0.9949,0.4517,0,0
+w441338304,service135,highway,service,driveway,4,53.2727719,-6.2112269,-0.9648,0.4181,0,0
+w442716016,service136,highway,service,driveway,4,53.2664922,-6.1839614,0.8483,-0.2801,0,0
+w442716017,service137,highway,service,driveway,4,53.2664472,-6.1841938,0.8329,-0.2851,0,0
+w444833722,service138,highway,service,driveway,3,53.2714360,-6.2013505,-0.3080,0.2696,0,0
+w466398723,South Eastern Motorway01,highway,motorway,highway,6,53.2611481,-6.1911663,0.3692,-0.8744,0,0
+w466398724,South Eastern Motorway02,highway,motorway,highway,5,53.2672115,-6.2035844,-0.4566,-0.2001,0,0
+w479963309,service139,highway,service,driveway,4,53.2704985,-6.2079953,-0.7499,0.1654,0,0
+w480297222,footway27,highway,footway,walkway,10,53.2676032,-6.1984920,-0.1180,-0.1566,0,0
+w480297223,footway28,highway,footway,walkway,6,53.2675685,-6.1979345,-0.0809,-0.1604,0,0
+w480297224,footway29,highway,footway,walkway,28,53.2681058,-6.1978505,-0.0753,-0.1007,0,0
+w480297225,footway30,highway,footway,walkway,20,53.2691941,-6.1980909,-0.0913,0.0203,0,0
+w480297226,footway31,highway,footway,walkway,2,53.2690908,-6.1983825,-0.1107,0.0088,0,0
+w480297227,footway32,highway,footway,walkway,2,53.2698800,-6.1993519,-0.1751,0.0966,0,0
+w480297228,footway33,highway,footway,walkway,8,53.2705061,-6.1996550,-0.1953,0.1662,0,0
+w480297229,footway34,highway,footway,walkway,9,53.2716120,-6.1997922,-0.2044,0.2892,0,0
+w480297230,footway35,highway,footway,walkway,13,53.2703735,-6.1999028,-0.2118,0.1515,0,0
+w480297231,footway36,highway,footway,walkway,3,53.2699955,-6.2006041,-0.2584,0.1094,0,0
+w481277139,footway37,highway,footway,walkway,2,53.2722405,-6.2001365,-0.2273,0.3591,0,0
+w481277140,footway38,highway,footway,walkway,34,53.2725528,-6.1995788,-0.1902,0.3938,0,0
+w481277141,footway39,highway,footway,walkway,3,53.2710507,-6.1996465,-0.1947,0.2268,0,0
+w481277142,footway40,highway,footway,walkway,3,53.2700877,-6.2000866,-0.2240,0.1197,0,0
+w481277143,footway41,highway,footway,walkway,3,53.2701641,-6.1995340,-0.1873,0.1282,0,0
+w481277144,footway42,highway,footway,walkway,3,53.2696054,-6.1991729,-0.1632,0.0661,0,0
+w482044035,service140,highway,service,driveway,2,53.2693960,-6.1970165,-0.0198,0.0428,0,0
+w482044036,footway43,highway,footway,walkway,3,53.2692529,-6.1970465,-0.0218,0.0269,0,0
+w482044037,footway44,highway,footway,walkway,22,53.2693867,-6.1981423,-0.0947,0.0417,0,0
+w482044038,footway45,highway,footway,walkway,4,53.2693485,-6.1978706,-0.0766,0.0375,0,0
+w482044039,footway46,highway,footway,walkway,2,53.2694051,-6.1982843,-0.1041,0.0438,0,0
+w482044041,service141,highway,service,driveway,13,53.2693575,-6.1966987,0.0013,0.0385,0,0
+w482044043,footway47,highway,footway,walkway,4,53.2690487,-6.1983614,-0.1093,0.0041,0,0
+w482044044,service142,highway,service,driveway,7,53.2690547,-6.1976887,-0.0645,0.0048,0,0
+w482044045,footway48,highway,footway,walkway,3,53.2674482,-6.1982872,-0.1043,-0.1738,0,0
+w482044046,footway49,highway,footway,walkway,3,53.2675114,-6.1980357,-0.0876,-0.1668,0,0
+w482044047,footway50,highway,footway,walkway,3,53.2676587,-6.1978887,-0.0778,-0.1504,0,0
+w489374676,service143,highway,service,driveway,2,53.2648224,-6.1961961,0.0347,-0.4658,0,0
+w489374677,service144,highway,service,driveway,2,53.2649406,-6.1963211,0.0264,-0.4527,0,0
+w489374678,service145,highway,service,driveway,2,53.2651030,-6.1963956,0.0215,-0.4346,0,0
+w489374679,service146,highway,service,driveway,2,53.2652726,-6.1964398,0.0185,-0.4157,0,0
+w492605967,unclassified21,highway,unclassified,road,5,53.2717499,-6.1999507,-0.2150,0.3045,0,0
+w492605968,unclassified22,highway,unclassified,road,8,53.2726320,-6.2006362,-0.2606,0.4026,0,0
+w495274622,Leopardstown Road23,highway,secondary,road,5,53.2730478,-6.1992134,-0.1659,0.4488,0,0
+w495274623,secondary_link01,highway,secondary_link,road,6,53.2731654,-6.2005536,-0.2551,0.4619,0,0
+w496535845,service147,highway,service,driveway,2,53.2734543,-6.1953670,0.0899,0.4940,0,0
+w496535846,service148,highway,service,driveway,17,53.2729567,-6.1954663,0.0833,0.4387,0,0
+w496535847,service149,highway,service,driveway,2,53.2728917,-6.1961875,0.0353,0.4315,0,0
+w496535848,service150,highway,service,driveway,2,53.2730033,-6.1963329,0.0256,0.4439,0,0
+w498361268,footway51,highway,footway,walkway,2,53.2727979,-6.2003889,-0.2441,0.4210,0,0
+w498361270,footway52,highway,footway,walkway,5,53.2686830,-6.1983057,-0.1056,-0.0365,0,0
+w498361273,footway53,highway,footway,walkway,5,53.2713285,-6.2032719,-0.4358,0.2576,0,0
+w498361275,footway54,highway,footway,walkway,41,53.2718431,-6.2025446,-0.3875,0.3149,0,0
+w498361278,footway55,highway,footway,walkway,2,53.2719848,-6.2046210,-0.5255,0.3306,0,0
+w498361280,footway56,highway,footway,walkway,7,53.2717975,-6.2050726,-0.5556,0.3098,0,0
+w498361283,footway57,highway,footway,walkway,3,53.2721148,-6.2041319,-0.4930,0.3451,0,0
+w498361285,footway58,highway,footway,walkway,8,53.2733919,-6.1978272,-0.0738,0.4871,0,0
+w498361298,footway59,highway,footway,walkway,4,53.2703523,-6.2034532,-0.4479,0.1491,0,0
+w498616011,footway60,highway,footway,walkway,4,53.2705503,-6.2016195,-0.3259,0.1711,0,0
+w498616012,footway61,highway,footway,walkway,3,53.2708103,-6.2014983,-0.3179,0.2000,0,0
+w498616013,service151,highway,service,driveway,2,53.2706342,-6.2017768,-0.3364,0.1804,0,0
+w498616014,footway62,highway,footway,walkway,3,53.2710764,-6.2013087,-0.3053,0.2296,0,0
+w498616015,footway63,highway,footway,walkway,3,53.2712445,-6.2011709,-0.2961,0.2483,0,0
+w517320671,footway64,highway,footway,walkway,3,53.2714772,-6.2019846,-0.3502,0.2742,0,0
+w517320672,footway65,highway,footway,walkway,3,53.2714291,-6.2016502,-0.3280,0.2688,0,0
+w517320673,footway66,highway,footway,walkway,2,53.2714488,-6.2017628,-0.3355,0.2710,0,0
+w550520504,service152,highway,service,driveway,6,53.2648928,-6.1892442,0.4970,-0.4580,0,0
+w576328804,path01,highway,path,walkway,14,53.2690760,-6.1951940,0.1014,0.0072,0,0
+w576328805,footway67,highway,footway,walkway,3,53.2690744,-6.1979751,-0.0836,0.0070,0,0
+w576333336,footway68,highway,footway,walkway,3,53.2702750,-6.2013366,-0.3071,0.1405,0,0
+w576333337,footway69,highway,footway,walkway,3,53.2704984,-6.2015878,-0.3238,0.1653,0,0
+w576333345,footway70,highway,footway,walkway,3,53.2703439,-6.2038665,-0.4754,0.1482,0,0
+w576333346,footway71,highway,footway,walkway,2,53.2705141,-6.2040426,-0.4871,0.1671,0,0
+w576333347,steps02,highway,steps,walkway,2,53.2704590,-6.2039495,-0.4809,0.1610,0,0
+w576333348,footway72,highway,footway,walkway,2,53.2704236,-6.2038892,-0.4769,0.1570,0,0
+w576333349,steps03,highway,steps,walkway,2,53.2703911,-6.2038335,-0.4732,0.1534,0,0
+w576333350,footway73,highway,footway,walkway,3,53.2703192,-6.2037063,-0.4647,0.1454,0,0
+w576333353,footway74,highway,footway,walkway,5,53.2702491,-6.1997169,-0.1994,0.1376,0,0
+w576338474,cycleway06,highway,cycleway,walkway,2,53.2729671,-6.2007518,-0.2682,0.4399,0,0
+w576338477,cycleway07,highway,cycleway,walkway,2,53.2731507,-6.2006254,-0.2598,0.4603,0,0
+w576338481,cycleway08,highway,cycleway,walkway,3,53.2731666,-6.2007444,-0.2677,0.4620,0,0
+w576338484,cycleway09,highway,cycleway,walkway,3,53.2732730,-6.2009348,-0.2804,0.4739,0,0
+w576338487,cycleway10,highway,cycleway,walkway,2,53.2727679,-6.2007667,-0.2692,0.4177,0,0
+w576338490,cycleway11,highway,cycleway,walkway,3,53.2731322,-6.2013306,-0.3067,0.4582,0,0
+w576338492,cycleway12,highway,cycleway,walkway,2,53.2730123,-6.2013698,-0.3093,0.4449,0,0
+w576338493,cycleway13,highway,cycleway,walkway,3,53.2729627,-6.2009208,-0.2795,0.4394,0,0
+w576338495,cycleway14,highway,cycleway,walkway,3,53.2729982,-6.2014716,-0.3161,0.4433,0,0
+w576338496,cycleway15,highway,cycleway,walkway,3,53.2730203,-6.2014002,-0.3114,0.4458,0,0
+w576338497,cycleway16,highway,cycleway,walkway,3,53.2729523,-6.2010584,-0.2886,0.4382,0,0
+w576338498,cycleway17,highway,cycleway,walkway,2,53.2729519,-6.2008062,-0.2719,0.4382,0,0
+w576338499,cycleway18,highway,cycleway,walkway,2,53.2732151,-6.2008447,-0.2744,0.4674,0,0
+w576338500,cycleway19,highway,cycleway,walkway,3,53.2731388,-6.2006630,-0.2623,0.4589,0,0
+w576338501,footway75,highway,footway,walkway,3,53.2734354,-6.2020615,-0.3553,0.4919,0,0
+w576338502,footway76,highway,footway,walkway,3,53.2730243,-6.2044816,-0.5163,0.4462,0,0
+w576338503,footway77,highway,footway,walkway,13,53.2740111,-6.2050156,-0.5518,0.5559,0,0
+w578491951,footway78,highway,footway,walkway,3,53.2732183,-6.2045863,-0.5232,0.4678,0,0
+w578491954,footway79,highway,footway,walkway,4,53.2724569,-6.2042065,-0.4980,0.3831,0,0
+w578491957,footway80,highway,footway,walkway,3,53.2728411,-6.2043438,-0.5071,0.4258,0,0
+w579970321,service153,highway,service,driveway,12,53.2710068,-6.2064070,-0.6443,0.2219,0,0
+w580862992,footway81,highway,footway,walkway,2,53.2646497,-6.2048176,-0.5386,-0.4850,0,0
+w583258056,footway82,highway,footway,walkway,3,53.2731018,-6.2042275,-0.4994,0.4548,0,0
+w583258058,footway83,highway,footway,walkway,8,53.2727902,-6.2040930,-0.4904,0.4202,0,0
+w583258059,footway84,highway,footway,walkway,3,53.2722315,-6.2039898,-0.4836,0.3581,0,0
+w583258060,footway85,highway,footway,walkway,6,53.2720588,-6.2037755,-0.4693,0.3389,0,0
+w591845357,footway86,highway,footway,walkway,9,53.2673409,-6.1993000,-0.1717,-0.1858,0,0
+w591845358,footway87,highway,footway,walkway,2,53.2672392,-6.1996167,-0.1927,-0.1971,0,0
+w591847173,service154,highway,service,driveway,31,53.2704631,-6.1952825,0.0955,0.1614,0,0
+w591847174,service155,highway,service,driveway,2,53.2703506,-6.1942570,0.1637,0.1489,0,0
+w591847175,service156,highway,service,driveway,3,53.2702078,-6.1943609,0.1568,0.1330,0,0
+w591847176,service157,highway,service,driveway,3,53.2701055,-6.1945297,0.1455,0.1217,0,0
+w591847177,service158,highway,service,driveway,3,53.2699635,-6.1946173,0.1397,0.1059,0,0
+w591847178,service159,highway,service,driveway,2,53.2698192,-6.1947123,0.1334,0.0898,0,0
+w591847179,service160,highway,service,driveway,10,53.2708138,-6.1950372,0.1118,0.2004,0,0
+w591847180,service161,highway,service,driveway,2,53.2703061,-6.1951633,0.1034,0.1440,0,0
+w591847181,service162,highway,service,driveway,2,53.2704276,-6.1952642,0.0967,0.1575,0,0
+w591847182,service163,highway,service,driveway,2,53.2705483,-6.1953618,0.0902,0.1709,0,0
+w591847183,service164,highway,service,driveway,2,53.2706527,-6.1954485,0.0844,0.1825,0,0
+w591847184,service165,highway,service,driveway,2,53.2707697,-6.1955515,0.0776,0.1955,0,0
+w591847185,service166,highway,service,driveway,2,53.2708932,-6.1956706,0.0697,0.2092,0,0
+w591896484,pedestrian07,highway,pedestrian,walkway,17,53.2717943,-6.2051266,-0.5592,0.3094,0,0
+w592249240,service167,highway,service,driveway,11,53.2718641,-6.1977651,-0.0696,0.3172,0,0
+w592249242,service168,highway,service,driveway,2,53.2718091,-6.1974469,-0.0485,0.3111,0,0
+w592249244,service169,highway,service,driveway,2,53.2718611,-6.1976881,-0.0645,0.3169,0,0
+w593149806,footway88,highway,footway,walkway,3,53.2711801,-6.2033870,-0.4435,0.2411,0,0
+w593151042,footway89,highway,footway,walkway,3,53.2710147,-6.2051991,-0.5640,0.2228,0,0
+w593151043,pedestrian08,highway,pedestrian,walkway,13,53.2717083,-6.2055251,-0.5857,0.2999,0,0
+w593151044,footway90,highway,footway,walkway,6,53.2720226,-6.2055368,-0.5864,0.3348,0,0
+w608208283,service170,highway,service,driveway,2,53.2674065,-6.1849904,0.7799,-0.1785,0,0
+w608208284,service171,highway,service,driveway,2,53.2669257,-6.1848522,0.7891,-0.2319,0,0
+w608208285,service172,highway,service,driveway,4,53.2663225,-6.1846808,0.8005,-0.2990,0,0
+w608208286,residential03,highway,residential,slowroad,2,53.2667324,-6.1846051,0.8055,-0.2534,0,0
+w608208287,The Hedgerows01,highway,service,driveway,2,53.2668328,-6.1846719,0.8011,-0.2423,0,0
+w608208288,service173,highway,service,driveway,3,53.2669076,-6.1844737,0.8143,-0.2339,0,0
+w608208289,service174,highway,service,driveway,2,53.2671927,-6.1843807,0.8205,-0.2022,0,0
+w608208290,residential04,highway,residential,slowroad,2,53.2646809,-6.1836579,0.8685,-0.4815,0,0
+w608208291,service175,highway,service,driveway,3,53.2648037,-6.1827751,0.9272,-0.4679,0,0
+w608208292,residential05,highway,residential,slowroad,2,53.2653979,-6.1839826,0.8469,-0.4018,0,0
+w626273405,cycleway20,highway,cycleway,walkway,23,53.2711819,-6.2085322,-0.7856,0.2414,0,0
+w626273406,cycleway21,highway,cycleway,walkway,32,53.2673563,-6.2106838,-0.9287,-0.1840,0,0
+w626273408,cycleway22,highway,cycleway,walkway,92,53.2579498,-6.1956160,0.0733,-1.2300,0,0
+w677121372,steps04,highway,steps,walkway,3,53.2710841,-6.2047593,-0.5347,0.2305,0,0
+w677121373,footway91,highway,footway,walkway,7,53.2710121,-6.2050697,-0.5554,0.2225,0,0
+w677121374,footway92,highway,footway,walkway,4,53.2705946,-6.2040770,-0.4894,0.1760,0,0
+w715528480,service176,highway,service,driveway,5,53.2699589,-6.2050691,-0.5553,0.1054,0,0
+w715528481,service177,highway,service,driveway,2,53.2707816,-6.2054970,-0.5838,0.1968,0,0
+w715528482,service178,highway,service,driveway,2,53.2707954,-6.2055831,-0.5895,0.1984,0,0
+w715528483,service179,highway,service,driveway,3,53.2695776,-6.2049439,-0.5470,0.0630,0,0
+w715528484,service180,highway,service,driveway,3,53.2690032,-6.2066706,-0.6618,-0.0009,0,0
+w715528485,service181,highway,service,driveway,3,53.2691210,-6.2065307,-0.6525,0.0122,0,0
+w715528486,service182,highway,service,driveway,2,53.2691804,-6.2052959,-0.5704,0.0188,0,0
+w715528487,service183,highway,service,driveway,2,53.2692547,-6.2054795,-0.5826,0.0270,0,0
+w715528488,service184,highway,service,driveway,2,53.2693307,-6.2056679,-0.5952,0.0355,0,0
+w715528489,service185,highway,service,driveway,2,53.2694068,-6.2058805,-0.6093,0.0440,0,0
+w715528490,service186,highway,service,driveway,2,53.2694834,-6.2060858,-0.6230,0.0525,0,0
+w715528491,service187,highway,service,driveway,2,53.2695849,-6.2065544,-0.6541,0.0638,0,0
+w715528492,service188,highway,service,driveway,2,53.2696678,-6.2067622,-0.6679,0.0730,0,0
+w715528493,service189,highway,service,driveway,2,53.2697199,-6.2068896,-0.6764,0.0788,0,0
+w715528494,service190,highway,service,driveway,5,53.2693936,-6.2064708,-0.6486,0.0425,0,0
+w715528495,service191,highway,service,driveway,9,53.2691597,-6.2061605,-0.6279,0.0165,0,0
+w715528496,service192,highway,service,driveway,4,53.2698081,-6.2064316,-0.6460,0.0886,0,0
+w715528497,service193,highway,service,driveway,4,53.2695017,-6.2051868,-0.5632,0.0545,0,0
+w715528498,service194,highway,service,driveway,2,53.2690439,-6.2052284,-0.5659,0.0036,0,0
+w715536996,service195,highway,service,driveway,3,53.2708964,-6.2020546,-0.3549,0.2096,0,0
+w715545012,tertiary01,highway,tertiary,road,8,53.2729800,-6.2015054,-0.3184,0.4413,0,0
+w715545013,service196,highway,service,driveway,3,53.2695593,-6.1958541,0.0575,0.0609,0,0
+w715545014,service197,highway,service,driveway,9,53.2697134,-6.1965571,0.0107,0.0781,0,0
+w715545015,service198,highway,service,driveway,3,53.2695780,-6.1963845,0.0222,0.0630,0,0
+w715545016,service199,highway,service,driveway,2,53.2696710,-6.1967116,0.0004,0.0733,0,0
+w715545017,path02,highway,path,walkway,8,53.2687615,-6.1980778,-0.0904,-0.0278,0,0
+w733270060,footway93,highway,footway,walkway,7,53.2699691,-6.1996556,-0.1953,0.1065,0,0
+w733270061,footway94,highway,footway,walkway,3,53.2696020,-6.1993941,-0.1779,0.0657,0,0
+w733270062,footway95,highway,footway,walkway,2,53.2695222,-6.1993443,-0.1746,0.0568,0,0
+w733270063,footway96,highway,footway,walkway,3,53.2694395,-6.1992934,-0.1713,0.0476,0,0
+w733270064,footway97,highway,footway,walkway,3,53.2692533,-6.1991476,-0.1616,0.0269,0,0
+w733270065,unclassified23,highway,unclassified,road,7,53.2714212,-6.1999014,-0.2117,0.2680,0,0
+w733270066,cycleway23,highway,cycleway,walkway,6,53.2694032,-6.1992014,-0.1651,0.0436,0,0
+w733270067,cycleway24,highway,cycleway,walkway,11,53.2705397,-6.1998440,-0.2079,0.1699,0,0
+w733270068,cycleway25,highway,cycleway,walkway,8,53.2693763,-6.1989962,-0.1515,0.0406,0,0
+w733270069,unclassified24,highway,unclassified,road,13,53.2700624,-6.1995084,-0.1856,0.1169,0,0
+w733270070,cycleway26,highway,cycleway,walkway,10,53.2706058,-6.1996827,-0.1971,0.1773,0,0
+w733270071,footway98,highway,footway,walkway,3,53.2701180,-6.1998001,-0.2049,0.1230,0,0
+w734532851,cycleway27,highway,cycleway,walkway,12,53.2722106,-6.2028584,-0.4083,0.3557,0,0
+w734532852,cycleway28,highway,cycleway,walkway,10,53.2725024,-6.2025541,-0.3881,0.3882,0,0
+w739445962,footway99,highway,footway,walkway,10,53.2716986,-6.2054276,-0.5792,0.2988,0,0
+w739445963,footway100,highway,footway,walkway,8,53.2718562,-6.2055734,-0.5889,0.3163,0,0
+w739445965,service200,highway,service,driveway,14,53.2664128,-6.1977785,-0.0705,-0.2890,0,0
+w754956060,footway101,highway,footway,walkway,13,53.2682284,-6.1983144,-0.1061,-0.0871,0,0
+w754956061,cycleway29,highway,cycleway,walkway,14,53.2683761,-6.1982766,-0.1036,-0.0706,0,0
+w768296883,footway102,highway,footway,walkway,3,53.2710609,-6.2055188,-0.5853,0.2279,0,0
+w768296884,footway103,highway,footway,walkway,18,53.2710487,-6.2053555,-0.5744,0.2265,0,0
+w768296885,footway104,highway,footway,walkway,2,53.2710646,-6.2053242,-0.5723,0.2283,0,0
+w768296886,footway105,highway,footway,walkway,6,53.2710736,-6.2049526,-0.5476,0.2293,0,0
+w768296887,steps05,highway,steps,walkway,2,53.2709608,-6.2051016,-0.5575,0.2168,0,0
+w768296888,footway106,highway,footway,walkway,4,53.2709956,-6.2048874,-0.5433,0.2206,0,0
+w768296889,footway107,highway,footway,walkway,2,53.2710013,-6.2050025,-0.5509,0.2213,0,0
+w768296890,pedestrian09,highway,pedestrian,walkway,41,53.2706801,-6.2038950,-0.4773,0.1855,0,0
+w771364557,cycleway30,highway,cycleway,walkway,3,53.2730423,-6.2007006,-0.2648,0.4482,0,0
+w771364558,cycleway31,highway,cycleway,walkway,2,53.2728553,-6.2006688,-0.2627,0.4274,0,0
+w771364559,cycleway32,highway,cycleway,walkway,3,53.2728028,-6.2006766,-0.2632,0.4216,0,0
+w771364560,cycleway33,highway,cycleway,walkway,2,53.2729399,-6.2007469,-0.2679,0.4368,0,0
+w771364561,cycleway34,highway,cycleway,walkway,3,53.2729063,-6.2007039,-0.2651,0.4331,0,0
+w771364562,cycleway35,highway,cycleway,walkway,3,53.2731638,-6.2005612,-0.2556,0.4617,0,0
+w771364563,footway108,highway,footway,walkway,2,53.2732989,-6.2009997,-0.2847,0.4767,0,0
+w771368255,cycleway36,highway,cycleway,walkway,2,53.2729142,-6.2011648,-0.2957,0.4340,0,0
+w771368256,cycleway37,highway,cycleway,walkway,3,53.2729617,-6.2012629,-0.3022,0.4393,0,0
+w771370067,cycleway38,highway,cycleway,walkway,7,53.2732757,-6.2011859,-0.2971,0.4742,0,0
+w771370068,footway109,highway,footway,walkway,6,53.2739184,-6.2002434,-0.2344,0.5456,0,0
+w771370070,cycleway39,highway,cycleway,walkway,7,53.2731549,-6.2004076,-0.2453,0.4607,0,0
+w771371221,cycleway40,highway,cycleway,walkway,2,53.2728678,-6.2015518,-0.3214,0.4288,0,0
+w771371222,footway110,highway,footway,walkway,13,53.2724631,-6.2026757,-0.3962,0.3838,0,0
+w771371223,cycleway41,highway,cycleway,walkway,5,53.2732970,-6.2009740,-0.2830,0.4765,0,0
+w771371224,cycleway42,highway,cycleway,walkway,4,53.2730243,-6.2015858,-0.3237,0.4462,0,0
+w771372028,cycleway43,highway,cycleway,walkway,4,53.2735364,-6.2008093,-0.2721,0.5031,0,0
+w783429025,South Eastern Motorway03,highway,motorway,highway,7,53.2619388,-6.1931244,0.2390,-0.7864,0,0
+w783429026,South Eastern Motorway04,highway,motorway,highway,2,53.2686643,-6.2072058,-0.6974,-0.0386,0,0
+w783429027,South Eastern Motorway05,highway,motorway,highway,4,53.2692788,-6.2090514,-0.8202,0.0297,0,0
+w790722416,footway111,highway,footway,walkway,2,53.2686380,-6.1818357,0.9897,-0.0415,0,0
+w10210265,pavilion01,unknown,pavilion,unknown,15,53.2669527,-6.1949531,0.1174,-0.2289,0,0
+w10210266,Leopardstown Racecourse,unknown,pavilion,unknown,16,53.2663460,-6.1947471,0.1311,-0.2964,0,0
+w23883373,Legionaries Of Christ,building,school,bldwall,9,53.2703220,-6.2084351,-0.7792,0.1457,0,0
+w26473087,leisure_centre01,unknown,leisure_centre,unknown,7,53.2643426,-6.1941274,0.1723,-0.5191,0,0
+w26473108,leisure_centre02,unknown,leisure_centre,unknown,6,53.2642876,-6.1955389,0.0784,-0.5253,0,0
+w44636923,One Microsoft Court,building,office,bldwall,27,53.2676058,-6.1991556,-0.1621,-0.1563,0,0
+w44681749,Nord Anglia International School Dublin,building,school,bldwall,49,53.2665458,-6.1987108,-0.1325,-0.2742,0,4
+w49406238,office01,building,office,bldwall,7,53.2728640,-6.2111210,-0.9578,0.4284,0,0
+w49406245,office02,building,office,bldwall,5,53.2727704,-6.2101406,-0.8926,0.4180,0,0
+w49406246,office03,building,office,bldwall,16,53.2719336,-6.2101607,-0.8939,0.3249,0,0
+w49406247,office04,building,office,bldwall,5,53.2726396,-6.2110434,-0.9526,0.4034,0,0
+w49406248,Block C,building,office,bldwall,5,53.2716085,-6.2039080,-0.4781,0.2888,25,0
+w49406249,office05,building,office,bldwall,5,53.2716821,-6.2032189,-0.4323,0.2970,25,0
+w49406251,office06,building,office,bldwall,6,53.2714931,-6.2045762,-0.5226,0.2759,25,0
+w49577144,office07,building,office,bldwall,6,53.2734805,-6.2055473,-0.5871,0.4969,0,0
+w49577145,office08,building,office,bldwall,6,53.2728717,-6.2052756,-0.5691,0.4292,0,0
+w49577153,bld01,building,bld,bldwall,7,53.2740058,-6.2062875,-0.6364,0.5554,8,2
+w80719125,house01,building,house,bldwall,5,53.2669022,-6.2117931,-1.0025,-0.2345,0,0
+w80719128,house02,building,house,bldwall,5,53.2673350,-6.2117169,-0.9974,-0.1864,0,0
+w80719134,house03,building,house,bldwall,5,53.2673375,-6.2111043,-0.9567,-0.1861,0,0
+w80719137,house04,building,house,bldwall,5,53.2676868,-6.2113268,-0.9715,-0.1473,0,0
+w80719140,house05,building,house,bldwall,5,53.2661035,-6.2109360,-0.9455,-0.3233,0,0
+w80719151,house06,building,house,bldwall,5,53.2658669,-6.2114144,-0.9773,-0.3497,0,0
+w80719152,house07,building,house,bldwall,5,53.2681963,-6.2111087,-0.9570,-0.0906,0,2
+w80719156,house08,building,house,bldwall,5,53.2672590,-6.2103511,-0.9066,-0.1949,0,0
+w80719157,house09,building,house,bldwall,5,53.2659347,-6.2116138,-0.9906,-0.3421,0,0
+w80719159,house10,building,house,bldwall,5,53.2684476,-6.2114246,-0.9780,-0.0627,0,2
+w80719167,house11,building,house,bldwall,5,53.2664323,-6.2106863,-0.9289,-0.2868,0,0
+w80719171,house12,building,house,bldwall,5,53.2663585,-6.2116046,-0.9900,-0.2950,0,0
+w80719172,house13,building,house,bldwall,5,53.2672481,-6.2116685,-0.9942,-0.1961,0,0
+w80719175,house14,building,house,bldwall,5,53.2673856,-6.2104445,-0.9128,-0.1808,0,0
+w80719180,house15,building,house,bldwall,5,53.2661322,-6.2110069,-0.9502,-0.3201,0,0
+w80719185,house16,building,house,bldwall,5,53.2676167,-6.2112706,-0.9677,-0.1551,0,0
+w80719189,house17,building,house,bldwall,5,53.2676995,-6.2105726,-0.9213,-0.1459,0,0
+w80719192,house18,building,house,bldwall,5,53.2666872,-6.2112968,-0.9695,-0.2584,0,0
+w80719203,house19,building,house,bldwall,5,53.2681303,-6.2110566,-0.9535,-0.0980,0,2
+w80719205,house20,building,house,bldwall,5,53.2679523,-6.2116827,-0.9952,-0.1178,0,0
+w80719211,house21,building,house,bldwall,5,53.2670762,-6.2110974,-0.9562,-0.2152,0,0
+w80719217,house22,building,house,bldwall,5,53.2666895,-6.2104335,-0.9121,-0.2582,0,0
+w80719227,house23,building,house,bldwall,5,53.2667427,-6.2104243,-0.9115,-0.2523,0,0
+w80719233,house24,building,house,bldwall,5,53.2686163,-6.2116577,-0.9935,-0.0439,0,2
+w80719236,house25,building,house,bldwall,5,53.2677762,-6.2106334,-0.9254,-0.1373,0,0
+w80719239,house26,building,house,bldwall,5,53.2680954,-6.2110106,-0.9505,-0.1019,0,2
+w80719242,house27,building,house,bldwall,5,53.2666096,-6.2113890,-0.9756,-0.2671,0,0
+w80719243,house28,building,house,bldwall,5,53.2671169,-6.2103354,-0.9056,-0.2107,0,0
+w80719245,house29,building,house,bldwall,5,53.2669470,-6.2111420,-0.9592,-0.2295,0,0
+w80719246,house30,building,house,bldwall,5,53.2663621,-6.2107327,-0.9320,-0.2946,0,0
+w80719253,house31,building,house,bldwall,5,53.2678973,-6.2116121,-0.9905,-0.1239,0,0
+w80719261,house32,building,house,bldwall,5,53.2669965,-6.2111205,-0.9578,-0.2240,0,0
+w80719300,house33,building,house,bldwall,5,53.2685503,-6.2115596,-0.9870,-0.0513,0,2
+w80719303,house34,building,house,bldwall,5,53.2665637,-6.2114335,-0.9786,-0.2722,0,0
+w80719311,house35,building,house,bldwall,5,53.2680202,-6.2109431,-0.9460,-0.1102,0,2
+w80719312,house36,building,house,bldwall,5,53.2670252,-6.2103660,-0.9076,-0.2209,0,0
+w80719313,house37,building,house,bldwall,5,53.2668696,-6.2111768,-0.9615,-0.2382,0,0
+w80719317,house38,building,house,bldwall,5,53.2658956,-6.2114854,-0.9820,-0.3465,0,0
+w80719318,house39,building,house,bldwall,5,53.2659635,-6.2116847,-0.9953,-0.3389,0,0
+w80719319,house40,building,house,bldwall,5,53.2684127,-6.2113786,-0.9749,-0.0666,0,2
+w80719323,house41,building,house,bldwall,5,53.2663872,-6.2116755,-0.9947,-0.2918,0,0
+w80719324,house42,building,house,bldwall,5,53.2671982,-6.2116685,-0.9942,-0.2016,0,0
+w80719330,house43,building,house,bldwall,5,53.2685155,-6.2115136,-0.9839,-0.0551,0,2
+w80719331,house44,building,house,bldwall,5,53.2674379,-6.2104521,-0.9133,-0.1750,0,0
+w80719337,house45,building,house,bldwall,5,53.2669720,-6.2103752,-0.9082,-0.2268,0,0
+w80719341,house46,building,house,bldwall,5,53.2675745,-6.2112353,-0.9654,-0.1598,0,0
+w80719343,house47,building,house,bldwall,5,53.2678625,-6.2115661,-0.9874,-0.1278,0,0
+w80719349,house48,building,house,bldwall,5,53.2683394,-6.2112928,-0.9692,-0.0747,0,2
+w80719356,house49,building,house,bldwall,5,53.2671123,-6.2116825,-0.9951,-0.2112,0,0
+w80719361,house50,building,house,bldwall,5,53.2662185,-6.2112186,-0.9643,-0.3106,0,0
+w80719367,house51,building,house,bldwall,5,53.2661897,-6.2111476,-0.9596,-0.3138,0,0
+w80719369,house52,building,house,bldwall,5,53.2668774,-6.2103943,-0.9095,-0.2373,0,0
+w80719370,house53,building,house,bldwall,5,53.2675175,-6.2104874,-0.9157,-0.1661,0,0
+w80719372,house54,building,house,bldwall,5,53.2675021,-6.2111894,-0.9623,-0.1678,0,0
+w80719376,house55,building,house,bldwall,5,53.2678198,-6.2114864,-0.9821,-0.1325,0,0
+w80719385,house56,building,house,bldwall,5,53.2663135,-6.2107741,-0.9347,-0.3000,0,0
+w80719393,house57,building,house,bldwall,5,53.2657862,-6.2111752,-0.9614,-0.3586,0,0
+w80719394,house58,building,house,bldwall,5,53.2670639,-6.2117009,-0.9964,-0.2166,0,0
+w80719404,house59,building,house,bldwall,5,53.2666148,-6.2105283,-0.9184,-0.2665,0,0
+w80719410,house60,building,house,bldwall,5,53.2662741,-6.2113715,-0.9745,-0.3044,0,0
+w80719414,house61,building,house,bldwall,5,53.2675643,-6.2105058,-0.9169,-0.1609,0,0
+w80719417,house62,building,house,bldwall,5,53.2674608,-6.2111572,-0.9602,-0.1724,0,0
+w80719430,house63,building,house,bldwall,5,53.2679854,-6.2108971,-0.9429,-0.1141,0,0
+w80719435,house64,building,house,bldwall,5,53.2683045,-6.2112467,-0.9662,-0.0786,0,2
+w80719438,house65,building,house,bldwall,5,53.2668256,-6.2112075,-0.9636,-0.2431,0,0
+w80719446,house66,building,house,bldwall,5,53.2669711,-6.2117477,-0.9995,-0.2269,0,0
+w80719447,house67,building,house,bldwall,5,53.2665662,-6.2105697,-0.9211,-0.2719,0,0
+w80719455,house68,building,house,bldwall,5,53.2672580,-6.2110846,-0.9554,-0.1950,0,0
+w80719462,house69,building,house,bldwall,5,53.2673916,-6.2111135,-0.9573,-0.1801,0,0
+w80719479,house70,building,house,bldwall,5,53.2678936,-6.2108327,-0.9386,-0.1243,0,0
+w80719486,house71,building,house,bldwall,5,53.2682311,-6.2111547,-0.9600,-0.0868,0,2
+w80719491,house72,building,house,bldwall,5,53.2672085,-6.2110830,-0.9553,-0.2005,0,0
+w80719493,house73,building,house,bldwall,5,53.2664809,-6.2106449,-0.9261,-0.2814,0,0
+w80719502,house74,building,house,bldwall,5,53.2687319,-6.2117589,-1.0002,-0.0311,0,2
+w80719506,house75,building,house,bldwall,5,53.2678588,-6.2107867,-0.9356,-0.1282,0,0
+w80719508,house76,building,house,bldwall,5,53.2668242,-6.2104035,-0.9101,-0.2432,0,0
+w80719511,house77,building,house,bldwall,5,53.2676592,-6.2105250,-0.9182,-0.1504,0,0
+w80719513,house78,building,house,bldwall,5,53.2667486,-6.2112462,-0.9661,-0.2516,0,0
+w80719516,house79,building,house,bldwall,5,53.2677849,-6.2114404,-0.9790,-0.1364,0,0
+w80719519,house80,building,house,bldwall,5,53.2679872,-6.2117287,-0.9982,-0.1139,0,0
+w80719523,house81,building,house,bldwall,5,53.2671294,-6.2110867,-0.9555,-0.2093,0,0
+w80719525,house82,building,house,bldwall,5,53.2658149,-6.2112462,-0.9661,-0.3554,0,0
+w80719527,house83,building,house,bldwall,5,53.2673113,-6.2103496,-0.9065,-0.1890,0,0
+w80719531,house84,building,house,bldwall,5,53.2663028,-6.2114425,-0.9792,-0.3012,0,0
+w80719532,house85,building,house,bldwall,5,53.2673753,-6.2117525,-0.9998,-0.1819,0,0
+w80719534,house86,building,house,bldwall,5,53.2686512,-6.2117037,-0.9966,-0.0401,0,2
+w80719536,house87,building,house,bldwall,5,53.2678111,-6.2106794,-0.9284,-0.1335,0,0
+w80719539,house88,building,house,bldwall,5,53.2671701,-6.2103262,-0.9049,-0.2047,0,0
+w80719543,house89,building,house,bldwall,5,53.2677271,-6.2113682,-0.9742,-0.1428,0,0
+w81523100,bld02,building,bld,bldwall,5,53.2735485,-6.2120470,-1.0194,0.5045,0,2
+w81523186,bld03,building,bld,bldwall,5,53.2736261,-6.2111582,-0.9603,0.5131,0,2
+w83186998,S3 Group,building,office,bldwall,10,53.2673646,-6.1975957,-0.0584,-0.1831,0,0
+w83187003,Keywords International  / Philips,building,bld,bldwall,14,53.2671484,-6.1965846,0.0089,-0.2072,0,0
+w84490917,Block E Mountain View,building,commercial,bldwall,22,53.2719016,-6.2019649,-0.3489,0.3214,25,0
+w86207881,office09,building,office,bldwall,6,53.2710194,-6.1983473,-0.1083,0.2233,0,0
+w86207889,office10,building,office,bldwall,5,53.2703483,-6.1973846,-0.0443,0.1487,0,0
+w86207891,Icon,building,office,bldwall,5,53.2700109,-6.1980200,-0.0866,0.1111,0,0
+w86207892,Cairn House,building,office,bldwall,14,53.2695627,-6.2004642,-0.2491,0.0613,0,0
+w86207893,Red Oak North,building,office,bldwall,19,53.2687069,-6.1994028,-0.1785,-0.0339,0,0
+w86207897,Maple House,building,bld,bldwall,13,53.2706210,-6.2020882,-0.3571,0.1790,0,0
+w86207898,office11,building,office,bldwall,15,53.2696923,-6.1999924,-0.2177,0.0757,0,0
+w86207901,office12,building,office,bldwall,8,53.2712274,-6.2015666,-0.3224,0.2464,0,0
+w86207905,SoftCo,building,bld,bldwall,26,53.2704907,-6.2001899,-0.2309,0.1645,0,0
+w86207907,Soft-ex,building,office,bldwall,5,53.2690790,-6.1996868,-0.1974,0.0075,0,0
+w86207908,Icon01,building,office,bldwall,5,53.2699516,-6.1987853,-0.1375,0.1045,0,0
+w86207909,Soft-ex01,building,office,bldwall,11,53.2692540,-6.1994729,-0.1832,0.0270,0,0
+w86207911,hospital01,unknown,hospital,unknown,23,53.2686150,-6.2039382,-0.4801,-0.0441,0,0
+w86207912,Red Oak South,building,office,bldwall,9,53.2683898,-6.1986508,-0.1285,-0.0691,0,0
+w88821354,house90,building,house,bldwall,5,53.2646598,-6.2081617,-0.7610,-0.4839,0,0
+w88821359,house91,building,house,bldwall,5,53.2648622,-6.2095611,-0.8541,-0.4614,0,0
+w88821361,house92,building,house,bldwall,7,53.2653100,-6.2101788,-0.8951,-0.4116,0,0
+w88821362,house93,building,house,bldwall,7,53.2654191,-6.2097403,-0.8660,-0.3994,0,0
+w88821363,house94,building,house,bldwall,5,53.2645451,-6.2071494,-0.6937,-0.4966,0,0
+w88821368,house95,building,house,bldwall,5,53.2654885,-6.2088769,-0.8086,-0.3917,0,0
+w88821375,house96,building,house,bldwall,8,53.2651961,-6.2091268,-0.8252,-0.4242,0,0
+w88821378,house97,building,house,bldwall,6,53.2653997,-6.2101990,-0.8965,-0.4016,0,0
+w88821383,house98,building,house,bldwall,5,53.2648668,-6.2080363,-0.7527,-0.4609,0,0
+w88821390,house99,building,house,bldwall,5,53.2646056,-6.2052136,-0.5650,-0.4899,0,0
+w88821396,house100,building,house,bldwall,11,53.2661411,-6.2065643,-0.6548,-0.3192,0,0
+w88821423,house101,building,house,bldwall,5,53.2649206,-6.2099395,-0.8792,-0.4549,0,0
+w88821425,house102,building,house,bldwall,9,53.2647410,-6.2073890,-0.7096,-0.4748,0,0
+w88821430,house103,building,house,bldwall,5,53.2655033,-6.2096376,-0.8592,-0.3901,0,0
+w88821431,house104,building,house,bldwall,7,53.2645789,-6.2099580,-0.8805,-0.4929,0,0
+w88821446,house105,building,house,bldwall,9,53.2651760,-6.2093466,-0.8398,-0.4265,0,0
+w88821454,house106,building,house,bldwall,9,53.2647445,-6.2080238,-0.7518,-0.4745,0,0
+w88821459,house107,building,house,bldwall,7,53.2652610,-6.2102024,-0.8967,-0.4170,0,0
+w88821461,house108,building,house,bldwall,8,53.2652716,-6.2096464,-0.8597,-0.4158,0,0
+w88821464,house109,building,house,bldwall,5,53.2645496,-6.2052156,-0.5651,-0.4961,0,0
+w88821466,house110,building,house,bldwall,9,53.2645286,-6.2103465,-0.9063,-0.4985,0,0
+w88821468,house111,building,house,bldwall,5,53.2650563,-6.2085979,-0.7900,-0.4398,0,0
+w88821469,house112,building,house,bldwall,7,53.2649520,-6.2103132,-0.9041,-0.4514,0,0
+w88821470,house113,building,house,bldwall,5,53.2655300,-6.2090471,-0.8199,-0.3871,0,0
+w88821479,house114,building,house,bldwall,7,53.2653152,-6.2090098,-0.8174,-0.4110,0,0
+w88821483,house115,building,house,bldwall,5,53.2648188,-6.2093035,-0.8369,-0.4662,0,0
+w88821489,house116,building,house,bldwall,5,53.2651586,-6.2085213,-0.7849,-0.4284,0,0
+w88821497,house117,building,house,bldwall,7,53.2646605,-6.2103715,-0.9080,-0.4838,0,0
+w88821503,house118,building,house,bldwall,8,53.2649979,-6.2077031,-0.7305,-0.4463,0,0
+w88821515,house119,building,house,bldwall,5,53.2654049,-6.2085446,-0.7865,-0.4010,0,0
+w88821516,house120,building,house,bldwall,5,53.2650892,-6.2078390,-0.7395,-0.4361,0,0
+w88821518,house121,building,house,bldwall,5,53.2645692,-6.2082375,-0.7660,-0.4940,0,0
+w88821520,house122,building,house,bldwall,5,53.2646408,-6.2072786,-0.7023,-0.4860,0,0
+w88821530,house123,building,house,bldwall,5,53.2648544,-6.2087133,-0.7977,-0.4622,0,0
+w88821534,house124,building,house,bldwall,5,53.2654560,-6.2087166,-0.7979,-0.3953,0,0
+w88821554,house125,building,house,bldwall,7,53.2651341,-6.2102470,-0.8997,-0.4311,0,0
+w88821565,house126,building,house,bldwall,7,53.2646047,-6.2103781,-0.9084,-0.4900,0,0
+w88821600,house127,building,house,bldwall,5,53.2653415,-6.2083965,-0.7766,-0.4081,0,0
+w88821618,house128,building,house,bldwall,5,53.2647557,-6.2087730,-0.8017,-0.4732,0,0
+w88821621,house129,building,house,bldwall,9,53.2649484,-6.2076035,-0.7239,-0.4518,0,0
+w88821639,house130,building,house,bldwall,7,53.2651887,-6.2102196,-0.8979,-0.4251,0,0
+w88821648,house131,building,house,bldwall,5,53.2649604,-6.2086656,-0.7945,-0.4505,0,0
+w88821675,house132,building,house,bldwall,7,53.2645231,-6.2099636,-0.8808,-0.4991,0,0
+w88821680,house133,building,house,bldwall,5,53.2648447,-6.2074521,-0.7138,-0.4633,0,0
+w88821687,house134,building,house,bldwall,5,53.2648357,-6.2094082,-0.8439,-0.4643,0,0
+w88821697,house135,building,house,bldwall,5,53.2646610,-6.2088501,-0.8068,-0.4837,0,0
+w88821710,house136,building,house,bldwall,7,53.2650461,-6.2102781,-0.9017,-0.4409,0,0
+w88821721,house137,building,house,bldwall,5,53.2657075,-6.2095484,-0.8532,-0.3674,0,0
+w88821726,house138,building,house,bldwall,5,53.2652902,-6.2082437,-0.7665,-0.4138,0,0
+w88821731,house139,building,house,bldwall,5,53.2647838,-6.2091125,-0.8242,-0.4701,0,0
+w88821736,house140,building,house,bldwall,5,53.2648790,-6.2096658,-0.8610,-0.4595,0,0
+w88821741,house141,building,house,bldwall,11,53.2652126,-6.2095481,-0.8532,-0.4224,0,0
+w88821757,house142,building,house,bldwall,5,53.2649038,-6.2098349,-0.8723,-0.4568,0,0
+w88821761,house143,building,house,bldwall,5,53.2655968,-6.2096209,-0.8580,-0.3797,0,0
+w88832175,house144,building,house,bldwall,7,53.2656335,-6.2119468,-1.0127,-0.3756,0,0
+w89685894,office13,building,office,bldwall,5,53.2713795,-6.1970820,-0.0242,0.2633,0,0
+w89685897,bld04,building,bld,bldwall,6,53.2668847,-6.1955246,0.0794,-0.2365,0,0
+w89685915,office14,building,office,bldwall,5,53.2716337,-6.1967029,0.0010,0.2916,0,0
+w89693235,house145,building,house,bldwall,5,53.2712338,-6.1924693,0.2826,0.2471,0,0
+w89693238,house146,building,house,bldwall,5,53.2722915,-6.1959750,0.0494,0.3647,0,0
+w89693239,house147,building,house,bldwall,5,53.2722278,-6.1925188,0.2793,0.3577,0,0
+w89693240,house148,building,house,bldwall,5,53.2721746,-6.1957516,0.0643,0.3517,0,0
+w89693241,house149,building,house,bldwall,5,53.2723291,-6.1938102,0.1934,0.3689,0,0
+w89693242,house150,building,house,bldwall,5,53.2718657,-6.1950141,0.1133,0.3174,0,0
+w89693243,house151,building,house,bldwall,5,53.2712953,-6.1932888,0.2281,0.2540,0,0
+w89693244,house152,building,house,bldwall,5,53.2722581,-6.1935503,0.2107,0.3610,0,0
+w89693247,house153,building,house,bldwall,5,53.2721687,-6.1923584,0.2899,0.3511,0,0
+w89693249,house154,building,house,bldwall,5,53.2719713,-6.1920571,0.3100,0.3291,0,0
+w89693250,house155,building,house,bldwall,5,53.2716579,-6.1930215,0.2458,0.2943,0,0
+w89693251,house156,building,house,bldwall,5,53.2720702,-6.1921928,0.3009,0.3401,0,0
+w89693252,house157,building,house,bldwall,5,53.2724581,-6.1930016,0.2472,0.3833,0,0
+w89693253,house158,building,house,bldwall,5,53.2719944,-6.1953632,0.0901,0.3317,0,0
+w89693254,house159,building,house,bldwall,5,53.2714983,-6.1935516,0.2106,0.2765,0,0
+w89693255,house160,building,house,bldwall,5,53.2716441,-6.1938596,0.1901,0.2927,0,0
+w89693256,house161,building,house,bldwall,5,53.2723878,-6.1928178,0.2594,0.3754,0,0
+w89693257,house162,building,house,bldwall,5,53.2728153,-6.1941300,0.1721,0.4230,0,0
+w89693258,house163,building,house,bldwall,5,53.2716342,-6.1937620,0.1966,0.2916,0,0
+w89693259,house164,building,house,bldwall,5,53.2727514,-6.1939222,0.1859,0.4159,0,0
+w89693260,house165,building,house,bldwall,5,53.2717794,-6.1932463,0.2309,0.3078,0,0
+w89693261,house166,building,house,bldwall,5,53.2716956,-6.1942661,0.1631,0.2985,0,0
+w89693262,house167,building,house,bldwall,5,53.2714941,-6.1920040,0.3135,0.2761,0,0
+w89693263,house168,building,house,bldwall,5,53.2725423,-6.1965117,0.0137,0.3926,0,0
+w89693265,house169,building,house,bldwall,5,53.2722065,-6.1934085,0.2201,0.3553,0,0
+w89693266,house170,building,house,bldwall,5,53.2724241,-6.1962162,0.0334,0.3795,0,0
+w89693267,house171,building,house,bldwall,5,53.2719212,-6.1927741,0.2623,0.3236,0,0
+w89693268,house172,building,house,bldwall,5,53.2721272,-6.1931502,0.2373,0.3465,0,0
+w89693269,house173,building,house,bldwall,5,53.2726237,-6.1935178,0.2128,0.4017,0,0
+w89693270,house174,building,house,bldwall,5,53.2718966,-6.1935819,0.2086,0.3208,0,0
+w89693271,house175,building,house,bldwall,5,53.2725598,-6.1933101,0.2266,0.3946,0,0
+w89693272,house176,building,house,bldwall,5,53.2713996,-6.1921759,0.3021,0.2656,0,0
+w89693274,house177,building,house,bldwall,5,53.2726450,-6.1968330,-0.0076,0.4040,0,0
+w89693275,house178,building,house,bldwall,5,53.2726747,-6.1936799,0.2020,0.4073,0,0
+w89693276,house179,building,house,bldwall,5,53.2722853,-6.1943450,0.1578,0.3640,0,0
+w89693277,house180,building,house,bldwall,5,53.2716371,-6.1926304,0.2718,0.2920,0,0
+w89693278,house181,building,house,bldwall,5,53.2719872,-6.1940659,0.1764,0.3309,0,0
+w89693279,house182,building,house,bldwall,5,53.2712653,-6.1924120,0.2864,0.2506,0,0
+w89693280,house183,building,house,bldwall,5,53.2722525,-6.1959006,0.0544,0.3604,0,0
+w89693281,house184,building,house,bldwall,5,53.2723055,-6.1937235,0.1992,0.3663,0,0
+w89693282,house185,building,house,bldwall,5,53.2718343,-6.1949302,0.1189,0.3139,0,0
+w89693283,house186,building,house,bldwall,5,53.2721124,-6.1956250,0.0727,0.3448,0,0
+w89693284,house187,building,house,bldwall,5,53.2712460,-6.1932195,0.2327,0.2485,0,0
+w89693285,house188,building,house,bldwall,5,53.2721358,-6.1923032,0.2936,0.3474,0,0
+w89693286,house189,building,house,bldwall,5,53.2719385,-6.1920019,0.3136,0.3255,0,0
+w89693287,house190,building,house,bldwall,5,53.2711220,-6.1926540,0.2703,0.2347,0,0
+w89693288,house191,building,house,bldwall,5,53.2717450,-6.1946137,0.1400,0.3040,0,0
+w89693289,house192,building,house,bldwall,5,53.2724368,-6.1929323,0.2518,0.3809,0,0
+w89693290,house193,building,house,bldwall,5,53.2710167,-6.1928572,0.2568,0.2230,0,0
+w89693291,house194,building,house,bldwall,5,53.2719630,-6.1952793,0.0957,0.3282,0,0
+w89693292,house195,building,house,bldwall,5,53.2714514,-6.1934894,0.2147,0.2713,0,0
+w89693293,house196,building,house,bldwall,5,53.2719329,-6.1937311,0.1986,0.3249,0,0
+w89693294,house197,building,house,bldwall,5,53.2715628,-6.1918395,0.3244,0.2837,0,0
+w89693295,house198,building,house,bldwall,5,53.2717976,-6.1917369,0.3313,0.3098,0,0
+w89693296,house199,building,house,bldwall,5,53.2723553,-6.1927242,0.2656,0.3718,0,0
+w89693297,house200,building,house,bldwall,5,53.2718604,-6.1933961,0.2209,0.3168,0,0
+w89693298,house201,building,house,bldwall,5,53.2717389,-6.1931713,0.2359,0.3033,0,0
+w89693299,house202,building,house,bldwall,5,53.2725007,-6.1931400,0.2380,0.3880,0,0
+w89693300,house203,building,house,bldwall,5,53.2716857,-6.1941685,0.1696,0.2974,0,0
+w89693301,house204,building,house,bldwall,5,53.2720656,-6.1930133,0.2464,0.3396,0,0
+w89693302,house205,building,house,bldwall,5,53.2716639,-6.1940547,0.1771,0.2949,0,0
+w89693303,house206,building,house,bldwall,5,53.2727940,-6.1940607,0.1767,0.4206,0,0
+w89693304,house207,building,house,bldwall,5,53.2721801,-6.1933224,0.2258,0.3523,0,0
+w89693305,house208,building,house,bldwall,5,53.2723852,-6.1961417,0.0383,0.3751,0,0
+w89693306,house209,building,house,bldwall,5,53.2718841,-6.1927131,0.2663,0.3194,0,0
+w89693307,house210,building,house,bldwall,5,53.2717154,-6.1944612,0.1501,0.3007,0,0
+w89693308,house211,building,house,bldwall,5,53.2726024,-6.1934486,0.2174,0.3993,0,0
+w89693309,house212,building,house,bldwall,5,53.2718469,-6.1926521,0.2704,0.3153,0,0
+w89693310,house213,building,house,bldwall,5,53.2714311,-6.1921186,0.3059,0.2691,0,0
+w89693311,house214,building,house,bldwall,5,53.2726171,-6.1967457,-0.0018,0.4009,0,0
+w89693312,house215,building,house,bldwall,5,53.2722403,-6.1943964,0.1544,0.3590,0,0
+w89693313,house216,building,house,bldwall,5,53.2716686,-6.1925731,0.2757,0.2955,0,0
+w89693314,house217,building,house,bldwall,5,53.2725101,-6.1964267,0.0194,0.3890,0,0
+w89693315,house218,building,house,bldwall,5,53.2722752,-6.1925926,0.2744,0.3629,0,0
+w89693316,house219,building,house,bldwall,5,53.2720053,-6.1941775,0.1690,0.3329,0,0
+w89693317,house220,building,house,bldwall,5,53.2712968,-6.1923547,0.2902,0.2541,0,0
+w89693318,house221,building,house,bldwall,5,53.2722818,-6.1936369,0.2049,0.3637,0,0
+w89693319,house222,building,house,bldwall,5,53.2718029,-6.1948464,0.1245,0.3104,0,0
+w89693320,house223,building,house,bldwall,5,53.2720740,-6.1955476,0.0778,0.3405,0,0
+w89693321,house224,building,house,bldwall,5,53.2711966,-6.1931502,0.2373,0.2430,0,0
+w89693322,house225,building,house,bldwall,5,53.2719057,-6.1919467,0.3173,0.3218,0,0
+w89693323,house226,building,house,bldwall,5,53.2711663,-6.1925751,0.2755,0.2396,0,0
+w89693324,house227,building,house,bldwall,5,53.2715741,-6.1927450,0.2642,0.2850,0,0
+w89693325,house228,building,house,bldwall,5,53.2710339,-6.1929562,0.2502,0.2249,0,0
+w89693326,house229,building,house,bldwall,5,53.2719316,-6.1951955,0.1013,0.3247,0,0
+w89693327,house230,building,house,bldwall,5,53.2714045,-6.1934272,0.2189,0.2661,0,0
+w89693328,house231,building,house,bldwall,5,53.2719510,-6.1938427,0.1912,0.3269,0,0
+w89693329,house232,building,house,bldwall,5,53.2716221,-6.1917962,0.3273,0.2903,0,0
+w89693330,house233,building,house,bldwall,5,53.2717331,-6.1917287,0.3318,0.3026,0,0
+w89693331,house234,building,house,bldwall,5,53.2720891,-6.1945457,0.1445,0.3422,0,0
+w89693332,house235,building,house,bldwall,5,53.2722136,-6.1958261,0.0593,0.3561,0,0
+w89693333,house236,building,house,bldwall,5,53.2723528,-6.1938968,0.1876,0.3715,0,0
+w89693334,house237,building,house,bldwall,5,53.2718971,-6.1950979,0.1078,0.3209,0,0
+w89693335,house238,building,house,bldwall,5,53.2716984,-6.1930964,0.2409,0.2988,0,0
+w89693336,house239,building,house,bldwall,5,53.2721030,-6.1922480,0.2973,0.3438,0,0
+w89693337,house240,building,house,bldwall,5,53.2724794,-6.1930708,0.2426,0.3856,0,0
+w89693338,house241,building,house,bldwall,5,53.2720258,-6.1954470,0.0845,0.3352,0,0
+w89693339,house242,building,house,bldwall,5,53.2715452,-6.1936137,0.2065,0.2817,0,0
+w89693340,house243,building,house,bldwall,5,53.2720270,-6.1929415,0.2512,0.3353,0,0
+w89693341,house244,building,house,bldwall,5,53.2714881,-6.1928471,0.2574,0.2754,0,0
+w89693342,house245,building,house,bldwall,5,53.2716540,-6.1939571,0.1836,0.2938,0,0
+w89693343,house246,building,house,bldwall,5,53.2727727,-6.1939915,0.1813,0.4182,0,0
+w89693344,house247,building,house,bldwall,5,53.2721536,-6.1932363,0.2316,0.3494,0,0
+w89693345,house248,building,house,bldwall,5,53.2718199,-6.1933212,0.2259,0.3123,0,0
+w89693346,house249,building,house,bldwall,5,53.2723462,-6.1960673,0.0433,0.3708,0,0
+w89693347,house250,building,house,bldwall,5,53.2724142,-6.1942124,0.1666,0.3784,0,0
+w89693348,house251,building,house,bldwall,5,53.2717055,-6.1943636,0.1566,0.2996,0,0
+w89693349,house252,building,house,bldwall,5,53.2727030,-6.1937773,0.1956,0.4105,0,0
+w89693350,house253,building,house,bldwall,5,53.2714626,-6.1920613,0.3097,0.2726,0,0
+w89693351,house254,building,house,bldwall,5,53.2725892,-6.1966585,0.0040,0.3978,0,0
+w89693352,house255,building,house,bldwall,5,53.2721952,-6.1944478,0.1510,0.3540,0,0
+w89693353,house256,building,house,bldwall,5,53.2720234,-6.1942890,0.1615,0.3349,0,0
+w89693354,house257,building,house,bldwall,5,53.2713283,-6.1922974,0.2940,0.2576,0,0
+w89693355,house258,building,house,bldwall,5,53.2724631,-6.1962907,0.0284,0.3838,0,0
+w89693356,house259,building,house,bldwall,5,53.2719584,-6.1928351,0.2582,0.3277,0,0
+w89693357,house260,building,house,bldwall,5,53.2725811,-6.1933794,0.2220,0.3969,0,0
+w89693358,house261,building,house,bldwall,5,53.2711473,-6.1930808,0.2419,0.2375,0,0
+w89693359,house262,building,house,bldwall,5,53.2717312,-6.1924215,0.2857,0.3024,0,0
+w89693360,house263,building,house,bldwall,5,53.2717603,-6.1947109,0.1335,0.3057,0,0
+w89693361,house264,building,house,bldwall,5,53.2726729,-6.1969203,-0.0134,0.4071,0,0
+w89693362,house265,building,house,bldwall,5,53.2718728,-6.1918915,0.3210,0.3182,0,0
+w89693363,house266,building,house,bldwall,5,53.2723304,-6.1942936,0.1612,0.3691,0,0
+w89693364,house267,building,house,bldwall,5,53.2716056,-6.1926877,0.2680,0.2885,0,0
+w89693365,house268,building,house,bldwall,5,53.2713576,-6.1933651,0.2230,0.2609,0,0
+w89693366,house269,building,house,bldwall,5,53.2719691,-6.1939543,0.1838,0.3289,0,0
+w113570255,leisure_centre03,unknown,leisure_centre,unknown,13,53.2654215,-6.1944623,0.1500,-0.3992,0,0
+w121745854,The Gables,building,bld,bldwall,5,53.2670466,-6.1843557,0.8221,-0.2185,0,0
+w154229043,house270,building,house,bldwall,5,53.2735388,-6.1887776,0.5281,0.5034,0,0
+w154229045,house271,building,house,bldwall,5,53.2734666,-6.1883416,0.5571,0.4954,0,0
+w228197322,bld05,building,bld,bldwall,13,53.2709776,-6.2029035,-0.4113,0.2186,0,0
+w228197324,bld06,building,bld,bldwall,16,53.2712961,-6.2023921,-0.3773,0.2540,0,0
+w228197325,bld07,building,bld,bldwall,32,53.2710546,-6.2039666,-0.4820,0.2272,45,8
+w228197330,bld08,building,bld,bldwall,9,53.2727942,-6.2069144,-0.6781,0.4206,0,0
+w228206407,office15,building,office,bldwall,4,53.2732509,-6.2087212,-0.7982,0.4714,15,0
+w228206417,office16,building,office,bldwall,5,53.2733649,-6.2105073,-0.9170,0.4841,0,0
+w228206420,office17,building,office,bldwall,5,53.2731178,-6.2093358,-0.8391,0.4566,0,0
+w228206423,bld09,building,bld,bldwall,9,53.2729727,-6.2084213,-0.7783,0.4405,15,0
+w228243890,office18,building,office,bldwall,21,53.2722644,-6.2044892,-0.5168,0.3617,0,0
+w228243891,bld10,building,bld,bldwall,15,53.2725083,-6.2065083,-0.6510,0.3888,0,0
+w245782782,Park Montessori,building,bld,bldwall,5,53.2660538,-6.2108341,-0.9387,-0.3289,0,0
+w292092581,Block P,building,commercial,bldwall,4,53.2712724,-6.2033577,-0.4415,0.2514,0,0
+w302111073,Icon02,building,office,bldwall,125,53.2695987,-6.1980132,-0.0861,0.0653,0,0
+w389138388,Oakhill Junior School And Pre-School,building,school,bldwall,13,53.2700126,-6.2072373,-0.6995,0.1113,0,0
+w399052100,industrial01,unknown,industrial,unknown,5,53.2717567,-6.2010778,-0.2899,0.3053,0,0
+w399060903,industrial02,unknown,industrial,unknown,5,53.2694323,-6.2045532,-0.5210,0.0468,0,0
+w399060905,house272,building,house,bldwall,7,53.2667071,-6.2092678,-0.8346,-0.2562,0,0
+w399060906,bld11,building,bld,bldwall,5,53.2669614,-6.2092312,-0.8321,-0.2279,0,0
+w399060909,house273,building,house,bldwall,7,53.2661500,-6.2083487,-0.7734,-0.3182,0,0
+w399060910,bld12,building,bld,bldwall,5,53.2660354,-6.2079697,-0.7482,-0.3309,0,0
+w470024317,industrial03,unknown,industrial,unknown,6,53.2702798,-6.2060417,-0.6200,0.1410,0,0
+w488068045,bld13,building,bld,bldwall,5,53.2669672,-6.1998816,-0.2104,-0.2273,0,0
+w488068048,One South County,building,bld,bldwall,21,53.2723868,-6.1995338,-0.1872,0.3753,0,0
+w515850894,hospital02,unknown,hospital,unknown,9,53.2684729,-6.2031038,-0.4246,-0.0599,0,0
+w515850898,hospital03,unknown,hospital,unknown,5,53.2683866,-6.2020601,-0.3552,-0.0695,0,0
+w515850899,bld14,building,bld,bldwall,5,53.2687780,-6.2020188,-0.3525,-0.0260,0,0
+w515850900,bld15,building,bld,bldwall,30,53.2688375,-6.2010045,-0.2850,-0.0193,0,0
+w515850901,bld16,building,bld,bldwall,5,53.2690498,-6.2011224,-0.2929,0.0043,0,0
+w515850902,bld17,building,bld,bldwall,14,53.2690214,-6.2035300,-0.4530,0.0011,0,0
+w573644781,One Microsoft Place,building,bld,bldwall,16,53.2689121,-6.1961384,0.0386,-0.0110,0,5
+w591845356,greenhouse01,unknown,greenhouse,unknown,5,53.2672067,-6.1993304,-0.1737,-0.2007,0,0
+w591850487,AIB,building,commercial,bldwall,7,53.2708387,-6.2048077,-0.5380,0.2032,0,8
+w593149799,apartments01,building,apartments,bldwall,7,53.2708795,-6.2032753,-0.4361,0.2077,0,9
+w593149800,apartments02,building,apartments,bldwall,9,53.2706019,-6.2033837,-0.4433,0.1769,0,9
+w593149804,apartments03,building,apartments,bldwall,10,53.2704801,-6.2037287,-0.4662,0.1633,0,17
+w598066160,apartments04,building,apartments,bldwall,15,53.2698478,-6.2047856,-0.5365,0.0930,0,0
+w598066161,apartments05,building,apartments,bldwall,11,53.2700559,-6.2045990,-0.5241,0.1161,0,7
+w598066162,apartments06,building,apartments,bldwall,12,53.2701983,-6.2041851,-0.4966,0.1320,0,11
+w598105049,Block I,building,bld,bldwall,8,53.2702715,-6.2051381,-0.5599,0.1401,0,8
+w634368147,bld18,building,bld,bldwall,7,53.2719366,-6.2079614,-0.7477,0.3253,0,0
+w634368148,bld19,building,bld,bldwall,5,53.2718311,-6.2083047,-0.7705,0.3135,0,0
+w634368149,bld20,building,bld,bldwall,5,53.2717463,-6.2087358,-0.7992,0.3041,0,0
+w634368342,bld21,building,bld,bldwall,5,53.2718487,-6.2082081,-0.7641,0.3155,0,0
+w634368343,bld22,building,bld,bldwall,5,53.2717639,-6.2086393,-0.7928,0.3061,0,0
+w753662044,bld23,building,bld,bldwall,5,53.2653253,-6.2098030,-0.8701,-0.4099,0,0
+w753662046,house274,building,house,bldwall,5,53.2654889,-6.2101412,-0.8926,-0.3917,0,0
+w753662069,bld24,building,bld,bldwall,5,53.2662356,-6.2077654,-0.7347,-0.3087,0,0
+w754195529,bld25,building,bld,bldwall,14,53.2734969,-6.1991323,-0.1605,0.4988,0,0
+w754195530,bld26,building,bld,bldwall,35,53.2736726,-6.1996414,-0.1944,0.5183,0,0
+w754195532,bld27,building,bld,bldwall,17,53.2733419,-6.2000370,-0.2207,0.4815,0,0
+w754195536,bld28,building,bld,bldwall,42,53.2733383,-6.1985781,-0.1237,0.4811,0,0
+w754195537,bld29,building,bld,bldwall,5,53.2734064,-6.1981822,-0.0974,0.4887,0,0
+w754195538,bld30,building,bld,bldwall,5,53.2734615,-6.1979095,-0.0792,0.4948,0,0
+w754195539,bld31,building,bld,bldwall,5,53.2735022,-6.1976591,-0.0626,0.4994,0,0
+w754195568,bld32,building,bld,bldwall,5,53.2722455,-6.2068424,-0.6733,0.3596,0,0
+w754195569,bld33,building,bld,bldwall,5,53.2723879,-6.2068538,-0.6740,0.3755,0,0
+w754633582,bld34,building,bld,bldwall,5,53.2667084,-6.1853396,0.7567,-0.2561,0,0
+w754633583,bld35,building,bld,bldwall,5,53.2690590,-6.1854686,0.7481,0.0053,0,0
+w754633584,bld36,building,bld,bldwall,7,53.2698786,-6.1852814,0.7606,0.0964,0,0
+w754633585,bld37,building,bld,bldwall,9,53.2700451,-6.1854260,0.7509,0.1149,0,0
+w754633586,bld38,building,bld,bldwall,7,53.2705625,-6.1857639,0.7285,0.1725,0,0
+w754633587,bld39,building,bld,bldwall,13,53.2707048,-6.1860428,0.7099,0.1883,0,0
+w754633588,bld40,building,bld,bldwall,5,53.2708661,-6.1862152,0.6985,0.2062,0,0
+w754633589,bld41,building,bld,bldwall,6,53.2712997,-6.1868630,0.6554,0.2544,0,0
+w754633590,bld42,building,bld,bldwall,9,53.2712299,-6.1868422,0.6568,0.2467,0,0
+w754633591,bld43,building,bld,bldwall,5,53.2713990,-6.1871879,0.6338,0.2655,0,0
+w754633592,bld44,building,bld,bldwall,5,53.2713234,-6.1869982,0.6464,0.2571,0,0
+w754633593,bld45,building,bld,bldwall,9,53.2716728,-6.1874621,0.6155,0.2959,0,0
+w754633594,bld46,building,bld,bldwall,13,53.2717269,-6.1877889,0.5938,0.3020,0,0
+w754633595,bld47,building,bld,bldwall,30,53.2664125,-6.1891120,0.5058,-0.2890,0,0
+w754633596,bld48,building,bld,bldwall,5,53.2653623,-6.1959586,0.0505,-0.4058,0,0
+w754633597,bld49,building,bld,bldwall,5,53.2659738,-6.1954506,0.0843,-0.3378,0,0
+w754633598,bld50,building,bld,bldwall,5,53.2664864,-6.1954693,0.0831,-0.2808,0,0
+w754633599,bld51,building,bld,bldwall,5,53.2661566,-6.1953250,0.0927,-0.3174,0,0
+w754633600,bld52,building,bld,bldwall,5,53.2711712,-6.1933767,0.2222,0.2402,0,0
+w754633601,bld53,building,bld,bldwall,5,53.2710259,-6.1927265,0.2655,0.2240,0,0
+w754959752,sports_centre01,unknown,sports_centre,unknown,5,53.2659959,-6.1984446,-0.1148,-0.3353,0,0
+w755276774,bld54,building,bld,bldwall,5,53.2683976,-6.2017651,-0.3356,-0.0682,0,0
+w755279800,bld55,building,bld,bldwall,5,53.2652566,-6.2004093,-0.2455,-0.4175,0,0
+w755279801,bld56,building,bld,bldwall,7,53.2652098,-6.2005081,-0.2520,-0.4227,0,0
+w755279802,bld57,building,bld,bldwall,7,53.2652935,-6.2011105,-0.2921,-0.4134,0,0
+w755279803,bld58,building,bld,bldwall,5,53.2652504,-6.2012019,-0.2982,-0.4182,0,0
+w755279804,bld59,building,bld,bldwall,7,53.2653912,-6.2009740,-0.2830,-0.4025,0,0
+w755279805,bld60,building,bld,bldwall,7,53.2653518,-6.2010226,-0.2862,-0.4069,0,0
+w755279806,bld61,building,bld,bldwall,7,53.2654794,-6.2008001,-0.2715,-0.3927,0,0
+w755279807,bld62,building,bld,bldwall,7,53.2654339,-6.2008543,-0.2751,-0.3978,0,0
+w755279808,bld63,building,bld,bldwall,5,53.2657484,-6.2013213,-0.3061,-0.3628,0,0
+w755279809,bld64,building,bld,bldwall,6,53.2657164,-6.2013767,-0.3098,-0.3664,0,0
+w755279810,bld65,building,bld,bldwall,5,53.2656675,-6.2014234,-0.3129,-0.3718,0,0
+w755279811,bld66,building,bld,bldwall,5,53.2656083,-6.2014875,-0.3172,-0.3784,0,0
+w755279812,bld67,building,bld,bldwall,7,53.2655782,-6.2015835,-0.3235,-0.3818,0,0
+w755279813,bld68,building,bld,bldwall,5,53.2654849,-6.2016263,-0.3264,-0.3921,0,0
+w755279814,bld69,building,bld,bldwall,5,53.2654309,-6.2016890,-0.3306,-0.3981,0,0
+w755279815,bld70,building,bld,bldwall,7,53.2651290,-6.2018298,-0.3399,-0.4317,0,0
+w755279816,bld71,building,bld,bldwall,7,53.2651648,-6.2019065,-0.3450,-0.4277,0,0
+w755279817,bld72,building,bld,bldwall,5,53.2652170,-6.2020188,-0.3525,-0.4219,0,0
+w755279818,bld73,building,bld,bldwall,6,53.2652459,-6.2021021,-0.3580,-0.4187,0,0
+w755279819,bld74,building,bld,bldwall,5,53.2651638,-6.2027200,-0.3991,-0.4278,0,0
+w755279820,bld75,building,bld,bldwall,5,53.2651647,-6.2028771,-0.4096,-0.4277,0,0
+w755279821,bld76,building,bld,bldwall,8,53.2652415,-6.2030888,-0.4237,-0.4192,0,0
+w755279822,bld77,building,bld,bldwall,5,53.2653271,-6.2030918,-0.4239,-0.4097,0,0
+w755279823,bld78,building,bld,bldwall,7,53.2652836,-6.2023980,-0.3777,-0.4145,0,0
+w755279824,bld79,building,bld,bldwall,11,53.2652277,-6.2024593,-0.3818,-0.4207,0,0
+w755279825,bld80,building,bld,bldwall,9,53.2653642,-6.2022718,-0.3693,-0.4056,0,0
+w755279826,bld81,building,bld,bldwall,8,53.2656548,-6.2020559,-0.3550,-0.3732,0,0
+w755279827,bld82,building,bld,bldwall,7,53.2656226,-6.2021180,-0.3591,-0.3768,0,0
+w755279828,bld83,building,bld,bldwall,7,53.2657610,-6.2019509,-0.3480,-0.3614,0,0
+w755279829,bld84,building,bld,bldwall,7,53.2657205,-6.2020007,-0.3513,-0.3659,0,0
+w755279830,bld85,building,bld,bldwall,7,53.2658407,-6.2017906,-0.3373,-0.3526,0,0
+w755279831,bld86,building,bld,bldwall,7,53.2657991,-6.2018368,-0.3404,-0.3572,0,0
+w755279832,bld87,building,bld,bldwall,7,53.2658968,-6.2016910,-0.3307,-0.3463,0,0
+w755279833,bld88,building,bld,bldwall,5,53.2653823,-6.2033631,-0.4419,-0.4035,0,0
+w755279834,bld89,building,bld,bldwall,8,53.2655387,-6.2030152,-0.4188,-0.3862,0,0
+w755279835,bld90,building,bld,bldwall,5,53.2654594,-6.2030538,-0.4213,-0.3950,0,0
+w755279836,bld91,building,bld,bldwall,5,53.2656159,-6.2028590,-0.4084,-0.3776,0,0
+w755279837,bld92,building,bld,bldwall,5,53.2656845,-6.2027725,-0.4026,-0.3699,0,0
+w755279838,bld93,building,bld,bldwall,5,53.2657668,-6.2026675,-0.3956,-0.3608,0,0
+w755279839,bld94,building,bld,bldwall,6,53.2658429,-6.2026181,-0.3923,-0.3523,0,0
+w755279840,bld95,building,bld,bldwall,5,53.2661547,-6.2021729,-0.3627,-0.3176,0,0
+w755279841,bld96,building,bld,bldwall,5,53.2661030,-6.2022347,-0.3669,-0.3234,0,0
+w755279842,bld97,building,bld,bldwall,5,53.2660447,-6.2023222,-0.3727,-0.3299,0,0
+w755279843,bld98,building,bld,bldwall,6,53.2660152,-6.2024015,-0.3779,-0.3332,0,0
+w755279844,bld99,building,bld,bldwall,5,53.2658983,-6.2024898,-0.3838,-0.3462,0,0
+w755279845,bld100,building,bld,bldwall,5,53.2659432,-6.2024361,-0.3802,-0.3412,0,0
+w755279846,bld101,building,bld,bldwall,5,53.2659757,-6.2069576,-0.6809,-0.3376,0,0
+w757826290,bld102,building,bld,bldwall,13,53.2696855,-6.1852073,0.7655,0.0750,0,0
+w766648858,bld103,building,bld,bldwall,5,53.2645694,-6.2102150,-0.8975,-0.4939,0,0
+w766648860,bld104,building,bld,bldwall,5,53.2646665,-6.2101304,-0.8919,-0.4831,0,0
+w766648861,bld105,building,bld,bldwall,5,53.2646811,-6.2102243,-0.8982,-0.4815,0,0
+w774721467,house275,building,house,bldwall,6,53.2647953,-6.2017903,-0.3373,-0.4688,0,0
+w774721468,house276,building,house,bldwall,5,53.2647532,-6.2017357,-0.3337,-0.4735,0,0
+w774721469,house277,building,house,bldwall,6,53.2648444,-6.2019803,-0.3499,-0.4633,0,0
+w774721470,house278,building,house,bldwall,5,53.2648074,-6.2019155,-0.3456,-0.4675,0,0
+w774721471,house279,building,house,bldwall,5,53.2649226,-6.2021535,-0.3615,-0.4547,0,0
+w774721472,house280,building,house,bldwall,5,53.2648990,-6.2020828,-0.3568,-0.4573,0,0
+w774721473,house281,building,house,bldwall,9,53.2649506,-6.2024137,-0.3788,-0.4515,0,0
+w774721474,house282,building,house,bldwall,5,53.2649377,-6.2023033,-0.3714,-0.4530,0,0
+w774721475,house283,building,house,bldwall,5,53.2648899,-6.2025433,-0.3874,-0.4583,0,0
+w774721476,house284,building,house,bldwall,5,53.2648512,-6.2025983,-0.3910,-0.4626,0,0
+w774721477,house285,building,house,bldwall,5,53.2647077,-6.2026198,-0.3925,-0.4786,0,0
+w774721478,house286,building,house,bldwall,5,53.2647606,-6.2026208,-0.3925,-0.4727,0,0
+w774721479,house287,building,house,bldwall,5,53.2645747,-6.2024985,-0.3844,-0.4933,0,0
+w774721480,house288,building,house,bldwall,5,53.2646189,-6.2025679,-0.3890,-0.4884,0,0
+w774721481,house289,building,house,bldwall,5,53.2645425,-6.2023395,-0.3738,-0.4969,0,0
+w774721482,house290,building,house,bldwall,6,53.2645012,-6.2022946,-0.3708,-0.5015,0,0
+w774721489,house291,building,house,bldwall,5,53.2649346,-6.2037256,-0.4660,-0.4533,0,0
+w774721490,house292,building,house,bldwall,5,53.2648551,-6.2037794,-0.4696,-0.4622,0,0
+w774721491,house293,building,house,bldwall,5,53.2647931,-6.2038957,-0.4773,-0.4691,0,0
+w774721492,house294,building,house,bldwall,5,53.2647440,-6.2039531,-0.4811,-0.4745,0,0
+w774721493,house295,building,house,bldwall,5,53.2646870,-6.2040266,-0.4860,-0.4809,0,0
+w774721494,house296,building,house,bldwall,5,53.2646216,-6.2041032,-0.4911,-0.4881,0,0
+w774721495,house297,building,house,bldwall,5,53.2649917,-6.2034759,-0.4494,-0.4470,0,0
+w774721496,house298,building,house,bldwall,7,53.2649764,-6.2033473,-0.4408,-0.4487,0,0
+w774721497,house299,building,house,bldwall,7,53.2648216,-6.2031138,-0.4253,-0.4659,0,0
+w774721498,house300,building,house,bldwall,7,53.2649103,-6.2031868,-0.4302,-0.4560,0,0
+w774721499,house301,building,house,bldwall,8,53.2646660,-6.2031266,-0.4262,-0.4832,0,0
+w774721500,house302,building,house,bldwall,5,53.2646103,-6.2032212,-0.4325,-0.4894,0,0
+w774721501,house303,building,house,bldwall,8,53.2645119,-6.2033189,-0.4390,-0.5003,0,0
+w777741885,bld106,building,bld,bldwall,5,53.2648443,-6.2007369,-0.2672,-0.4634,0,0
+w777741886,bld107,building,bld,bldwall,7,53.2647823,-6.2008179,-0.2726,-0.4703,0,0
+w777741887,bld108,building,bld,bldwall,7,53.2647371,-6.2008777,-0.2766,-0.4753,0,0
+w777741888,bld109,building,bld,bldwall,7,53.2646244,-6.2010117,-0.2855,-0.4878,0,0
+w777741889,bld110,building,bld,bldwall,7,53.2646696,-6.2009519,-0.2815,-0.4828,0,0
+w777741890,bld111,building,bld,bldwall,7,53.2645056,-6.2011619,-0.2955,-0.5010,0,0
+w777741891,bld112,building,bld,bldwall,7,53.2645588,-6.2010937,-0.2910,-0.4951,0,0
+w777741892,bld113,building,bld,bldwall,5,53.2646783,-6.2013724,-0.3095,-0.4818,0,0
+w777741893,bld114,building,bld,bldwall,5,53.2646965,-6.2014475,-0.3145,-0.4798,0,0
+w777741894,bld115,building,bld,bldwall,5,53.2647229,-6.2016384,-0.3272,-0.4769,0,0
+w777741895,bld116,building,bld,bldwall,5,53.2647043,-6.2015606,-0.3220,-0.4789,0,0
+w777741896,bld117,building,bld,bldwall,5,53.2648732,-6.2010774,-0.2899,-0.4601,0,0
+w777741897,house304,building,house,bldwall,7,53.2649296,-6.2012294,-0.3000,-0.4539,0,0
+w777741898,bld118,building,bld,bldwall,7,53.2649627,-6.2013066,-0.3051,-0.4502,0,0
+w777741899,house305,building,house,bldwall,7,53.2649837,-6.2014466,-0.3144,-0.4479,0,0
+w777741900,bld119,building,bld,bldwall,7,53.2650168,-6.2015238,-0.3196,-0.4442,0,0
+w777741901,house306,building,house,bldwall,7,53.2650523,-6.2016488,-0.3279,-0.4402,0,0
+w777741902,bld120,building,bld,bldwall,7,53.2650854,-6.2017259,-0.3330,-0.4366,0,0
+w777741903,bld121,building,bld,bldwall,7,53.2650480,-6.2005675,-0.2560,-0.4407,0,0
+w777741904,bld122,building,bld,bldwall,5,53.2650824,-6.2004582,-0.2487,-0.4369,0,0
+w822532755,house307,building,house,bldwall,7,53.2647247,-6.1819064,0.9850,-0.4767,0,0
+w822532756,house308,building,house,bldwall,7,53.2645793,-6.1817528,0.9952,-0.4928,0,0
+w822532759,house309,building,house,bldwall,9,53.2645447,-6.1830138,0.9114,-0.4967,0,0
+w822532762,bld123,building,bld,bldwall,7,53.2645910,-6.1833352,0.8900,-0.4915,0,0
+w822532781,house310,building,house,bldwall,5,53.2647870,-6.1836052,0.8720,-0.4697,0,0
+w822532782,house311,building,house,bldwall,5,53.2647924,-6.1832489,0.8957,-0.4691,0,0
+w822532783,house312,building,house,bldwall,5,53.2649650,-6.1833938,0.8861,-0.4499,0,0
+w822532784,house313,building,house,bldwall,5,53.2649826,-6.1841521,0.8357,-0.4480,0,0
+w822532785,house314,building,house,bldwall,5,53.2651101,-6.1840657,0.8414,-0.4338,0,0
+w822532786,house315,building,house,bldwall,5,53.2648777,-6.1841250,0.8375,-0.4596,0,0
+w822532787,house316,building,house,bldwall,5,53.2647757,-6.1840900,0.8398,-0.4710,0,0
+w822532788,house317,building,house,bldwall,5,53.2646752,-6.1840690,0.8412,-0.4822,0,0
+w822532789,house318,building,house,bldwall,5,53.2645461,-6.1840664,0.8414,-0.4965,0,0

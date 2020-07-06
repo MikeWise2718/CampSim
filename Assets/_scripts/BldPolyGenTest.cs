@@ -39,14 +39,16 @@ public class BldPolyGenTest : MonoBehaviour
     {
         bpg = new BldPolyGen();
         //TestEb12();
-        //TestMsft();
-        Test4();
+        TestMsft();
+        //Test4();
     }
     void TestMsft()
     {
+        var latlngmap = new Aiskwk.Map.LatLongMap();
+        latlngmap.InitMapFromSceneSel("MsftRedwest");
         var hmo = new heightMocker(33);
         var pgvd = new PolyGenVekMapDel(hmo.ChangeHeight);
-        bpg.LoadRegion(this.gameObject, "msftb19area,msftcommons,msftredwest",1f,pgvd:pgvd);
+        bpg.LoadRegion(this.gameObject, "msftb19area,msftcommons,msftredwest", 1f, pgvd: pgvd, llm: latlngmap);
         //bpg.LoadRegion(this.gameObject, "eb12");
         //bpg.LoadRegion(this.gameObject, "eb12small");
         //bpg.LoadRegion(this.gameObject, "SanFrancisco", ptscale: 1000);

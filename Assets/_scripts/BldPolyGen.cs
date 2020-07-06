@@ -169,6 +169,11 @@ public class BldPolyGen
             pathname = pathname.Remove(idx);
         }
         var asset = Resources.Load<TextAsset>(pathname);
+        if (asset==null)
+        {
+            Debug.LogError($"Could not load TextAsset {pathname}");
+            return null;
+        }
         return TextAssetToList(asset);
     }
 
@@ -216,30 +221,39 @@ public class BldPolyGen
             dname = "osmcsv/";
         }
 
-        SimpleDf dfways;
+        SimpleDf dfways=null;
         {
             var fnameways = $"{dname}{areaprefix}_ways.csv";
             dfways = new SimpleDf(areaprefix + "_ways");
             var wayslist = ReadResource(fnameways);
-            dfways.ReadCsv(wayslist);
+            if (wayslist != null)
+            {
+                dfways.ReadCsv(wayslist);
+            }
             //Debug.Log($"Read {dfways.Nrow()} ways from {fnameways}");
         }
 
-        SimpleDf dflinks;
+        SimpleDf dflinks = null;
         {
             var fnamelinks = $"{dname}{areaprefix}_links.csv";
             dflinks = new SimpleDf(areaprefix + "links");
             var linkslist = ReadResource(fnamelinks);
-            dflinks.ReadCsv(linkslist);
+            if (linkslist != null)
+            {
+                dflinks.ReadCsv(linkslist);
+            }
             //Debug.Log($"Read {dflinks.Nrow()} links from {fnamelinks}");
         }
 
-        SimpleDf dfnodes;
+        SimpleDf dfnodes = null;
         {
             var fnamenodes = $"{dname}{areaprefix}_nodes.csv";
             dfnodes = new SimpleDf(areaprefix + "nodes");
             var nodeslist = ReadResource(fnamenodes);
-            dfnodes.ReadCsv(nodeslist);
+            if (nodeslist != null)
+            {
+                dfnodes.ReadCsv(nodeslist);
+            }
             //Debug.Log($"Read {dfnodes.Nrow()} links from {fnamenodes}");
         }
 
@@ -247,7 +261,30 @@ public class BldPolyGen
     }
 
 
-    public List<Bldspec> LoadBuildingsFromCsv(string areaprefix, string dname = "", float ptscale = 1)
+    public void ConvertNodeCoords(SimpleDf nodes, LatLongMap ll)
+    {
+        var ixcol = nodes.ColIdx("x");
+        var izcol = nodes.ColIdx("z");
+
+        var latcol = nodes.GetDoubleCol("lat");
+        var lngcol = nodes.GetDoubleCol("lng");
+        var nrow = nodes.Nrow();
+        var xmap = ll.maps.xmap;
+        var zmap = ll.maps.zmap;
+        for (int i=0; i<nrow; i++)
+        {
+            var lat = latcol[i];
+            var lng = lngcol[i];
+            var xv = xmap.Map(lng,lat);
+            var zv = zmap.Map(lng,lat);
+            var ox = nodes.GetVal(ixcol, i,0.0);
+            var oz = nodes.GetVal(izcol, i,0.0);
+            nodes.SetDoubVal(ixcol, i, xv);
+            nodes.SetDoubVal(izcol, i, zv);
+        }
+    }
+
+    public List<Bldspec> LoadBuildingsFromCsv(string areaprefix, string dname = "", float ptscale = 1,LatLongMap llm=null)
     {
         var sw = new Aiskwk.Dataframe.StopWatch();
         sw.Start();
@@ -255,6 +292,11 @@ public class BldPolyGen
 
         //var (dfways, dflinks, dfnodes) = GetDfsFromFiles(areaprefix, dname);
         var (dfways, dflinks, dfnodes) = GetDfsFromResources(areaprefix, dname);
+
+        if (llm!=null)
+        {
+            ConvertNodeCoords(dfnodes, llm);
+        }
 
         var nid = dfnodes.GetStringCol("osm_nid");
         var nodedict = new Dictionary<string, int>();
@@ -369,7 +411,7 @@ public class BldPolyGen
         return rv;
     }
 
-    public List<Bldspec> LoadRegion(GameObject parent, string regionspec, float ptscale = 1, PolyGenVekMapDel pgvd = null)
+    public List<Bldspec> LoadRegion(GameObject parent, string regionspec, float ptscale = 1, PolyGenVekMapDel pgvd = null, LatLongMap llm = null)
     {
         var rv = new List<Bldspec>();
         var sw = new Aiskwk.Dataframe.StopWatch();
@@ -377,7 +419,8 @@ public class BldPolyGen
         var sar = regionspec.Split(',');
         foreach (var s in sar)
         {
-            blds.AddRange(LoadBuildingsFromCsv(s, ptscale: ptscale));
+            var lst = LoadBuildingsFromCsv(s, ptscale: ptscale,llm:llm);
+            blds.AddRange(lst);
         }
         foreach (var bs in blds)
         {

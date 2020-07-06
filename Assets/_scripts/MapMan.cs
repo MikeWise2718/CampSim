@@ -318,6 +318,11 @@ namespace CampusSimulator
             //(var _, var nbm, var nel) = await qmapman.MakeMeshFromLlbox(scenename, llbox, mapprov: mapprov, elevprov:elprov, execute: false, forceload: false, limitQuadkeys: false);
             return (nbm, nel);
         }
+        public LatLongMap GetLatLongMap(QkCoordSys coordsys)
+        {
+            var llm = qmapman.qmm.GetLatLongMap(coordsys);
+            return llm;
+        }
 
         public void SetMapPovider(MapProvider map)
         {
@@ -737,7 +742,7 @@ namespace CampusSimulator
                         vviewerDefaultPosition = new Vector3(0, 0, 0);
                         vviewerDefaultRotation = new Vector3(0, 0, 0);
                         break;
-                    case SceneSelE.Tukwila:
+                    case SceneSelE.TukSouCen:
                         // better with google maps
                         maplat = 47.456970;
                         maplng = -122.258825;

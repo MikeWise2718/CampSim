@@ -668,7 +668,7 @@ namespace Aiskwk.Map
         public GameObject MakeMarkers(string coordsys, float ska = 1, string clr = "purple",bool wps=true)
         {
             var sphholder = new GameObject();
-            sphholder.transform.parent = llm.transform;
+            // sphholder.transform.parent = llm.transform; // llm no longer monobehavior
             sphholder.name = coordsys;
             int i = 0;
             foreach (var md in mapdata)
@@ -743,7 +743,7 @@ namespace Aiskwk.Map
         public CrdMap zmap;
     }
 
-    public class LatLongMap : MonoBehaviour
+    public class LatLongMap 
     {
 
         public MapCoordblock mapcoord;
@@ -755,6 +755,8 @@ namespace Aiskwk.Map
 
         public LatLongMap glbllm = null;
         public bool isInited = false;
+        public bool isOk = false;
+        public string initmethod = "";
         // Use this for initialization
 
         public Vector3 xycoord(double lng, double lat)
@@ -787,6 +789,7 @@ namespace Aiskwk.Map
         public void InitMapCoords(string dataSetName="")
         {
             mapcoord = new MapCoordblock(this);
+            var ok = false;
             switch (dataSetName)
             {
                 case "Bld43":
@@ -795,6 +798,7 @@ namespace Aiskwk.Map
                     AddRowLatLng(47.638526, -122.134519, 75.4, 19.9);
                     AddRowLatLng(47.639368, -122.133926, -29.4, 30.8);
                     AddRowLatLng(47.641066, -122.136018, -155.44, -177.96);
+                    ok = true;
                     break;
                 case "BldRWB":
                     double xadj = 10.5;
@@ -803,6 +807,7 @@ namespace Aiskwk.Map
                     AddRowLatLng(47.659377, -122.140189, -5.35 + xadj, 4.77 + zadj);// lower left
                     AddRowLatLng(47.660150, -122.139328, 81.23 + xadj, -59.70 + zadj);// upper right
                     AddRowLatLng(47.659457, -122.139339, 3.18 + xadj, -59.70 + zadj);// lower right
+                    ok = true;
                     break;
                 case "test":
                     AddRowLatLng(1, 1, 40, 25);
@@ -828,6 +833,7 @@ namespace Aiskwk.Map
                     AddRowLatLng(5, 5, 65, 38);
                     AddRowLatLng(4, 4, 50, 34);
                     AddRowLatLng(3, 3, 58, 38);
+                    ok = true;
                     break;
                 default:
                     return;
@@ -835,14 +841,17 @@ namespace Aiskwk.Map
             //sman = Object.FindO            SphInfo.DoInfoSphere(ranpoints, name, pos, ska, clrs[istat]);nativebjectOfType<SceneMan>();
             //glbllm = sman.GetComponent<LatLongMap>();
             CalcRegressionMaps();
+            initmethod = $"InitMapCoords(\"{dataSetName}\")";
+            isInited = true;
+            isOk = ok;
         }
 
-        public void InitMapFromSceneSel(string regsel, int nothing)
+        public void InitMapFromSceneSel(string regsel)
         {
             mapcoord = new MapCoordblock(this);
+            bool ok = false;
             switch (regsel)
             {
-                default:
                 case "MsftRedwest":
                 case "MsftCoreCampus":
                 case "MsftB19focused":
@@ -856,27 +865,37 @@ namespace Aiskwk.Map
                     mapcoord.AddRowLatLng(47.638526, -122.134519, 75.4, 19.9);
                     mapcoord.AddRowLatLng(47.639368, -122.133926, -29.4, 30.8);
                     mapcoord.AddRowLatLng(47.641066, -122.136018, -155.44, -177.96);
+                    ok = true;
                     break;
                 case "Eb12":
-
                     mapcoord.AddRowLatLng(49.993313, 8.678353, 0, 0);          // eb12 origin streetlamp     
                     mapcoord.AddRowLatLng(49.993472, 8.677981, 18.45, 27.90);   // eb12-12 doorway
                     mapcoord.AddRowLatLng(49.995560, 8.676101, 260.80, 167.7); // SW corner of Rewe
                     mapcoord.AddRowLatLng(49.995788, 8.676752, 287.25, 118.35); //SE corner of Rewe
-
+                    ok = true;
                     break;
                 case "MsftDublin":
                     //mapcoord.AddRowLngLat(53.268998, -6.196680, 0, 0);
                     mapcoord.AddRowLatLng(53.268396, -6.195296, -103.5, 75.2);
                     mapcoord.AddRowLatLng(53.269369, -6.196511, -12.4, -47.8);
                     mapcoord.AddRowLatLng(53.269212, -6.194816, -139.0, -27.5);
+                    ok = true;
+                    break;
+                default:
                     break;
             }
             glbllm = this;
-            maps.latmap = mapcoord.DoRegression("lat = x + z");
-            maps.lngmap = mapcoord.DoRegression("lng = x + z");
-            maps.xmap = mapcoord.DoRegression("x = lng + lat");// backwards, should do something about it someday
-            maps.zmap = mapcoord.DoRegression("z = lng + lat");
+            //maps.latmap = mapcoord.DoRegression("lat = x + z");
+            //maps.lngmap = mapcoord.DoRegression("lng = x + z");
+            //maps.xmap = mapcoord.DoRegression("x = lng + lat");// backwards, should do something about it someday
+            //maps.zmap = mapcoord.DoRegression("z = lng + lat");
+            if (ok)
+            {
+                CalcRegressionMaps();
+            }
+            isInited = true;
+            isOk = ok;
+            initmethod = $"InitMapFromSceneSel(\"{regsel}\") ok:{ok}";
         }
 
 
@@ -898,10 +917,14 @@ namespace Aiskwk.Map
             mapcoord.AddRowLngLat(llur, lod, pixToMeters, orgmeters);
             mapcoord.AddRowLngLat(llmp, lod, pixToMeters, orgmeters);
             glbllm = this;
-            maps.latmap = mapcoord.DoRegression("lat = x + z");
-            maps.lngmap = mapcoord.DoRegression("lng = x + z");
-            maps.xmap = mapcoord.DoRegression("x = lng + lat");
-            maps.zmap = mapcoord.DoRegression("z = lng + lat");
+            //maps.latmap = mapcoord.DoRegression("lat = x + z");
+            //maps.lngmap = mapcoord.DoRegression("lng = x + z");
+            //maps.xmap = mapcoord.DoRegression("x = lng + lat");
+            //maps.zmap = mapcoord.DoRegression("z = lng + lat");
+            CalcRegressionMaps();
+            isInited = true;
+            isOk = true;
+            initmethod = $"InitMapFromLatLongBox(\"{latLngBox.boxSpec}\",lod:{lod})";
         }
 
         // Update is called once per frame

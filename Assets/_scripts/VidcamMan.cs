@@ -64,7 +64,7 @@ namespace CampusSimulator
                     MakeVidcams("Eb");
                     //mcamvcam = "Eb_vc_frontdoor";
                     break;
-                case SceneSelE.Tukwila:
+                case SceneSelE.TukSouCen:
                     MakeVidcams("Tuk");
                     //mcamvcam = "Eb_vc_frontdoor";
                     break;

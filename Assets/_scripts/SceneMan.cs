@@ -16,7 +16,7 @@ namespace CampusSimulator
 {
     public enum RouteGarnishE { none, names, coords, all }
 
-    public enum SceneSelE { MsftCoreCampus, MsftB19focused, MsftRedwest, Custom, Seattle, MtStHelens,Riggins, Eb12,Eb12small,  MsftDublin, Tukwila, HiddenLakeLookout,TeneriffeMtn, None }
+    public enum SceneSelE { MsftCoreCampus, MsftB19focused, MsftRedwest, Custom, Seattle, MtStHelens,Riggins, Eb12,Eb12small,  MsftDublin, TukSouCen, HiddenLakeLookout,TeneriffeMtn, None }
 
     public class SceneMan : MonoBehaviour
     {
@@ -162,7 +162,7 @@ namespace CampusSimulator
             keyman = new KeywordMan(this);
 #endif
 
-            rmango.AddComponent<LatLongMap>();
+            //rmango.AddComponent<LatLongMap>(); no longer monobehavior
 
             // Create game object to hold actual game objects
             rgo = new GameObject("Rgo");
@@ -284,8 +284,9 @@ namespace CampusSimulator
 
 
                     // Now construct our graphical objects
-                    glbllm = rmango.AddComponent<LatLongMap>();
-                    glbllm.InitMapFromSceneSel(newscene.ToString(),0); 
+                    //glbllm = rmango.AddComponent<LatLongMap>();
+                    glbllm = new LatLongMap();
+                    glbllm.InitMapFromSceneSel(newscene.ToString()); 
 
 
                     mpman.SetScene(newscene);

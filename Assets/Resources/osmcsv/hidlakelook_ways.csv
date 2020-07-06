@@ -1,0 +1,21 @@
+osm_wid,name,osmtype,osmsubtype,linkuse,nnodes,lat,lng,z,x,height,levels
+w22705944,National Forest Development Road 1540,highway,unclassified,road,113,48.5172097,-121.2401521,-0.3266,0.5152,0,0
+w22706391,National Forest Development Road 1550,highway,unclassified,road,84,48.5145163,-121.2765028,-3.0042,0.2157,0,0
+w22709065,Saddle Point Road,highway,track,slowroad,13,48.4718157,-121.2033957,2.3810,-4.5324,0,0
+w22709066,Saddle Point Road01,highway,track,slowroad,21,48.4699619,-121.1909755,3.2959,-4.7385,0,0
+w22711459,South Side Cascade Road,highway,track,slowroad,70,48.4618631,-121.2217323,1.0303,-5.6390,0,0
+w22711635,Cascade River Road,highway,unclassified,road,12,48.5141636,-121.2526628,-1.2481,0.1765,0,0
+w22711636,Cascade River Road01,highway,unclassified,road,66,48.5338710,-121.3120390,-5.6219,2.3679,0,0
+w22711637,Cascade River Road02,highway,unclassified,road,77,48.4657131,-121.1747069,4.4942,-5.2109,0,0
+w128830643,Hidden Lake Trail,highway,path,walkway,208,48.5091195,-121.2055715,2.2207,-0.3844,0,0
+w220489685,South Side Cascade Road01,highway,service,driveway,27,48.4673376,-121.2080265,2.0399,-5.0303,0,0
+w220490017,National Forest Development Road 155001,highway,unclassified,road,2,48.5012316,-121.2501511,-1.0631,-1.2615,0,0
+w220490020,National Forest Development Road 155002,highway,unclassified,road,11,48.5058199,-121.2489540,-0.9749,-0.7513,0,0
+w304288404,Cascade River Road03,highway,unclassified,road,16,48.5278831,-121.2657728,-2.2138,1.7021,0,0
+w304288405,Cascade River Road04,highway,unclassified,road,2,48.5357672,-121.2720707,-2.6778,2.5787,0,0
+w340228188,Lookout/Monogram Trail,highway,path,walkway,222,48.5458989,-121.2999173,-4.7290,3.7053,0,0
+w340228190,Monogram Lake Trail,highway,path,walkway,143,48.5577322,-121.2991994,-4.6761,5.0211,0,0
+w375855589,National Forest Development Road 1051,highway,track,slowroad,40,48.5103014,-121.2886121,-3.8962,-0.2529,0,0
+w375857156,Saddle Point Road02,highway,track,slowroad,12,48.4697182,-121.1764442,4.3663,-4.7656,0,0
+w394161880,service01,highway,service,driveway,28,48.5304294,-121.2747865,-2.8778,1.9852,0,0
+w722397662,Cascade River Road05,highway,unclassified,road,70,48.4856317,-121.2267546,0.6603,-2.9961,0,0

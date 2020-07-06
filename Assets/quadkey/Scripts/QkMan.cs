@@ -383,7 +383,7 @@ namespace Aiskwk.Map
             else
             {
                 Debug.Log("Initing llmap from datamapname:" + datamapname);
-                qmm.llmapqkcoords.InitMapFromSceneSel(datamapname, 0);
+                qmm.llmapqkcoords.InitMapFromSceneSel(datamapname);
             }
 
             //var nxx = (tilebr.pixbr.x - tileul.pixul.x);

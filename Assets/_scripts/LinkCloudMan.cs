@@ -179,7 +179,7 @@ namespace CampusSimulator
                 case SceneSelE.MsftDublin:
                     GenLinkCloud(graphSceneE.gen_dublin, genmode);
                     break;
-                case SceneSelE.Tukwila:
+                case SceneSelE.TukSouCen:
                     GenLinkCloud(graphSceneE.gen_tukwila, genmode);
                     break;
                 case SceneSelE.Eb12small:

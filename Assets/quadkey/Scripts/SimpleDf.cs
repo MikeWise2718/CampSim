@@ -437,6 +437,13 @@ namespace Aiskwk.Dataframe
             var vd = doubcols[cname][jRow];
             return vd;
         }
+        public bool SetDoubVal(int iCol, int jRow, double newval)
+        {
+            if (!InRange(iCol, jRow)) return false;
+            var cname = colnames[iCol];
+            doubcols[cname][jRow] = newval;
+            return true;
+        }
         public DateTime GetVal(int iCol, int jRow, DateTime defval)
         {
             if (!InRange(iCol, jRow)) return defval;
@@ -1545,7 +1552,7 @@ namespace Aiskwk.Dataframe
             return (minv, imin, maxv, imax);
         }
 
-        void DeleteOneColumn(string delColName, bool quiet = false)
+        public void DeleteOneColumn(string delColName, bool quiet = false)
         {
             var icol = ColIdx(delColName);
             if (icol < 0)
