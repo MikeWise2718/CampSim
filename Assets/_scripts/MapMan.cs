@@ -822,7 +822,7 @@ namespace CampusSimulator
                         hasLLmap = false;
                         break;
                     case SceneSelE.HiddenLakeLookout:
-                        maplat = 45.412219;
+                        maplat = 48.5126;
                         maplng = -121.2357;
                         maprot = Vector3.zero;
                         maptrans = Vector3.zero;
