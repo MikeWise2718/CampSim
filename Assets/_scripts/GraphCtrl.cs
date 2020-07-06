@@ -974,11 +974,18 @@ namespace GraphAlgos
             {
                 int nllnkcnt = latelinks.Count;
                 int nllnkcnt0 = nllnkcnt;
-                int maxiter = 2*nllnkcnt + 4;
-                int i = 0;
-                while (i<nllnkcnt)
+                int maxiter = 2*nllnkcnt + 2;
+                var iter = 0;
+                int ilnk = 0;
+                while (ilnk<nllnkcnt)
                 {
-                    var lnk = latelinks[i];
+                    iter++;
+                    if (iter > maxiter)
+                    {
+                        Debug.LogError($"Probable infinite loop detected i:{ilnk} iter:{iter} maxiter:{maxiter} nllnkcnt0:{nllnkcnt0}");
+                        break;
+                    }
+                    var lnk = latelinks[ilnk];
                     var (name1, name2, usetype, regStepIdx, regid, cmt) = lnk;
                     var oname2 = name2;
                     //Debug.Log($"RealizeLateLinks {i}/{nllnkcnt}  :  {name1} to {name2}  {usetype} regStepIdx:{regStepIdx}");
@@ -989,7 +996,7 @@ namespace GraphAlgos
                         var reg = regman.GetRegion(regname);
                         if (reg == null)
                         {
-                            Debug.LogWarning("Bad region name:" + regname);
+                            Debug.LogWarning($"Bad region name:{regname}  i:{iter} iter:{iter}");
                             continue;
                         }
                         var pt = GetNode(name1).pt;
@@ -1011,13 +1018,8 @@ namespace GraphAlgos
                         nllnk.regid = regid;
                         nllnk.node2spec = oname2;
                     }
-                    i++;
+                    ilnk++;
                     nllnkcnt = latelinks.Count;
-                    if (i>maxiter)
-                    {
-                        Debug.LogError($"Probable infinite loop detected i:{i} maxiter:{maxiter} nllnkcnt0:{nllnkcnt0}");
-                        break;
-                    }
                 }
             }
             catch(Exception ex)

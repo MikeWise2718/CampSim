@@ -749,7 +749,7 @@ namespace CampusSimulator
                         mapscale = 3.2f;
                         xdistkm = 1;
                         zdistkm = 1;
-                        //lod = defaultlod;
+                        lod = 16;
                         hasLLmap = true;
                         isCustomizable = false;
                         break;

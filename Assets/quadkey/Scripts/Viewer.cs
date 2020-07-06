@@ -252,8 +252,8 @@ namespace Aiskwk.Map
         public bool showDroppings = false;
         public void MakeAvatar(string avaname, float angle, Vector3 shift, float scale = 1,float visorscale=2)
         {
-            Debug.Log($"MakeAvatar {avaname} angle:{angle}");
-            Debug.Log($"MakeAvatar - Viewer rotation before  {transform.localRotation.eulerAngles}");
+            //Debug.Log($"MakeAvatar {avaname} angle:{angle}");
+            //Debug.Log($"MakeAvatar - Viewer rotation before  {transform.localRotation.eulerAngles}");
 
             DestroyAvatar();
             moveplane = new GameObject("moveplane");
@@ -310,7 +310,7 @@ namespace Aiskwk.Map
                 qut.SetColorOfGo(rod, Color.blue);
             }
             rodgo.transform.SetParent(transform, worldPositionStays: false);
-            Debug.Log($"MakeAvatar - Viewer rotation after  {transform.localRotation.eulerAngles}");
+            //Debug.Log($"MakeAvatar - Viewer rotation after  {transform.localRotation.eulerAngles}");
         }
         public void SetCamPosition()
         {

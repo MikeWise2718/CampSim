@@ -130,6 +130,7 @@ namespace CampusSimulator
 
         public void SetScene(SceneSelE newregion)
         {
+            Debug.Log($"BuildingMan.SetScene {newregion}");
             DelBuildings();
             var osmloadspec = "";
             var ptscale = 1f;
@@ -178,7 +179,15 @@ namespace CampusSimulator
                 var llm1 = sman.glbllm;
                 var llm2 = sman.mpman.GetLatLongMap(QkCoordSys.QkWc);
                 var llm = llm1;
-                if (!llm1.isOk) llm = llm2;
+                Debug.Log($"llm1 {llm1.initmethod}");
+                Debug.Log($"llm2 {llm2.initmethod}");
+                Debug.Log($"sman.mpman.hasLLmap {sman.mpman.hasLLmap}");
+                if (!sman.mpman.hasLLmap)
+                {
+                    llm = llm2;
+                    Debug.Log($"");
+                }
+                Debug.Log($"llm {llm.initmethod}");
                 var lbgos = bpg.LoadRegion(this.gameObject, osmloadspec,ptscale:ptscale,pgvd:pgvd,llm:llm);
                 bldspecs.AddRange(lbgos);
             }
