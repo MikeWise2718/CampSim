@@ -146,7 +146,7 @@ namespace CampusSimulator
         public UxSettingVector3 mapRot= new UxSettingVector3("mapRot", Vector3.zero);
         public UxSettingVector3 mapTrans = new UxSettingVector3("mapTrans", Vector3.zero);
 
-        public UxSettingBool HasLLmap = new UxSettingBool("hasLLmap", false);
+        //public UxSettingBool HasLLmap = new UxSettingBool("hasLLmap", false);
         public UxSettingBool locIsCustomizable = new UxSettingBool("locIsCustomizable", false);
 
         //Viewer.viewerDefaultPosition = Vector3.zero;
@@ -179,7 +179,7 @@ namespace CampusSimulator
             mapRot.GetInitial(Vector3.zero);
             mapTrans.GetInitial(Vector3.zero);
 
-            HasLLmap.GetInitial(false);
+            //HasLLmap.GetInitial(false);
             locIsCustomizable.GetInitial(false);
 
             mapVisiblity.GetInitial(  MapVisualsE.MapOn  );
@@ -671,7 +671,7 @@ namespace CampusSimulator
             var vviewerControlDefaultValue = ViewerControl.Velocity;
 
             var msc = modeSetCount.Get();
-            if (msc == 0)
+            if (msc >= 0)
             {
                 switch (newscene)
                 {
@@ -749,16 +749,20 @@ namespace CampusSimulator
                         mapscale = 3.2f;
                         xdistkm = 1;
                         zdistkm = 1;
-                        lod = 16;
+                        lod = 18;
+                        //roty2 = 0;// this value aligns buildings to map (uses lat-lng coords)
+                        roty2 = -90; // this value aligns pipes to map (uses x-z coords)
                         hasLLmap = true;
                         isCustomizable = false;
+                        vviewerDefaultRotation = new Vector3(0, -90, 0);
+                        vviewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
                         break;
                     case SceneSelE.MsftDublin:
                         maplat = 53.268998;
                         maplng = -6.196680;
                         xdistkm = 2;
                         zdistkm = 1;
-                        //lod = defaultlod;
+                        lod = 16;
                         mapscale = 3.2f;
                         hasLLmap = true;
                         isCustomizable = false;
@@ -873,7 +877,7 @@ namespace CampusSimulator
                 mapScale.SetAndSave(mapscale);
                 mapRot.SetAndSave(maprot);
                 mapTrans.SetAndSave(maptrans);
-                HasLLmap.SetAndSave(hasLLmap);
+                //HasLLmap.SetAndSave(hasLLmap);
                 custom_maplat.SetAndSave(maplat);
                 custom_maplng.SetAndSave(maplng);
                 custom_latkm.SetAndSave(zdistkm);
@@ -904,7 +908,7 @@ namespace CampusSimulator
             maprot = mapRot.Get();
             maptrans = mapTrans.Get();
 
-            hasLLmap = HasLLmap.Get();
+            //hasLLmap = HasLLmap.Get();
             isCustomizable = locIsCustomizable.Get();
 
             modeSetCount.SetAndSave(msc + 1);

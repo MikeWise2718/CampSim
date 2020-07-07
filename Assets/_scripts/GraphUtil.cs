@@ -770,7 +770,7 @@ namespace GraphAlgos
         }
 
 
-        static string _verstring = "2020.07.06.1";
+        static string _verstring = "2020.07.07.1";
         static DateTime _buildDate=DateTime.UtcNow;
         private static void getsysdata()
         {

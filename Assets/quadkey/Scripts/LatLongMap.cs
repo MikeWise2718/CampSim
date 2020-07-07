@@ -876,10 +876,22 @@ namespace Aiskwk.Map
                     ok = true;
                     break;
                 case "MsftDublin":
-                    //mapcoord.AddRowLngLat(53.268998, -6.196680, 0, 0);
                     mapcoord.AddRowLatLng(53.268396, -6.195296, -103.5, 75.2);
-                    mapcoord.AddRowLatLng(53.269369, -6.196511, -12.4, -47.8);
+                    //mapcoord.AddRowLatLng(53.269369, -6.196511, -12.4, -47.8);
+                    mapcoord.AddRowLatLng(53.269411, -6.196603, -7.6, -44.7);
                     mapcoord.AddRowLatLng(53.269212, -6.194816, -139.0, -27.5);
+                    mapcoord.AddRowLatLng(53.266725, -6.190259, -426.5, 252.1); // corner of curved building in golf club
+                    mapcoord.AddRowLatLng(53.268040, -6.199236,  172.9, 104.8); // corner of One Microsoft
+                    mapcoord.AddRowLatLng(53.268998, -6.196680,  0.0, 0.0);
+                    ok = true;
+                    break;
+                case "TukSouCen":
+                    mapcoord.AddRowLatLng(47.457029, -122.258709, -8.1, -6.53);   // parelligram island south west (lower-left)
+                    mapcoord.AddRowLatLng(47.457126, -122.258634, -13.73, -17.8); // parelligram island north east (upper-right)
+                    mapcoord.AddRowLatLng(47.459879, -122.261197, 180.4, -323.5); // parelligram island north east (upper-right)
+                    //mapcoord.AddRowLatLng(47.457029, -122.258709, -6.53, 8.1);   // parelligram island south west (lower-left)
+                    //mapcoord.AddRowLatLng(47.457126, -122.258634, -17.8, 13.73); // parelligram island north east (upper-right)
+                    //mapcoord.AddRowLatLng(47.459879, -122.261197, -323.5, -180.4 ); // parelligram island north east (upper-right)
                     ok = true;
                     break;
                 default:
