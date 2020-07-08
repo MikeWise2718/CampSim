@@ -11,18 +11,36 @@ namespace CampusSimulator
 
     public class DataFileMan : MonoBehaviour
     {
+        public SceneMan sman;
 
-        public SimpleDf dfways;
-        public SimpleDf dflinks;
-        public SimpleDf dfnodes;
+        private List<SimpleDf> dfwayslist;
+        private List<SimpleDf> dflinkslist;
+        private List<SimpleDf> dfnodeslist;
 
-        public List<Bldspec> blds;
 
+        public void InitPhase0()
+        {
+        }
+
+
+        public void InitDataFrames()
+        {
+            dfwayslist = new List<SimpleDf>();
+            dflinkslist = new List<SimpleDf>();
+            dfnodeslist = new List<SimpleDf>();
+        }
+
+        public (List<SimpleDf> ways, List<SimpleDf> links, List<SimpleDf> nodes) GetSdfs()
+        {
+            var rv = (dfwayslist, dflinkslist, dfnodeslist);
+            return rv;
+        }
 
         public void InitializeScene(SceneSelE newregion)
         {
+            Debug.Log($"DataFileMan.SetScene {newregion}");
+            InitDataFrames();
             var osmloadspec = "";
-            var ptscale = 1f;
             switch (newregion)
             {
                 case SceneSelE.MsftRedwest:
@@ -54,57 +72,72 @@ namespace CampusSimulator
                 case SceneSelE.None:
                     // DelBuildings called above already
                     break;
-
             }
-            blds = new List<Bldspec>();
-            var bpg = new BldPolyGen();
-            var sar = osmloadspec.Split(',');
-            foreach (var s in sar)
+            if (osmloadspec != "")
             {
-                var lst = bpg.LoadBuildingsFromCsv(s, ptscale: ptscale, llm: null);
-                blds.AddRange(lst);
+                GetDfsFromResources(osmloadspec);
             }
         }
 
-         public void InitializeValues()
-        {
-        }
 
-
-        public void SetScene(SceneSelE newregion)
+        public void GetDfsFromResources(string areaprefix)
         {
-        }
-
-        void LoadSfsFromResources(string areaprefix, string dname = "")
-        {
-            if (dname == "")
+            var sar = areaprefix.Split(',');
+            foreach(var area in sar)
             {
-                dname = "osmcsv/";
+                GetDfsFromResources1(area);
             }
+        }
 
+        public void GetDfsFromResources1(string area1)
+        {
+            SimpleDf dfways;
+            SimpleDf dflinks;
+            SimpleDf dfnodes;
+            var dname = "osmcsv/";
+
+            dfways = null;
             {
-                var fnameways = $"{dname}{areaprefix}_ways.csv";
-                dfways = new SimpleDf(areaprefix + "_ways");
+                var fnameways = $"{dname}{area1}_ways.csv";
+                dfways = new SimpleDf(area1 + "_ways");
                 var wayslist = ReadResource(fnameways);
-                dfways.ReadCsv(wayslist);
+                if (wayslist != null)
+                {
+                    dfways.ReadCsv(wayslist);
+                }
                 //Debug.Log($"Read {dfways.Nrow()} ways from {fnameways}");
             }
 
+            dflinks = null;
             {
-                var fnamelinks = $"{dname}{areaprefix}_links.csv";
-                dflinks = new SimpleDf(areaprefix + "links");
+                var fnamelinks = $"{dname}{area1}_links.csv";
+                dflinks = new SimpleDf(area1 + "links");
                 var linkslist = ReadResource(fnamelinks);
-                dflinks.ReadCsv(linkslist);
+                if (linkslist != null)
+                {
+                    dflinks.ReadCsv(linkslist);
+                }
                 //Debug.Log($"Read {dflinks.Nrow()} links from {fnamelinks}");
             }
 
+            dfnodes = null;
             {
-                var fnamenodes = $"{dname}{areaprefix}_nodes.csv";
-                dfnodes = new SimpleDf(areaprefix + "nodes");
+                var fnamenodes = $"{dname}{area1}_nodes.csv";
+                dfnodes = new SimpleDf(area1 + "nodes");
                 var nodeslist = ReadResource(fnamenodes);
-                dfnodes.ReadCsv(nodeslist);
+                if (nodeslist != null)
+                {
+                    dfnodes.ReadCsv(nodeslist);
+                }
                 //Debug.Log($"Read {dfnodes.Nrow()} links from {fnamenodes}");
             }
+            var okways = dfways.CheckConsistency("DataFileMan.GetDfsFromResources");
+            var oklinks = dflinks.CheckConsistency("DataFileMan.GetDfsFromResources");
+            var oknodes = dfnodes.CheckConsistency("DataFileMan.GetDfsFromResources");
+            Debug.Log($"Df consistency check for {area1} ways:{okways}  links:{oklinks}  nodes:{oknodes}");
+            dfwayslist.Add(dfways);
+            dflinkslist.Add(dflinks);
+            dfnodeslist.Add(dfnodes);
         }
 
         public List<string> ReadResource(string pathname)
@@ -128,6 +161,9 @@ namespace CampusSimulator
             return listToReturn;
         }
 
+        public void SetScene(SceneSelE newregion)
+        {
+        }
 
         // Start is called before the first frame update
         void Start()

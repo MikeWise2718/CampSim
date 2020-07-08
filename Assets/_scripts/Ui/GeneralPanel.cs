@@ -20,7 +20,6 @@ public class GeneralPanel : MonoBehaviour
 
     public void Init0()
     {
-        panelActive = false;
         LinkObjectsAndComponents();
     }
 
@@ -35,7 +34,6 @@ public class GeneralPanel : MonoBehaviour
         closeButton = transform.Find("CloseButton").gameObject.GetComponent<Button>();
         closeButton.onClick.AddListener(delegate { uiman.ClosePanel();  });
 
-        panelActive = true;
     }
     public void InitVals()
     {
@@ -44,7 +42,6 @@ public class GeneralPanel : MonoBehaviour
         {
             fastModeToggle.isOn = sman.fastMode;
         }
-        panelActive = true;
     }
 
     public void SetScene(CampusSimulator.SceneSelE curscene)

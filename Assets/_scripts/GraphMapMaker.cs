@@ -752,7 +752,7 @@ namespace GraphAlgos
                                 lmd.createPointsFor_msft_bredwb_f3();
                                 lmd.createPointsFor_msft_bsx();
                                 //lmd.createPointsFor_msft_campus();
-                                lmd.CreateGraphForOsmImport_msft();
+                                lmd.CreateGraphForOsmImport_msft_streets();
 
                                 //lmd.CreateGraphForOsmImport_MsftCampusBldSmall();
                                 if (addWallLinks)

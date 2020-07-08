@@ -104,6 +104,7 @@ namespace CampusSimulator
 
         public GarageMan gaman;
         public BuildingMan bdman;
+        public StreetMan stman;
         public MapMan mpman;
         public JourneyMan jnman;
         public VidcamMan vcman;
@@ -113,6 +114,7 @@ namespace CampusSimulator
         public ZoneMan znman;
         public FrameMan frman;
         public CalibMan cbman;
+        public DataFileMan dfman;
         public UiMan uiman;
         public string runtimestamp = DateTime.UtcNow.ToString("yyyyMMdd-HHmmss");
         public string simrundir;
@@ -189,6 +191,7 @@ namespace CampusSimulator
             mpman = FindObjectOfType<MapMan>();
             vcman = FindObjectOfType<VidcamMan>();
             bdman = FindObjectOfType<BuildingMan>();
+            stman = FindObjectOfType<StreetMan>();
             gaman = FindObjectOfType<GarageMan>();
             znman = FindObjectOfType<ZoneMan>();
             jnman = FindObjectOfType<JourneyMan>();
@@ -197,10 +200,12 @@ namespace CampusSimulator
             psman = FindObjectOfType<PersonMan>();
             veman = FindObjectOfType<VehicleMan>();
             frman = FindObjectOfType<FrameMan>();
+            dfman = FindObjectOfType<DataFileMan>();
 
             uiman.sman = this;
             mpman.sman = this;
             vcman.sman = this;
+            stman.sman = this;
             bdman.sman = this;
             gaman.sman = this;
             znman.sman = this;
@@ -209,6 +214,7 @@ namespace CampusSimulator
             psman.sman = this;
             veman.sman = this;
             frman.sman = this;
+            dfman.sman = this;
 
             bool subbordinatethemall = false;
             if (subbordinatethemall)
@@ -217,6 +223,7 @@ namespace CampusSimulator
                 mpman.transform.parent = rgo.transform;
                 vcman.transform.parent = rgo.transform;
                 bdman.transform.parent = rgo.transform;
+                stman.transform.parent = rgo.transform;
                 gaman.transform.parent = rgo.transform;
                 znman.transform.parent = rgo.transform;
                 jnman.transform.parent = rgo.transform;
@@ -224,16 +231,18 @@ namespace CampusSimulator
                 psman.transform.parent = rgo.transform;
                 veman.transform.parent = rgo.transform;
                 frman.transform.parent = rgo.transform;
+                dfman.transform.parent = rgo.transform;
             }
 
             mpman.InitPhase0();
+            bdman.InitPhase0();
+            stman.InitPhase0();
             vcman.InitPhase0();
             uiman.InitPhase0();
+            dfman.InitPhase0();
         }
 
-        void InitPhase1()
-        {
-        }
+
         public void InitializeScene(SceneSelE newscene)
         {
             // Here we do two things
@@ -270,6 +279,7 @@ namespace CampusSimulator
 
                     // Now do value initialization 
                     this.InitializeScene(newscene);// start with setting the scene
+                    dfman.InitializeScene(newscene); 
                     mpman.InitializeScene(newscene); // Note this has an await buried in it and afterwards a call to smam.PostMapLoadSetScene below
                     vcman.InitializeScene(newscene);
                     bdman.InitializeScene(newscene);
@@ -282,11 +292,12 @@ namespace CampusSimulator
                     frman.InitializeScene(newscene);
                     uiman.InitializeScene(newscene);
 
-
                     // Now construct our graphical objects
                     //glbllm = rmango.AddComponent<LatLongMap>();
                     glbllm = new LatLongMap();
-                    glbllm.InitMapFromSceneSel(newscene.ToString()); 
+                    glbllm.InitMapFromSceneSel(newscene.ToString());
+
+                    dfman.SetScene(newscene); // should be early to setup data
 
 
                     mpman.SetScene(newscene);
@@ -1471,7 +1482,6 @@ namespace CampusSimulator
             Debug.Log("SceneMan.Start called");
             IdentitySystemAndUser();
             InitPhase0();
-            InitPhase1();
             var esi = SceneMan.GetInitialSceneOption();
             curscene = SceneSelE.None; // force it to execute - kind of a kludge
             SetScene(esi);

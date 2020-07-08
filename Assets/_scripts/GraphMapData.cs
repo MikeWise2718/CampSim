@@ -12328,7 +12328,7 @@ namespace GraphAlgos
             grc.LinkToPtxyz("st-148NE-c15", "st-148NE-c16", -1791.360, 0.000, -1301.220, LinkUse.road, comment: ""); //  76 nn:1 nl:1
             grc.regman.SetRegion("default");
         }
-        public void CreateGraphForOsmImport_msft()  // machine generated - do not edit
+        public void CreateGraphForOsmImport_msft_streets()  // machine generated - do not edit
         {
             grc.regman.NewNodeRegion("msft-campus", "blue", saveToFile: true);
             grc.AddNodePtxz("osm3801669054", 540.528, -490.249);

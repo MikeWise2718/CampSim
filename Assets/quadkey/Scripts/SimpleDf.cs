@@ -114,6 +114,7 @@ namespace Aiskwk.Dataframe
     }
 
     public enum DfStatus { uninit, init, reading, erroredOutOfReading, finished }
+
     public class SimpleDf
     {
         public string csvFileName;
@@ -125,8 +126,8 @@ namespace Aiskwk.Dataframe
         public string csvcDictionaryPrefix = "##";
         public int csvcCommentLines = 0;
         public int csvcDictionaryLines = 0;
-        public Dictionary<string, string> csvcDict = new Dictionary<string, string>();
-        public System.Globalization.DateTimeStyles dtstyle = System.Globalization.DateTimeStyles.AssumeLocal;
+        private Dictionary<string, string> csvcDict = new Dictionary<string, string>();
+        private System.Globalization.DateTimeStyles dtstyle = System.Globalization.DateTimeStyles.AssumeLocal;
         private Dictionary<string, List<float>> floatcols = null;
         private Dictionary<string, List<string>> stringcols = null;
         private Dictionary<string, List<bool>> boolcols = null;
@@ -137,13 +138,13 @@ namespace Aiskwk.Dataframe
         private List<DataError> dataErrors = new List<DataError>();
         private List<string> colnames = null;
         private List<SdfColType> coltypes = null;
-        public bool preferFloat = false;
+        private bool preferFloat = false;
         public Dictionary<string, SdfColType> preferedType = new Dictionary<string, SdfColType>();
         public Dictionary<string, string> preferedFormat = new Dictionary<string, string>();
         public Dictionary<string, (string, string)> preferedSubstitute = new Dictionary<string, (string, string)>();
 
         public static SdfConsistencyLevel SdfConsistencyLevel = SdfConsistencyLevel.aggressive;
-        public SdfVerbosity SdfVerbosity = SdfVerbosity.debug;
+        private SdfVerbosity SdfVerbosity = SdfVerbosity.debug;
 
 
         public void Log(SdfVerbosity level, string msg)

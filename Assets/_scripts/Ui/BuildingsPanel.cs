@@ -19,18 +19,22 @@ public class BuildingsPanel : MonoBehaviour
     Toggle walllinks_toggle;
     Toggle osmblds_toggle;
     Toggle fixedblds_toggle;
+    Toggle osmstreets_toggle;
+    Toggle fixedstreets_toggle;
 
     Dropdown b19_matmode_dropdown;
     Button closeButton;
 
-    BuildingMan bman;
+    StreetMan stman;
+    BuildingMan bdman;
     B19Willow b19comp;
 
     bool panelActiveForRefreshChecks = false;
 
     public void Init0()
     {
-        bman = sman.bdman;
+        bdman = sman.bdman;
+        stman = sman.stman;
         uiman = sman.uiman;
         b19_model_toggle = transform.Find("B19ModelToggle").GetComponent<Toggle>();
         b19_level1_toggle = transform.Find("Level1Toggle").GetComponent<Toggle>();
@@ -45,6 +49,8 @@ public class BuildingsPanel : MonoBehaviour
         osmblds_toggle = transform.Find("OsmBldsToggle").GetComponent<Toggle>();
         fixedblds_toggle = transform.Find("FixedBldsToggle").GetComponent<Toggle>();
 
+        osmstreets_toggle = transform.Find("OsmStreetsToggle").GetComponent<Toggle>();
+        fixedstreets_toggle = transform.Find("FixedStreetsToggle").GetComponent<Toggle>();
 
         closeButton = transform.Find("CloseButton").gameObject.GetComponent<Button>();
         closeButton.onClick.AddListener(delegate { uiman.ClosePanel(); });
@@ -65,14 +71,13 @@ public class BuildingsPanel : MonoBehaviour
         b19_hvac_toggle.enabled = state;
         b19_floors_toggle.enabled = state;
         b19_doors_toggle.enabled = state;
-
     }
 
 
     public void InitVals()
     {
         b19comp = null;
-        var b19bld = bman?.GetBuilding("Bld19",couldFail:true);
+        var b19bld = bdman?.GetBuilding("Bld19",couldFail:true);
         if (b19bld != null)
         {
             b19comp = b19bld.GetComponent<B19Willow>();
@@ -81,9 +86,13 @@ public class BuildingsPanel : MonoBehaviour
                 Debug.LogWarning("BuildingsPanel could not find B19Willow component in B19 building object that it needs to operate");
             }
         }
-        walllinks_toggle.isOn = bman.walllinks.Get();
-        osmblds_toggle.isOn = bman.osmblds.Get();
-        fixedblds_toggle.isOn = bman.fixedblds.Get();
+        walllinks_toggle.isOn = bdman.walllinks.Get();
+        osmblds_toggle.isOn = bdman.osmblds.Get();
+        fixedblds_toggle.isOn = bdman.fixedblds.Get();
+
+        osmstreets_toggle.isOn = stman.osmstreets.Get();
+        fixedblds_toggle.isOn = stman.fixedstreets.Get();
+
 
         if (b19comp == null)
         {
@@ -147,11 +156,15 @@ public class BuildingsPanel : MonoBehaviour
         }
 
         var chg = false;
-        chg = chg || bman.walllinks.SetAndSave(walllinks_toggle.isOn);
-        chg = chg || bman.osmblds.SetAndSave(osmblds_toggle.isOn);
-        chg = chg || bman.fixedblds.SetAndSave(fixedblds_toggle.isOn);
-        Debug.Log($"BuildingsPanel.SetVals walllinks:{walllinks_toggle.isOn} osmblds:{osmblds_toggle.isOn}  fixedblds:{fixedblds_toggle.isOn} chg:{chg}");
-
+        chg = chg || bdman.walllinks.SetAndSave(walllinks_toggle.isOn);
+        chg = chg || bdman.osmblds.SetAndSave(osmblds_toggle.isOn);
+        chg = chg || bdman.fixedblds.SetAndSave(fixedblds_toggle.isOn);
+        chg = chg || stman.osmstreets.SetAndSave(osmstreets_toggle.isOn);
+        chg = chg || stman.fixedstreets.SetAndSave(fixedstreets_toggle.isOn);
+        var msg = $"BuildingsPanel.SetVals walllinks:{walllinks_toggle.isOn} osmblds:{osmblds_toggle.isOn}  fixedblds:{fixedblds_toggle.isOn}";
+        msg += $"  osmstreets:{osmstreets_toggle.isOn}  fixedstreets:{fixedstreets_toggle.isOn}";
+        msg += $"  chg:{chg}";
+        Debug.Log(msg);
         sman.RequestRefresh("BuildingsPanel-SetVals",totalrefresh:chg);
         panelActiveForRefreshChecks = false;
 
@@ -181,9 +194,9 @@ public class BuildingsPanel : MonoBehaviour
             }
         }
 
-        tchg = tchg || bman.walllinks.SetAndSave(walllinks_toggle.isOn);
-        tchg = tchg || bman.osmblds.SetAndSave(osmblds_toggle.isOn);
-        chg = chg || bman.fixedblds.SetAndSave(fixedblds_toggle.isOn);
+        tchg = tchg || bdman.walllinks.SetAndSave(walllinks_toggle.isOn);
+        tchg = tchg || bdman.osmblds.SetAndSave(osmblds_toggle.isOn);
+        chg = chg || bdman.fixedblds.SetAndSave(fixedblds_toggle.isOn);
 
 
         //Debug.Log($"SetValsForRefresh t:{Time.time:f1}   chg:{chg} tchg:{tchg}");

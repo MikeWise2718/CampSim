@@ -27,7 +27,7 @@ namespace CampusSimulator
 
         public bool showPersRects;
 
-        public List<Bldspec> bldspecs;
+        public List<OsmBldSpec> bldspecs;
 
 
         public UxSettingBool walllinks = new UxSettingBool("walllinks", false);
@@ -110,9 +110,15 @@ namespace CampusSimulator
         }
         #endregion treeMode
 
+        public void InitPhase0()
+        {
+        }
+
+
+
         public void InitializeScene(SceneSelE newregion)
         {
-            bldspecs = new List<Bldspec>();
+            bldspecs = new List<OsmBldSpec>();
             InitializeValues();
         }
 
@@ -134,6 +140,7 @@ namespace CampusSimulator
             DelBuildings();
             var osmloadspec = "";
             var ptscale = 1f;
+            var usenew = true;
             switch (newregion)
             {
                 case SceneSelE.MsftRedwest:
@@ -188,8 +195,17 @@ namespace CampusSimulator
                     Debug.Log($"");
                 }
                 Debug.Log($"llm {llm.initmethod}");
-                var lbgos = bpg.LoadRegion(this.gameObject, osmloadspec,ptscale:ptscale,pgvd:pgvd,llm:llm);
-                bldspecs.AddRange(lbgos);
+                if (usenew)
+                {
+                    var (waysdflst, linksdflist, nodesdflist) = sman.dfman.GetSdfs();
+                    var lbgos = bpg.LoadRegionNew(this.gameObject, waysdflst, linksdflist, nodesdflist, pgvd: pgvd, llm: llm);
+                    bldspecs.AddRange(lbgos);
+                }
+                else
+                {
+                    var lbgos = bpg.LoadRegionOld(this.gameObject, osmloadspec,ptscale:ptscale,pgvd:pgvd,llm:llm);
+                    bldspecs.AddRange(lbgos);
+                }
             }
         }
         public void UpdateBldStats()
@@ -351,7 +367,7 @@ namespace CampusSimulator
             {
                 bldspecs.ForEach(bs => Destroy(bs.bgo));
             }
-            bldspecs = new List<Bldspec>();
+            bldspecs = new List<OsmBldSpec>();
         }
         public void DelBuilding(string name)
         {
