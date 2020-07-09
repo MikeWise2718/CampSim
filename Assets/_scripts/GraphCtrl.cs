@@ -181,6 +181,7 @@ namespace GraphAlgos
         }
         public NodeRegion NewNodeRegion(string name, string color, bool saveToFile, bool makeCurrent=true, bool warnondups=false)
         {
+            Debug.Log($"NewNodeRegion:{name}");
             NodeRegion newRegion;
             if (regionDict.ContainsKey(name))
             {
@@ -982,7 +983,7 @@ namespace GraphAlgos
                     iter++;
                     if (iter > maxiter)
                     {
-                        Debug.LogError($"Probable infinite loop detected i:{ilnk} iter:{iter} maxiter:{maxiter} nllnkcnt0:{nllnkcnt0}");
+                        Debug.LogError($"RealizeLateLinks: probable infinite loop detected i:{ilnk} iter:{iter} maxiter:{maxiter} nllnkcnt0:{nllnkcnt0}");
                         break;
                     }
                     var lnk = latelinks[ilnk];
@@ -996,7 +997,7 @@ namespace GraphAlgos
                         var reg = regman.GetRegion(regname);
                         if (reg == null)
                         {
-                            Debug.LogWarning($"Bad region name:{regname}  ilnk:{ilnk} iter:{iter} nllnkcnt:{nllnkcnt}");
+                            Debug.LogWarning($"RealizeLateLinks: bad region name:{regname}  ilnk:{ilnk} iter:{iter} nllnkcnt:{nllnkcnt}");
                             ilnk++;
                             nllnkcnt = latelinks.Count;
                             continue;
@@ -1012,7 +1013,7 @@ namespace GraphAlgos
                     var nllnk = AddLinkByNodeName(name1, name2, usetype,inLateLinkingPhase:true);
                     if (nllnk == null)
                     {
-                        Debug.LogWarning($"Failed to RealizeLateLink {cmt}");
+                        Debug.LogWarning($"RealizeLateLinks: failed on {cmt}");
                     }
                     else
                     {
@@ -1026,7 +1027,7 @@ namespace GraphAlgos
             }
             catch(Exception ex)
             {
-                Debug.LogError("Exception caught in RealizeLateLinks");
+                Debug.LogError("RealizeLateLinks: Exception caught");
                 Debug.LogError(ex.ToString());
             }
         }

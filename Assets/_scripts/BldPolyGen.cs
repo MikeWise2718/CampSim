@@ -214,7 +214,7 @@ public class BldPolyGen
     //    return (dfways, dflinks, dfnodes);
     //}
 
-    public (SimpleDf dfways1, SimpleDf dflinks1, SimpleDf dfnodes1) GetDfsFromResources(string areaprefix, string dname = "")
+    public (SimpleDf dfways1, SimpleDf dflinks1, SimpleDf dfnodes1) GetDfsFromResources(string areaprefix, string dname = "", LatLongMap llm = null)
     {
         if (dname == "")
         {
@@ -255,6 +255,10 @@ public class BldPolyGen
                 dfnodes1.ReadCsv(nodeslist);
             }
             //Debug.Log($"Read {dfnodes.Nrow()} links from {fnamenodes}");
+        }
+        if (llm != null)
+        {
+            ConvertNodeCoords(dfnodes1, llm);
         }
         _dfways = dfways1;
         _dfnodes = dfnodes1;

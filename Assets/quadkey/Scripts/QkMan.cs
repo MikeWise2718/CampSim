@@ -344,13 +344,15 @@ namespace Aiskwk.Map
             var ok = true;
             var newlod = lod;
             var _tsize = tsize;
+            var reduced = false;
             while (npix>lim)
             {
                 _tsize = _tsize / 2;
                 npix = ntiles * _tsize;
                 newlod -= 1;
+                reduced = true;
             }
-            if (dowarn)
+            if (reduced && dowarn)
             {
                 Debug.Log($"Reducing {warnlab} lod due to SystemInfo.maxTextureSize:{lim} requesed lod:{lod} new lod:{newlod}");
             }

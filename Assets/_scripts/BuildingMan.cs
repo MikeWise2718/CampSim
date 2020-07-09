@@ -183,18 +183,18 @@ namespace CampusSimulator
             {
                 var pgvd = new PolyGenVekMapDel(sman.mpman.GetHeightVector3);
                 var bpg = new BldPolyGen();
-                var llm1 = sman.glbllm;
-                var llm2 = sman.mpman.GetLatLongMap(QkCoordSys.QkWc);
-                var llm = llm1;
-                Debug.Log($"llm1 {llm1.initmethod}");
-                Debug.Log($"llm2 {llm2.initmethod}");
-                Debug.Log($"sman.mpman.hasLLmap {sman.mpman.hasLLmap}");
-                if (!sman.mpman.hasLLmap)
-                {
-                    llm = llm2;
-                    Debug.Log($"");
-                }
-                Debug.Log($"llm {llm.initmethod}");
+                //var llm1 = sman.glbllm;
+                //var llm2 = sman.mpman.GetLatLongMapQk(QkCoordSys.QkWc);
+                //var llm = llm1;
+                //Debug.Log($"llm1 {llm1.initmethod}");
+                //Debug.Log($"llm2 {llm2.initmethod}");
+                //Debug.Log($"sman.mpman.hasLLmap {sman.mpman.hasLLmap}");
+                //if (!sman.mpman.hasLLmap)
+                //{
+                //    llm = llm2;
+                //}
+                //Debug.Log($"llm {llm.initmethod}");
+                var llm = sman.mpman.GetLatLongMap();
                 if (usenew)
                 {
                     var (waysdflst, linksdflist, nodesdflist) = sman.dfman.GetSdfs();

@@ -279,10 +279,15 @@ namespace CampusSimulator
 
                     // Now do value initialization 
                     this.InitializeScene(newscene);// start with setting the scene
-                    dfman.InitializeScene(newscene); 
+                    //glbllm = rmango.AddComponent<LatLongMap>();
+                    glbllm = new LatLongMap();
+                    glbllm.InitMapFromSceneSel(newscene.ToString());
+
                     mpman.InitializeScene(newscene); // Note this has an await buried in it and afterwards a call to smam.PostMapLoadSetScene below
+                    dfman.InitializeScene(newscene);
                     vcman.InitializeScene(newscene);
                     bdman.InitializeScene(newscene);
+                    stman.InitializeScene(newscene);
                     gaman.InitializeScene(newscene);
                     znman.InitializeScene(newscene);
                     psman.InitializeScene(newscene);
@@ -293,9 +298,7 @@ namespace CampusSimulator
                     uiman.InitializeScene(newscene);
 
                     // Now construct our graphical objects
-                    //glbllm = rmango.AddComponent<LatLongMap>();
-                    glbllm = new LatLongMap();
-                    glbllm.InitMapFromSceneSel(newscene.ToString());
+
 
                     dfman.SetScene(newscene); // should be early to setup data
 
@@ -305,6 +308,7 @@ namespace CampusSimulator
                     gaman.SetScene(newscene);
 
                     bdman.SetScene(newscene);// building details, but no nodes and links
+                    stman.SetScene(newscene);
 
                     lcman.SetScene(newscene); // create or read in most nodes and links
                                               // currently needs to happen after buildings and garages are setup

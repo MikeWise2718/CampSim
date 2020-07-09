@@ -82,14 +82,39 @@ namespace CampusSimulator
 
         public void GetDfsFromResources(string areaprefix)
         {
+            var llm = sman.mpman.GetLatLongMap();
             var sar = areaprefix.Split(',');
             foreach(var area in sar)
             {
-                GetDfsFromResources1(area);
+                GetDfsFromResources1(area,llm:llm);
             }
         }
 
-        public void GetDfsFromResources1(string area1)
+        public void ConvertNodeCoords(SimpleDf nodes, LatLongMap ll)
+        {
+            var ixcol = nodes.ColIdx("x");
+            var izcol = nodes.ColIdx("z");
+
+            var latcol = nodes.GetDoubleCol("lat");
+            var lngcol = nodes.GetDoubleCol("lng");
+            var nrow = nodes.Nrow();
+            var xmap = ll.maps.xmap;
+            var zmap = ll.maps.zmap;
+            for (int i = 0; i < nrow; i++)
+            {
+                var lat = latcol[i];
+                var lng = lngcol[i];
+                var xv = xmap.Map(lng, lat);
+                var zv = zmap.Map(lng, lat);
+                var ox = nodes.GetVal(ixcol, i, 0.0);
+                var oz = nodes.GetVal(izcol, i, 0.0);
+                nodes.SetDoubVal(ixcol, i, xv);
+                nodes.SetDoubVal(izcol, i, zv);
+            }
+        }
+
+
+        public void GetDfsFromResources1(string area1, LatLongMap llm = null)
         {
             SimpleDf dfways;
             SimpleDf dflinks;
@@ -131,9 +156,14 @@ namespace CampusSimulator
                 }
                 //Debug.Log($"Read {dfnodes.Nrow()} links from {fnamenodes}");
             }
-            var okways = dfways.CheckConsistency("DataFileMan.GetDfsFromResources");
-            var oklinks = dflinks.CheckConsistency("DataFileMan.GetDfsFromResources");
-            var oknodes = dfnodes.CheckConsistency("DataFileMan.GetDfsFromResources");
+            if (llm != null)
+            {
+                Debug.Log($"Converting coords with llm {llm.initmethod}");
+                ConvertNodeCoords(dfnodes, llm);
+            }
+            var okways = dfways.CheckConsistency("DataFileMan.GetDfsFromResources", quiet:true);
+            var oklinks = dflinks.CheckConsistency("DataFileMan.GetDfsFromResources", quiet: true);
+            var oknodes = dfnodes.CheckConsistency("DataFileMan.GetDfsFromResources", quiet: true);
             Debug.Log($"Df consistency check for {area1} ways:{okways}  links:{oklinks}  nodes:{oknodes}");
             dfwayslist.Add(dfways);
             dflinkslist.Add(dflinks);

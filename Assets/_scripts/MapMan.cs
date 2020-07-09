@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UxUtils;
 using Aiskwk.Map;
+using System.Runtime.InteropServices;
 
 namespace CampusSimulator
 {
@@ -318,9 +319,26 @@ namespace CampusSimulator
             //(var _, var nbm, var nel) = await qmapman.MakeMeshFromLlbox(scenename, llbox, mapprov: mapprov, elevprov:elprov, execute: false, forceload: false, limitQuadkeys: false);
             return (nbm, nel);
         }
-        public LatLongMap GetLatLongMap(QkCoordSys coordsys)
+        public LatLongMap GetLatLongMapQk(QkCoordSys coordsys)
         {
-            var llm = qmapman.qmm.GetLatLongMap(coordsys);
+            var llm = qmapman?.qmm?.GetLatLongMap(coordsys);
+            return llm;
+        }
+
+        public LatLongMap GetLatLongMap()
+        {
+            var llm1 = sman.glbllm;
+            var llm = llm1;
+            var llm2 = sman.glbllm;
+            if (!sman.mpman.hasLLmap)
+            {
+                llm2 = sman.mpman.GetLatLongMapQk(QkCoordSys.QkWc);
+                llm = llm2;
+            }
+            //Debug.Log($"llm1 {llm1.initmethod}");
+            //Debug.Log($"llm2 {llm2.initmethod}");
+            //Debug.Log($"sman.mpman.hasLLmap {sman.mpman.hasLLmap}");
+            //Debug.Log($"final llm {llm.initmethod}");
             return llm;
         }
 

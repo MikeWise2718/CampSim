@@ -12328,6 +12328,73 @@ namespace GraphAlgos
             grc.LinkToPtxyz("st-148NE-c15", "st-148NE-c16", -1791.360, 0.000, -1301.220, LinkUse.road, comment: ""); //  76 nn:1 nl:1
             grc.regman.SetRegion("default");
         }
+
+        //public List<OsmBldSpec> LoadOsmBuildingsFromSdfs(SimpleDf dfways, SimpleDf dfnodes, SimpleDf dflinks, float ptscale = 1, LatLongMap llm = null)
+        //{
+        //    var sw = new Aiskwk.Dataframe.StopWatch();
+        //    sw.Start();
+        //    var rv = new List<OsmBldSpec>();
+
+
+        //    if (llm != null)
+        //    {
+        //        ConvertNodeCoords(dfnodes, llm);
+        //    }
+
+        //    var nid = dfnodes.GetStringCol("osm_nid");
+        //    var nodedict = new Dictionary<string, int>();
+        //    for (int idx = 0; idx < dfnodes.Nrow(); idx++)
+        //    {
+        //        nodedict[nid[idx]] = idx;
+        //    }
+        //    var blddf = SimpleDf.SubsetOnStringColVal(dfways, "osmtype", "building");
+        //    Debug.Log($"Found {blddf.Nrow()} buildings in dfways");
+        //    var bldtyp = blddf.GetStringCol("osmsubtype");
+        //    var bldwids = blddf.GetStringCol("osm_wid");
+        //    var bldnames = blddf.GetStringCol("name");
+        //    var bldheights = blddf.GetFloatCol("height");
+        //    var bldlevels = blddf.GetIntCol("levels");
+        //    var bldlat = blddf.GetDoubleCol("lat");
+        //    var bldlng = blddf.GetDoubleCol("lng");
+        //    var bldz = blddf.GetFloatCol("z");
+        //    var bldx = blddf.GetIntCol("x");
+        //    int i = 0;
+        //    foreach (var bwid in bldwids)
+        //    {
+        //        var bname = bldnames[i];
+        //        var btype = bldtyp[i];
+        //        var bheit = bldheights[i];
+        //        var blevs = bldlevels[i];
+        //        var bllat = (bldlat == null ? 0 : bldlat[i]);
+        //        var bllng = (bldlng == null ? 0 : bldlng[i]);
+        //        var blz = (bldz == null ? 0 : bldz[i]);
+        //        var blx = (bldx == null ? 0 : bldx[i]);
+        //        var bldwalldf = SimpleDf.SubsetOnStringColVal(dflinks, "osm_wid", bwid);
+        //        //Debug.Log($"Found {bldwalldf.Nrow()} links for bld wid:{bwid} name:{bname}");
+        //        var bs = new OsmBldSpec(bname, btype, bwid, bheit, blevs, bscale: ptscale);
+        //        bs.AddPos(bllat, bllng, blx, blz);
+        //        var nodeoutline = ExtractNodes(bname, bwid, bldwalldf, dfnodes, nodedict);
+        //        var area = GrafPolyGen.CalcAreaWithYup(nodeoutline);
+        //        if (area < 0)
+        //        {
+        //            nodeoutline.Reverse();
+        //        }
+        //        bs.SetOutline(nodeoutline);
+        //        rv.Add(bs);
+        //        i++;
+        //    }
+        //    var nbld = i;
+        //    sw.Stop();
+        //    Debug.Log($"LoadBuilding from simpledfs generating {nbld} buildings took {sw.ElapSecs()} secs");
+        //    return rv;
+        //}
+
+        public void CreateGraphForOsmImport_msft_streets_df()
+        {
+            grc.regman.NewNodeRegion("msft-campus", "blue", saveToFile: true);
+            var sman = GameObject.FindObjectOfType<SceneMan>();
+            var (dfways, dfnodes, dflinks) = sman.dfman.GetSdfs();           
+        }
         public void CreateGraphForOsmImport_msft_streets()  // machine generated - do not edit
         {
             grc.regman.NewNodeRegion("msft-campus", "blue", saveToFile: true);

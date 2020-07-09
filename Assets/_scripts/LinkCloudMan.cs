@@ -312,8 +312,10 @@ namespace CampusSimulator
 
             mm.maxVoiceKeywords = this.maxVoiceKeywords;
             var addWallLinks = sman.bdman.walllinks.Get();
+            var genOsmStreetLinks = sman.stman.osmstreets.Get();
+            var addfixedStreetLinks = sman.stman.fixedstreets.Get();
             //Debug.Log($"GenLinkCloud addWallLinks:{addWallLinks}");
-            mm.AddGraphToLinkCloud(graphScene,genmode,addWallLinks);
+            mm.AddGraphToLinkCloud(graphScene,genmode,addWallLinks, addfixedStreetLinks,genOsmStreetLinks);
             nVoiceKeywords = mm.nVoiceKeywords;
             if (CanGetHeights())
             {

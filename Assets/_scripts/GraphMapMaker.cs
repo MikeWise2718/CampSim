@@ -709,7 +709,7 @@ namespace GraphAlgos
         public GenGlobeParameters globpar = new GenGlobeParameters(12, 12, 10, 10);
         public GenCircParameters circpar = new GenCircParameters(12, 10, 0);
         public Range LinkFloor = new Range(0, 0);
-        public void AddGraphToLinkCloud(graphSceneE graphScene,GraphGenerationModeE genMode,bool addWallLinks)
+        public void AddGraphToLinkCloud(graphSceneE graphScene,GraphGenerationModeE genMode,bool addWallLinks,bool addfixedStreetLinks,bool genOsmStreetLinks)
         {
             grc.maxRanHeight = LinkFloor.max;
             grc.minRanHeight = LinkFloor.min;
@@ -752,7 +752,14 @@ namespace GraphAlgos
                                 lmd.createPointsFor_msft_bredwb_f3();
                                 lmd.createPointsFor_msft_bsx();
                                 //lmd.createPointsFor_msft_campus();
-                                lmd.CreateGraphForOsmImport_msft_streets();
+                                if (addfixedStreetLinks)
+                                {
+                                    lmd.CreateGraphForOsmImport_msft_streets();
+                                }
+                                if (genOsmStreetLinks)
+                                {
+                                    lmd.CreateGraphForOsmImport_msft_streets_df();
+                                }
 
                                 //lmd.CreateGraphForOsmImport_MsftCampusBldSmall();
                                 if (addWallLinks)
