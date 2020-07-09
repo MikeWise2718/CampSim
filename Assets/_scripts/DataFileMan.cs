@@ -12,6 +12,9 @@ namespace CampusSimulator
     public class DataFileMan : MonoBehaviour
     {
         public SceneMan sman;
+        public SceneSelE curregion;
+        public string osmloadspec;
+
 
         private List<SimpleDf> dfwayslist;
         private List<SimpleDf> dflinkslist;
@@ -39,14 +42,16 @@ namespace CampusSimulator
         public void InitializeScene(SceneSelE newregion)
         {
             Debug.Log($"DataFileMan.SetScene {newregion}");
+            curregion = newregion;
             InitDataFrames();
-            var osmloadspec = "";
+            osmloadspec = "";
             switch (newregion)
             {
                 case SceneSelE.MsftRedwest:
                 case SceneSelE.MsftCoreCampus:
                 case SceneSelE.MsftB19focused:
-                    osmloadspec = "msftb19area,msftcommons,msftredwest";
+                    //osmloadspec = "msftb19area,msftcommons,msftredwest";
+                    osmloadspec = "msftcampcore";
                     break;
                 case SceneSelE.MsftDublin:
                     osmloadspec = "msftdublin";

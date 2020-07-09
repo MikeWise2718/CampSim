@@ -12389,11 +12389,81 @@ namespace GraphAlgos
         //    return rv;
         //}
 
+        public LinkUse CvtLinkUse(string s,LinkUse def)
+        {
+            var rv = def;
+            switch (s)
+            {
+                case "bldwall": 
+                    rv = LinkUse.bldwall;
+                     break;
+                default:
+                    Debug.LogWarning($"CvtLinkUse:Unknown linktype:{s}");
+                    rv = def;
+                    break;
+                case "road":
+                    rv = LinkUse.road;
+                    break;
+                case "slowroad":
+                    rv = LinkUse.slowroad;
+                    break;
+                case "driveway":
+                    rv = LinkUse.driveway;
+                    break;
+                case "highway":
+                    rv = LinkUse.highway;
+                    break;
+                case "walkway":
+                    rv = LinkUse.walkway;
+                    break;
+            }
+            return rv;
+        }
         public void CreateGraphForOsmImport_msft_streets_df()
         {
+            Debug.Log($"CreateGraphForOsmImport_msft_streets_df");
             grc.regman.NewNodeRegion("msft-campus", "blue", saveToFile: true);
             var sman = GameObject.FindObjectOfType<SceneMan>();
-            var (dfways, dfnodes, dflinks) = sman.dfman.GetSdfs();           
+            var (nnodes,nlinks) = (0,0);
+            var (dfwayslst, dflinkslist, dfnodeslist) = sman.dfman.GetSdfs();
+            for (int idf = 0; idf < dfwayslst.Count; idf++)
+            {
+                // Nodes
+                var dfnode = dfnodeslist[idf];
+                var nidcol = dfnode.ColIdx("osm_nid");
+                var nixcol = dfnode.ColIdx("x");
+                var nizcol = dfnode.ColIdx("z");
+                var nnrow = dfnode.Nrow();
+                for (int i = 0; i < nnrow; i++)
+                {
+                    var nid = dfnode.GetVal(nidcol, i, "");
+                    var x = dfnode.GetVal(nixcol, i, 0.0);
+                    var z = dfnode.GetVal(nizcol, i, 0.0);
+                    grc.AddNodePtxz(nid, x, z);
+                    nnodes++;
+                }
+                // Links
+                var dflink = dflinkslist[idf];
+                var lidcol = dflink.ColIdx("osm_wid");
+                var lin1col = dflink.ColIdx("osm_nid_1");
+                var lin2col = dflink.ColIdx("osm_nid_2");
+                var liutcol = dflink.ColIdx("linkuse");
+                var lictcol = dflink.ColIdx("comment");
+                var nlrow = dflink.Nrow();
+                for (int i = 0; i < nlrow; i++)
+                {
+                    var lid = dflink.GetVal(lidcol, i, "");
+                    var nid1 = dflink.GetVal(lin1col, i, "");
+                    var nid2 = dflink.GetVal(lin2col, i, "");
+                    var lts = dflink.GetVal(liutcol, i, "");
+                    var cmt = dflink.GetVal(lictcol, i, "");
+                    var linktyp = CvtLinkUse(lts, LinkUse.road);
+                    grc.AddLinkByNodeName(nid1,nid2, usetype: linktyp, comment: cmt);
+                    nlinks++;
+                }
+            }
+            grc.regman.SetRegion("default");
+            Debug.Log($"CreateGraphForOsmImport_msft_streets_df added nodes:{nnodes} links:{nlinks}");
         }
         public void CreateGraphForOsmImport_msft_streets()  // machine generated - do not edit
         {

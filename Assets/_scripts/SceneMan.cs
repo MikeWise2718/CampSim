@@ -1594,10 +1594,10 @@ namespace CampusSimulator
                 // CTRL + C
                 ctrlChitTime = Time.time;
             }
-            if (ctrlhit &&  Input.GetKeyDown(KeyCode.D))
+            if (ctrlhit && Input.GetKeyDown(KeyCode.D))
             {
                 Debug.Log("Hit LCtrl-D");
-                if ((Time.time - ctrlDhitTime)<1)
+                if ((Time.time - ctrlDhitTime) < 1)
                 {
                     // must have hit it twice
                     psman.EverybodyDance();

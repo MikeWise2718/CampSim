@@ -836,19 +836,15 @@ namespace Aiskwk.Map
             {
                 SetSceneCamToMainCam();
             }
-            if (Input.GetKey(KeyCode.D) && Time.time - ctrlDhit > hitgap3)
-            {
-                showDroppings = !showDroppings;
-                ctrlDhit = Time.time;
-            }
+            //if (Input.GetKey(KeyCode.D) && Time.time - ctrlDhit > hitgap3)
+            //{
+            //    showDroppings = !showDroppings;
+            //    ctrlDhit = Time.time;
+            //}
             if (Input.GetKey(KeyCode.N) && Time.time - ctrlNhit > hitgap3)
             {
                 showNormalRod = !showNormalRod;
                 ctrlNhit = Time.time;
-            }
-            if (Input.GetKey(KeyCode.D) && ctrlpressed)
-            {
-                this.gameObject.SetActive(false);
             }
             if (Input.GetKey(KeyCode.E) && ctrlpressed && Time.time - ctrlEhit > hitgap3)
             {
