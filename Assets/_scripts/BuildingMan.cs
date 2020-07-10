@@ -167,6 +167,18 @@ namespace CampusSimulator
                     osmloadspec = "tuksoucen";
                     //ptscale = 1000f;
                     break;
+                case SceneSelE.SanFrancisco:
+                    osmloadspec = "sanfrancisco";
+                    //ptscale = 1000f;
+                    break;
+                case SceneSelE.Seattle:
+                    osmloadspec = "seattle";
+                    //ptscale = 1000f;
+                    break;
+                case SceneSelE.Frankfurt:
+                    osmloadspec = "frankfurt";
+                    //ptscale = 1000f;
+                    break;
                 case SceneSelE.HiddenLakeLookout:
                     osmloadspec = "hidlakelook";
                     //ptscale = 1000f;

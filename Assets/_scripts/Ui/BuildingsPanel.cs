@@ -80,10 +80,13 @@ public class BuildingsPanel : MonoBehaviour
         if (bdman!=null)
         {
             var b19bld = bdman.GetBuilding("Bld19", couldFail: true);
-            b19comp = b19bld.GetComponent<B19Willow>();
-            if (b19comp==null)
+            if (b19bld != null)
             {
-                Debug.LogWarning("BuildingsPanel could not find B19Willow component in B19 building object that it needs to operate");
+                b19comp = b19bld.GetComponent<B19Willow>();
+                if (b19comp == null)
+                {
+                    Debug.LogWarning("BuildingsPanel could not find B19Willow component in B19 building object that it needs to operate");
+                }
             }
         }
         walllinks_toggle.isOn = bdman.walllinks.Get();

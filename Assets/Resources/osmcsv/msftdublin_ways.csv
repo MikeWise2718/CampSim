@@ -818,13 +818,13 @@ w245782782,Park Montessori,building,bld,bldwall,5,53.2660538,-6.2108341,-0.9387,
 w292092581,Block P,building,commercial,bldwall,4,53.2712724,-6.2033577,-0.4415,0.2514,0,0
 w302111073,Icon02,building,office,bldwall,125,53.2695987,-6.1980132,-0.0861,0.0653,0,0
 w389138388,Oakhill Junior School And Pre-School,building,school,bldwall,13,53.2700126,-6.2072373,-0.6995,0.1113,0,0
-w399052100,industrial01,unknown,industrial,unknown,5,53.2717567,-6.2010778,-0.2899,0.3053,0,0
-w399060903,industrial02,unknown,industrial,unknown,5,53.2694323,-6.2045532,-0.5210,0.0468,0,0
+w399052100,industrial01,building,industrial,bldwall,5,53.2717567,-6.2010778,-0.2899,0.3053,0,0
+w399060903,industrial02,building,industrial,bldwall,5,53.2694323,-6.2045532,-0.5210,0.0468,0,0
 w399060905,house272,building,house,bldwall,7,53.2667071,-6.2092678,-0.8346,-0.2562,0,0
 w399060906,bld11,building,bld,bldwall,5,53.2669614,-6.2092312,-0.8321,-0.2279,0,0
 w399060909,house273,building,house,bldwall,7,53.2661500,-6.2083487,-0.7734,-0.3182,0,0
 w399060910,bld12,building,bld,bldwall,5,53.2660354,-6.2079697,-0.7482,-0.3309,0,0
-w470024317,industrial03,unknown,industrial,unknown,6,53.2702798,-6.2060417,-0.6200,0.1410,0,0
+w470024317,industrial03,building,industrial,bldwall,6,53.2702798,-6.2060417,-0.6200,0.1410,0,0
 w488068045,bld13,building,bld,bldwall,5,53.2669672,-6.1998816,-0.2104,-0.2273,0,0
 w488068048,One South County,building,bld,bldwall,21,53.2723868,-6.1995338,-0.1872,0.3753,0,0
 w515850894,hospital02,unknown,hospital,unknown,9,53.2684729,-6.2031038,-0.4246,-0.0599,0,0

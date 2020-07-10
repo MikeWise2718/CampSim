@@ -789,7 +789,6 @@ namespace CampusSimulator
                         break;
                     case SceneSelE.Eb12small:
                     case SceneSelE.Eb12:
-                        // better with google maps
                         maplat = 49.993311;
                         maplng = 8.678343;
                         mapscale = 3.2f;
@@ -805,7 +804,6 @@ namespace CampusSimulator
                         vviewerDefaultRotation = new Vector3(0, 0, 0);
                         break;
                     case SceneSelE.TukSouCen:
-                        // better with google maps
                         maplat = 47.456970;
                         maplng = -122.258825;
                         mapscale = 3.2f;
@@ -817,6 +815,53 @@ namespace CampusSimulator
                         hasLLmap = true;
                         isCustomizable = false;
                         vviewerDefaultRotation = new Vector3(0, -90, 0);
+                        vviewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
+                        break;
+                    case SceneSelE.Seattle:
+                        maplat = 47.608439;
+                        maplng = -122.340765;
+                        mapscale = 1;
+                        maprot = Vector3.zero;
+                        maptrans = Vector3.zero;
+                        //xdistkm = 14.84f / (2 * 0.4096f);
+                        //zdistkm = 25.17f / (2 * 0.4096f);
+                        xdistkm = 6;
+                        zdistkm = 8;
+                        lod = 14;
+                        //hmultForNow = 10;
+                        useElesForNow = true;
+                        useViewer = true;
+                        mapscale = 1f;
+                        roty2 = 0;
+                        //nodesPerQuadKey = 8;
+                        vviewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
+                        hasLLmap = false;
+                        isCustomizable = false;
+                        break;
+                    case SceneSelE.SanFrancisco:
+                        maplat = 37.774900;
+                        maplng = -122.419400;
+                        mapscale = 1;
+                        xdistkm = 2;
+                        zdistkm = 2;
+                        lod = 18;
+                        roty2 = 0;// this value aligns buildings to map (uses lat-lng coords)
+                        hasLLmap = false;
+                        isCustomizable = false;
+                        vviewerDefaultRotation = new Vector3(0, 0, 0);
+                        vviewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
+                        break;
+                    case SceneSelE.Frankfurt:
+                        maplat = 50.110465;
+                        maplng = 8.6815720;
+                        mapscale = 1;
+                        xdistkm = 3;
+                        zdistkm = 2;
+                        lod = 17;
+                        roty2 = 0;// this value aligns buildings to map (uses lat-lng coords)
+                        hasLLmap = false;
+                        isCustomizable = false;
+                        vviewerDefaultRotation = new Vector3(0, 0, 0);
                         vviewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
                         break;
                     case SceneSelE.MsftDublin:
@@ -831,25 +876,7 @@ namespace CampusSimulator
                         vviewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
                         break;
 
-                    case SceneSelE.Seattle:
-                        maplat = 47.619992;
-                        maplng = -122.3373495;
-                        mapscale = 3.2f;
-                        maprot = Vector3.zero;
-                        maptrans = Vector3.zero;
-                        xdistkm = 14.84f / (2 * 0.4096f);
-                        zdistkm = 25.17f / (2 * 0.4096f);
-                        lod = 12;
-                        //hmultForNow = 10;
-                        useElesForNow = true;
-                        useViewer = true;
-                        mapscale = 1f;
-                        roty2 = 0;
-                        //nodesPerQuadKey = 8;
-                        vviewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
-                        hasLLmap = false;
-                        isCustomizable = false;
-                        break;
+
                     case SceneSelE.MtStHelens:
                         maplat = 46.198428;
                         maplng = -122.188841;

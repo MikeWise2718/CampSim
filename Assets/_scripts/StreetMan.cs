@@ -34,43 +34,6 @@ namespace CampusSimulator
         {
             Debug.Log($"StreetMan.SetScene {newregion}");
             InitializeValues();
-            var osmloadspec = "";
-            switch (newregion)
-            {
-                case SceneSelE.MsftRedwest:
-                case SceneSelE.MsftCoreCampus:
-                case SceneSelE.MsftB19focused:
-                    osmloadspec = "msftb19area,msftcommons,msftredwest";
-                    break;
-                case SceneSelE.MsftDublin:
-                    osmloadspec = "msftdublin";
-                    //ptscale = 1000f;
-                    break;
-                case SceneSelE.Eb12small:
-                case SceneSelE.Eb12:
-                    osmloadspec = "eb12small";
-                    break;
-                case SceneSelE.TeneriffeMtn:
-                    osmloadspec = "tenmtn";
-                    //ptscale = 1000f;
-                    break;
-                case SceneSelE.TukSouCen:
-                    osmloadspec = "tuksoucen";
-                    //ptscale = 1000f;
-                    break;
-                case SceneSelE.HiddenLakeLookout:
-                    osmloadspec = "hidlakelook";
-                    //ptscale = 1000f;
-                    break;
-                default:
-                case SceneSelE.None:
-                    // DelBuildings called above already
-                    break;
-            }
-            if (osmloadspec != "")
-            {
-                //GetDfsFromResources(osmloadspec);
-            }
         }
         public LinkUse CvtLinkUse(string s, LinkUse def)
         {
@@ -182,6 +145,18 @@ namespace CampusSimulator
                     regname = "tuksoucen";
                     //ptscale = 1000f;
                     break;
+                case SceneSelE.Seattle:
+                    regname = "seattle";
+                    //ptscale = 1000f;
+                    break;
+                case SceneSelE.SanFrancisco:
+                    regname = "sanfrancisco";
+                    //ptscale = 1000f;
+                    break;
+                case SceneSelE.Frankfurt:
+                    regname = "frankfurt";
+                    //ptscale = 1000f;
+                    break;
                 case SceneSelE.HiddenLakeLookout:
                     regname = "hidlakelook";
                     //ptscale = 1000f;
@@ -193,8 +168,7 @@ namespace CampusSimulator
             }
             if (regname != "")
             {
-
-                CreateGraphForOsmImport_streets_df(regname,regcolor);
+               CreateGraphForOsmImport_streets_df(regname,regcolor);
             }
         }
 
