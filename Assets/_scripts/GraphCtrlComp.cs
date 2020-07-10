@@ -17,11 +17,6 @@ namespace CampusSimulator
         public int regionNodeSum;
         public string NodeMultiplicty = "";
         public bool dumpMultiNodes = false;
-        // Start is called before the first frame update
-        void Start()
-        {
-
-        }
 
         public void Init(LinkCloudMan lcman,GraphAlgos.GraphCtrl grc)
         {

@@ -69,15 +69,15 @@ public class BldPolyGenTest : MonoBehaviour
         bpg.LoadRegionOld(this.gameObject, "eb12small", 1);
     }
 
-    float lastDumpTime;
-    private void Update()
-    {
-        //if (Time.time-lastDumpTime>2)
-        //{
-        //    var pct = 100*GrafPolyGen.reverses*1f / GrafPolyGen.reverseOpps;
-        //    Debug.Log($"ReverseOpps:{GrafPolyGen.reverseOpps} Reverses:{GrafPolyGen.reverses} pct:{pct:f1}");
-        //    lastDumpTime = Time.time;
-        //}
-    }
+    //float lastDumpTime;
+    //private void Update()
+    //{
+    //    //if (Time.time-lastDumpTime>2)
+    //    //{
+    //    //    var pct = 100*GrafPolyGen.reverses*1f / GrafPolyGen.reverseOpps;
+    //    //    Debug.Log($"ReverseOpps:{GrafPolyGen.reverseOpps} Reverses:{GrafPolyGen.reverses} pct:{pct:f1}");
+    //    //    lastDumpTime = Time.time;
+    //    //}
+    //}
 
 }

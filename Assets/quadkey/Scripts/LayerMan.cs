@@ -55,15 +55,15 @@ namespace Aiskwk.Map
             objgo.transform.SetParent(layerRootGo.transform, worldPositionStays: false);
             Debug.Log($"Reattached {key} to {layerRootGo.name}");
         }
-        void Start()
-        {
+        //void Start()
+        //{
 
-        }
+        //}
 
-        // Update is called once per frame
-        void Update()
-        {
+        //// Update is called once per frame
+        //void Update()
+        //{
 
-        }
+        //}
     }
 }

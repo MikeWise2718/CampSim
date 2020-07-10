@@ -9,10 +9,7 @@ public class Presentation : MonoBehaviour {
 	public float speed 	= 0.35f;
 	public int maxX		= 16;
 
-	// Use this for initialization
-	void Start () {
-	}
-	
+
 	// Update is called once per frame
 	void Update () {
 		if(transform.position.x<maxX && left){

@@ -24,10 +24,10 @@ namespace CampusSimulator
         //public NodeGo node2;
 
         // Use this for initialization
-        void Start()
-        {
+        //void Start()
+        //{
 
-        }
+        //}
         public static string normname(string name)
         {
             if (name.EndsWith("-cyl"))
@@ -40,11 +40,11 @@ namespace CampusSimulator
             }
         }
 
-        // Update is called once per frame
-        void Update()
-        {
+        //// Update is called once per frame
+        //void Update()
+        //{
 
-        }
+        //}
         public void ChangeLinkName()
         {
             var lcld = link.grc;

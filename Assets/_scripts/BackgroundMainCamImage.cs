@@ -28,10 +28,6 @@ namespace CampusSimulator
         {
             LinkObjectsAndComponents();
         }
-        private void Awake()
-        {
-
-        }
 
         void LinkObjectsAndComponents()
         {

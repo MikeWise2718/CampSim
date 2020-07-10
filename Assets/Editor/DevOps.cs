@@ -109,7 +109,9 @@ public class DevOps
                 return string.Format("{0}.app", outputFileName);
             case BuildTarget.iOS:
             case BuildTarget.tvOS:
+#if !UNITY_2019_2_OR_NEWER
             case BuildTarget.StandaloneLinux:
+#endif
             case BuildTarget.WebGL:
             case BuildTarget.WSAPlayer:
 #if !UNITY_2019_2_OR_NEWER

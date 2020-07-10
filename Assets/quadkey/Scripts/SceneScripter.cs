@@ -15,10 +15,10 @@ namespace Aiskwk.Map
         VehicleTrackMan vtm;
         bool running = false;
         // Start is called before the first frame update
-        void Start()
-        {
+        //void Start()
+        //{
 
-        }
+        //}
 
         public void Init(SceneScenario scenario, VehicleTrackMan vtm)
         {
@@ -64,7 +64,7 @@ namespace Aiskwk.Map
             foreach (var trk in vtm.vehicleTracks)
             {
                 trk.DeleteTrack();
-                trk.PlotStaticTrack();
+                StartCoroutine(trk.PlotStaticTrack());
                 yield return new WaitForSeconds(0.2f);
                 break;
             }

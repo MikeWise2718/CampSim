@@ -155,8 +155,8 @@ public class OptionsPanel : MonoBehaviour
         SyncOptionsTabState();
     }
     // Update is called once per frame
-    void Update()
-    {
+    //void Update()
+    //{
 
-    }
+    //}
 }

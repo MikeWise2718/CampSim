@@ -12,7 +12,7 @@ public class LevelReset :MonoBehaviour , IPointerClickHandler
     }
 
 
-    private void Update()
-    {
-    }
+    //private void Update()
+    //{
+    //}
 }

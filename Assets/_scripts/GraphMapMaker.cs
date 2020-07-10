@@ -758,7 +758,7 @@ namespace GraphAlgos
                                 }
                                 if (genOsmStreetLinks)
                                 {
-                                    lmd.CreateGraphForOsmImport_msft_streets_df();
+                                    lmd.CreateGraphForOsmImport_msft_streets_df("msft-campus", "blue");
                                 }
 
                                 //lmd.CreateGraphForOsmImport_MsftCampusBldSmall();
@@ -860,6 +860,10 @@ namespace GraphAlgos
                                 if (addWallLinks)
                                 {
                                     lmd.CreateGraphForOsmImport_Eb12small();
+                                }
+                                if (genOsmStreetLinks)
+                                {
+                                    lmd.CreateGraphForOsmImport_msft_streets_df("EB12 Area", "blue");
                                 }
                                 //lmd.createPointsFor_eb12_streets();
                                 lmd.createPointsFor_eb12_resident();

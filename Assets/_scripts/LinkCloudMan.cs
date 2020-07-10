@@ -78,12 +78,10 @@ namespace CampusSimulator
         #endregion LinkTransparency
 
 
-        [SerializeField]
         public UxUtils.UxEnumSetting<GraphGenerationModeE> graphGenOptions = new UxUtils.UxEnumSetting<GraphGenerationModeE>("GraphGenerationMode", GraphGenerationModeE.GenFromCode);
 
 
         public enum LinkVisualOptionsE { NodesAndLinks, NodesAndFlatLinks, Nodes, Links, FlatLinks, None };
-        [SerializeField]
         public UxUtils.UxEnumSetting<LinkVisualOptionsE> lvisOptions = new UxUtils.UxEnumSetting<LinkVisualOptionsE>("linkVisuals",LinkVisualOptionsE.NodesAndLinks);
 
         public void SetLinkAndNodeVisibility(string snewval,bool force=true)
@@ -150,9 +148,7 @@ namespace CampusSimulator
             //Debug.Log("Initial ggo get:" + graphGenOptions.Get());
         }
 
-        void Awake()
-        {
-        }
+
         void Start()
         {
             initVals();

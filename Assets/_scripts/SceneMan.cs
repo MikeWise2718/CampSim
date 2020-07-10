@@ -1362,7 +1362,10 @@ namespace CampusSimulator
             gaman.RefreshGos();
             bdman.RefreshGos();
             vcman.RefreshGos();
-            cbman?.RefreshGos();
+            if (cbman != null)
+            {
+                cbman.RefreshGos();
+            }
 
             // We have to do it afterwards - that is the trick :)
             rgo.transform.localScale = new Vector3(rgoScale, rgoScale, rgoScale);

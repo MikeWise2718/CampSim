@@ -120,9 +120,9 @@ namespace CampusSimulator
             var nprs = vehgos.Count;
             //   Debug.Log("Created " + nprs + " gos for Vehicle "+name);
         }
-        // Update is called once per frame
-        void Update()
-        {
-        }
+        //// Update is called once per frame
+        //void Update()
+        //{
+        //}
     }
 }

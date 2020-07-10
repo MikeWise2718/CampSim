@@ -21,12 +21,6 @@ public class B19Willow : MonoBehaviour
     //   public UxSetting<bool> visibilityTiedToDetectability = new UxSetting<bool>("FrameVisibilityTiedToDetectability", true);
     // public B19_MaterialMode materialMode = B19_MaterialMode.materialed;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-
-
-    }
 
     public void InitializeValues(CampusSimulator.SceneMan sman)
     {
@@ -91,17 +85,6 @@ public class B19Willow : MonoBehaviour
         return chg;
     }
 
-    void SetChildrenVis(string childname, bool active)
-    {
-        GameObject[] children = willgo.transform.GetComponentsInChildren<GameObject>();
-        foreach (var goc in children)
-        {
-            if (goc.name == childname)
-            {
-                goc.SetActive(active);
-            }
-        }
-    }
 
     void SetChildVis2(string childname, string grandchildname, bool active)
     {

@@ -77,9 +77,9 @@ public class BuildingsPanel : MonoBehaviour
     public void InitVals()
     {
         b19comp = null;
-        var b19bld = bdman?.GetBuilding("Bld19",couldFail:true);
-        if (b19bld != null)
+        if (bdman!=null)
         {
+            var b19bld = bdman.GetBuilding("Bld19", couldFail: true);
             b19comp = b19bld.GetComponent<B19Willow>();
             if (b19comp==null)
             {

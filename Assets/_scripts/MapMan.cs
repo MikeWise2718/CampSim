@@ -41,7 +41,10 @@ namespace CampusSimulator
             var mapviz = mapVisiblity.Get();
             var active = mapviz == MapVisualsE.MapOn;
             //Debug.Log("RealizeMapVisuals " + mapviz+" active:"+active);
-            qmapgo?.SetActive(active);
+            if (qmapgo != null)
+            {
+                qmapgo.SetActive(active);
+            }
         }
         #endregion Map Visuals
 
@@ -274,9 +277,9 @@ namespace CampusSimulator
             qmapman.bespoke.mapscale = new Vector3(ska, ska, ska);
             //qmapman.bespoke.maprot = new Vector3(0, 0, 0);
             qmapman.bespoke.mappoints = new List<MappingPoint>();
-            if (hasLLmap)
+            if (sman!=null && hasLLmap && sman.glbllm != null)
             {
-                var mapdata = sman?.glbllm?.mapcoord?.mapdata;
+                var mapdata = sman.glbllm.mapcoord?.mapdata;
                 if (mapdata != null)
                 {
                     foreach (var p in mapdata)
@@ -319,10 +322,31 @@ namespace CampusSimulator
             //(var _, var nbm, var nel) = await qmapman.MakeMeshFromLlbox(scenename, llbox, mapprov: mapprov, elevprov:elprov, execute: false, forceload: false, limitQuadkeys: false);
             return (nbm, nel);
         }
+        QmapMesh GetQmm(string caller="",bool complain=true)
+        {
+            if (qmapman != null)
+            {
+                if (qmapman.qmm != null)
+                {
+                    return qmapman.qmm;
+                }
+            }
+            if (complain)
+            {
+                Debug.LogWarning($"MapMan - qmm is null - caller:{caller}");
+            }
+            return null;
+        }
         public LatLongMap GetLatLongMapQk(QkCoordSys coordsys)
         {
-            var llm = qmapman?.qmm?.GetLatLongMap(coordsys);
-            return llm;
+            var qmm = GetQmm();
+            if (qmm!=null)
+            {
+                var llm = qmm.GetLatLongMap(coordsys);
+                return llm;
+
+            }
+            return null;
         }
 
         public LatLongMap GetLatLongMap()
@@ -346,31 +370,34 @@ namespace CampusSimulator
         {
             Debug.Log($"SetMapProvider:{map}");
             reqMapProv.SetAndSave(map);
-            if (qmapman?.qmm != null)
+            var qmm = GetQmm("SetMapPovider");
+            if (qmm != null)
             {
                 qmapman.mapprov = map;
                 qmapman.bespoke.mapProv = map;
-                qmapman.qmm.mapprov = map;
+                qmm.mapprov = map;
             }
         }
         public void SetEleProvider(ElevProvider ele)
         {
             //Debug.Log($"SetEleProvider:{ele}");
             reqEleProv.SetAndSave(ele);
-            if (qmapman?.qmm != null)
+            var qmm = GetQmm("SetEleProvider");
+            if (qmm != null)
             {
                 qmapman.elevprov = ele;
                 qmapman.bespoke.eleProv = ele;
-                qmapman.qmm.elevprov = ele;
+                qmm.elevprov = ele;
             }
         }
         public void SetUseElevations(bool neweleval)
         {
             useElevations.SetAndSave(neweleval);
-            if (qmapman?.qmm != null)
+            var qmm = GetQmm("SetUseElevations");
+            if (qmm != null)
             {
                 qmapman.useElevationDataStart = neweleval;
-                qmapman.qmm.useElevationData = neweleval;
+                qmm.useElevationData = neweleval;
             }
         }
         public void SetLatLngAndExtent(string lookupaddress,double lat,double lng,double latkm,double lngkm)
@@ -399,9 +426,10 @@ namespace CampusSimulator
             if (newlod > 19) newlod = 19;
             Debug.Log($"mman.SetLod:{newlod}");
             lod = newlod;
-            if (qmapman?.qmm != null)
+            var qmm = GetQmm("SetLod");
+            if (qmm != null)
             {
-                qmapman.qmm.levelOfDetail = newlod;
+                qmm.levelOfDetail = newlod;
             }
         }
         public void SetNtqk(int newntqk)
@@ -417,30 +445,46 @@ namespace CampusSimulator
         public void SetHmult(float newhmult)
         {
             hmult.SetAndSave(newhmult);
-            if (qmapman?.qmm != null)
+            var qmm = GetQmm("SetHmult");
+            if (qmm != null)
             {
-                qmapman.qmm.hmult = newhmult;
+                qmm.hmult = newhmult;
             }
         }
         public void SetFlatTris(bool flattris)
         {
             flatTris.SetAndSave(flattris);
             qmapman.useFlatTrisStart = flattris;
-            if (qmapman?.qmm != null)
+            var qmm = GetQmm("SetFlatTris");
+            if (qmm != null)
             {
-                qmapman.qmm.flatTriangles = flattris;
+                qmm.flatTriangles = flattris;
             }
         }
 
         public LatLngBox GetLlbox()
         {
-            var rv = qmapman.qmm.stats.llbox;
-            return rv;
+            var qmm = GetQmm("SetFlatTris");
+            if (qmm != null)
+            {
+                return qmm.stats.llbox;
+            }
+            else
+            {
+                return null;
+            }
         }
         public QkmeshStatistics GetQkmeshStatistics()
         {
-            var rv = qmapman?.qmm?.stats;
-            return rv;
+            var qmm = GetQmm("GetQkmeshStatistics");
+            if (qmm != null)
+            {
+                return qmm.stats;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public void SetQuadkeyFraming(bool onoff)

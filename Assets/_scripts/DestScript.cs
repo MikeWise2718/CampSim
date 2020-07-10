@@ -11,12 +11,12 @@ public class DestScript : MonoBehaviour {
 	public Button deleteButton;
 
 	// Use this for initialization
-	void Start () {
+	//void Start () {
 		
-	}
+	//}
 	
-	// Update is called once per frame
-	void Update () {
+	//// Update is called once per frame
+	//void Update () {
 		
-	}
+	//}
 }

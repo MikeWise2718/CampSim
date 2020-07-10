@@ -38,10 +38,10 @@ namespace CampusSimulator
            // this.path = path;
         }
         // Use this for initialization
-        void Start()
-        {
+        //void Start()
+        //{
 
-        }
+        //}
 
         public void startMarking(int n = 5)
         {

@@ -5112,10 +5112,10 @@ namespace GraphAlgos
             grc.regman.NewNodeRegion("msft-bredwb-f3", "purple", true);
             if (bldname != "")
             {
-                var bld = GameObject.Find(bldname);
-                var llm = bld.GetComponent<LatLongMap>();
-                grc.gm.initmods();
-                grc.gm.setmapper(llm);
+                //var bld = GameObject.Find(bldname);
+                //var llm = bld.GetComponent<LatLongMap>();
+                //grc.gm.initmods();
+                //grc.gm.setmapper(llm);
             }
             else
             {
@@ -12419,10 +12419,10 @@ namespace GraphAlgos
             }
             return rv;
         }
-        public void CreateGraphForOsmImport_msft_streets_df()
+        public void CreateGraphForOsmImport_msft_streets_df(string regionname,string color)
         {
             Debug.Log($"CreateGraphForOsmImport_msft_streets_df");
-            grc.regman.NewNodeRegion("msft-campus", "blue", saveToFile: true);
+            grc.regman.NewNodeRegion(regionname,color, saveToFile: true);
             var sman = GameObject.FindObjectOfType<SceneMan>();
             var (nnodes,nlinks) = (0,0);
             var (dfwayslst, dflinkslist, dfnodeslist) = sman.dfman.GetSdfs();
@@ -12450,16 +12450,20 @@ namespace GraphAlgos
                 var liutcol = dflink.ColIdx("linkuse");
                 var lictcol = dflink.ColIdx("comment");
                 var nlrow = dflink.Nrow();
+                bool dowalls = sman.bdman.walllinks.Get();
                 for (int i = 0; i < nlrow; i++)
                 {
+                    nlinks++;
                     var lid = dflink.GetVal(lidcol, i, "");
                     var nid1 = dflink.GetVal(lin1col, i, "");
                     var nid2 = dflink.GetVal(lin2col, i, "");
                     var lts = dflink.GetVal(liutcol, i, "");
                     var cmt = dflink.GetVal(lictcol, i, "");
                     var linktyp = CvtLinkUse(lts, LinkUse.road);
-                    grc.AddLinkByNodeName(nid1,nid2, usetype: linktyp, comment: cmt);
-                    nlinks++;
+                    if (dowalls || linktyp != LinkUse.bldwall)
+                    {
+                        grc.AddLinkByNodeName(nid1, nid2, usetype: linktyp, comment: cmt);
+                    }
                 }
             }
             grc.regman.SetRegion("default");

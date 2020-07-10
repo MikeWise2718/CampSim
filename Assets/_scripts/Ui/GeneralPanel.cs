@@ -16,8 +16,6 @@ public class GeneralPanel : MonoBehaviour
 
     Button closeButton;
 
-    bool panelActive = false;
-
     public void Init0()
     {
         LinkObjectsAndComponents();
@@ -59,7 +57,6 @@ public class GeneralPanel : MonoBehaviour
     {
         Debug.Log($"GeneralPanel.SetVals called - closing:{closing}");
         sman.fastMode = fastModeToggle.isOn;
-        panelActive = false;
         sman.RequestRefresh("GeneralPanel-SetVals");
     }
 

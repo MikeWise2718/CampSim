@@ -26,6 +26,17 @@ public class InfoPanel : MonoBehaviour
         InitoInfoPanels();
     }
 
+    public Text GetComp<Text>(GameObject go,string cname,string caller="")
+    {
+        var ngo = transform.Find(cname);
+        if (ngo == null)
+        {
+            Debug.LogWarning($"Cloud not find component named {cname} in {caller}");
+            return default(Text);
+        }
+        return ngo.GetComponent<Text>();// there is a warning that this is not a Unity component, but it works, so it must be?
+    }
+
     public void LinkObjectsAndComponents()
     {
         uiman = sman.uiman;
@@ -34,12 +45,17 @@ public class InfoPanel : MonoBehaviour
         vman = sman.vcman;
         locman = sman.loman;
 
-        sysText = transform.Find("SysText")?.GetComponent<Text>();
-        simText = transform.Find("SimText")?.GetComponent<Text>();
-        geoText = transform.Find("GeoText")?.GetComponent<Text>();
-        mscText = transform.Find("MscText")?.GetComponent<Text>();
+        var tgo = this.gameObject;
+        sysText = GetComp<Text>(tgo, "SysText", "InfoPanel");
+        simText = GetComp<Text>(tgo, "SimText", "InfoPanel");
+        geoText = GetComp<Text>(tgo, "GeoText", "InfoPanel");
+        mscText = GetComp<Text>(tgo, "MscText", "InfoPanel");
+        //sysText = transform.Find("SysText")?.GetComponent<Text>();
+        //simText = transform.Find("SimText")?.GetComponent<Text>();
+        //geoText = transform.Find("GeoText")?.GetComponent<Text>();
+        //mscText = transform.Find("MscText")?.GetComponent<Text>();
 
-        
+
         //Debug.Log("assigned sysText and simText");
     }
 
@@ -81,7 +97,12 @@ public class InfoPanel : MonoBehaviour
     {
         if (Time.time - lastupdate < 0.25f) return;
 
-        trackedObject = vman.GetCurrentCamera()?.gameObject;
+        var curcam = vman.GetCurrentCamera();
+        trackedObject = null;
+        if (curcam != null)
+        {
+            trackedObject = curcam.gameObject;
+        }
 
         var msg = $"{vman.lastcamset}\nJny:{jman.njnys} Sspn:{jman.nspawned} Fspn:{jman.nspawnfails}\n";
 
