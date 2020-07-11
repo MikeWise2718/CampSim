@@ -782,6 +782,7 @@ namespace CampusSimulator
                         xdistkm = 1;
                         zdistkm = 1;
                         vviewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
+                        vviewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
                         vviewerDefaultPosition = new Vector3(-2035.2f, 3.8f, -1173.5f);
                         vviewerDefaultRotation = new Vector3(0, 163.310f, 0);
                         isCustomizable = false;
@@ -791,9 +792,9 @@ namespace CampusSimulator
                         maplat = 37.411770;
                         maplng = -122.071381;
                         mapscale = 1;
-                        xdistkm = 1;
-                        zdistkm = 1;
-                        lod = 17;
+                        xdistkm = 6;
+                        zdistkm = 5;
+                        lod = 15;
                         roty2 = 0;// this value aligns buildings to map (uses lat-lng coords)
                         hasLLmap = false;
                         isCustomizable = false;

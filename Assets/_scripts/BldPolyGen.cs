@@ -74,25 +74,64 @@ public class OsmBldSpec
 
     static Dictionary<string, string> clrcvt = new Dictionary<string, string>()
         {
-            { "construction","red" },
+            { "construction","brown" },
             { "commercial","darkblue" },
+            { "industrial","brown" },
+            { "data_center","lightblue" },
+            { "train_station","indigo" },
+            { "transportation","indigo" },
+            { "public","purple" },
+            { "civic","purple" },
+            { "government","purple" },
+            { "hospital","red" },
             { "yes","black" },
             { "osmbld","black" },
             { "bld","darkgreen" },
             { "house","blue" },
+            { "manufactured_home","blue" },
+            { "semidetached_house","blue" },
+            { "detached","darkblue" },
+            { "demolished","black" },
+            { "razed building","black" },
+            { "ruins","black" },
+            { "bunker","black" },
             { "parking","darkred" },
             { "garage","darkred" },
+            { "garages","darkred" },
             { "carport","darkred" },
+            { "carports","darkred" },
+            { "mixed","cyan" },
+            { "bridge","cyan" },
+            { "gangway","cyan" },
             { "apartments","purple" },
             { "appartments","indigo" },
             { "terrace","green" },
             { "office","lightblue" },
             { "shed","green" },
-            { "hotel","pink" },
-            { "retail","gray" },
+            { "barn","darkred" },
+            { "cabin","green" },
+            { "hut","green" },
+            { "greenhouse","green" },
+            { "hotel","darkred" },
+            { "pavilion","darkred" },
+            { "retail","lightgreen" },
+            { "supermarket","lightgreen" },
+            { "kindergarten","orange" },
             { "school","orange" },
+            { "university","orange" },
+            { "college","orange" },
             { "roof","green" },
+            { "dome","pink" },
+            { "leisure_centre","pink" },
+            { "sports_hall","pink" },
+            { "sports_centre","pink" },
+            { "sports_center","pink" },
+            { "theater","pink" },
+            { "theatre","pink" },
+            { "toilets","pink" },
+            { "toilet","pink" },
             { "church","purple" },
+            { "cathedral","purple" },
 
         };
     public string GetColor()
@@ -423,7 +462,7 @@ public class BldPolyGen
     {
         pg.SetOutline(bs.GetOutline());
         var clr = bs.GetColor();
-        var bldname = $"{bs.name} ({bs.wid})";
+        var bldname = $"{bs.name} ({bs.wid} {bs.bldtyp})";
         var dowalls = true;
         var dofloors = true;
         var doroof = true;
@@ -453,10 +492,18 @@ public class BldPolyGen
         }
         foreach (var bs in osmblds)
         {
-            //GenFixedFormBld(ObjForm.cross, bs.name, bs.loc, bs.height,bs.levels,"db");
-            var bldgo = GenBld(parent, bs, ptscale: ptscale, pgvd: pgvd);
-            bs.bgo = bldgo;
-            rv.Add(bs);
+            var nbspts = bs.GetOutline().Count;
+            if (nbspts >= 3)
+            {
+                //GenFixedFormBld(ObjForm.cross, bs.name, bs.loc, bs.height,bs.levels,"db");
+                var bldgo = GenBld(parent, bs, ptscale: ptscale, pgvd: pgvd);
+                bs.bgo = bldgo;
+                rv.Add(bs);
+            }
+            else
+            {
+                //Debug.LogWarning($"Building {bs.name} does not have enough outline points:{nbspts}");
+            }
         }
         sw.Stop();
         Debug.Log($"BldPolyGen.LoadRegion Building Generation took {sw.ElapSecs()} secs");

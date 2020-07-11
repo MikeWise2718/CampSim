@@ -30,7 +30,7 @@ public class BuildingsPanel : MonoBehaviour
     BuildingMan bdman;
     B19Willow b19comp;
 
-    bool panelActiveForRefreshChecks = false;
+
 
     public void Init0()
     {
@@ -135,7 +135,7 @@ public class BuildingsPanel : MonoBehaviour
             }
             //visTiedToggle.isOn = fman.visibilityTiedToDetectability;
         }
-        panelActiveForRefreshChecks = true;
+        //panelActiveForRefreshChecks = true;
     }
 
 
@@ -214,17 +214,17 @@ public class BuildingsPanel : MonoBehaviour
             sman.RequestRefresh("BuildingsPanel.SetValsForRefresh", totalrefresh:tchg);
         }
     }
-    float lastcheck = 0;
-    // Update is called once per frame
-    void Update()
-    {
-        //if (panelActiveForRefreshChecks)
-        //{
-        //    if (Time.time-lastcheck>0.5f)
-        //    {
-        //        SetValsForRefresh();
-        //        lastcheck = Time.time;
-        //    }
-        //}
-    }
+    //float lastcheck = 0;
+    //bool panelActiveForRefreshChecks = false;    // Update is called once per frame
+    //void Update()
+    //{
+    //    if (panelActiveForRefreshChecks)
+    //    {
+    //        if (Time.time - lastcheck > 0.5f)
+    //        {
+    //            SetValsForRefresh();
+    //            lastcheck = Time.time;
+    //        }
+    //    }
+    //}
 }
