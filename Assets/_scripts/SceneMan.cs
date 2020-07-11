@@ -327,7 +327,8 @@ namespace CampusSimulator
                     uiman.SetScene(newscene);
 
                     lcman.SetScene3(newscene);  // realize latelinks    
-                    //Debug.Log("SetScene finished");
+                    lcman.DeleteUnconnectedNodes();
+                    Debug.Log($"SceneMan.SetScene {newscene} finished");
                 }
                 catch(Exception ex)
                 {

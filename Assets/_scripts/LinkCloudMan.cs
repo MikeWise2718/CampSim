@@ -486,6 +486,25 @@ namespace CampusSimulator
                 grcgos = null;
             }
         }
+        public void DeleteUnconnectedNodes()
+        {
+            var grc = GetGraphCtrl();
+            var nodesToDelete = new List<string>();
+            var nodelist = grc.GetLcNodes();
+            var numnodesbefore = nodelist.Count;
+            foreach (var n in nodelist)
+            {
+                if (n.wegtos==null || n.wegtos.Count == 0)
+                {
+                    nodesToDelete.Add(n.name);
+                }
+            }
+            Debug.Log($"DeleteUnconnectedNodes  number to delete:{nodesToDelete.Count} of {numnodesbefore}");
+            foreach (var nname in nodesToDelete)
+            {
+                grc.DelNode(nname);
+            }
+        }
         #region public methods
         public void DestroyLinkCloud()
         {

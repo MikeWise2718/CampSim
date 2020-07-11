@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Aiskwk.Map;
+using UnityEditor.Experimental.GraphView;
 
 /// <summary>
 /// GraphAlgos.cs  - This file contains Graph algorithems that we need. It is fairly self-contained. 
@@ -314,6 +315,8 @@ namespace GraphAlgos
             //    }
             //}
         }
+
+
     }
 
     public class GraphCtrl
@@ -1173,15 +1176,18 @@ namespace GraphAlgos
             }
             var pt = nodedict[nname];
             // first find the names of all connected links
-            var linknamelist = new HashSet<string>();
-            foreach (var w in pt.wegtos)
+            if (pt.wegtos != null)
             {
-                linknamelist.Add(w.link.name);
-            }
-            // now delete them all
-            foreach (var lname in linknamelist)
-            {
-                DelLink(lname);
+                var linknamelist = new HashSet<string>();
+                foreach (var w in pt.wegtos)
+                {
+                    linknamelist.Add(w.link.name);
+                }
+                // now delete them all
+                foreach (var lname in linknamelist)
+                {
+                    DelLink(lname);
+                }
             }
             // now remove the point
             nodedict.Remove(nname);
