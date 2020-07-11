@@ -855,7 +855,10 @@ namespace GraphAlgos
                                 //lmd.CreatePointsForEb12retail();
                                 //lmd.CreatePointsForEb12resident2();
 
-                                lmd.CreateGraphForOsmImport_eb12_orig();
+                                if (addfixedStreetLinks)
+                                {
+                                    lmd.CreateGraphForOsmImport_eb12_orig();
+                                }
 
                                 if (addWallLinks)
                                 {
@@ -887,6 +890,11 @@ namespace GraphAlgos
                                 //lmd.CreatePointsForEb12streets2();
                                 //lmd.CreatePointsForEb12retail();
                                 //lmd.CreatePointsForEb12resident2();
+                                if (addfixedStreetLinks)
+                                {
+                                    lmd.CreateGraphForOsmImport_eb12_orig();
+                                }
+
                                 if (addWallLinks)
                                 {
                                     lmd.CreateGraphForOsmImport_Eb12small();

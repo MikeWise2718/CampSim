@@ -23,6 +23,7 @@ public class BuildingsPanel : MonoBehaviour
     Toggle fixedstreets_toggle;
 
     Dropdown b19_matmode_dropdown;
+    Button applyButton;
     Button closeButton;
 
     StreetMan stman;
@@ -52,8 +53,10 @@ public class BuildingsPanel : MonoBehaviour
         osmstreets_toggle = transform.Find("OsmStreetsToggle").GetComponent<Toggle>();
         fixedstreets_toggle = transform.Find("FixedStreetsToggle").GetComponent<Toggle>();
 
+        applyButton = transform.Find("ApplyButton").gameObject.GetComponent<Button>();
         closeButton = transform.Find("CloseButton").gameObject.GetComponent<Button>();
         closeButton.onClick.AddListener(delegate { uiman.ClosePanel(); });
+        applyButton.onClick.AddListener(delegate { SetVals(); });
     }
 
     public void SetScene(CampusSimulator.SceneSelE curscene)
@@ -94,7 +97,7 @@ public class BuildingsPanel : MonoBehaviour
         fixedblds_toggle.isOn = bdman.fixedblds.Get();
 
         osmstreets_toggle.isOn = stman.osmstreets.Get();
-        fixedblds_toggle.isOn = stman.fixedstreets.Get();
+        fixedstreets_toggle.isOn = stman.fixedstreets.Get();
 
 
         if (b19comp == null)
@@ -136,44 +139,44 @@ public class BuildingsPanel : MonoBehaviour
     }
 
 
-    public void SetVals(bool closing = false)
-    {
-        //Debug.Log($"BuildingsPanel.SetVals called - closing:{closing}");
-        if (b19comp != null)
-        {
+    //public void SetVals(bool closing = false)
+    //{
+    //    //Debug.Log($"BuildingsPanel.SetVals called - closing:{closing}");
+    //    if (b19comp != null)
+    //    {
 
-            //fman.visibilityTiedToDetectability = visTiedToggle.isOn;
-            b19comp.loadmodel.SetAndSave(b19_model_toggle.isOn);
-            b19comp.level01.SetAndSave(b19_level1_toggle.isOn);
-            b19comp.level02.SetAndSave(b19_level2_toggle.isOn);
-            b19comp.level03.SetAndSave(b19_level3_toggle.isOn);
-            b19comp.hvac.SetAndSave(b19_hvac_toggle.isOn);
-            b19comp.floors.SetAndSave(b19_floors_toggle.isOn);
-            b19comp.doors.SetAndSave(b19_doors_toggle.isOn);
-            {
-                var opts = b19comp.b19_materialMode.GetOptionsAsList();
-                var newval = opts[b19_matmode_dropdown.value];
-                //Debug.Log("Set toptextlabel default to " + newval);
-                b19comp.b19_materialMode.SetAndSave(newval);
-            }
-        }
+    //        //fman.visibilityTiedToDetectability = visTiedToggle.isOn;
+    //        b19comp.loadmodel.SetAndSave(b19_model_toggle.isOn);
+    //        b19comp.level01.SetAndSave(b19_level1_toggle.isOn);
+    //        b19comp.level02.SetAndSave(b19_level2_toggle.isOn);
+    //        b19comp.level03.SetAndSave(b19_level3_toggle.isOn);
+    //        b19comp.hvac.SetAndSave(b19_hvac_toggle.isOn);
+    //        b19comp.floors.SetAndSave(b19_floors_toggle.isOn);
+    //        b19comp.doors.SetAndSave(b19_doors_toggle.isOn);
+    //        {
+    //            var opts = b19comp.b19_materialMode.GetOptionsAsList();
+    //            var newval = opts[b19_matmode_dropdown.value];
+    //            //Debug.Log("Set toptextlabel default to " + newval);
+    //            b19comp.b19_materialMode.SetAndSave(newval);
+    //        }
+    //    }
 
-        var chg = false;
-        chg = chg || bdman.walllinks.SetAndSave(walllinks_toggle.isOn);
-        chg = chg || bdman.osmblds.SetAndSave(osmblds_toggle.isOn);
-        chg = chg || bdman.fixedblds.SetAndSave(fixedblds_toggle.isOn);
-        chg = chg || stman.osmstreets.SetAndSave(osmstreets_toggle.isOn);
-        chg = chg || stman.fixedstreets.SetAndSave(fixedstreets_toggle.isOn);
-        var msg = $"BuildingsPanel.SetVals walllinks:{walllinks_toggle.isOn} osmblds:{osmblds_toggle.isOn}  fixedblds:{fixedblds_toggle.isOn}";
-        msg += $"  osmstreets:{osmstreets_toggle.isOn}  fixedstreets:{fixedstreets_toggle.isOn}";
-        msg += $"  chg:{chg}";
-        Debug.Log(msg);
-        sman.RequestRefresh("BuildingsPanel-SetVals",totalrefresh:chg);
-        panelActiveForRefreshChecks = false;
+    //    var chg = false;
+    //    chg = chg || bdman.walllinks.SetAndSave(walllinks_toggle.isOn);
+    //    chg = chg || bdman.osmblds.SetAndSave(osmblds_toggle.isOn);
+    //    chg = chg || bdman.fixedblds.SetAndSave(fixedblds_toggle.isOn);
+    //    chg = chg || stman.osmstreets.SetAndSave(osmstreets_toggle.isOn);
+    //    chg = chg || stman.fixedstreets.SetAndSave(fixedstreets_toggle.isOn);
+    //    var msg = $"BuildingsPanel.SetVals walllinks:{walllinks_toggle.isOn} osmblds:{osmblds_toggle.isOn}  fixedblds:{fixedblds_toggle.isOn}";
+    //    msg += $"  osmstreets:{osmstreets_toggle.isOn}  fixedstreets:{fixedstreets_toggle.isOn}";
+    //    msg += $"  chg:{chg}";
+    //    Debug.Log(msg);
+    //    sman.RequestRefresh("BuildingsPanel-SetVals",totalrefresh:chg);
+    //    panelActiveForRefreshChecks = false;
 
-    }
+    //}
 
-    public void SetValsForRefresh()
+    public void SetVals(bool closing=false)
     {
 
         //Debug.Log("BuildingsPanel SetVals2 called");
@@ -199,6 +202,8 @@ public class BuildingsPanel : MonoBehaviour
 
         tchg = tchg || bdman.walllinks.SetAndSave(walllinks_toggle.isOn);
         tchg = tchg || bdman.osmblds.SetAndSave(osmblds_toggle.isOn);
+        tchg = tchg || stman.osmstreets.SetAndSave(osmstreets_toggle.isOn);
+        tchg = tchg || stman.fixedstreets.SetAndSave(fixedstreets_toggle.isOn);
         chg = chg || bdman.fixedblds.SetAndSave(fixedblds_toggle.isOn);
 
 
@@ -213,13 +218,13 @@ public class BuildingsPanel : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (panelActiveForRefreshChecks)
-        {
-            if (Time.time-lastcheck>0.5f)
-            {
-                SetValsForRefresh();
-                lastcheck = Time.time;
-            }
-        }
+        //if (panelActiveForRefreshChecks)
+        //{
+        //    if (Time.time-lastcheck>0.5f)
+        //    {
+        //        SetValsForRefresh();
+        //        lastcheck = Time.time;
+        //    }
+        //}
     }
 }

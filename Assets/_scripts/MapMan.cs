@@ -787,6 +787,19 @@ namespace CampusSimulator
                         isCustomizable = false;
                         hasLLmap = true;
                         break;
+                    case SceneSelE.MsftMountainView:
+                        maplat = 37.411770;
+                        maplng = -122.071381;
+                        mapscale = 1;
+                        xdistkm = 1;
+                        zdistkm = 1;
+                        lod = 17;
+                        roty2 = 0;// this value aligns buildings to map (uses lat-lng coords)
+                        hasLLmap = false;
+                        isCustomizable = false;
+                        vviewerDefaultRotation = new Vector3(0, 0, 0);
+                        vviewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
+                        break;
                     case SceneSelE.Eb12small:
                     case SceneSelE.Eb12:
                         maplat = 49.993311;

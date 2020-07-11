@@ -355,10 +355,12 @@ namespace CampusSimulator
             if (longlatmap == null) return;
             var calcHeights = true;
             var grc = GetGraphCtrl();
+            var llmap = sman.mpman.GetLatLongMap();
             foreach (string lptname in grc.linkpoints())
             {
                 var node = grc.GetNode(lptname);
-                var v2 = longlatmap.llcoord(node.pt.x, node.pt.z);
+                //var v2 = longlatmap.llcoord(node.pt.x, node.pt.z);
+                var v2 = llmap.llcoord(node.pt.x, node.pt.z);
                 node.lat = v2.x;
                 node.lng = v2.y;
                 if (calcHeights)

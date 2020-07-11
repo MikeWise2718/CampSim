@@ -114,6 +114,7 @@ namespace CampusSimulator
                     }
                 }
             }
+            this.sman.lcman.CalculateHeights();
             grc.regman.SetRegion("default");
             Debug.Log($"CreateGraphForOsmImport_msft_streets_df added nodes:{nnodes} links:{nlinks}");
         }
@@ -127,15 +128,19 @@ namespace CampusSimulator
                 case SceneSelE.MsftRedwest:
                 case SceneSelE.MsftCoreCampus:
                 case SceneSelE.MsftB19focused:
-                    regname = "msftb19area,msftcommons,msftredwest";
+                    regname = "msft-campus";
                     break;
                 case SceneSelE.MsftDublin:
                     regname = "msftdublin";
                     //ptscale = 1000f;
                     break;
+                case SceneSelE.MsftMountainView:
+                    regname = "msftmountainview";
+                    //ptscale = 1000f;
+                    break;
                 case SceneSelE.Eb12small:
                 case SceneSelE.Eb12:
-                    regname = "eb12small";
+                    regname = "eb12-streets";
                     break;
                 case SceneSelE.TeneriffeMtn:
                     regname = "tenmtn";

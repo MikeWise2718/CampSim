@@ -57,6 +57,10 @@ namespace CampusSimulator
                     osmloadspec = "msftdublin";
                     //ptscale = 1000f;
                     break;
+                case SceneSelE.MsftMountainView:
+                    osmloadspec = "msftmountainview";
+                    //ptscale = 1000f;
+                    break;
                 case SceneSelE.Eb12small:
                 case SceneSelE.Eb12:
                     osmloadspec = "eb12small";
