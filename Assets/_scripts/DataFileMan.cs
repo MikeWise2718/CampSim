@@ -163,6 +163,8 @@ namespace CampusSimulator
                 {
                     dflinks.ReadCsv(linkslist);
                 }
+                dflinks.AddIndex("osm_wid");
+                dflinks.AddIndex("osm_nid_1");
                 //Debug.Log($"Read {dflinks.Nrow()} links from {fnamelinks}");
             }
 
@@ -175,6 +177,7 @@ namespace CampusSimulator
                 {
                     dfnodes.ReadCsv(nodeslist);
                 }
+                dfnodes.AddIndex("osm_nid");
                 //Debug.Log($"Read {dfnodes.Nrow()} links from {fnamenodes}");
             }
             if (llm != null)

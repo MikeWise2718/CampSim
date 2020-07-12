@@ -173,15 +173,24 @@ public class BldPolyGen
         //var lngvals = nodedf.GetDoubleCol("lng");
         //var on1 = "";
         //var on2 = "";
+        int n1idx;
         for (int i = 0; i < linksdf.Nrow(); i++)
         {
             var n1 = osm_nid_1[i];
-            if (!nodedict.ContainsKey(n1))
+            if (nodedict != null)
             {
-                Debug.LogError($"Bld:{name} - wid:{wid} - Unknown node 1 {osm_nid_1}");
-                continue;
+                if (!nodedict.ContainsKey(n1))
+                {
+                    Debug.LogError($"Bld:{name} - wid:{wid} - Unknown node 1 {osm_nid_1}");
+                    continue;
+                }
+                n1idx = nodedict[n1];
+
             }
-            var n1idx = nodedict[n1];
+            else
+            {
+                n1idx = nodedf.GetColIdx("osm_nid",n1);
+            }
             var x = xvals[n1idx];
             var z = zvals[n1idx];
             var pt1 = new Vector3(x, 0, z);
@@ -394,7 +403,8 @@ public class BldPolyGen
             //Debug.Log($"Found {bldwalldf.Nrow()} links for bld wid:{bwid} name:{bname}");
             var bs = new OsmBldSpec(bname, btype, bwid, bheit, blevs, bscale: ptscale);
             bs.AddPos(bllat, bllng, blx, blz);
-            var nodeoutline = ExtractNodes(bname, bwid, bldwalldf, dfnodes, nodedict);
+            //var nodeoutline = ExtractNodes(bname, bwid, bldwalldf, dfnodes, nodedict);
+            var nodeoutline = ExtractNodes(bname, bwid, bldwalldf, dfnodes, null);
             var area = GrafPolyGen.CalcAreaWithYup(nodeoutline);
             if (area < 0)
             {

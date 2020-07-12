@@ -130,6 +130,7 @@ namespace Aiskwk.Dataframe
         private System.Globalization.DateTimeStyles dtstyle = System.Globalization.DateTimeStyles.AssumeLocal;
         private Dictionary<string, List<float>> floatcols = null;
         private Dictionary<string, List<string>> stringcols = null;
+        private Dictionary<string, Dictionary<string,List<int>>> stringindex = null;
         private Dictionary<string, List<bool>> boolcols = null;
         private Dictionary<string, List<double>> doubcols = null;
         private Dictionary<string, List<DateTime>> datetimecols = null;
@@ -2121,5 +2122,94 @@ namespace Aiskwk.Dataframe
             }
         }
 
+        public bool AddIndex(string colname,bool reindex=false, bool quiet = true)
+        {
+            var icol = ColIdx(colname);
+            if (icol < 0)
+            {
+                if (!quiet)
+                {
+                    var msg = $"SimpleDF.AddIndex - can not find {colname} column in CopyColumn";
+                    Debug.LogError(msg);
+                }
+                return false;
+            }
+            var ctype = coltypes[icol];
+            if (ctype != SdfColType.dfstring)
+            {
+                var msg = $"SimpleDF.AddIndex - {colname} has type {ctype} - currently can only index string columns";
+                Debug.LogError(msg);
+                return false;
+            }
+            if (stringindex == null)
+            {
+                stringindex = new Dictionary<string, Dictionary<string, List<int>>>();
+            }
+            if (HasIndex(colname)) ;
+            {
+                if (ctype != SdfColType.dfstring && !reindex)
+                {
+                    var msg = $"SimpleDF.AddIndex - {colname} already has index";
+                    Debug.LogError(msg);
+                    return false;
+                }
+            }
+            ComputeIndex(icol, colname);
+            return true;
+        }
+        public bool HasIndex(string colname)
+        {
+            var rv = stringindex.ContainsKey(colname);
+            return rv;
+        }
+        public void ComputeIndex(int icol,string colname, bool quiet = true)
+        {
+            var sidx = new Dictionary<string, List<int>>();
+            stringindex[colname] = sidx;
+            var scol = GetStringCol(colname);
+            int i = 0;
+            foreach(var sval in scol)
+            {
+                if (!sidx.ContainsKey(sval))
+                {
+                    var newlst = new List<int>();
+                    sidx[sval] = newlst;
+                }
+                var lst = sidx[sval];
+                lst.Add(i);
+                i++;
+            }
+            return;
+        }
+        public int GetColIdx(string colname,string sval)
+        {
+            if (HasIndex(colname))
+            {
+                var sidx = stringindex[colname];
+                if (sidx.ContainsKey(sval))
+                {
+                    return sidx[sval][0];
+                }
+                else
+                {
+                    return -1;
+                }
+            }
+            else
+            {
+                var scol = stringcols[colname];
+                int i = 0;
+                foreach (var s in scol)
+                {
+
+                    if (s == sval)
+                    {
+                        return i;
+                    }
+                    i++;
+                }
+                return -1;
+            }
+        }
     }
 }
