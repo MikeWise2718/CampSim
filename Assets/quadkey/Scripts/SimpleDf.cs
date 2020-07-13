@@ -974,10 +974,28 @@ namespace Aiskwk.Dataframe
         public static SimpleDf SubsetOnStringColVal(SimpleDf sdf,  string colname,string colval, bool quiet = true, string newname = "ddf")
         {
             //Debug.Log("Subsetting " + newname + " on col " + colname +" val "+colval );
+            //if (sdf.HasIndex(colname))
+            //{
+            //    return SubsetOnStringColValIndexed(sdf, colname, colval, quiet, newname);
+            //}
             var ddf = new SimpleDf(newname);
             ddf._CopyInColDefs(sdf, "Copy");
             var filter = sdf.GetStringColEqVal(colname,colval);
             ddf._CopyInRows(sdf, reorderIdx: null, boolMask: filter);
+            if (SdfConsistencyLevel == SdfConsistencyLevel.aggressive)
+            {
+                ddf.CheckConsistency("After Subset", quiet: quiet);
+            }
+            return ddf;
+        }
+        public static SimpleDf SubsetOnStringColValIndexed(SimpleDf sdf, string colname, string colval, bool quiet = true, string newname = "ddf")
+        {
+            //Debug.Log("Subsetting " + newname + " on col " + colname +" val "+colval );
+            var ddf = new SimpleDf(newname);
+            ddf._CopyInColDefs(sdf, "Copy");
+            var filter = sdf.GetStringColEqVal(colname, colval);
+            var idxtocopy = sdf.GetColIdxList(colname, colval);
+            ddf._CopyInRows(sdf, reorderIdx: idxtocopy, boolMask: null);
             if (SdfConsistencyLevel == SdfConsistencyLevel.aggressive)
             {
                 ddf.CheckConsistency("After Subset", quiet: quiet);
@@ -2159,7 +2177,7 @@ namespace Aiskwk.Dataframe
         }
         public bool HasIndex(string colname)
         {
-            var rv = stringindex.ContainsKey(colname);
+            var rv = stringindex!=null && stringindex.ContainsKey(colname);
             return rv;
         }
         public void ComputeIndex(int icol,string colname, bool quiet = true)
