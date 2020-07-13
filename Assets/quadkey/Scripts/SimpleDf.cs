@@ -2183,32 +2183,42 @@ namespace Aiskwk.Dataframe
         }
         public int GetColIdx(string colname,string sval)
         {
+            var lst = GetColIdxList(colname, sval);
+            if (lst==null || lst.Count==0)
+            {
+                return -1;
+            }
+            return lst[0];
+        }
+        public List<int> GetColIdxList(string colname, string sval)
+        {
             if (HasIndex(colname))
             {
                 var sidx = stringindex[colname];
                 if (sidx.ContainsKey(sval))
                 {
-                    return sidx[sval][0];
+                    return sidx[sval];// first element in list
                 }
                 else
                 {
-                    return -1;
+                    return new List<int>();
                 }
             }
             else
             {
                 var scol = stringcols[colname];
+                var lst = new List<int>();
                 int i = 0;
                 foreach (var s in scol)
                 {
 
                     if (s == sval)
                     {
-                        return i;
+                        lst.Add(i);
                     }
                     i++;
                 }
-                return -1;
+                return lst;
             }
         }
     }

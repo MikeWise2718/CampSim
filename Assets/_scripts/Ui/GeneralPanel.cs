@@ -11,8 +11,7 @@ public class GeneralPanel : MonoBehaviour
     UiMan uiman;
 
     Toggle fastModeToggle;
-    bool oldFastMode;
-    Text fastModeText;
+    Toggle useDfInexesToggle;
 
     Button closeButton;
 
@@ -28,6 +27,7 @@ public class GeneralPanel : MonoBehaviour
         fman = sman.frman;
 
         fastModeToggle = transform.Find("FastModeToggle").gameObject.GetComponent<Toggle>();
+        useDfInexesToggle = transform.Find("UseDataFileIndexesToggle").gameObject.GetComponent<Toggle>();
 
         closeButton = transform.Find("CloseButton").gameObject.GetComponent<Button>();
         closeButton.onClick.AddListener(delegate { uiman.ClosePanel();  });
@@ -46,17 +46,13 @@ public class GeneralPanel : MonoBehaviour
     {
     }
 
-    int nSetTextValuesCalled = 0;
-    private void SetTextValues()
-    {
-        nSetTextValuesCalled += 1;
-    }
-
 
     public void SetVals(bool closing = false)
     {
         Debug.Log($"GeneralPanel.SetVals called - closing:{closing}");
         sman.fastMode = fastModeToggle.isOn;
+        sman.dfman.useDfIndexes.SetAndSave(useDfInexesToggle.isOn);
+
         sman.RequestRefresh("GeneralPanel-SetVals");
     }
 

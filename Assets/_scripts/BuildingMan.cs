@@ -211,17 +211,17 @@ namespace CampusSimulator
                 //}
                 //Debug.Log($"llm {llm.initmethod}");
                 var llm = sman.mpman.GetLatLongMap();
-                if (usenew)
-                {
-                    var (waysdflst, linksdflist, nodesdflist) = sman.dfman.GetSdfs();
-                    var lbgos = bpg.LoadRegionNew(this.gameObject, waysdflst, linksdflist, nodesdflist, pgvd: pgvd, llm: llm);
-                    bldspecs.AddRange(lbgos);
-                }
-                else
-                {
-                    var lbgos = bpg.LoadRegionOld(this.gameObject, osmloadspec,ptscale:ptscale,pgvd:pgvd,llm:llm);
-                    bldspecs.AddRange(lbgos);
-                }
+                //if (usenew)
+                //{
+                var (waysdflst, linksdflist, nodesdflist) = sman.dfman.GetSdfs();
+                var lbgos = bpg.LoadRegion(this.gameObject, waysdflst, linksdflist, nodesdflist, pgvd: pgvd, llm: llm);
+                bldspecs.AddRange(lbgos);
+                //}
+                //else
+                //{
+                //    var lbgos = bpg.LoadRegionOld(this.gameObject, osmloadspec,ptscale:ptscale,pgvd:pgvd,llm:llm);
+                //    bldspecs.AddRange(lbgos);
+                //}
             }
         }
         public void UpdateBldStats()

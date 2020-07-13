@@ -185,7 +185,6 @@ public class BldPolyGen
                     continue;
                 }
                 n1idx = nodedict[n1];
-
             }
             else
             {
@@ -347,7 +346,7 @@ public class BldPolyGen
         GetDfsFromResources(areaprefix, dname);
     }
 
-    
+
     //public List<Bldspec> LoadOsmBuildings(float ptscale = 1, LatLongMap llm = null)
     //{
     //    if (_dfways==null)
@@ -359,7 +358,7 @@ public class BldPolyGen
     //}
 
 
-    public List<OsmBldSpec> LoadOsmBuildingsFromSdfs(SimpleDf dfways,SimpleDf dfnodes,SimpleDf dflinks,float ptscale = 1,LatLongMap llm=null)
+    public List<OsmBldSpec> LoadOsmBuildingsFromSdfs(SimpleDf dfways, SimpleDf dfnodes, SimpleDf dflinks, float ptscale = 1, LatLongMap llm = null, bool usenodedict = false)
     {
         var sw = new Aiskwk.Dataframe.StopWatch();
         sw.Start();
@@ -372,10 +371,14 @@ public class BldPolyGen
         }
 
         var nid = dfnodes.GetStringCol("osm_nid");
-        var nodedict = new Dictionary<string, int>();
-        for (int idx = 0; idx < dfnodes.Nrow(); idx++)
+        Dictionary<string, int> nodedict = null;
+        if (usenodedict)
         {
-            nodedict[nid[idx]] = idx;
+            new Dictionary<string, int>();
+            for (int idx = 0; idx < dfnodes.Nrow(); idx++)
+            {
+                nodedict[nid[idx]] = idx;
+            }
         }
         var blddf = SimpleDf.SubsetOnStringColVal(dfways, "osmtype", "building");
         Debug.Log($"Found {blddf.Nrow()} buildings in dfways");
@@ -485,7 +488,7 @@ public class BldPolyGen
         return rv;
     }
 
-    public List<OsmBldSpec> LoadRegionNew(GameObject parent, List<SimpleDf> dfwayslist, List<SimpleDf> dflinkslist, List<SimpleDf> dfnodeslist, float ptscale = 1, PolyGenVekMapDel pgvd = null, LatLongMap llm = null)
+    public List<OsmBldSpec> LoadRegion(GameObject parent, List<SimpleDf> dfwayslist, List<SimpleDf> dflinkslist, List<SimpleDf> dfnodeslist, float ptscale = 1, PolyGenVekMapDel pgvd = null, LatLongMap llm = null,bool useindexes=true)
     {
         var rv = new List<OsmBldSpec>();
         var sw = new Aiskwk.Dataframe.StopWatch();

@@ -20,6 +20,7 @@ namespace CampusSimulator
         private List<SimpleDf> dflinkslist;
         private List<SimpleDf> dfnodeslist;
 
+        public UxSettingBool useDfIndexes = new UxSettingBool("useDfIndexes", true);
 
         public void InitPhase0()
         {
@@ -39,9 +40,15 @@ namespace CampusSimulator
             return rv;
         }
 
+        public void InitializeValues()
+        {
+            useDfIndexes.GetInitial(true);
+        }
+
         public void InitializeScene(SceneSelE newregion)
         {
-            Debug.Log($"DataFileMan.SetScene {newregion}");
+            Debug.Log($"DataFileMan.InitializeScene {newregion}");
+            InitializeValues();
             curregion = newregion;
             InitDataFrames();
             osmloadspec = "";
@@ -163,8 +170,12 @@ namespace CampusSimulator
                 {
                     dflinks.ReadCsv(linkslist);
                 }
-                dflinks.AddIndex("osm_wid");
-                dflinks.AddIndex("osm_nid_1");
+                if (useDfIndexes.Get())
+                {
+                    Debug.Log($"Using indexes on {fnamelinks}");
+                    dflinks.AddIndex("osm_wid");
+                    dflinks.AddIndex("osm_nid_1");
+                }
                 //Debug.Log($"Read {dflinks.Nrow()} links from {fnamelinks}");
             }
 
@@ -177,7 +188,11 @@ namespace CampusSimulator
                 {
                     dfnodes.ReadCsv(nodeslist);
                 }
-                dfnodes.AddIndex("osm_nid");
+                if (useDfIndexes.Get())
+                {
+                    Debug.Log($"Using indexes on {fnamenodes}");
+                    dfnodes.AddIndex("osm_nid");
+                }
                 //Debug.Log($"Read {dfnodes.Nrow()} links from {fnamenodes}");
             }
             if (llm != null)
