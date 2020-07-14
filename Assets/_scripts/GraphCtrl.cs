@@ -824,13 +824,13 @@ namespace GraphAlgos
             // find closest filtered link 1 and 2
             //var go = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             //go.transform.position = pt;
-            var lnk1 = FindClosestLinkOnLineCloudFiltered(lname1, pt);
+            var lnk1 = FindClosestLinkOnLineCloudFilteredOnNamePrefix(lname1, pt);
             if (lnk1 == null)
             {
-                lnk1 = FindClosestLinkOnLineCloudFiltered(lname1, pt);
+                lnk1 = FindClosestLinkOnLineCloudFilteredOnNamePrefix(lname1, pt);
                 throw new UnityException("AddCrossLink: Could not find filtered link for filter:" + lname1);
             }
-            var lnk2 = FindClosestLinkOnLineCloudFiltered(lname2, pt);
+            var lnk2 = FindClosestLinkOnLineCloudFilteredOnNamePrefix(lname2, pt);
             if (lnk2 == null)
             {
                 throw new UnityException("AddCrossLink: Could not find filtered link for filter:" + lname2);
@@ -857,7 +857,7 @@ namespace GraphAlgos
             var pt = new Vector3(x, yfloor, z);
             pt = gm.modv(pt);
             var filter = gm.addprefix("c");
-            var lnk = FindClosestLinkOnLineCloudFiltered(filter, pt, deb: false);
+            var lnk = FindClosestLinkOnLineCloudFilteredOnNamePrefix(filter, pt, deb: false);
             if (lnk == null)
             {
                 throw new UnityException("AddRoomLink: Could not find filtered link for filter:" + filter);
@@ -875,7 +875,7 @@ namespace GraphAlgos
             var pt = new Vector3(x, yfloor, z);
             pt = gm.modv(pt);
             var filter = gm.addprefix("c");
-            var lnk = FindClosestLinkOnLineCloudFiltered(filter, pt, deb: false);
+            var lnk = FindClosestLinkOnLineCloudFilteredOnNamePrefix(filter, pt, deb: false);
             if (lnk == null)
             {
                 throw new UnityException("AddRoomLink: Could not find filtered link for filter:" + filter);
@@ -1272,17 +1272,23 @@ namespace GraphAlgos
             }
             return new Tuple<LcLink,Vector3>(rlink,rpt);
         }
-        public Tuple<LcLink, Vector3> FindClosestPointOnLineCloud(Vector3 pt)
+        public Tuple<LcLink, Vector3> FindClosestPointOnLineCloudTuple(Vector3 pt)
         {
             var links = linkdict.Values.ToList();
             return FindClosestPointOnLineCloud(pt, links);
+        }
+        public (LcLink link, Vector3 pt) FindClosestPointOnLineCloud(Vector3 pt)
+        {
+            var links = linkdict.Values.ToList();
+            var v1 = FindClosestPointOnLineCloud(pt, links);
+            return (v1.Item1, v1.Item2);
         }
         public Tuple<LcLink, Vector3> FindClosestPointOnLineCloud(Vector3 pt,NodeRegion region)
         {
             var links = GetLinksInRegion(region.regid);
             return FindClosestPointOnLineCloud(pt, links);
         }
-        public LcLink FindClosestLinkOnLineCloudFiltered(string filter, Vector3 pt, bool deb = false)
+        public LcLink FindClosestLinkOnLineCloudFilteredOnNamePrefix(string filter, Vector3 pt, bool deb = false)
         {
             if (deb)
             {

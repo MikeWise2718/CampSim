@@ -768,7 +768,7 @@ namespace CampusSimulator
         public Tuple<LcLink, Vector3> FindClosestPointOnLineCloud(Vector3 pt)
         {
             var gcr = GetGraphCtrl();
-            return (gcr.FindClosestPointOnLineCloud(pt));
+            return (gcr.FindClosestPointOnLineCloudTuple(pt));
         }
         public LcLink FindClosestLinkOnLineCloudFiltered(string filter, Vector3 pt)
         {

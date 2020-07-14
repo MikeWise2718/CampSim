@@ -5,6 +5,7 @@ using UnityEngine;
 using UxUtils;
 using Aiskwk.Map;
 using Aiskwk.Dataframe;
+using Microsoft.Win32;
 
 namespace CampusSimulator
 {
@@ -21,6 +22,24 @@ namespace CampusSimulator
         private List<SimpleDf> dfnodeslist;
 
         public UxSettingBool useDfIndexes = new UxSettingBool("useDfIndexes", true);
+
+        public (int waysidxcnt,int linksidxcnt,int nodeidxcnt) GetIndexCounts()
+        {
+            var (rv1,rv2,rv3) = (0,0,0);
+            foreach(var df in dfwayslist)
+            {
+                rv1 += df.IndexAccesses;
+            }
+            foreach (var df in dflinkslist)
+            {
+                rv2 += df.IndexAccesses;
+            }
+            foreach (var df in dfnodeslist)
+            {
+                rv3 += df.IndexAccesses;
+            }
+            return (rv1, rv2, rv3);
+        }
 
         public void InitPhase0()
         {

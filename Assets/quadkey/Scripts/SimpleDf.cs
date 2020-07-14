@@ -2199,6 +2199,7 @@ namespace Aiskwk.Dataframe
             }
             return;
         }
+        public int IndexAccesses = 0;
         public int GetColIdx(string colname,string sval)
         {
             var lst = GetColIdxList(colname, sval);
@@ -2212,6 +2213,7 @@ namespace Aiskwk.Dataframe
         {
             if (HasIndex(colname))
             {
+                IndexAccesses++;
                 var sidx = stringindex[colname];
                 if (sidx.ContainsKey(sval))
                 {
