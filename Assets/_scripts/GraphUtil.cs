@@ -195,6 +195,7 @@ namespace GraphAlgos
             colorTable["firebrick"] = rgbbyte(178, 34, 34);
             colorTable["darkred"] = rgbbyte(139, 0, 0);
             colorTable["dirtyred"] = rgbbyte(117, 10, 10);
+            colorTable["lightred"] = new Color(1, 0.412f, 0.71f);
             colorTable["pink"] = new Color(1, 0.412f, 0.71f);
             colorTable["scarlet"] = new Color(1, 0.14f, 0.0f);
             // yellows
@@ -211,6 +212,7 @@ namespace GraphAlgos
             colorTable["darkbrown"] = new Color(0.396f, 0.263f, 0.129f);
             // greens
             colorTable["g"] =
+            colorTable["lightgreen"] = new Color(0.5f, 1, 0.5f);
             colorTable["green"] = new Color(0, 1, 0);
             colorTable["dg"] = new Color(0, 0.5f, 0);
             colorTable["olive"] = new Color(0.5f, 0.5f, 0f);
@@ -770,7 +772,7 @@ namespace GraphAlgos
         }
 
 
-        static string _verstring = "2020.07.12.1";
+        static string _verstring = "2020.07.13.1";
         static DateTime _buildDate=DateTime.UtcNow;
         private static void getsysdata()
         {

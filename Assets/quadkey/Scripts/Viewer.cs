@@ -554,20 +554,21 @@ namespace Aiskwk.Map
 
         void RotateViewer(float rotate)
         {
-            //Debug.Log($"RotateViewer - Viewer rotation before  {transform.localRotation.eulerAngles} followGround:{followGround}");
-            var fak = calctimefak(ref tvlastkey);
+            ////Debug.Log($"RotateViewer - Viewer rotation before  {transform.localRotation.eulerAngles} followGround:{followGround}");
 
-            bodyPlaneRotation *= Quaternion.Euler(new Vector3(0, fak*rotate, 0));
+            var fak = calctimefak(ref tvlastkey);
+            bodyPlaneRotation *= Quaternion.Euler(new Vector3(0, fak * rotate, 0));
             moveplane.transform.localRotation = bodyPlaneRotation;
-            bodyPrefabRotation *= Quaternion.Euler(new Vector3(0, fak*rotate, 0));
+            bodyPrefabRotation *= Quaternion.Euler(new Vector3(0, fak * rotate, 0));
             body.transform.localRotation = Quaternion.FromToRotation(Vector3.up, lstnrm) * bodyPrefabRotation;
-            //if (followGround)
-            //{
-            //    body.transform.localRotation = Quaternion.FromToRotation(Vector3.up, lstnrm) * bodyPrefabRotation;
-            //}
-            //Debug.Log($"RotateViewer - Viewer rotation after   {transform.localRotation.eulerAngles}");
-            //bodypose.transform.localRotation = Quaternion.Euler(new Vector3(0, rotate, 0)) * Quaternion.FromToRotation(Vector3.up, lstnrm) ;
-            //Debug.Log($"RotateViewer: {rotate}");
+
+            ////if (followGround)
+            ////{
+            ////    body.transform.localRotation = Quaternion.FromToRotation(Vector3.up, lstnrm) * bodyPrefabRotation;
+            ////}
+            ////Debug.Log($"RotateViewer - Viewer rotation after   {transform.localRotation.eulerAngles}");
+            ////bodypose.transform.localRotation = Quaternion.Euler(new Vector3(0, rotate, 0)) * Quaternion.FromToRotation(Vector3.up, lstnrm) ;
+            ////Debug.Log($"RotateViewer: {rotate}");
         }
 
         Vector3 lstnrm = Vector3.up;

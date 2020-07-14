@@ -73,6 +73,14 @@ namespace CampusSimulator
             cargo.transform.rotation = pargo.transform.rotation;
             cargo.transform.Rotate(new Vector3(0, 90, 0));
             cargo.transform.Translate(new Vector3(0, 0, -0.4f));
+            var rigidbody = cargo.GetComponent<Rigidbody>();
+            if (rigidbody!=null)
+            {
+                // leaving this on it causes it to rotate when I use the arrow keys for some reasons
+                // Mach's pinciple?
+                //Debug.LogWarning($"Found rigidbody on {carformname}");
+                Destroy(rigidbody);
+            }
             return cargo;
         }
 

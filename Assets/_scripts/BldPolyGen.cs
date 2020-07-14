@@ -84,7 +84,7 @@ public class OsmBldSpec
             { "civic","purple" },
             { "government","purple" },
             { "hospital","red" },
-            { "yes","black" },
+            { "yes","lightblue" },
             { "osmbld","black" },
             { "bld","darkgreen" },
             { "house","blue" },

@@ -567,7 +567,7 @@ namespace Aiskwk.Map
         }
         public CrdMap DoRegression(string formula)
         {
-            // split on + then trim leading and following whitespace
+            // split on + then trim leading and trailing whitespace
             char[] spar = { '=', '+' };
             var vnames = new List<string>(formula.Split(spar).Select(x => x.Trim()));
 
@@ -576,7 +576,7 @@ namespace Aiskwk.Map
             //Debug.Log("DoRegression mapdata:" + mapdata.Count);
             if (mapdata.Count <= 1)
             {
-                throw new UnityException("Not enough data for regression num points:" + mapdata.Count + " formula:" + formula);
+                throw new UnityException($"Not enough data for regression num points:{mapdata.Count} formula:{formula}");
             }
 
             vnames.ForEach(v => mu[v] = mapdata.Select(x => x.Val(v)).Average());

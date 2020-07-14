@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Aiskwk.Map;
-using UnityEditor.Experimental.GraphView;
 
 /// <summary>
 /// GraphAlgos.cs  - This file contains Graph algorithems that we need. It is fairly self-contained. 
@@ -182,7 +181,7 @@ namespace GraphAlgos
         }
         public NodeRegion NewNodeRegion(string name, string color, bool saveToFile, bool makeCurrent=true, bool warnondups=false)
         {
-            Debug.Log($"NewNodeRegion:{name}");
+            //Debug.Log($"NewNodeRegion:{name}");
             NodeRegion newRegion;
             if (regionDict.ContainsKey(name))
             {
