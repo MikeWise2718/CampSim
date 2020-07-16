@@ -26,6 +26,7 @@ namespace CampusSimulator
             {
                 //"Bld11",
                 "Bld19",
+                "Bld121",
                 "Bld40",
                 "Bld43",
                 "BldSX",
@@ -141,6 +142,18 @@ namespace CampusSimulator
                         var b19comp = this.transform.gameObject.AddComponent<B19Willow>();
                         b19comp.InitializeValues(bm.sman);
                         b19comp.MakeItSo();
+                        break;
+                    }
+                case "Bld121":
+                    {
+                        //maingaragename = "Garage19_1";
+                        roomspecs = B19roomspec;
+                        destnodes = SplitOutDestNodes(roomspecs);
+                        shortname = "b121";
+                        journeyChoiceWeight = 20;
+                        var b121comp = this.transform.gameObject.AddComponent<B121Willow>();
+                        b121comp.InitializeValues(bm.sman);
+                        b121comp.MakeItSo();
                         break;
                     }
                 case "Bld40":

@@ -16,6 +16,10 @@ public class BuildingsPanel : MonoBehaviour
     Toggle b19_hvac_toggle;
     Toggle b19_floors_toggle;
     Toggle b19_doors_toggle;
+
+    Toggle b121_model_toggle;
+
+
     Toggle walllinks_toggle;
     Toggle osmblds_toggle;
     Toggle fixedblds_toggle;
@@ -29,6 +33,7 @@ public class BuildingsPanel : MonoBehaviour
     StreetMan stman;
     BuildingMan bdman;
     B19Willow b19comp;
+    B121Willow b121comp;
 
 
 
@@ -45,6 +50,8 @@ public class BuildingsPanel : MonoBehaviour
         b19_floors_toggle = transform.Find("FloorsToggle").GetComponent<Toggle>();
         b19_doors_toggle = transform.Find("DoorsToggle").GetComponent<Toggle>();
         b19_matmode_dropdown = transform.Find("MaterialModeDropdown").GetComponent<Dropdown>();
+
+        b121_model_toggle = transform.Find("B121ModelToggle").GetComponent<Toggle>();
 
         walllinks_toggle = transform.Find("WallLinksToggle").GetComponent<Toggle>();
         osmblds_toggle = transform.Find("OsmBldsToggle").GetComponent<Toggle>();
