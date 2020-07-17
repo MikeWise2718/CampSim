@@ -122,7 +122,7 @@ public class B19Willow : MonoBehaviour
                 //Debug.Log($"B19 yoff:{yoff}");
                 defpos = new Vector3(defpos.x, yoff+defpos.y, defpos.z);
             }
-            var obprefab = Resources.Load<GameObject>("Willow/B19-Willow");
+            var obprefab = Resources.Load<GameObject>("Willow/B19/B19-Willow");
             willgo = Instantiate<GameObject>(obprefab);
             var ftm = 0.3048f;
             willgo.transform.localScale = new Vector3(ftm,ftm,ftm);

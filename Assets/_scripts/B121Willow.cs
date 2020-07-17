@@ -8,12 +8,11 @@ public class B121Willow : MonoBehaviour
     public enum b121_MaterialMode {  raw, materialed, glass, glasswalls };
 
     public UxSetting<bool> loadmodel = new UxSetting<bool>("B121_WillowModel", true);
-    public UxSetting<bool> level01 = new UxSetting<bool>("B121_level01", true);
-    public UxSetting<bool> level02 = new UxSetting<bool>("B121_level02", true);
-    public UxSetting<bool> level03 = new UxSetting<bool>("B121_level03", true);
+    public UxSetting<bool> shell = new UxSetting<bool>("B121_shell", true);
+    public UxSetting<bool> interiorwalls = new UxSetting<bool>("B121_interiorwalls", true);
     public UxSetting<bool> hvac = new UxSetting<bool>("B121_hvac", true);
-    public UxSetting<bool> floors = new UxSetting<bool>("B121_floors", true);
-    public UxSetting<bool> doors = new UxSetting<bool>("B121_doors", true);
+    public UxSetting<bool> lighting = new UxSetting<bool>("B121_lights", true);
+    public UxSetting<bool> plumbing = new UxSetting<bool>("B121_plumbing", true);
 
     public CampusSimulator.SceneMan sman=null;
 
@@ -22,29 +21,32 @@ public class B121Willow : MonoBehaviour
     // public B19_MaterialMode materialMode = B19_MaterialMode.materialed;
 
 
+
+
+
+    bool _b121_WillowModelLoaded = false;
+    bool _b121_shell = false;
+    bool _b121_interiorwalls = false;
+    bool _b121_hvac = false;
+    bool _b121_lighting = false;
+    bool _b121_plumbing = false;
+    GameObject b121go = null;
+    GameObject b121igo = null;
+    GameObject b121hgo = null;
+    GameObject b121lgo = null;
+    GameObject b121pgo = null;
+
     public void InitializeValues(CampusSimulator.SceneMan sman)
     {
         this.sman = sman;
         b121_materialMode.GetInitial(b121_MaterialMode.glasswalls);
         loadmodel.GetInitial(true);
-        _b19_level01 = level01.GetInitial(true);
-        _b19_level02 = level02.GetInitial(false);
-        _b19_level03 = level03.GetInitial(false);
-        _b19_hvac = hvac.GetInitial(false);
-        _b19_floors = floors.GetInitial(false);
-        _b19_doors = doors.GetInitial(false);
+        _b121_shell = shell.GetInitial(true);
+        _b121_interiorwalls = interiorwalls.GetInitial(true);
+        _b121_hvac = hvac.GetInitial(false);
+        _b121_lighting = lighting.GetInitial(false);
+        _b121_plumbing = plumbing.GetInitial(false);
     }
-
-
-
-    bool _b121_WillowModelLoaded = false;
-    bool _b19_level01 = false;
-    bool _b19_level02 = false;
-    bool _b19_level03 = false;
-    bool _b19_hvac = false;
-    bool _b19_floors = false;
-    bool _b19_doors = false;
-    GameObject willgo = null;
 
 
 
@@ -52,167 +54,122 @@ public class B121Willow : MonoBehaviour
     {
         var chg = false;
         if (loadmodel.Get() != _b121_WillowModelLoaded) chg = true;
-        if (level01.Get() != _b19_level01)
+        if (shell.Get() != _b121_shell)
         {
             chg = true;
-            //Debug.Log("1");
         }
-        if (level02.Get() != _b19_level02)
+        if (interiorwalls.Get() != _b121_interiorwalls)
         {
             chg = true;
-            //Debug.Log("2");
         }
-        if (level03.Get() != _b19_level03)
+        if (hvac.Get() != _b121_hvac)
         {
             chg = true;
-            //Debug.Log("3");
         }
-        if (floors.Get() != _b19_floors)
+        if (lighting.Get() != _b121_lighting)
         {
             chg = true;
-            //Debug.Log("floors");
         }
-        if (doors.Get() != _b19_doors)
+        if (plumbing.Get() != _b121_plumbing)
         {
             chg = true;
-            //Debug.Log("floors");
         }
-        if (hvac.Get() != _b19_hvac)
-        {
-            chg = true;
-            //Debug.Log("floors");
-        }
+
         return chg;
     }
 
 
-    void SetChildVis2(string childname, string grandchildname, bool active)
+    public GameObject LoadObject(string objname,float ska=0.025f,float xrot=0)
     {
-        var legot = willgo.transform.Find(childname);
-        if (legot != null)
+        var xoff = 0;
+        var zoff = 0;
+        Vector3 defpos = new Vector3(-789 + xoff, 0f, -436 + zoff);
+        var yoff = 0f;
+        if (sman != null)
         {
-            var legot2 = legot.transform.Find(grandchildname);
-            if (legot2 != null)
-            {
-                legot2.gameObject.SetActive(active);
-            }
+            yoff = sman.mpman.GetHeight(defpos.x, defpos.z);
+            //Debug.Log($"B19 yoff:{yoff}");
+            defpos = new Vector3(defpos.x, yoff + defpos.y, defpos.z);
         }
-    }
-
-    void SetChildVis(string childname,bool active)
-    {
-        var legot = willgo.transform.Find(childname);
-        if (legot!=null)
-        {
-            legot.gameObject.SetActive(active);
-        }
+        var obprefab = Resources.Load<GameObject>(objname);
+        var objgo = Instantiate<GameObject>(obprefab);
+        var ftm = ska;
+        objgo.transform.localScale = new Vector3(ftm, ftm, ftm);
+        objgo.transform.position = defpos;
+        objgo.transform.Rotate(new Vector3(xrot, -20.15f, 0));
+        objgo.transform.parent = this.transform;
+        return objgo;
     }
     public void MakeItSo()
     {
         //Debug.Log($"MakeItSo loadModel:{loadmodel.Get()} _b19WillowModel:{_b19_WillowModelLoaded}");
         if (loadmodel.Get() && !_b121_WillowModelLoaded)
         {
-            var xoff =0;
-            var zoff = 0;
-            Vector3 defpos = new Vector3(-789 + xoff, 0f, -436 + zoff);
-            var yoff = 0f;
-            if (sman!=null)
-            {
-                yoff = sman.mpman.GetHeight(defpos.x, defpos.z);
-                //Debug.Log($"B19 yoff:{yoff}");
-                defpos = new Vector3(defpos.x, yoff+defpos.y, defpos.z);
-            }
-            var obprefab = Resources.Load<GameObject>("Willow/B121/1716045-BH-AR-BASE_R20");
-            willgo = Instantiate<GameObject>(obprefab);
-            var ftm = 0.025f;
-            willgo.transform.localScale = new Vector3(ftm,ftm,ftm);
-            willgo.transform.position = defpos;
-            willgo.transform.Rotate(new Vector3(0,-20.15f, 0));
-            willgo.transform.parent = this.transform;
+            b121go = LoadObject("Willow/B121/1716045-BH-AR-BASE_R20");
+            _b121_shell = true;
+            _b121_interiorwalls = false;
+            _b121_hvac = false;
+            _b121_lighting = false;
+            _b121_plumbing = false;
             _b121_WillowModelLoaded = true;
-            level01.SetAndSave( true );
-            _b19_level01 = true;
-            level02.SetAndSave( false );
-            _b19_level02 = true;
-            level03.SetAndSave( false );
-            _b19_level03 = true;
-            floors.SetAndSave( false );
-            _b19_floors = true;
-            doors.SetAndSave( false );
-            _b19_doors = true;
-            hvac.SetAndSave( false );
-            _b19_hvac = true;
         }
         else if(!loadmodel.Get() && _b121_WillowModelLoaded)
         {
-            Destroy(willgo);
-            willgo = null;
+            Destroy(b121go);
+            b121go = null;
             loadmodel.SetAndSave( false );
             _b121_WillowModelLoaded = false;
-            level01.SetAndSave( false );
-            _b19_level01 = false;
-            level02.SetAndSave( false );
-            _b19_level02 = false;
-            level03.SetAndSave( false );
-            _b19_level03 = false;
+
+            shell.SetAndSave(false);
+            _b121_shell = false;
+
+            interiorwalls.SetAndSave( false );
+            _b121_interiorwalls = false;
+
             hvac.SetAndSave( false );
-            _b19_hvac = false;
+            _b121_hvac = false;
+
+            lighting.SetAndSave(false);
+            _b121_lighting = false;
+
+            plumbing.SetAndSave(false);
+            _b121_plumbing = false;
 
         }
-        if (willgo && level01.Get() != _b19_level01)
+        if (b121go && shell.Get() != _b121_shell)
         {
-            //Debug.Log("Fixing 1");
-            var stat = level01.Get();
-            SetChildVis("L01-AR", stat);
-            //SetChildVis("L01-ME", stat);
-            _b19_level01 = stat;
+            var stat = shell.Get();
+            b121go.SetActive(stat);
+            _b121_shell = stat;
         }
-        if (willgo && level02.Get() != _b19_level02)
+        if (b121go && interiorwalls.Get() != _b121_interiorwalls)
         {
-            //Debug.Log("Fixing 2");
-            var stat = level02.Get();
-            SetChildVis("L02-AR", stat);
-            //SetChildVis("L02-ME", stat);
-            _b19_level02 = stat;
+            var stat = interiorwalls.Get();
+            b121igo = LoadObject("Willow/B121/1716045-BH-AR-INTERIOR_R20");
+            _b121_interiorwalls = stat;
         }
-        if (willgo && level03.Get() != _b19_level03)
+        if (b121go && hvac.Get() != _b121_hvac)
         {
-            //Debug.Log("Fixing 3");
-            var stat = level03.Get();
-            SetChildVis("L03-AR", stat);
-            //SetChildVis("L03-ME", stat);
-            _b19_level03 = stat;
-        }
-        if (willgo && floors.Get() != _b19_floors)
-        {
-            //Debug.Log("Fixing floors");
-            var stat = floors.Get();
-            SetChildVis2("L01-AR", "Solid", stat);
-            SetChildVis2("L02-AR", "Solid", stat);
-            SetChildVis2("L03-AR", "Solid", stat);
-            _b19_floors = stat;
-        }
-        if (willgo && doors.Get() != _b19_doors)
-        {
-            //Debug.Log("Fixing doors");
-            var stat = doors.Get();
-            SetChildVis2("L01-AR", "Composite_Part", stat);
-            SetChildVis2("L02-AR", "Composite_Part", stat);
-            SetChildVis2("L03-AR", "Composite_Part", stat);
-            _b19_doors = stat;
-        }
-        if (willgo && hvac.Get() != _b19_hvac)
-        {
-            //Debug.Log("Fixing hvac");
             var stat = hvac.Get();
-            SetChildVis("L01-ME", stat);
-            SetChildVis("L02-ME", stat);
-            SetChildVis("L03-ME", stat);
-            _b19_hvac = stat;
+            b121hgo = LoadObject("Willow/B121/1716045-BH-HVAC-B121_2020",ska:1,xrot:-90);
+            _b121_hvac = stat;
         }
-        if (willgo)
+        if (b121go && lighting.Get() != _b121_lighting)
         {
-            ActuateMaterialMode();
+            var stat = lighting.Get();
+            b121lgo = LoadObject("Willow/B121/1716045-BH-LIGHTING-B121_2020",ska:1,xrot:-90);
+            _b121_lighting = stat;
+        }
+        if (b121go && plumbing.Get() != _b121_plumbing)
+        {
+            var stat = plumbing.Get();
+            b121pgo = LoadObject("Willow/B121/1716045-BH-PLUMBING-B121_2020",ska:1,xrot:-90);
+            _b121_plumbing = stat;
+        }
+
+        if (b121go)
+        {
+            ActuateMaterialMode(b121go);
         }
     }
 
@@ -332,16 +289,16 @@ public class B121Willow : MonoBehaviour
 
     public void WriteOutPartsAndMaterials()
     {
-        if (this.willgo == null)
+        if (this.b121go == null)
         {
-            this.willgo = GameObject.Find("B19-Willow");
+            this.b121go = GameObject.Find("B19-Willow");
         }
-        if (this.willgo == null)
+        if (this.b121go == null)
         {
             Debug.Log("Cound not find B19-Willow");
             return;
         }
-        var lst = GraphAlgos.GraphUtil.HierarchyDescToText(this.willgo, "");
+        var lst = GraphAlgos.GraphUtil.HierarchyDescToText(this.b121go, "");
         var fname = "B19materials.txt";
         GraphAlgos.GraphUtil.writeListToFile(lst, fname);
         Debug.Log("Wrote " + lst.Count + " lines to " + fname);
@@ -392,15 +349,15 @@ public class B121Willow : MonoBehaviour
         }
     }
 
-    public void ActuateMaterialMode()
+    public void ActuateMaterialMode(GameObject go)
     {
-        if (this.willgo == null)
+        if (go == null)
         {
-            this.willgo = GameObject.Find("B19-Willow");
+            go = GameObject.Find("B121");
         }
-        if (this.willgo == null)
+        if (go == null)
         {
-            Debug.Log("Cound not find B19-Willow");
+            Debug.Log("Cound not find B121");
             return;
         }
         foreach( var pname in B19_parts)
@@ -434,7 +391,7 @@ public class B121Willow : MonoBehaviour
                     matname = "";
                     break;
             }
-            AssignPartMat(this.willgo,partname, matname);
+            AssignPartMat(this.b121go,partname, matname);
         }
         //var lst = GraphAlgos.GraphUtil.HierarchyDescToText(this.willgo, "");
         //var fname = "B19materials.txt";
@@ -457,9 +414,9 @@ public class B121Willow : MonoBehaviour
             //Debug.Log("ChangeHappened");
             MakeItSo();
         }
-        if (willgo && lastMaterialMode!= b121_materialMode.Get())
+        if (b121go && lastMaterialMode!= b121_materialMode.Get())
         {
-            ActuateMaterialMode();
+            ActuateMaterialMode(b121go);
             lastMaterialMode = b121_materialMode.Get();
         }
         updcount++;

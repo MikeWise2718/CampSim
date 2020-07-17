@@ -18,6 +18,11 @@ public class BuildingsPanel : MonoBehaviour
     Toggle b19_doors_toggle;
 
     Toggle b121_model_toggle;
+    Toggle b121_shell_toggle;
+    Toggle b121_interiorwalls_toggle;
+    Toggle b121_hvac_toggle;
+    Toggle b121_lighting_toggle;
+    Toggle b121_plumbing_toggle;
 
 
     Toggle walllinks_toggle;
@@ -27,6 +32,7 @@ public class BuildingsPanel : MonoBehaviour
     Toggle fixedstreets_toggle;
 
     Dropdown b19_matmode_dropdown;
+    Dropdown b121_matmode_dropdown;
     Button applyButton;
     Button closeButton;
 
@@ -52,6 +58,12 @@ public class BuildingsPanel : MonoBehaviour
         b19_matmode_dropdown = transform.Find("MaterialModeDropdown").GetComponent<Dropdown>();
 
         b121_model_toggle = transform.Find("B121ModelToggle").GetComponent<Toggle>();
+        b121_shell_toggle = transform.Find("B121ShellToggle").GetComponent<Toggle>();
+        b121_interiorwalls_toggle = transform.Find("B121InteriorWallsToggle").GetComponent<Toggle>();
+        b121_hvac_toggle = transform.Find("B121HvacToggle").GetComponent<Toggle>();
+        b121_lighting_toggle = transform.Find("B121LightingToggle").GetComponent<Toggle>();
+        b121_plumbing_toggle = transform.Find("B121PlumbingToggle").GetComponent<Toggle>();
+        b121_matmode_dropdown = transform.Find("B121MaterialModeDropdown").GetComponent<Dropdown>();
 
         walllinks_toggle = transform.Find("WallLinksToggle").GetComponent<Toggle>();
         osmblds_toggle = transform.Find("OsmBldsToggle").GetComponent<Toggle>();
@@ -72,7 +84,7 @@ public class BuildingsPanel : MonoBehaviour
     }
 
 
-    public void EnableComponents(bool state)
+    public void EnableB19Parts(bool state)
     {
         b19_model_toggle.enabled = state;
         b19_level1_toggle.enabled = state;
@@ -83,33 +95,90 @@ public class BuildingsPanel : MonoBehaviour
         b19_doors_toggle.enabled = state;
     }
 
+    public void EnableB121Parts(bool state)
+    {
+        b121_model_toggle.enabled = state;
+        b121_shell_toggle.enabled = state;
+        b121_interiorwalls_toggle.enabled = state;
+        b121_hvac_toggle.enabled = state;
+        b121_lighting_toggle.enabled = state;
+        b121_plumbing_toggle.enabled = state;
+    }
+
+
 
     public void InitVals()
     {
-        b19comp = null;
-        if (bdman!=null)
-        {
-            var b19bld = bdman.GetBuilding("Bld19", couldFail: true);
-            if (b19bld != null)
-            {
-                b19comp = b19bld.GetComponent<B19Willow>();
-                if (b19comp == null)
-                {
-                    Debug.LogWarning("BuildingsPanel could not find B19Willow component in B19 building object that it needs to operate");
-                }
-            }
-        }
+        InitB19Vals();
+        InitB121Vals();
+
         walllinks_toggle.isOn = bdman.walllinks.Get();
         osmblds_toggle.isOn = bdman.osmblds.Get();
         fixedblds_toggle.isOn = bdman.fixedblds.Get();
 
         osmstreets_toggle.isOn = stman.osmstreets.Get();
         fixedstreets_toggle.isOn = stman.fixedstreets.Get();
+    }
+
+    public void InitB121Vals()
+    {
+        b121comp = null;
+        var b121bld = bdman.GetBuilding("Bld121", couldFail: true);
+        if (b121bld != null)
+        {
+            b121comp = b121bld.GetComponent<B121Willow>();
+            if (b121comp == null)
+            {
+                Debug.LogWarning("BuildingsPanel could not find B121 willow component in B121 building object that it needs to operate");
+            }
+        }
+
+        if (b121comp == null)
+        {
+            EnableB121Parts(false);
+            b121_interiorwalls_toggle.isOn = false;
+        }
+        else
+        {
+            EnableB121Parts(true);
+            b121_model_toggle.isOn = b121comp.loadmodel.Get();
+            b121_shell_toggle.isOn = b121comp.shell.Get();
+            b121_interiorwalls_toggle.isOn = b121comp.interiorwalls.Get();
+            b121_hvac_toggle.isOn = b121comp.hvac.Get();
+            b121_lighting_toggle.isOn = b121comp.lighting.Get();
+            b121_plumbing_toggle.isOn = b121comp.plumbing.Get();
+
+            // MaterialMode
+            {
+                var opts = b121comp.b121_materialMode.GetOptionsAsList();
+                var inival = b121comp.b121_materialMode.Get().ToString();
+                var idx = opts.FindIndex(s => s == inival);
+                if (idx <= 0) idx = 0;
+                b19_matmode_dropdown.ClearOptions();
+                b19_matmode_dropdown.AddOptions(opts);
+                //Debug.Log("MatMode add options n:" + opts.Count);
+                b19_matmode_dropdown.value = idx;
+            }
+        }
+    }
+    public void InitB19Vals()
+    {
+        b19comp = null;
+        var b19bld = bdman.GetBuilding("Bld19", couldFail: true);
+        if (b19bld != null)
+        {
+            b19comp = b19bld.GetComponent<B19Willow>();
+            if (b19comp == null)
+            {
+                Debug.LogWarning("BuildingsPanel could not find B19Willow component in B19 building object that it needs to operate");
+            }
+        }
+
 
 
         if (b19comp == null)
         {
-            EnableComponents(false);
+            EnableB19Parts(false);
             b19_model_toggle.isOn = false;
             b19_level1_toggle.isOn = false;
             b19_level2_toggle.isOn = false;
@@ -122,7 +191,7 @@ public class BuildingsPanel : MonoBehaviour
         }
         else
         {
-            EnableComponents(true);
+            EnableB19Parts(true);
             b19_model_toggle.isOn = b19comp.loadmodel.Get();
             b19_level1_toggle.isOn = b19comp.level01.Get();
             b19_level2_toggle.isOn = b19comp.level02.Get();
@@ -130,6 +199,8 @@ public class BuildingsPanel : MonoBehaviour
             b19_hvac_toggle.isOn = b19comp.hvac.Get();
             b19_floors_toggle.isOn = b19comp.floors.Get();
             b19_doors_toggle.isOn = b19comp.doors.Get();
+
+            // MaterialMode
             {
                 var opts = b19comp.b19_materialMode.GetOptionsAsList();
                 var inival = b19comp.b19_materialMode.Get().ToString();
@@ -140,48 +211,9 @@ public class BuildingsPanel : MonoBehaviour
                 //Debug.Log("MatMode add options n:" + opts.Count);
                 b19_matmode_dropdown.value = idx;
             }
-            //visTiedToggle.isOn = fman.visibilityTiedToDetectability;
         }
-        //panelActiveForRefreshChecks = true;
     }
 
-
-    //public void SetVals(bool closing = false)
-    //{
-    //    //Debug.Log($"BuildingsPanel.SetVals called - closing:{closing}");
-    //    if (b19comp != null)
-    //    {
-
-    //        //fman.visibilityTiedToDetectability = visTiedToggle.isOn;
-    //        b19comp.loadmodel.SetAndSave(b19_model_toggle.isOn);
-    //        b19comp.level01.SetAndSave(b19_level1_toggle.isOn);
-    //        b19comp.level02.SetAndSave(b19_level2_toggle.isOn);
-    //        b19comp.level03.SetAndSave(b19_level3_toggle.isOn);
-    //        b19comp.hvac.SetAndSave(b19_hvac_toggle.isOn);
-    //        b19comp.floors.SetAndSave(b19_floors_toggle.isOn);
-    //        b19comp.doors.SetAndSave(b19_doors_toggle.isOn);
-    //        {
-    //            var opts = b19comp.b19_materialMode.GetOptionsAsList();
-    //            var newval = opts[b19_matmode_dropdown.value];
-    //            //Debug.Log("Set toptextlabel default to " + newval);
-    //            b19comp.b19_materialMode.SetAndSave(newval);
-    //        }
-    //    }
-
-    //    var chg = false;
-    //    chg = chg || bdman.walllinks.SetAndSave(walllinks_toggle.isOn);
-    //    chg = chg || bdman.osmblds.SetAndSave(osmblds_toggle.isOn);
-    //    chg = chg || bdman.fixedblds.SetAndSave(fixedblds_toggle.isOn);
-    //    chg = chg || stman.osmstreets.SetAndSave(osmstreets_toggle.isOn);
-    //    chg = chg || stman.fixedstreets.SetAndSave(fixedstreets_toggle.isOn);
-    //    var msg = $"BuildingsPanel.SetVals walllinks:{walllinks_toggle.isOn} osmblds:{osmblds_toggle.isOn}  fixedblds:{fixedblds_toggle.isOn}";
-    //    msg += $"  osmstreets:{osmstreets_toggle.isOn}  fixedstreets:{fixedstreets_toggle.isOn}";
-    //    msg += $"  chg:{chg}";
-    //    Debug.Log(msg);
-    //    sman.RequestRefresh("BuildingsPanel-SetVals",totalrefresh:chg);
-    //    panelActiveForRefreshChecks = false;
-
-    //}
 
     public void SetVals(bool closing=false)
     {
@@ -205,6 +237,13 @@ public class BuildingsPanel : MonoBehaviour
                 //Debug.Log("Set toptextlabel default to " + newval);
                 chg = chg || b19comp.b19_materialMode.SetAndSave(newval);
             }
+            chg = chg || b121comp.loadmodel.SetAndSave(b121_model_toggle.isOn);
+            chg = chg || b121comp.shell.SetAndSave(b121_shell_toggle.isOn);
+            chg = chg || b121comp.interiorwalls.SetAndSave(b121_interiorwalls_toggle.isOn);
+            chg = chg || b121comp.hvac.SetAndSave(b121_hvac_toggle.isOn);
+            chg = chg || b121comp.lighting.SetAndSave(b121_lighting_toggle.isOn);
+            chg = chg || b121comp.plumbing.SetAndSave(b121_plumbing_toggle.isOn);
+
         }
 
         tchg = tchg || bdman.walllinks.SetAndSave(walllinks_toggle.isOn);
@@ -214,7 +253,7 @@ public class BuildingsPanel : MonoBehaviour
         chg = chg || bdman.fixedblds.SetAndSave(fixedblds_toggle.isOn);
 
 
-        //Debug.Log($"SetValsForRefresh t:{Time.time:f1}   chg:{chg} tchg:{tchg}");
+        Debug.Log($"SetValsForRefresh t:{Time.time:f1}   chg:{chg} tchg:{tchg}");
         if (chg || tchg)
         {
             //Debug.Log($"BuildingsPanel.SetValsForRefresh bman.fixedblds.SetAndSave:{fixedblds_toggle.isOn}");

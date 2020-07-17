@@ -147,7 +147,7 @@ namespace CampusSimulator
                 case "Bld121":
                     {
                         //maingaragename = "Garage19_1";
-                        roomspecs = B19roomspec;
+                        //roomspecs = B121roomspec;
                         destnodes = SplitOutDestNodes(roomspecs);
                         shortname = "b121";
                         journeyChoiceWeight = 20;
