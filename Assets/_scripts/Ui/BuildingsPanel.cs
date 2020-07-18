@@ -16,6 +16,7 @@ public class BuildingsPanel : MonoBehaviour
     Toggle b19_hvac_toggle;
     Toggle b19_floors_toggle;
     Toggle b19_doors_toggle;
+    Toggle b19_osmbld_toggle;
 
     Toggle b121_model_toggle;
     Toggle b121_shell_toggle;
@@ -23,6 +24,7 @@ public class BuildingsPanel : MonoBehaviour
     Toggle b121_hvac_toggle;
     Toggle b121_lighting_toggle;
     Toggle b121_plumbing_toggle;
+    Toggle b121_osmbld_toggle;
 
 
     Toggle walllinks_toggle;
@@ -55,6 +57,7 @@ public class BuildingsPanel : MonoBehaviour
         b19_hvac_toggle = transform.Find("HVACToggle").GetComponent<Toggle>();
         b19_floors_toggle = transform.Find("FloorsToggle").GetComponent<Toggle>();
         b19_doors_toggle = transform.Find("DoorsToggle").GetComponent<Toggle>();
+        b19_osmbld_toggle = transform.Find("OsmbldToggle").GetComponent<Toggle>();
         b19_matmode_dropdown = transform.Find("MaterialModeDropdown").GetComponent<Dropdown>();
 
         b121_model_toggle = transform.Find("B121ModelToggle").GetComponent<Toggle>();
@@ -63,6 +66,7 @@ public class BuildingsPanel : MonoBehaviour
         b121_hvac_toggle = transform.Find("B121HvacToggle").GetComponent<Toggle>();
         b121_lighting_toggle = transform.Find("B121LightingToggle").GetComponent<Toggle>();
         b121_plumbing_toggle = transform.Find("B121PlumbingToggle").GetComponent<Toggle>();
+        b121_osmbld_toggle = transform.Find("B121OsmbldToggle").GetComponent<Toggle>();
         b121_matmode_dropdown = transform.Find("B121MaterialModeDropdown").GetComponent<Dropdown>();
 
         walllinks_toggle = transform.Find("WallLinksToggle").GetComponent<Toggle>();
@@ -76,6 +80,7 @@ public class BuildingsPanel : MonoBehaviour
         closeButton = transform.Find("CloseButton").gameObject.GetComponent<Button>();
         closeButton.onClick.AddListener(delegate { uiman.ClosePanel(); });
         applyButton.onClick.AddListener(delegate { SetVals(); });
+        //applyButton.onClick.AddListener(delegate { MakeItSo(); });
     }
 
     public void SetScene(CampusSimulator.SceneSelE curscene)
@@ -93,6 +98,7 @@ public class BuildingsPanel : MonoBehaviour
         b19_hvac_toggle.enabled = state;
         b19_floors_toggle.enabled = state;
         b19_doors_toggle.enabled = state;
+        b19_osmbld_toggle.enabled = state;
     }
 
     public void EnableB121Parts(bool state)
@@ -103,6 +109,7 @@ public class BuildingsPanel : MonoBehaviour
         b121_hvac_toggle.enabled = state;
         b121_lighting_toggle.enabled = state;
         b121_plumbing_toggle.enabled = state;
+        b121_osmbld_toggle.enabled = state;
     }
 
 
@@ -147,6 +154,7 @@ public class BuildingsPanel : MonoBehaviour
             b121_hvac_toggle.isOn = b121comp.hvac.Get();
             b121_lighting_toggle.isOn = b121comp.lighting.Get();
             b121_plumbing_toggle.isOn = b121comp.plumbing.Get();
+            b121_osmbld_toggle.isOn = b121comp.osmbld.Get();
 
             // MaterialMode
             {
@@ -154,10 +162,10 @@ public class BuildingsPanel : MonoBehaviour
                 var inival = b121comp.b121_materialMode.Get().ToString();
                 var idx = opts.FindIndex(s => s == inival);
                 if (idx <= 0) idx = 0;
-                b19_matmode_dropdown.ClearOptions();
-                b19_matmode_dropdown.AddOptions(opts);
+                b121_matmode_dropdown.ClearOptions();
+                b121_matmode_dropdown.AddOptions(opts);
                 //Debug.Log("MatMode add options n:" + opts.Count);
-                b19_matmode_dropdown.value = idx;
+                b121_matmode_dropdown.value = idx;
             }
         }
     }
@@ -186,6 +194,7 @@ public class BuildingsPanel : MonoBehaviour
             b19_hvac_toggle.isOn = false;
             b19_floors_toggle.isOn = false;
             b19_doors_toggle.isOn = false;
+            b19_osmbld_toggle.isOn = false;
 
             b19_matmode_dropdown.ClearOptions();
         }
@@ -199,6 +208,7 @@ public class BuildingsPanel : MonoBehaviour
             b19_hvac_toggle.isOn = b19comp.hvac.Get();
             b19_floors_toggle.isOn = b19comp.floors.Get();
             b19_doors_toggle.isOn = b19comp.doors.Get();
+            b19_osmbld_toggle.isOn = b19comp.osmbld.Get();
 
             // MaterialMode
             {
@@ -211,6 +221,18 @@ public class BuildingsPanel : MonoBehaviour
                 //Debug.Log("MatMode add options n:" + opts.Count);
                 b19_matmode_dropdown.value = idx;
             }
+        }
+    }
+
+    public void MakeItSo()
+    {
+        if (b19comp!=null)
+        {
+            b19comp.MakeItSo();
+        }
+        if (b121comp != null)
+        {
+            b121comp.MakeItSo();
         }
     }
 
@@ -231,19 +253,31 @@ public class BuildingsPanel : MonoBehaviour
             chg = chg || b19comp.hvac.SetAndSave(b19_hvac_toggle.isOn);
             chg = chg || b19comp.floors.SetAndSave(b19_floors_toggle.isOn);
             chg = chg || b19comp.doors.SetAndSave(b19_doors_toggle.isOn);
+            chg = chg || b19comp.osmbld.SetAndSave(b19_osmbld_toggle.isOn);
             {
                 var opts = b19comp.b19_materialMode.GetOptionsAsList();
                 var newval = opts[b19_matmode_dropdown.value];
                 //Debug.Log("Set toptextlabel default to " + newval);
                 chg = chg || b19comp.b19_materialMode.SetAndSave(newval);
             }
+        }
+        if (b121comp!=null)
+        { 
             chg = chg || b121comp.loadmodel.SetAndSave(b121_model_toggle.isOn);
             chg = chg || b121comp.shell.SetAndSave(b121_shell_toggle.isOn);
             chg = chg || b121comp.interiorwalls.SetAndSave(b121_interiorwalls_toggle.isOn);
             chg = chg || b121comp.hvac.SetAndSave(b121_hvac_toggle.isOn);
             chg = chg || b121comp.lighting.SetAndSave(b121_lighting_toggle.isOn);
             chg = chg || b121comp.plumbing.SetAndSave(b121_plumbing_toggle.isOn);
+            chg = chg || b121comp.osmbld.SetAndSave(b121_osmbld_toggle.isOn);
+            {
+                var opts = b121comp.b121_materialMode.GetOptionsAsList();
+                var newval = opts[b121_matmode_dropdown.value];
+                //Debug.Log("Set toptextlabel default to " + newval);
+                chg = chg || b121comp.b121_materialMode.SetAndSave(newval);
 
+
+            }
         }
 
         tchg = tchg || bdman.walllinks.SetAndSave(walllinks_toggle.isOn);

@@ -114,7 +114,20 @@ namespace CampusSimulator
         {
         }
 
-
+        public OsmBldSpec FindBldSpecByNameStart(string namestart)
+        {
+            if (bldspecs != null)
+            {
+                foreach (var bs in bldspecs)
+                {
+                    if (bs.bgo.name.StartsWith(namestart))
+                    {
+                        return bs;
+                    }
+                }
+            }
+            return null;
+        }
 
         public void InitializeScene(SceneSelE newregion)
         {

@@ -1,5 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 using UxUtils;
 
@@ -13,6 +13,7 @@ public class B121Willow : MonoBehaviour
     public UxSetting<bool> hvac = new UxSetting<bool>("B121_hvac", true);
     public UxSetting<bool> lighting = new UxSetting<bool>("B121_lights", true);
     public UxSetting<bool> plumbing = new UxSetting<bool>("B121_plumbing", true);
+    public UxSetting<bool> osmbld = new UxSetting<bool>("B121_osmbld", true);
 
     public CampusSimulator.SceneMan sman=null;
 
@@ -30,7 +31,11 @@ public class B121Willow : MonoBehaviour
     bool _b121_hvac = false;
     bool _b121_lighting = false;
     bool _b121_plumbing = false;
+    bool _b121_osmbld = false;
+    b121_MaterialMode lastMaterialMode;
+
     GameObject b121go = null;
+    GameObject b121sgo = null;
     GameObject b121igo = null;
     GameObject b121hgo = null;
     GameObject b121lgo = null;
@@ -46,6 +51,7 @@ public class B121Willow : MonoBehaviour
         _b121_hvac = hvac.GetInitial(false);
         _b121_lighting = lighting.GetInitial(false);
         _b121_plumbing = plumbing.GetInitial(false);
+        lastMaterialMode = b121_materialMode.Get();
     }
 
 
@@ -74,7 +80,14 @@ public class B121Willow : MonoBehaviour
         {
             chg = true;
         }
-
+        if (osmbld.Get() != _b121_osmbld)
+        {
+            chg = true;
+        }
+        if (b121_materialMode.Get() != lastMaterialMode)
+        {
+            chg = true;
+        }
         return chg;
     }
 
@@ -97,26 +110,50 @@ public class B121Willow : MonoBehaviour
         objgo.transform.localScale = new Vector3(ftm, ftm, ftm);
         objgo.transform.position = defpos;
         objgo.transform.Rotate(new Vector3(xrot, -20.15f, 0));
-        objgo.transform.parent = this.transform;
+        objgo.transform.parent = b121go.transform;
+        //        objgo.transform.parent = this.transform;
         return objgo;
+    }
+
+    public void DestroyOneGo(ref GameObject bgo)
+    {
+        if (bgo != null)
+        {
+            Destroy(bgo);
+            bgo = null;
+        }
+    }
+
+    public void DestroyGos()
+    {
+        DestroyOneGo(ref b121sgo);
+        DestroyOneGo(ref b121igo);
+        DestroyOneGo(ref b121hgo);
+        DestroyOneGo(ref b121lgo);
+        DestroyOneGo(ref b121pgo);
+        DestroyOneGo(ref b121go);
     }
     public void MakeItSo()
     {
         //Debug.Log($"MakeItSo loadModel:{loadmodel.Get()} _b19WillowModel:{_b19_WillowModelLoaded}");
         if (loadmodel.Get() && !_b121_WillowModelLoaded)
         {
-            b121go = LoadObject("Willow/B121/1716045-BH-AR-BASE_R20");
+            b121go = new GameObject("B121-Willow");
+            b121go.transform.parent = this.transform;
+
+            b121sgo = LoadObject("Willow/B121/1716045-BH-AR-BASE_R20");
             _b121_shell = true;
             _b121_interiorwalls = false;
             _b121_hvac = false;
             _b121_lighting = false;
             _b121_plumbing = false;
             _b121_WillowModelLoaded = true;
+            _b121_osmbld = false;
         }
         else if(!loadmodel.Get() && _b121_WillowModelLoaded)
         {
-            Destroy(b121go);
-            b121go = null;
+            DestroyGos();
+
             loadmodel.SetAndSave( false );
             _b121_WillowModelLoaded = false;
 
@@ -136,46 +173,60 @@ public class B121Willow : MonoBehaviour
             _b121_plumbing = false;
 
         }
-        if (b121go && shell.Get() != _b121_shell)
+        if (b121sgo)
         {
-            var stat = shell.Get();
-            b121go.SetActive(stat);
-            _b121_shell = stat;
-        }
-        if (b121go && interiorwalls.Get() != _b121_interiorwalls)
-        {
-            var stat = interiorwalls.Get();
-            b121igo = LoadObject("Willow/B121/1716045-BH-AR-INTERIOR_R20");
-            _b121_interiorwalls = stat;
-        }
-        if (b121go && hvac.Get() != _b121_hvac)
-        {
-            var stat = hvac.Get();
-            b121hgo = LoadObject("Willow/B121/1716045-BH-HVAC-B121_2020",ska:1,xrot:-90);
-            _b121_hvac = stat;
-        }
-        if (b121go && lighting.Get() != _b121_lighting)
-        {
-            var stat = lighting.Get();
-            b121lgo = LoadObject("Willow/B121/1716045-BH-LIGHTING-B121_2020",ska:1,xrot:-90);
-            _b121_lighting = stat;
-        }
-        if (b121go && plumbing.Get() != _b121_plumbing)
-        {
-            var stat = plumbing.Get();
-            b121pgo = LoadObject("Willow/B121/1716045-BH-PLUMBING-B121_2020",ska:1,xrot:-90);
-            _b121_plumbing = stat;
-        }
-
-        if (b121go)
-        {
-            ActuateMaterialMode(b121go);
+            if (shell.Get() != _b121_shell)
+            {
+                var stat = shell.Get();
+                b121sgo.SetActive(stat);
+                _b121_shell = stat;
+            }
+            if (osmbld.Get() != _b121_osmbld)
+            {
+                var stat = osmbld.Get();
+                var bspec = sman.bdman.FindBldSpecByNameStart("Microsoft Building 121 ");
+                if (bspec != null)
+                {
+                    if (bspec.bgo != null)
+                    {
+                        bspec.bgo.SetActive(stat);
+                    }
+                }
+                _b121_osmbld = stat;
+            }
+            if (interiorwalls.Get() != _b121_interiorwalls)
+            {
+                var stat = interiorwalls.Get();
+                b121igo = LoadObject("Willow/B121/1716045-BH-AR-INTERIOR_R20");
+                _b121_interiorwalls = stat;
+            }
+            if (hvac.Get() != _b121_hvac)
+            {
+                var stat = hvac.Get();
+                b121hgo = LoadObject("Willow/B121/1716045-BH-HVAC-B121_2020", ska: 1, xrot: -90);
+                _b121_hvac = stat;
+            }
+            if (lighting.Get() != _b121_lighting)
+            {
+                var stat = lighting.Get();
+                b121lgo = LoadObject("Willow/B121/1716045-BH-LIGHTING-B121_2020", ska: 1, xrot: -90);
+                _b121_lighting = stat;
+            }
+            if (plumbing.Get() != _b121_plumbing)
+            {
+                var stat = plumbing.Get();
+                b121pgo = LoadObject("Willow/B121/1716045-BH-PLUMBING-B121_2020", ska: 1, xrot: -90);
+                _b121_plumbing = stat;
+            }
+            if (b121_materialMode.Get() != lastMaterialMode)
+            {
+                ActuateMaterialMode(b121sgo);
+                lastMaterialMode = b121_materialMode.Get();
+            }
         }
     }
 
-
-
-    List<string> B19_parts = new List<string>
+    List<string> B121_parts = new List<string>
     {
         "B19-Willow/L03-ME/Exhaust_Air_Duct,Exhaust_Air_DuctMat",
         "B19-Willow/L03-ME/Solid,SolidMat",
@@ -289,16 +340,16 @@ public class B121Willow : MonoBehaviour
 
     public void WriteOutPartsAndMaterials()
     {
-        if (this.b121go == null)
+        if (this.b121sgo == null)
         {
-            this.b121go = GameObject.Find("B19-Willow");
+            this.b121sgo = GameObject.Find("B19-Willow");
         }
-        if (this.b121go == null)
+        if (this.b121sgo == null)
         {
             Debug.Log("Cound not find B19-Willow");
             return;
         }
-        var lst = GraphAlgos.GraphUtil.HierarchyDescToText(this.b121go, "");
+        var lst = GraphAlgos.GraphUtil.HierarchyDescToText(this.b121sgo, "");
         var fname = "B19materials.txt";
         GraphAlgos.GraphUtil.writeListToFile(lst, fname);
         Debug.Log("Wrote " + lst.Count + " lines to " + fname);
@@ -318,7 +369,6 @@ public class B121Willow : MonoBehaviour
                 Debug.Log("GetPart failed to find " + partname + "-  failed name part" + part);
                 return null;
             }
-
             curgo = tform.gameObject;
         }
         return curgo;
@@ -360,64 +410,68 @@ public class B121Willow : MonoBehaviour
             Debug.Log("Cound not find B121");
             return;
         }
-        foreach( var pname in B19_parts)
+        var doit = false;
+        if (doit)
         {
-            var parcom = pname.Split(',');
-            var partname = parcom[0];
-            var partmat = parcom[1];
-            var defmatname = "ComputerGlass";
-            var matname = defmatname;
-            switch (b121_materialMode.Get())
+            foreach (var pname in B121_parts)
             {
-                case b121_MaterialMode.glass:
-                    matname = "ComputerGlass";
-                    break;
-                case b121_MaterialMode.materialed:
-                    matname = bldmatmap[parcom[1]];
-                    break;
-                case b121_MaterialMode.glasswalls:
-                    var pnl = partname.ToLower();
-                    if (pnl.Contains("solid") || pnl.Contains("wall") || pnl.Contains("door") || pnl.Contains("composite_part"))
-                    {
+                var parcom = pname.Split(',');
+                var partname = parcom[0];
+                var partmat = parcom[1];
+                var defmatname = "ComputerGlass";
+                var matname = defmatname;
+                switch (b121_materialMode.Get())
+                {
+                    case b121_MaterialMode.glass:
                         matname = "ComputerGlass";
-                    }
-                    else
-                    {
-                        matname = bldmatmap[partmat];
-                    }
-                    break;
-                case b121_MaterialMode.raw:
-                    //matname = parcom[1];
-                    matname = "";
-                    break;
+                        break;
+                    case b121_MaterialMode.materialed:
+                        matname = bldmatmap[parcom[1]];
+                        break;
+                    case b121_MaterialMode.glasswalls:
+                        var pnl = partname.ToLower();
+                        if (pnl.Contains("solid") || pnl.Contains("wall") || pnl.Contains("door") || pnl.Contains("composite_part"))
+                        {
+                            matname = "ComputerGlass";
+                        }
+                        else
+                        {
+                            matname = bldmatmap[partmat];
+                        }
+                        break;
+                    case b121_MaterialMode.raw:
+                        //matname = parcom[1];
+                        matname = "";
+                        break;
+                }
+                AssignPartMat(this.b121sgo, partname, matname);
             }
-            AssignPartMat(this.b121go,partname, matname);
         }
+
+
+
         //var lst = GraphAlgos.GraphUtil.HierarchyDescToText(this.willgo, "");
-        //var fname = "B19materials.txt";
+        //var fname = "B121materials.txt";
         //GraphAlgos.GraphUtil.writeListToFile(lst, fname);
         //Debug.Log("Wrote " + lst.Count + " lines to " + fname);
     }
 
-    b121_MaterialMode lastMaterialMode;
     int updcount = 0;
+
+    float timeinterval = 1.0f;
+    float lasttimecheck = 0;
 
     // Update is called once per frame
     void Update()
     {
-        if (updcount==0)
+        if (Time.time - lasttimecheck > timeinterval)
         {
-            lastMaterialMode = b121_materialMode.Get();
-        }
-        if (ChangeHappened())
-        {
-            //Debug.Log("ChangeHappened");
-            MakeItSo();
-        }
-        if (b121go && lastMaterialMode!= b121_materialMode.Get())
-        {
-            ActuateMaterialMode(b121go);
-            lastMaterialMode = b121_materialMode.Get();
+            if (ChangeHappened())
+            {
+                Debug.Log($"ChangeHappened to B121 upd:{updcount}");
+                MakeItSo();
+            }
+            lasttimecheck = Time.time;
         }
         updcount++;
     }
