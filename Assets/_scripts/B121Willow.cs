@@ -292,11 +292,12 @@ public class B121Willow : MonoBehaviour
 
     List<string> B121_parts = new List<string>
     {
-        "b121/shell,_Finish_Facade_Feature_WallMat",
-        "b121/interior,_Wall_GenericMat",
-        "b121/hvac,_AluminiumMat",
-        "b121/lighting,CopperMat",
-        "b121/plumbing,_Metal_Stainless_Steel_-_PolishedMat",
+        "b121/shell,System_Panel_Glazed,PC_Monitor_ColorMat",
+        "b121/shell,Floor_Slab,PlasticHololens",
+        "b121/interior,*,_Wall_GenericMat",
+        "b121/hvac*,,_AluminiumMat",
+        "b121/lighting,*,CopperMat",
+        "b121/plumbing,*,_Metal_Stainless_Steel_-_PolishedMat",
     };
 
     Dictionary<string, string> bldmatmap = new Dictionary<string, string>
@@ -308,6 +309,7 @@ public class B121Willow : MonoBehaviour
         {"_Door_FrameMat","Plywood"},
         {"_Finish_Facade_Feature_WallMat","FacadeWall"},
         {"_Glazing_Glass_-_ClearMat","DustyGlass"},
+        {"_Glazing_Glass","DustyGlass"},
         {"_Metal_Powdercoated_WhiteMat","Aluminium"},
         {"_Metal_Stainless_Steel_-_PolishedMat","Steel"},
         {"_Wall_GenericMat","WallMat"},
@@ -384,7 +386,7 @@ public class B121Willow : MonoBehaviour
         }
         return curgo;
     }
-    public void AssignPartMat(GameObject rootgo,string partname,string matname)
+    public void AssignPartMat(GameObject rootgo,string partname,string partfiltername,string matname)
     {
         if (matname=="")
         {
@@ -402,21 +404,29 @@ public class B121Willow : MonoBehaviour
                 return;
             }
             //renderer.material = mat;
-            ChangeMaterial(pogo, mat);
+            ChangeMaterial(pogo,partfiltername, mat);
         }
     }
-    void ChangeMaterial(GameObject pogo,Material newMat)
+    void ChangeMaterial(GameObject pogo,string partfiltername,Material newMat)
     {
         var children = pogo.GetComponentsInChildren<Renderer>();
-        Debug.Log($"Changing {pogo.name} children({children.Length}) to material:{newMat.name}");
+        Debug.Log($"Changing {pogo.name} children({children.Length}) to material:{newMat.name} - filter:{partfiltername}");
+        var last = partfiltername.Length-1;
+        if (partfiltername[last]=='*')
+        {
+            partfiltername = partfiltername.Remove(last);
+        }
         foreach (var rend in children)
         {
-            var mats = new Material[rend.materials.Length];
-            for (var j = 0; j < rend.materials.Length; j++)
+            if (rend.name.StartsWith(partfiltername))
             {
-                mats[j] = newMat;
+                var mats = new Material[rend.materials.Length];
+                for (var j = 0; j < rend.materials.Length; j++)
+                {
+                    mats[j] = newMat;
+                }
+                rend.materials = mats;
             }
-            rend.materials = mats;
         }
     }
 
@@ -429,7 +439,8 @@ public class B121Willow : MonoBehaviour
             {
                 var parcom = pname.Split(',');
                 var partname = parcom[0];
-                var partmat = parcom[1];
+                var partfiltername = parcom[1];
+                var partmat = parcom[2];
                 var defmatname = "ComputerGlass";
                 var matname = defmatname;
                 switch (b121_materialMode.Get())
@@ -438,7 +449,14 @@ public class B121Willow : MonoBehaviour
                         matname = "ComputerGlass";
                         break;
                     case b121_MaterialMode.materialed:
-                        matname = bldmatmap[parcom[1]];
+                        if (!bldmatmap.ContainsKey(partmat))
+                        {
+                            Debug.LogWarning($"Missing material:{partmat}");
+                        }
+                        else
+                        {
+                            matname = bldmatmap[partmat];
+                        }
                         break;
                     case b121_MaterialMode.glasswalls:
                         var pnl = partname.ToLower();
@@ -457,7 +475,7 @@ public class B121Willow : MonoBehaviour
                         matname = "";
                         break;
                 }
-                AssignPartMat(this.b121go, partname, matname);
+                AssignPartMat(this.b121go, partname, partfiltername, matname);
             }
         }
 
