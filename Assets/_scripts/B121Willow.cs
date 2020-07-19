@@ -214,37 +214,78 @@ public class B121Willow : MonoBehaviour
             {
                 var stat = shell.Get();
                 //b121sgo.SetActive(stat);
-                b121sgo = LoadObject(b121go, "Willow/B121/1716045-BH-AR-BASE_R20","shell",ska: 0.025f);
+                if (stat)
+                {
+                    b121sgo = LoadObject(b121go, "Willow/B121/1716045-BH-AR-BASE_R20", "shell", ska: 0.025f);
+                    loadedThisTime = true;
+                }
+                else
+                {
+                    DestroyOneGo(ref b121sgo);
+                }
                 _b121_shell = stat;
             }
             if (interiorwalls.Get() != _b121_interiorwalls)
             {
                 var stat = interiorwalls.Get();
-                b121igo = LoadObject(b121go,"Willow/B121/1716045-BH-AR-INTERIOR_R20","interior", ska: 0.025f);
+                if (stat)
+                {
+                    b121igo = LoadObject(b121go, "Willow/B121/1716045-BH-AR-INTERIOR_R20", "interior", ska: 0.025f);
+                    loadedThisTime = true;
+                }
+                else
+                {
+                    DestroyOneGo(ref b121igo);
+                }
                 _b121_interiorwalls = stat;
             }
             if (hvac.Get() != _b121_hvac)
             {
                 var stat = hvac.Get();
-                b121hgo = LoadObject(b121go, "Willow/B121/1716045-BH-HVAC-B121_2020","hvac", xrot: -90);
+                if (stat)
+                {
+                    b121hgo = LoadObject(b121go, "Willow/B121/1716045-BH-HVAC-B121_2020", "hvac", xrot: -90);
+                    loadedThisTime = true;
+                }
+                else
+                {
+                    DestroyOneGo(ref b121hgo);
+                }    
                 _b121_hvac = stat;
             }
             if (lighting.Get() != _b121_lighting)
             {
                 var stat = lighting.Get();
-                b121lgo = LoadObject(b121go, "Willow/B121/1716045-BH-LIGHTING-B121_2020","lighting", xrot: -90);
+                if (stat)
+                {
+                    b121lgo = LoadObject(b121go, "Willow/B121/1716045-BH-LIGHTING-B121_2020", "lighting", xrot: -90);
+                    loadedThisTime = true;
+                }
+                else
+                {
+                    DestroyOneGo(ref b121lgo);
+                }
                 _b121_lighting = stat;
             }
             if (plumbing.Get() != _b121_plumbing)
             {
                 var stat = plumbing.Get();
-                b121pgo = LoadObject(b121go, "Willow/B121/1716045-BH-PLUMBING-B121_2020","plumbing", xrot: -90);
+                if (stat)
+                {
+                    b121pgo = LoadObject(b121go, "Willow/B121/1716045-BH-PLUMBING-B121_2020", "plumbing", xrot: -90);
+                    loadedThisTime = true;
+                }
+                else
+                {
+                    DestroyOneGo(ref b121pgo);
+                }
                 _b121_plumbing = stat;
             }
+            Debug.Log($"loadedThisTime:{loadedThisTime}");
             if (loadedThisTime || b121_materialMode.Get() != lastMaterialMode)
             {
-                ActuateMaterialMode(b121sgo);
                 lastMaterialMode = b121_materialMode.Get();
+                ActuateMaterialMode();
             }
         }
     }
@@ -379,7 +420,7 @@ public class B121Willow : MonoBehaviour
         }
     }
 
-    public void ActuateMaterialMode(GameObject go,bool writepartlisttofile=false)
+    public void ActuateMaterialMode(bool writepartlisttofile=false)
     {
         var doit = true;
         if (doit)
