@@ -151,61 +151,6 @@ namespace CampusSimulator
         {
             Debug.Log($"BuildingMan.SetScene {newregion}");
             DelBuildings();
-            var osmloadspec = "";
-            var ptscale = 1f;
-            var usenew = true;
-            switch (newregion)
-            {
-                case SceneSelE.MsftRedwest:
-                case SceneSelE.MsftCoreCampus:
-                case SceneSelE.MsftB19focused:
-                case SceneSelE.MsftB121focused:
-                    MakeBuildings("Bld");
-                    osmloadspec = "msftb19area,msftcommons,msftredwest"; 
-                    break;
-                case SceneSelE.MsftDublin:
-                    MakeBuildings("Dub");
-                    osmloadspec = "msftdublin";
-                    //ptscale = 1000f;
-                    break;
-                case SceneSelE.MsftMountainView:
-                    osmloadspec = "msftmountainview";
-                    //ptscale = 1000f;
-                    break;
-                case SceneSelE.Eb12small:
-                case SceneSelE.Eb12:
-                    MakeBuildings("Eb");
-                    osmloadspec = "eb12small";
-                    break;
-                case SceneSelE.TeneriffeMtn:
-                    osmloadspec = "tenmtn";
-                    //ptscale = 1000f;
-                    break;
-                case SceneSelE.TukSouCen:
-                    osmloadspec = "tuksoucen";
-                    //ptscale = 1000f;
-                    break;
-                case SceneSelE.SanFrancisco:
-                    osmloadspec = "sanfrancisco";
-                    //ptscale = 1000f;
-                    break;
-                case SceneSelE.Seattle:
-                    osmloadspec = "seattle";
-                    //ptscale = 1000f;
-                    break;
-                case SceneSelE.Frankfurt:
-                    osmloadspec = "frankfurt";
-                    //ptscale = 1000f;
-                    break;
-                case SceneSelE.HiddenLakeLookout:
-                    osmloadspec = "hidlakelook";
-                    //ptscale = 1000f;
-                    break;
-                default:
-                case SceneSelE.None:
-                    // DelBuildings called above already
-                    break;
-            }
 
             var doosmblds = osmblds.Get();
             //Debug.Log($"doosmblds:{doosmblds} osmloadspec{osmloadspec}");
@@ -213,30 +158,34 @@ namespace CampusSimulator
             {
                 var pgvd = new PolyGenVekMapDel(sman.mpman.GetHeightVector3);
                 var bpg = new BldPolyGen();
-                //var llm1 = sman.glbllm;
-                //var llm2 = sman.mpman.GetLatLongMapQk(QkCoordSys.QkWc);
-                //var llm = llm1;
-                //Debug.Log($"llm1 {llm1.initmethod}");
-                //Debug.Log($"llm2 {llm2.initmethod}");
-                //Debug.Log($"sman.mpman.hasLLmap {sman.mpman.hasLLmap}");
-                //if (!sman.mpman.hasLLmap)
-                //{
-                //    llm = llm2;
-                //}
-                //Debug.Log($"llm {llm.initmethod}");
                 var llm = sman.mpman.GetLatLongMap();
-                //if (usenew)
-                //{
                 var (waysdflst, linksdflist, nodesdflist) = sman.dfman.GetSdfs();
                 var lbgos = bpg.LoadRegion(this.gameObject, waysdflst, linksdflist, nodesdflist, pgvd: pgvd, llm: llm);
                 bldspecs.AddRange(lbgos);
-                //}
-                //else
-                //{
-                //    var lbgos = bpg.LoadRegionOld(this.gameObject, osmloadspec,ptscale:ptscale,pgvd:pgvd,llm:llm);
-                //    bldspecs.AddRange(lbgos);
-                //}
             }
+
+            switch (newregion)
+            {
+                case SceneSelE.MsftRedwest:
+                case SceneSelE.MsftCoreCampus:
+                case SceneSelE.MsftB19focused:
+                case SceneSelE.MsftB121focused:
+                    MakeBuildings("Bld");
+                    break;
+                case SceneSelE.MsftDublin:
+                    MakeBuildings("Dub");
+                    break;
+                case SceneSelE.Eb12small:
+                case SceneSelE.Eb12:
+                    MakeBuildings("Eb");
+                    break;
+                default:
+                case SceneSelE.None:
+                    // DelBuildings called above already
+                    break;
+            }
+
+
         }
         public void UpdateBldStats()
         {
@@ -425,9 +374,6 @@ namespace CampusSimulator
             }
             return bldlookup[name];
         }
-
-
-
         public void AddBuildingToCollection(Building building)
         {
             if (bldlookup.ContainsKey(building.name))

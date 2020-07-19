@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Security.Cryptography;
+using UnityEditor;
 using UnityEngine;
 using UxUtils;
 
@@ -43,6 +44,7 @@ public class B121Willow : MonoBehaviour
 
     public void InitializeValues(CampusSimulator.SceneMan sman)
     {
+        Debug.Log("InitializeValues");
         this.sman = sman;
         b121_materialMode.GetInitial(b121_MaterialMode.glasswalls);
         loadmodel.GetInitial(true);
@@ -51,7 +53,16 @@ public class B121Willow : MonoBehaviour
         _b121_hvac = hvac.GetInitial(false);
         _b121_lighting = lighting.GetInitial(false);
         _b121_plumbing = plumbing.GetInitial(false);
+        _b121_osmbld = osmbld.GetInitial(false);
         lastMaterialMode = b121_materialMode.Get();
+        Debug.Log($"b121.loadmodel:{loadmodel.Get()}");
+        Debug.Log($"b121.shell:{shell.Get()}");
+        Debug.Log($"b121.interior:{interiorwalls.Get()}");
+        Debug.Log($"b121.hvac:{hvac.Get()}");
+        Debug.Log($"b121.lighting:{lighting.Get()}");
+        Debug.Log($"b121.plumbing:{plumbing.Get()}");
+        Debug.Log($"b121.osmbld:{osmbld.Get()}");
+        Debug.Log($"b121.materialmode:{b121_materialMode.Get()}");
     }
 
 
@@ -62,30 +73,37 @@ public class B121Willow : MonoBehaviour
         if (loadmodel.Get() != _b121_WillowModelLoaded) chg = true;
         if (shell.Get() != _b121_shell)
         {
+            Debug.Log($"b121 shell changed to {shell.Get()}");
             chg = true;
         }
         if (interiorwalls.Get() != _b121_interiorwalls)
         {
+            Debug.Log($"b121 interior changed to {interiorwalls.Get()}");
             chg = true;
         }
         if (hvac.Get() != _b121_hvac)
         {
+            Debug.Log($"b121 hvac changed to {hvac.Get()}");
             chg = true;
         }
         if (lighting.Get() != _b121_lighting)
         {
+            Debug.Log($"b121 lighting changed to {lighting.Get()}");
             chg = true;
         }
         if (plumbing.Get() != _b121_plumbing)
         {
+            Debug.Log($"b121 plumbing changed to {plumbing.Get()}");
             chg = true;
         }
         if (osmbld.Get() != _b121_osmbld)
         {
+            Debug.Log($"b121 osmbld changed to {osmbld.Get()}");
             chg = true;
         }
         if (b121_materialMode.Get() != lastMaterialMode)
         {
+            Debug.Log($"b121 material changed to {b121_materialMode.Get()}");
             chg = true;
         }
         return chg;
@@ -94,11 +112,12 @@ public class B121Willow : MonoBehaviour
 
 
 
-    public GameObject LoadObject(GameObject parent,string objname,float ska=1,float xrot=0)
+    public GameObject LoadObject(GameObject parent,string resourcename,string objname,float ska=1,float xrot=0)
     {
-        var obprefab = Resources.Load<GameObject>(objname);
+        var obprefab = Resources.Load<GameObject>(resourcename);
         var objgo = Instantiate<GameObject>(obprefab);
         var ftm = ska;
+        objgo.name = objname;
         objgo.transform.localScale = new Vector3(ftm, ftm, ftm);
         objgo.transform.position = Vector3.zero;
         objgo.transform.Rotate(new Vector3(xrot, 0, 0));
@@ -149,7 +168,7 @@ public class B121Willow : MonoBehaviour
             _b121_hvac = false;
             _b121_lighting = false;
             _b121_plumbing = false;
-            _b121_osmbld = false;
+            _b121_osmbld = sman.bdman.osmblds.Get();
             _b121_WillowModelLoaded = true;
             loadedThisTime = true;
         }
@@ -195,31 +214,31 @@ public class B121Willow : MonoBehaviour
             {
                 var stat = shell.Get();
                 //b121sgo.SetActive(stat);
-                b121sgo = LoadObject(b121go, "Willow/B121/1716045-BH-AR-BASE_R20",ska: 0.025f);
+                b121sgo = LoadObject(b121go, "Willow/B121/1716045-BH-AR-BASE_R20","shell",ska: 0.025f);
                 _b121_shell = stat;
             }
             if (interiorwalls.Get() != _b121_interiorwalls)
             {
                 var stat = interiorwalls.Get();
-                b121igo = LoadObject(b121go,"Willow/B121/1716045-BH-AR-INTERIOR_R20", ska: 0.025f);
+                b121igo = LoadObject(b121go,"Willow/B121/1716045-BH-AR-INTERIOR_R20","interior", ska: 0.025f);
                 _b121_interiorwalls = stat;
             }
             if (hvac.Get() != _b121_hvac)
             {
                 var stat = hvac.Get();
-                b121hgo = LoadObject(b121go, "Willow/B121/1716045-BH-HVAC-B121_2020", xrot: -90);
+                b121hgo = LoadObject(b121go, "Willow/B121/1716045-BH-HVAC-B121_2020","hvac", xrot: -90);
                 _b121_hvac = stat;
             }
             if (lighting.Get() != _b121_lighting)
             {
                 var stat = lighting.Get();
-                b121lgo = LoadObject(b121go, "Willow/B121/1716045-BH-LIGHTING-B121_2020", xrot: -90);
+                b121lgo = LoadObject(b121go, "Willow/B121/1716045-BH-LIGHTING-B121_2020","lighting", xrot: -90);
                 _b121_lighting = stat;
             }
             if (plumbing.Get() != _b121_plumbing)
             {
                 var stat = plumbing.Get();
-                b121pgo = LoadObject(b121go, "Willow/B121/1716045-BH-PLUMBING-B121_2020", xrot: -90);
+                b121pgo = LoadObject(b121go, "Willow/B121/1716045-BH-PLUMBING-B121_2020","plumbing", xrot: -90);
                 _b121_plumbing = stat;
             }
             if (loadedThisTime || b121_materialMode.Get() != lastMaterialMode)
@@ -232,11 +251,11 @@ public class B121Willow : MonoBehaviour
 
     List<string> B121_parts = new List<string>
     {
-        "B121/1716045-BH-AR-BASE_R20,_Finish_Facade_Feature_WallMat",
-        "B121/1716045-BH-AR-INTERIOR_R20,_Wall_GenericMat",
-        "B121/1716045-BH-HVAC-B121_2020,_AluminiumMat",
-        "B121/1716045-BH-PLUMBING-B121_2020,_Metal_Stainless_Steel_-_PolishedMat",
-        "B121/1716045-BH-LIGHTING-B121_2020,CopperMat",
+        "b121/shell,_Finish_Facade_Feature_WallMat",
+        "b121/interior,_Wall_GenericMat",
+        "b121/hvac,_AluminiumMat",
+        "b121/lighting,CopperMat",
+        "b121/plumbing,_Metal_Stainless_Steel_-_PolishedMat",
     };
 
     Dictionary<string, string> bldmatmap = new Dictionary<string, string>
@@ -303,18 +322,21 @@ public class B121Willow : MonoBehaviour
         Debug.Log("Wrote " + lst.Count + " lines to " + fname);
     }
 
-    public GameObject GetPart(GameObject root,string partname)
+    public GameObject GetPart(GameObject root,string partname,bool canfail)
     {
         var parslh = partname.Split('/');
         var curgo = root;
         for(var i=0; i<parslh.Length; i++)
         {
             var part = parslh[i];
-            //if (i == 0) continue;
+            if (i == 0) continue; // skip over root name
             var tform = curgo.transform.Find(part);
             if (tform == null)
             {
-                Debug.Log("GetPart failed to find " + partname + "-  failed name part" + part);
+                if (!canfail)
+                {
+                    Debug.LogWarning("GetPart failed to find " + partname + "-  failed name part:" + part);
+                }
                 return null;
             }
             curgo = tform.gameObject;
@@ -327,16 +349,10 @@ public class B121Willow : MonoBehaviour
         {
             return; // do nothing - raw mode
         }
-
-        var pogo = GetPart(rootgo, partname);
+        Debug.Log($"AssignPartMat rootgo:{rootgo.name} partname:{partname} matname:{matname}");
+        var pogo = GetPart(rootgo, partname,canfail:true);
         if (pogo!=null)
         {
-            var renderer = pogo.GetComponent<Renderer>();
-            if (!renderer)
-            {
-                Debug.Log("No renderer found for " + partname+" pogo.name:"+pogo.name);
-                return;
-            }
             var fullmatname = "Materials/" + matname;
             var mat = Resources.Load<Material>(fullmatname);
             if (!mat)
@@ -344,13 +360,14 @@ public class B121Willow : MonoBehaviour
                 Debug.Log("Material "+fullmatname+" not found in Resources");
                 return;
             }
-            renderer.material = mat;
+            //renderer.material = mat;
             ChangeMaterial(pogo, mat);
         }
     }
     void ChangeMaterial(GameObject pogo,Material newMat)
     {
         var children = pogo.GetComponentsInChildren<Renderer>();
+        Debug.Log($"Changing {pogo.name} children({children.Length}) to material:{newMat.name}");
         foreach (var rend in children)
         {
             var mats = new Material[rend.materials.Length];
@@ -384,7 +401,8 @@ public class B121Willow : MonoBehaviour
                         break;
                     case b121_MaterialMode.glasswalls:
                         var pnl = partname.ToLower();
-                        if (pnl.Contains("solid") || pnl.Contains("wall") || pnl.Contains("door") || pnl.Contains("composite_part"))
+                        //if (pnl.Contains("solid") || pnl.Contains("wall") || pnl.Contains("door") || pnl.Contains("composite_part"))
+                        if (pnl.Contains("shell") || pnl.Contains("interior"))
                         {
                             matname = "ComputerGlass";
                         }
@@ -411,9 +429,20 @@ public class B121Willow : MonoBehaviour
         }
     }
 
+
+    public bool ActuateChange()
+    {
+        var rv = ChangeHappened();
+        if (rv)
+        {
+            MakeItSo();
+        }
+        return rv;
+    }
+
     int updcount = 0;
 
-    float timeinterval = 1.0f;
+    float timeinterval = 1e6f;
     float lasttimecheck = 0;
 
     // Update is called once per frame
@@ -423,8 +452,12 @@ public class B121Willow : MonoBehaviour
         {
             if (ChangeHappened())
             {
-                Debug.Log($"ChangeHappened to B121 upd:{updcount}");
+                Debug.Log($"ChangeHappened to B121 upd:{updcount} time:{Time.time:f2} - making it so");
                 MakeItSo();
+            }
+            else
+            {
+                Debug.Log($"No Change to B121 upd:{updcount} time:{Time.time:f2}");
             }
             lasttimecheck = Time.time;
         }

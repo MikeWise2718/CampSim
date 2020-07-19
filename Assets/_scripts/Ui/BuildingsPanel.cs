@@ -290,6 +290,14 @@ public class BuildingsPanel : MonoBehaviour
         Debug.Log($"SetValsForRefresh t:{Time.time:f1}   chg:{chg} tchg:{tchg}");
         if (chg || tchg)
         {
+            if (b121comp != null)
+            {
+                b121comp.ActuateChange();
+            }
+            if (b19comp != null)
+            {
+                b19comp.ActuateChange();
+            }
             //Debug.Log($"BuildingsPanel.SetValsForRefresh bman.fixedblds.SetAndSave:{fixedblds_toggle.isOn}");
             sman.RequestRefresh("BuildingsPanel.SetValsForRefresh", totalrefresh:tchg);
         }

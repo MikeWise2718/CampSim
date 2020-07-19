@@ -496,9 +496,19 @@ public class B19Willow : MonoBehaviour
         }
     }
 
+    public bool ActuateChange()
+    {
+        var rv = ChangeHappened();
+        if (rv)
+        {
+            MakeItSo();
+        }
+        return rv;
+    }
+
 
     int updcount = 0;
-    float timeinterval = 1.0f;
+    float timeinterval = 1e6f;
     float lasttimecheck = 0;
 
     // Update is called once per frame
