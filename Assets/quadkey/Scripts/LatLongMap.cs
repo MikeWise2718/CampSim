@@ -846,7 +846,7 @@ namespace Aiskwk.Map
             isOk = ok;
         }
 
-        public void InitMapFromSceneSel(string regsel)
+        public void InitMapFromSceneSelString(string regsel)
         {
             mapcoord = new MapCoordblock(this);
             bool ok = false;
@@ -855,6 +855,7 @@ namespace Aiskwk.Map
                 case "MsftRedwest":
                 case "MsftCoreCampus":
                 case "MsftB19focused":
+                case "MsftB121focused":
                     // current calibration points
 
                     ////mapcoord.AddRowLatLng(47.65945816, -122.14133453, -1960.446 + 8.31, -1217.206 + 7.53);
@@ -895,6 +896,7 @@ namespace Aiskwk.Map
                     ok = true;
                     break;
                 default:
+                    Debug.LogError($"LatrLongMap.InitMapFromSceneSelString tried to init from unknown id:{regsel}");
                     break;
             }
             glbllm = this;
@@ -908,7 +910,7 @@ namespace Aiskwk.Map
             }
             isInited = true;
             isOk = ok;
-            initmethod = $"InitMapFromSceneSel(\"{regsel}\") ok:{ok}";
+            initmethod = $"InitMapFromSceneSelString(\"{regsel}\") ok:{ok}";
         }
 
 

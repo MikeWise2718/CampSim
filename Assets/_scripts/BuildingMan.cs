@@ -159,6 +159,7 @@ namespace CampusSimulator
                 case SceneSelE.MsftRedwest:
                 case SceneSelE.MsftCoreCampus:
                 case SceneSelE.MsftB19focused:
+                case SceneSelE.MsftB121focused:
                     MakeBuildings("Bld");
                     osmloadspec = "msftb19area,msftcommons,msftredwest"; 
                     break;
@@ -288,6 +289,7 @@ namespace CampusSimulator
                 case SceneSelE.MsftRedwest:
                 case SceneSelE.MsftCoreCampus:
                 case SceneSelE.MsftB19focused:
+                case SceneSelE.MsftB121focused:
                     presetEvacBldName = "Bld19";
                     if (newregion == SceneSelE.MsftRedwest)
                     {

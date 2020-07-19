@@ -122,6 +122,21 @@ public class B19Willow : MonoBehaviour
             legot.gameObject.SetActive(active);
         }
     }
+
+    public void DestroyOneGo(ref GameObject bgo)
+    {
+        if (bgo != null)
+        {
+            Destroy(bgo);
+            bgo = null;
+        }
+    }
+
+    public void DestroyGos()
+    {
+        DestroyOneGo(ref b19go);
+    }
+
     public void MakeItSo()
     {
         bool loadedThisTime  = false;
@@ -164,8 +179,7 @@ public class B19Willow : MonoBehaviour
         }
         else if(!loadmodel.Get() && _b19_WillowModelLoaded)
         {
-            Destroy(b19go);
-            b19go = null;
+            DestroyGos();
             loadmodel.SetAndSave( false );
             _b19_WillowModelLoaded = false;
             level01.SetAndSave( false );
@@ -429,7 +443,7 @@ public class B19Willow : MonoBehaviour
         }
     }
 
-    public void ActuateMaterialMode()
+    public void ActuateMaterialMode(bool writepartlisttofile=false)
     {
         if (this.b19go == null)
         {
@@ -473,10 +487,13 @@ public class B19Willow : MonoBehaviour
             }
             AssignPartMat(this.b19go,partname, matname);
         }
-        //var lst = GraphAlgos.GraphUtil.HierarchyDescToText(this.willgo, "");
-        //var fname = "B19materials.txt";
-        //GraphAlgos.GraphUtil.writeListToFile(lst, fname);
-        //Debug.Log("Wrote " + lst.Count + " lines to " + fname);
+        if (writepartlisttofile)
+        {
+            var lst = GraphAlgos.GraphUtil.HierarchyDescToText(this.b19go, "");
+            var fname = "B19materials.txt";
+            GraphAlgos.GraphUtil.writeListToFile(lst, fname);
+            Debug.Log($"Wrote {lst.Count} lines to {fname}");
+        }
     }
 
 

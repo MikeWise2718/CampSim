@@ -753,6 +753,27 @@ namespace CampusSimulator
                         vviewerDefaultPosition = new Vector3(-451.5f, 3f, 98.3f);
                         vviewerDefaultRotation = new Vector3(0, -60, 0);
                         break;
+                    case SceneSelE.MsftB121focused:
+                        //maplat = 47.639217;
+                        //maplng = -122.134216;
+                        maplat = 47.639217;
+                        maplng = -122.134216;
+                        mapscale = 3.2f;
+                        maprot = new Vector3(0, 71.1f, 0);
+                        maptrans = new Vector3(-6, 0, 17);
+                        //xdistkm = 1;
+                        //zdistkm = 2;
+                        xdistkm = 2;
+                        zdistkm = 3;
+                        //nodesPerQuadKey = 4;
+                        lod = 16;
+                        hasLLmap = true;
+                        vviewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
+                        //vviewerDefaultPosition = new Vector3(-862f+(-395-(-451)), 10f, -254f+(98-221));
+                        vviewerDefaultPosition = new Vector3(-778, 10f,-524);
+                        vviewerDefaultRotation = new Vector3(0, -40, 0);
+                        isCustomizable = false;
+                        break;
                     case SceneSelE.MsftB19focused:
                         //maplat = 47.639217;
                         //maplng = -122.134216;

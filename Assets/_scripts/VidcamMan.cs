@@ -51,6 +51,7 @@ namespace CampusSimulator
             {
                 case SceneSelE.MsftCoreCampus:
                 case SceneSelE.MsftB19focused:
+                case SceneSelE.MsftB121focused:
                     //Debug.Log("Making cams for MsftCore");
                     MakeVidcams("Ms_c");
                     //mcamvcam = "Ms_Redwg_KM-48";

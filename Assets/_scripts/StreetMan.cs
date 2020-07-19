@@ -128,6 +128,7 @@ namespace CampusSimulator
                 case SceneSelE.MsftRedwest:
                 case SceneSelE.MsftCoreCampus:
                 case SceneSelE.MsftB19focused:
+                case SceneSelE.MsftB121focused:
                     regname = "msft-campus";
                     break;
                 case SceneSelE.MsftDublin:

@@ -16,7 +16,7 @@ namespace CampusSimulator
 {
     public enum RouteGarnishE { none, names, coords, all }
 
-    public enum SceneSelE { MsftCoreCampus, MsftB19focused, MsftRedwest,MsftMountainView, Custom, Seattle, MtStHelens,Riggins, Eb12,Eb12small,  MsftDublin, TukSouCen, HiddenLakeLookout,TeneriffeMtn,SanFrancisco,Frankfurt, None }
+    public enum SceneSelE { MsftCoreCampus, MsftB121focused, MsftB19focused, MsftRedwest,MsftMountainView, Custom, Seattle, MtStHelens,Riggins, Eb12,Eb12small,  MsftDublin, TukSouCen, HiddenLakeLookout,TeneriffeMtn,SanFrancisco,Frankfurt, None }
 
     public class SceneMan : MonoBehaviour
     {
@@ -281,7 +281,7 @@ namespace CampusSimulator
                     this.InitializeScene(newscene);// start with setting the scene
                     //glbllm = rmango.AddComponent<LatLongMap>();
                     glbllm = new LatLongMap();
-                    glbllm.InitMapFromSceneSel(newscene.ToString());
+                    glbllm.InitMapFromSceneSelString(newscene.ToString());
 
                     mpman.InitializeScene(newscene); // Note this has an await buried in it and afterwards a call to smam.PostMapLoadSetScene below
                     dfman.InitializeScene(newscene);
@@ -1470,7 +1470,7 @@ namespace CampusSimulator
         }
         public static SceneSelE GetInitialSceneOption()
         {
-            var einival = SceneSelE.MsftB19focused; // default scene
+            var einival = SceneSelE.MsftB121focused; // default scene
             if (PlayerPrefs.HasKey(initialSceneOptionsKey))
             {
                 var inival = PlayerPrefs.GetString(initialSceneOptionsKey, "");

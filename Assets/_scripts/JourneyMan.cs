@@ -809,7 +809,7 @@ namespace CampusSimulator
             if (nstreamers % 6 == 3) // every 6 times a new one comes, but the first one comes after 3
             {
                 pers.empStatus = PersonMan.empStatusE.Unknown;
-                if (sman.curscene== SceneSelE.MsftB19focused)
+                if (bm.sman.curscene == SceneSelE.MsftB19focused || bm.sman.curscene == SceneSelE.MsftB121focused)
                 {
                     if (bld.name=="Bld19")
                     {

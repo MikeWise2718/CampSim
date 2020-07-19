@@ -45,7 +45,7 @@ public class BldPolyGenTest : MonoBehaviour
     void TestMsft()
     {
         var latlngmap = new Aiskwk.Map.LatLongMap();
-        latlngmap.InitMapFromSceneSel("MsftRedwest");
+        latlngmap.InitMapFromSceneSelString("MsftRedwest");
         var hmo = new heightMocker(33);
         var pgvd = new PolyGenVekMapDel(hmo.ChangeHeight);
         bpg.LoadRegionOld(this.gameObject, "msftb19area,msftcommons,msftredwest", 1f, pgvd: pgvd, llm: latlngmap);

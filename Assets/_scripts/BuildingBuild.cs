@@ -554,7 +554,7 @@ namespace CampusSimulator
                 case "BldRWB":
                     { 
                         defPeoplePerRoom = 2;
-                        if (bm.sman.curscene == SceneSelE.MsftB19focused)
+                        if (bm.sman.curscene == SceneSelE.MsftB19focused || bm.sman.curscene == SceneSelE.MsftB121focused  )
                         {
                             defPercentFull = 0.05f;
                         }
@@ -580,6 +580,18 @@ namespace CampusSimulator
                 case "Bld19":
                     {
                         if (bm.sman.curscene == SceneSelE.MsftB19focused)
+                        {
+                            bm.sman.jnman.preferedJourneyBuildingName = name;
+                        }
+                        defPeoplePerRoom = 8;
+                        defPercentFull = 0.80f;
+                        defRoomArea = 16;
+                        defAngAlign = 24.0f;
+                        break;
+                    }
+                case "Bld121":
+                    {
+                        if (bm.sman.curscene == SceneSelE.MsftB121focused)
                         {
                             bm.sman.jnman.preferedJourneyBuildingName = name;
                         }
@@ -783,7 +795,7 @@ namespace CampusSimulator
                     {
                         //AddResource("pine1", "TreesAndShrubs/PineTree", new Vector3(0.4f, 0.4f, 0.4f), 180, new Vector3(-1987.0f, 0, -1167.7f));
                         //AddResource("pine2", "TreesAndShrubs/PineTree", new Vector3(0.4f, 0.4f, 0.4f), 180, new Vector3(-1959.9f, 0, -1242.6f));
-                        if (bm.sman.curscene == SceneSelE.MsftB19focused)
+                        if (bm.sman.curscene == SceneSelE.MsftB19focused || bm.sman.curscene == SceneSelE.MsftB121focused)
                         {
                             defPercentFull = 0.05f;
                         }

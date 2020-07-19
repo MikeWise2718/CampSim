@@ -135,6 +135,7 @@ public class B121Willow : MonoBehaviour
     }
     public void MakeItSo()
     {
+        bool loadedThisTime = false;
         //Debug.Log($"MakeItSo loadModel:{loadmodel.Get()} _b19WillowModel:{_b19_WillowModelLoaded}");
         if (loadmodel.Get() && !_b121_WillowModelLoaded)
         {
@@ -149,6 +150,7 @@ public class B121Willow : MonoBehaviour
             _b121_plumbing = false;
             _b121_WillowModelLoaded = true;
             _b121_osmbld = false;
+            loadedThisTime = true;
         }
         else if(!loadmodel.Get() && _b121_WillowModelLoaded)
         {
@@ -218,7 +220,7 @@ public class B121Willow : MonoBehaviour
                 b121pgo = LoadObject("Willow/B121/1716045-BH-PLUMBING-B121_2020", ska: 1, xrot: -90);
                 _b121_plumbing = stat;
             }
-            if (b121_materialMode.Get() != lastMaterialMode)
+            if (loadedThisTime || b121_materialMode.Get() != lastMaterialMode)
             {
                 ActuateMaterialMode(b121sgo);
                 lastMaterialMode = b121_materialMode.Get();
@@ -228,67 +230,11 @@ public class B121Willow : MonoBehaviour
 
     List<string> B121_parts = new List<string>
     {
-        "B19-Willow/L03-ME/Exhaust_Air_Duct,Exhaust_Air_DuctMat",
-        "B19-Willow/L03-ME/Solid,SolidMat",
-        "B19-Willow/L03-ME/Supply_Air_Duct,Supply_Air_DuctMat",
-        "B19-Willow/L01-AR/*Door_Frame,_Door_FrameMat",
-        "B19-Willow/L01-AR/*Finish_Facade_Feature_Wall,_Finish_Facade_Feature_WallMat",
-        "B19-Willow/L01-AR/*Glazing_Glass_-_Clear,_Glazing_Glass_-_ClearMat",
-        "B19-Willow/L01-AR/*Metal_Aluminum,_Metal_AluminumMat",
-        "B19-Willow/L01-AR/*Metal_Powdercoated_White,_Metal_Powdercoated_WhiteMat",
-        "B19-Willow/L01-AR/*Metal_Stainless_Steel_-_Polished,_Metal_Stainless_Steel_-_PolishedMat",
-        "B19-Willow/L01-AR/*Wall_Generic,_Wall_GenericMat",
-        "B19-Willow/L01-AR/.Wall_Default,",
-        "B19-Willow/L01-AR/_Aluminium,_AluminiumMat",
-        "B19-Willow/L01-AR/Composite_Part,Composite_PartMat",
-        "B19-Willow/L01-AR/Computer_Basic,Computer_BasicMat",
-        "B19-Willow/L01-AR/Computer_Basic_2,Computer_Basic_2Mat",
-        "B19-Willow/L01-AR/Computer_Basic_3,Computer_Basic_3Mat",
-        "B19-Willow/L01-AR/Computer_Glass,Computer_GlassMat",
-        "B19-Willow/L01-AR/Computer_Light_(ON),Computer_Light_(ON)Mat",
-        "B19-Willow/L01-AR/Computer_Metal,Computer_MetalMat",
-        "B19-Willow/L01-AR/Computer_Metal_2,Computer_Metal_2Mat",
-        "B19-Willow/L01-AR/Generic_-_Plastic_-_Black,Generic_-_Plastic_-_BlackMat",
-        "B19-Willow/L01-AR/Generic_-_Plastic_-_Grey,Generic_-_Plastic_-_GreyMat",
-        "B19-Willow/L01-AR/IKE080018_2,IKE080018_2Mat",
-        "B19-Willow/L01-AR/IKE080018_3,IKE080018_3Mat",
-        "B19-Willow/L01-AR/IKE160124_1,IKE160124_1Mat",
-        "B19-Willow/L01-AR/IKE160124_2,IKE160124_2Mat",
-        "B19-Willow/L01-AR/IKE160124_3,IKE160124_3Mat",
-        "B19-Willow/L01-AR/IKE160124_4,IKE160124_4Mat",
-        "B19-Willow/L01-AR/IKE160130_1,IKE160130_1Mat",
-        "B19-Willow/L01-AR/IKE160130_2,IKE160130_2Mat",
-        "B19-Willow/L01-AR/IKE160130_3,IKE160130_3Mat",
-        "B19-Willow/L01-AR/IKE160130_4,IKE160130_4Mat",
-        "B19-Willow/L01-AR/Metal-Chrome-Caroma,Metal-Chrome-CaromaMat",
-        "B19-Willow/L01-AR/PC_Monitor_Color,PC_Monitor_ColorMat",
-        "B19-Willow/L01-AR/PC_Monitor_Glass,PC_Monitor_GlassMat",
-        "B19-Willow/L01-AR/Porcelain-White-Caroma,Porcelain-White-CaromaMat",
-        "B19-Willow/L01-AR/Solid,SolidMat",
-        "B19-Willow/L01-ME/Copper,CopperMat",
-        "B19-Willow/L01-ME/Gas_Pipe,Gas_PipeMat",
-        "B19-Willow/L01-ME/Line,LineMat",
-        "B19-Willow/L01-ME/Return_Air_Duct,Return_Air_DuctMat",
-        "B19-Willow/L01-ME/Solid,SolidMat",
-        "B19-Willow/L01-ME/Supply_Air_Duct,Supply_Air_DuctMat",
-        "B19-Willow/L02-AR/*Door_Frame,_Door_FrameMat",
-        "B19-Willow/L02-AR/*Fabric_Linen_Porcelain,_Fabric_Linen_PorcelainMat",
-        "B19-Willow/L02-AR/*Finish_Facade_Feature_Wall,_Finish_Facade_Feature_WallMat",
-        "B19-Willow/L02-AR/*Glazing_Glass_-_Clear,_Glazing_Glass_-_ClearMat",
-        "B19-Willow/L02-AR/*Metal_Aluminum,_Metal_AluminumMat",
-        "B19-Willow/L02-AR/*Wall_Generic,_Wall_GenericMat",
-        "B19-Willow/L02-AR/.Wall_Default,",
-        "B19-Willow/L02-AR/_Aluminium,_AluminiumMat",
-        "B19-Willow/L02-AR/Composite_Part,Composite_PartMat",
-        "B19-Willow/L02-AR/Metal-Chrome-Caroma,Metal-Chrome-CaromaMat",
-        "B19-Willow/L02-AR/Porcelain-White-Caroma,Porcelain-White-CaromaMat",
-        "B19-Willow/L02-AR/Solid,SolidMat",
-        "B19-Willow/L02-ME/Exhaust_Air_Duct,Exhaust_Air_DuctMat",
-        "B19-Willow/L02-ME/Return_Air_Duct,Return_Air_DuctMat",
-        "B19-Willow/L02-ME/Solid,SolidMat",
-        "B19-Willow/L02-ME/Supply_Air_Duct,Supply_Air_DuctMat",
-        "B19-Willow/L03-AR/*Finish_Facade_Feature_Wall,_Finish_Facade_Feature_WallMat",
-        "B19-Willow/L03-AR/*Wall_Generic,_Wall_GenericMat"
+        "B121/1716045-BH-AR-BASE_R20,_Finish_Facade_Feature_WallMat",
+        "B121/1716045-BH-AR-INTERIOR_R20,_Wall_GenericMat",
+        "B121/1716045-BH-HVAC-B121_2020,_AluminiumMat",
+        "B121/1716045-BH-PLUMBING-B121_2020,_Metal_Stainless_Steel_-_PolishedMat",
+        "B121/1716045-BH-LIGHTING-B121_2020,CopperMat",
     };
 
     Dictionary<string, string> bldmatmap = new Dictionary<string, string>
@@ -362,7 +308,7 @@ public class B121Willow : MonoBehaviour
         for(var i=0; i<parslh.Length; i++)
         {
             var part = parslh[i];
-            if (i == 0) continue;
+            //if (i == 0) continue;
             var tform = curgo.transform.Find(part);
             if (tform == null)
             {
@@ -379,6 +325,7 @@ public class B121Willow : MonoBehaviour
         {
             return; // do nothing - raw mode
         }
+
         var pogo = GetPart(rootgo, partname);
         if (pogo!=null)
         {
@@ -396,21 +343,26 @@ public class B121Willow : MonoBehaviour
                 return;
             }
             renderer.material = mat;
+            ChangeMaterial(pogo, mat);
+        }
+    }
+    void ChangeMaterial(GameObject pogo,Material newMat)
+    {
+        var children = pogo.GetComponentsInChildren<Renderer>();
+        foreach (var rend in children)
+        {
+            var mats = new Material[rend.materials.Length];
+            for (var j = 0; j < rend.materials.Length; j++)
+            {
+                mats[j] = newMat;
+            }
+            rend.materials = mats;
         }
     }
 
-    public void ActuateMaterialMode(GameObject go)
+    public void ActuateMaterialMode(GameObject go,bool writepartlisttofile=false)
     {
-        if (go == null)
-        {
-            go = GameObject.Find("B121");
-        }
-        if (go == null)
-        {
-            Debug.Log("Cound not find B121");
-            return;
-        }
-        var doit = false;
+        var doit = true;
         if (doit)
         {
             foreach (var pname in B121_parts)
@@ -444,16 +396,17 @@ public class B121Willow : MonoBehaviour
                         matname = "";
                         break;
                 }
-                AssignPartMat(this.b121sgo, partname, matname);
+                AssignPartMat(this.b121go, partname, matname);
             }
         }
 
-
-
-        //var lst = GraphAlgos.GraphUtil.HierarchyDescToText(this.willgo, "");
-        //var fname = "B121materials.txt";
-        //GraphAlgos.GraphUtil.writeListToFile(lst, fname);
-        //Debug.Log("Wrote " + lst.Count + " lines to " + fname);
+        if (writepartlisttofile)
+        {
+            var lst = GraphAlgos.GraphUtil.HierarchyDescToText(this.b121go, "");
+            var fname = "B121materials.txt";
+            GraphAlgos.GraphUtil.writeListToFile(lst, fname);
+            Debug.Log($"Wrote {lst.Count} lines to {fname}");
+        }
     }
 
     int updcount = 0;

@@ -169,6 +169,7 @@ namespace CampusSimulator
             {
                 case SceneSelE.MsftCoreCampus:
                 case SceneSelE.MsftB19focused:
+                case SceneSelE.MsftB121focused:
                 case SceneSelE.MsftRedwest:
                     GenLinkCloud(graphSceneE.gen_campus, genmode);
                     break;
