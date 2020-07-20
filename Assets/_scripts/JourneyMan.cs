@@ -573,7 +573,7 @@ namespace CampusSimulator
             }
         }
 
-        public Journey AddJourneyBackHome(Person pers, string pathname, float startdelaysecs = -1) // this could probably be subsituted with the above
+        public Journey AddJourneyBackHome(Person pers, string pathname, float startdelaysecs = -1,float startdelaymax=15) // this could probably be subsituted with the above
         {
             CheckFastMode();
             var fr_node = pers.placeNode;
@@ -609,7 +609,7 @@ namespace CampusSimulator
                 var findelaysecs = 2f;
                 if (startdelaysecs < 0)
                 {
-                    startdelaysecs = GraphAlgos.GraphUtil.GetRanFloat(0, 15);
+                    startdelaysecs = GraphAlgos.GraphUtil.GetRanFloat(0, startdelaymax);
                 }
                 var froom = bm.GetBroom(pers.placeRoom,expectFailure:true);
                 var broom = bm.GetBroom(pers.homeRoom);
@@ -772,6 +772,7 @@ namespace CampusSimulator
             var perlist = zone.GetFreePeopleInZone();
             if (n > perlist.Count) n = perlist.Count;
 
+            var sdm = n / 2f;
             for (int i = 0; i < n; i++)
             {
                 var pers = perlist[i];
@@ -780,7 +781,7 @@ namespace CampusSimulator
                 {
                     Debug.Log(pathname);
                 }
-                AddJourneyBackHome(pers, pathname);
+                AddJourneyBackHome(pers, pathname,startdelaymax:sdm);
             }
         }
         bool doStreamJourneys = false;
