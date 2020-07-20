@@ -132,6 +132,10 @@ public class InfoPanel : MonoBehaviour
         {
             msg += " R";
         }
+        else
+        {
+            msg += "--";
+        }
         simText.text = msg;
         updatecount++;
 

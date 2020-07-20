@@ -68,7 +68,7 @@ namespace CampusSimulator
 
         public void CreateGraphForOsmImport_streets_df(string regionname, string color)
         {
-            Debug.Log($"CreateGraphForOsmImport_msft_streets_df");
+            Debug.Log($"CreateGraphForOsmImport_streets_df");
             var grc = this.sman.lcman.GetGraphCtrl();
             grc.regman.NewNodeRegion(regionname, color, saveToFile: true);
             var sman = GameObject.FindObjectOfType<SceneMan>();
@@ -116,7 +116,7 @@ namespace CampusSimulator
             }
             this.sman.lcman.CalculateHeights();
             grc.regman.SetRegion("default");
-            Debug.Log($"CreateGraphForOsmImport_msft_streets_df added nodes:{nnodes} links:{nlinks}");
+            Debug.Log($"CreateGraphForOsmImport_streets_df added nodes:{nnodes} links:{nlinks}");
         }
 
         public void SetScene(SceneSelE newregion)

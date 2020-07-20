@@ -7,6 +7,7 @@ using UnityEngine.Windows.Speech;
 #endif
 using System.Linq;
 using GraphAlgos;
+using UnityEngine.Analytics;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -345,6 +346,20 @@ namespace CampusSimulator
         public void PostMapLoadSetScene()
         {
             vcman.PostTerrainLoadAdjustments();
+        }
+
+        public void SaveSceneState()
+        {
+            mpman.SaveSceneState();
+        }
+
+        public void Quit()
+        {
+            SaveSceneState();
+            Application.Quit();
+#if UNITY_EDITOR
+            EditorApplication.ExecuteMenuItem("Edit/Play");
+#endif
         }
 
 
@@ -1581,7 +1596,7 @@ namespace CampusSimulator
                 if ((Time.time - ctrlQhitTime) < 1)
                 {
                     Debug.Log("Hit it twice so quitting: Application.Quit()");
-                    Application.Quit();
+                    Quit();
                 }
                 // CTRL + Q
                 ctrlQhitTime = Time.time;

@@ -14,7 +14,7 @@ public class B19Willow : MonoBehaviour
     public UxSetting<bool> hvac = new UxSetting<bool>("B19_hvac", true);
     public UxSetting<bool> floors = new UxSetting<bool>("B19_floors", true);
     public UxSetting<bool> doors = new UxSetting<bool>("B19_doors", true);
-    public UxSetting<bool> osmbld = new UxSetting<bool>("B19_osmbld", true);
+    public UxSetting<bool> osmbld = new UxSetting<bool>("B19_osmbld", false);
 
     public CampusSimulator.SceneMan sman=null;
 
@@ -34,7 +34,7 @@ public class B19Willow : MonoBehaviour
         _b19_hvac = hvac.GetInitial(false);
         _b19_floors = floors.GetInitial(false);
         _b19_doors = doors.GetInitial(false);
-        _b19_osmbld = osmbld.GetInitial(true);
+        _b19_osmbld = osmbld.GetInitial(false);
         lastMaterialMode = b19_materialMode.Get();
     }
 
@@ -161,20 +161,13 @@ public class B19Willow : MonoBehaviour
             b19go.transform.Rotate(new Vector3(-90, 26, 0));
             b19go.transform.parent = this.transform;
             _b19_WillowModelLoaded = true;
-            level01.SetAndSave( true );
             _b19_level01 = true;
-            level02.SetAndSave( false );
             _b19_level02 = true;
-            level03.SetAndSave( false );
             _b19_level03 = true;
-            floors.SetAndSave( false );
             _b19_floors = true;
-            doors.SetAndSave( false );
             _b19_doors = true;
-            hvac.SetAndSave( false );
             _b19_hvac = true;
-            osmbld.SetAndSave(true);
-            _b19_osmbld = true;
+            _b19_osmbld = sman.bdman.osmblds.Get();
             loadedThisTime = true;
         }
         else if(!loadmodel.Get() && _b19_WillowModelLoaded)
@@ -190,8 +183,7 @@ public class B19Willow : MonoBehaviour
             _b19_level03 = false;
             hvac.SetAndSave( false );
             _b19_hvac = false;
-            osmbld.SetAndSave(true);
-            _b19_osmbld = true;
+            _b19_osmbld = sman.bdman.osmblds.Get(); 
         }
         if (b19go)
         {

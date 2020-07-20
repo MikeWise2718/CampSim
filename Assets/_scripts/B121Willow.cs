@@ -14,7 +14,7 @@ public class B121Willow : MonoBehaviour
     public UxSetting<bool> hvac = new UxSetting<bool>("B121_hvac", true);
     public UxSetting<bool> lighting = new UxSetting<bool>("B121_lights", true);
     public UxSetting<bool> plumbing = new UxSetting<bool>("B121_plumbing", true);
-    public UxSetting<bool> osmbld = new UxSetting<bool>("B121_osmbld", true);
+    public UxSetting<bool> osmbld = new UxSetting<bool>("B121_osmbld", false);
 
     public CampusSimulator.SceneMan sman=null;
 
@@ -150,14 +150,16 @@ public class B121Willow : MonoBehaviour
         if (loadmodel.Get() && !_b121_WillowModelLoaded)
         {
             b121go = new GameObject("B121-Willow");
-            var xoff = 0;
-            var zoff = 0;
-            Vector3 defpos = new Vector3(-789 + xoff, 0f, -436 + zoff);
+            var xofs = 0;
+            var yofs = 0;
+            //var yoff = 5.8f;
+            var zofs = 0;
+            Vector3 defpos = new Vector3(-789 + xofs, yofs, -436 + zofs);
             if (sman != null)
             {
-                var yoff = sman.mpman.GetHeight(defpos.x, defpos.z);
+                var yheit = sman.mpman.GetHeight(defpos.x, defpos.z);
                 //Debug.Log($"B19 yoff:{yoff}");
-                defpos = new Vector3(defpos.x, yoff + defpos.y, defpos.z);
+                defpos = new Vector3(defpos.x, yheit + defpos.y, defpos.z);
             }
             b121go.transform.Rotate(new Vector3(0, -20.15f, 0));
             b121go.transform.position = defpos;
@@ -193,6 +195,7 @@ public class B121Willow : MonoBehaviour
 
             plumbing.SetAndSave(false);
             _b121_plumbing = false;
+            _b121_osmbld = sman.bdman.osmblds.Get();
 
         }
         if (b121go)
@@ -290,62 +293,7 @@ public class B121Willow : MonoBehaviour
         }
     }
 
-    List<string> B121_parts = new List<string>
-    {
-        "b121/shell,System_Panel_Glazed,PC_Monitor_ColorMat",
-        "b121/shell,Floor_Slab,PlasticHololens",
-        "b121/interior,*,_Wall_GenericMat",
-        "b121/hvac*,,_AluminiumMat",
-        "b121/lighting,*,CopperMat",
-        "b121/plumbing,*,_Metal_Stainless_Steel_-_PolishedMat",
-    };
-
-    Dictionary<string, string> bldmatmap = new Dictionary<string, string>
-    {
-        {"SolidMat","WallWhite"},
-        {"Exhaust_Air_DuctMat","Aluminium"},
-        {"Supply_Air_DuctMat","Aluminium"},
-        {"Return_Air_DuctMat","Aluminium"},
-        {"_Door_FrameMat","Plywood"},
-        {"_Finish_Facade_Feature_WallMat","FacadeWall"},
-        {"_Glazing_Glass_-_ClearMat","DustyGlass"},
-        {"_Glazing_Glass","DustyGlass"},
-        {"_Metal_Powdercoated_WhiteMat","Aluminium"},
-        {"_Metal_Stainless_Steel_-_PolishedMat","Steel"},
-        {"_Wall_GenericMat","WallMat"},
-        {"_Fabric_Linen_PorcelainMat","WallMat"},
-        {"","WallMat"},
-        {"_Metal_AluminumMat","Aluminium"},
-        {"_AluminiumMat","Aluminium"},
-        {"Composite_PartMat","WallMat"},
-        {"Computer_BasicMat","PlasticHololens"},
-        {"Computer_Basic_2Mat","PlasticHololens"},
-        {"Computer_Basic_3Mat","PlasticHololens"},
-        {"Computer_GlassMat","ComputerGlass"},
-        {"Computer_Light_(ON)Mat","BlueLight"},
-        {"Computer_MetalMat","Aluminium"},
-        {"Computer_Metal_2Mat","Aluminium"},
-        {"PC_Monitor_ColorMat","ComputerGlass"},
-        {"PC_Monitor_GlassMat","ComputerGlass"},
-        {"Generic_-_Plastic_-_BlackMat","PlasticHololens"},
-        {"Generic_-_Plastic_-_GreyMat","PlasticHololens"},
-        {"IKE080018_2Mat","Aluminium"},
-        {"IKE080018_3Mat","Aluminium"},
-        {"IKE160124_1Mat","Aluminium"},
-        {"IKE160124_2Mat","Aluminium"},
-        {"IKE160124_3Mat","Aluminium"},
-        {"IKE160124_4Mat","Aluminium"},
-        {"IKE160130_1Mat","Aluminium"},
-        {"IKE160130_2Mat","Aluminium"},
-        {"IKE160130_3Mat","Aluminium"},
-        {"IKE160130_4Mat","Aluminium"},
-        {"Metal-Chrome-CaromaMat","Steel"},
-        {"Porcelain-White-CaromaMat","WallMat"},
-        {"CopperMat","Copper"},
-        {"Gas_PipeMat","Copper"},
-        {"LineMat","WallMat"},
-    };
-
+ 
 
 
     public void WriteOutPartsAndMaterials()
@@ -416,6 +364,7 @@ public class B121Willow : MonoBehaviour
         {
             partfiltername = partfiltername.Remove(last);
         }
+        var nhits = 0;
         foreach (var rend in children)
         {
             if (rend.name.StartsWith(partfiltername))
@@ -426,11 +375,75 @@ public class B121Willow : MonoBehaviour
                     mats[j] = newMat;
                 }
                 rend.materials = mats;
+                nhits++;
             }
         }
+        Debug.Log($"Changing {pogo.name} children({children.Length}) to material:{newMat.name} - filter:{partfiltername} hits:{nhits}");
     }
 
-    public void ActuateMaterialMode(bool writepartlisttofile=false)
+    List<string> B121_parts = new List<string>
+    {
+        "b121/shell,*,_Wall_GenericMat",
+        "b121/shell,Arch_Mullion*,_AluminiumMat",
+        "b121/shell,Rectangular_Mullion*,_AluminiumMat",
+        "b121/shell,System_Panel_Glazed,PC_Monitor_ColorMat",
+        //"b121/shell,System_Panel_Glazed,DarkGlass",
+        "b121/shell,Floor_Slab,FloorMaterial",
+        "b121/interior,*,_Wall_GenericMat",
+        "b121/hvac,*,_AluminiumMat",
+        "b121/lighting,*,CopperMat",
+        "b121/plumbing,*,_Metal_Stainless_Steel_-_PolishedMat",
+    };
+
+    Dictionary<string, string> bldmatmap = new Dictionary<string, string>
+    {
+        {"SolidMat","WallWhite"},
+        {"Exhaust_Air_DuctMat","Aluminium"},
+        {"Supply_Air_DuctMat","Aluminium"},
+        {"Return_Air_DuctMat","Aluminium"},
+        {"_Door_FrameMat","Plywood"},
+        {"_Finish_Facade_Feature_WallMat","FacadeWall"},
+        {"_Glazing_Glass_-_ClearMat","DustyGlass"},
+        {"_Glazing_Glass","DustyGlass"},
+        {"_Metal_Powdercoated_WhiteMat","Aluminium"},
+        {"_Metal_Stainless_Steel_-_PolishedMat","Steel"},
+        {"_Wall_GenericMat","WallMat"},
+        {"_Fabric_Linen_PorcelainMat","WallMat"},
+        {"","WallMat"},
+        {"_Metal_AluminumMat","Aluminium"},
+        {"_AluminiumMat","Aluminium"},
+        {"Composite_PartMat","WallMat"},
+        {"Computer_BasicMat","PlasticHololens"},
+        {"Computer_Basic_2Mat","PlasticHololens"},
+        {"Computer_Basic_3Mat","PlasticHololens"},
+        {"Computer_GlassMat","ComputerGlass"},
+        {"Computer_Light_(ON)Mat","BlueLight"},
+        {"Computer_MetalMat","Aluminium"},
+        {"Computer_Metal_2Mat","Aluminium"},
+        {"PC_Monitor_ColorMat","ComputerGlass"},
+        {"PC_Monitor_GlassMat","ComputerGlass"},
+        {"Generic_-_Plastic_-_BlackMat","PlasticHololens"},
+        {"Generic_-_Plastic_-_GreyMat","PlasticHololens"},
+        {"IKE080018_2Mat","Aluminium"},
+        {"IKE080018_3Mat","Aluminium"},
+        {"IKE160124_1Mat","Aluminium"},
+        {"IKE160124_2Mat","Aluminium"},
+        {"IKE160124_3Mat","Aluminium"},
+        {"IKE160124_4Mat","Aluminium"},
+        {"IKE160130_1Mat","Aluminium"},
+        {"IKE160130_2Mat","Aluminium"},
+        {"IKE160130_3Mat","Aluminium"},
+        {"IKE160130_4Mat","Aluminium"},
+        {"Metal-Chrome-CaromaMat","Steel"},
+        {"Porcelain-White-CaromaMat","WallMat"},
+        {"CopperMat","Copper"},
+        {"Gas_PipeMat","Copper"},
+        {"LineMat","WallMat"},
+        {"FloorMaterial","FloorMaterial"},
+    };
+
+
+    public void ActuateMaterialMode(bool writepartlisttofile=true)
     {
         var doit = true;
         if (doit)
@@ -459,9 +472,13 @@ public class B121Willow : MonoBehaviour
                         }
                         break;
                     case b121_MaterialMode.glasswalls:
-                        var pnl = partname.ToLower();
+                        var pnl = pname.ToLower(); ;
+                        if (pnl.Contains("floor_slab"))
+                        {
+                            Debug.Log("Here I am");
+                        }
                         //if (pnl.Contains("solid") || pnl.Contains("wall") || pnl.Contains("door") || pnl.Contains("composite_part"))
-                        if (pnl.Contains("shell") || pnl.Contains("interior"))
+                        if (pnl.Contains("interior") || pnl.Contains("floor") || pnl.Contains("door"))
                         {
                             matname = "ComputerGlass";
                         }
@@ -475,7 +492,10 @@ public class B121Willow : MonoBehaviour
                         matname = "";
                         break;
                 }
-                AssignPartMat(this.b121go, partname, partfiltername, matname);
+                if (matname != "")
+                {
+                    AssignPartMat(this.b121go, partname, partfiltername, matname);
+                }
             }
         }
 
@@ -485,10 +505,53 @@ public class B121Willow : MonoBehaviour
             var fname = "B121materials.txt";
             GraphAlgos.GraphUtil.writeListToFile(lst, fname);
             Debug.Log($"Wrote {lst.Count} lines to {fname}");
+            var clst = ClassifyList(lst);
+            var cfname = "B121materials_classified.txt";
+            GraphAlgos.GraphUtil.writeListToFile(clst, cfname);
+            Debug.Log($"Wrote {clst.Count} classified lines to {cfname}");
         }
     }
 
-
+    public List<string> ClassifyList(List<string> ilst)
+    {
+        var nskipped = 0;
+        var ldict = new Dictionary<string, int>();
+        foreach( var line in ilst)
+        {
+            var sar = line.Split('/');
+            if (sar.Length < 3)
+            {
+                nskipped++;
+                continue;
+            }
+            var mline = sar[2];
+            int i = 0;
+            var ln = mline.Length;
+            while (i < ln && !char.IsDigit(mline[i])) i++;
+            var newmline = mline;
+            if (i < mline.Length)
+            {
+                newmline = mline.Remove(i);
+            }
+            newmline = $"{sar[0]}/{sar[1]}/{newmline}";
+            if (!ldict.ContainsKey(newmline))
+            {
+                ldict[newmline] = 0;
+            }
+            ldict[newmline]++;
+        }
+        var ccnt = 0;
+        var rv = new List<string>();
+        foreach(var line in ldict.Keys)
+        {
+            var nl = $"{line},{ldict[line]}";
+            ccnt += ldict[line];
+            rv.Add(nl);
+        }
+        var diff = ilst.Count - nskipped - ccnt;
+        Debug.Log($"Classify orig count:{ilst.Count}  skipped:{nskipped}  sum classiffied:{ccnt} diff:{diff}");
+        return rv;
+    }    
     public bool ActuateChange()
     {
         var rv = ChangeHappened();
