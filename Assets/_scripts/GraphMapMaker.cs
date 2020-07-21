@@ -419,7 +419,7 @@ namespace GraphAlgos
             //              w_order: connectOrderE.inc, w_exit: exitDirE.back, w_len: 7f);
 
             // Garage 121
-            CreateGarageLinks("MsGarage121_1", "b121-os1-o002", "osm743394908",
+            CreateGarageLinks("MsGarage121_1", "b121-os1-o005", "b121-dw-d01",
                           d_order: connectOrderE.dec, d_exit: exitDirE.front, d_len: 5f,
                           w_order: connectOrderE.inc, w_exit: exitDirE.back, w_len: 7f);
 

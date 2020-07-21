@@ -5190,9 +5190,15 @@ namespace GraphAlgos
             //xs = 0;
             //zs = 0;
             grc.AddNodePtxyz("b121-f01-lobby", -811.80 + xs, 0.000, -485.8 + zs, comment: ""); //  1 nn:1 nl:0
-            grc.LinkToPtxyz("b121-f01-lobby", "b121-os1-o001", -808.1 + xs, 0.000, -484.8 + zs, LinkUse.walkway, comment: ""); //  2 nn:1 nl:1
-            grc.LinkToPtxyz("b121-os1-o001", "b121-os1-o002", -807.200 + xs, 0.000, -486.0 + zs, LinkUse.walkway, comment: ""); //  2 nn:1 nl:1
+            grc.LinkToPtxyz("b121-os1-o001", -808.1 + xs, 0.000, -484.8 + zs, LinkUse.walkway, comment: ""); //  2 nn:1 nl:1
+            grc.LinkToPtxyz("b121-os1-o002", -807.200 + xs, 0.000, -486.0 + zs, LinkUse.walkway, comment: ""); //  2 nn:1 nl:1
+            grc.LinkToPtxyz("b121-os1-o003", -808.600 + xs, 0.000, -492.0 + zs, LinkUse.walkway, comment: ""); //  2 nn:1 nl:1
+            grc.LinkToPtxyz("b121-os1-o004", -817.900 + xs, 0.000, -503.0 + zs, LinkUse.walkway, comment: ""); //  2 nn:1 nl:1
+            grc.LinkToPtxyz("b121-os1-o005", -830.800 + xs, 0.000, -523.0 + zs, LinkUse.walkway, comment: ""); //  2 nn:1 nl:1
 
+            grc.AddNodePtxyz("b121-dw-d01", -824.40 + xs, 0.000, -593.2 + zs, comment: ""); //  1 nn:1 nl:0
+            grc.LinkToPtxyz("b121-dw-d02", -777.0 + xs, 0.000, -725.6 + zs, LinkUse.driveway, comment: ""); //  2 nn:1 nl:1
+            grc.AddLinkByNodeName("b121-dw-d02", "reg:msft-campus", LinkUse.driveway);
             grc.regman.SetRegion("default");
         }
 
