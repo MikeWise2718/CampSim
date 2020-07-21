@@ -449,10 +449,17 @@ namespace Aiskwk.Map
             return rv;
         }
 
-        public (Vector3 meshpos, Vector3 normal, int istat) GetWcMeshPosProjectedAlongYnew(Vector3 wcpos, QkCoordSys coordsys = QkCoordSys.UserWc, bool db =false)
+        public (Vector3 meshpos, Vector3 normal, int istat) GetWcMeshPosProjectedAlongYnew(Vector3 wcpos, QkCoordSys coordsys = QkCoordSys.UserWc, bool db =false, bool cliptocorners=false)
         {
             var ll = GetLngLatNew(wcpos,coordsys:coordsys);
             var (lambx, lambz) = GetLambMeshPosFromLatLng(ll);
+            if (cliptocorners)
+            {
+                if (lambx < 0) lambx = 0;
+                if (lambx > 1) lambx = 1;
+                if (lambz < 0) lambz = 0;
+                if (lambz > 1) lambz = 1;
+            }
             var (meshpos, nrm, istat) = GetWcMeshPosFromLambda(lambx, lambz);
             if (db)
             {

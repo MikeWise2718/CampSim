@@ -16,6 +16,8 @@ namespace CampusSimulator
  
         public double xdistkm = 1;
         public double zdistkm = 3;
+        public double xoffkm = 0;
+        public double zoffkm = 0;
 
         public int lod = 16;
         public int npqk = 16;
@@ -188,7 +190,7 @@ namespace CampusSimulator
             if (qmapman == null || qmapman.qmm == null) return Vector3.zero;
             var oy = p.y;
             var np = new Vector3(p.x, 0, p.z);
-            var (v, _, _) = qmapman.qmm.GetWcMeshPosProjectedAlongYnew(np);
+            var (v, _, _) = qmapman.qmm.GetWcMeshPosProjectedAlongYnew(np,cliptocorners:true);
             var nv = new Vector3(v.x, v.y + oy, v.z);
             return nv;
         }
@@ -216,7 +218,7 @@ namespace CampusSimulator
             qmapman.qmapMode = QmapMan.QmapModeE.Bespoke;
             //var fak = 2*0.4096f;
             //qmapman.bespoke = new BespokeSpec(lastregionset.ToString(), maplat,maplng, fak*zscale, fak*xscale,lod:17 );
-            qmapman.bespoke = new BespokeSpec(lastsceneset.ToString(), maplat,maplng, zdistkm, xdistkm,lod:lod,nodesPerQuadKey:npqk );
+            qmapman.bespoke = new BespokeSpec(lastsceneset.ToString(), maplat,maplng, zdistkm, xdistkm,zoffkm,xoffkm,lod:lod,nodesPerQuadKey:npqk );
 
             qmapman.bespoke.mapProv = reqMapProv.Get();
             qmapman.bespoke.eleProv = reqEleProv.Get();

@@ -339,6 +339,8 @@ namespace Aiskwk.Map
         public LatLngBox llbox;
         public double LatExtentKm;
         public double LngExtentKm;
+        public double LatOffsetKm;
+        public double LngOffsetKm;
         public Vector3 mapscale;
         public Vector3 maprot;
         public Vector3 maptrans;
@@ -354,16 +356,16 @@ namespace Aiskwk.Map
         public float hmult;
         public bool useViewer;
         public List<MappingPoint> mappoints= new List<MappingPoint>();
-        public BespokeSpec(string scenename, LatLng ll, double latkm, double lngkm, int lod = 16, int nodesPerQuadKey = 16)
+        public BespokeSpec(string scenename, LatLng ll, double latkm, double lngkm, double latoffkm, double lngoffkm, int lod = 16, int nodesPerQuadKey = 16)
         {
-            Init(scenename, ll, latkm, lngkm, lod, nodesPerQuadKey);
+            Init(scenename, ll, latkm, lngkm, latoffkm, lngoffkm, lod, nodesPerQuadKey);
         }
-        public BespokeSpec(string scenename, double lat, double lng, double latkm, double lngkm, int lod = 16, int nodesPerQuadKey = 16)
+        public BespokeSpec(string scenename, double lat, double lng, double latkm, double lngkm,double latoffkm,double lngoffkm, int lod = 16, int nodesPerQuadKey = 16)
         {
             var ll = new LatLng(lat, lng);
-            Init(scenename, ll, latkm, lngkm, lod, nodesPerQuadKey);
+            Init(scenename, ll, latkm, lngkm,latoffkm,lngoffkm, lod, nodesPerQuadKey);
         }
-        void Init(string scenename, LatLng ll, double latkm, double lngkm, int lod, int nodesPerQuadKey = 16)
+        void Init(string scenename, LatLng ll, double latkm, double lngkm,double latoffkm,double lngoffkm, int lod, int nodesPerQuadKey = 16)
         {
             sceneName = scenename;
             useElevationData = false;
@@ -373,6 +375,8 @@ namespace Aiskwk.Map
             eleProv = ElevProvider.BingElev;
             LatExtentKm = latkm;
             LngExtentKm = lngkm;
+            LatOffsetKm = latoffkm;
+            LngOffsetKm = lngoffkm;
             mapExtent = MapExtentTypeE.AsSpecified;
             llbox = new LatLngBox(ll, latkm, lngkm, lod: lod);
             maprot = Vector3.zero;
