@@ -78,12 +78,10 @@ namespace CampusSimulator
         #endregion LinkTransparency
 
 
-        [SerializeField]
         public UxUtils.UxEnumSetting<GraphGenerationModeE> graphGenOptions = new UxUtils.UxEnumSetting<GraphGenerationModeE>("GraphGenerationMode", GraphGenerationModeE.GenFromCode);
 
 
         public enum LinkVisualOptionsE { NodesAndLinks, NodesAndFlatLinks, Nodes, Links, FlatLinks, None };
-        [SerializeField]
         public UxUtils.UxEnumSetting<LinkVisualOptionsE> lvisOptions = new UxUtils.UxEnumSetting<LinkVisualOptionsE>("linkVisuals",LinkVisualOptionsE.NodesAndLinks);
 
         public void SetLinkAndNodeVisibility(string snewval,bool force=true)
@@ -150,9 +148,7 @@ namespace CampusSimulator
             //Debug.Log("Initial ggo get:" + graphGenOptions.Get());
         }
 
-        void Awake()
-        {
-        }
+
         void Start()
         {
             initVals();
@@ -173,13 +169,14 @@ namespace CampusSimulator
             {
                 case SceneSelE.MsftCoreCampus:
                 case SceneSelE.MsftB19focused:
+                case SceneSelE.MsftB121focused:
                 case SceneSelE.MsftRedwest:
                     GenLinkCloud(graphSceneE.gen_campus, genmode);
                     break;
                 case SceneSelE.MsftDublin:
                     GenLinkCloud(graphSceneE.gen_dublin, genmode);
                     break;
-                case SceneSelE.Tukwila:
+                case SceneSelE.TukSouCen:
                     GenLinkCloud(graphSceneE.gen_tukwila, genmode);
                     break;
                 case SceneSelE.Eb12small:
@@ -312,8 +309,13 @@ namespace CampusSimulator
 
             mm.maxVoiceKeywords = this.maxVoiceKeywords;
             var addWallLinks = sman.bdman.walllinks.Get();
+            //var genOsmStreetLinks = sman.stman.osmstreets.Get();
+            //var addfixedStreetLinks = sman.stman.fixedstreets.Get();
+            var genOsmStreetLinks = true;
+            var addfixedStreetLinks = false;
+
             //Debug.Log($"GenLinkCloud addWallLinks:{addWallLinks}");
-            mm.AddGraphToLinkCloud(graphScene,genmode,addWallLinks);
+            mm.AddGraphToLinkCloud(graphScene,genmode,addWallLinks, addfixedStreetLinks,genOsmStreetLinks);
             nVoiceKeywords = mm.nVoiceKeywords;
             if (CanGetHeights())
             {
@@ -357,10 +359,12 @@ namespace CampusSimulator
             if (longlatmap == null) return;
             var calcHeights = true;
             var grc = GetGraphCtrl();
+            var llmap = sman.mpman.GetLatLongMap();
             foreach (string lptname in grc.linkpoints())
             {
                 var node = grc.GetNode(lptname);
-                var v2 = longlatmap.llcoord(node.pt.x, node.pt.z);
+                //var v2 = longlatmap.llcoord(node.pt.x, node.pt.z);
+                var v2 = llmap.llcoord(node.pt.x, node.pt.z);
                 node.lat = v2.x;
                 node.lng = v2.y;
                 if (calcHeights)
@@ -484,6 +488,25 @@ namespace CampusSimulator
             {
                 Destroy(grcgos);
                 grcgos = null;
+            }
+        }
+        public void DeleteUnconnectedNodes()
+        {
+            var grc = GetGraphCtrl();
+            var nodesToDelete = new List<string>();
+            var nodelist = grc.GetLcNodes();
+            var numnodesbefore = nodelist.Count;
+            foreach (var n in nodelist)
+            {
+                if (n.wegtos==null || n.wegtos.Count == 0)
+                {
+                    nodesToDelete.Add(n.name);
+                }
+            }
+            Debug.Log($"DeleteUnconnectedNodes  number to delete:{nodesToDelete.Count} of {numnodesbefore}");
+            foreach (var nname in nodesToDelete)
+            {
+                grc.DelNode(nname);
             }
         }
         #region public methods
@@ -749,7 +772,7 @@ namespace CampusSimulator
         public Tuple<LcLink, Vector3> FindClosestPointOnLineCloud(Vector3 pt)
         {
             var gcr = GetGraphCtrl();
-            return (gcr.FindClosestPointOnLineCloud(pt));
+            return (gcr.FindClosestPointOnLineCloudTuple(pt));
         }
         public LcLink FindClosestLinkOnLineCloudFiltered(string filter, Vector3 pt)
         {

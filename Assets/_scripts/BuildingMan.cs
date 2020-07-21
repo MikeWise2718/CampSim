@@ -27,7 +27,7 @@ namespace CampusSimulator
 
         public bool showPersRects;
 
-        public List<Bldspec> bldspecs;
+        public List<OsmBldSpec> bldspecs;
 
 
         public UxSettingBool walllinks = new UxSettingBool("walllinks", false);
@@ -110,9 +110,28 @@ namespace CampusSimulator
         }
         #endregion treeMode
 
+        public void InitPhase0()
+        {
+        }
+
+        public OsmBldSpec FindBldSpecByNameStart(string namestart)
+        {
+            if (bldspecs != null)
+            {
+                foreach (var bs in bldspecs)
+                {
+                    if (bs.bgo.name.StartsWith(namestart))
+                    {
+                        return bs;
+                    }
+                }
+            }
+            return null;
+        }
+
         public void InitializeScene(SceneSelE newregion)
         {
-            bldspecs = new List<Bldspec>();
+            bldspecs = new List<OsmBldSpec>();
             InitializeValues();
         }
 
@@ -130,15 +149,30 @@ namespace CampusSimulator
 
         public void SetScene(SceneSelE newregion)
         {
+            Debug.Log($"BuildingMan.SetScene {newregion}");
             DelBuildings();
-            var osmloadspec = "";
+
+            var doosmblds = osmblds.Get();
+            //Debug.Log($"doosmblds:{doosmblds} osmloadspec{osmloadspec}");
+            if (doosmblds)
+            {
+                var osmroot = new GameObject("osmblds");
+                osmroot.transform.parent = this.transform;
+                var pgvd = new PolyGenVekMapDel(sman.mpman.GetHeightVector3);
+                var bpg = new BldPolyGen();
+                var llm = sman.mpman.GetLatLongMap();
+                var (waysdflst, linksdflist, nodesdflist) = sman.dfman.GetSdfs();
+                var lbgos = bpg.LoadRegion(osmroot, waysdflst, linksdflist, nodesdflist, pgvd: pgvd, llm: llm);
+                bldspecs.AddRange(lbgos);
+            }
+
             switch (newregion)
             {
                 case SceneSelE.MsftRedwest:
                 case SceneSelE.MsftCoreCampus:
                 case SceneSelE.MsftB19focused:
+                case SceneSelE.MsftB121focused:
                     MakeBuildings("Bld");
-                    osmloadspec = "msftb19area,msftcommons,msftredwest"; 
                     break;
                 case SceneSelE.MsftDublin:
                     MakeBuildings("Dub");
@@ -146,7 +180,6 @@ namespace CampusSimulator
                 case SceneSelE.Eb12small:
                 case SceneSelE.Eb12:
                     MakeBuildings("Eb");
-                    osmloadspec = "eb12small";
                     break;
                 default:
                 case SceneSelE.None:
@@ -154,15 +187,7 @@ namespace CampusSimulator
                     break;
             }
 
-            var doosmblds = osmblds.Get();
-            //Debug.Log($"doosmblds:{doosmblds} osmloadspec{osmloadspec}");
-            if (doosmblds)
-            {
-                var pgvd = new PolyGenVekMapDel(sman.mpman.GetHeightVector3);
-                var bpg = new BldPolyGen();
-                var lbgos = bpg.LoadRegion(this.gameObject, osmloadspec,1f,pgvd:pgvd);
-                bldspecs.AddRange(lbgos);
-            }
+
         }
         public void UpdateBldStats()
         {
@@ -215,6 +240,7 @@ namespace CampusSimulator
                 case SceneSelE.MsftRedwest:
                 case SceneSelE.MsftCoreCampus:
                 case SceneSelE.MsftB19focused:
+                case SceneSelE.MsftB121focused:
                     presetEvacBldName = "Bld19";
                     if (newregion == SceneSelE.MsftRedwest)
                     {
@@ -305,7 +331,8 @@ namespace CampusSimulator
             var bld = bgo.AddComponent<Building>();
             bld.AddBldDetails(this);
             AddBuildingToCollection(bld); /// has to be afterwards because of the sorted names for journeys
-            bld.llm = bgo.AddComponent<LatLongMap>(); // todo uncomment
+            //bld.llm = bgo.AddComponent<LatLongMap>(); // todo uncomment
+            bld.llm = new LatLongMap(); // todo uncomment
             //bld.llm.AddLlmDetails();
             UpdateBldStats();
         }
@@ -322,7 +349,7 @@ namespace CampusSimulator
             {
                 bldspecs.ForEach(bs => Destroy(bs.bgo));
             }
-            bldspecs = new List<Bldspec>();
+            bldspecs = new List<OsmBldSpec>();
         }
         public void DelBuilding(string name)
         {
@@ -349,9 +376,6 @@ namespace CampusSimulator
             }
             return bldlookup[name];
         }
-
-
-
         public void AddBuildingToCollection(Building building)
         {
             if (bldlookup.ContainsKey(building.name))

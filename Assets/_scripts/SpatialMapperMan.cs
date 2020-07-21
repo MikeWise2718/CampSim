@@ -9,10 +9,10 @@ namespace CampusSimulator
     {
 
         // Use this for initialization
-        void Start()
-        {
+        //void Start()
+        //{
 
-        }
+        //}
         GameObject smgo = null;
         GameObject GetSpatialMapper()
         {
@@ -99,9 +99,9 @@ namespace CampusSimulator
         }
 #endif
         // Update is called once per frame
-        void Update()
-        {
+        //void Update()
+        //{
 
-        }
+        //}
     }
 }

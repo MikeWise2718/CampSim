@@ -11,16 +11,14 @@ public class GeneralPanel : MonoBehaviour
     UiMan uiman;
 
     Toggle fastModeToggle;
-    bool oldFastMode;
-    Text fastModeText;
+    Toggle useDfInexesToggle;
+
+    Text SimpleDfIndexCountText;
 
     Button closeButton;
 
-    bool panelActive = false;
-
     public void Init0()
     {
-        panelActive = false;
         LinkObjectsAndComponents();
     }
 
@@ -31,11 +29,12 @@ public class GeneralPanel : MonoBehaviour
         fman = sman.frman;
 
         fastModeToggle = transform.Find("FastModeToggle").gameObject.GetComponent<Toggle>();
+        useDfInexesToggle = transform.Find("UseDataFileIndexesToggle").gameObject.GetComponent<Toggle>();
+        SimpleDfIndexCountText = transform.Find("SimpleDfIndexCountText").gameObject.GetComponent<Text>();
 
         closeButton = transform.Find("CloseButton").gameObject.GetComponent<Button>();
         closeButton.onClick.AddListener(delegate { uiman.ClosePanel();  });
 
-        panelActive = true;
     }
     public void InitVals()
     {
@@ -44,26 +43,39 @@ public class GeneralPanel : MonoBehaviour
         {
             fastModeToggle.isOn = sman.fastMode;
         }
-        panelActive = true;
     }
 
     public void SetScene(CampusSimulator.SceneSelE curscene)
     {
     }
-
-    int nSetTextValuesCalled = 0;
-    private void SetTextValues()
+    public void UpdateText()
     {
-        nSetTextValuesCalled += 1;
+        var tx = "";
+        var dfman = sman.dfman;
+        var (rv1, rv2, rv3) = dfman.GetIndexCounts();
+        tx = $"SimpleDf Index Counts - Ways:{rv1} Links:{rv2} Nodes:{rv3}";
+        SimpleDfIndexCountText.text = tx;
     }
-
 
     public void SetVals(bool closing = false)
     {
         Debug.Log($"GeneralPanel.SetVals called - closing:{closing}");
         sman.fastMode = fastModeToggle.isOn;
-        panelActive = false;
+        sman.dfman.useDfIndexes.SetAndSave(useDfInexesToggle.isOn);
+
         sman.RequestRefresh("GeneralPanel-SetVals");
+    }
+
+    float checkInterval = 1f;
+    float lastCheck = 0;
+
+    private void Update()
+    {
+        if (Time.time-lastCheck>checkInterval)
+        {
+            UpdateText();
+            lastCheck = Time.time;
+        }
     }
 
 }

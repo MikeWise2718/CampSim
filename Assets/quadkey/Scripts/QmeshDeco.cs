@@ -862,6 +862,9 @@ namespace Aiskwk.Map
 
         public override void Destruct()
         {
+            if (qmm == null) return;
+            if (qmm.llmapqkcoords == null) return;
+            if (qmm.llmapqkcoords.mapcoord == null) return;
             qmm.llmapqkcoords.mapcoord.DestroyNativeCoordMarkers();
         }
 

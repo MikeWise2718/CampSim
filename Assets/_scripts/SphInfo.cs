@@ -58,15 +58,15 @@ public class SphInfo : MonoBehaviour
         return spi;
     }
 
-    void Start()
-    {
+    //void Start()
+    //{
 
-    }
+    //}
 
 
-    // Update is called once per frame
-    void Update()
-    {
+    //// Update is called once per frame
+    //void Update()
+    //{
 
-    }
+    //}
 }

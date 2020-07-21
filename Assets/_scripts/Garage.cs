@@ -430,6 +430,7 @@ namespace CampusSimulator
                 "MsGarageRWB/csces", // CW_NWrow - csces
                 "MsGarageRWB/csees", // CW_MWrow - csees
 
+                "MsGarage121_1",
                 "MsGarage19_1",
                 "MsGarage11_1",
                 "MsGarage40_1",
@@ -627,7 +628,7 @@ namespace CampusSimulator
             string gname = this.fullname;
             if (gname.StartsWith("MsGarageRWB"))
             {
-                if (gm.sman.curscene == SceneSelE.MsftB19focused)
+                if (gm.sman.curscene == SceneSelE.MsftB19focused || gm.sman.curscene == SceneSelE.MsftB121focused)
                 {
                     defPercentFull = 0.05f;
                 }
@@ -667,6 +668,10 @@ namespace CampusSimulator
                 case "MsGarage19_1":
                     defPercentFull = 1.0f;
                     GenSlots("g_19_1", 15, -518.00f, 112.00f, 3.00f, 1.0f, 160);
+                    break;
+                case "MsGarage121_1":
+                    defPercentFull = 1.0f;
+                    GenSlots("g_121_1", 16, -836f, -542.00f, 1.12f, -3.0f, 70);
                     break;
                 case "MsGarage11_1":
                     GenSlots("g_11_1", 22, -102.35f, 247.10f, 3.00f, 1.0f,160);

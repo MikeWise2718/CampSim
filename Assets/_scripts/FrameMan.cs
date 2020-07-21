@@ -114,7 +114,6 @@ namespace CampusSimulator
 
         public bool forceFrameAllRooms;
         //public bool showOnlyFlaggedPeople;
-        [SerializeField]
         public UxSettingBool detectFte = new UxSettingBool("FrameDetectFte", true);
         public UxSettingBool detectContractor = new UxSettingBool("FrameDetectContractor", true);
         public UxSettingBool detectSecurity = new UxSettingBool("FrameDetectSecurity", true);

@@ -191,16 +191,16 @@ namespace CampusSimulator
             legdesc.Add(leg.ToString());
             legs.Add(leg);
         }
-        void Start()
-        {
+        //void Start()
+        //{
 
-        }
+        //}
 
-        // Update is called once per frame
-        void Update()
-        {
+        //// Update is called once per frame
+        //void Update()
+        //{
 
-        }
+        //}
 
     }
 

@@ -27,11 +27,8 @@ public class FramePanel : MonoBehaviour
     Button closeButton;
 
 
-    bool panelActive = false;
-
     public void Init0()
     {
-        panelActive = false;
         LinkObjectsAndComponents();
     }
     public void LinkObjectsAndComponents()
@@ -48,7 +45,6 @@ public class FramePanel : MonoBehaviour
         frameZones = transform.Find("FrameZonesToggle").gameObject.GetComponent<Toggle>();
         topTextDropdown = transform.Find("TopTextDropdown").gameObject.GetComponent<Dropdown>();
         botTextDropdown = transform.Find("BotTextDropdown").gameObject.GetComponent<Dropdown>();
-        panelActive = true;
 
         closeButton = transform.Find("CloseButton").gameObject.GetComponent<Button>();
         closeButton.onClick.AddListener(delegate { uiman.ClosePanel(); });
@@ -86,7 +82,6 @@ public class FramePanel : MonoBehaviour
         }
 
 
-        panelActive = true;
     }
 
     public void SetScene(CampusSimulator.SceneSelE curscene)
@@ -125,7 +120,6 @@ public class FramePanel : MonoBehaviour
             fman.botLabelText.SetAndSave(newval);
             Debug.Log("SetAndSave botLabelText default to " + newval);
         }
-        panelActive = false;
         sman.RequestRefresh("FramePanel-SetVals");
     }
 

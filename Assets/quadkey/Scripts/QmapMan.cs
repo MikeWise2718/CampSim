@@ -339,6 +339,8 @@ namespace Aiskwk.Map
         public LatLngBox llbox;
         public double LatExtentKm;
         public double LngExtentKm;
+        public double LatOffsetKm;
+        public double LngOffsetKm;
         public Vector3 mapscale;
         public Vector3 maprot;
         public Vector3 maptrans;
@@ -354,16 +356,16 @@ namespace Aiskwk.Map
         public float hmult;
         public bool useViewer;
         public List<MappingPoint> mappoints= new List<MappingPoint>();
-        public BespokeSpec(string scenename, LatLng ll, double latkm, double lngkm, int lod = 16, int nodesPerQuadKey = 16)
+        public BespokeSpec(string scenename, LatLng ll, double latkm, double lngkm, double latoffkm, double lngoffkm, int lod = 16, int nodesPerQuadKey = 16)
         {
-            Init(scenename, ll, latkm, lngkm, lod, nodesPerQuadKey);
+            Init(scenename, ll, latkm, lngkm, latoffkm, lngoffkm, lod, nodesPerQuadKey);
         }
-        public BespokeSpec(string scenename, double lat, double lng, double latkm, double lngkm, int lod = 16, int nodesPerQuadKey = 16)
+        public BespokeSpec(string scenename, double lat, double lng, double latkm, double lngkm,double latoffkm,double lngoffkm, int lod = 16, int nodesPerQuadKey = 16)
         {
             var ll = new LatLng(lat, lng);
-            Init(scenename, ll, latkm, lngkm, lod, nodesPerQuadKey);
+            Init(scenename, ll, latkm, lngkm,latoffkm,lngoffkm, lod, nodesPerQuadKey);
         }
-        void Init(string scenename, LatLng ll, double latkm, double lngkm, int lod, int nodesPerQuadKey = 16)
+        void Init(string scenename, LatLng ll, double latkm, double lngkm,double latoffkm,double lngoffkm, int lod, int nodesPerQuadKey = 16)
         {
             sceneName = scenename;
             useElevationData = false;
@@ -373,6 +375,8 @@ namespace Aiskwk.Map
             eleProv = ElevProvider.BingElev;
             LatExtentKm = latkm;
             LngExtentKm = lngkm;
+            LatOffsetKm = latoffkm;
+            LngOffsetKm = lngoffkm;
             mapExtent = MapExtentTypeE.AsSpecified;
             llbox = new LatLngBox(ll, latkm, lngkm, lod: lod);
             maprot = Vector3.zero;
@@ -513,30 +517,36 @@ namespace Aiskwk.Map
         public void SetFrameQuadKey(bool onoff)
         {
             //Debug.Log($"QmapMan.SetFrameQuadKey:{onoff}");
-            var decocomp = this.qmm?.GetComponent<FrameQuadkeysDeco>();
+            if (qmm == null)
+            {
+                Debug.LogError($"QmapMan.SetFrameQuadKey  - qmm is null");
+            }
+            var decocomp = qmm.GetComponent<FrameQuadkeysDeco>();
             if (decocomp != null)
             {
                 decocomp.showDeco = onoff;
             }
             else
             {
-                var qmmisnull = qmm == null;
-                Debug.LogError($"QmapMan.SetFrameQuadKey  - decocomp is null - qmmIsNull:{qmmisnull}");
+                Debug.LogError($"QmapMan.SetFrameQuadKey  - decocomp is null");
             }
         }
 
         public void SetTrilines(bool onoff)
         {
             //Debug.Log($"QmapMan.SetTrilines:{onoff}");
-            var decocomp = this.qmm?.GetComponent<TrilinesDeco>();
+            if (qmm==null)
+            {
+                Debug.LogError($"QmapMan.SetTrilines  - qmm is null");
+            }
+            var decocomp = qmm.GetComponent<TrilinesDeco>();
             if (decocomp != null)
             {
                 decocomp.showDeco = onoff;
             }
             else
             {
-                var qmmisnull = qmm == null;
-                Debug.LogError($"QmapMan.SetTrilines  - decocomp is null - qmmIsNull:{qmmisnull}");
+                Debug.LogError($"QmapMan.SetTrilines  - decocomp is null");
             }
         }
 
@@ -544,60 +554,72 @@ namespace Aiskwk.Map
         public void SetTriPoints(bool onoff)
         {
             //Debug.Log($"QmapMan.SetTriPoints:{onoff}");
-            var decocomp = this.qmm?.GetComponent<TriPointDeco>();
+            if (qmm == null)
+            {
+                Debug.LogError($"QmapMan.SetTriPoints  - qmm is null");
+            }
+            var decocomp = qmm.GetComponent<TriPointDeco>();
             if (decocomp != null)
             {
                 decocomp.showDeco = onoff;
             }
             else
             {
-                var qmmisnull = qmm == null;
-                Debug.LogError($"QmapMan.SetTrilines  - decocomp is null - qmmIsNull:{qmmisnull}");
+                Debug.LogError($"QmapMan.SetTriPoints  - decocomp is null");
             }
         }
 
         public void SetMeshPoints(bool onoff)
         {
             //Debug.Log($"QmapMan.MeshPoints:{onoff}");
-            var decocomp = this.qmm?.GetComponent<MeshNodesDeco>();
+            if (qmm == null)
+            {
+                Debug.LogError($"QmapMan.SetMeshPoints  - qmm is null");
+            }
+            var decocomp = qmm.GetComponent<MeshNodesDeco>();
             if (decocomp != null)
             {
                 decocomp.showDeco = onoff;
             }
             else
             {
-                var qmmisnull = qmm == null;
-                Debug.LogError($"QmapMan.MeshPoints  - decocomp is null - qmmIsNull:{qmmisnull}");
+                Debug.LogError($"QmapMan.MeshPoints  - decocomp is null");
             }
         }
 
         public void SetCoordPoints(bool onoff)
         {
             //Debug.Log($"QmapMan.CoordPoints:{onoff}");
-            var decocomp = this.qmm?.GetComponent<CoordDefiningNodesDeco>();
+            if (qmm == null)
+            {
+                Debug.LogError($"QmapMan.SetCoordPoints  - qmm is null");
+            }
+            var decocomp = this.qmm.GetComponent<CoordDefiningNodesDeco>();
             if (decocomp != null)
             {
                 decocomp.showDeco = onoff;
             }
             else
             {
-                var qmmisnull = qmm == null;
-                Debug.LogError($"QmapMan.CoordPoints  - decocomp is null - qmmIsNull:{qmmisnull}");
+                Debug.LogError($"QmapMan.CoordPoints  - decocomp is null");
             }
         }
 
         public void SetExtentPoints(bool onoff)
         {
             //Debug.Log($"QmapMan.CoordPoints:{onoff}");
-            var decocomp = this.qmm?.GetComponent<ExtendDefiningNodesDeco>();
+            if (qmm == null)
+            {
+                Debug.LogError($"QmapMan.SetExtentPoints  - qmm is null");
+            }
+            var decocomp = this.qmm.GetComponent<ExtendDefiningNodesDeco>();
             if (decocomp != null)
             {
                 decocomp.showDeco = onoff;
             }
             else
             {
-                var qmmisnull = qmm == null;
-                Debug.LogError($"QmapMan.ExtentPoints  - decocomp is null - qmmIsNull:{qmmisnull}");
+                Debug.LogError($"QmapMan.ExtentPoints  - decocomp is null");
             }
         }
         public void DeleteQmm()

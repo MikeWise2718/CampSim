@@ -181,6 +181,7 @@ namespace GraphAlgos
         }
         public NodeRegion NewNodeRegion(string name, string color, bool saveToFile, bool makeCurrent=true, bool warnondups=false)
         {
+            //Debug.Log($"NewNodeRegion:{name}");
             NodeRegion newRegion;
             if (regionDict.ContainsKey(name))
             {
@@ -313,6 +314,8 @@ namespace GraphAlgos
             //    }
             //}
         }
+
+
     }
 
     public class GraphCtrl
@@ -821,13 +824,13 @@ namespace GraphAlgos
             // find closest filtered link 1 and 2
             //var go = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             //go.transform.position = pt;
-            var lnk1 = FindClosestLinkOnLineCloudFiltered(lname1, pt);
+            var lnk1 = FindClosestLinkOnLineCloudFilteredOnNamePrefix(lname1, pt);
             if (lnk1 == null)
             {
-                lnk1 = FindClosestLinkOnLineCloudFiltered(lname1, pt);
+                lnk1 = FindClosestLinkOnLineCloudFilteredOnNamePrefix(lname1, pt);
                 throw new UnityException("AddCrossLink: Could not find filtered link for filter:" + lname1);
             }
-            var lnk2 = FindClosestLinkOnLineCloudFiltered(lname2, pt);
+            var lnk2 = FindClosestLinkOnLineCloudFilteredOnNamePrefix(lname2, pt);
             if (lnk2 == null)
             {
                 throw new UnityException("AddCrossLink: Could not find filtered link for filter:" + lname2);
@@ -854,7 +857,7 @@ namespace GraphAlgos
             var pt = new Vector3(x, yfloor, z);
             pt = gm.modv(pt);
             var filter = gm.addprefix("c");
-            var lnk = FindClosestLinkOnLineCloudFiltered(filter, pt, deb: false);
+            var lnk = FindClosestLinkOnLineCloudFilteredOnNamePrefix(filter, pt, deb: false);
             if (lnk == null)
             {
                 throw new UnityException("AddRoomLink: Could not find filtered link for filter:" + filter);
@@ -872,7 +875,7 @@ namespace GraphAlgos
             var pt = new Vector3(x, yfloor, z);
             pt = gm.modv(pt);
             var filter = gm.addprefix("c");
-            var lnk = FindClosestLinkOnLineCloudFiltered(filter, pt, deb: false);
+            var lnk = FindClosestLinkOnLineCloudFilteredOnNamePrefix(filter, pt, deb: false);
             if (lnk == null)
             {
                 throw new UnityException("AddRoomLink: Could not find filtered link for filter:" + filter);
@@ -974,11 +977,18 @@ namespace GraphAlgos
             {
                 int nllnkcnt = latelinks.Count;
                 int nllnkcnt0 = nllnkcnt;
-                int maxiter = 2*nllnkcnt + 4;
-                int i = 0;
-                while (i<nllnkcnt)
+                int maxiter = 2*nllnkcnt + 2;
+                var iter = 0;
+                int ilnk = 0;
+                while (ilnk<nllnkcnt)
                 {
-                    var lnk = latelinks[i];
+                    iter++;
+                    if (iter > maxiter)
+                    {
+                        Debug.LogError($"RealizeLateLinks: probable infinite loop detected i:{ilnk} iter:{iter} maxiter:{maxiter} nllnkcnt0:{nllnkcnt0}");
+                        break;
+                    }
+                    var lnk = latelinks[ilnk];
                     var (name1, name2, usetype, regStepIdx, regid, cmt) = lnk;
                     var oname2 = name2;
                     //Debug.Log($"RealizeLateLinks {i}/{nllnkcnt}  :  {name1} to {name2}  {usetype} regStepIdx:{regStepIdx}");
@@ -989,7 +999,9 @@ namespace GraphAlgos
                         var reg = regman.GetRegion(regname);
                         if (reg == null)
                         {
-                            Debug.LogWarning("Bad region name:" + regname);
+                            Debug.LogWarning($"RealizeLateLinks: bad region name:{regname}  ilnk:{ilnk} iter:{iter} nllnkcnt:{nllnkcnt}");
+                            ilnk++;
+                            nllnkcnt = latelinks.Count;
                             continue;
                         }
                         var pt = GetNode(name1).pt;
@@ -1003,7 +1015,7 @@ namespace GraphAlgos
                     var nllnk = AddLinkByNodeName(name1, name2, usetype,inLateLinkingPhase:true);
                     if (nllnk == null)
                     {
-                        Debug.LogWarning($"Failed to RealizeLateLink {cmt}");
+                        Debug.LogWarning($"RealizeLateLinks: failed on {cmt}");
                     }
                     else
                     {
@@ -1011,18 +1023,13 @@ namespace GraphAlgos
                         nllnk.regid = regid;
                         nllnk.node2spec = oname2;
                     }
-                    i++;
+                    ilnk++;
                     nllnkcnt = latelinks.Count;
-                    if (i>maxiter)
-                    {
-                        Debug.LogError($"Probable infinite loop detected i:{i} maxiter:{maxiter} nllnkcnt0:{nllnkcnt0}");
-                        break;
-                    }
                 }
             }
             catch(Exception ex)
             {
-                Debug.LogError("Exception caught in RealizeLateLinks");
+                Debug.LogError("RealizeLateLinks: Exception caught");
                 Debug.LogError(ex.ToString());
             }
         }
@@ -1168,15 +1175,18 @@ namespace GraphAlgos
             }
             var pt = nodedict[nname];
             // first find the names of all connected links
-            var linknamelist = new HashSet<string>();
-            foreach (var w in pt.wegtos)
+            if (pt.wegtos != null)
             {
-                linknamelist.Add(w.link.name);
-            }
-            // now delete them all
-            foreach (var lname in linknamelist)
-            {
-                DelLink(lname);
+                var linknamelist = new HashSet<string>();
+                foreach (var w in pt.wegtos)
+                {
+                    linknamelist.Add(w.link.name);
+                }
+                // now delete them all
+                foreach (var lname in linknamelist)
+                {
+                    DelLink(lname);
+                }
             }
             // now remove the point
             nodedict.Remove(nname);
@@ -1262,17 +1272,23 @@ namespace GraphAlgos
             }
             return new Tuple<LcLink,Vector3>(rlink,rpt);
         }
-        public Tuple<LcLink, Vector3> FindClosestPointOnLineCloud(Vector3 pt)
+        public Tuple<LcLink, Vector3> FindClosestPointOnLineCloudTuple(Vector3 pt)
         {
             var links = linkdict.Values.ToList();
             return FindClosestPointOnLineCloud(pt, links);
+        }
+        public (LcLink link, Vector3 pt) FindClosestPointOnLineCloud(Vector3 pt)
+        {
+            var links = linkdict.Values.ToList();
+            var v1 = FindClosestPointOnLineCloud(pt, links);
+            return (v1.Item1, v1.Item2);
         }
         public Tuple<LcLink, Vector3> FindClosestPointOnLineCloud(Vector3 pt,NodeRegion region)
         {
             var links = GetLinksInRegion(region.regid);
             return FindClosestPointOnLineCloud(pt, links);
         }
-        public LcLink FindClosestLinkOnLineCloudFiltered(string filter, Vector3 pt, bool deb = false)
+        public LcLink FindClosestLinkOnLineCloudFilteredOnNamePrefix(string filter, Vector3 pt, bool deb = false)
         {
             if (deb)
             {

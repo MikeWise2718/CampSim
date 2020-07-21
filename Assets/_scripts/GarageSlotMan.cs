@@ -419,25 +419,25 @@ namespace CampusSimulator
             slotformgo = null;
         }
         // Update is called once per frame
-        void Update()
-        {
-            //if (garage.gm.showCarRects)
-            //{
-            //    if (slotformgo != null)
-            //    {
-            //        if (cargo != null)
-            //        {
-            //            carrect = GraphAlgos.GraphUtil.GUIRectWithObject(cargo);
-            //            carrectok = GraphAlgos.GraphUtil.ClipToScreen(carrect);
-            //            if (carrectok)
-            //            {
-            //                var cmt = carname + " parked in " + garage.name;
-            //                cmt += " Sc w,h:" + Screen.width + "," + Screen.height;
-            //                garage.gm.vman.AddFoundLabel("car", carrect, cmt);
-            //            }
-            //        }
-            //    }
-            //}
-        }
+        //void Update()
+        //{
+        //    //if (garage.gm.showCarRects)
+        //    //{
+        //    //    if (slotformgo != null)
+        //    //    {
+        //    //        if (cargo != null)
+        //    //        {
+        //    //            carrect = GraphAlgos.GraphUtil.GUIRectWithObject(cargo);
+        //    //            carrectok = GraphAlgos.GraphUtil.ClipToScreen(carrect);
+        //    //            if (carrectok)
+        //    //            {
+        //    //                var cmt = carname + " parked in " + garage.name;
+        //    //                cmt += " Sc w,h:" + Screen.width + "," + Screen.height;
+        //    //                garage.gm.vman.AddFoundLabel("car", carrect, cmt);
+        //    //            }
+        //    //        }
+        //    //    }
+        //    //}
+        //}
     }
 }

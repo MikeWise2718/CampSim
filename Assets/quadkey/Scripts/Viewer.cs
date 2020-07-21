@@ -252,8 +252,8 @@ namespace Aiskwk.Map
         public bool showDroppings = false;
         public void MakeAvatar(string avaname, float angle, Vector3 shift, float scale = 1,float visorscale=2)
         {
-            Debug.Log($"MakeAvatar {avaname} angle:{angle}");
-            Debug.Log($"MakeAvatar - Viewer rotation before  {transform.localRotation.eulerAngles}");
+            //Debug.Log($"MakeAvatar {avaname} angle:{angle}");
+            //Debug.Log($"MakeAvatar - Viewer rotation before  {transform.localRotation.eulerAngles}");
 
             DestroyAvatar();
             moveplane = new GameObject("moveplane");
@@ -310,7 +310,7 @@ namespace Aiskwk.Map
                 qut.SetColorOfGo(rod, Color.blue);
             }
             rodgo.transform.SetParent(transform, worldPositionStays: false);
-            Debug.Log($"MakeAvatar - Viewer rotation after  {transform.localRotation.eulerAngles}");
+            //Debug.Log($"MakeAvatar - Viewer rotation after  {transform.localRotation.eulerAngles}");
         }
         public void SetCamPosition()
         {
@@ -554,20 +554,21 @@ namespace Aiskwk.Map
 
         void RotateViewer(float rotate)
         {
-            //Debug.Log($"RotateViewer - Viewer rotation before  {transform.localRotation.eulerAngles} followGround:{followGround}");
-            var fak = calctimefak(ref tvlastkey);
+            ////Debug.Log($"RotateViewer - Viewer rotation before  {transform.localRotation.eulerAngles} followGround:{followGround}");
 
-            bodyPlaneRotation *= Quaternion.Euler(new Vector3(0, fak*rotate, 0));
+            var fak = calctimefak(ref tvlastkey);
+            bodyPlaneRotation *= Quaternion.Euler(new Vector3(0, fak * rotate, 0));
             moveplane.transform.localRotation = bodyPlaneRotation;
-            bodyPrefabRotation *= Quaternion.Euler(new Vector3(0, fak*rotate, 0));
+            bodyPrefabRotation *= Quaternion.Euler(new Vector3(0, fak * rotate, 0));
             body.transform.localRotation = Quaternion.FromToRotation(Vector3.up, lstnrm) * bodyPrefabRotation;
-            //if (followGround)
-            //{
-            //    body.transform.localRotation = Quaternion.FromToRotation(Vector3.up, lstnrm) * bodyPrefabRotation;
-            //}
-            //Debug.Log($"RotateViewer - Viewer rotation after   {transform.localRotation.eulerAngles}");
-            //bodypose.transform.localRotation = Quaternion.Euler(new Vector3(0, rotate, 0)) * Quaternion.FromToRotation(Vector3.up, lstnrm) ;
-            //Debug.Log($"RotateViewer: {rotate}");
+
+            ////if (followGround)
+            ////{
+            ////    body.transform.localRotation = Quaternion.FromToRotation(Vector3.up, lstnrm) * bodyPrefabRotation;
+            ////}
+            ////Debug.Log($"RotateViewer - Viewer rotation after   {transform.localRotation.eulerAngles}");
+            ////bodypose.transform.localRotation = Quaternion.Euler(new Vector3(0, rotate, 0)) * Quaternion.FromToRotation(Vector3.up, lstnrm) ;
+            ////Debug.Log($"RotateViewer: {rotate}");
         }
 
         Vector3 lstnrm = Vector3.up;
@@ -836,19 +837,15 @@ namespace Aiskwk.Map
             {
                 SetSceneCamToMainCam();
             }
-            if (Input.GetKey(KeyCode.D) && Time.time - ctrlDhit > hitgap3)
-            {
-                showDroppings = !showDroppings;
-                ctrlDhit = Time.time;
-            }
+            //if (Input.GetKey(KeyCode.D) && Time.time - ctrlDhit > hitgap3)
+            //{
+            //    showDroppings = !showDroppings;
+            //    ctrlDhit = Time.time;
+            //}
             if (Input.GetKey(KeyCode.N) && Time.time - ctrlNhit > hitgap3)
             {
                 showNormalRod = !showNormalRod;
                 ctrlNhit = Time.time;
-            }
-            if (Input.GetKey(KeyCode.D) && ctrlpressed)
-            {
-                this.gameObject.SetActive(false);
             }
             if (Input.GetKey(KeyCode.E) && ctrlpressed && Time.time - ctrlEhit > hitgap3)
             {

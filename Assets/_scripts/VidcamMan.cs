@@ -39,19 +39,7 @@ namespace CampusSimulator
             bgim.RealizeBackground();
         }
 
-        public void SetScene(SceneSelE newscene)
-        {
-            var vcamname = mainCamName.Get();
-            if (!vidcam.ContainsKey(vcamname))
-            {
-                vcamname = "Viewer";
-            }
-            SetMainCameraToVcam(vcamname);
-        }
-        public void PostTerrainLoadAdjustments()
-        {
-            AdjustHeightsForTerrain();
-        }
+
         public void InitializeScene(SceneSelE newscene)
         {
             DelVidcams();
@@ -63,6 +51,7 @@ namespace CampusSimulator
             {
                 case SceneSelE.MsftCoreCampus:
                 case SceneSelE.MsftB19focused:
+                case SceneSelE.MsftB121focused:
                     //Debug.Log("Making cams for MsftCore");
                     MakeVidcams("Ms_c");
                     //mcamvcam = "Ms_Redwg_KM-48";
@@ -76,7 +65,7 @@ namespace CampusSimulator
                     MakeVidcams("Eb");
                     //mcamvcam = "Eb_vc_frontdoor";
                     break;
-                case SceneSelE.Tukwila:
+                case SceneSelE.TukSouCen:
                     MakeVidcams("Tuk");
                     //mcamvcam = "Eb_vc_frontdoor";
                     break;
@@ -86,6 +75,21 @@ namespace CampusSimulator
             }
             vidcamlist.Insert(0,"Viewer");
         }
+
+        public void SetScene(SceneSelE newscene)
+        {
+            var vcamname = mainCamName.Get();
+            if (!vidcam.ContainsKey(vcamname))
+            {
+                vcamname = "Viewer";
+            }
+            SetMainCameraToVcam(vcamname);
+        }
+        public void PostTerrainLoadAdjustments()
+        {
+            AdjustHeightsForTerrain();
+        }
+
         public bool toggleFreeFly;
         public FreeFlyCam ffc = null;
         public bool inFreeFly = false;

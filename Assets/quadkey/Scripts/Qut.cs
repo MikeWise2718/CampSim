@@ -219,10 +219,11 @@ namespace Aiskwk.Map
             colorTable["saddlebrown"] = new Color(0.545f, 0.271f, 0.075f);
             colorTable["darkbrown"] = new Color(0.396f, 0.263f, 0.129f);
             // greens
-            colorTable["g"] = 
+            colorTable["g"] =
             colorTable["green"] = new Color(0, 1, 0);
             colorTable["dg"] = new Color(0, 0.5f, 0);
             colorTable["olive"] = new Color(0.5f, 0.5f, 0f);
+            colorTable["lightgreen"] = new Color(0.5f, 1f, 0.5f);
             colorTable["darkgreen"] = new Color(0, 0.5f, 0);
             colorTable["darkgreen1"] = new Color(0.004f, 0.196f, 0.125f);
             colorTable["forestgreen"] = new Color(0.132f, 0.543f, 0.132f);

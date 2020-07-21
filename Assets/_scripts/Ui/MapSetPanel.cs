@@ -254,9 +254,9 @@ public class MapSetPanel : MonoBehaviour
         oldHmultVal = float.MinValue;
         npqkVal.value = mman.npqk;
 
-        UpdateHmult();
-        UpdateLod();
-        UpdateNpqk();
+        UpdateHmultTextValue();
+        UpdateLodTextValue();
+        UpdateNpqkTextValue();
 
         UpdateFileText();
 
@@ -443,7 +443,7 @@ public class MapSetPanel : MonoBehaviour
 
     static public bool isLoadingMaps = false;
     float loadStartTime = 0;
-    (bool oktoload,string errmsg) StartLoadingTiles()
+    (bool oktoload,string errmsg) StartLoadingTiles(bool forceload)
     {
         if (!loadererrmsg.StartsWith("ok"))
         {
@@ -464,7 +464,7 @@ public class MapSetPanel : MonoBehaviour
             mman.SetLatLngAndExtent(addr,newLat, newLng, newLatKm, newLngKm);
         }
         mman.SetNtqk((int) (npqkVal.value+0.5f));
-        mman.LoadMaps();
+        mman.LoadMaps(forceload:forceload);
         return (true, "");
     }
     float checkLoadInterval = 0.25f;
@@ -544,7 +544,7 @@ public class MapSetPanel : MonoBehaviour
                 }
             case "LoadMapsButton":
                 {
-                    StartLoadingTiles();
+                    StartLoadingTiles(forceload:true);
                     break;
                 }
             case "DeleteMapsButton":
@@ -627,7 +627,7 @@ public class MapSetPanel : MonoBehaviour
             }
         }
     }
-    private void UpdateHmult()
+    private void UpdateHmultTextValue()
     {
         var callsettextvalues = false;
         if (oldHmultVal != hmultVal.value)
@@ -648,7 +648,7 @@ public class MapSetPanel : MonoBehaviour
         }
     }
 
-    private void UpdateLod()
+    private void UpdateLodTextValue()
     {
         var callsettextvalues = false;
         if (oldLodVal != lodVal.value)
@@ -663,7 +663,7 @@ public class MapSetPanel : MonoBehaviour
         }
     }
 
-    private void UpdateNpqk()
+    private void UpdateNpqkTextValue()
     {
         var callsettextvalues = false;
         if (oldNpqkVal != npqkVal.value)
@@ -737,9 +737,9 @@ public class MapSetPanel : MonoBehaviour
         sw.Mark();
         //Debug.Log($"MapSetPanel.SetVals Phase1 took:{sw.ElapSecs()} secs");
 
-        UpdateHmult();
-        UpdateLod();
-        UpdateNpqk();
+        UpdateHmultTextValue();
+        UpdateLodTextValue();
+        UpdateNpqkTextValue();
 
         mman.SetUseElevations(useElevationsToggle.isOn);
         mman.SetFlatTris(flatTrisToggle.isOn);
@@ -750,6 +750,8 @@ public class MapSetPanel : MonoBehaviour
         mman.SetCoordPoints(coordPointsToggle.isOn);
         mman.SetExtentPoints(extentPointsToggle.isOn);
         mman.SetHmult(hmultVal.value);
+        mman.SetLod((int) (lodVal.value+0.5f));
+        mman.SetNtqk((int) (npqkVal.value+0.5f));
 
         sman.RequestRefresh("MapSetPanel-SetVals");
         sw.Stop();
@@ -765,6 +767,7 @@ public class MapSetPanel : MonoBehaviour
         {
             panelTakingInput = false;
             Aiskwk.Map.Viewer.ActivateViewerKeys(true);
+            StartLoadingTiles(forceload: false);
         }
     }
     string loadererrmsg = "";
@@ -867,9 +870,9 @@ public class MapSetPanel : MonoBehaviour
                 {
                     SetHmultTextValues();
                 }
-                UpdateHmult();
-                UpdateLod();
-                UpdateNpqk();
+                UpdateHmultTextValue();
+                UpdateLodTextValue();
+                UpdateNpqkTextValue();
                 UpdateChangables();
                 if (Time.time - fileTextUpdate > 1)
                 {

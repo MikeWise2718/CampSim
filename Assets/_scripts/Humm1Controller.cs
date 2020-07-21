@@ -47,6 +47,10 @@ public class Humm1Controller : MonoBehaviour {
 	// Update is called once per frame
 	void Update()
 	{
+		if (rb==null)
+        {
+			return;
+        }
         //Debug.Log("update humm1ctrl");
 		mYaw = mYaw + Input.GetAxis("Horizontal");
 		mPit = mPit + Input.GetAxis("Vertical");
@@ -74,6 +78,10 @@ public class Humm1Controller : MonoBehaviour {
 	}
 	void FixedUpdate()
 	{
+		if (rb==null)
+        {
+			return;
+        }
 		Move();
 		Turn();
 		frameCount++;

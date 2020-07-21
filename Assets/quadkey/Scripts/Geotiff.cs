@@ -69,10 +69,7 @@ namespace Aiskwk.Map
             pmeany = (pbl.y + pbr.y + pul.y + pur.y) / 4;
         }
         // Start is called before the first frame update
-        void Start()
-        {
 
-        }
 
         private void Load()
         {

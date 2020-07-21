@@ -10,7 +10,7 @@ using UnityEngine.AI;
 using System.Data.Common;
 using System;
 
-public class Bldspec
+public class OsmBldSpec
 {
     public string name;
     public string bldtyp;
@@ -26,7 +26,7 @@ public class Bldspec
     List<Vector3> boutline;
     public GameObject bgo;
 
-    public Bldspec(string name, string bldtyp, string wid, float height = 0, int levels = 0, float bscale = 1)
+    public OsmBldSpec(string name, string bldtyp, string wid, float height = 0, int levels = 0, float bscale = 1)
     {
         if (height == 0 && levels == 0)
         {
@@ -74,25 +74,64 @@ public class Bldspec
 
     static Dictionary<string, string> clrcvt = new Dictionary<string, string>()
         {
-            { "construction","red" },
+            { "construction","brown" },
             { "commercial","darkblue" },
-            { "yes","black" },
+            { "industrial","brown" },
+            { "data_center","lightblue" },
+            { "train_station","indigo" },
+            { "transportation","indigo" },
+            { "public","purple" },
+            { "civic","purple" },
+            { "government","purple" },
+            { "hospital","red" },
+            { "yes","lightblue" },
             { "osmbld","black" },
             { "bld","darkgreen" },
             { "house","blue" },
+            { "manufactured_home","blue" },
+            { "semidetached_house","blue" },
+            { "detached","darkblue" },
+            { "demolished","black" },
+            { "razed building","black" },
+            { "ruins","black" },
+            { "bunker","black" },
             { "parking","darkred" },
             { "garage","darkred" },
+            { "garages","darkred" },
             { "carport","darkred" },
+            { "carports","darkred" },
+            { "mixed","cyan" },
+            { "bridge","cyan" },
+            { "gangway","cyan" },
             { "apartments","purple" },
             { "appartments","indigo" },
             { "terrace","green" },
             { "office","lightblue" },
             { "shed","green" },
-            { "hotel","pink" },
-            { "retail","gray" },
+            { "barn","darkred" },
+            { "cabin","green" },
+            { "hut","green" },
+            { "greenhouse","green" },
+            { "hotel","darkred" },
+            { "pavilion","darkred" },
+            { "retail","lightgreen" },
+            { "supermarket","lightgreen" },
+            { "kindergarten","orange" },
             { "school","orange" },
+            { "university","orange" },
+            { "college","orange" },
             { "roof","green" },
+            { "dome","pink" },
+            { "leisure_centre","pink" },
+            { "sports_hall","pink" },
+            { "sports_centre","pink" },
+            { "sports_center","pink" },
+            { "theater","pink" },
+            { "theatre","pink" },
+            { "toilets","pink" },
+            { "toilet","pink" },
             { "church","purple" },
+            { "cathedral","purple" },
 
         };
     public string GetColor()
@@ -134,15 +173,23 @@ public class BldPolyGen
         //var lngvals = nodedf.GetDoubleCol("lng");
         //var on1 = "";
         //var on2 = "";
+        int n1idx;
         for (int i = 0; i < linksdf.Nrow(); i++)
         {
             var n1 = osm_nid_1[i];
-            if (!nodedict.ContainsKey(n1))
+            if (nodedict != null)
             {
-                Debug.LogError($"Bld:{name} - wid:{wid} - Unknown node 1 {osm_nid_1}");
-                continue;
+                if (!nodedict.ContainsKey(n1))
+                {
+                    Debug.LogError($"Bld:{name} - wid:{wid} - Unknown node 1 {osm_nid_1}");
+                    continue;
+                }
+                n1idx = nodedict[n1];
             }
-            var n1idx = nodedict[n1];
+            else
+            {
+                n1idx = nodedf.GetColIdx("osm_nid",n1);
+            }
             var x = xvals[n1idx];
             var z = zvals[n1idx];
             var pt1 = new Vector3(x, 0, z);
@@ -169,6 +216,11 @@ public class BldPolyGen
             pathname = pathname.Remove(idx);
         }
         var asset = Resources.Load<TextAsset>(pathname);
+        if (asset==null)
+        {
+            Debug.LogError($"Could not load TextAsset {pathname}");
+            return null;
+        }
         return TextAssetToList(asset);
     }
 
@@ -184,83 +236,149 @@ public class BldPolyGen
     }
 
 
-    (SimpleDf ways, SimpleDf links, SimpleDf nodes) GetDfsFromFiles(string areaprefix, string dname = "")
-    {
-        if (dname == "")
-        {
-            dname = "d:/pyprj/overpy/output/";
-        }
-        var fnameways = $"{dname}{areaprefix}_ways.csv";
-        var fnamenodes = $"{dname}{areaprefix}_nodes.csv";
-        var fnamelinks = $"{dname}{areaprefix}_links.csv";
+    //(SimpleDf ways, SimpleDf links, SimpleDf nodes) GetDfsFromFiles(string areaprefix, string dname = "")
+    //{
+    //    if (dname == "")
+    //    {
+    //        dname = "d:/pyprj/overpy/output/";
+    //    }
+    //    var fnameways = $"{dname}{areaprefix}_ways.csv";
+    //    var fnamenodes = $"{dname}{areaprefix}_nodes.csv";
+    //    var fnamelinks = $"{dname}{areaprefix}_links.csv";
 
-        var dfways = new SimpleDf(areaprefix + "_ways");
-        dfways.ReadCsv(fnameways);
-        Debug.Log($"Read {dfways.Nrow()} ways from {fnameways}");
+    //    var dfways = new SimpleDf(areaprefix + "_ways");
+    //    dfways.ReadCsv(fnameways);
+    //    Debug.Log($"Read {dfways.Nrow()} ways from {fnameways}");
 
-        var dflinks = new SimpleDf(areaprefix + "links");
-        dflinks.ReadCsv(fnamelinks);
-        Debug.Log($"Read {dflinks.Nrow()} links from {fnamelinks}");
+    //    var dflinks = new SimpleDf(areaprefix + "links");
+    //    dflinks.ReadCsv(fnamelinks);
+    //    Debug.Log($"Read {dflinks.Nrow()} links from {fnamelinks}");
 
-        var dfnodes = new SimpleDf(areaprefix + "nodes");
-        dfnodes.ReadCsv(fnamenodes);
-        Debug.Log($"Read {dfnodes.Nrow()} links from {fnamenodes}");
+    //    var dfnodes = new SimpleDf(areaprefix + "nodes");
+    //    dfnodes.ReadCsv(fnamenodes);
+    //    Debug.Log($"Read {dfnodes.Nrow()} links from {fnamenodes}");
 
-        return (dfways, dflinks, dfnodes);
-    }
+    //    return (dfways, dflinks, dfnodes);
+    //}
 
-    (SimpleDf ways, SimpleDf links, SimpleDf nodes) GetDfsFromResources(string areaprefix, string dname = "")
+    public (SimpleDf dfways1, SimpleDf dflinks1, SimpleDf dfnodes1) GetDfsFromResources(string areaprefix, string dname = "", LatLongMap llm = null)
     {
         if (dname == "")
         {
             dname = "osmcsv/";
         }
 
-        SimpleDf dfways;
+        var dfways1 = new SimpleDf();
         {
             var fnameways = $"{dname}{areaprefix}_ways.csv";
-            dfways = new SimpleDf(areaprefix + "_ways");
+            dfways1 = new SimpleDf(areaprefix + "_ways");
             var wayslist = ReadResource(fnameways);
-            dfways.ReadCsv(wayslist);
+            if (wayslist != null)
+            {
+                dfways1.ReadCsv(wayslist);
+            }
             //Debug.Log($"Read {dfways.Nrow()} ways from {fnameways}");
         }
 
-        SimpleDf dflinks;
+        var dflinks1 = new SimpleDf();
         {
             var fnamelinks = $"{dname}{areaprefix}_links.csv";
-            dflinks = new SimpleDf(areaprefix + "links");
+            dflinks1 = new SimpleDf(areaprefix + "links");
             var linkslist = ReadResource(fnamelinks);
-            dflinks.ReadCsv(linkslist);
+            if (linkslist != null)
+            {
+                dflinks1.ReadCsv(linkslist);
+            }
             //Debug.Log($"Read {dflinks.Nrow()} links from {fnamelinks}");
         }
 
-        SimpleDf dfnodes;
+        var dfnodes1 = new SimpleDf();
         {
             var fnamenodes = $"{dname}{areaprefix}_nodes.csv";
-            dfnodes = new SimpleDf(areaprefix + "nodes");
+            dfnodes1 = new SimpleDf(areaprefix + "nodes");
             var nodeslist = ReadResource(fnamenodes);
-            dfnodes.ReadCsv(nodeslist);
+            if (nodeslist != null)
+            {
+                dfnodes1.ReadCsv(nodeslist);
+            }
             //Debug.Log($"Read {dfnodes.Nrow()} links from {fnamenodes}");
         }
-
-        return (dfways, dflinks, dfnodes);
+        if (llm != null)
+        {
+            ConvertNodeCoords(dfnodes1, llm);
+        }
+        _dfways = dfways1;
+        _dfnodes = dfnodes1;
+        _dflinks = dflinks1;
+        return (dfways1, dflinks1, dfnodes1);
     }
 
 
-    public List<Bldspec> LoadBuildingsFromCsv(string areaprefix, string dname = "", float ptscale = 1)
+    public void ConvertNodeCoords(SimpleDf nodes, LatLongMap ll)
+    {
+        var ixcol = nodes.ColIdx("x");
+        var izcol = nodes.ColIdx("z");
+
+        var latcol = nodes.GetDoubleCol("lat");
+        var lngcol = nodes.GetDoubleCol("lng");
+        var nrow = nodes.Nrow();
+        var xmap = ll.maps.xmap;
+        var zmap = ll.maps.zmap;
+        for (int i=0; i<nrow; i++)
+        {
+            var lat = latcol[i];
+            var lng = lngcol[i];
+            var xv = xmap.Map(lng,lat);
+            var zv = zmap.Map(lng,lat);
+            var ox = nodes.GetVal(ixcol, i,0.0);
+            var oz = nodes.GetVal(izcol, i,0.0);
+            nodes.SetDoubVal(ixcol, i, xv);
+            nodes.SetDoubVal(izcol, i, zv);
+        }
+    }
+
+    SimpleDf _dfways = null;
+    SimpleDf _dflinks = null;
+    SimpleDf _dfnodes = null;
+
+    public void LoadSdfs(string areaprefix, string dname = "")
+    {
+        GetDfsFromResources(areaprefix, dname);
+    }
+
+
+    //public List<Bldspec> LoadOsmBuildings(float ptscale = 1, LatLongMap llm = null)
+    //{
+    //    if (_dfways==null)
+    //    {
+    //        Debug.LogError("LoadOsmBuildingsFromSdfs not initialized");
+    //    }
+    //    var rv = LoadOsmBuildingsFromSdfs(_dfways,_dfnodes,_dflinks,ptscale: ptscale, llm: llm);
+    //    return rv;
+    //}
+
+
+    public List<OsmBldSpec> LoadOsmBuildingsFromSdfs(SimpleDf dfways, SimpleDf dfnodes, SimpleDf dflinks, float ptscale = 1, LatLongMap llm = null, bool usenodedict = false)
     {
         var sw = new Aiskwk.Dataframe.StopWatch();
         sw.Start();
-        var rv = new List<Bldspec>();
+        var rv = new List<OsmBldSpec>();
 
-        //var (dfways, dflinks, dfnodes) = GetDfsFromFiles(areaprefix, dname);
-        var (dfways, dflinks, dfnodes) = GetDfsFromResources(areaprefix, dname);
+
+        if (llm!=null)
+        {
+            ConvertNodeCoords(dfnodes, llm);
+        }
 
         var nid = dfnodes.GetStringCol("osm_nid");
-        var nodedict = new Dictionary<string, int>();
-        for (int idx = 0; idx < dfnodes.Nrow(); idx++)
+        Dictionary<string, int> nodedict = null;
+        if (usenodedict)
         {
-            nodedict[nid[idx]] = idx;
+            new Dictionary<string, int>();
+            for (int idx = 0; idx < dfnodes.Nrow(); idx++)
+            {
+                nodedict[nid[idx]] = idx;
+            }
         }
         var blddf = SimpleDf.SubsetOnStringColVal(dfways, "osmtype", "building");
         Debug.Log($"Found {blddf.Nrow()} buildings in dfways");
@@ -286,9 +404,10 @@ public class BldPolyGen
             var blx = (bldx == null ? 0 : bldx[i]);
             var bldwalldf = SimpleDf.SubsetOnStringColVal(dflinks, "osm_wid", bwid);
             //Debug.Log($"Found {bldwalldf.Nrow()} links for bld wid:{bwid} name:{bname}");
-            var bs = new Bldspec(bname, btype, bwid, bheit, blevs, bscale: ptscale);
+            var bs = new OsmBldSpec(bname, btype, bwid, bheit, blevs, bscale: ptscale);
             bs.AddPos(bllat, bllng, blx, blz);
-            var nodeoutline = ExtractNodes(bname, bwid, bldwalldf, dfnodes, nodedict);
+            //var nodeoutline = ExtractNodes(bname, bwid, bldwalldf, dfnodes, nodedict);
+            var nodeoutline = ExtractNodes(bname, bwid, bldwalldf, dfnodes, null);
             var area = GrafPolyGen.CalcAreaWithYup(nodeoutline);
             if (area < 0)
             {
@@ -300,7 +419,7 @@ public class BldPolyGen
         }
         var nbld = i;
         sw.Stop();
-        Debug.Log($"{areaprefix} Loading and generating {nbld} buildings took {sw.ElapSecs()} secs");
+        Debug.Log($"LoadBuilding from simpledfs generating {nbld} buildings took {sw.ElapSecs()} secs");
         return rv;
     }
 
@@ -352,11 +471,11 @@ public class BldPolyGen
         var rv = pg.GenBld(parent, bldname, height, levels, clr, alf: 0.5f,dowalls:dowalls,dofloors: dofloors,doroof:doroof, ptscale: ptscale, pgvd:pgvd);
         return rv;
     }
-    public GameObject GenBld(GameObject parent, Bldspec bs, bool plotTesselation = false, float ptscale = 1, PolyGenVekMapDel pgvd = null)
+    public GameObject GenBld(GameObject parent, OsmBldSpec bs, bool plotTesselation = false, float ptscale = 1, PolyGenVekMapDel pgvd = null)
     {
         pg.SetOutline(bs.GetOutline());
         var clr = bs.GetColor();
-        var bldname = $"{bs.name} ({bs.wid})";
+        var bldname = $"{bs.name} ({bs.wid} {bs.bldtyp})";
         var dowalls = true;
         var dofloors = true;
         var doroof = true;
@@ -369,17 +488,56 @@ public class BldPolyGen
         return rv;
     }
 
-    public List<Bldspec> LoadRegion(GameObject parent, string regionspec, float ptscale = 1, PolyGenVekMapDel pgvd = null)
+    public List<OsmBldSpec> LoadRegion(GameObject parent, List<SimpleDf> dfwayslist, List<SimpleDf> dflinkslist, List<SimpleDf> dfnodeslist, float ptscale = 1, PolyGenVekMapDel pgvd = null, LatLongMap llm = null,bool useindexes=true)
     {
-        var rv = new List<Bldspec>();
+        var rv = new List<OsmBldSpec>();
         var sw = new Aiskwk.Dataframe.StopWatch();
-        var blds = new List<Bldspec>();
-        var sar = regionspec.Split(',');
-        foreach (var s in sar)
+        var osmblds = new List<OsmBldSpec>();
+
+        var numregs = dfwayslist.Count;
+        for(var i=0; i< numregs; i++)
         {
-            blds.AddRange(LoadBuildingsFromCsv(s, ptscale: ptscale));
+            var wdf = dfwayslist[i];
+            var ndf = dfnodeslist[i];
+            var ldf = dflinkslist[i];
+            var lst = LoadOsmBuildingsFromSdfs(wdf, ndf, ldf, ptscale: ptscale, llm: llm);
+            osmblds.AddRange(lst);
         }
-        foreach (var bs in blds)
+        foreach (var bs in osmblds)
+        {
+            var nbspts = bs.GetOutline().Count;
+            if (nbspts >= 3)
+            {
+                //GenFixedFormBld(ObjForm.cross, bs.name, bs.loc, bs.height,bs.levels,"db");
+                var bldgo = GenBld(parent, bs, ptscale: ptscale, pgvd: pgvd);
+                bs.bgo = bldgo;
+                rv.Add(bs);
+            }
+            else
+            {
+                //Debug.LogWarning($"Building {bs.name} does not have enough outline points:{nbspts}");
+            }
+        }
+        sw.Stop();
+        Debug.Log($"BldPolyGen.LoadRegion Building Generation took {sw.ElapSecs()} secs");
+        return rv;
+    }
+
+
+    public List<OsmBldSpec> LoadRegionOld(GameObject parent, string regionspec, float ptscale = 1, PolyGenVekMapDel pgvd = null, LatLongMap llm = null)
+    {
+        var rv = new List<OsmBldSpec>();
+        var sw = new Aiskwk.Dataframe.StopWatch();
+        var osmblds = new List<OsmBldSpec>();
+        var sar = regionspec.Split(',');
+
+        foreach (var regionname in sar)
+        {
+            LoadSdfs(regionname);
+            var lst = LoadOsmBuildingsFromSdfs(_dfways,_dfnodes,_dflinks,ptscale: ptscale,llm:llm);
+            osmblds.AddRange(lst);
+        }
+        foreach (var bs in osmblds)
         {
             //GenFixedFormBld(ObjForm.cross, bs.name, bs.loc, bs.height,bs.levels,"db");
             var bldgo = GenBld(parent, bs, ptscale: ptscale, pgvd: pgvd);
@@ -391,27 +549,28 @@ public class BldPolyGen
         return rv;
     }
 
-    public void LoadRegionOneBld(GameObject parent, string regionspec, string bldwid, float ptscale = 1)
-    {
-        var sw = new Aiskwk.Dataframe.StopWatch();
-        var blds = new List<Bldspec>();
-        var sar = regionspec.Split(',');
-        foreach (var s in sar)
-        {
-            blds.AddRange(LoadBuildingsFromCsv(s, ptscale: ptscale));
-        }
-        foreach (var bs in blds)
-        {
-            if (bs.wid == bldwid)
-            {
-                //GenFixedFormBld(ObjForm.cross, bs.name, bs.loc, bs.height,bs.levels,"db");
-                GenBld(parent, bs, plotTesselation: true, ptscale: ptscale);
-            }
-        }
-        sw.Stop();
-        Debug.Log($"Generation of {regionspec} took {sw.ElapSecs()} secs");
-    }
-
+    //public void LoadRegionOneBld(GameObject parent, string regionspec, string bldwid, float ptscale = 1)
+    //{
+    //    var sw = new Aiskwk.Dataframe.StopWatch();
+    //    var blds = new List<Bldspec>();
+    //    var sar = regionspec.Split(',');
+    //    foreach (var regionname in sar)
+    //    {
+    //        LoadSdfs(regionname);
+    //        blds.AddRange(LoadOsmBuildingsFromSdfs(ptscale: ptscale));
+    //    }
+    //    foreach (var bs in blds)
+    //    {
+    //        if (bs.wid == bldwid)
+    //        {
+    //            //GenFixedFormBld(ObjForm.cross, bs.name, bs.loc, bs.height,bs.levels,"db");
+    //            GenBld(parent, bs, plotTesselation: true, ptscale: ptscale);
+    //        }
+    //    }
+    //    sw.Stop();
+    //    Debug.Log($"Generation of {regionspec} took {sw.ElapSecs()} secs");
+    //}
+    public enum ObjForm { star, cross, circle }
     void GenOutline(ObjForm objform, Vector3 loc)
     {
         var radiusinnner = 0.5f;
@@ -437,7 +596,7 @@ public class BldPolyGen
         }
     }
 
-    public enum ObjForm { star, cross, circle }
+
     //void GenObj(GameObject parent, ObjForm objform, bool dowalls = true, bool doroof = true, bool dofloor = true, bool plotTesselation = false, bool onesided = false)
     //{
     //    var alf = 0.5f;

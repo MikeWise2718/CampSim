@@ -39,14 +39,16 @@ public class BldPolyGenTest : MonoBehaviour
     {
         bpg = new BldPolyGen();
         //TestEb12();
-        //TestMsft();
-        Test4();
+        TestMsft();
+        //Test4();
     }
     void TestMsft()
     {
+        var latlngmap = new Aiskwk.Map.LatLongMap();
+        latlngmap.InitMapFromSceneSelString("MsftRedwest");
         var hmo = new heightMocker(33);
         var pgvd = new PolyGenVekMapDel(hmo.ChangeHeight);
-        bpg.LoadRegion(this.gameObject, "msftb19area,msftcommons,msftredwest",1f,pgvd:pgvd);
+        bpg.LoadRegionOld(this.gameObject, "msftb19area,msftcommons,msftredwest", 1f, pgvd: pgvd, llm: latlngmap);
         //bpg.LoadRegion(this.gameObject, "eb12");
         //bpg.LoadRegion(this.gameObject, "eb12small");
         //bpg.LoadRegion(this.gameObject, "SanFrancisco", ptscale: 1000);
@@ -64,19 +66,18 @@ public class BldPolyGenTest : MonoBehaviour
     void TestEb12()
     {
         //bpg.LoadRegion(this.gameObject, "eb12small", 0.5f);
-        bpg.LoadRegion(this.gameObject, "eb12small", 1);
+        bpg.LoadRegionOld(this.gameObject, "eb12small", 1);
     }
 
-    float lastDumpTime;
-    private void Update()
-    {
-        //if (Time.time-lastDumpTime>2)
-        //{
-        //    var pct = 100*GrafPolyGen.reverses*1f / GrafPolyGen.reverseOpps;
-        //    Debug.Log($"ReverseOpps:{GrafPolyGen.reverseOpps} Reverses:{GrafPolyGen.reverses} pct:{pct:f1}");
-        //    lastDumpTime = Time.time;
-        //}
-
-    }
+    //float lastDumpTime;
+    //private void Update()
+    //{
+    //    //if (Time.time-lastDumpTime>2)
+    //    //{
+    //    //    var pct = 100*GrafPolyGen.reverses*1f / GrafPolyGen.reverseOpps;
+    //    //    Debug.Log($"ReverseOpps:{GrafPolyGen.reverseOpps} Reverses:{GrafPolyGen.reverses} pct:{pct:f1}");
+    //    //    lastDumpTime = Time.time;
+    //    //}
+    //}
 
 }

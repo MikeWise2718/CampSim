@@ -418,6 +418,11 @@ namespace GraphAlgos
             //              d_order: connectOrderE.inc, d_exit: exitDirE.back, d_len: 5f,
             //              w_order: connectOrderE.inc, w_exit: exitDirE.back, w_len: 7f);
 
+            // Garage 121
+            CreateGarageLinks("MsGarage121_1", "b121-os1-o005", "b121-dw-d01",
+                          d_order: connectOrderE.dec, d_exit: exitDirE.front, d_len: 5f,
+                          w_order: connectOrderE.inc, w_exit: exitDirE.back, w_len: 7f);
+
             // Garage 19
             CreateGarageLinks("MsGarage19_1", "b19-os1-o03", "dw-B19-c02",
                           d_order: connectOrderE.inc, d_exit: exitDirE.back, d_len: 5f,
@@ -709,7 +714,7 @@ namespace GraphAlgos
         public GenGlobeParameters globpar = new GenGlobeParameters(12, 12, 10, 10);
         public GenCircParameters circpar = new GenCircParameters(12, 10, 0);
         public Range LinkFloor = new Range(0, 0);
-        public void AddGraphToLinkCloud(graphSceneE graphScene,GraphGenerationModeE genMode,bool addWallLinks)
+        public void AddGraphToLinkCloud(graphSceneE graphScene,GraphGenerationModeE genMode,bool addWallLinks,bool addfixedStreetLinks,bool genOsmStreetLinks)
         {
             grc.maxRanHeight = LinkFloor.max;
             grc.minRanHeight = LinkFloor.min;
@@ -744,6 +749,7 @@ namespace GraphAlgos
 
                                 //lmd.createPointsFor_msft_b11();
                                 lmd.createPointsFor_msft_b19();
+                                lmd.createPointsFor_msft_b121();
                                 lmd.createPointsFor_msft_b40();
                                 lmd.createPointsFor_msft_b43();
                                 lmd.createPointsFor_msft_b43_f1();
@@ -752,7 +758,14 @@ namespace GraphAlgos
                                 lmd.createPointsFor_msft_bredwb_f3();
                                 lmd.createPointsFor_msft_bsx();
                                 //lmd.createPointsFor_msft_campus();
-                                lmd.CreateGraphForOsmImport_msft();
+                                if (addfixedStreetLinks)
+                                {
+                                    lmd.CreateGraphForOsmImport_msft_streets();
+                                }
+                                //if (genOsmStreetLinks)
+                                //{
+                                //    lmd.CreateGraphForOsmImport_msft_streets_df("msft-campus", "blue");
+                                //}
 
                                 //lmd.CreateGraphForOsmImport_MsftCampusBldSmall();
                                 if (addWallLinks)
@@ -848,12 +861,20 @@ namespace GraphAlgos
                                 //lmd.CreatePointsForEb12retail();
                                 //lmd.CreatePointsForEb12resident2();
 
-                                lmd.CreateGraphForOsmImport_eb12_orig();
+                                if (addfixedStreetLinks)
+                                {
+                                    lmd.CreateGraphForOsmImport_eb12_orig();
+                                }
 
                                 if (addWallLinks)
                                 {
                                     lmd.CreateGraphForOsmImport_Eb12small();
                                 }
+                                //if (genOsmStreetLinks)
+                                //{
+                                //    lmd.CreateGraphForOsmImport_msft_streets_df("EB12 Area", "blue");
+                                //}
+
                                 //lmd.createPointsFor_eb12_streets();
                                 lmd.createPointsFor_eb12_resident();
                                 lmd.createPointsFor_eb12_retail();
@@ -875,6 +896,11 @@ namespace GraphAlgos
                                 //lmd.CreatePointsForEb12streets2();
                                 //lmd.CreatePointsForEb12retail();
                                 //lmd.CreatePointsForEb12resident2();
+                                if (addfixedStreetLinks)
+                                {
+                                    lmd.CreateGraphForOsmImport_eb12_orig();
+                                }
+
                                 if (addWallLinks)
                                 {
                                     lmd.CreateGraphForOsmImport_Eb12small();

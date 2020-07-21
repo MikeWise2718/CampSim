@@ -135,6 +135,7 @@ namespace CampusSimulator
             switch (newregion)
             {
                 case SceneSelE.MsftB19focused:
+                case SceneSelE.MsftB121focused:
                     MakeZones("Ms-B19");
                     break;
                 case SceneSelE.MsftRedwest:

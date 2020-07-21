@@ -114,6 +114,7 @@ namespace Aiskwk.Dataframe
     }
 
     public enum DfStatus { uninit, init, reading, erroredOutOfReading, finished }
+
     public class SimpleDf
     {
         public string csvFileName;
@@ -125,10 +126,11 @@ namespace Aiskwk.Dataframe
         public string csvcDictionaryPrefix = "##";
         public int csvcCommentLines = 0;
         public int csvcDictionaryLines = 0;
-        public Dictionary<string, string> csvcDict = new Dictionary<string, string>();
-        public System.Globalization.DateTimeStyles dtstyle = System.Globalization.DateTimeStyles.AssumeLocal;
+        private Dictionary<string, string> csvcDict = new Dictionary<string, string>();
+        private System.Globalization.DateTimeStyles dtstyle = System.Globalization.DateTimeStyles.AssumeLocal;
         private Dictionary<string, List<float>> floatcols = null;
         private Dictionary<string, List<string>> stringcols = null;
+        private Dictionary<string, Dictionary<string,List<int>>> stringindex = null;
         private Dictionary<string, List<bool>> boolcols = null;
         private Dictionary<string, List<double>> doubcols = null;
         private Dictionary<string, List<DateTime>> datetimecols = null;
@@ -137,13 +139,13 @@ namespace Aiskwk.Dataframe
         private List<DataError> dataErrors = new List<DataError>();
         private List<string> colnames = null;
         private List<SdfColType> coltypes = null;
-        public bool preferFloat = false;
+        private bool preferFloat = false;
         public Dictionary<string, SdfColType> preferedType = new Dictionary<string, SdfColType>();
         public Dictionary<string, string> preferedFormat = new Dictionary<string, string>();
         public Dictionary<string, (string, string)> preferedSubstitute = new Dictionary<string, (string, string)>();
 
         public static SdfConsistencyLevel SdfConsistencyLevel = SdfConsistencyLevel.aggressive;
-        public SdfVerbosity SdfVerbosity = SdfVerbosity.debug;
+        private SdfVerbosity SdfVerbosity = SdfVerbosity.debug;
 
 
         public void Log(SdfVerbosity level, string msg)
@@ -436,6 +438,13 @@ namespace Aiskwk.Dataframe
             var cname = colnames[iCol];
             var vd = doubcols[cname][jRow];
             return vd;
+        }
+        public bool SetDoubVal(int iCol, int jRow, double newval)
+        {
+            if (!InRange(iCol, jRow)) return false;
+            var cname = colnames[iCol];
+            doubcols[cname][jRow] = newval;
+            return true;
         }
         public DateTime GetVal(int iCol, int jRow, DateTime defval)
         {
@@ -965,10 +974,28 @@ namespace Aiskwk.Dataframe
         public static SimpleDf SubsetOnStringColVal(SimpleDf sdf,  string colname,string colval, bool quiet = true, string newname = "ddf")
         {
             //Debug.Log("Subsetting " + newname + " on col " + colname +" val "+colval );
+            //if (sdf.HasIndex(colname))
+            //{
+            //    return SubsetOnStringColValIndexed(sdf, colname, colval, quiet, newname);
+            //}
             var ddf = new SimpleDf(newname);
             ddf._CopyInColDefs(sdf, "Copy");
             var filter = sdf.GetStringColEqVal(colname,colval);
             ddf._CopyInRows(sdf, reorderIdx: null, boolMask: filter);
+            if (SdfConsistencyLevel == SdfConsistencyLevel.aggressive)
+            {
+                ddf.CheckConsistency("After Subset", quiet: quiet);
+            }
+            return ddf;
+        }
+        public static SimpleDf SubsetOnStringColValIndexed(SimpleDf sdf, string colname, string colval, bool quiet = true, string newname = "ddf")
+        {
+            //Debug.Log("Subsetting " + newname + " on col " + colname +" val "+colval );
+            var ddf = new SimpleDf(newname);
+            ddf._CopyInColDefs(sdf, "Copy");
+            var filter = sdf.GetStringColEqVal(colname, colval);
+            var idxtocopy = sdf.GetColIdxList(colname, colval);
+            ddf._CopyInRows(sdf, reorderIdx: idxtocopy, boolMask: null);
             if (SdfConsistencyLevel == SdfConsistencyLevel.aggressive)
             {
                 ddf.CheckConsistency("After Subset", quiet: quiet);
@@ -1545,7 +1572,7 @@ namespace Aiskwk.Dataframe
             return (minv, imin, maxv, imax);
         }
 
-        void DeleteOneColumn(string delColName, bool quiet = false)
+        public void DeleteOneColumn(string delColName, bool quiet = false)
         {
             var icol = ColIdx(delColName);
             if (icol < 0)
@@ -2113,5 +2140,106 @@ namespace Aiskwk.Dataframe
             }
         }
 
+        public bool AddIndex(string colname,bool reindex=false, bool quiet = true)
+        {
+            var icol = ColIdx(colname);
+            if (icol < 0)
+            {
+                if (!quiet)
+                {
+                    var msg = $"SimpleDF.AddIndex - can not find {colname} column in CopyColumn";
+                    Debug.LogError(msg);
+                }
+                return false;
+            }
+            var ctype = coltypes[icol];
+            if (ctype != SdfColType.dfstring)
+            {
+                var msg = $"SimpleDF.AddIndex - {colname} has type {ctype} - currently can only index string columns";
+                Debug.LogError(msg);
+                return false;
+            }
+            if (stringindex == null)
+            {
+                stringindex = new Dictionary<string, Dictionary<string, List<int>>>();
+            }
+            if (HasIndex(colname)) ;
+            {
+                if (ctype != SdfColType.dfstring && !reindex)
+                {
+                    var msg = $"SimpleDF.AddIndex - {colname} already has index";
+                    Debug.LogError(msg);
+                    return false;
+                }
+            }
+            ComputeIndex(icol, colname);
+            return true;
+        }
+        public bool HasIndex(string colname)
+        {
+            var rv = stringindex!=null && stringindex.ContainsKey(colname);
+            return rv;
+        }
+        public void ComputeIndex(int icol,string colname, bool quiet = true)
+        {
+            var sidx = new Dictionary<string, List<int>>();
+            stringindex[colname] = sidx;
+            var scol = GetStringCol(colname);
+            int i = 0;
+            foreach(var sval in scol)
+            {
+                if (!sidx.ContainsKey(sval))
+                {
+                    var newlst = new List<int>();
+                    sidx[sval] = newlst;
+                }
+                var lst = sidx[sval];
+                lst.Add(i);
+                i++;
+            }
+            return;
+        }
+        public int IndexAccesses = 0;
+        public int GetColIdx(string colname,string sval)
+        {
+            var lst = GetColIdxList(colname, sval);
+            if (lst==null || lst.Count==0)
+            {
+                return -1;
+            }
+            return lst[0];
+        }
+        public List<int> GetColIdxList(string colname, string sval)
+        {
+            if (HasIndex(colname))
+            {
+                IndexAccesses++;
+                var sidx = stringindex[colname];
+                if (sidx.ContainsKey(sval))
+                {
+                    return sidx[sval];// first element in list
+                }
+                else
+                {
+                    return new List<int>();
+                }
+            }
+            else
+            {
+                var scol = stringcols[colname];
+                var lst = new List<int>();
+                int i = 0;
+                foreach (var s in scol)
+                {
+
+                    if (s == sval)
+                    {
+                        lst.Add(i);
+                    }
+                    i++;
+                }
+                return lst;
+            }
+        }
     }
 }

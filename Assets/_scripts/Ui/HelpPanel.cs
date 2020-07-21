@@ -39,10 +39,16 @@ public class HelpPanel : MonoBehaviour
 
         var sysver = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
         var utc = System.DateTime.UtcNow;
-        Font arial;
-        arial = (Font)Resources.GetBuiltinResource(typeof(Font), "Arial.ttf");
+        var arial = (Font)Resources.GetBuiltinResource(typeof(Font), "Arial.ttf");
+        var consolas = Font.CreateDynamicFontFromOSFont("Consolas", 24);
 
-        helpText.font = arial;
+        var font = arial;
+        if (consolas!=null)
+        {
+            font = consolas;
+        }
+
+        helpText.font = font;
         helpText.fontSize = 24;
         helpText.alignment = TextAnchor.UpperLeft;
         helpText.verticalOverflow = VerticalWrapMode.Overflow;
@@ -50,15 +56,18 @@ public class HelpPanel : MonoBehaviour
         try
         {
 #if UNITY_EDITOR
-            msg += "\nCtrl-M Ctrl-M   - Copy scene camera to main camera (editor only)";
-            msg += "\nCtrl-M Ctrl-S   - Copy main camera to scene camera (editor only)";
+            msg += "\n"   + "Ctrl-M Ctrl-M       - Copy scene camera to main camera (in Unity Editor only)";
+            msg += "\n"   + "Ctrl-M Ctrl-S       - Copy main camera to scene camera (in Unity Editor only)";
 #endif
-            msg += "\nF5                - Total Refresh of Scene";
-            msg += "\nCtrl-E            - Shift Camera position on viewer";
-            msg += "\nCtrl-A            - Shift Camera position on viewer";
-            msg += "\nCtrl-W            - Force Viewer to respond to keys";
-            msg += "\\nnCtrl-C          - Interrupt bitmap loading";
-            msg += "\n\nCtrl-Q Ctrl-Q   - Quit Application (hit ctrl-q twice)";
+            msg += "\n"   + "F5                  - Total Refresh of Scene";
+            msg += "\n"   + "F10                 - Options Panel";
+            msg += "\n"   + "Ctrl-E              - Shift Camera position on viewer";
+            msg += "\n"   + "Ctrl-A              - Shift Camera position on viewer";
+            msg += "\n"   + "Ctrl-W              - Force Viewer to respond to keys";
+            msg += "\n"   + "Ctrl-C              - Interrupt bitmap loading";
+            msg += "\n\n" + "Ctrl-Q Ctrl-Q       - Quit Application (hit ctrl-q twice)";
+            msg += "\n\n" + "Bugs/Requests/Info  - Contact: mwise@microsoft.com (Mike Wise)";
+            msg += "\n"   + "                               brujo@microsoft.com (Bruce E. Johnson)";
         }
         catch (Exception ex)
         {
@@ -71,7 +80,7 @@ public class HelpPanel : MonoBehaviour
 
 
     // Update is called once per frame
-    void Update()
-    {
-    }
+    //void Update()
+    //{
+    //}
 }

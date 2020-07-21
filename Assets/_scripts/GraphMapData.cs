@@ -5112,10 +5112,10 @@ namespace GraphAlgos
             grc.regman.NewNodeRegion("msft-bredwb-f3", "purple", true);
             if (bldname != "")
             {
-                var bld = GameObject.Find(bldname);
-                var llm = bld.GetComponent<LatLongMap>();
-                grc.gm.initmods();
-                grc.gm.setmapper(llm);
+                //var bld = GameObject.Find(bldname);
+                //var llm = bld.GetComponent<LatLongMap>();
+                //grc.gm.initmods();
+                //grc.gm.setmapper(llm);
             }
             else
             {
@@ -5181,21 +5181,42 @@ namespace GraphAlgos
             grc.gm.initmods();// reset
             grc.yfloor = 0;
         }
-        // =================== generated code
-        //public void createPointsFor_msft_b11()  // machine generated - do not edit
-        //{
-        //    grc.regman.NewNodeRegion("msft-b11", "purple", saveToFile: true);
-        //    grc.AddNodePtxyz("b11-f01-lobby", -123.670, 0.000, 219.400, comment: ""); //  1 nn:1 nl:0
-        //    grc.LinkToPtxyz("b11-f01-lobby", "b11-os1-o01", -123.670, 0.000, 225.850, LinkUse.walkway, comment: ""); //  2 nn:1 nl:1
-        //    grc.LinkToPtxyz("b11-os1-o01", "b11-os1-o02", -106.900, 0.000, 232.940, LinkUse.walkway, comment: ""); //  3 nn:1 nl:1
-        //    grc.LinkToPtxyz("b11-os1-o02", "b11-os1-o03", -105.600, 0.000, 236.400, LinkUse.walkway, comment: ""); //  4 nn:1 nl:1
-        //    grc.AddNodePtxyz("dw-B11-c01", -103.230, 0.000, 241.700, comment: ""); //  5 nn:1 nl:0
-        //    grc.LinkToPtxyz("dw-B11-c01", "st-B11-c02", -112.310, 0.000, 238.830, LinkUse.driveway, comment: ""); //  6 nn:1 nl:1
-        //    grc.AddLinkByNodeName("st-B11-c02", "st-B11-c02", LinkUse.driveway); //  7 nn:0 nl:1
-        //    grc.LinkToPtxyz("st-B11-c02", "st-B11-c04", -128.940, 0.000, 243.850, LinkUse.driveway, comment: ""); //  8 nn:1 nl:1
-        //    grc.AddLinkByNodeName("st-B11-c04", "reg:msft-campus", LinkUse.driveway); //  9 nn:0 nl:1
-        //    grc.regman.SetRegion("default");
-        //}
+
+        public void createPointsFor_msft_b121()  // machine generated - do not edit
+        {
+            grc.regman.NewNodeRegion("msft-b121", "purple", saveToFile: true);
+            var xs = 0;
+            var zs = 0;
+            //xs = 0;
+            //zs = 0;
+            grc.AddNodePtxyz("b121-f01-lobby", -811.80 + xs, 0.000, -485.8 + zs, comment: ""); //  1 nn:1 nl:0
+            grc.LinkToPtxyz("b121-os1-o001", -808.1 + xs, 0.000, -484.8 + zs, LinkUse.walkway, comment: ""); //  2 nn:1 nl:1
+            grc.LinkToPtxyz("b121-os1-o002", -807.200 + xs, 0.000, -486.0 + zs, LinkUse.walkway, comment: ""); //  2 nn:1 nl:1
+            grc.LinkToPtxyz("b121-os1-o003", -808.600 + xs, 0.000, -492.0 + zs, LinkUse.walkway, comment: ""); //  2 nn:1 nl:1
+            grc.LinkToPtxyz("b121-os1-o004", -817.900 + xs, 0.000, -503.0 + zs, LinkUse.walkway, comment: ""); //  2 nn:1 nl:1
+            grc.LinkToPtxyz("b121-os1-o005", -830.800 + xs, 0.000, -523.0 + zs, LinkUse.walkway, comment: ""); //  2 nn:1 nl:1
+
+            grc.AddNodePtxyz("b121-dw-d01", -824.40 + xs, 0.000, -593.2 + zs, comment: ""); //  1 nn:1 nl:0
+            grc.LinkToPtxyz("b121-dw-d02", -777.0 + xs, 0.000, -725.6 + zs, LinkUse.driveway, comment: ""); //  2 nn:1 nl:1
+            grc.AddLinkByNodeName("b121-dw-d02", "reg:msft-campus", LinkUse.driveway);
+            grc.regman.SetRegion("default");
+        }
+
+            // =================== generated code
+            //public void createPointsFor_msft_b11()  // machine generated - do not edit
+            //{
+            //    grc.regman.NewNodeRegion("msft-b11", "purple", saveToFile: true);
+            //    grc.AddNodePtxyz("b11-f01-lobby", -123.670, 0.000, 219.400, comment: ""); //  1 nn:1 nl:0
+            //    grc.LinkToPtxyz("b11-f01-lobby", "b11-os1-o01", -123.670, 0.000, 225.850, LinkUse.walkway, comment: ""); //  2 nn:1 nl:1
+            //    grc.LinkToPtxyz("b11-os1-o01", "b11-os1-o02", -106.900, 0.000, 232.940, LinkUse.walkway, comment: ""); //  3 nn:1 nl:1
+            //    grc.LinkToPtxyz("b11-os1-o02", "b11-os1-o03", -105.600, 0.000, 236.400, LinkUse.walkway, comment: ""); //  4 nn:1 nl:1
+            //    grc.AddNodePtxyz("dw-B11-c01", -103.230, 0.000, 241.700, comment: ""); //  5 nn:1 nl:0
+            //    grc.LinkToPtxyz("dw-B11-c01", "st-B11-c02", -112.310, 0.000, 238.830, LinkUse.driveway, comment: ""); //  6 nn:1 nl:1
+            //    grc.AddLinkByNodeName("st-B11-c02", "st-B11-c02", LinkUse.driveway); //  7 nn:0 nl:1
+            //    grc.LinkToPtxyz("st-B11-c02", "st-B11-c04", -128.940, 0.000, 243.850, LinkUse.driveway, comment: ""); //  8 nn:1 nl:1
+            //    grc.AddLinkByNodeName("st-B11-c04", "reg:msft-campus", LinkUse.driveway); //  9 nn:0 nl:1
+            //    grc.regman.SetRegion("default");
+            //}
 
         public void createPointsFor_msft_b19()  // machine generated - do not edit
         {
@@ -12328,7 +12349,148 @@ namespace GraphAlgos
             grc.LinkToPtxyz("st-148NE-c15", "st-148NE-c16", -1791.360, 0.000, -1301.220, LinkUse.road, comment: ""); //  76 nn:1 nl:1
             grc.regman.SetRegion("default");
         }
-        public void CreateGraphForOsmImport_msft()  // machine generated - do not edit
+
+        //public List<OsmBldSpec> LoadOsmBuildingsFromSdfs(SimpleDf dfways, SimpleDf dfnodes, SimpleDf dflinks, float ptscale = 1, LatLongMap llm = null)
+        //{
+        //    var sw = new Aiskwk.Dataframe.StopWatch();
+        //    sw.Start();
+        //    var rv = new List<OsmBldSpec>();
+
+
+        //    if (llm != null)
+        //    {
+        //        ConvertNodeCoords(dfnodes, llm);
+        //    }
+
+        //    var nid = dfnodes.GetStringCol("osm_nid");
+        //    var nodedict = new Dictionary<string, int>();
+        //    for (int idx = 0; idx < dfnodes.Nrow(); idx++)
+        //    {
+        //        nodedict[nid[idx]] = idx;
+        //    }
+        //    var blddf = SimpleDf.SubsetOnStringColVal(dfways, "osmtype", "building");
+        //    Debug.Log($"Found {blddf.Nrow()} buildings in dfways");
+        //    var bldtyp = blddf.GetStringCol("osmsubtype");
+        //    var bldwids = blddf.GetStringCol("osm_wid");
+        //    var bldnames = blddf.GetStringCol("name");
+        //    var bldheights = blddf.GetFloatCol("height");
+        //    var bldlevels = blddf.GetIntCol("levels");
+        //    var bldlat = blddf.GetDoubleCol("lat");
+        //    var bldlng = blddf.GetDoubleCol("lng");
+        //    var bldz = blddf.GetFloatCol("z");
+        //    var bldx = blddf.GetIntCol("x");
+        //    int i = 0;
+        //    foreach (var bwid in bldwids)
+        //    {
+        //        var bname = bldnames[i];
+        //        var btype = bldtyp[i];
+        //        var bheit = bldheights[i];
+        //        var blevs = bldlevels[i];
+        //        var bllat = (bldlat == null ? 0 : bldlat[i]);
+        //        var bllng = (bldlng == null ? 0 : bldlng[i]);
+        //        var blz = (bldz == null ? 0 : bldz[i]);
+        //        var blx = (bldx == null ? 0 : bldx[i]);
+        //        var bldwalldf = SimpleDf.SubsetOnStringColVal(dflinks, "osm_wid", bwid);
+        //        //Debug.Log($"Found {bldwalldf.Nrow()} links for bld wid:{bwid} name:{bname}");
+        //        var bs = new OsmBldSpec(bname, btype, bwid, bheit, blevs, bscale: ptscale);
+        //        bs.AddPos(bllat, bllng, blx, blz);
+        //        var nodeoutline = ExtractNodes(bname, bwid, bldwalldf, dfnodes, nodedict);
+        //        var area = GrafPolyGen.CalcAreaWithYup(nodeoutline);
+        //        if (area < 0)
+        //        {
+        //            nodeoutline.Reverse();
+        //        }
+        //        bs.SetOutline(nodeoutline);
+        //        rv.Add(bs);
+        //        i++;
+        //    }
+        //    var nbld = i;
+        //    sw.Stop();
+        //    Debug.Log($"LoadBuilding from simpledfs generating {nbld} buildings took {sw.ElapSecs()} secs");
+        //    return rv;
+        //}
+
+        public LinkUse CvtLinkUse(string s,LinkUse def)
+        {
+            var rv = def;
+            switch (s)
+            {
+                case "bldwall": 
+                    rv = LinkUse.bldwall;
+                     break;
+                default:
+                    Debug.LogWarning($"CvtLinkUse:Unknown linktype:{s}");
+                    rv = def;
+                    break;
+                case "road":
+                    rv = LinkUse.road;
+                    break;
+                case "slowroad":
+                    rv = LinkUse.slowroad;
+                    break;
+                case "driveway":
+                    rv = LinkUse.driveway;
+                    break;
+                case "highway":
+                    rv = LinkUse.highway;
+                    break;
+                case "walkway":
+                    rv = LinkUse.walkway;
+                    break;
+            }
+            return rv;
+        }
+        public void CreateGraphForOsmImport_msft_streets_df(string regionname,string color)
+        {
+            Debug.Log($"CreateGraphForOsmImport_msft_streets_df");
+            grc.regman.NewNodeRegion(regionname,color, saveToFile: true);
+            var sman = GameObject.FindObjectOfType<SceneMan>();
+            var (nnodes,nlinks) = (0,0);
+            var (dfwayslst, dflinkslist, dfnodeslist) = sman.dfman.GetSdfs();
+            for (int idf = 0; idf < dfwayslst.Count; idf++)
+            {
+                // Nodes
+                var dfnode = dfnodeslist[idf];
+                var nidcol = dfnode.ColIdx("osm_nid");
+                var nixcol = dfnode.ColIdx("x");
+                var nizcol = dfnode.ColIdx("z");
+                var nnrow = dfnode.Nrow();
+                for (int i = 0; i < nnrow; i++)
+                {
+                    var nid = dfnode.GetVal(nidcol, i, "");
+                    var x = dfnode.GetVal(nixcol, i, 0.0);
+                    var z = dfnode.GetVal(nizcol, i, 0.0);
+                    grc.AddNodePtxz(nid, x, z);
+                    nnodes++;
+                }
+                // Links
+                var dflink = dflinkslist[idf];
+                var lidcol = dflink.ColIdx("osm_wid");
+                var lin1col = dflink.ColIdx("osm_nid_1");
+                var lin2col = dflink.ColIdx("osm_nid_2");
+                var liutcol = dflink.ColIdx("linkuse");
+                var lictcol = dflink.ColIdx("comment");
+                var nlrow = dflink.Nrow();
+                bool dowalls = sman.bdman.walllinks.Get();
+                for (int i = 0; i < nlrow; i++)
+                {
+                    nlinks++;
+                    var lid = dflink.GetVal(lidcol, i, "");
+                    var nid1 = dflink.GetVal(lin1col, i, "");
+                    var nid2 = dflink.GetVal(lin2col, i, "");
+                    var lts = dflink.GetVal(liutcol, i, "");
+                    var cmt = dflink.GetVal(lictcol, i, "");
+                    var linktyp = CvtLinkUse(lts, LinkUse.road);
+                    if (dowalls || linktyp != LinkUse.bldwall)
+                    {
+                        grc.AddLinkByNodeName(nid1, nid2, usetype: linktyp, comment: cmt);
+                    }
+                }
+            }
+            grc.regman.SetRegion("default");
+            Debug.Log($"CreateGraphForOsmImport_msft_streets_df added nodes:{nnodes} links:{nlinks}");
+        }
+        public void CreateGraphForOsmImport_msft_streets()  // machine generated - do not edit
         {
             grc.regman.NewNodeRegion("msft-campus", "blue", saveToFile: true);
             grc.AddNodePtxz("osm3801669054", 540.528, -490.249);

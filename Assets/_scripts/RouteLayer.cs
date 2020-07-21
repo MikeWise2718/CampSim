@@ -9,10 +9,10 @@ namespace CampusSimulator
     {
 
         // Use this for initialization
-        void Start()
-        {
+        //void Start()
+        //{
 
-        }
+        //}
         public bool nearestNode; //"run" or "generate" for example
         public bool buttonDisplayName2; //supports multiple buttons	
                                         // Update is called once per frame

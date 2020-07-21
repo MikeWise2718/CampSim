@@ -195,9 +195,11 @@ namespace Aiskwk.Map
             this.mapprov = mapprov;
             this.elevprov = elevprov;
             this.levelOfDetail = llbox.lod;
-            this.llmapqkcoords = this.gameObject.AddComponent<LatLongMap>();
+            //this.llmapqkcoords = this.gameObject.AddComponent<LatLongMap>();
+            this.llmapqkcoords = new LatLongMap();
             llmapqkcoords.InitMapCoords("");
-            this.llmapuscoords = this.gameObject.AddComponent<LatLongMap>();
+            //this.llmapuscoords = this.gameObject.AddComponent<LatLongMap>();
+            this.llmapuscoords = new LatLongMap();
             llmapuscoords.InitMapCoords("");
             this.qmapElev = gameObject.AddComponent<QmapElevation>();
             this.qkm = new QkMan(this, this.mapcoordname, mapprov, llbox);
@@ -447,10 +449,17 @@ namespace Aiskwk.Map
             return rv;
         }
 
-        public (Vector3 meshpos, Vector3 normal, int istat) GetWcMeshPosProjectedAlongYnew(Vector3 wcpos, QkCoordSys coordsys = QkCoordSys.UserWc, bool db =false)
+        public (Vector3 meshpos, Vector3 normal, int istat) GetWcMeshPosProjectedAlongYnew(Vector3 wcpos, QkCoordSys coordsys = QkCoordSys.UserWc, bool db =false, bool cliptocorners=false)
         {
             var ll = GetLngLatNew(wcpos,coordsys:coordsys);
             var (lambx, lambz) = GetLambMeshPosFromLatLng(ll);
+            if (cliptocorners)
+            {
+                if (lambx < 0) lambx = 0;
+                if (lambx > 1) lambx = 1;
+                if (lambz < 0) lambz = 0;
+                if (lambz > 1) lambz = 1;
+            }
             var (meshpos, nrm, istat) = GetWcMeshPosFromLambda(lambx, lambz);
             if (db)
             {
@@ -464,13 +473,19 @@ namespace Aiskwk.Map
             var nmeshpos = new Vector3(wcpos.x, meshpos.y, wcpos.z);
             return (nmeshpos, nrm, istat);
         }
-        public LatLng GetLngLatNew(Vector3 wcpos, QkCoordSys coordsys)
+        public LatLongMap GetLatLongMap(QkCoordSys coordsys)
         {
             var llmap = llmapyacoords;
-            if (llmap==null || !llmap.isInited || coordsys== QkCoordSys.QkWc)
+            if (llmap == null || !llmap.isInited || coordsys == QkCoordSys.QkWc)
             {
                 llmap = llmapqkcoords;
             }
+            return llmap;
+        }
+        public LatLng GetLngLatNew(Vector3 wcpos, QkCoordSys coordsys)
+        {
+
+            var llmap = GetLatLongMap(coordsys);
             // long lat from world position
             var nlat = llmap.maps.latmap.Map(wcpos.x, wcpos.z);
             var nlng = llmap.maps.lngmap.Map(wcpos.x, wcpos.z);
@@ -1163,7 +1178,8 @@ namespace Aiskwk.Map
         {
             var cnt = llmapqkcoords.mapcoord.mapdata.Count;
             //Debug.Log($"CalcYaLLmap llmapqk pts:{cnt}");
-            var llya= this.gameObject.AddComponent<LatLongMap>();
+            //var llya= this.gameObject.AddComponent<LatLongMap>();
+            var llya = new LatLongMap();
             llya.InitMapCoords();
             int i = 0;
             foreach (var md in llmapqkcoords.mapcoord.mapdata)

@@ -29,11 +29,11 @@ namespace CampusSimulator
         public int nodeTransformSetCount;
         public string lastmsg;
 
-        void Start()
-        {
+        //void Start()
+        //{
 
 
-        }
+        //}
 
         // Update is called once per frame
         void Update()

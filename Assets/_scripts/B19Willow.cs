@@ -14,6 +14,7 @@ public class B19Willow : MonoBehaviour
     public UxSetting<bool> hvac = new UxSetting<bool>("B19_hvac", true);
     public UxSetting<bool> floors = new UxSetting<bool>("B19_floors", true);
     public UxSetting<bool> doors = new UxSetting<bool>("B19_doors", true);
+    public UxSetting<bool> osmbld = new UxSetting<bool>("B19_osmbld", false);
 
     public CampusSimulator.SceneMan sman=null;
 
@@ -21,12 +22,6 @@ public class B19Willow : MonoBehaviour
     //   public UxSetting<bool> visibilityTiedToDetectability = new UxSetting<bool>("FrameVisibilityTiedToDetectability", true);
     // public B19_MaterialMode materialMode = B19_MaterialMode.materialed;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-
-
-    }
 
     public void InitializeValues(CampusSimulator.SceneMan sman)
     {
@@ -39,6 +34,8 @@ public class B19Willow : MonoBehaviour
         _b19_hvac = hvac.GetInitial(false);
         _b19_floors = floors.GetInitial(false);
         _b19_doors = doors.GetInitial(false);
+        _b19_osmbld = osmbld.GetInitial(false);
+        lastMaterialMode = b19_materialMode.Get();
     }
 
 
@@ -50,7 +47,10 @@ public class B19Willow : MonoBehaviour
     bool _b19_hvac = false;
     bool _b19_floors = false;
     bool _b19_doors = false;
-    GameObject willgo = null;
+    bool _b19_osmbld = false;
+    B19_MaterialMode lastMaterialMode;
+
+    GameObject b19go = null;
 
 
 
@@ -88,24 +88,22 @@ public class B19Willow : MonoBehaviour
             chg = true;
             //Debug.Log("floors");
         }
+        if (osmbld.Get() != _b19_osmbld)
+        {
+            chg = true;
+            //Debug.Log("floors");
+        }
+        if (b19_materialMode.Get()!= lastMaterialMode)
+        {
+            chg = true;
+        }
         return chg;
     }
 
-    void SetChildrenVis(string childname, bool active)
-    {
-        GameObject[] children = willgo.transform.GetComponentsInChildren<GameObject>();
-        foreach (var goc in children)
-        {
-            if (goc.name == childname)
-            {
-                goc.SetActive(active);
-            }
-        }
-    }
 
     void SetChildVis2(string childname, string grandchildname, bool active)
     {
-        var legot = willgo.transform.Find(childname);
+        var legot = b19go.transform.Find(childname);
         if (legot != null)
         {
             var legot2 = legot.transform.Find(grandchildname);
@@ -118,14 +116,30 @@ public class B19Willow : MonoBehaviour
 
     void SetChildVis(string childname,bool active)
     {
-        var legot = willgo.transform.Find(childname);
+        var legot = b19go.transform.Find(childname);
         if (legot!=null)
         {
             legot.gameObject.SetActive(active);
         }
     }
+
+    public void DestroyOneGo(ref GameObject bgo)
+    {
+        if (bgo != null)
+        {
+            Destroy(bgo);
+            bgo = null;
+        }
+    }
+
+    public void DestroyGos()
+    {
+        DestroyOneGo(ref b19go);
+    }
+
     public void MakeItSo()
     {
+        bool loadedThisTime  = false;
         //Debug.Log($"MakeItSo loadModel:{loadmodel.Get()} _b19WillowModel:{_b19_WillowModelLoaded}");
         if (loadmodel.Get() && !_b19_WillowModelLoaded)
         {
@@ -139,31 +153,26 @@ public class B19Willow : MonoBehaviour
                 //Debug.Log($"B19 yoff:{yoff}");
                 defpos = new Vector3(defpos.x, yoff+defpos.y, defpos.z);
             }
-            var obprefab = Resources.Load<GameObject>("Willow/B19-Willow");
-            willgo = Instantiate<GameObject>(obprefab);
+            var obprefab = Resources.Load<GameObject>("Willow/B19/B19-Willow");
+            b19go = Instantiate<GameObject>(obprefab);
             var ftm = 0.3048f;
-            willgo.transform.localScale = new Vector3(ftm,ftm,ftm);
-            willgo.transform.position = defpos;
-            willgo.transform.Rotate(new Vector3(-90, 26, 0));
-            willgo.transform.parent = this.transform;
+            b19go.transform.localScale = new Vector3(ftm,ftm,ftm);
+            b19go.transform.position = defpos;
+            b19go.transform.Rotate(new Vector3(-90, 26, 0));
+            b19go.transform.parent = this.transform;
             _b19_WillowModelLoaded = true;
-            level01.SetAndSave( true );
             _b19_level01 = true;
-            level02.SetAndSave( false );
             _b19_level02 = true;
-            level03.SetAndSave( false );
             _b19_level03 = true;
-            floors.SetAndSave( false );
             _b19_floors = true;
-            doors.SetAndSave( false );
             _b19_doors = true;
-            hvac.SetAndSave( false );
             _b19_hvac = true;
+            _b19_osmbld = sman.bdman.osmblds.Get();
+            loadedThisTime = true;
         }
         else if(!loadmodel.Get() && _b19_WillowModelLoaded)
         {
-            Destroy(willgo);
-            willgo = null;
+            DestroyGos();
             loadmodel.SetAndSave( false );
             _b19_WillowModelLoaded = false;
             level01.SetAndSave( false );
@@ -174,62 +183,79 @@ public class B19Willow : MonoBehaviour
             _b19_level03 = false;
             hvac.SetAndSave( false );
             _b19_hvac = false;
-
+            _b19_osmbld = sman.bdman.osmblds.Get(); 
         }
-        if (willgo && level01.Get() != _b19_level01)
+        if (b19go)
         {
-            //Debug.Log("Fixing 1");
-            var stat = level01.Get();
-            SetChildVis("L01-AR", stat);
-            //SetChildVis("L01-ME", stat);
-            _b19_level01 = stat;
-        }
-        if (willgo && level02.Get() != _b19_level02)
-        {
-            //Debug.Log("Fixing 2");
-            var stat = level02.Get();
-            SetChildVis("L02-AR", stat);
-            //SetChildVis("L02-ME", stat);
-            _b19_level02 = stat;
-        }
-        if (willgo && level03.Get() != _b19_level03)
-        {
-            //Debug.Log("Fixing 3");
-            var stat = level03.Get();
-            SetChildVis("L03-AR", stat);
-            //SetChildVis("L03-ME", stat);
-            _b19_level03 = stat;
-        }
-        if (willgo && floors.Get() != _b19_floors)
-        {
-            //Debug.Log("Fixing floors");
-            var stat = floors.Get();
-            SetChildVis2("L01-AR", "Solid", stat);
-            SetChildVis2("L02-AR", "Solid", stat);
-            SetChildVis2("L03-AR", "Solid", stat);
-            _b19_floors = stat;
-        }
-        if (willgo && doors.Get() != _b19_doors)
-        {
-            //Debug.Log("Fixing doors");
-            var stat = doors.Get();
-            SetChildVis2("L01-AR", "Composite_Part", stat);
-            SetChildVis2("L02-AR", "Composite_Part", stat);
-            SetChildVis2("L03-AR", "Composite_Part", stat);
-            _b19_doors = stat;
-        }
-        if (willgo && hvac.Get() != _b19_hvac)
-        {
-            //Debug.Log("Fixing hvac");
-            var stat = hvac.Get();
-            SetChildVis("L01-ME", stat);
-            SetChildVis("L02-ME", stat);
-            SetChildVis("L03-ME", stat);
-            _b19_hvac = stat;
-        }
-        if (willgo)
-        {
-            ActuateMaterialMode();
+            if (osmbld.Get() != _b19_osmbld)
+            {
+                var stat = osmbld.Get();
+                var bspec = sman.bdman.FindBldSpecByNameStart("Microsoft Building 19 ");
+                if (bspec != null)
+                {
+                    if (bspec.bgo != null)
+                    {
+                        bspec.bgo.SetActive(stat);
+                    }
+                }
+                _b19_osmbld = stat;
+            }
+            if (level01.Get() != _b19_level01)
+            {
+                //Debug.Log("Fixing 1");
+                var stat = level01.Get();
+                SetChildVis("L01-AR", stat);
+                //SetChildVis("L01-ME", stat);
+                _b19_level01 = stat;
+            }
+            if (level02.Get() != _b19_level02)
+            {
+                //Debug.Log("Fixing 2");
+                var stat = level02.Get();
+                SetChildVis("L02-AR", stat);
+                //SetChildVis("L02-ME", stat);
+                _b19_level02 = stat;
+            }
+            if (level03.Get() != _b19_level03)
+            {
+                //Debug.Log("Fixing 3");
+                var stat = level03.Get();
+                SetChildVis("L03-AR", stat);
+                //SetChildVis("L03-ME", stat);
+                _b19_level03 = stat;
+            }
+            if (floors.Get() != _b19_floors)
+            {
+                //Debug.Log("Fixing floors");
+                var stat = floors.Get();
+                SetChildVis2("L01-AR", "Solid", stat);
+                SetChildVis2("L02-AR", "Solid", stat);
+                SetChildVis2("L03-AR", "Solid", stat);
+                _b19_floors = stat;
+            }
+            if (doors.Get() != _b19_doors)
+            {
+                //Debug.Log("Fixing doors");
+                var stat = doors.Get();
+                SetChildVis2("L01-AR", "Composite_Part", stat);
+                SetChildVis2("L02-AR", "Composite_Part", stat);
+                SetChildVis2("L03-AR", "Composite_Part", stat);
+                _b19_doors = stat;
+            }
+            if (hvac.Get() != _b19_hvac)
+            {
+                //Debug.Log("Fixing hvac");
+                var stat = hvac.Get();
+                SetChildVis("L01-ME", stat);
+                SetChildVis("L02-ME", stat);
+                SetChildVis("L03-ME", stat);
+                _b19_hvac = stat;
+            }
+            if (loadedThisTime || lastMaterialMode != b19_materialMode.Get())
+            {
+                ActuateMaterialMode();
+                lastMaterialMode = b19_materialMode.Get();
+            }
         }
     }
 
@@ -349,16 +375,16 @@ public class B19Willow : MonoBehaviour
 
     public void WriteOutPartsAndMaterials()
     {
-        if (this.willgo == null)
+        if (this.b19go == null)
         {
-            this.willgo = GameObject.Find("B19-Willow");
+            this.b19go = GameObject.Find("B19-Willow");
         }
-        if (this.willgo == null)
+        if (this.b19go == null)
         {
             Debug.Log("Cound not find B19-Willow");
             return;
         }
-        var lst = GraphAlgos.GraphUtil.HierarchyDescToText(this.willgo, "");
+        var lst = GraphAlgos.GraphUtil.HierarchyDescToText(this.b19go, "");
         var fname = "B19materials.txt";
         GraphAlgos.GraphUtil.writeListToFile(lst, fname);
         Debug.Log("Wrote " + lst.Count + " lines to " + fname);
@@ -409,13 +435,13 @@ public class B19Willow : MonoBehaviour
         }
     }
 
-    public void ActuateMaterialMode()
+    public void ActuateMaterialMode(bool writepartlisttofile=false)
     {
-        if (this.willgo == null)
+        if (this.b19go == null)
         {
-            this.willgo = GameObject.Find("B19-Willow");
+            this.b19go = GameObject.Find("B19-Willow");
         }
-        if (this.willgo == null)
+        if (this.b19go == null)
         {
             Debug.Log("Cound not find B19-Willow");
             return;
@@ -451,33 +477,42 @@ public class B19Willow : MonoBehaviour
                     matname = "";
                     break;
             }
-            AssignPartMat(this.willgo,partname, matname);
+            AssignPartMat(this.b19go,partname, matname);
         }
-        //var lst = GraphAlgos.GraphUtil.HierarchyDescToText(this.willgo, "");
-        //var fname = "B19materials.txt";
-        //GraphAlgos.GraphUtil.writeListToFile(lst, fname);
-        //Debug.Log("Wrote " + lst.Count + " lines to " + fname);
+        if (writepartlisttofile)
+        {
+            var lst = GraphAlgos.GraphUtil.HierarchyDescToText(this.b19go, "");
+            var fname = "B19materials.txt";
+            GraphAlgos.GraphUtil.writeListToFile(lst, fname);
+            Debug.Log($"Wrote {lst.Count} lines to {fname}");
+        }
     }
 
-    B19_MaterialMode lastMaterialMode;
+    public bool ActuateChange()
+    {
+        var rv = ChangeHappened();
+        if (rv)
+        {
+            MakeItSo();
+        }
+        return rv;
+    }
+
+
     int updcount = 0;
+    float timeinterval = 1e6f;
+    float lasttimecheck = 0;
 
     // Update is called once per frame
     void Update()
     {
-        if (updcount==0)
+        if (Time.time - lasttimecheck > timeinterval)
         {
-            lastMaterialMode = b19_materialMode.Get();
-        }
-        if (ChangeHappened())
-        {
-            //Debug.Log("ChangeHappened");
-            MakeItSo();
-        }
-        if (willgo && lastMaterialMode!=b19_materialMode.Get())
-        {
-            ActuateMaterialMode();
-            lastMaterialMode = b19_materialMode.Get();
+            if (ChangeHappened())
+            {
+                Debug.Log($"ChangeHappened to B19 upd:{updcount}");
+                MakeItSo();
+            }
         }
         updcount++;
     }

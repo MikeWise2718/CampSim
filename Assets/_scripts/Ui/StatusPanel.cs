@@ -239,7 +239,7 @@ namespace CampusSimulator
         public void QuitButton()
         {
             Debug.Log($"Activating QuitButton");
-            Application.Quit();
+            sman.Quit();
         }
 
         public void ColorizeButtonStates()

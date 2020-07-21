@@ -7,6 +7,7 @@ using UnityEngine.Windows.Speech;
 #endif
 using System.Linq;
 using GraphAlgos;
+using UnityEngine.Analytics;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -16,7 +17,7 @@ namespace CampusSimulator
 {
     public enum RouteGarnishE { none, names, coords, all }
 
-    public enum SceneSelE { MsftCoreCampus, MsftB19focused, MsftRedwest, Custom, Seattle, MtStHelens,Riggins, Eb12,Eb12small,  MsftDublin, Tukwila, None }
+    public enum SceneSelE { MsftCoreCampus, MsftB121focused, MsftB19focused, MsftRedwest,MsftMountainView, Custom, Seattle, MtStHelens,Riggins, Eb12,Eb12small,  MsftDublin, TukSouCen, HiddenLakeLookout,TeneriffeMtn,SanFrancisco,Frankfurt, None }
 
     public class SceneMan : MonoBehaviour
     {
@@ -104,6 +105,7 @@ namespace CampusSimulator
 
         public GarageMan gaman;
         public BuildingMan bdman;
+        public StreetMan stman;
         public MapMan mpman;
         public JourneyMan jnman;
         public VidcamMan vcman;
@@ -113,6 +115,7 @@ namespace CampusSimulator
         public ZoneMan znman;
         public FrameMan frman;
         public CalibMan cbman;
+        public DataFileMan dfman;
         public UiMan uiman;
         public string runtimestamp = DateTime.UtcNow.ToString("yyyyMMdd-HHmmss");
         public string simrundir;
@@ -162,7 +165,7 @@ namespace CampusSimulator
             keyman = new KeywordMan(this);
 #endif
 
-            rmango.AddComponent<LatLongMap>();
+            //rmango.AddComponent<LatLongMap>(); no longer monobehavior
 
             // Create game object to hold actual game objects
             rgo = new GameObject("Rgo");
@@ -189,6 +192,7 @@ namespace CampusSimulator
             mpman = FindObjectOfType<MapMan>();
             vcman = FindObjectOfType<VidcamMan>();
             bdman = FindObjectOfType<BuildingMan>();
+            stman = FindObjectOfType<StreetMan>();
             gaman = FindObjectOfType<GarageMan>();
             znman = FindObjectOfType<ZoneMan>();
             jnman = FindObjectOfType<JourneyMan>();
@@ -197,10 +201,12 @@ namespace CampusSimulator
             psman = FindObjectOfType<PersonMan>();
             veman = FindObjectOfType<VehicleMan>();
             frman = FindObjectOfType<FrameMan>();
+            dfman = FindObjectOfType<DataFileMan>();
 
             uiman.sman = this;
             mpman.sman = this;
             vcman.sman = this;
+            stman.sman = this;
             bdman.sman = this;
             gaman.sman = this;
             znman.sman = this;
@@ -209,6 +215,7 @@ namespace CampusSimulator
             psman.sman = this;
             veman.sman = this;
             frman.sman = this;
+            dfman.sman = this;
 
             bool subbordinatethemall = false;
             if (subbordinatethemall)
@@ -217,6 +224,7 @@ namespace CampusSimulator
                 mpman.transform.parent = rgo.transform;
                 vcman.transform.parent = rgo.transform;
                 bdman.transform.parent = rgo.transform;
+                stman.transform.parent = rgo.transform;
                 gaman.transform.parent = rgo.transform;
                 znman.transform.parent = rgo.transform;
                 jnman.transform.parent = rgo.transform;
@@ -224,16 +232,18 @@ namespace CampusSimulator
                 psman.transform.parent = rgo.transform;
                 veman.transform.parent = rgo.transform;
                 frman.transform.parent = rgo.transform;
+                dfman.transform.parent = rgo.transform;
             }
 
             mpman.InitPhase0();
+            bdman.InitPhase0();
+            stman.InitPhase0();
             vcman.InitPhase0();
             uiman.InitPhase0();
+            dfman.InitPhase0();
         }
 
-        void InitPhase1()
-        {
-        }
+
         public void InitializeScene(SceneSelE newscene)
         {
             // Here we do two things
@@ -270,9 +280,15 @@ namespace CampusSimulator
 
                     // Now do value initialization 
                     this.InitializeScene(newscene);// start with setting the scene
-                    mpman.InitializeScene(newscene);
+                    //glbllm = rmango.AddComponent<LatLongMap>();
+                    glbllm = new LatLongMap();
+                    glbllm.InitMapFromSceneSelString(newscene.ToString());
+
+                    mpman.InitializeScene(newscene); // Note this has an await buried in it and afterwards a call to smam.PostMapLoadSetScene below
+                    dfman.InitializeScene(newscene);
                     vcman.InitializeScene(newscene);
                     bdman.InitializeScene(newscene);
+                    stman.InitializeScene(newscene);
                     gaman.InitializeScene(newscene);
                     znman.InitializeScene(newscene);
                     psman.InitializeScene(newscene);
@@ -282,10 +298,10 @@ namespace CampusSimulator
                     frman.InitializeScene(newscene);
                     uiman.InitializeScene(newscene);
 
-
                     // Now construct our graphical objects
-                    glbllm = rmango.AddComponent<LatLongMap>();
-                    glbllm.InitMapFromSceneSel(newscene.ToString(),0); 
+
+
+                    dfman.SetScene(newscene); // should be early to setup data
 
 
                     mpman.SetScene(newscene);
@@ -293,6 +309,7 @@ namespace CampusSimulator
                     gaman.SetScene(newscene);
 
                     bdman.SetScene(newscene);// building details, but no nodes and links
+                    stman.SetScene(newscene);
 
                     lcman.SetScene(newscene); // create or read in most nodes and links
                                               // currently needs to happen after buildings and garages are setup
@@ -311,7 +328,8 @@ namespace CampusSimulator
                     uiman.SetScene(newscene);
 
                     lcman.SetScene3(newscene);  // realize latelinks    
-                    //Debug.Log("SetScene finished");
+                    lcman.DeleteUnconnectedNodes();
+                    Debug.Log($"SceneMan.SetScene {newscene} finished");
                 }
                 catch(Exception ex)
                 {
@@ -328,6 +346,20 @@ namespace CampusSimulator
         public void PostMapLoadSetScene()
         {
             vcman.PostTerrainLoadAdjustments();
+        }
+
+        public void SaveSceneState()
+        {
+            mpman.SaveSceneState();
+        }
+
+        public void Quit()
+        {
+            SaveSceneState();
+            Application.Quit();
+#if UNITY_EDITOR
+            EditorApplication.ExecuteMenuItem("Edit/Play");
+#endif
         }
 
 
@@ -1346,7 +1378,10 @@ namespace CampusSimulator
             gaman.RefreshGos();
             bdman.RefreshGos();
             vcman.RefreshGos();
-            cbman?.RefreshGos();
+            if (cbman != null)
+            {
+                cbman.RefreshGos();
+            }
 
             // We have to do it afterwards - that is the trick :)
             rgo.transform.localScale = new Vector3(rgoScale, rgoScale, rgoScale);
@@ -1450,7 +1485,7 @@ namespace CampusSimulator
         }
         public static SceneSelE GetInitialSceneOption()
         {
-            var einival = SceneSelE.MsftB19focused; // default scene
+            var einival = SceneSelE.MsftB121focused; // default scene
             if (PlayerPrefs.HasKey(initialSceneOptionsKey))
             {
                 var inival = PlayerPrefs.GetString(initialSceneOptionsKey, "");
@@ -1470,7 +1505,6 @@ namespace CampusSimulator
             Debug.Log("SceneMan.Start called");
             IdentitySystemAndUser();
             InitPhase0();
-            InitPhase1();
             var esi = SceneMan.GetInitialSceneOption();
             curscene = SceneSelE.None; // force it to execute - kind of a kludge
             SetScene(esi);
@@ -1562,7 +1596,7 @@ namespace CampusSimulator
                 if ((Time.time - ctrlQhitTime) < 1)
                 {
                     Debug.Log("Hit it twice so quitting: Application.Quit()");
-                    Application.Quit();
+                    Quit();
                 }
                 // CTRL + Q
                 ctrlQhitTime = Time.time;
@@ -1579,10 +1613,10 @@ namespace CampusSimulator
                 // CTRL + C
                 ctrlChitTime = Time.time;
             }
-            if (ctrlhit &&  Input.GetKeyDown(KeyCode.D))
+            if (ctrlhit && Input.GetKeyDown(KeyCode.D))
             {
                 Debug.Log("Hit LCtrl-D");
-                if ((Time.time - ctrlDhitTime)<1)
+                if ((Time.time - ctrlDhitTime) < 1)
                 {
                     // must have hit it twice
                     psman.EverybodyDance();
