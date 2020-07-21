@@ -47,6 +47,11 @@ namespace CampusSimulator
             l.RemoveAll(item => !item.StartsWith(filter));
             return l;
         }
+        List<string> B121roomspec = new List<string>()
+        {
+            "b121-f01-lobby:6:-18.5:4:4:T",
+        };
+
         // defPeoplePerRoom = 8;
         // defPercentFull = 0.80f;
         // defRoomArea = 16;
@@ -146,8 +151,8 @@ namespace CampusSimulator
                     }
                 case "Bld121":
                     {
-                        //maingaragename = "Garage19_1";
-                        //roomspecs = B121roomspec;
+                        maingaragename = "Garage121_1";
+                        roomspecs = B121roomspec;
                         destnodes = SplitOutDestNodes(roomspecs);
                         shortname = "b121";
                         journeyChoiceWeight = 20;

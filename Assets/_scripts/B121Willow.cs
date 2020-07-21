@@ -112,14 +112,14 @@ public class B121Willow : MonoBehaviour
 
 
 
-    public GameObject LoadObject(GameObject parent,string resourcename,string objname,float ska=1,float xrot=0)
+    public GameObject LoadObjFile(GameObject parent,string resourcename,string objname,float ska=1,float xrot=0, float xoff = 0, float yoff = 0,float zoff=0)
     {
         var obprefab = Resources.Load<GameObject>(resourcename);
         var objgo = Instantiate<GameObject>(obprefab);
         var ftm = ska;
         objgo.name = objname;
         objgo.transform.localScale = new Vector3(ftm, ftm, ftm);
-        objgo.transform.position = Vector3.zero;
+        objgo.transform.position = new Vector3(xoff,yoff,zoff);
         objgo.transform.Rotate(new Vector3(xrot, 0, 0));
         objgo.transform.SetParent(parent.transform,worldPositionStays:false);
         return objgo;
@@ -151,7 +151,7 @@ public class B121Willow : MonoBehaviour
         {
             b121go = new GameObject("B121-Willow");
             var xofs = 0;
-            var yofs = 0;
+            var yofs = -1;
             //var yoff = 5.8f;
             var zofs = 0;
             Vector3 defpos = new Vector3(-789 + xofs, yofs, -436 + zofs);
@@ -213,13 +213,18 @@ public class B121Willow : MonoBehaviour
                 }
                 _b121_osmbld = stat;
             }
+            var bshellska = 0.025f;
+            var bang = -90;
+            var bxoff = 1.6f;
+            var bzoff = 1.3f;
+
             if (shell.Get() != _b121_shell)
             {
                 var stat = shell.Get();
                 //b121sgo.SetActive(stat);
                 if (stat)
                 {
-                    b121sgo = LoadObject(b121go, "Willow/B121/1716045-BH-AR-BASE_R20", "shell", ska: 0.025f);
+                    b121sgo = LoadObjFile(b121go, "Willow/B121/1716045-BH-AR-BASE_R20", "shell", ska: bshellska);
                     loadedThisTime = true;
                 }
                 else
@@ -228,12 +233,13 @@ public class B121Willow : MonoBehaviour
                 }
                 _b121_shell = stat;
             }
+
             if (interiorwalls.Get() != _b121_interiorwalls)
             {
                 var stat = interiorwalls.Get();
                 if (stat)
                 {
-                    b121igo = LoadObject(b121go, "Willow/B121/1716045-BH-AR-INTERIOR_R20", "interior", ska: 0.025f);
+                    b121igo = LoadObjFile(b121go, "Willow/B121/1716045-BH-AR-INTERIOR_R20", "interior", ska: bshellska);
                     loadedThisTime = true;
                 }
                 else
@@ -247,7 +253,7 @@ public class B121Willow : MonoBehaviour
                 var stat = hvac.Get();
                 if (stat)
                 {
-                    b121hgo = LoadObject(b121go, "Willow/B121/1716045-BH-HVAC-B121_2020", "hvac", xrot: -90);
+                    b121hgo = LoadObjFile(b121go, "Willow/B121/1716045-BH-HVAC-B121_2020", "hvac", xrot: bang, zoff:bzoff, xoff:bxoff);
                     loadedThisTime = true;
                 }
                 else
@@ -261,7 +267,7 @@ public class B121Willow : MonoBehaviour
                 var stat = lighting.Get();
                 if (stat)
                 {
-                    b121lgo = LoadObject(b121go, "Willow/B121/1716045-BH-LIGHTING-B121_2020", "lighting", xrot: -90);
+                    b121lgo = LoadObjFile(b121go, "Willow/B121/1716045-BH-LIGHTING-B121_2020", "lighting", xrot:bang, zoff: bzoff, xoff: bxoff);
                     loadedThisTime = true;
                 }
                 else
@@ -275,7 +281,7 @@ public class B121Willow : MonoBehaviour
                 var stat = plumbing.Get();
                 if (stat)
                 {
-                    b121pgo = LoadObject(b121go, "Willow/B121/1716045-BH-PLUMBING-B121_2020", "plumbing", xrot: -90);
+                    b121pgo = LoadObjFile(b121go, "Willow/B121/1716045-BH-PLUMBING-B121_2020", "plumbing", xrot: bang, zoff: bzoff, xoff: bxoff);
                     loadedThisTime = true;
                 }
                 else
@@ -292,10 +298,7 @@ public class B121Willow : MonoBehaviour
             }
         }
     }
-
  
-
-
     public void WriteOutPartsAndMaterials()
     {
         if (this.b121sgo == null)

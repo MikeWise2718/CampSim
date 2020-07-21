@@ -229,3 +229,49 @@ B121-Willow/interior/Z_SE_Restroom_Feminine_Vending_WH_Z_SE_Restroom_Feminine_Ve
 B121-Willow/interior/Z_SE_Single_Robe_Hook_WH_ADA_Height__,7
 B121-Willow/interior/ZONE_A_HUT_JOINT_ZONE_A_HUT_JOINT__,1
 B121-Willow/interior/Zone_C___LEvel_,3
+B121-Willow/hvac/,56
+B121-Willow/hvac/AHU, m:Aluminium (Instance),1
+B121-Willow/hvac/AHU_L.R.,2
+B121-Willow/hvac/CU, m:Aluminium (Instance),1
+B121-Willow/hvac/Default, m:Aluminium (Instance),1
+B121-Willow/hvac/EF.LR.,1
+B121-Willow/hvac/FCU, m:Aluminium (Instance),1
+B121-Willow/hvac/Flex_-_Round, m:Aluminium (Instance),1
+B121-Willow/hvac/Gored_Elbows_,1
+B121-Willow/hvac/Horizontal, m:Aluminium (Instance),1
+B121-Willow/hvac/LEVEL_,3
+B121-Willow/hvac/LEVEL_REFERENCE, m:Aluminium (Instance),1
+B121-Willow/hvac/Mass_,1
+B121-Willow/hvac/Mitered_Elbows_,1
+B121-Willow/hvac/Outdoor_Unit, m:Aluminium (Instance),1
+B121-Willow/hvac/Radius_Elbows_,1
+B121-Willow/hvac/ROOF, m:Aluminium (Instance),1
+B121-Willow/hvac/Size_,1
+B121-Willow/hvac/Standard, m:Aluminium (Instance),1
+B121-Willow/hvac/T.,1
+B121-Willow/hvac/T.O._PARAPET, m:Aluminium (Instance),1
+B121-Willow/hvac/Taps, m:Aluminium (Instance),1
+B121-Willow/hvac/Taps_,1
+B121-Willow/hvac/VAV, m:Aluminium (Instance),1
+B121-Willow/hvac/Vertical, m:Aluminium (Instance),1
+B121-Willow/lighting/dld_tape, m:Copper (Instance),1
+B121-Willow/lighting/dld_tape_extrusion_-_non_host, m:Copper (Instance),1
+B121-Willow/lighting/Monopoint_,1
+B121-Willow/lighting/P,52
+B121-Willow/lighting/place_holder, m:Copper (Instance),1
+B121-Willow/lighting/R,21
+B121-Willow/lighting/S,7
+B121-Willow/lighting/T,1
+B121-Willow/lighting/troy_bell_,1
+B121-Willow/lighting/Wall_Wash_Fixture_,2
+B121-Willow/plumbing/,6
+B121-Willow/plumbing/Default, m:Steel (Instance),1
+B121-Willow/plumbing/Expansion_Tank, m:Steel (Instance),1
+B121-Willow/plumbing/LEVEL_,3
+B121-Willow/plumbing/LEVEL_REFERENCE, m:Steel (Instance),1
+B121-Willow/plumbing/Plumbing_Fixture, m:Steel (Instance),1
+B121-Willow/plumbing/ROOF, m:Steel (Instance),1
+B121-Willow/plumbing/Standard, m:Steel (Instance),1
+B121-Willow/plumbing/T.,1
+B121-Willow/plumbing/T.O._PARAPET, m:Steel (Instance),1
+B121-Willow/plumbing/Water_Treatment, m:Steel (Instance),1

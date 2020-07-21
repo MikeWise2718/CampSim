@@ -418,6 +418,11 @@ namespace GraphAlgos
             //              d_order: connectOrderE.inc, d_exit: exitDirE.back, d_len: 5f,
             //              w_order: connectOrderE.inc, w_exit: exitDirE.back, w_len: 7f);
 
+            // Garage 121
+            CreateGarageLinks("MsGarage121_1", "b121-os1-o002", "osm743394908",
+                          d_order: connectOrderE.dec, d_exit: exitDirE.front, d_len: 5f,
+                          w_order: connectOrderE.inc, w_exit: exitDirE.back, w_len: 7f);
+
             // Garage 19
             CreateGarageLinks("MsGarage19_1", "b19-os1-o03", "dw-B19-c02",
                           d_order: connectOrderE.inc, d_exit: exitDirE.back, d_len: 5f,
@@ -744,6 +749,7 @@ namespace GraphAlgos
 
                                 //lmd.createPointsFor_msft_b11();
                                 lmd.createPointsFor_msft_b19();
+                                lmd.createPointsFor_msft_b121();
                                 lmd.createPointsFor_msft_b40();
                                 lmd.createPointsFor_msft_b43();
                                 lmd.createPointsFor_msft_b43_f1();

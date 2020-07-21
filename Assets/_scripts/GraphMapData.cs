@@ -5181,21 +5181,36 @@ namespace GraphAlgos
             grc.gm.initmods();// reset
             grc.yfloor = 0;
         }
-        // =================== generated code
-        //public void createPointsFor_msft_b11()  // machine generated - do not edit
-        //{
-        //    grc.regman.NewNodeRegion("msft-b11", "purple", saveToFile: true);
-        //    grc.AddNodePtxyz("b11-f01-lobby", -123.670, 0.000, 219.400, comment: ""); //  1 nn:1 nl:0
-        //    grc.LinkToPtxyz("b11-f01-lobby", "b11-os1-o01", -123.670, 0.000, 225.850, LinkUse.walkway, comment: ""); //  2 nn:1 nl:1
-        //    grc.LinkToPtxyz("b11-os1-o01", "b11-os1-o02", -106.900, 0.000, 232.940, LinkUse.walkway, comment: ""); //  3 nn:1 nl:1
-        //    grc.LinkToPtxyz("b11-os1-o02", "b11-os1-o03", -105.600, 0.000, 236.400, LinkUse.walkway, comment: ""); //  4 nn:1 nl:1
-        //    grc.AddNodePtxyz("dw-B11-c01", -103.230, 0.000, 241.700, comment: ""); //  5 nn:1 nl:0
-        //    grc.LinkToPtxyz("dw-B11-c01", "st-B11-c02", -112.310, 0.000, 238.830, LinkUse.driveway, comment: ""); //  6 nn:1 nl:1
-        //    grc.AddLinkByNodeName("st-B11-c02", "st-B11-c02", LinkUse.driveway); //  7 nn:0 nl:1
-        //    grc.LinkToPtxyz("st-B11-c02", "st-B11-c04", -128.940, 0.000, 243.850, LinkUse.driveway, comment: ""); //  8 nn:1 nl:1
-        //    grc.AddLinkByNodeName("st-B11-c04", "reg:msft-campus", LinkUse.driveway); //  9 nn:0 nl:1
-        //    grc.regman.SetRegion("default");
-        //}
+
+        public void createPointsFor_msft_b121()  // machine generated - do not edit
+        {
+            grc.regman.NewNodeRegion("msft-b121", "purple", saveToFile: true);
+            var xs = 0;
+            var zs = 0;
+            //xs = 0;
+            //zs = 0;
+            grc.AddNodePtxyz("b121-f01-lobby", -811.80 + xs, 0.000, -485.8 + zs, comment: ""); //  1 nn:1 nl:0
+            grc.LinkToPtxyz("b121-f01-lobby", "b121-os1-o001", -808.1 + xs, 0.000, -484.8 + zs, LinkUse.walkway, comment: ""); //  2 nn:1 nl:1
+            grc.LinkToPtxyz("b121-os1-o001", "b121-os1-o002", -807.200 + xs, 0.000, -486.0 + zs, LinkUse.walkway, comment: ""); //  2 nn:1 nl:1
+
+            grc.regman.SetRegion("default");
+        }
+
+            // =================== generated code
+            //public void createPointsFor_msft_b11()  // machine generated - do not edit
+            //{
+            //    grc.regman.NewNodeRegion("msft-b11", "purple", saveToFile: true);
+            //    grc.AddNodePtxyz("b11-f01-lobby", -123.670, 0.000, 219.400, comment: ""); //  1 nn:1 nl:0
+            //    grc.LinkToPtxyz("b11-f01-lobby", "b11-os1-o01", -123.670, 0.000, 225.850, LinkUse.walkway, comment: ""); //  2 nn:1 nl:1
+            //    grc.LinkToPtxyz("b11-os1-o01", "b11-os1-o02", -106.900, 0.000, 232.940, LinkUse.walkway, comment: ""); //  3 nn:1 nl:1
+            //    grc.LinkToPtxyz("b11-os1-o02", "b11-os1-o03", -105.600, 0.000, 236.400, LinkUse.walkway, comment: ""); //  4 nn:1 nl:1
+            //    grc.AddNodePtxyz("dw-B11-c01", -103.230, 0.000, 241.700, comment: ""); //  5 nn:1 nl:0
+            //    grc.LinkToPtxyz("dw-B11-c01", "st-B11-c02", -112.310, 0.000, 238.830, LinkUse.driveway, comment: ""); //  6 nn:1 nl:1
+            //    grc.AddLinkByNodeName("st-B11-c02", "st-B11-c02", LinkUse.driveway); //  7 nn:0 nl:1
+            //    grc.LinkToPtxyz("st-B11-c02", "st-B11-c04", -128.940, 0.000, 243.850, LinkUse.driveway, comment: ""); //  8 nn:1 nl:1
+            //    grc.AddLinkByNodeName("st-B11-c04", "reg:msft-campus", LinkUse.driveway); //  9 nn:0 nl:1
+            //    grc.regman.SetRegion("default");
+            //}
 
         public void createPointsFor_msft_b19()  // machine generated - do not edit
         {

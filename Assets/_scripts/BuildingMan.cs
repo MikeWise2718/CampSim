@@ -156,11 +156,13 @@ namespace CampusSimulator
             //Debug.Log($"doosmblds:{doosmblds} osmloadspec{osmloadspec}");
             if (doosmblds)
             {
+                var osmroot = new GameObject("osmblds");
+                osmroot.transform.parent = this.transform;
                 var pgvd = new PolyGenVekMapDel(sman.mpman.GetHeightVector3);
                 var bpg = new BldPolyGen();
                 var llm = sman.mpman.GetLatLongMap();
                 var (waysdflst, linksdflist, nodesdflist) = sman.dfman.GetSdfs();
-                var lbgos = bpg.LoadRegion(this.gameObject, waysdflst, linksdflist, nodesdflist, pgvd: pgvd, llm: llm);
+                var lbgos = bpg.LoadRegion(osmroot, waysdflst, linksdflist, nodesdflist, pgvd: pgvd, llm: llm);
                 bldspecs.AddRange(lbgos);
             }
 

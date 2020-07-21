@@ -253,21 +253,27 @@ namespace CampusSimulator
 
         public void SetAlarmState(bool newstate,bool justone,bool startstream)
         {
-            //Debug.Log("SetAlarmState - nestate:" + newstate + " justone:" + justone + " startstream:" + startstream);
-            var algot = this.alarmgo.transform;
-            var nalarm = algot.childCount;
-            for (var i = 0; i < nalarm; i++)
+            Debug.Log($"Zone.SetAlarmState name:{name} - nestate:{newstate} justone:{justone} startstream:{startstream}");
+            if (this.alarmgo != null)
             {
-                var ago = algot.GetChild(i);
-                var alarm = ago.GetComponent<BldEvacAlarm>();
-                if (alarm != null)
+                var algot = this.alarmgo.transform;
+                if (algot != null)
                 {
-                    alarm.SetState(newstate);
-                    if (startstream)
+                    var nalarm = algot.childCount;
+                    for (var i = 0; i < nalarm; i++)
                     {
-                        //Debug.Log("Setting color to yellow");
-                        alarm.inAlarmAldeboColor = "yellow";
-                        alarm.inAlarmEmissiveColor = "deeppurple";
+                        var ago = algot.GetChild(i);
+                        var alarm = ago.GetComponent<BldEvacAlarm>();
+                        if (alarm != null)
+                        {
+                            alarm.SetState(newstate);
+                            if (startstream)
+                            {
+                                //Debug.Log("Setting color to yellow");
+                                alarm.inAlarmAldeboColor = "yellow";
+                                alarm.inAlarmEmissiveColor = "deeppurple";
+                            }
+                        }
                     }
                 }
             }
