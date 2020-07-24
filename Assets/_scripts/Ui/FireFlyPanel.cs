@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,13 +9,18 @@ public class FireFlyPanel : MonoBehaviour
 {
     public SceneMan sman;
     FrameMan fman;
+    MapMan mman;
+    JourneyMan jman;
     UiMan uiman;
 
     Toggle fastModeToggle;
     Toggle useDfInexesToggle;
 
-    Text SimpleDfIndexCountText;
+    Dropdown viewerJourneyStartDropdown;
+    Dropdown viewerJourneyEndDropdown;
+    Text fireFlyDfText;
 
+    Button startJourney;
     Button closeButton;
 
     public void Init0()
@@ -24,16 +30,26 @@ public class FireFlyPanel : MonoBehaviour
 
     public void LinkObjectsAndComponents()
     {
-        sman = FindObjectOfType<SceneMan>();
         uiman = sman.uiman;
         fman = sman.frman;
+        jman = sman.jnman;
+        mman = sman.mpman;
+
 
         fastModeToggle = transform.Find("FastModeToggle").gameObject.GetComponent<Toggle>();
         useDfInexesToggle = transform.Find("UseDataFileIndexesToggle").gameObject.GetComponent<Toggle>();
-        SimpleDfIndexCountText = transform.Find("SimpleDfIndexCountText").gameObject.GetComponent<Text>();
+
+        viewerJourneyStartDropdown = transform.Find("ViewerJourneyStartDropdown").gameObject.GetComponent<Dropdown>();
+        viewerJourneyEndDropdown = transform.Find("ViewerJourneyEndDropdown").gameObject.GetComponent<Dropdown>();
+
+        startJourney = transform.Find("StartJourneyButton").gameObject.GetComponent<Button>();
+        startJourney.onClick.AddListener(delegate { StartJourney();  });
+
+        fireFlyDfText = transform.Find("FireFlyDfText").gameObject.GetComponent<Text>();
+
 
         closeButton = transform.Find("CloseButton").gameObject.GetComponent<Button>();
-        closeButton.onClick.AddListener(delegate { uiman.ClosePanel();  });
+        closeButton.onClick.AddListener(delegate { uiman.ClosePanel(); });
 
     }
     public void InitVals()
@@ -43,6 +59,46 @@ public class FireFlyPanel : MonoBehaviour
         {
             fastModeToggle.isOn = sman.fastMode;
         }
+
+
+        var errmsg = "Error in FireFlyPanel.InitVals-";
+        try
+        {
+            var opts = mman.GetMapProviderList();
+            var inival = mman.reqMapProv.Get().ToString();
+            //Debug.Log($"InitVals get:{inival}");
+            var idx = opts.FindIndex(s => s == inival);
+            if (idx <= 0) idx = 0;
+            viewerJourneyStartDropdown.ClearOptions();
+            viewerJourneyStartDropdown.AddOptions(opts);
+            viewerJourneyStartDropdown.value = idx;
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"{errmsg}1:{ex.Message}");
+        }
+
+        try
+        {
+            var opts = mman.GetMapProviderList();
+            var inival = mman.reqMapProv.Get().ToString();
+            //Debug.Log($"InitVals get:{inival}");
+            var idx = opts.FindIndex(s => s == inival);
+            if (idx <= 0) idx = 0;
+            viewerJourneyEndDropdown.ClearOptions();
+            viewerJourneyEndDropdown.AddOptions(opts);
+            viewerJourneyEndDropdown.value = idx;
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"{errmsg}1:{ex.Message}");
+        }
+
+    }
+
+    public void StartJourney()
+    {
+
     }
 
     public void SetScene(CampusSimulator.SceneSelE curscene)
@@ -54,7 +110,7 @@ public class FireFlyPanel : MonoBehaviour
         var dfman = sman.dfman;
         var (rv1, rv2, rv3) = dfman.GetIndexCounts();
         tx = $"SimpleDf Index Counts - Ways:{rv1} Links:{rv2} Nodes:{rv3}";
-        SimpleDfIndexCountText.text = tx;
+        fireFlyDfText.text = tx;
     }
 
     public void SetVals(bool closing = false)
