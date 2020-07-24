@@ -8,6 +8,32 @@ namespace Aiskwk.Map
     public enum ViewerCamPosition { Eyes, FloatBehindDiv2, FloatBehind, FloatBehindTimes2, FloatBehindTimes4 }
     public enum ViewerControl { Position, Velocity }
 
+    public class ViewerState
+    {
+        public Vector3 viewerPosition = Vector3.zero;
+        public Vector3 viewerRotation = Vector3.zero;
+
+        public ViewerAvatar viewerAvatarValue = ViewerAvatar.CapsuleMan;
+        public ViewerCamPosition viewerCamPositionValue = ViewerCamPosition.Eyes;
+        public ViewerControl viewerControlValue = ViewerControl.Position;
+        public ViewerState()
+        {
+            viewerPosition = Vector3.zero;
+            viewerRotation = Vector3.zero;
+            viewerAvatarValue = ViewerAvatar.CapsuleMan;
+            viewerCamPositionValue = ViewerCamPosition.Eyes;
+            viewerControlValue = ViewerControl.Position;
+        }
+        public ViewerState(Vector3 pos, Vector3 rot, ViewerAvatar ava = ViewerAvatar.CapsuleMan, ViewerCamPosition cam = ViewerCamPosition.Eyes, ViewerControl ctrl = ViewerControl.Position)
+        {
+            viewerPosition = pos;
+            viewerRotation = rot;
+            viewerAvatarValue = ava;
+            viewerCamPositionValue = cam;
+            viewerControlValue = ctrl;
+        }
+    }
+
     public class Viewer : MonoBehaviour
     {
         QmapMesh qmm;
@@ -36,12 +62,9 @@ namespace Aiskwk.Map
         public float altitude = 0;
         public bool followGround;
 
-        public static Vector3 viewerDefaultPosition = Vector3.zero;
-        public static Vector3 viewerDefaultRotation = Vector3.zero;
+        private static ViewerState defViewer = new ViewerState();
 
-        public static ViewerAvatar viewerAvatarDefaultValue = ViewerAvatar.CapsuleMan;
-        public static ViewerCamPosition ViewerCamPositionDefaultValue = ViewerCamPosition.Eyes;
-        public static ViewerControl ViewerControlDefaultValue = ViewerControl.Position;
+        public ViewerState home;
 
         public static Camera GetViewerCamera()
         {
@@ -66,18 +89,26 @@ namespace Aiskwk.Map
                 Debug.LogWarning($"Viewer.SetVtm - DoTrackThings:{doTrackThings}");
             }
         }
-        public void InitViewer(QmapMesh qmm)
+        public void InitViewer(QmapMesh qmm,ViewerState homespec=null)
         {
             //Debug.Log("InitViewer");
             this.qmm = qmm;
-            viewerAvatar = viewerAvatarDefaultValue;
-            viewerCamPosition = ViewerCamPositionDefaultValue;
-            viewerControl = ViewerControlDefaultValue;
+            if (homespec!=null)
+            {
+                home = homespec;
+            }
+            else
+            {
+                home = defViewer;
+            }
+            viewerAvatar = home.viewerAvatarValue;
+            viewerCamPosition = home.viewerCamPositionValue;
+            viewerControl = home.viewerControlValue;
             //var (vo,_, istat) = qmm.GetWcMeshPosFromLambda(0.5f, 0.5f);
-            var (vo, _, istat) = qmm.GetWcMeshPosProjectedAlongYnew(viewerDefaultPosition);
+            var (vo, _, istat) = qmm.GetWcMeshPosProjectedAlongYnew(home.viewerPosition);
             transform.position = vo;
             //Debug.Log($"Initviwer initial position {vo}");
-            transform.localRotation = Quaternion.Euler(viewerDefaultRotation);
+            transform.localRotation = Quaternion.Euler(home.viewerRotation);
             qcmdescriptor = qmm.descriptor;
             BuildViewer();
             //Debug.Log("Done with InitViewer");
@@ -122,8 +153,8 @@ namespace Aiskwk.Map
 
             var parent = transform.parent;
             transform.SetParent(null, worldPositionStays: false);// disconnect
-            transform.position = viewerDefaultPosition;
-            transform.localRotation = Quaternion.Euler(viewerDefaultRotation);
+            transform.position = home.viewerPosition;
+            transform.localRotation = Quaternion.Euler(home.viewerRotation);
             //Debug.Log($"ReAdjustViewerInitialPosition - viewerDefaultRotation:{viewerDefaultRotation}");
             var t = GetRootTransform(parent.transform);
             var s = t.localScale.x;
@@ -138,7 +169,7 @@ namespace Aiskwk.Map
                 Debug.LogError($"{t.name} s == 0");
             }
             transform.SetParent(parent.transform, worldPositionStays: true);// reconnect
-            transform.localRotation = Quaternion.Euler(viewerDefaultRotation); // Think this has to match the rotation it was built with
+            transform.localRotation = Quaternion.Euler(home.viewerRotation); // Think this has to match the rotation it was built with
                                                                                // or we get problems when we follownormal along the mesh
             TranslateViewer(0, 0);
             RotateViewer(0);
@@ -571,6 +602,11 @@ namespace Aiskwk.Map
             ////Debug.Log($"RotateViewer: {rotate}");
         }
 
+        void MoveViewerToHome()
+        {
+            Debug.Log($"move viewer to home");
+        }
+
         Vector3 lstnrm = Vector3.up;
         void TranslateViewerProjected(float xmove, float zmove)
         {
@@ -720,6 +756,7 @@ namespace Aiskwk.Map
 #endif
         }
         float ctrlAhit = float.MinValue;
+        float ctrlHhit = float.MinValue;
         float ctrlVhit = float.MinValue;
         float ctrlRhit = float.MinValue;
         float ctrlLhit = float.MinValue;
@@ -867,6 +904,15 @@ namespace Aiskwk.Map
                     Debug.Log($"Moving to next avatar old:{oldav}  new:{newav}");
                     ctrlAhit = Time.time;
                 }
+            }
+            if (Input.GetKey(KeyCode.H) && ctrlpressed)
+            {
+                //Debug.Log($"hit H {Time.time - ctrlHhit} hitgap3:{hitgap3} doTrackThings:{doTrackThings}");
+                if (Time.time - ctrlHhit > hitgap3)
+                {
+                    MoveViewerToHome();
+                }
+                ctrlHhit = Time.time;
             }
             if (Input.GetKey(KeyCode.Alpha0))
             {

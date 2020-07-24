@@ -95,6 +95,7 @@ namespace Aiskwk.Map
         public bool regenMesh;
         public bool regenMeshNormals;
         public bool addViewer = true;
+        public ViewerState viewHome = null;
         public enum sythTexMethod { Quadkeys, Synth, Hybrid }
         public sythTexMethod synthTex = sythTexMethod.Quadkeys;
         public string synthSpec = "goldenrod";
@@ -957,7 +958,7 @@ namespace Aiskwk.Map
             QMeshDestroyViewer();
             viewerobj = new GameObject("Viewer");
             viewer = viewerobj.AddComponent<Viewer>();
-            viewer.InitViewer(this);
+            viewer.InitViewer(this,this.viewHome);
             //viewerobj.transform.SetParent(this.transform, worldPositionStays: true);
             //Debug.Log($"QmeshBuildViewer - Viewer rotation before SetParent  {viewerobj.transform.localRotation.eulerAngles}");
             viewerobj.transform.SetParent(this.transform, worldPositionStays: false);

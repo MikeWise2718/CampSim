@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using UnityEngine;
 using System.IO;
 using System.Reflection;
@@ -10,69 +9,32 @@ using System.Reflection;
 /// GraphAlgos.cs  - This file contains static algoritms that we need in various places. 
 /// </summary>
 
-
-
-
-[System.Serializable]
-public struct LegVector3d
-{
-    public double x;
-    public double y;
-    public double z;
-    public LegVector3d(double x, double y, double z)
-    {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-    }
-}
-
-[System.Serializable]
-public struct LegVector2d
-{
-    public double x;
-    public double y;
-    public LegVector2d(double x, double y)
-    {
-        this.x = x;
-        this.y = y;
-    }
-}
-
-
 namespace GraphAlgos
 {
-    public static class glt
-    {
-        public static DateTime GetLinkerTime(this Assembly assembly, TimeZoneInfo target = null)
-        {
-            var filePath = assembly.Location;
-            const int c_PeHeaderOffset = 60;
-            const int c_LinkerTimestampOffset = 8;
-
-            var buffer = new byte[2048];
-
-            //            using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
-            //                stream.Read(buffer, 0, 2048);
-            using (var stream = new FileStream(filePath, FileMode.Open))
-                stream.Read(buffer, 0, 2048);
-
-            var offset = BitConverter.ToInt32(buffer, c_PeHeaderOffset);
-            var secondsSince1970 = BitConverter.ToInt32(buffer, offset + c_LinkerTimestampOffset);
-            var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-
-            var linkTimeUtc = epoch.AddSeconds(secondsSince1970);
-
-            var tz = target ?? TimeZoneInfo.Local;
-            var localTime = TimeZoneInfo.ConvertTimeFromUtc(linkTimeUtc, tz);
-
-            return localTime;
-        }
-    }
-
-
     public class GraphUtil
     {
+        static string _verstring = "2020.07.24.1";
+        static DateTime _buildDate = DateTime.UtcNow;
+
+        private static void getsysdata()
+        {
+            string sysver = "";
+            if (_verstring == "")
+            {
+                try
+                {
+                    sysver = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+                    _buildDate = Assembly.GetExecutingAssembly().GetLinkerTime(); // defined later in this file
+                }
+                catch (Exception ex)
+                {
+                    sysver = ex.Message;
+                }
+                //_buildDate = BuildtimeInfo.DateTimeString();
+                _verstring = sysver.ToString();
+            }
+        }
+
         static Dictionary<string, GameObject> uniresdict = new Dictionary<string, GameObject>();
         public static GameObject GetUniResPrefab(string dname,string name)
         {
@@ -772,26 +734,6 @@ namespace GraphAlgos
         }
 
 
-        static string _verstring = "2020.07.21.1";
-        static DateTime _buildDate=DateTime.UtcNow;
-        private static void getsysdata()
-        {
-            string sysver = "";
-            if (_verstring == "")
-            {
-                try
-                {
-                    sysver = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
-                    _buildDate = Assembly.GetExecutingAssembly().GetLinkerTime();
-                }
-                catch(Exception ex)
-                {
-                    sysver = ex.Message;
-                }
-                //_buildDate = BuildtimeInfo.DateTimeString();
-                _verstring = sysver.ToString();
-            }
-        }
         public static string GetVersionString()
         {
             getsysdata();
@@ -958,4 +900,32 @@ namespace GraphAlgos
             ScreenCapture.CaptureScreenshot(fname);
         }
     }
+    public static class glt
+    {
+        public static DateTime GetLinkerTime(this Assembly assembly, TimeZoneInfo target = null)
+        {
+            var filePath = assembly.Location;
+            const int c_PeHeaderOffset = 60;
+            const int c_LinkerTimestampOffset = 8;
+
+            var buffer = new byte[2048];
+
+            //            using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+            //                stream.Read(buffer, 0, 2048);
+            using (var stream = new FileStream(filePath, FileMode.Open))
+                stream.Read(buffer, 0, 2048);
+
+            var offset = BitConverter.ToInt32(buffer, c_PeHeaderOffset);
+            var secondsSince1970 = BitConverter.ToInt32(buffer, offset + c_LinkerTimestampOffset);
+            var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+            var linkTimeUtc = epoch.AddSeconds(secondsSince1970);
+
+            var tz = target ?? TimeZoneInfo.Local;
+            var localTime = TimeZoneInfo.ConvertTimeFromUtc(linkTimeUtc, tz);
+
+            return localTime;
+        }
+    }
+
 }

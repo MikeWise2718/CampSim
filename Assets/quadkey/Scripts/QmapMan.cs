@@ -355,6 +355,7 @@ namespace Aiskwk.Map
         public int nodesPerQuadKey;
         public float hmult;
         public bool useViewer;
+        public ViewerState viewHome;
         public List<MappingPoint> mappoints= new List<MappingPoint>();
         public BespokeSpec(string scenename, LatLng ll, double latkm, double lngkm, double latoffkm, double lngoffkm, int lod = 16, int nodesPerQuadKey = 16)
         {
@@ -464,7 +465,8 @@ namespace Aiskwk.Map
         static int mmreentrycnt = 0;
         public async Task<(QmapMesh qmm, int nbmloaded, int nelloaded)> MakeMeshFromLlbox(string scenename, LatLngBox llbox, int tpqk = 4, float hmult = 1, string mapcoordname = "", MapExtentTypeE mapextent = MapExtentTypeE.SnapToTiles, MapProvider mapprov = MapProvider.BingSatelliteLabels, ElevProvider elevprov = ElevProvider.BingElev, bool execute = true, bool forceload = false,
                                                                bool limitQuadkeys = true, QmapMesh.sythTexMethod synthTex = QmapMesh.sythTexMethod.Quadkeys,
-                                                               HeightSource heitSource = HeightSource.Fetched, HeightAdjust heitAdjust = HeightAdjust.Zeroed) //, HeightTypeE heitType= HeightTypeE.FetchedAndZeroed)
+                                                               HeightSource heitSource = HeightSource.Fetched, HeightAdjust heitAdjust = HeightAdjust.Zeroed
+                                                               ) //, HeightTypeE heitType= HeightTypeE.FetchedAndZeroed)
         {
 
             var wpstays = false;
@@ -643,6 +645,10 @@ namespace Aiskwk.Map
             useElevationDataStart = true;
             useFlatTrisStart = false;
             DeleteQmm();
+            var zvek = Vector3.zero;
+            var rrot = new Vector3(0, 90, 0);
+            ViewerState dfv = new ViewerState();
+
             switch (newmode)
             {
                 case QmapModeE.Bespoke:
@@ -670,6 +676,7 @@ namespace Aiskwk.Map
                         transform.position = bespoke.maptrans;
                         qmm.nodefak = 1f;
                         qmm.addViewer = bespoke.useViewer;
+                        qmm.viewHome = bespoke.viewHome;
                         SetFrameQuadKey(bespoke.frameQuadkeys);
                         SetTrilines(bespoke.triLines);
                         SetTriPoints(bespoke.triPoints);
@@ -707,6 +714,8 @@ namespace Aiskwk.Map
                         var ll1 = new LatLng(47.646622, -122.139957, "MsftCampus ll1"); // msft campus
                         var ll2 = new LatLng(47.631792, -122.128826, "MsftCampus ll2");
                         (qmm, _, _) = await MakeMesh("msftcampus", 15, ll1, ll2, mapprov: mapprov);
+                        qmm.addViewer = true;
+                        qmm.viewHome = dfv;
                         break;
                     }
                 case QmapModeE.MsftCampusMapped:
@@ -714,6 +723,8 @@ namespace Aiskwk.Map
                         var ll1 = new LatLng(47.646622, -122.139957, "MsftCampus ll1"); // msft campus
                         var ll2 = new LatLng(47.631792, -122.128826, "MsftCampus ll2");
                         (qmm, _, _) = await MakeMesh("msftcampus", 15, ll1, ll2, mapcoordname: "MsftCoreCampus", mapprov: mapprov);
+                        qmm.addViewer = true;
+                        qmm.viewHome = dfv;
                         break;
                     }
                 case QmapModeE.MsftCampusMappedHigh:
@@ -721,6 +732,8 @@ namespace Aiskwk.Map
                         var ll1 = new LatLng(47.646622, -122.139957, "MsftCampus ll1"); // msft campus
                         var ll2 = new LatLng(47.631792, -122.128826, "MsftCampus ll2");
                         (qmm, _, _) = await MakeMesh("msftcampus", 18, ll1, ll2, mapcoordname: "MsftCoreCampus", tpqk: 4, mapprov: mapprov);
+                        qmm.addViewer = true;
+                        qmm.viewHome = dfv;
                         break;
                     }
                 case QmapModeE.MsftCampusMappedHigh19:
@@ -728,6 +741,8 @@ namespace Aiskwk.Map
                         var ll1 = new LatLng(47.646622, -122.139957, "MsftCampus ll1"); // msft campus
                         var ll2 = new LatLng(47.631792, -122.128826, "MsftCampus ll2");
                         (qmm, _, _) = await MakeMesh("msftcampus", 19, ll1, ll2, mapcoordname: "MsftCoreCampus", tpqk: 2, mapprov: mapprov);
+                        qmm.addViewer = true;
+                        qmm.viewHome = dfv;
                         break;
                     }
                 case QmapModeE.Cyclades:
@@ -737,16 +752,15 @@ namespace Aiskwk.Map
                         var llbox = new LatLngBox(llmid, 110, 170, lod: 12);
                         useElevationDataStart = true;
                         useFlatTrisStart = false;
-                        Viewer.viewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
-                        Viewer.viewerDefaultRotation = new Vector3(0, 90, 0);
-                        Viewer.viewerDefaultPosition = new Vector3(0, 0, 0);
-                        Viewer.ViewerCamPositionDefaultValue = ViewerCamPosition.FloatBehind;
+                        dfv = new ViewerState(zvek, rrot, ViewerAvatar.QuadCopter,ViewerCamPosition.FloatBehind);
+
                         (qmm, _, _) = await MakeMeshFromLlbox("cyclades", llbox, tpqk: 16, hmult: 3, mapprov: mapprov, limitQuadkeys: false);
                         var vtm = gameObject.AddComponent<VehicleTrackMan>();
                         vtm.Init(qmm, trackFilePath, VehicleTrackMan.TrackScenario.CycladesTrip);
                         sceneScripter = gameObject.AddComponent<SceneScripter>();
                         sceneScripter.Init(SceneScenario.Cyclades, vtm);
                         qmm.addViewer = true;
+                        qmm.viewHome = dfv;
                         var dirlight = FindObjectOfType<Light>();
                         if (dirlight != null)
                         {
@@ -760,10 +774,11 @@ namespace Aiskwk.Map
                         var llbox = new LatLngBox(llmid, 25.17, 14.84, lod: 12);
                         useElevationDataStart = true;
                         useFlatTrisStart = false;
-                        Viewer.viewerAvatarDefaultValue = ViewerAvatar.Rover;
-                        Viewer.viewerDefaultRotation = new Vector3(0, 90, 0);
-                        Viewer.viewerDefaultPosition = new Vector3(0, 0, 0);
-                        Viewer.ViewerCamPositionDefaultValue = ViewerCamPosition.FloatBehind;
+
+
+                        dfv = new ViewerState(zvek, rrot, ViewerAvatar.Rover, ViewerCamPosition.FloatBehind);
+
+
 
                         //(qmm,_,_) = await MakeMeshBox("seattle", llbox,tpqk:16,hmult:10, mapprov: mapprov);
                         (qmm, _, _) = await MakeMeshFromLlbox("seattle", llbox, tpqk: 16, hmult: 10, mapprov: mapprov, synthTex: QmapMesh.sythTexMethod.Quadkeys);
@@ -773,6 +788,8 @@ namespace Aiskwk.Map
                             tpcomp.showDeco = false;
                         }
                         qmm.addViewer = true;
+                        qmm.viewHome = dfv;
+
                         break;
                     }
                 case QmapModeE.Seattle10:
@@ -781,15 +798,14 @@ namespace Aiskwk.Map
                         var llbox = new LatLngBox(llmid, 10, 10, lod: 13);
                         (qmm, _, _) = await MakeMeshFromLlbox("seattle", llbox, tpqk: 16, hmult: 10, mapprov: mapprov);
                         qmm.addViewer = true;
+                        qmm.viewHome = dfv;
                         break;
                     }
                 case QmapModeE.Seattle3:
                     {
-                        //useElevationDataStart = false;
-                        Viewer.viewerAvatarDefaultValue = ViewerAvatar.Rover;
-                        Viewer.viewerDefaultRotation = new Vector3(0, 90, 0);
-                        Viewer.viewerDefaultPosition = new Vector3(0, 0, 0);
-                        Viewer.ViewerCamPositionDefaultValue = ViewerCamPosition.FloatBehind;
+
+                        dfv = new ViewerState(zvek, rrot, ViewerAvatar.QuadCopter, ViewerCamPosition.FloatBehind);
+
                         var llmid = new LatLng(47.619992, -122.3373495, "Seattle mid");
                         var llbox = new LatLngBox(llmid, 3, 3, lod: 18);
                         //(qmm,_,_) = await MakeMeshFromLlbox("seattle", llbox, tpqk: 16, hmult: 2, mapprov: mapprov, heitType: HeightTypeE.FetchedAndOriginZeroed, heitSource:HeightSource.Fetched, heitAdjust: HeightAdjust.OriginZeroed, limitQuadkeys: false);
@@ -797,6 +813,8 @@ namespace Aiskwk.Map
                         qmm.addMeshColliders = true;
                         qmm.AddMeshColliders();
                         qmm.addViewer = true;
+                        qmm.viewHome = dfv;
+
                         break;
                     }
                 case QmapModeE.FortHills:
@@ -814,9 +832,11 @@ namespace Aiskwk.Map
                         var llbox = new LatLngBox(llmid, 4.453, 6.666, "dozerbox", lod: 15);
                         Debug.Log("dozers-llbox llmid:" + llbox.midll.ToString());
                         Debug.Log("dozers-llbox llmid:" + llbox.midll.ToString());
-                        Viewer.viewerDefaultRotation = new Vector3(0, 90, 0);
-                        Viewer.viewerDefaultPosition = new Vector3(0, 0, 0);
-                        Viewer.ViewerCamPositionDefaultValue = ViewerCamPosition.FloatBehind;
+
+
+                        dfv = new ViewerState(zvek, rrot, ViewerAvatar.QuadCopter, ViewerCamPosition.FloatBehind);
+
+
                         //(qmm,_,_) = await MakeMeshFromLlbox("dozers", llbox, tpqk: 16, hmult: 5, mapprov: mapprov, heitType: HeightTypeE.FetchedAndOriginZeroed, heitSource: HeightSource.Fetched, heitAdjust: HeightAdjust.OriginZeroed);
                         (qmm, _, _) = await MakeMeshFromLlbox("dozers", llbox, tpqk: 16, hmult: 3, mapprov: mapprov, heitSource: HeightSource.FetchedPlusLidar, heitAdjust: HeightAdjust.NoAdjust);
                         var geoman = gameObject.AddComponent<GeotiffMan>();
@@ -826,6 +846,8 @@ namespace Aiskwk.Map
                         var trkman = gameObject.AddComponent<VehicleTrackMan>();
                         trkman.Init(qmm, trackFilePath, VehicleTrackMan.TrackScenario.SuncorMine);
                         qmm.addViewer = true;
+                        qmm.viewHome = dfv;
+
                         break;
                     }
                 case QmapModeE.DozersMediumSim:
@@ -834,9 +856,11 @@ namespace Aiskwk.Map
                         var llmid = new LatLng(57.0056037, -111.3581390, "Dozers Medium llmid");
                         var llbox = new LatLngBox(llmid, 1.0, 1.0, "dozermediumbox", lod: 19);
                         //Debug.Log("dozers-med-llbox llmid:" + llbox.midll.ToString());
-                        Viewer.viewerDefaultRotation = new Vector3(0, 90, 0);
-                        Viewer.viewerDefaultPosition = new Vector3(0, 0, 0);
-                        Viewer.ViewerCamPositionDefaultValue = ViewerCamPosition.FloatBehind;
+
+
+                        dfv = new ViewerState(zvek, rrot, ViewerAvatar.QuadCopter, ViewerCamPosition.FloatBehind);
+
+
                         var geoman = gameObject.AddComponent<GeotiffMan>();
                         var trkman = gameObject.AddComponent<VehicleTrackMan>();
                         (qmm, _, _) = await MakeMeshFromLlbox("dozersmedium", llbox, tpqk: 8, hmult: 1, mapextent: MapExtentTypeE.AsSpecified, mapprov: mapprov, heitSource: HeightSource.FetchedPlusLidar, limitQuadkeys: false);
@@ -850,6 +874,8 @@ namespace Aiskwk.Map
                             sceneScripter.Init(SceneScenario.SuncorDozers, trkman);
                         }
                         qmm.addViewer = true;
+                        qmm.viewHome = dfv;
+
                         break;
                     }
                 case QmapModeE.DozerSmall:
@@ -857,9 +883,9 @@ namespace Aiskwk.Map
                         var llmid = new LatLng(57.0056037, -111.3581390, "Dozers  Smallllmid");
                         var llbox = new LatLngBox(llmid, 0.5, 0.5, "dozersmallbox", lod: 19);
                         Debug.Log("dozers-small-llbox llmid:" + llbox.midll.ToString());
-                        Viewer.viewerDefaultRotation = new Vector3(0, 90, 0);
-                        Viewer.viewerDefaultPosition = new Vector3(0, 0, 0);
-                        Viewer.ViewerCamPositionDefaultValue = ViewerCamPosition.FloatBehind;
+
+                        dfv = new ViewerState(zvek, rrot, ViewerAvatar.QuadCopter, ViewerCamPosition.FloatBehind);
+
                         var geoman = gameObject.AddComponent<GeotiffMan>();
                         var trkman = gameObject.AddComponent<VehicleTrackMan>();
                         (qmm, _, _) = await MakeMeshFromLlbox("dozerssmall", llbox, tpqk: 10, hmult: 5, mapprov: mapprov);
@@ -868,6 +894,8 @@ namespace Aiskwk.Map
                         geoman.showMediumGeosTiffs2 = true;
                         trkman.Init(qmm, trackFilePath, VehicleTrackMan.TrackScenario.SuncorMine);
                         qmm.addViewer = true;
+                        qmm.viewHome = dfv;
+
                         break;
                     }
                 case QmapModeE.Horizon4:
@@ -875,13 +903,15 @@ namespace Aiskwk.Map
                         var llmid = new LatLng(57.338920, -111.750198, "CNRL Horizon llmid");
                         var llbox = new LatLngBox(llmid, 4.0, 4.0, "horizonbox", lod: 17);
                         Debug.Log("Horizon-llbox llmid:" + llbox.midll.ToString());
-                        Viewer.viewerAvatarDefaultValue = ViewerAvatar.Minehaul1;
-                        Viewer.ViewerCamPositionDefaultValue = ViewerCamPosition.FloatBehind;
-                        Viewer.ViewerControlDefaultValue = ViewerControl.Velocity;
-                        Viewer.viewerDefaultPosition = new Vector3(155.30f, 64.06f, -9.77f);
-                        Viewer.viewerDefaultRotation = new Vector3(0, -90, 0);
+
+                        dfv = new ViewerState(zvek, rrot, ViewerAvatar.QuadCopter, ViewerCamPosition.FloatBehind);
+
+
                         (qmm, _, _) = await MakeMeshFromLlbox("horizon", llbox, tpqk: 16, hmult: 1, mapprov: mapprov, limitQuadkeys: false);
                         qmm.nodefak = 1f;
+                        qmm.addViewer = true;
+                        qmm.viewHome = dfv;
+
                         break;
                     }
                 case QmapModeE.Horizon16:
@@ -889,13 +919,17 @@ namespace Aiskwk.Map
                         var llmid = new LatLng(57.338920, -111.750198, "CNRL Horizon llmid");
                         var llbox = new LatLngBox(llmid, 16.0, 16.0, "horizonbox", lod: 15);
                         Debug.Log("Horizon-llbox llmid:" + llbox.midll.ToString());
-                        Viewer.viewerAvatarDefaultValue = ViewerAvatar.Minehaul1;
-                        Viewer.ViewerCamPositionDefaultValue = ViewerCamPosition.FloatBehind;
-                        Viewer.ViewerControlDefaultValue = ViewerControl.Velocity;
-                        Viewer.viewerDefaultPosition = new Vector3(164.62f, 64.06f, -235.97f);
-                        Viewer.viewerDefaultRotation = new Vector3(0, -90, 0);
+
+                        var pos = new Vector3(155.30f, 64.06f, -9.77f); ;
+                        dfv = new ViewerState(pos, rrot, ViewerAvatar.Minehaul1, ViewerCamPosition.FloatBehind, ViewerControl.Velocity);
+
+
+
                         (qmm, _, _) = await MakeMeshFromLlbox("horizon", llbox, tpqk: 16, hmult: 1, mapprov: mapprov, limitQuadkeys: false);
                         qmm.nodefak = 1f;
+                        qmm.addViewer = true;
+                        qmm.viewHome = dfv;
+
                         break;
                     }
                 case QmapModeE.MtStHelens16:
@@ -903,12 +937,15 @@ namespace Aiskwk.Map
                         var llmid = new LatLng(46.198428, -122.188841, "MtStHellens16llmid");
                         var llbox = new LatLngBox(llmid, 16.0, 16.0, "MtStHellens16 box", lod: 15);
                         Debug.Log("MtStHellens16-llbox llmid:" + llbox.midll.ToString());
-                        Viewer.viewerAvatarDefaultValue = ViewerAvatar.Rover;
-                        Viewer.ViewerCamPositionDefaultValue = ViewerCamPosition.FloatBehind;
-                        Viewer.ViewerControlDefaultValue = ViewerControl.Velocity;
+
+
+                        dfv = new ViewerState(zvek, rrot, ViewerAvatar.Rover, ViewerCamPosition.FloatBehind, ViewerControl.Velocity);
+
+
                         (qmm, _, _) = await MakeMeshFromLlbox("mtsthelens", llbox, tpqk: 16, hmult: 1, mapextent: MapExtentTypeE.AsSpecified, mapprov: mapprov, limitQuadkeys: false);
                         qmm.nodefak = 1f;
                         qmm.addViewer = true;
+                        qmm.viewHome = dfv;
                         break;
                     }
                 case QmapModeE.MtStHelens12:
@@ -916,12 +953,14 @@ namespace Aiskwk.Map
                         var llmid = new LatLng(46.198428, -122.188841, "MtStHellensllmid");
                         var llbox = new LatLngBox(llmid, 12.0, 12.0, "MtStHellens box", lod: 16);
                         Debug.Log("MtStHellens-llbox llmid:" + llbox.midll.ToString());
-                        Viewer.viewerAvatarDefaultValue = ViewerAvatar.Rover;
-                        Viewer.ViewerCamPositionDefaultValue = ViewerCamPosition.FloatBehind;
-                        Viewer.ViewerControlDefaultValue = ViewerControl.Velocity;
+
+                        dfv = new ViewerState(zvek, rrot, ViewerAvatar.Rover, ViewerCamPosition.FloatBehind, ViewerControl.Velocity);
+
+
                         (qmm, _, _) = await MakeMeshFromLlbox("mtsthelens", llbox, tpqk: 16, hmult: 1, mapextent: MapExtentTypeE.AsSpecified, mapprov: mapprov, limitQuadkeys: false);
                         qmm.nodefak = 0.2f;
                         qmm.addViewer = true;
+                        qmm.viewHome = dfv;
                         break;
                     }
                 case QmapModeE.MtStHelens3:
@@ -929,9 +968,9 @@ namespace Aiskwk.Map
                         var llmid = new LatLng(46.198428, -122.188841, "MtStHellens3llmid");
                         var llbox = new LatLngBox(llmid, 3.0, 3.0, "MtStHellens3 box", lod: 17);
                         Debug.Log("MtStHellens3-llbox llmid:" + llbox.midll.ToString());
-                        Viewer.viewerAvatarDefaultValue = ViewerAvatar.Rover;
-                        Viewer.ViewerCamPositionDefaultValue = ViewerCamPosition.FloatBehind;
-                        Viewer.ViewerControlDefaultValue = ViewerControl.Velocity;
+
+                        dfv = new ViewerState(zvek, rrot, ViewerAvatar.Rover, ViewerCamPosition.FloatBehind, ViewerControl.Velocity);
+
                         (qmm, _, _) = await MakeMeshFromLlbox("mtsthelens", llbox, tpqk: 16, hmult: 1, mapextent: MapExtentTypeE.AsSpecified, mapprov: mapprov, limitQuadkeys: false);
                         qmm.nodefak = 0.2f;
                         var tpcomp = qmm.gameObject.GetComponent<TriPointDeco>();
@@ -940,6 +979,7 @@ namespace Aiskwk.Map
                             tpcomp.showDeco = false;
                         }
                         qmm.addViewer = true;
+                        qmm.viewHome = dfv;
                         break;
                     }
                 case QmapModeE.MtStHelens2:
@@ -947,11 +987,14 @@ namespace Aiskwk.Map
                         var llmid = new LatLng(46.198428, -122.188841, "MtStHellens3llmid");
                         var llbox = new LatLngBox(llmid, 3.0, 3.0, "MtStHellens3 box", lod: 19);
                         Debug.Log("MtStHellens3-llbox llmid:" + llbox.midll.ToString());
-                        Viewer.viewerAvatarDefaultValue = ViewerAvatar.Rover;
-                        Viewer.ViewerCamPositionDefaultValue = ViewerCamPosition.FloatBehind;
-                        Viewer.ViewerControlDefaultValue = ViewerControl.Velocity;
+
+                        dfv = new ViewerState(zvek, rrot, ViewerAvatar.Rover, ViewerCamPosition.FloatBehind, ViewerControl.Velocity);
+
+
                         (qmm, _, _) = await MakeMeshFromLlbox("mtsthelens", llbox, tpqk: 16, hmult: 1, mapextent: MapExtentTypeE.AsSpecified, mapprov: mapprov, limitQuadkeys: false);
                         qmm.nodefak = 0.2f;
+                        qmm.addViewer = true;
+                        qmm.viewHome = dfv;
                         break;
                     }
                 case QmapModeE.Riggins:
@@ -960,8 +1003,13 @@ namespace Aiskwk.Map
                         var llbox = new LatLngBox(llmid, 10.0, 10.0, "Riggins box", lod: 15);
                         Debug.Log("riggins-llbox llmid:" + llbox.midll.ToString());
                         (qmm, _, _) = await MakeMeshFromLlbox("riggins", llbox, tpqk: 16, hmult: 1, mapprov: mapprov);
+
+
+
                         //var qcm = InitMesh("dozers", "", 15, ll1, ll2, 16, 10, mapprov: mapprov);
                         qmm.nodefak = 0.2f;
+                        qmm.addViewer = true;
+                        qmm.viewHome = dfv;
                         break;
                     }
                 case QmapModeE.Eb12:
@@ -969,6 +1017,8 @@ namespace Aiskwk.Map
                         var ll1 = new LatLng(49.996606, 8.674300, "Eb12 ll1"); // EB12 in Germany
                         var ll2 = new LatLng(49.987100, 8.687557, "Eb12 ll2");
                         (qmm, _, _) = await MakeMesh("eb12", 16, ll1, ll2, tpqk: 2, hmult: 10, mapprov: mapprov);
+                        qmm.addViewer = true;
+                        qmm.viewHome = dfv;
                         break;
                     }
                 case QmapModeE.Eb12Mapped:
@@ -976,6 +1026,8 @@ namespace Aiskwk.Map
                         var ll1 = new LatLng(49.996606, 8.674300, "Eb12 ll1"); // EB12 in Germany
                         var ll2 = new LatLng(49.987100, 8.687557, "Eb12 ll2");
                         (qmm, _, _) = await MakeMesh("eb12", 16, ll1, ll2, mapcoordname: "Eb12", mapprov: mapprov);
+                        qmm.addViewer = true;
+                        qmm.viewHome = dfv;
                         break;
                     }
                 case QmapModeE.Tukwilla:
@@ -983,6 +1035,8 @@ namespace Aiskwk.Map
                         var ll1 = new LatLng(47.461414, -122.262566, "Tukwila ll1"); // Tukwila
                         var ll2 = new LatLng(47.453419, -122.253639, "Tukwila ll2");
                         (qmm, _, _) = await MakeMesh("tukwila", 16, ll1, ll2, mapprov: mapprov);
+                        qmm.addViewer = true;
+                        qmm.viewHome = dfv;
                         break;
                     }
                 case QmapModeE.MtFuji:
@@ -991,6 +1045,8 @@ namespace Aiskwk.Map
                         var ll2 = new LatLng(35.296752, 138.874443, "MtFuji ll2");
                         (qmm, _, _) = await MakeMesh("mtfuji", 14, ll1, ll2, tpqk: 8, mapprov: mapprov);
                         qmm.nodefak = 0.5f;
+                        qmm.addViewer = true;
+                        qmm.viewHome = dfv;
                         break;
                     }
                 case QmapModeE.Whistler:
@@ -999,6 +1055,8 @@ namespace Aiskwk.Map
                         var ll2 = new LatLng(50.029914, -123.2595303, "Whistler ll2");
                         (qmm, _, _) = await MakeMesh("whistler", 14, ll1, ll2, tpqk: 4, mapprov: mapprov);
                         qmm.nodefak = 0.5f;
+                        qmm.addViewer = true;
+                        qmm.viewHome = dfv;
                         break;
                     }
                     // 49.996606, 8.674300

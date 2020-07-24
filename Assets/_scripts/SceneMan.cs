@@ -1571,6 +1571,7 @@ namespace CampusSimulator
         float ctrlShitTime = 0;
         float ctrlDhitTime = 0;
         float F5hitTime = 0;
+        float F10hitTime = 0;
         public void KeyProcessing()
         {
             //if (Input.GetKeyDown(KeyCode.LeftShift))
@@ -1605,6 +1606,12 @@ namespace CampusSimulator
             {
                 Debug.Log("F5 - Request Total Refresh");
                 this.RequestRefresh("F5 hit", totalrefresh: true);
+            }
+            if (((Time.time - F10hitTime) > 1) && Input.GetKeyDown(KeyCode.F10))
+            {
+                Debug.Log("F10 - Options");
+                uiman.stapan.OptionsButton(toggleState:true);
+                //this.RequestRefresh("F5 hit", totalrefresh: true);
             }
             if (ctrlhit && Input.GetKeyDown(KeyCode.C))
             {

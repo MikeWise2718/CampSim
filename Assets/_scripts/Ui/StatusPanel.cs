@@ -201,9 +201,13 @@ namespace CampusSimulator
         {
             sman.jnman.LaunchArnie();
         }
-        public void OptionsButton()
+        public void OptionsButton(bool toggleState=true)
         {
-            var newstate = !optionsPanelGo.activeSelf;
+            var newstate = true;
+            if (toggleState)
+            {
+                newstate = !optionsPanelGo.activeSelf;
+            }
             //Debug.Log($"Options Button Pushed optionsPanelGo.activeSelf:{optionsPanelGo.activeSelf} -> newstate:{newstate}");
             optionsPanelGo.SetActive(newstate);// this does immediately take effect
             optionsPanel.ChangingOptionsDialog(newstate);
