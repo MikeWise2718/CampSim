@@ -334,7 +334,7 @@ namespace CampusSimulator
             //bld.llm = bgo.AddComponent<LatLongMap>(); // todo uncomment
             bld.llm = new LatLongMap(); // todo uncomment
                                         //bld.llm.AddLlmDetails();
-            sman.jnman.AddViewerJourneyNodes(bld.destnodes);
+            sman.jnman.AddViewerJourneyNodes(bld.destnodes,prefix:$"{name}/");
             UpdateBldStats();
         }
         public void DelBuildings()

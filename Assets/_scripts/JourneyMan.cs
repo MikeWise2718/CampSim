@@ -933,18 +933,26 @@ namespace CampusSimulator
             viewerJourneyNodes.Add(jnode);
         }
 
-        public void AddViewerJourneyNodes(IEnumerable<string> jnodes)
+        public void AddViewerJourneyNodes(IEnumerable<string> jnodes,string prefix="")
         {
             foreach(var jn in jnodes)
             {
-                viewerJourneyNodes.Add(jn);
+                var nodename = jn;
+                if (prefix!="")
+                {
+                    nodename = prefix + jn;
+                }
+                viewerJourneyNodes.Add(nodename);
             }
         }
 
-        public void StartViewerJourney(string frnode,string tunode)
+        public Journey StartViewerJourney(string frnode,string tunode)
         {
+            var jny = AddBldBldJourneyWithEphemeralPeople(frnode, tunode);
+            //var jny = AddBldBldJourney(frnode, tunode, "startviewerjourney");
             lastViewerStartJourney.SetAndSave(frnode);
             lastViewerEndJourney.SetAndSave(tunode);
+            return jny;
         }
 
         public string [] GetJourneyNodes()

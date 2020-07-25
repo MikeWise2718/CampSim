@@ -96,7 +96,7 @@ public class FireFlyPanel : MonoBehaviour
     public void StartJourney()
     {
         var nodes = jman.GetJourneyNodes();
-        var sidx = viewerJourneyEndDropdown.value;
+        var sidx = viewerJourneyStartDropdown.value;
         var snode = nodes[sidx];
         var eidx = viewerJourneyEndDropdown.value;
         var enode = nodes[eidx];
