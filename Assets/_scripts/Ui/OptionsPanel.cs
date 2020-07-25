@@ -82,7 +82,7 @@ public class OptionsPanel : MonoBehaviour
     public void SyncOptionsTabState()
     {
         if (!visualPanelGo) return; // not initialized yet
-        //Debug.Log("SyncOptionsTabState");
+        Debug.Log($"SyncOptionsTabState fftog:{fireFlyToggle.isOn}  frtog:{frameToggle.isOn}");
         visualPanelGo.SetActive(visualToggle.isOn);
         mapSetGo.SetActive(mapsetToggle.isOn);
         framePanelGo.SetActive(frameToggle.isOn);

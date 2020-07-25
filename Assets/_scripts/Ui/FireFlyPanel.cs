@@ -54,18 +54,17 @@ public class FireFlyPanel : MonoBehaviour
     }
     public void InitVals()
     {
-        Debug.Log("GeneralPanel InitVals called");
+        Debug.Log("FireFlyPanel InitVals called");
         if (fastModeToggle != null)
         {
             fastModeToggle.isOn = sman.fastMode;
         }
 
-
+        var opts = new List<string>(jman.GetJourneyNodes());
         var errmsg = "Error in FireFlyPanel.InitVals-";
         try
         {
-            var opts = new List<string>(jman.GetJourneyNodes());
-            var inival = opts[0];
+            var inival = jman.lastViewerStartJourney.Get();
             //Debug.Log($"InitVals get:{inival}");
             var idx = opts.FindIndex(s => s == inival);
             if (idx <= 0) idx = 0;
@@ -80,8 +79,7 @@ public class FireFlyPanel : MonoBehaviour
 
         try
         {
-            var opts = new List<string>(jman.GetJourneyNodes());
-            var inival = opts[0];
+            var inival = jman.lastViewerEndJourney.Get();
             //Debug.Log($"InitVals get:{inival}");
             var idx = opts.FindIndex(s => s == inival);
             if (idx <= 0) idx = 0;
@@ -93,12 +91,16 @@ public class FireFlyPanel : MonoBehaviour
         {
             Debug.LogError($"{errmsg}1:{ex.Message}");
         }
-
     }
 
     public void StartJourney()
     {
-
+        var nodes = jman.GetJourneyNodes();
+        var sidx = viewerJourneyEndDropdown.value;
+        var snode = nodes[sidx];
+        var eidx = viewerJourneyEndDropdown.value;
+        var enode = nodes[eidx];
+        jman.StartViewerJourney(snode, enode);
     }
 
     public void SetScene(CampusSimulator.SceneSelE curscene)
@@ -115,11 +117,10 @@ public class FireFlyPanel : MonoBehaviour
 
     public void SetVals(bool closing = false)
     {
-        Debug.Log($"GeneralPanel.SetVals called - closing:{closing}");
-        sman.fastMode = fastModeToggle.isOn;
-        sman.dfman.useDfIndexes.SetAndSave(useDfInexesToggle.isOn);
+        Debug.Log($"FireFlyPanel.SetVals called - closing:{closing}");
 
-        sman.RequestRefresh("GeneralPanel-SetVals");
+
+        sman.RequestRefresh("FireFlyPanel-SetVals");
     }
 
     float checkInterval = 1f;

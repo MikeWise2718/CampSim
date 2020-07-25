@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using GraphAlgos;
+using UxUtils;
 
 namespace CampusSimulator
 {
@@ -49,6 +50,9 @@ namespace CampusSimulator
         public string jnyLogFileName = "";
         public float startJnyTime = 0;
         public int journeysLogged = 0;
+
+        public UxSetting<string> lastViewerStartJourney = new UxSetting<string>("lastViewerStartJourney", "");
+        public UxSetting<string> lastViewerEndJourney = new UxSetting<string>("lastViewerEndJourney", "");
 
         public void AddJ(Journey jny)
         {
@@ -937,6 +941,12 @@ namespace CampusSimulator
             }
         }
 
+        public void StartViewerJourney(string frnode,string tunode)
+        {
+            lastViewerStartJourney.SetAndSave(frnode);
+            lastViewerEndJourney.SetAndSave(tunode);
+        }
+
         public string [] GetJourneyNodes()
         {
             var rv = viewerJourneyNodes.ToArray();
@@ -951,7 +961,14 @@ namespace CampusSimulator
         public void InitializeScene(SceneSelE newregion)
         {
             DeleteAllJourneys();
+            InitializeValues();
             viewerJourneyNodes = new List<string>();
+        }
+
+        public void InitializeValues()
+        {
+            lastViewerStartJourney.GetInitial("");
+            lastViewerEndJourney.GetInitial("");
         }
 
 

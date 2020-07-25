@@ -31,7 +31,7 @@ namespace CampusSimulator
         Button goButton;
         Button optionsButton;
         Button mapfitButton;
-        Canvas canvas;
+       // Canvas canvas;
         GameObject freeFlyPanel;
         // Start is called before the first frame update
 
@@ -40,9 +40,9 @@ namespace CampusSimulator
             uiman = sman.uiman;
             jman = sman.jnman;
             gman = sman.gaman;
-            var cango = GameObject.Find("SimParkUICanvas");
-            canvas = cango.GetComponent<Canvas>();
-            canvas = cango.GetComponent<Canvas>();
+            //var cango = GameObject.Find("SimParkUICanvas");
+            //canvas = cango.GetComponent<Canvas>();
+            //canvas = cango.GetComponent<Canvas>();
 
             optionsPanelGo = transform.Find("OptionsPanel").gameObject;
             optionsPanel = optionsPanelGo.GetComponent<OptionsPanel>();
