@@ -602,16 +602,44 @@ namespace Aiskwk.Map
             ////Debug.Log($"RotateViewer: {rotate}");
         }
 
+        void RotateViewerNoTimeFak(float rotate)
+        {
+            Debug.Log($"RotateViewerNoTimeFak - Viewer rotation before  {transform.localRotation.eulerAngles}");
+
+            bodyPlaneRotation *= Quaternion.Euler(new Vector3(0, rotate, 0));
+            moveplane.transform.localRotation = bodyPlaneRotation;
+            bodyPrefabRotation *= Quaternion.Euler(new Vector3(0, rotate, 0));
+            body.transform.localRotation = Quaternion.FromToRotation(Vector3.up, lstnrm) * bodyPrefabRotation;
+
+            Debug.Log($"RotateViewerNoTimeFak - Viewer rotation after   {transform.localRotation.eulerAngles}");
+        }
+
         void MoveViewerToHome()
         {
-            Debug.Log($"move viewer to home");
+            //Debug.Log($"MoveViewerToHome pos:{home.viewerPosition:f1} rot:{home.viewerRotation:f1}");
+            var homepos = home.viewerPosition;
+            var homerot = Vector3.zero; /// this seems wierd, but we seemingly have the homeRotation coded in the toplevel Viewer rotation already
+
+
+            var bodyeuler = bodyPrefabRotation.eulerAngles;
+            // the following two lines don't work
+            var qqrot = Quaternion.FromToRotation(bodyeuler, homerot);
+            var angtorot = qqrot.eulerAngles;
+            //Debug.Log($"MoveViewerToHome bodyeuler:{bodyeuler:f1} ");
+            //Debug.Log($"MoveViewerToHome ang:{angtorot:f1} ");
+            // aparently it starts from zero every time
+
+            RotateViewerNoTimeFak(-bodyeuler.y);// this only handles the y-axis so it is wrong....
+
+            TranslateViewerToPosition(homepos);
+            TranslateViewer(0, 0);// TODO: this shouldn't be necessary but it is for MsftB19focused for some reason....
         }
 
         Vector3 lstnrm = Vector3.up;
         void TranslateViewerProjected(float xmove, float zmove)
         {
             var po = transform.position;
-            var (vo, _, _) = qmm.GetWcMeshPosProjectedAlongYnew(po);
+            //var (vo, _, _) = qmm.GetWcMeshPosProjectedAlongYnew(po);
             var bto = moveplane.transform;
             var pnstar = po + zmove*bto.forward + xmove*bto.right;
 
