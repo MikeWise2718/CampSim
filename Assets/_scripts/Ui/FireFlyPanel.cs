@@ -64,8 +64,8 @@ public class FireFlyPanel : MonoBehaviour
         var errmsg = "Error in FireFlyPanel.InitVals-";
         try
         {
-            var opts = mman.GetMapProviderList();
-            var inival = mman.reqMapProv.Get().ToString();
+            var opts = new List<string>(jman.GetJourneyNodes());
+            var inival = opts[0];
             //Debug.Log($"InitVals get:{inival}");
             var idx = opts.FindIndex(s => s == inival);
             if (idx <= 0) idx = 0;
@@ -80,8 +80,8 @@ public class FireFlyPanel : MonoBehaviour
 
         try
         {
-            var opts = mman.GetMapProviderList();
-            var inival = mman.reqMapProv.Get().ToString();
+            var opts = new List<string>(jman.GetJourneyNodes());
+            var inival = opts[0];
             //Debug.Log($"InitVals get:{inival}");
             var idx = opts.FindIndex(s => s == inival);
             if (idx <= 0) idx = 0;

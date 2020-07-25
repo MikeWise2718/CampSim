@@ -915,6 +915,33 @@ namespace CampusSimulator
             spawnjourneys = false;
         }
 
+        List<string> viewerJourneyNodes;
+
+        public void AddViewerJourneyNode(string jnode)
+        {
+            var lc = sman.lcman;
+            var grc = lc.GetGraphCtrl();
+            if (!grc.nodeExists(jnode))
+            {
+                Debug.LogWarning($"JourneyMan.AddViewerJourneyNode({jnode}) - node does not exist in linkcloud");
+                // still might work because it might get added later
+            }
+            viewerJourneyNodes.Add(jnode);
+        }
+
+        public void AddViewerJourneyNodes(IEnumerable<string> jnodes)
+        {
+            foreach(var jn in jnodes)
+            {
+                viewerJourneyNodes.Add(jn);
+            }
+        }
+
+        public string [] GetJourneyNodes()
+        {
+            var rv = viewerJourneyNodes.ToArray();
+            return rv;
+        }
 
         public void CeaseSceneActivity()
         {
@@ -924,7 +951,10 @@ namespace CampusSimulator
         public void InitializeScene(SceneSelE newregion)
         {
             DeleteAllJourneys();
+            viewerJourneyNodes = new List<string>();
         }
+
+
 
         public void SetScene(SceneSelE newregion)
         {

@@ -333,7 +333,8 @@ namespace CampusSimulator
             AddBuildingToCollection(bld); /// has to be afterwards because of the sorted names for journeys
             //bld.llm = bgo.AddComponent<LatLongMap>(); // todo uncomment
             bld.llm = new LatLongMap(); // todo uncomment
-            //bld.llm.AddLlmDetails();
+                                        //bld.llm.AddLlmDetails();
+            sman.jnman.AddViewerJourneyNodes(bld.destnodes);
             UpdateBldStats();
         }
         public void DelBuildings()
