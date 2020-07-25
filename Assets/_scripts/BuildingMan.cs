@@ -365,17 +365,22 @@ namespace CampusSimulator
             Destroy(bld.gameObject);
             //Debug.Log($"After deleting building {name} nbld:{bldlookup.Count}");
         }
-        public Building GetBuilding(string name,bool couldFail=false)
+        public Building GetBuilding(string bname,bool couldFail=false)
         {
-            if (!bldlookup.ContainsKey(name))
+            if (bname.Contains("/"))
+            {
+                var sar = bname.Split('/');
+                bname = sar[0];
+            }
+            if (!bldlookup.ContainsKey(bname))
             {
                 if (!couldFail)
                 {
-                    Debug.Log("Bad building lookup:" + name);
+                    Debug.Log("Bad building lookup:" + bname);
                 }
                 return null;
             }
-            return bldlookup[name];
+            return bldlookup[bname];
         }
         public void AddBuildingToCollection(Building building)
         {

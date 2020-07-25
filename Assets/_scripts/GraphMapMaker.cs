@@ -10,7 +10,7 @@ namespace GraphAlgos
     {
         gen_none, gen_circ, gen_sphere, gen_b43_1, gen_b43_2, gen_b43_3, gen_b43_4, gen_b43_1p2,
         gen_bho, gen_small, gen_redwb_3, gen_json_file, gen_campus, gen_eb12, gen_eb12_json, gen_eb12_small,
-        gen_dublin,gen_tukwila
+        gen_dublin,gen_tukwila,gen_tenmtn
     };
 
     public class GenGlobeParameters
@@ -176,6 +176,7 @@ namespace GraphAlgos
             //lc.SetCurUseType(LcUseType.driveway);
             //lc.AddNodePtxy("tuk-ssm-dw00", -1, 4.4);
             //lc.LinkTooPtxz("tuk-ssm-dw01", -1, -60.7);
+            grc.regman.SetRegion("tukwila");
 
             grc.SetCurUseType(LinkUse.sewerpipe);
             grc.AddNodePtxz("tuk-ssm-sp00", -1.5, 4.4);
@@ -205,7 +206,45 @@ namespace GraphAlgos
             grc.AddNodePtxz("tuk-ssm-cm00", -12.44, -10.65);
             grc.LinkToPtxz("tuk-ssm-cm01", -12.44, -12.91);
             grc.LinkToPtxz("tuk-ssm-cm02", -12.44, -89.5);
+            grc.regman.SetRegion("default");
+        }
 
+        public void CreatePointsForTenMtn()
+        {
+            //lc.SetCurUseType(LcUseType.driveway);
+            //lc.AddNodePtxy("tuk-ssm-dw00", -1, 4.4);
+            //lc.LinkTooPtxz("tuk-ssm-dw01", -1, -60.7);
+            grc.regman.SetRegion("tenmtn");
+
+            //grc.SetCurUseType(LinkUse.sewerpipe);
+            //grc.AddNodePtxz("tuk-ssm-sp00", -1.5, 4.4);
+            //grc.LinkToPtxz("tuk-ssm-sp01", -1.5, -10.0);
+            //grc.LinkToPtxz("tuk-ssm-sp02", -1.5, -60.7);
+            //grc.NewAnchorLinkToxz("tuk-ssm-sp01", "tuk-ssm-sp11", -7.6, -16.42);
+            //grc.LinkToPtxz("tuk-ssm-sp12", -18.79, -20.23);
+            //grc.NewAnchorLinkToxz("tuk-ssm-sp01", "tuk-ssm-sp21", 8.0, -14.0);
+
+            //grc.SetCurUseType(LinkUse.marker);
+            //grc.AddNodePtxz("tuk-ssm-mk00", -13.73, -17.8);
+            //grc.LinkToPtxz("tuk-ssm-mk01", -13.73, -10.1);
+            //grc.LinkToPtxz("tuk-ssm-mk02", -8.31, -6.53);
+            //grc.LinkToPtxz("tuk-ssm-mk03", -8.31, -14.2);
+            //grc.AddLinkByNodeName("tuk-ssm-mk03", "tuk-ssm-mk00");
+
+            //grc.SetCurUseType(LinkUse.elecpipe);
+            //grc.AddNodePtxz("tuk-ssm-el01", 60, -69.0);
+            //grc.LinkToPtxz("tuk-ssm-el02", 20, -69.0);
+            //grc.LinkToPtxz("tuk-ssm-el02", 8.01, -29.0);
+            //grc.LinkToPtxz("tuk-ssm-lp00", 5.6, -29.0);
+            //grc.LinkToPtxz("tuk-ssm-el03", -9.5, -29.1);
+            //grc.LinkToPtxz("tuk-ssm-el04", -9.5, -12.6);
+            //grc.LinkToPtxz("tuk-ssm-el05", -11.25, -12.6);
+
+            //grc.SetCurUseType(LinkUse.commspipe);
+            //grc.AddNodePtxz("tuk-ssm-cm00", -12.44, -10.65);
+            //grc.LinkToPtxz("tuk-ssm-cm01", -12.44, -12.91);
+            //grc.LinkToPtxz("tuk-ssm-cm02", -12.44, -89.5);
+            grc.regman.SetRegion("default");
         }
 
         public void CreateEb12GarageLinks()
@@ -922,6 +961,12 @@ namespace GraphAlgos
                         CreatePointsForTukwila();
                         break;
                     }
+                case graphSceneE.gen_tenmtn:
+                    {
+                        CreatePointsForTenMtn();
+                        break;
+                    }
+
                 case graphSceneE.gen_dublin:
                     {
                         CreatePointsForDublin();

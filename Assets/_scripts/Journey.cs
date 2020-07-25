@@ -74,7 +74,10 @@ namespace CampusSimulator
                 finishSecsToDestroy = finsecs;
             }
             failedSecsToDestroy = 10;
-            person.journey = this;           
+            if (person != null)
+            {
+                person.journey = this;
+            }
             status = JourneyStatE.WaitingToStart;
             jnyTime = Time.time;
             jman.LogJourney(this,br1,br2);
@@ -98,9 +101,12 @@ namespace CampusSimulator
                 //sm.Occupy(currentleg.formname);
                 sm.VehicleOccupy(currentleg.vehicle);
             }
-            if (person.grabbedMainCamera)
+            if (person != null)
             {
-                Camera.main.transform.parent = null; // unattach the main cam to avoid Unity deleting main cam and freaking out
+                if (person.grabbedMainCamera)
+                {
+                    Camera.main.transform.parent = null; // unattach the main cam to avoid Unity deleting main cam and freaking out
+                }
             }
             legindex = legidx;
             currentleg = legs[legidx];
