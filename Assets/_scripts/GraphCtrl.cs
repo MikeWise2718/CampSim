@@ -554,7 +554,6 @@ namespace GraphAlgos
             var zf = (float)z;
             return (AddNode(ndname, new Vector3(xf, yf, zf), comment: comment));
         }
-
         public LcNode AddNodePtll(string ndname, double lat, double lng, string comment = "")
         {
             if (lltoxz==null)
@@ -771,6 +770,14 @@ namespace GraphAlgos
             var yf = ranHeight();
             var zf = (float)z;
             return (LinkTo(nodename, new Vector3(xf, yf, zf), curUseType, lname,comment));
+        }
+        public LcLink LinkToPtll(string nodename, double lat, double lng, string lname = "", string comment = "")
+        {
+            var (x, z) = lltoxz(lat, lng);
+            var xf = (float)x;
+            var yf = ranHeight();
+            var zf = (float)z;
+            return (LinkTo(nodename, new Vector3(xf, yf, zf), curUseType, lname, comment));
         }
         public LcLink LinkToPtxyz(string nodename, double x, double y, double z, string lname = "",string comment="")
         {

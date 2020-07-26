@@ -214,10 +214,17 @@ namespace GraphAlgos
             //lc.SetCurUseType(LcUseType.driveway);
             //lc.AddNodePtxy("tuk-ssm-dw00", -1, 4.4);
             //lc.LinkTooPtxz("tuk-ssm-dw01", -1, -60.7);
-            grc.regman.SetRegion("tenmtnx");
+            grc.regman.SetRegion("tenmtn-x");
             grc.AddNodePtll("foundspot", 47.520249, -121.721548); // where she was found
-
             grc.AddLinkByNodeName("foundspot", "reg:tenmtn", LinkUse.driveway);
+
+            grc.AddNodePtll("llmd", 47.5016149, -121.7083454); // where she was found
+            grc.LinkToPtll( "llul", 47.5465240, -121.7748213);
+            grc.LinkToPtll( "llur", 47.5465240, -121.6418695);
+            grc.LinkToPtll( "llbr", 47.4567059, -121.6418695);
+            grc.LinkToPtll( "llbl", 47.4567059, -121.7748213);
+
+
 
             //grc.SetCurUseType(LinkUse.sewerpipe);
             //grc.AddNodePtxz("tuk-ssm-sp00", -1.5, 4.4);
