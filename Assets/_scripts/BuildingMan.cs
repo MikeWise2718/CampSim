@@ -323,18 +323,19 @@ namespace CampusSimulator
             bldlst.ForEach(bld => bld.PopulateBuilding());
         }
 
-        public void MakeBuilding(string name)
+        public void MakeBuilding(string mbname)
         {
-            var bgo = new GameObject(name);
+            var bgo = new GameObject(mbname);
             bgo.transform.position = Vector3.zero;
             bgo.transform.parent = this.transform;
             var bld = bgo.AddComponent<Building>();
             bld.AddBldDetails(this);
             AddBuildingToCollection(bld); /// has to be afterwards because of the sorted names for journeys
             //bld.llm = bgo.AddComponent<LatLongMap>(); // todo uncomment
-            bld.llm = new LatLongMap(); // todo uncomment
+            var origin = $"BuildingMan.MakeBuilding(\"{mbname}\")";
+            bld.llm = new LatLongMap(origin); // todo uncomment
                                         //bld.llm.AddLlmDetails();
-            sman.jnman.AddViewerJourneyNodes(bld.destnodes,prefix:$"{name}/");
+            sman.jnman.AddViewerJourneyNodes(bld.destnodes,prefix:$"{mbname}/");
             UpdateBldStats();
         }
         public void DelBuildings()

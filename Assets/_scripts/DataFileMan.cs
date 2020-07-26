@@ -125,6 +125,10 @@ namespace CampusSimulator
                     osmloadspec = "hidlakelook";
                     //ptscale = 1000f;
                     break;
+                case SceneSelE.Riggins:
+                    osmloadspec = "riggins";
+                    //ptscale = 1000f;
+                    break;
                 default:
                 case SceneSelE.None:
                     // DelBuildings called above already

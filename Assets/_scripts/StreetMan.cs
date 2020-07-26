@@ -167,6 +167,10 @@ namespace CampusSimulator
                     regname = "hidlakelook";
                     //ptscale = 1000f;
                     break;
+                case SceneSelE.Riggins:
+                    regname = "riggins";
+                    //ptscale = 1000f;
+                    break;
                 default:
                 case SceneSelE.None:
                     // DelBuildings called above already

@@ -256,7 +256,16 @@ namespace CampusSimulator
             UxUtils.UxSettingsMan.SetScenario(newscene.ToString());
             curscene = newscene;
         }
-
+        public (float x,float z) lltoxz(double lat,double lng)
+        {
+            if (glbllm==null)
+            {
+                return ((float)lng, (float)lat);
+            }
+            var x = (float) glbllm.maps.xmap.Map(lng,lat);
+            var z = (float) glbllm.maps.zmap.Map(lng,lat);
+            return (x, z);
+        }
         public void SetScene( SceneSelE newscene,bool force=false )
         {
             if (newscene != curscene || force)
@@ -280,8 +289,9 @@ namespace CampusSimulator
 
                     // Now do value initialization 
                     this.InitializeScene(newscene);// start with setting the scene
-                    //glbllm = rmango.AddComponent<LatLongMap>();
-                    glbllm = new LatLongMap();
+                                                   //glbllm = rmango.AddComponent<LatLongMap>();
+                    var origin = $"SceneMan.SetScene( SceneSelE.{newscene} )";
+                    glbllm = new LatLongMap(origin);
                     glbllm.InitMapFromSceneSelString(newscene.ToString());
 
                     mpman.InitializeScene(newscene); // Note this has an await buried in it and afterwards a call to smam.PostMapLoadSetScene below

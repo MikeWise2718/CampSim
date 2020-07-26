@@ -214,7 +214,10 @@ namespace GraphAlgos
             //lc.SetCurUseType(LcUseType.driveway);
             //lc.AddNodePtxy("tuk-ssm-dw00", -1, 4.4);
             //lc.LinkTooPtxz("tuk-ssm-dw01", -1, -60.7);
-            grc.regman.SetRegion("tenmtn");
+            grc.regman.SetRegion("tenmtnx");
+            grc.AddNodePtll("foundspot", 47.520249, -121.721548); // where she was found
+
+            grc.AddLinkByNodeName("foundspot", "reg:tenmtn", LinkUse.driveway);
 
             //grc.SetCurUseType(LinkUse.sewerpipe);
             //grc.AddNodePtxz("tuk-ssm-sp00", -1.5, 4.4);
@@ -966,7 +969,6 @@ namespace GraphAlgos
                         CreatePointsForTenMtn();
                         break;
                     }
-
                 case graphSceneE.gen_dublin:
                     {
                         CreatePointsForDublin();

@@ -239,16 +239,39 @@ namespace CampusSimulator
             qmapman.bespoke.mapscale = new Vector3(ska, ska, ska);
             //qmapman.bespoke.maprot = new Vector3(0, 0, 0);
             qmapman.bespoke.mappoints = new List<MappingPoint>();
-            if (sman!=null && hasLLmap && sman.glbllm != null)
+            if (sman != null && sman.glbllm != null)
             {
-                var mapdata = sman.glbllm.mapcoord?.mapdata;
-                if (mapdata != null)
+                if (hasLLmap)
                 {
-                    foreach (var p in mapdata)
+                    // copy the mapcoords from our predefined map
+                    var mapdata = sman.glbllm.mapcoord?.mapdata;
+                    if (mapdata != null)
                     {
-                        qmapman.bespoke.mappoints.Add(new MappingPoint(p.lat, p.lng, p.x, p.z));
-                        //Debug.Log($"ptcnt:{qmapman.bespoke.mappoints.Count}");
+                        foreach (var p in mapdata)
+                        {
+                            qmapman.bespoke.mappoints.Add(new MappingPoint(p.lat, p.lng, p.x, p.z));
+                            //Debug.Log($"ptcnt:{qmapman.bespoke.mappoints.Count}");
+                        }
                     }
+                }
+                else
+                {
+                    var llm = sman.glbllm;
+                    //llm.mapcoord.AddRowLatLng(47.640490, -122.133797, -149.1, 0.2);
+                    var llb = qmapman.bespoke.llbox;
+                    var llmd = llb.GetMidPoint();
+                    var llbl = llb.GetBottomLeft();
+                    var llur = llb.GetUpperRight();
+                    var llbr = llb.GetBottomRight();
+                    var llul = llb.GetUpperLeft();
+                    var w = llb.extentMeters1.x/2;
+                    var h = llb.extentMeters1.y/2;
+                    llm.mapcoord.AddRowLatLng( llmd.lat, llmd.lng, 0,0);
+                    llm.mapcoord.AddRowLatLng( llbl.lat, llbl.lng, -w, -h);
+                    llm.mapcoord.AddRowLatLng( llur.lat, llur.lng, w, h);
+                    llm.mapcoord.AddRowLatLng( llbr.lat, llbr.lng, w, -h);
+                    llm.mapcoord.AddRowLatLng( llul.lat, llul.lng, -w, h);
+                    llm.CalcRegressionMaps();
                 }
             }
             var (nbm,nel) = await qmapman.SetMode(qmapman.qmapMode);

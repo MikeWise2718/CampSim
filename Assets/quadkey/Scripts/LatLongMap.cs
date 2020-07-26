@@ -756,8 +756,14 @@ namespace Aiskwk.Map
         public LatLongMap glbllm = null;
         public bool isInited = false;
         public bool isOk = false;
-        public string initmethod = "";
+        public string initmethod = "unknown";
+        public string origin = "unknown";
         // Use this for initialization
+
+        public LatLongMap(string origin)
+        {
+            this.origin = origin;
+        }
 
         public Vector3 xycoord(double lng, double lat)
         {
