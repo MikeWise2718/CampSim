@@ -22,6 +22,7 @@ namespace CampusSimulator
         private List<SimpleDf> dfnodeslist;
 
         public UxSettingBool useDfIndexes = new UxSettingBool("useDfIndexes", true);
+        public UxSettingBool useDfLlCoords = new UxSettingBool("useDfLlcoords", true);
 
         public (int waysidxcnt,int linksidxcnt,int nodeidxcnt) GetIndexCounts()
         {
@@ -71,6 +72,7 @@ namespace CampusSimulator
         public void InitializeValues()
         {
             useDfIndexes.GetInitial(true);
+            useDfLlCoords.GetInitial(true);
         }
 
         public void InitializeScene(SceneSelE newregion)
@@ -230,7 +232,7 @@ namespace CampusSimulator
             }
             if (llm != null)
             {
-                Debug.Log($"Converting coords with llm {llm.initmethod}");
+                Debug.Log($"Converting coords with llm {llm.origin} - {llm.initmethod}");
                 ConvertNodeCoords(dfnodes, llm);
             }
             var okways = dfways.CheckConsistency("DataFileMan.GetDfsFromResources", quiet:true);

@@ -666,11 +666,11 @@ namespace CampusSimulator
                     }
                     break;
                 case "MsGarage19_1":
-                    defPercentFull = 1.0f;
+                    defPercentFull = 0.9f;
                     GenSlots("g_19_1", 15, -518.00f, 112.00f, 3.00f, 1.0f, 160);
                     break;
                 case "MsGarage121_1":
-                    defPercentFull = 1.0f;
+                    defPercentFull = 0.9f;
                     GenSlots("g_121_1", 16, -836f, -542.00f, 1.12f, -3.0f, 70);
                     break;
                 case "MsGarage11_1":

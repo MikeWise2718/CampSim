@@ -270,9 +270,14 @@ namespace CampusSimulator
         {
             if (newscene != curscene || force)
             {
+                var ceasesw = new StopWatch(start:false);
+                var initsw = new StopWatch(start: false);
+                var setsw = new StopWatch(start: false);
+                var finsw = new StopWatch(start: false);
                 Debug.LogWarning($"SceneMan-Setting scenario to {newscene} - curscene:{curscene} - force:{force}");
                 try
                 {
+                    ceasesw.Start();
                     // Cease all activity
                     jnman.CeaseSceneActivity();
 
@@ -286,6 +291,9 @@ namespace CampusSimulator
                     mpman.DeleteQmap();
                     firstPersonBirdCtrl.DeleteBirdGosAndInit();
                     firstPersonPathCtrl.DeletePathGoesAndInit();
+
+                    ceasesw.Stop();
+                    initsw.Start();
 
                     // Now do value initialization 
                     this.InitializeScene(newscene);// start with setting the scene
@@ -310,6 +318,9 @@ namespace CampusSimulator
                     lcman.InitializeScene(newscene);
                     frman.InitializeScene(newscene);
                     uiman.InitializeScene(newscene);
+
+                    initsw.Stop();
+                    setsw.Start();
 
                     // Now construct our graphical objects
 
@@ -339,11 +350,20 @@ namespace CampusSimulator
                     frman.SetScene(newscene);
                     uiman.SetScene(newscene);
 
+                    setsw.Stop();
+
+                    finsw.Start();
+
                     lcman.SetScene3(newscene);  // realize latelinks    
                     lcman.DeleteUnconnectedNodes();
+                    finsw.Stop();
+
                     Debug.Log($"SceneMan.SetScene {newscene} finished");
+                    var tot = ceasesw.Elapf() + initsw.Elapf() + setsw.Elapf() + finsw.Elapf();
+                    //var tot = 0f;
+                    Debug.Log($"Cease:{ceasesw.ElapSecs()} Init:{initsw.ElapSecs()} Set:{setsw.ElapSecs()} Fin:{finsw.ElapSecs()}  - Tot:{tot:f3}");
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     Debug.LogError("Scene "+newscene.ToString()+" not initialized successfully Exception:"+ex.ToString());
                 }   
@@ -1518,7 +1538,7 @@ namespace CampusSimulator
             IdentitySystemAndUser();
             InitPhase0();
             var esi = SceneMan.GetInitialSceneOption();
-            curscene = SceneSelE.None; // force it to execute - kind of a kludge
+            curscene = SceneSelE.None; // force it to execute by specifying something it should never be - kind of a kludge
             SetScene(esi);
         }
         public void ToggleAutoErrorCorrect()
@@ -1682,7 +1702,7 @@ namespace CampusSimulator
                 if (needstotalrefresh)
                 {
                     var sceneToRefresh = curscene;
-                    if (requestScene!=SceneSelE.None)
+                    if (requestScene != SceneSelE.None)
                     {
                         sceneToRefresh = requestScene;
                     }
@@ -1691,10 +1711,13 @@ namespace CampusSimulator
                     sw2.Stop();
                     Debug.Log($"TotalRefresh SetScene took {sw2.ElapSecs()} secs");
                 }
-                var sw3 = new StopWatch();
-                RefreshSceneManGos(); // in update
-                sw3.Stop();
-                Debug.Log($"RefreshSceneManGos took {sw3.ElapSecs()} secs");
+                else
+                {
+                    var sw3 = new StopWatch();
+                    RefreshSceneManGos(); // in update
+                    sw3.Stop();
+                    Debug.Log($"RefreshSceneManGos took {sw3.ElapSecs()} secs");
+                }
                 uiman.SyncState();
                 needstotalrefresh = false;
                 needsrefresh = false;

@@ -169,7 +169,7 @@ namespace CampusSimulator
                 case BirdFormE.hummingbird:
                     {
                         var objPrefab = Resources.Load<GameObject>("hummingbird");
-                        birdformgo = Instantiate<GameObject>(objPrefab) as GameObject;
+                        birdformgo = Instantiate<GameObject>(objPrefab);
                         var s = 0.5e-3f;
                         birdformgo.transform.localScale = new Vector3(s, s, s);
                         birdformgo.transform.localRotation = currot;
@@ -183,7 +183,7 @@ namespace CampusSimulator
                 case BirdFormE.drone:
                     {
                         var objPrefab = Resources.Load<GameObject>("obj3d/quadcopterspinning");
-                        birdformgo = Instantiate<GameObject>(objPrefab) as GameObject;
+                        birdformgo = Instantiate<GameObject>(objPrefab);
                         var s = 100;
                         birdformgo.transform.localScale = new Vector3(s, s, s);
                         birdformgo.transform.localRotation = currot;
@@ -191,7 +191,7 @@ namespace CampusSimulator
                         movingAnimationScript = "";
                         restingAnimationScript = "";
                         //BirdFlyHeight = 1.5f;
-                        birdgo.name = "Bird";
+                        birdgo.name = "Phantom";
                         break;
                     }
                 case BirdFormE.person:
@@ -200,10 +200,18 @@ namespace CampusSimulator
                         //{
                         //    birdresourcename = "girl004";
                         //}
-                        birdformgo = person.LoadPersonGo("-ava-bc");
-                        if (person.hasHololens)
+                        if (person)
                         {
-                            person.ActivateHololens(true);
+                            birdformgo = person.LoadPersonGo("-ava-bc");
+                            if (person.hasHololens)
+                            {
+                                person.ActivateHololens(true);
+                            }
+                        }
+                        else
+                        {
+                            var objPrefab = Resources.Load<GameObject>("people/girl004");
+                            birdformgo = Instantiate<GameObject>(objPrefab);
                         }
                         var s = 1.0f;
                         birdformgo.transform.localScale = new Vector3(s, s, s);
