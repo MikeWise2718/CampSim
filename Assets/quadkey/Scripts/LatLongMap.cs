@@ -852,7 +852,7 @@ namespace Aiskwk.Map
             isOk = ok;
         }
 
-        public void InitMapFromSceneSelString(string regsel)
+        public void InitMapFromSceneSelString(string regsel,LatLngBox llb=null)
         {
             mapcoord = new MapCoordblock(this);
             bool ok = false;
@@ -902,7 +902,14 @@ namespace Aiskwk.Map
                     ok = true;
                     break;
                 default:
-                    Debug.LogError($"LatrLongMap.InitMapFromSceneSelString tried to init from unknown id:{regsel}");
+                    if (llb != null)
+                    {
+                        RegressllboxIntoLlmap(llb);
+                    }
+                    else
+                    {
+                        Debug.LogError($"LatrLongMap.InitMapFromSceneSelString tried to init from unknown id:{regsel} and llbox==null");
+                    }
                     break;
             }
             glbllm = this;
@@ -919,6 +926,30 @@ namespace Aiskwk.Map
             initmethod = $"InitMapFromSceneSelString(\"{regsel}\") ok:{ok}";
         }
 
+        public void RegressllboxIntoLlmap(LatLngBox llb)
+        {
+            //var llm = sman.glbllm;
+            ////llm.mapcoord.AddRowLatLng(47.640490, -122.133797, -149.1, 0.2);
+            //var llb = qmapman.bespoke.llbox;
+            var llmd = llb.GetMidPoint();
+            var llbl = llb.GetBottomLeft();
+            var llbr = llb.GetBottomRight();
+            var llur = llb.GetUpperRight();
+            var llul = llb.GetUpperLeft();
+            Debug.Log($"RegressLLboxIntoLlmap - llmd:{llmd}");
+            Debug.Log($"RegressLLboxIntoLlmap - llul:{llul}");
+            Debug.Log($"RegressLLboxIntoLlmap - llbr:{llbr}");
+            Debug.Log($"RegressLLboxIntoLlmap - llbl:{llbl}");
+            Debug.Log($"RegressLLboxIntoLlmap - llur:{llur}");
+            var w = llb.extentMeters1.x / 2;
+            var h = llb.extentMeters1.y / 2;
+            mapcoord.AddRowLatLng(llmd.lat, llmd.lng, 0, 0);
+            mapcoord.AddRowLatLng(llul.lat, llul.lng, -h, -w);
+            mapcoord.AddRowLatLng(llur.lat, llur.lng, -h, w);
+            mapcoord.AddRowLatLng(llbr.lat, llbr.lng, h, w);
+            mapcoord.AddRowLatLng(llbl.lat, llbl.lng, h, -w);
+            CalcRegressionMaps();
+        }
 
         public void InitMapFromLatLongBox(LatLngBox latLngBox, int lod)
         {

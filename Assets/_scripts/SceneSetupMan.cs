@@ -407,7 +407,7 @@ namespace CampusSimulator
             updateCount++;
         }
     }
-
+#if UNITY_EDITOR
     public class FindMissingScripts : EditorWindow
     {
         [MenuItem("Window/FindMissingScripts")]
@@ -452,4 +452,5 @@ namespace CampusSimulator
             Debug.Log(string.Format("Searched {0} GameObjects, {1} components, found {2} missing", go_count, components_count, missing_count));
         }
     }
+#endif
 }

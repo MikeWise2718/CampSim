@@ -637,7 +637,7 @@ namespace Aiskwk.Map
         }
         string gdalFilePath = "c:/transfer/gdal/";
         string trackFilePath = "c:/transfer/tracks/";
-        public async Task<(int nbmloaded,int nelloaded)> SetMode(QmapModeE newmode,bool forceload=false)
+        public async Task<(int nbmloaded,int nelloaded)> SetModeAndMakeMesh(QmapModeE newmode,bool forceload=false)
         {
             Debug.LogWarning("SetMode:" + newmode);
             var nbm = 0;
@@ -1079,7 +1079,7 @@ namespace Aiskwk.Map
             {
                 if (lastQmapMode != qmapMode)
                 {
-                    SetMode(qmapMode);
+                    SetModeAndMakeMesh(qmapMode);
                 }
                 if (locSpecer.locSpecExecute)
                 {

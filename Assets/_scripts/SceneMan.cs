@@ -290,11 +290,14 @@ namespace CampusSimulator
                     // Now do value initialization 
                     this.InitializeScene(newscene);// start with setting the scene
                                                    //glbllm = rmango.AddComponent<LatLongMap>();
-                    var origin = $"SceneMan.SetScene( SceneSelE.{newscene} )";
-                    glbllm = new LatLongMap(origin);
-                    glbllm.InitMapFromSceneSelString(newscene.ToString());
 
-                    mpman.InitializeScene(newscene); // Note this has an await buried in it and afterwards a call to smam.PostMapLoadSetScene below
+                    glbllm = null;
+
+                    mpman.InitializeScene(newscene); // bspokespec set here
+
+                    glbllm = new LatLongMap($"SceneMan.SetScene( SceneSelE.{newscene} )");
+                    glbllm.InitMapFromSceneSelString(newscene.ToString(),mpman.bespokespec?.llbox); // doesn't handle non-llmap scense 
+
                     dfman.InitializeScene(newscene);
                     vcman.InitializeScene(newscene);
                     bdman.InitializeScene(newscene);
@@ -313,8 +316,7 @@ namespace CampusSimulator
 
                     dfman.SetScene(newscene); // should be early to setup data
 
-
-                    mpman.SetScene(newscene);
+                    mpman.SetScene(newscene);// Note this has an await buried in it and afterwards a call to smam.PostMapLoadSetScene below 
 
                     gaman.SetScene(newscene);
 

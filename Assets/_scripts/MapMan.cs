@@ -169,7 +169,7 @@ namespace CampusSimulator
 
         public UxSetting<float> hmult = new UxSetting<float>("Hmult", 1f );
 
- 
+        public BespokeSpec bespokespec=null;
 
         public void InitPhase0()
         {
@@ -203,66 +203,57 @@ namespace CampusSimulator
                 qmapman.DeleteQmm();
             }
         }
-        void CreateQmap()
+        //void CreateQmap()
+        //{
+        //    qmapgo = new GameObject("QmapMan");
+        //    qmapman = qmapgo.AddComponent<QmapMan>();
+        //    qmapman.qmapMode = QmapMan.QmapModeE.Bespoke;
+        //    qmapman.bespoke = bspko;
+
+        //    RealizeQmap();
+        //}
+
+        void AssignBespoke()
         {
-            qmapgo = new GameObject("QmapMan");
-            qmapman = qmapgo.AddComponent<QmapMan>();
-            RealizeQmap();
+            //var fak = 2*0.4096f;
+            //qmapman.bespoke = new BespokeSpec(lastregionset.ToString(), maplat,maplng, fak*zscale, fak*xscale,lod:17 );
+            bespokespec = new BespokeSpec(lastsceneset.ToString(), maplat, maplng, zdistkm, xdistkm, zoffkm, xoffkm, lod: lod, nodesPerQuadKey: npqk);
+
+            bespokespec.mapProv = reqMapProv.Get();
+            bespokespec.eleProv = reqEleProv.Get();
+            bespokespec.hmult = hmult.Get();
+            bespokespec.useElevationData = useElevations.Get();
+            bespokespec.useFlatTris = flatTris.Get();
+            bespokespec.frameQuadkeys = frameQuadkeys.Get();
+            bespokespec.triLines = meshGrid.Get();
+            bespokespec.triPoints = triPoints.Get();
+            bespokespec.meshPoints = meshPoints.Get();
+            bespokespec.coordPoints = coordPoints.Get();
+            bespokespec.extentPoints = extentPoints.Get();
+            bespokespec.useViewer = true;
+            bespokespec.viewHome = viewHome;
+            bespokespec.maptrans = maptrans;
+            bespokespec.maprot = new Vector3(0, this.roty2, 0);
+            var ska = 1 / mapscale;
+            bespokespec.mapscale = new Vector3(ska, ska, ska);
+            //qmapman.bespoke.maprot = new Vector3(0, 0, 0);
+            bespokespec.mappoints = new List<MappingPoint>();
         }
-        public void RegressllboxIntoLlmap(LatLngBox llb,Aiskwk.Map.LatLongMap llm)
-        {
-            //var llm = sman.glbllm;
-            ////llm.mapcoord.AddRowLatLng(47.640490, -122.133797, -149.1, 0.2);
-            //var llb = qmapman.bespoke.llbox;
-            var llmd = llb.GetMidPoint();
-            var llbl = llb.GetBottomLeft();
-            var llbr = llb.GetBottomRight();
-            var llur = llb.GetUpperRight();
-            var llul = llb.GetUpperLeft();
-            Debug.Log($"RegressLLboxIntoLlmap - llmd:{llmd}");
-            Debug.Log($"RegressLLboxIntoLlmap - llul:{llul}");
-            Debug.Log($"RegressLLboxIntoLlmap - llbr:{llbr}");
-            Debug.Log($"RegressLLboxIntoLlmap - llbl:{llbl}");
-            Debug.Log($"RegressLLboxIntoLlmap - llur:{llur}");
-            var w = llb.extentMeters1.x / 2;
-            var h = llb.extentMeters1.y / 2;
-            llm.mapcoord.AddRowLatLng(llmd.lat, llmd.lng,  0,  0);
-            llm.mapcoord.AddRowLatLng(llul.lat, llul.lng, -h, -w);
-            llm.mapcoord.AddRowLatLng(llur.lat, llur.lng, -h,  w);
-            llm.mapcoord.AddRowLatLng(llbr.lat, llbr.lng, h,  w);
-            llm.mapcoord.AddRowLatLng(llbl.lat, llbl.lng, h, -w);
-            llm.CalcRegressionMaps();
-        }
-        async void RealizeQmap()
+
+        async void RealizeQmapAndMakeMesh()
         {
             //Debug.LogWarning($"QmapMan.RealizeQmap lod:{lod}");
+            if (qmapgo == null)
+            {
+                qmapgo = new GameObject("QmapMan");
+                qmapman = qmapgo.AddComponent<QmapMan>();
+            }
+            qmapman.qmapMode = QmapMan.QmapModeE.Bespoke;
+            qmapman.bespoke = bespokespec;
             qmapgo.transform.parent = null;// we need to set this to force the next transformation to occur
             qmapgo.transform.SetParent(this.transform, worldPositionStays: false);
             RealizeMapVisuals();
-            qmapman.qmapMode = QmapMan.QmapModeE.Bespoke;
-            //var fak = 2*0.4096f;
-            //qmapman.bespoke = new BespokeSpec(lastregionset.ToString(), maplat,maplng, fak*zscale, fak*xscale,lod:17 );
-            qmapman.bespoke = new BespokeSpec(lastsceneset.ToString(), maplat,maplng, zdistkm, xdistkm,zoffkm,xoffkm,lod:lod,nodesPerQuadKey:npqk );
-
-            qmapman.bespoke.mapProv = reqMapProv.Get();
-            qmapman.bespoke.eleProv = reqEleProv.Get();
-            qmapman.bespoke.hmult = hmult.Get();
-            qmapman.bespoke.useElevationData = useElevations.Get();
-            qmapman.bespoke.useFlatTris = flatTris.Get();
-            qmapman.bespoke.frameQuadkeys = frameQuadkeys.Get();
-            qmapman.bespoke.triLines = meshGrid.Get();
-            qmapman.bespoke.triPoints = triPoints.Get();
-            qmapman.bespoke.meshPoints = meshPoints.Get();
-            qmapman.bespoke.coordPoints = coordPoints.Get();
-            qmapman.bespoke.extentPoints = extentPoints.Get();
-            qmapman.bespoke.useViewer = true;
-            qmapman.bespoke.viewHome = viewHome;
-            qmapman.bespoke.maptrans = maptrans;
-            qmapman.bespoke.maprot = new Vector3(0,this.roty2,0);
-            var ska = 1 / mapscale;
-            qmapman.bespoke.mapscale = new Vector3(ska, ska, ska);
-            //qmapman.bespoke.maprot = new Vector3(0, 0, 0);
-            qmapman.bespoke.mappoints = new List<MappingPoint>();
+            //AssignBespoke();
             if (sman != null && sman.glbllm != null)
             {
                 if (hasLLmap)
@@ -278,30 +269,16 @@ namespace CampusSimulator
                         }
                     }
                 }
-                else
-                {
-
-                    //llm.mapcoord.AddRowLatLng(47.640490, -122.133797, -149.1, 0.2);
-
-                    RegressllboxIntoLlmap(qmapman.bespoke.llbox, sman.glbllm);
-
-                    //var llmd = llb.GetMidPoint();
-                    //var llbl = llb.GetBottomLeft();
-                    //var llur = llb.GetUpperRight();
-                    //var llbr = llb.GetBottomRight();
-                    //var llul = llb.GetUpperLeft();
-                    //Debug.Log($"");
-                    //var w = llb.extentMeters1.x/2;
-                    //var h = llb.extentMeters1.y/2;
-                    //llm.mapcoord.AddRowLatLng( llmd.lat, llmd.lng, 0,0);
-                    //llm.mapcoord.AddRowLatLng( llbl.lat, llbl.lng, -w, -h);
-                    //llm.mapcoord.AddRowLatLng( llur.lat, llur.lng, w, h);
-                    //llm.mapcoord.AddRowLatLng( llbr.lat, llbr.lng, w, -h);
-                    //llm.mapcoord.AddRowLatLng( llul.lat, llul.lng, -w, h);
-                    //llm.CalcRegressionMaps();
-                }
+                //else
+                //{
+                //    sman.glbllm.RegressllboxIntoLlmap(qmapman.bespoke.llbox);
+                //}
             }
-            var (nbm,nel) = await qmapman.SetMode(qmapman.qmapMode);
+
+            //================================================================
+            var (nbm,nel) = await qmapman.SetModeAndMakeMesh(qmapman.qmapMode);
+            //================================================================
+
             sman.PostMapLoadSetScene(); // this has to go after the await
             if (nbm>0 || nel>0)
             {
@@ -313,7 +290,7 @@ namespace CampusSimulator
             //Debug.Log($"bespoke ptcnt:{qmapman.bespoke.mappoints.Count}");
         }
 
-           public (int,int) EstimateNumFilesInFetch(string scenename,MapProvider mapprov, ElevProvider elprov, LatLng ll,float latkm,float lngkm,int lod,int ntpq)
+         public (int,int) EstimateNumFilesInFetch(string scenename,MapProvider mapprov, ElevProvider elprov, LatLng ll,float latkm,float lngkm,int lod,int ntpq)
         {
             var llbox = new LatLngBox(ll, latkm, lngkm, lod: lod);
             var (nqkx, nqky) = llbox.GetTileSize();
@@ -349,7 +326,7 @@ namespace CampusSimulator
             return null;
         }
 
-        public LatLongMap GetLatLongMap()
+        public LatLongMap GetLatLongMapOld()
         {
             var llm1 = sman.glbllm;
             var llm = llm1;
@@ -364,6 +341,10 @@ namespace CampusSimulator
             //Debug.Log($"sman.mpman.hasLLmap {sman.mpman.hasLLmap}");
             //Debug.Log($"final llm {llm.initmethod}");
             return llm;
+        }
+        public LatLongMap GetLatLongMap()
+        {
+            return sman.glbllm;
         }
 
         public void SetMapPovider(MapProvider map)
@@ -596,7 +577,7 @@ namespace CampusSimulator
             qmapman.bespoke.lod = lod;
             qmapman.bespoke.llbox.lod = lod;
             qmapman.bespoke.nodesPerQuadKey = npqk;
-            await qmapman.SetMode(qmapman.qmapMode,forceload:forceload);
+            await qmapman.SetModeAndMakeMesh(qmapman.qmapMode,forceload:forceload);
         }
         public (bool isLoading,bool irupt,int lodLoading,int nbmLoaded,int nbmToLoad,int nelevBatchesLoaded, int nelevBatchsToLoad) GetLoadingStatus()
         {
@@ -658,17 +639,10 @@ namespace CampusSimulator
             }
             return rv;
         }
-
-        void Initialize()
+        public void SetScene(SceneSelE newscene)
         {
-            if (qmapgo == null)
-            {
-                CreateQmap();
-            }
-            else
-            {
-                RealizeQmap();
-            }
+            Debug.Log($"MapMan.SetScene: {newscene}");
+            RealizeQmapAndMakeMesh();
         }
         void SetMeshCollider(bool enable)
         {
@@ -984,7 +958,6 @@ namespace CampusSimulator
                     isCustomizable = false;
                     break;
             }
-
         }
         public void GetInitials()
         {
@@ -1075,15 +1048,14 @@ namespace CampusSimulator
             transform.position = maptrans;
             transform.localScale = new Vector3(mapscale, mapscale, mapscale);
             lastsceneset = newscene;
+
+
+            AssignBespoke();
+
             Debug.Log($"MapMan.SetScene {newscene} - lod:{lod} scale:{mapscale} rot:{maprot} trans:{maptrans} ");
         }
 
-        public void SetScene(SceneSelE newscene)
-        {
-            Debug.Log($"MapMan.SetScene: {newscene}");
-            RealizeMapVisuals();
-            Initialize();
-        }
+ 
 
         public void SaveSceneState()
         {

@@ -476,10 +476,10 @@ public class B121Willow : MonoBehaviour
                         break;
                     case b121_MaterialMode.glasswalls:
                         var pnl = pname.ToLower(); ;
-                        if (pnl.Contains("floor_slab"))
-                        {
-                            Debug.Log("Here I am");
-                        }
+                        //if (pnl.Contains("floor_slab"))
+                        //{
+                        //    Debug.Log("floor_slab");
+                        //}
                         //if (pnl.Contains("solid") || pnl.Contains("wall") || pnl.Contains("door") || pnl.Contains("composite_part"))
                         if (pnl.Contains("interior") || pnl.Contains("floor") || pnl.Contains("door"))
                         {
