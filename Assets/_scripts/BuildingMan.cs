@@ -323,17 +323,19 @@ namespace CampusSimulator
             bldlst.ForEach(bld => bld.PopulateBuilding());
         }
 
-        public void MakeBuilding(string name)
+        public void MakeBuilding(string mbname)
         {
-            var bgo = new GameObject(name);
+            var bgo = new GameObject(mbname);
             bgo.transform.position = Vector3.zero;
             bgo.transform.parent = this.transform;
             var bld = bgo.AddComponent<Building>();
             bld.AddBldDetails(this);
             AddBuildingToCollection(bld); /// has to be afterwards because of the sorted names for journeys
             //bld.llm = bgo.AddComponent<LatLongMap>(); // todo uncomment
-            bld.llm = new LatLongMap(); // todo uncomment
-            //bld.llm.AddLlmDetails();
+            var origin = $"BuildingMan.MakeBuilding(\"{mbname}\")";
+            bld.llm = new LatLongMap(origin); // todo uncomment
+                                        //bld.llm.AddLlmDetails();
+            sman.jnman.AddViewerJourneyNodes(bld.destnodes,prefix:$"{mbname}/");
             UpdateBldStats();
         }
         public void DelBuildings()
@@ -364,17 +366,22 @@ namespace CampusSimulator
             Destroy(bld.gameObject);
             //Debug.Log($"After deleting building {name} nbld:{bldlookup.Count}");
         }
-        public Building GetBuilding(string name,bool couldFail=false)
+        public Building GetBuilding(string bname,bool couldFail=false)
         {
-            if (!bldlookup.ContainsKey(name))
+            if (bname.Contains("/"))
+            {
+                var sar = bname.Split('/');
+                bname = sar[0];
+            }
+            if (!bldlookup.ContainsKey(bname))
             {
                 if (!couldFail)
                 {
-                    Debug.Log("Bad building lookup:" + name);
+                    Debug.Log("Bad building lookup:" + bname);
                 }
                 return null;
             }
-            return bldlookup[name];
+            return bldlookup[bname];
         }
         public void AddBuildingToCollection(Building building)
         {

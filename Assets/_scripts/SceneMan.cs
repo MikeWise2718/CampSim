@@ -256,14 +256,28 @@ namespace CampusSimulator
             UxUtils.UxSettingsMan.SetScenario(newscene.ToString());
             curscene = newscene;
         }
-
+        public (float x,float z) lltoxz(double lat,double lng)
+        {
+            if (glbllm==null)
+            {
+                return ((float)lng, (float)lat);
+            }
+            var x = (float) glbllm.maps.xmap.Map(lng,lat);
+            var z = (float) glbllm.maps.zmap.Map(lng,lat);
+            return (x, z);
+        }
         public void SetScene( SceneSelE newscene,bool force=false )
         {
             if (newscene != curscene || force)
             {
+                var ceasesw = new StopWatch(start:false);
+                var initsw = new StopWatch(start: false);
+                var setsw = new StopWatch(start: false);
+                var finsw = new StopWatch(start: false);
                 Debug.LogWarning($"SceneMan-Setting scenario to {newscene} - curscene:{curscene} - force:{force}");
                 try
                 {
+                    ceasesw.Start();
                     // Cease all activity
                     jnman.CeaseSceneActivity();
 
@@ -278,13 +292,20 @@ namespace CampusSimulator
                     firstPersonBirdCtrl.DeleteBirdGosAndInit();
                     firstPersonPathCtrl.DeletePathGoesAndInit();
 
+                    ceasesw.Stop();
+                    initsw.Start();
+
                     // Now do value initialization 
                     this.InitializeScene(newscene);// start with setting the scene
-                    //glbllm = rmango.AddComponent<LatLongMap>();
-                    glbllm = new LatLongMap();
-                    glbllm.InitMapFromSceneSelString(newscene.ToString());
+                                                   //glbllm = rmango.AddComponent<LatLongMap>();
 
-                    mpman.InitializeScene(newscene); // Note this has an await buried in it and afterwards a call to smam.PostMapLoadSetScene below
+                    glbllm = null;
+
+                    mpman.InitializeScene(newscene); // bspokespec set here
+
+                    glbllm = new LatLongMap($"SceneMan.SetScene( SceneSelE.{newscene} )");
+                    glbllm.InitMapFromSceneSelString(newscene.ToString(),mpman.bespokespec?.llbox); // doesn't handle non-llmap scense 
+
                     dfman.InitializeScene(newscene);
                     vcman.InitializeScene(newscene);
                     bdman.InitializeScene(newscene);
@@ -298,13 +319,15 @@ namespace CampusSimulator
                     frman.InitializeScene(newscene);
                     uiman.InitializeScene(newscene);
 
+                    initsw.Stop();
+                    setsw.Start();
+
                     // Now construct our graphical objects
 
 
                     dfman.SetScene(newscene); // should be early to setup data
 
-
-                    mpman.SetScene(newscene);
+                    mpman.SetScene(newscene);// Note this has an await buried in it and afterwards a call to smam.PostMapLoadSetScene below 
 
                     gaman.SetScene(newscene);
 
@@ -327,11 +350,20 @@ namespace CampusSimulator
                     frman.SetScene(newscene);
                     uiman.SetScene(newscene);
 
+                    setsw.Stop();
+
+                    finsw.Start();
+
                     lcman.SetScene3(newscene);  // realize latelinks    
                     lcman.DeleteUnconnectedNodes();
+                    finsw.Stop();
+
                     Debug.Log($"SceneMan.SetScene {newscene} finished");
+                    var tot = ceasesw.Elapf() + initsw.Elapf() + setsw.Elapf() + finsw.Elapf();
+                    //var tot = 0f;
+                    Debug.Log($"Cease:{ceasesw.ElapSecs()} Init:{initsw.ElapSecs()} Set:{setsw.ElapSecs()} Fin:{finsw.ElapSecs()}  - Tot:{tot:f3}");
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     Debug.LogError("Scene "+newscene.ToString()+" not initialized successfully Exception:"+ex.ToString());
                 }   
@@ -1506,7 +1538,7 @@ namespace CampusSimulator
             IdentitySystemAndUser();
             InitPhase0();
             var esi = SceneMan.GetInitialSceneOption();
-            curscene = SceneSelE.None; // force it to execute - kind of a kludge
+            curscene = SceneSelE.None; // force it to execute by specifying something it should never be - kind of a kludge
             SetScene(esi);
         }
         public void ToggleAutoErrorCorrect()
@@ -1571,6 +1603,7 @@ namespace CampusSimulator
         float ctrlShitTime = 0;
         float ctrlDhitTime = 0;
         float F5hitTime = 0;
+        float F10hitTime = 0;
         public void KeyProcessing()
         {
             //if (Input.GetKeyDown(KeyCode.LeftShift))
@@ -1605,6 +1638,12 @@ namespace CampusSimulator
             {
                 Debug.Log("F5 - Request Total Refresh");
                 this.RequestRefresh("F5 hit", totalrefresh: true);
+            }
+            if (((Time.time - F10hitTime) > 1) && Input.GetKeyDown(KeyCode.F10))
+            {
+                Debug.Log("F10 - Options");
+                uiman.stapan.OptionsButton(toggleState:true);
+                //this.RequestRefresh("F5 hit", totalrefresh: true);
             }
             if (ctrlhit && Input.GetKeyDown(KeyCode.C))
             {
@@ -1663,7 +1702,7 @@ namespace CampusSimulator
                 if (needstotalrefresh)
                 {
                     var sceneToRefresh = curscene;
-                    if (requestScene!=SceneSelE.None)
+                    if (requestScene != SceneSelE.None)
                     {
                         sceneToRefresh = requestScene;
                     }
@@ -1672,10 +1711,13 @@ namespace CampusSimulator
                     sw2.Stop();
                     Debug.Log($"TotalRefresh SetScene took {sw2.ElapSecs()} secs");
                 }
-                var sw3 = new StopWatch();
-                RefreshSceneManGos(); // in update
-                sw3.Stop();
-                Debug.Log($"RefreshSceneManGos took {sw3.ElapSecs()} secs");
+                else
+                {
+                    var sw3 = new StopWatch();
+                    RefreshSceneManGos(); // in update
+                    sw3.Stop();
+                    Debug.Log($"RefreshSceneManGos took {sw3.ElapSecs()} secs");
+                }
                 uiman.SyncState();
                 needstotalrefresh = false;
                 needsrefresh = false;

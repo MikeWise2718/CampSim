@@ -95,6 +95,7 @@ namespace Aiskwk.Map
         public bool regenMesh;
         public bool regenMeshNormals;
         public bool addViewer = true;
+        public ViewerState viewHome = null;
         public enum sythTexMethod { Quadkeys, Synth, Hybrid }
         public sythTexMethod synthTex = sythTexMethod.Quadkeys;
         public string synthSpec = "goldenrod";
@@ -196,11 +197,12 @@ namespace Aiskwk.Map
             this.elevprov = elevprov;
             this.levelOfDetail = llbox.lod;
             //this.llmapqkcoords = this.gameObject.AddComponent<LatLongMap>();
-            this.llmapqkcoords = new LatLongMap();
-            llmapqkcoords.InitMapCoords("");
+            var origin = $"QmapMesh.InitializeGrid( \"{scenename}\" )";
+            this.llmapqkcoords = new LatLongMap(origin+ " - llmapqkcoords");
+            llmapqkcoords.InitMapCoords("llmapqkcoords");
             //this.llmapuscoords = this.gameObject.AddComponent<LatLongMap>();
-            this.llmapuscoords = new LatLongMap();
-            llmapuscoords.InitMapCoords("");
+            this.llmapuscoords = new LatLongMap(origin+" - llmapuscoords");
+            llmapuscoords.InitMapCoords("llmapuscoords");
             this.qmapElev = gameObject.AddComponent<QmapElevation>();
             this.qkm = new QkMan(this, this.mapcoordname, mapprov, llbox);
             this.qtt = this.gameObject.AddComponent<Qtrilines>();
@@ -957,7 +959,7 @@ namespace Aiskwk.Map
             QMeshDestroyViewer();
             viewerobj = new GameObject("Viewer");
             viewer = viewerobj.AddComponent<Viewer>();
-            viewer.InitViewer(this);
+            viewer.InitViewer(this,this.viewHome);
             //viewerobj.transform.SetParent(this.transform, worldPositionStays: true);
             //Debug.Log($"QmeshBuildViewer - Viewer rotation before SetParent  {viewerobj.transform.localRotation.eulerAngles}");
             viewerobj.transform.SetParent(this.transform, worldPositionStays: false);
@@ -1179,8 +1181,9 @@ namespace Aiskwk.Map
             var cnt = llmapqkcoords.mapcoord.mapdata.Count;
             //Debug.Log($"CalcYaLLmap llmapqk pts:{cnt}");
             //var llya= this.gameObject.AddComponent<LatLongMap>();
-            var llya = new LatLongMap();
-            llya.InitMapCoords();
+            var origin = $"QmapMesh.CalcYaLLmap() - scenename: \"{scenename}\" )";
+            var llya = new LatLongMap(origin);
+            llya.InitMapCoords("llya.InitMapCoords");
             int i = 0;
             foreach (var md in llmapqkcoords.mapcoord.mapdata)
             {

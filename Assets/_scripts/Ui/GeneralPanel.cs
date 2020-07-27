@@ -12,6 +12,7 @@ public class GeneralPanel : MonoBehaviour
 
     Toggle fastModeToggle;
     Toggle useDfInexesToggle;
+    Toggle useDfLlCoordsToggle;
 
     Text SimpleDfIndexCountText;
 
@@ -30,6 +31,7 @@ public class GeneralPanel : MonoBehaviour
 
         fastModeToggle = transform.Find("FastModeToggle").gameObject.GetComponent<Toggle>();
         useDfInexesToggle = transform.Find("UseDataFileIndexesToggle").gameObject.GetComponent<Toggle>();
+        useDfLlCoordsToggle = transform.Find("UseDataFileLlCoordsToggle").gameObject.GetComponent<Toggle>();
         SimpleDfIndexCountText = transform.Find("SimpleDfIndexCountText").gameObject.GetComponent<Text>();
 
         closeButton = transform.Find("CloseButton").gameObject.GetComponent<Button>();
@@ -39,10 +41,9 @@ public class GeneralPanel : MonoBehaviour
     public void InitVals()
     {
         Debug.Log("GeneralPanel InitVals called");
-        if (fastModeToggle != null)
-        {
-            fastModeToggle.isOn = sman.fastMode;
-        }
+        fastModeToggle.isOn = sman.fastMode;
+        useDfInexesToggle.isOn = sman.dfman.useDfIndexes.Get();
+        useDfLlCoordsToggle.isOn = sman.dfman.useDfLlCoords.Get();
     }
 
     public void SetScene(CampusSimulator.SceneSelE curscene)
@@ -62,6 +63,7 @@ public class GeneralPanel : MonoBehaviour
         Debug.Log($"GeneralPanel.SetVals called - closing:{closing}");
         sman.fastMode = fastModeToggle.isOn;
         sman.dfman.useDfIndexes.SetAndSave(useDfInexesToggle.isOn);
+        sman.dfman.useDfLlCoords.SetAndSave(useDfLlCoordsToggle.isOn);
 
         sman.RequestRefresh("GeneralPanel-SetVals");
     }

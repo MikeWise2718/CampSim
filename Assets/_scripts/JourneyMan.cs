@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using GraphAlgos;
+using UxUtils;
 
 namespace CampusSimulator
 {
@@ -49,6 +50,9 @@ namespace CampusSimulator
         public string jnyLogFileName = "";
         public float startJnyTime = 0;
         public int journeysLogged = 0;
+
+        public UxSetting<string> lastViewerStartJourney = new UxSetting<string>("lastViewerStartJourney", "");
+        public UxSetting<string> lastViewerEndJourney = new UxSetting<string>("lastViewerEndJourney", "");
 
         public void AddJ(Journey jny)
         {
@@ -915,6 +919,47 @@ namespace CampusSimulator
             spawnjourneys = false;
         }
 
+        List<string> viewerJourneyNodes;
+
+        public void AddViewerJourneyNode(string jnode)
+        {
+            var lc = sman.lcman;
+            var grc = lc.GetGraphCtrl();
+            if (!grc.nodeExists(jnode))
+            {
+                Debug.LogWarning($"JourneyMan.AddViewerJourneyNode({jnode}) - node does not exist in linkcloud");
+                // still might work because it might get added later
+            }
+            viewerJourneyNodes.Add(jnode);
+        }
+
+        public void AddViewerJourneyNodes(IEnumerable<string> jnodes,string prefix="")
+        {
+            foreach(var jn in jnodes)
+            {
+                var nodename = jn;
+                if (prefix!="")
+                {
+                    nodename = prefix + jn;
+                }
+                viewerJourneyNodes.Add(nodename);
+            }
+        }
+
+        public Journey StartViewerJourney(string frnode,string tunode)
+        {
+            var jny = AddBldBldJourneyWithEphemeralPeople(frnode, tunode);
+            //var jny = AddBldBldJourney(frnode, tunode, "startviewerjourney");
+            lastViewerStartJourney.SetAndSave(frnode);
+            lastViewerEndJourney.SetAndSave(tunode);
+            return jny;
+        }
+
+        public string [] GetJourneyNodes()
+        {
+            var rv = viewerJourneyNodes.ToArray();
+            return rv;
+        }
 
         public void CeaseSceneActivity()
         {
@@ -924,7 +969,17 @@ namespace CampusSimulator
         public void InitializeScene(SceneSelE newregion)
         {
             DeleteAllJourneys();
+            InitializeValues();
+            viewerJourneyNodes = new List<string>();
         }
+
+        public void InitializeValues()
+        {
+            lastViewerStartJourney.GetInitial("");
+            lastViewerEndJourney.GetInitial("");
+        }
+
+
 
         public void SetScene(SceneSelE newregion)
         {

@@ -6,7 +6,7 @@ using GraphAlgos;
 
 namespace CampusSimulator
 {
-    public enum BirdFormE { none, sphere, longsphere, hummingbird, person,car }
+    public enum BirdFormE { none, sphere, longsphere, hummingbird, person,car,drone }
     public enum BirdStateE { dormant, atstart, running, atgoal, stopped }
 
     public class BirdCtrl : MonoBehaviour
@@ -169,7 +169,7 @@ namespace CampusSimulator
                 case BirdFormE.hummingbird:
                     {
                         var objPrefab = Resources.Load<GameObject>("hummingbird");
-                        birdformgo = Instantiate<GameObject>(objPrefab) as GameObject;
+                        birdformgo = Instantiate<GameObject>(objPrefab);
                         var s = 0.5e-3f;
                         birdformgo.transform.localScale = new Vector3(s, s, s);
                         birdformgo.transform.localRotation = currot;
@@ -180,16 +180,38 @@ namespace CampusSimulator
                         birdgo.name = "Bird";
                         break;
                     }
+                case BirdFormE.drone:
+                    {
+                        var objPrefab = Resources.Load<GameObject>("obj3d/quadcopterspinning");
+                        birdformgo = Instantiate<GameObject>(objPrefab);
+                        var s = 100;
+                        birdformgo.transform.localScale = new Vector3(s, s, s);
+                        birdformgo.transform.localRotation = currot;
+                        birdformgo.transform.localPosition = curpos;
+                        movingAnimationScript = "";
+                        restingAnimationScript = "";
+                        //BirdFlyHeight = 1.5f;
+                        birdgo.name = "Phantom";
+                        break;
+                    }
                 case BirdFormE.person:
                     {
                         //if (birdresourcename=="")
                         //{
                         //    birdresourcename = "girl004";
                         //}
-                        birdformgo = person.LoadPersonGo("-ava-bc");
-                        if (person.hasHololens)
+                        if (person)
                         {
-                            person.ActivateHololens(true);
+                            birdformgo = person.LoadPersonGo("-ava-bc");
+                            if (person.hasHololens)
+                            {
+                                person.ActivateHololens(true);
+                            }
+                        }
+                        else
+                        {
+                            var objPrefab = Resources.Load<GameObject>("people/girl004");
+                            birdformgo = Instantiate<GameObject>(objPrefab);
                         }
                         var s = 1.0f;
                         birdformgo.transform.localScale = new Vector3(s, s, s);

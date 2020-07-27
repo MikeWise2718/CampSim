@@ -185,6 +185,9 @@ namespace CampusSimulator
                 case SceneSelE.Eb12:
                     GenLinkCloud(graphSceneE.gen_eb12, genmode);
                     break;
+                case SceneSelE.TeneriffeMtn:
+                    GenLinkCloud(graphSceneE.gen_tenmtn, genmode);
+                    break;
             }
             //if (newregion == SceneSelE.MsftCoreCampus || newregion == SceneSelE.MsftB19focused || newregion == SceneSelE.MsftRedwest)
             //{
@@ -388,6 +391,10 @@ namespace CampusSimulator
             if (grctrl == null)
             {
                 grctrl = new GraphAlgos.GraphCtrl(sman.graphsdir);
+                if (sman.glbllm!=null)
+                {
+                    grctrl.lltoxz = new GraphCtrl.LtoXZfunction( sman.lltoxz );
+                }
             }
             return (grctrl);
         }

@@ -22,21 +22,31 @@ namespace CampusSimulator
         private List<SimpleDf> dfnodeslist;
 
         public UxSettingBool useDfIndexes = new UxSettingBool("useDfIndexes", true);
+        public UxSettingBool useDfLlCoords = new UxSettingBool("useDfLlcoords", true);
 
         public (int waysidxcnt,int linksidxcnt,int nodeidxcnt) GetIndexCounts()
         {
             var (rv1,rv2,rv3) = (0,0,0);
-            foreach(var df in dfwayslist)
+            if (dfwayslist != null)
             {
-                rv1 += df.IndexAccesses;
+                foreach (var df in dfwayslist)
+                {
+                    rv1 += df.IndexAccesses;
+                }
             }
-            foreach (var df in dflinkslist)
+            if (dflinkslist != null)
             {
-                rv2 += df.IndexAccesses;
+                foreach (var df in dflinkslist)
+                {
+                    rv2 += df.IndexAccesses;
+                }
             }
-            foreach (var df in dfnodeslist)
+            if (dfnodeslist != null)
             {
-                rv3 += df.IndexAccesses;
+                foreach (var df in dfnodeslist)
+                {
+                    rv3 += df.IndexAccesses;
+                }
             }
             return (rv1, rv2, rv3);
         }
@@ -62,6 +72,7 @@ namespace CampusSimulator
         public void InitializeValues()
         {
             useDfIndexes.GetInitial(true);
+            useDfLlCoords.GetInitial(true);
         }
 
         public void InitializeScene(SceneSelE newregion)
@@ -114,6 +125,10 @@ namespace CampusSimulator
                     break;
                 case SceneSelE.HiddenLakeLookout:
                     osmloadspec = "hidlakelook";
+                    //ptscale = 1000f;
+                    break;
+                case SceneSelE.Riggins:
+                    osmloadspec = "riggins";
                     //ptscale = 1000f;
                     break;
                 default:
@@ -217,7 +232,7 @@ namespace CampusSimulator
             }
             if (llm != null)
             {
-                Debug.Log($"Converting coords with llm {llm.initmethod}");
+                Debug.Log($"Converting coords with llm {llm.origin} - {llm.initmethod}");
                 ConvertNodeCoords(dfnodes, llm);
             }
             var okways = dfways.CheckConsistency("DataFileMan.GetDfsFromResources", quiet:true);

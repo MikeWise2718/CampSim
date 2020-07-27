@@ -98,9 +98,12 @@ namespace Aiskwk.Map
         TimeSpan elap;
         DateTime lastyieldedtime;
         TimeSpan yieldtime = new TimeSpan(0, 0, 0, 0, 300);
-        public StopWatch()
+        public StopWatch(bool start=true)
         {
-            Start();
+            if (start)
+            {
+                Start();
+            }
         }
         public void SetYieldTime(TimeSpan yieldtime)
         {
@@ -136,6 +139,11 @@ namespace Aiskwk.Map
         {
             Mark();
             return elap;
+        }
+        public float Elapf()
+        {
+            //Mark();
+            return (float) elap.TotalSeconds; 
         }
         public string ElapSecs(int decpt = 3)
         {

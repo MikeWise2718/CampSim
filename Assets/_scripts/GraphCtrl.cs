@@ -318,9 +318,13 @@ namespace GraphAlgos
 
     }
 
+
     public class GraphCtrl
     {
-       public NodeRegionMan regman;
+        public delegate (float x,float z) LtoXZfunction(double Lat,double lng);
+        public LtoXZfunction lltoxz = null;
+
+        public NodeRegionMan regman;
 
         public List<string> nodenamelist = null;
         Dictionary<string, LcNode> nodedict = null;
@@ -510,12 +514,12 @@ namespace GraphAlgos
                 }
             }
         }
-        public LcNode AddNode(string name, Vector3 v,bool domodv=true,string comment="")
+        public LcNode AddNode(string ndname, Vector3 v,bool domodv=true,string comment="")
         {
-            name = gm.addprefix(name);
-            if (nodedict.ContainsKey(name))
+            ndname = gm.addprefix(ndname);
+            if (nodedict.ContainsKey(ndname))
             {
-                var msg = $"Duplicate Point name:{name}";
+                var msg = $"Duplicate Point name:{ndname}";
                 Debug.LogWarning(msg);
                 if (exceptionOnDuplicate)
                 {
@@ -530,9 +534,9 @@ namespace GraphAlgos
             {
                 v = gm.modv(v);
             }
-            nodenamelist.Add(name);
-            var node = new LcNode(this, name, v,LinkUse.legacy,ref regman.curNodeRegion,comment:comment);
-            nodedict.Add(name, node);
+            nodenamelist.Add(ndname);
+            var node = new LcNode(this, ndname, v,LinkUse.legacy,ref regman.curNodeRegion,comment:comment);
+            nodedict.Add(ndname, node);
             anchorpt = node;
             return (node);
         }
@@ -543,42 +547,55 @@ namespace GraphAlgos
             var rv = yfloor + (float)ranman.NextDouble() * dlt + minRanHeight;
             return (rv);
         }
-        public LcNode AddNodePtxzNoInc(string name, double x, double z, string comment = "")
+        public LcNode AddNodePtxzNoInc(string ndname, double x, double z, string comment = "")
         {
             var xf = (float)x;
             var yf = ranHeight();
             var zf = (float)z;
-            return (AddNode(name, new Vector3(xf, yf, zf), comment: comment));
+            return (AddNode(ndname, new Vector3(xf, yf, zf), comment: comment));
         }
-        public LcNode AddNodePtxz(string name, double x, double z,string comment="")
+        public LcNode AddNodePtll(string ndname, double lat, double lng, string comment = "")
         {
-            var rv = AddNodePtxzNoInc(name, x, z, comment);
+            if (lltoxz==null)
+            {
+                Debug.LogError($"lltoxz null in AddNodePtll");
+                return null;
+            }
+            var (x, z) = lltoxz(lat, lng);
+            Debug.Log($"AddNodePtll lat:{lat} lng:{lng}  x:{x} z:{z}");
+            var rv = AddNodePtxzNoInc(ndname, x, z, comment);
             regman.curNodeRegion.IncDefStepIdx();
             return rv;
         }
-        public LcNode AddNodePtxyzNoInc(string name, double x, double y,double z, string comment = "")
+        public LcNode AddNodePtxz(string ndname, double x, double z,string comment="")
+        {
+            var rv = AddNodePtxzNoInc(ndname, x, z, comment);
+            regman.curNodeRegion.IncDefStepIdx();
+            return rv;
+        }
+        public LcNode AddNodePtxyzNoInc(string ndname, double x, double y,double z, string comment = "")
         {
             var xf = (float)x;
             var yf = (float)y;
             var zf = (float)z;
-            return (AddNode(name, new Vector3(xf, yf, zf), comment: comment));
+            return (AddNode(ndname, new Vector3(xf, yf, zf), comment: comment));
         }
-        public LcNode AddNodePtxyz(string name, double x, double y,double z, string comment = "")
+        public LcNode AddNodePtxyz(string ndname, double x, double y,double z, string comment = "")
         {
-            var rv = AddNodePtxyzNoInc(name, x,y, z, comment);
+            var rv = AddNodePtxyzNoInc(ndname, x,y, z, comment);
             regman.curNodeRegion.IncDefStepIdx();
             return rv;
         }
-        public LcNode GetNewNode(string name, Vector3 v,LinkUse usetype,string comment="")
+        public LcNode GetNewNode(string ndname, Vector3 v,LinkUse usetype,string comment="")
         {
-            if (nodedict.ContainsKey(name))
+            if (nodedict.ContainsKey(ndname))
             {
-                return (nodedict[name]);
+                return (nodedict[ndname]);
             }
             // otherwise we need to make it
-            nodenamelist.Add(name);
-            var node = new LcNode(this, name, v,usetype, ref regman.curNodeRegion,comment);
-            nodedict.Add(name, node);
+            nodenamelist.Add(ndname);
+            var node = new LcNode(this, ndname, v,usetype, ref regman.curNodeRegion,comment);
+            nodedict.Add(ndname, node);
             return (node);
         }
         //public void AddIdToNode(string name)
@@ -753,6 +770,14 @@ namespace GraphAlgos
             var yf = ranHeight();
             var zf = (float)z;
             return (LinkTo(nodename, new Vector3(xf, yf, zf), curUseType, lname,comment));
+        }
+        public LcLink LinkToPtll(string nodename, double lat, double lng, string lname = "", string comment = "")
+        {
+            var (x, z) = lltoxz(lat, lng);
+            var xf = (float)x;
+            var yf = ranHeight();
+            var zf = (float)z;
+            return (LinkTo(nodename, new Vector3(xf, yf, zf), curUseType, lname, comment));
         }
         public LcLink LinkToPtxyz(string nodename, double x, double y, double z, string lname = "",string comment="")
         {

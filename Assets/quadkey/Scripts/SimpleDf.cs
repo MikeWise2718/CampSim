@@ -2163,7 +2163,7 @@ namespace Aiskwk.Dataframe
             {
                 stringindex = new Dictionary<string, Dictionary<string, List<int>>>();
             }
-            if (HasIndex(colname)) ;
+            if (HasIndex(colname)) 
             {
                 if (ctype != SdfColType.dfstring && !reindex)
                 {

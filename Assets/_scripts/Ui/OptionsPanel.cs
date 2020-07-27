@@ -15,6 +15,8 @@ public class OptionsPanel : MonoBehaviour
     MapSetPanel mapSetPanel;
     GameObject framePanelGo;
     FramePanel framePanel;
+    GameObject fireFlyPanelGo;
+    FireFlyPanel fireFlyPanel;
     GameObject buildingsPanelGo;
     BuildingsPanel buildingsPanel;
     GameObject generalPanelGo;
@@ -26,6 +28,7 @@ public class OptionsPanel : MonoBehaviour
     Toggle visualToggle;
     Toggle mapsetToggle;
     Toggle frameToggle;
+    Toggle fireFlyToggle;
     Toggle buildingsToggle;
     Toggle generalToggle;
     Toggle helpToggle;
@@ -44,6 +47,8 @@ public class OptionsPanel : MonoBehaviour
         mapSetPanel = mapSetGo.GetComponent<MapSetPanel>();
         framePanelGo = transform.Find("FramePanel").gameObject;
         framePanel = framePanelGo.GetComponent<FramePanel>();
+        fireFlyPanelGo = transform.Find("FireFlyPanel").gameObject;
+        fireFlyPanel = fireFlyPanelGo.GetComponent<FireFlyPanel>();
         buildingsPanelGo = transform.Find("BuildingsPanel").gameObject;
         buildingsPanel = buildingsPanelGo.GetComponent<BuildingsPanel>();
         generalPanelGo = transform.Find("GeneralPanel").gameObject;
@@ -54,6 +59,7 @@ public class OptionsPanel : MonoBehaviour
         visualToggle = transform.Find("VisualsToggle").GetComponent<Toggle>();
         mapsetToggle = transform.Find("MapSetToggle").GetComponent<Toggle>();
         frameToggle = transform.Find("FrameToggle").GetComponent<Toggle>();
+        fireFlyToggle = transform.Find("FireFlyToggle").GetComponent<Toggle>();
         buildingsToggle = transform.Find("BuildingsToggle").GetComponent<Toggle>();
         generalToggle = transform.Find("GeneralToggle").GetComponent<Toggle>();
         helpToggle = transform.Find("HelpToggle").GetComponent<Toggle>();
@@ -62,6 +68,7 @@ public class OptionsPanel : MonoBehaviour
         visualToggle.onValueChanged.AddListener(delegate { OptionsTabToggle(); });
         mapsetToggle.onValueChanged.AddListener(delegate { OptionsTabToggle(); });
         frameToggle.onValueChanged.AddListener(delegate { OptionsTabToggle(); });
+        fireFlyToggle.onValueChanged.AddListener(delegate { OptionsTabToggle(); });
         buildingsToggle.onValueChanged.AddListener(delegate { OptionsTabToggle(); });
         generalToggle.onValueChanged.AddListener(delegate { OptionsTabToggle(); });
         helpToggle.onValueChanged.AddListener(delegate { OptionsTabToggle(); });
@@ -75,10 +82,11 @@ public class OptionsPanel : MonoBehaviour
     public void SyncOptionsTabState()
     {
         if (!visualPanelGo) return; // not initialized yet
-        //Debug.Log("SyncOptionsTabState");
+        //Debug.Log($"SyncOptionsTabState fftog:{fireFlyToggle.isOn}  frtog:{frameToggle.isOn}");
         visualPanelGo.SetActive(visualToggle.isOn);
         mapSetGo.SetActive(mapsetToggle.isOn);
         framePanelGo.SetActive(frameToggle.isOn);
+        fireFlyPanelGo.SetActive(fireFlyToggle.isOn);
         buildingsPanelGo.SetActive(buildingsToggle.isOn);
         generalPanelGo.SetActive(generalToggle.isOn);
         helpPanelGo.SetActive(helpToggle.isOn);
@@ -98,6 +106,10 @@ public class OptionsPanel : MonoBehaviour
         if (frameToggle.isOn)
         {
             framePanel.InitVals();
+        }
+        if (fireFlyToggle.isOn)
+        {
+            fireFlyPanel.InitVals();
         }
         if (buildingsToggle.isOn)
         {
@@ -134,6 +146,10 @@ public class OptionsPanel : MonoBehaviour
             if (frameToggle.isOn)
             {
                 framePanel.SetVals(closing: true);
+            }
+            if (fireFlyToggle.isOn)
+            {
+                fireFlyPanel.SetVals(closing: true);
             }
             if (buildingsToggle.isOn)
             {

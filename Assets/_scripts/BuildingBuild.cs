@@ -439,9 +439,9 @@ namespace CampusSimulator
         {
             var bgo = GameObject.CreatePrimitive(PrimitiveType.Cube);
             bgo.name = name;
-            var glbllm = this.bm.sman.glbllm;
+            var llm = this.bm.sman.glbllm;
             bgo.transform.parent = this.transform;
-            bgo.transform.position = glbllm.xycoord(lat, lng);
+            bgo.transform.position = llm.xycoord(lat, lng);
             bldgos.Add(bgo);
         }
         int pnum = 0;
