@@ -185,13 +185,18 @@ namespace CampusSimulator
             var (v, _, _) = qmapman.qmm.GetWcMeshPosProjectedAlongYnew(p);
             return v.y;
         }
+
         public Vector3 GetHeightVector3(Vector3 p)
+        {
+            return GetHeightVector3(p, 0);
+        }
+        public Vector3 GetHeightVector3(Vector3 p,float yoff)
         {
             if (qmapman == null || qmapman.qmm == null) return Vector3.zero;
             var oy = p.y;
             var np = new Vector3(p.x, 0, p.z);
             var (v, _, _) = qmapman.qmm.GetWcMeshPosProjectedAlongYnew(np,cliptocorners:true);
-            var nv = new Vector3(v.x, v.y + oy, v.z);
+            var nv = new Vector3(v.x, v.y + oy + yoff, v.z);
             return nv;
         }
 

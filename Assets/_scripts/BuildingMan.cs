@@ -181,6 +181,9 @@ namespace CampusSimulator
                 case SceneSelE.Eb12:
                     MakeBuildings("Eb");
                     break;
+                case SceneSelE.TeneriffeMtn:
+                    MakeBuildings("MtTen");
+                    break;
                 default:
                 case SceneSelE.None:
                     // DelBuildings called above already

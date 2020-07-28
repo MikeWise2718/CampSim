@@ -757,8 +757,7 @@ namespace Aiskwk.Map
                             }
                             if ((sz.x != tex.width) || (sz.y != tex.height))
                             {
-                                Debug.LogWarning($"Mapextent:{mapextent}");
-                                Debug.LogWarning($"Expected tex size:{sz.x},{sz.y} but retrieved:{tex.width},{tex.height}");
+                                Debug.LogWarning($"Mapextent:{mapextent} - Expected tex size:{sz.x},{sz.y} but retrieved:{tex.width},{tex.height}");
                             }
                             break;
                         }

@@ -20,6 +20,8 @@ public class FireFlyPanel : MonoBehaviour
     Dropdown viewerJourneyEndDropdown;
     Text fireFlyDfText;
 
+    InputField maxTrackNumber;
+
     Button startJourney;
     Button closeButton;
 
@@ -41,6 +43,8 @@ public class FireFlyPanel : MonoBehaviour
 
         viewerJourneyStartDropdown = transform.Find("ViewerJourneyStartDropdown").gameObject.GetComponent<Dropdown>();
         viewerJourneyEndDropdown = transform.Find("ViewerJourneyEndDropdown").gameObject.GetComponent<Dropdown>();
+
+        maxTrackNumber = transform.Find("MaxTrackNumberField").gameObject.GetComponent<InputField>();
 
         startJourney = transform.Find("StartJourneyButton").gameObject.GetComponent<Button>();
         startJourney.onClick.AddListener(delegate { StartJourney();  });

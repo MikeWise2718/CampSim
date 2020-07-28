@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using GraphAlgos;
 using UxUtils;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace CampusSimulator
 {
@@ -59,6 +60,7 @@ namespace CampusSimulator
             Journeys.Add(jny);
             UpdateLegCount();
         }
+
 
         public void StartLoggingJourneys()
         {
@@ -628,7 +630,41 @@ namespace CampusSimulator
                 return null;
             }
         }
-
+        public Journey AddBldNodeBldNodeJourneyWithEphemeralPeople(string b1, string b2)
+        {
+            CheckFastMode();
+            var bar1 = b1.Split('/');
+            if (bar1.Length!=2)
+            {
+                Debug.LogError($"Bad building1/node1 in AddBldNodeBldNodeJourneyWithEphemeralPeople:{b1}");
+                return null;
+            }
+            var bc1 = bm.GetBuilding(bar1[0]);
+            if (bc1 == null)
+            {
+                return null;
+            }
+            var bar2 = b2.Split('/');
+            if (bar2.Length != 2)
+            {
+                Debug.LogError($"Bad building2/node2 in AddBldNodeBldNodeJourneyWithEphemeralPeople:{b2}");
+                return null;
+            }
+            var bc2 = bm.GetBuilding(bar2[0]);
+            if (bc2 == null)
+            {
+                return null;
+            }
+            var pathname = $"{b1} to {b2}";
+            if (journeyMessages)
+            {
+                Debug.Log($"Spawning journey {pathname}");
+            }
+            var bdest1 = bar1[1];
+            var bdest2 = bar2[1];
+            var jny = AddBldBldJourney(bdest1, bdest2, pathname);
+            return jny;
+        }
         public Journey AddBldBldJourneyWithEphemeralPeople(string b1, string b2)
         {
             CheckFastMode();
@@ -638,7 +674,7 @@ namespace CampusSimulator
                 return null;
             }
             var bc2 = bm.GetBuilding(b2);
-            if (bc1 == null)
+            if (bc2 == null)
             {
                 return null;
             }
@@ -948,7 +984,7 @@ namespace CampusSimulator
 
         public Journey StartViewerJourney(string frnode,string tunode)
         {
-            var jny = AddBldBldJourneyWithEphemeralPeople(frnode, tunode);
+            var jny = AddBldNodeBldNodeJourneyWithEphemeralPeople(frnode, tunode);
             //var jny = AddBldBldJourney(frnode, tunode, "startviewerjourney");
             lastViewerStartJourney.SetAndSave(frnode);
             lastViewerEndJourney.SetAndSave(tunode);

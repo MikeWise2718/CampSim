@@ -169,12 +169,13 @@ namespace GraphAlgos
     }
 
     public enum LcCapType { walk, drive, waterflow, elecflow, anything }
-    public enum LinkUse { legacy, highway, road, slowroad, driveway, walkway, walkwaynoshow, marker, excavation, waterpipe, recwaterpipe,sewerpipe, elecpipe,commspipe,oilgaspipe, bldwall }
+    public enum LinkUse { legacy, highway, road, slowroad, driveway, walkway, walkwaynoshow, marker, excavation, waterpipe, recwaterpipe,sewerpipe, elecpipe,commspipe,oilgaspipe, bldwall, trackperson,trackheli,trackdrone }
 
     [Serializable]
     public class LcLink
     {
         public GraphCtrl grc;
+        public GameObject lgo;
 
         public static bool CanDoCapFromUse(LcCapType cap,LinkUse use)
         {

@@ -109,6 +109,7 @@ namespace CampusSimulator
             {
                 linkcyl.transform.parent = go.transform;
             }
+            link.lgo = go;
             return go;
         }
     }

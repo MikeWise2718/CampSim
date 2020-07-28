@@ -285,6 +285,7 @@ namespace CampusSimulator
                     psman.DelPersons();
                     veman.DelVehicles();
                     bdman.DelBuildings();
+                    stman.DeleteStreets();
                     gaman.DelGarages();
                     vcman.DelVidcams();
                     lcman.DestroyLinkCloud();
@@ -356,6 +357,8 @@ namespace CampusSimulator
 
                     lcman.SetScene3(newscene);  // realize latelinks    
                     lcman.DeleteUnconnectedNodes();
+
+
                     finsw.Stop();
 
                     Debug.Log($"SceneMan.SetScene {newscene} finished");
@@ -1439,7 +1442,8 @@ namespace CampusSimulator
         //public string pathlookatcolor = "steelblue";
 
 
-        public enum RmColorModeE { nodepathstart, nodepathend, nodecloud, nodecloudx,  linkcloud,linkhighway,linkroad,linkslowroad,linkdriveway, linkwalk,linkwalknoshow, linkexcavate, linksurvey,linkwater,linkreclaimwater,linksewer, linkelec,linkcomms,linkoilgas, pathnode, pathlink, pathlookat, bldwall }
+        public enum RmColorModeE { nodepathstart, nodepathend, nodecloud, nodecloudx,  linkcloud,linkhighway,linkroad,linkslowroad,linkdriveway, linkwalk,linkwalknoshow, linkexcavate, linksurvey,linkwater,linkreclaimwater,linksewer, linkelec,linkcomms,linkoilgas, pathnode, pathlink, pathlookat, bldwall, 
+                                   trackperson,trackheli,trackdrone }
 
 
 
@@ -1472,6 +1476,10 @@ namespace CampusSimulator
             { RmColorModeE.pathlookat, ("steelblue",0.1f,RmLinkFormE.pipe)},
 
             { RmColorModeE.bldwall, ("steelblue",0.1f,RmLinkFormE.wall)},
+
+            { RmColorModeE.trackperson, ("darkred",0.2f,RmLinkFormE.pipe)},
+            { RmColorModeE.trackheli, ("darkgreen",0.2f,RmLinkFormE.pipe)},
+            { RmColorModeE.trackdrone, ("darkblue",0.2f,RmLinkFormE.pipe)},
         };
 
 

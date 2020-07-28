@@ -41,7 +41,15 @@ namespace CampusSimulator
         public float backdist = 0;
         public int njnysOnWeg = 0;
         public float jnyTime = 0;
+        public bool pullViewer = false;
 
+        public bool IsRunning()
+        {
+            var rv = false;
+            if (status == JourneyStatE.Started || 
+                status == JourneyStatE.AlmostFinished) rv = true;
+            return rv;
+        }
 
 
         public void InitJourney(JourneyMan jman, Person pers, Vehicle vehi,BldRoom br1,BldRoom br2, string description, float finsecs = 5, float starsecs = 3,string jorg="")
@@ -201,12 +209,22 @@ namespace CampusSimulator
         //{
 
         //}
-
+        float lastUpdatedLoggedTime = 0;
+        float updateLogInterval = 1;
+        public void UpdatePosition()
+        {
+            PathPos pos = birdctrl.GetBirdPos();
+            if (IsRunning() && (Time.time-lastUpdatedLoggedTime)>updateLogInterval)
+            {
+                Debug.Log($"Jny:{name} position:{pos.pt:f1}");
+                lastUpdatedLoggedTime = Time.time;
+            }
+        }
         //// Update is called once per frame
-        //void Update()
-        //{
-
-        //}
+        void Update()
+        {
+            UpdatePosition();
+        }
 
     }
 

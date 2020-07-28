@@ -43,6 +43,8 @@ namespace CampusSimulator
                 "EbOphome",
                 "EbRewe",
                 "DubBld1",
+                "MtTen-foundher",
+                "MtTen-lastseen",
             };
             l.RemoveAll(item => !item.StartsWith(filter));
             return l;
@@ -109,6 +111,11 @@ namespace CampusSimulator
             "eb12-18-lob:9:0.0:4:4:T",
             "eb12-20-lob:7:0.0:4:4:T",
             "eb12-22-lob:9:0.0:4:4:T",
+        };
+
+        List<string> MtTenFoundSpotSpec = new List<string>()
+        {
+            "found-spot:1:0.0:4:4:T",
         };
 
         public List<string> SplitOutDestNodes(List<string> specs)
@@ -260,6 +267,19 @@ namespace CampusSimulator
                     {
                         shortname = "DubBld1";
                         destnodes = new List<string> { "dub-oso01" };
+                        break;
+                    }
+                case "MtTen-foundher":
+                    {
+                        shortname = "found";
+                        roomspecs = MtTenFoundSpotSpec;
+                        destnodes = new List<string> { "found-spot" };
+                        break;
+                    }
+                case "MtTen-lastseen":
+                    {
+                        shortname = "lastseen";
+                        destnodes = new List<string> { "lastseen-spot" };
                         break;
                     }
                 default:

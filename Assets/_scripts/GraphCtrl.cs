@@ -562,7 +562,7 @@ namespace GraphAlgos
                 return null;
             }
             var (x, z) = lltoxz(lat, lng);
-            Debug.Log($"AddNodePtll lat:{lat} lng:{lng}  x:{x} z:{z}");
+            //Debug.Log($"AddNodePtll lat:{lat} lng:{lng}  x:{x} z:{z}");
             var rv = AddNodePtxzNoInc(ndname, x, z, comment);
             regman.curNodeRegion.IncDefStepIdx();
             return rv;

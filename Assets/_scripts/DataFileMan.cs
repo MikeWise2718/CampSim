@@ -207,7 +207,7 @@ namespace CampusSimulator
                 }
                 if (useDfIndexes.Get())
                 {
-                    Debug.Log($"Using indexes on {fnamelinks}");
+                    //Debug.Log($"Using indexes on {fnamelinks}");
                     dflinks.AddIndex("osm_wid");
                     dflinks.AddIndex("osm_nid_1");
                 }
@@ -225,26 +225,29 @@ namespace CampusSimulator
                 }
                 if (useDfIndexes.Get())
                 {
-                    Debug.Log($"Using indexes on {fnamenodes}");
+                    //Debug.Log($"Using indexes on {fnamenodes}");
                     dfnodes.AddIndex("osm_nid");
                 }
                 //Debug.Log($"Read {dfnodes.Nrow()} links from {fnamenodes}");
             }
             if (llm != null)
             {
-                Debug.Log($"Converting coords with llm {llm.origin} - {llm.initmethod}");
+                //Debug.Log($"Converting coords with llm {llm.origin} - {llm.initmethod}");
                 ConvertNodeCoords(dfnodes, llm);
             }
             var okways = dfways.CheckConsistency("DataFileMan.GetDfsFromResources", quiet:true);
             var oklinks = dflinks.CheckConsistency("DataFileMan.GetDfsFromResources", quiet: true);
             var oknodes = dfnodes.CheckConsistency("DataFileMan.GetDfsFromResources", quiet: true);
-            Debug.Log($"Df consistency check for {area1} ways:{okways}  links:{oklinks}  nodes:{oknodes}");
+            if (!okways || !oklinks || !oknodes)
+            {
+                Debug.LogWarning($"Df consistency check for {area1} ways:{okways}  links:{oklinks}  nodes:{oknodes}");
+            }
             dfwayslist.Add(dfways);
             dflinkslist.Add(dflinks);
             dfnodeslist.Add(dfnodes);
         }
 
-        public List<string> ReadResource(string pathname)
+        public static List<string> ReadResource(string pathname)
         {
             var idx = pathname.IndexOf(".csv");
             if (idx > 0)

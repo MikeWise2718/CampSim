@@ -30,7 +30,7 @@ namespace CampusSimulator
         Button vt2dButton;
         Button goButton;
         Button optionsButton;
-        Button mapfitButton;
+        Button showTracksButton;
        // Canvas canvas;
         GameObject freeFlyPanel;
         // Start is called before the first frame update
@@ -57,7 +57,7 @@ namespace CampusSimulator
             unevacButton = transform.Find("UnEvacButton").gameObject.GetComponent<Button>();
             goButton = transform.Find("GoButton").gameObject.GetComponent<Button>();
             optionsButton = transform.Find("OptionsButton").gameObject.GetComponent<Button>();
-            mapfitButton = transform.Find("MapFitButton").gameObject.GetComponent<Button>();
+            showTracksButton = transform.Find("ShowTracksButton").gameObject.GetComponent<Button>();
             freeFlyButton = transform.Find("FreeFlyButton").gameObject.GetComponent<Button>();
             quitButton = transform.Find("QuitButton").gameObject.GetComponent<Button>();
             hideUiButton = transform.Find("HideUiButton").gameObject.GetComponent<Button>();
@@ -76,6 +76,7 @@ namespace CampusSimulator
             vt2dButton.onClick.AddListener(delegate { Vt2DButton(); });
             freeFlyButton.onClick.AddListener(delegate { FreeFlyButton(); });
             quitButton.onClick.AddListener(delegate { QuitButton(); });
+            showTracksButton.onClick.AddListener(delegate { ShowTracksButton(); });
             hideUiButton.onClick.AddListener(delegate { uiman.HideUi(); });
             fteButton.onClick.AddListener(delegate { DetectFteButton(); });
             conButton.onClick.AddListener(delegate { DetectConButton(); });
@@ -238,6 +239,16 @@ namespace CampusSimulator
                 }
             }
             ColorizeButtonStates();
+        }
+
+        public void ShowTracksButton()
+        {
+            var stman = sman.stman;
+            if (stman!=null)
+            {
+                var active = stman.gameObject.activeSelf;
+                stman.gameObject.SetActive(!active);
+            }
         }
 
         public void QuitButton()

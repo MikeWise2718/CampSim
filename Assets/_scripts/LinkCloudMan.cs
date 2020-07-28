@@ -607,6 +607,9 @@ namespace CampusSimulator
             { LinkUse.commspipe,SceneMan.RmColorModeE.linkcomms },
             { LinkUse.oilgaspipe,SceneMan.RmColorModeE.linkoilgas },
             { LinkUse.bldwall,SceneMan.RmColorModeE.bldwall },
+            { LinkUse.trackperson,SceneMan.RmColorModeE.trackperson },
+            { LinkUse.trackheli,SceneMan.RmColorModeE.trackheli },
+            { LinkUse.trackdrone,SceneMan.RmColorModeE.trackdrone },
         };
 
 

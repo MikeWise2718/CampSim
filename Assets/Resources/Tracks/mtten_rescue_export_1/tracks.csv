@@ -1,0 +1,348 @@
+X,Y,name,cmt,desc,src,link1_href,link1_text,link1_type,link2_href,link2_text,link2_type,number,type
+-121.702234977573,47.4957819143457,T7,,,,,,,,,,,
+-121.733176980167,47.4974146897306,Dog3 Aug 1 Track,,,,,,,,,,,
+-121.70225998521,47.4969497781568,T12 (SMR),,,,,,,,,,,
+-121.702072527722,47.495875033,SMR Team11 8-1-2017 17:00,,,,,,,,,,,
+-121.706921899167,47.4942978670567,ESAR 14 08-01-2017 17:00,,,,,,,,,,,
+-121.751894747789,47.4929645005603,TCWESAR1 2017-08-01 16:33:32,,,,,,,,,,,
+-121.706859992674,47.5044750549437,ESAR T6 8/1/17 1:33:27 PM,,,,,,,,,,,
+-121.709519729588,47.5003277969131,ESAR T6 08-01-2017 17:30,,,,,,,,,,,
+-121.682501785536,47.4965839307779,OMR T9 08-01-2017 18:30,,,,,,,,,,,
+-121.719580080344,47.5031672387913,ESAR Team8,,,,,,,,,,,
+-121.751141578641,47.488340613986,ESAR T19 08-01-2017 19:00,,,,,,,,,,,
+-121.741716363388,47.4970832827904,KitDog 33 08-01-2017 20:00,,,,,,,,,,,
+-121.703704923025,47.4921550256583,ESAR T20 21:30,,,,,,,,,,,
+-121.709783076048,47.4923741920102,KCSD-Team22-08-01-2017 22:30,,,,,,,,,,,
+-121.71521305417,47.4912398295173,ESAR T25 08-01-2017 22:00,,,,,,,,,,,
+-121.707362481761,47.5033939325244,SMR Team21 8/1/17 23:00,,,,,,,,,,,
+-121.719494893198,47.5034700237338,SMR T26 8/1/17 8:30:15 PM,,,,,,,,,,,
+-121.72308247535,47.49184572605,ESAR T28 2017-08-02 01:14:51,,,,,,,,,,,
+-121.702412423539,47.4962890369334,Day2-Trkr7,,,,,,,,,,,
+-121.708283887923,47.4936070199449,Day2-Trkr8,,,,,,,,,,,
+-121.728108113315,47.4917518844402,Day2-Trkr6,,,,,,,,,,,
+-121.709144925889,47.493241872,Day2-Trkr1,,,,,,,,,,,
+-121.718752440866,47.5035524589492,Day2-Trkr3,,,,,,,,,,,
+-121.728001201468,47.4926949608378,Day2-Trkr5,,,,,,,,,,,
+-121.716085759548,47.4910718576193,Day2-Trkr2,,,,,,,,,,,
+-121.710089994265,47.4917827835402,Day2-Trkr4,,,,,,,,,,,
+-121.768170854728,47.5299503262838,4x4 T43 2017-08-01 17:36:35,,,,,,,,,,,
+-121.708308478011,47.4937171465907,ESAR Team23-08-01 22:53:55,,,,,,,,,,,
+-121.786990477805,47.4298774249275,Helo - Day3 Morning,,,,,,,,,,,
+-121.685096957046,47.5197181049974,Public-Day3-morning,,,,,,,,,,,
+-121.703218594075,47.5534029652299,T9 Rd Srch,,,,,,,,,,,
+-121.724857137055,47.5068357904216,Kit-Dog4-Day3-morning,,,,,,,,,,,
+-121.631465185156,47.5032345150885,4x4-day3-sms-lake,,,,,,,,,,,
+-121.74794977977,47.5296276160199,T4-Day3,,,,,,,,,,,
+-121.726633961794,47.5066957072214,T5-Everett-day3,,,,,,,,,,,
+-121.745016677476,47.4909932318491,T12a-day3,,,,,,,,,,,
+-121.743571519398,47.4907885160995,T12b-day3,,,,,,,,,,,
+-121.707781929013,47.4937458717166,Dog5-Day2,,,,,,,,,,,
+-121.769651025355,47.5033959350356,Team14-2017-8-2-20:30,,,,,,,,,,,
+-121.70996212862,47.4869037692445,ESAR T18 2017-08-02 19:50,,,,,,,,,,,
+-121.706862964049,47.494186235232,ESAR T9 2017-08-02 20:09,,,,,,,,,,,
+-121.720011400535,47.5032051847943,ESAR-8-2017-8-2-18-05,,,,,,,,,,,
+-121.720011400535,47.5032051847943,2017-08-01 14:44:59,,,,,,,,,,,
+-121.622807729124,47.5227953705996,ESAR T11 2017-08-02 2023,,,,,,,,,,,
+-121.703199050389,47.5338455988094,ESAR T13a 2017-08-02 1511,,,,,,,,,,,
+-121.70996212862,47.4869037692445,ESAR T13b 2017-08-02 1913,,,,,,,,,,,
+-121.71657322751,47.5298308868252,TENNERIFFE AUG02,,,,,,,,,,,
+-121.755172134452,47.4954103361296,Dog-11-8/2/17 22:20:59,,,,,,,,,,,
+-121.720357267186,47.4927673581988,T16-Day3-out2243,,,,,,,,,,,
+-121.717517522739,47.4997953250192,ESAR-KitDod12017-8-2-2300,,,,,,,,,,,
+-121.710006955552,47.4914071069244,T18-day3-out2350,,,,,,,,,,,
+-121.717517522739,47.4997953250192,EASR-17&18-2017-8-2-2345,,,,,,,,,,,
+-121.6220055,47.5123805,Rory-4x4-day3-out2110,,,,,,,,,,,
+-121.728153600584,47.4929189448937,Dog-22-2017-8-3-0025,,,,,,,,,,,
+-121.736712624772,47.4970531232453,Dog13-Day3-out0030,,,,,,,,,,,
+-121.704153015603,47.505513618971,T19-Day3-out2400,,,,,,,,,,,
+-121.726367794036,47.5110579776323,T22-Day3-Out1+0200,,,,,,,,,,,
+-121.699313805248,47.4961641203884,ESAR T3 2017-08-03,,Late search of Voice Check area 6,,,,,,,,,
+-121.709809008163,47.4907601852244,Dog22-Day3,,,,,,,,,,,
+-122.038105827167,47.5192537516832,15mi,,,,,,,,,,,
+-121.719542961684,47.5002521584038,TaylorBrugh-SMR-Day3-TrailRun,,,,,,,,,,,
+-121.718084693797,47.5039099200167,Kim's GPS Watch,,,,,,,,,,,
+-121.717856055561,47.4965989994645,SMR-MarcAllen-Day3,,,,,,,,,,,
+-121.710007408006,47.4999036546308,SMR-Team19-McCall-Day3,,,,,,,,,,,
+-121.703497211771,47.492348171813,SMR-Team1-McCall-day3-out0300,,,,,,,,,,,
+-121.70894722861,47.4979090103402,SMR-Team21Curtis-Day3,,,,,,,,,,,
+-121.70614,47.503015,SMR-Team20Starlin-Day3,,,,,,,,,,,
+-121.719944030545,47.5033416618675,SMR-Team2Fergie-Day3,,,,,,,,,,,
+-121.717816173875,47.4998402776073,ESAR-Team2-Day2,,,,,,,,,,,
+-121.70122147307,47.5015472144565,1-01 (Team 10),,Search ridge and drainage immediately East of main Kamikaze trail ridge.,,,,,,,,,
+-121.680879575904,47.5021701983868,1-02 (Team 9 (OMR)),,Search second ridge and drainage east from Kamikaze ridge trail.,,,,,,,,,
+-121.708241492678,47.4995466018664,1-09 (Team 8 Voice checks),,,,,,,,,,,
+-121.71094183886,47.5184902377236,"2-09 (Rachor Lake, Team 8 Primary)",,Search in and around Rachor Lake.,,,,,,,,,
+-121.702551537222,47.5081424833616,1-03 (SMR -- Pending),,Search drainage east of Kamikaze Trail ridge.,,,,,,,,,
+-121.718049517158,47.510708023398,2-02 (Team 6 - 2),,Search spur road off Teneriffe Rd trail.,,,,,,,,,
+-121.710370893716,47.500029958,1-04 (T1 SMR),,Hasty search.,,,,,,,,,
+-121.717465,47.49655,1-05 (T2),,Hasty search Teneriffe Rd trail to Haystack cutover.,,,,,,,,,
+-121.729645025554,47.5098099148191,2-01 (Kitt Dog33),,"Intersection of Teneriffe Rd Trail and Haystack Cutover trail, along cutover trail to Haystack, then back to road that goes up to Blowout Mtn.",,,,,,,,,
+-121.706895105288,47.4954749385,1-06 (T3),,"Hasty search Up Ten road, crossover to Kamikaze trail, up Kamikaze trail a ways, back down to base",,,,,,,,,
+-121.7031,47.553295,4x4,,"Drove road, stationed at south end as containment. Whiskey 3",,,,,,,,,
+-121.653219904045,47.5048800921168,2-03 (CCC Trail West half),,Search CCC road to Bessemer or as far as you can get.,,,,,,,,,
+-121.710534210592,47.4998400000677,1-07 (T11),,"Dog team dropped off on Ten ridge, went to peak, then down Kamikaze trail to base",,,,,,,,,
+-121.573274955162,47.5397500872521,2-04 (CCC Trail East half),,Trail CCC search between Bessemer and Taylor River TH.,,,,,,,,,
+-121.7282770557,47.4929699661054,1-08 (T4),,"Hasty search up Ten Road to Roaring Creek trail, to Talus Loop Trail, down to Big Si TH.  Dunphy",,,,,,,,,
+-121.741034977009,47.4968799947233,2-05 (Hastack down Old Si Trail),,Hasty Search with Voice Checks along Old Si Trail),,,,,,,,,
+-121.708030356798,47.493849858,2-06 (Dog 4),,"Trailing dog search. Dog trailed up and across cutover to Kamikaze trail, went uphill positive indication but stopped due to heat. went back over to Talus Loop with negative indication.",,,,,,,,,
+-121.708594973197,47.5018842059183,"2-08 (Kamikaze Falls, T14)",,Search drop zone and creek area around Kamikaze Falls.,,,,,,,,,
+-121.660825355401,47.5062352726483,2-07 (Green Mtn),,From Middle Fork Rd up to Green Mtn summit,,,,,,,,,
+-121.710597696865,47.5000898088949,2-10 (Lower East Slope of falls),,Search steep slope area East of lower half of Kamikaze trail.,,,,,,,,,
+-121.740784729637,47.4909199599013,2-11 (Norths Rd),,Search network of trails between Big Si and Old Si trails,,,,,,,,,
+-121.725973915252,47.4970013449991,2-13 creek2,,,,,,,,,,,
+-121.717848942849,47.4962123107683,2-15 creek4,,,,,,,,,,,
+-121.724610907937,47.4941480736148,2-12 creek1,,,,,,,,,,,
+-121.72217304734,47.4958579695254,4-14 creek3,,"Hike up Teneriffe Rd to Talus Loop connector, to upper talus Loop.  Search creek drainage from upper Talus Loop Tr, downhill to where it meets other creek near end of 119th.",,,,,,,,,
+-121.710245832326,47.4926194883565,2-16 creek5,,,,,,,,,,,
+-121.711298094467,47.4985917677959,2-17 creek6,,,,,,,,,,,
+-121.712672623744,47.493939476379,2-18 creek7,,,,,,,,,,,
+-121.705494196201,47.4903429101219,2-19 trailnet1,,,,,,,,,,,
+-121.697412636686,47.4901955184439,2-20 trailnet2,,,,,,,,,,,
+-121.719479992785,47.5034000028862,2-21 Ranchor Lk,,"Completed by team 8 Aug 1, up the Ten Road to the ridge, down to Rachor Lake",,,,,,,,,
+-121.703124756531,47.4966037387655,2-22 creek8,,,,,,,,,,,
+-121.699601704773,47.4952408322126,2-23-creek9,,,,,,,,,,,
+-121.699679285205,47.4992131028236,2-24-creek9,,,,,,,,,,,
+-121.699319996899,47.4942487995005,2-25-road1,,,,,,,,,,,
+-121.708413581553,47.5039096586373,Class 3 terrain 2-26-Area1,,,,,,,,,,,
+-121.692788656466,47.514084844445,3-03-Trail1,,"Perform Voice Checks in Search Area
+Safety is assigned to individual on the team
+Proceed in Safe Manner and in accordance with training and operational proceedures
+Take frequent breaks and stay hydrated, be aware of heat related issues
+",,,,,,,,,
+-121.696709990501,47.5154580230231,5-25-Trail2,,"Perform Voice Checks in Search Area
+Safety is assigned to individual on the team
+Proceed in Safe Manner and in accordance with training and operational proceedures
+Take frequent breaks and stay hydrated, be aware of heat related issues
+",,,,,,,,,
+-121.725321805172,47.5207256281783,2-29-Area1,,"Perform Voice Checks in Search Area
+Safety is assigned to individual on the team
+Proceed in Safe Manner and in accordance with training and operational proceedures
+Take frequent breaks and stay hydrated, be aware of heat related issues
+",,,,,,,,,
+-121.680940831196,47.5157804572895,3-01-Creek1,,"Perform Voice Checks in Search Area
+Safety is assigned to individual on the team
+Proceed in Safe Manner and in accordance with training and operational proceedures
+Take frequent breaks and stay hydrated, be aware of heat related issues
+",,,,,,,,,
+-121.686968846588,47.5148217750585,3-02-Creek2,,"Perform Voice Checks in Search Area
+Safety is assigned to individual on the team
+Proceed in Safe Manner and in accordance with training and operational proceedures
+Take frequent breaks and stay hydrated, be aware of heat related issues
+",,,,,,,,,
+-121.700046551868,47.5204755390075,3-05-Creek3,,"Perform Voice Checks in Search Area
+Safety is assigned to individual on the team
+Proceed in Safe Manner and in accordance with training and operational proceedures
+Take frequent breaks and stay hydrated, be aware of heat related issues
+",,,,,,,,,
+-121.705437956387,47.5219425812958,3-06-Creek4,,"Perform Voice Checks in Search Area
+Safety is assigned to individual on the team
+Proceed in Safe Manner and in accordance with training and operational proceedures
+Take frequent breaks and stay hydrated, be aware of heat related issues
+",,,,,,,,,
+-121.686633854482,47.519678723655,3-12-Creek7,,"Perform Voice Checks in Search Area
+Safety is assigned to individual on the team
+Proceed in Safe Manner and in accordance with training and operational proceedures
+Take frequent breaks and stay hydrated, be aware of heat related issues
+",,,,,,,,,
+-121.717179256198,47.5273616915179,5-30-Creek4,,"Perform Voice Checks in Search Area
+Safety is assigned to individual on the team
+Proceed in Safe Manner and in accordance with training and operational proceedures
+Take frequent breaks and stay hydrated, be aware of heat related issues
+",,,,,,,,,
+-121.699471635921,47.5305603935811,3-09-Creek5,,"Perform Voice Checks in Search Area
+Safety is assigned to individual on the team
+Proceed in Safe Manner and in accordance with training and operational proceedures
+Take frequent breaks and stay hydrated, be aware of heat related issues
+",,,,,,,,,
+-121.730843571337,47.5281827425631,5-24 Creek6,,"Perform Voice Checks in Search Area
+Safety is assigned to individual on the team
+Proceed in Safe Manner and in accordance with training and operational proceedures
+Take frequent breaks and stay hydrated, be aware of heat related issues
+",,,,,,,,,
+-121.730723683096,47.5262516184064,3-10-Creek6,,"Perform Voice Checks in Search Area
+Safety is assigned to individual on the team
+Proceed in Safe Manner and in accordance with training and operational proceedures
+Take frequent breaks and stay hydrated, be aware of heat related issues
+",,,,,,,,,
+-121.724324947416,47.5354150219525,2-30-Road1,,,,,,,,,,,
+-121.738385441112,47.5174657965159,5-13-Creek7,,"Perform Voice Checks in Search Area
+Safety is assigned to individual on the team
+Proceed in Safe Manner and in accordance with training and operational proceedures
+Take frequent breaks and stay hydrated, be aware of heat related issues
+",,,,,,,,,
+-121.747762301267,47.5224321231724,3-19-Creek8,,"Perform Voice Checks in Search Area
+Safety is assigned to individual on the team
+Proceed in Safe Manner and in accordance with training and operational proceedures
+Take frequent breaks and stay hydrated, be aware of heat related issues
+",,,,,,,,,
+-121.751585424296,47.520318583887,3-14-Creek9,,"Perform Voice Checks in Search Area
+Safety is assigned to individual on the team
+Proceed in Safe Manner and in accordance with training and operational proceedures
+Take frequent breaks and stay hydrated, be aware of heat related issues
+",,,,,,,,,
+-121.708245280388,47.5332499375,3-07-Road1,,"Perform Voice Checks in Search Area
+Safety is assigned to individual on the team
+Proceed in Safe Manner and in accordance with training and operational proceedures
+Take frequent breaks and stay hydrated, be aware of heat related issues
+",,,,,,,,,
+-121.713125,47.53259,3-07-Road1C,,"Perform Voice Checks in Search Area
+Safety is assigned to individual on the team
+Proceed in Safe Manner and in accordance with training and operational proceedures
+Take frequent breaks and stay hydrated, be aware of heat related issues
+",,,,,,,,,
+-121.753604581723,47.5046492148883,T29 2-31-DogBarking,,,,,,,,,,,
+-121.747434939001,47.5291499045228,3-15-Road3,,"Perform Voice Checks in Search Area
+Safety is assigned to individual on the team
+Proceed in Safe Manner and in accordance with training and operational proceedures
+Take frequent breaks and stay hydrated, be aware of heat related issues
+",,,,,,,,,
+-121.697560013353,47.5304200487005,3-16-Road4,,"Perform Voice Checks in Search Area
+Safety is assigned to individual on the team
+Proceed in Safe Manner and in accordance with training and operational proceedures
+Take frequent breaks and stay hydrated, be aware of heat related issues
+",,,,,,,,,
+-121.688679633548,47.5313654250039,3-17-Road5,,"Perform Voice Checks in Search Area
+Safety is assigned to individual on the team
+Proceed in Safe Manner and in accordance with training and operational proceedures
+Take frequent breaks and stay hydrated, be aware of heat related issues
+",,,,,,,,,
+-121.680379320089,47.53908985471,3-31-Road5,,"Perform Voice Checks in Search Area
+Safety is assigned to individual on the team
+Proceed in Safe Manner and in accordance with training and operational proceedures
+Take frequent breaks and stay hydrated, be aware of heat related issues
+",,,,,,,,,
+-121.68287,47.538525,3-20-Road6,,"Perform Voice Checks in Search Area
+Safety is assigned to individual on the team
+Proceed in Safe Manner and in accordance with training and operational proceedures
+Take frequent breaks and stay hydrated, be aware of heat related issues
+",,,,,,,,,
+-121.675207194108,47.5407996600017,3-22-Road8,,"Perform Voice Checks in Search Area
+Safety is assigned to individual on the team
+Proceed in Safe Manner and in accordance with training and operational proceedures
+Take frequent breaks and stay hydrated, be aware of heat related issues
+",,,,,,,,,
+-121.674098205149,47.5396503948062,3-21-Road7,,"Perform Voice Checks in Search Area
+Safety is assigned to individual on the team
+Proceed in Safe Manner and in accordance with training and operational proceedures
+Take frequent breaks and stay hydrated, be aware of heat related issues
+",,,,,,,,,
+-121.663204447699,47.5470851841003,3-23-Road9,,"Perform Voice Checks in Search Area
+Safety is assigned to individual on the team
+Proceed in Safe Manner and in accordance with training and operational proceedures
+Take frequent breaks and stay hydrated, be aware of heat related issues
+",,,,,,,,,
+-121.651206925382,47.5452304551204,3-32-Road6,,"Perform Voice Checks in Search Area
+Safety is assigned to individual on the team
+Proceed in Safe Manner and in accordance with training and operational proceedures
+Take frequent breaks and stay hydrated, be aware of heat related issues
+",,,,,,,,,
+-121.68424503002,47.526875164397,3-17-Road5B,,"Perform Voice Checks in Search Area
+Safety is assigned to individual on the team
+Proceed in Safe Manner and in accordance with training and operational proceedures
+Take frequent breaks and stay hydrated, be aware of heat related issues
+",,,,,,,,,
+-121.673379526308,47.527217213359,3-24-Creek10,,"Perform Voice Checks in Search Area
+Safety is assigned to individual on the team
+Proceed in Safe Manner and in accordance with training and operational proceedures
+Take frequent breaks and stay hydrated, be aware of heat related issues
+",,,,,,,,,
+-121.677938413737,47.5314317130801,3-25-Creek11,,"Perform Voice Checks in Search Area
+Safety is assigned to individual on the team
+Proceed in Safe Manner and in accordance with training and operational proceedures
+Take frequent breaks and stay hydrated, be aware of heat related issues
+",,,,,,,,,
+-121.70225136962,47.5279524321947,3-07-Road1B,,"Perform Voice Checks in Search Area
+Safety is assigned to individual on the team
+Proceed in Safe Manner and in accordance with training and operational proceedures
+Take frequent breaks and stay hydrated, be aware of heat related issues
+",,,,,,,,,
+-121.745542287827,47.5276120325651,5-16 Area 1,,"Perform Voice Checks in Search Area
+Safety is assigned to individual on the team
+Proceed in Safe Manner and in accordance with training and operational proceedures
+Take frequent breaks and stay hydrated, be aware of heat related issues
+",,,,,,,,,
+-121.730099950391,47.5188527942256,3-26-Area2,,"Perform Voice Checks in Search Area
+Safety is assigned to individual on the team
+Proceed in Safe Manner and in accordance with training and operational proceedures
+Take frequent breaks and stay hydrated, be aware of heat related issues
+",,,,,,,,,
+-121.724814141134,47.5125124980989,3-27-Area3,,"Perform Voice Checks in Search Area
+Safety is assigned to individual on the team
+Proceed in Safe Manner and in accordance with training and operational proceedures
+Take frequent breaks and stay hydrated, be aware of heat related issues
+",,,,,,,,,
+-121.721084067922,47.5272932272263,3-28-Ridge2,,"Perform Voice Checks in Search Area
+Safety is assigned to individual on the team
+Proceed in Safe Manner and in accordance with training and operational proceedures
+Take frequent breaks and stay hydrated, be aware of heat related issues
+",,,,,,,,,
+-121.724152592761,47.526822102812,3-29-Creek12,,"Perform Voice Checks in Search Area
+Safety is assigned to individual on the team
+Proceed in Safe Manner and in accordance with training and operational proceedures
+Take frequent breaks and stay hydrated, be aware of heat related issues
+",,,,,,,,,
+-121.695177859639,47.5218054292116,3-30-Creek13,,"Perform Voice Checks in Search Area
+Safety is assigned to individual on the team
+Proceed in Safe Manner and in accordance with training and operational proceedures
+Take frequent breaks and stay hydrated, be aware of heat related issues
+",,,,,,,,,
+-121.713900629554,47.5190555708771,2-31-Ridge,,,,,,,,,,,
+-121.7185588073,47.5219248892517,SMR Team 1- Subject Found,,"search via ground insert
+
+Subject FOUND N end Crater Lake",,,,,,,,,
+-121.704315144225,47.520244194383,3-Helo-4,,Search via helo,,,,,,,,,
+-121.683346965643,47.5158094221103,3-Helo-2,,Search via helo,,,,,,,,,
+-121.614370026324,47.5389099928853,3-4x4-Bessemer,,4x4 drive up Bessemer Road,,,,,,,,,
+-121.709728070868,47.5016885096304,3-22-2200' ,,,,,,,,,,,
+-121.737084998809,47.4984197989784,4-09 Mt Si Trail,,"4x4 to Mt Si crossover. Dog buffer search across to Haystack, then down main Mt Si Trail",,,,,,,,,
+-121.698483823526,47.5077753988419,4-10 Teneriffe,,,,,,,,,,,
+-121.759187175689,47.5041563442321,4-08 Little Si,,"Airscent area north of Little Si, accessible off the north end of the Little Si trail.  Also access from wash off trail.",,,,,,,,,
+-121.717906032457,47.4968706826331,3-KCSD-22,,atv transport to Mt Si cutover.  Airscent search Teneriffe Rd down to TH,,,,,,,,,
+-121.71124642985,47.4867191237784,4-11 Perimeter,,"Perimeter sweep of New Ten TH parking lot, to 100 feet from edge of parking lot.  (Area on map is only indicative)",,,,,,,,,
+-121.710370893949,47.5000299581255,4-01-EofKam,,,,,,,,,,,
+-121.704261906471,47.4995175044096,5-02-EofKam,,"Grid search area in historic drainage catch basin. Appropriate spacing for down subject. Voice checks as appropriate.  Safety considerations including terrain, weather, personal abilities.",,,,,,,,,
+-121.703788511976,47.5039767730736,4-05-EofKam,,,,,,,,,,,
+-121.70767025845,47.4966852791428,5-03 Grid ,,"Grid search. Appropriate spacing for down subject. Voice checks as appropriate.  Safety considerations including terrain, weather, personal abilities.",,,,,,,,,
+-121.727379993006,47.511054967969,4-12 Blowout,,"ATV to Blowout Mtn trail.  Grid off trail approx 75 ft where terrain permits.  Do one side out to peak, TL stays on road as guide. Do other side back to Connector trail.",,,,,,,,,
+-121.733862304423,47.4931495042606,4-07 Mount Si,,"From Mt Si TH, search up the main Mt Si trail.  Meet Dog 13 coming down the trail.  Upon meeting D13, turn around and come back.",,,,,,,,,
+-121.722130874551,47.5030421450821,4-06 Creek,,"Uphill creek search, to best of ability. Possible early bailout halfway up.  Starting from near junction of Ten Rd and Talus Loop connector. SMR",,,,,,,,,
+-121.706619925807,47.4946951530233,4-13 TenerRoad,,Citizen heard distressed dog bark 08/02 1800,,,,,,,,,
+-121.677907928185,47.4840039445,5-01 CCCspurs,,"Search with voice checks starting at CCC road, taking south spurs, and northeast along CCC road to meet with team working the northern loop and spurs.",,,,,,,,,
+-121.681670071318,47.4921678451335,5-02 CCCspurs,,"Search with voice checks starting at CCC road, taking north loop and spurs, clockwise to meet with team working the sourthern loop and spurs.",,,,,,,,,
+-121.718435548579,47.4935229961325,5-04 Roaring Creek West,,"Grid search area from Roaring Creek trail, south to 800 foot contour.",,,,,,,,,
+-121.717921193096,47.4971500650932,5-05 Talus Loop East,,"Grid search area west of Teneriffe RD, north of Roaring Creek trail to Talus Loop Trail.",,,,,,,,,
+-121.716703153565,47.4939289066477,5-06 Roaring Creek East,,"Grid search area south of Teneriffe Road. Appropriate spacing for down subject. Voice checks as appropriate.  Safety considerations including terrain, weather, personal abilities.",,,,,,,,,
+-121.711950396149,47.4972200903201,5-07 Ten Road east,,"Grid search area north and east of Teneriffe Road.
+Appropriate spacing for down subject. Voice checks as appropriate.  Safety considerations including terrain, weather, personal abilities.",,,,,,,,,
+-121.717819005315,47.5001772817074,5-08 Connector,,"Grid search low-angle terrain in area east of Teneriffe Road switchbacks.
+Appropriate spacing for down subject. Voice checks as appropriate.  Safety considerations including terrain, weather, personal abilities.",,,,,,,,,
+-121.733225582756,47.4946320460267,5-09 Talus Loop West,,"Grid search in area bound by trails. Appropriate spacing for down subject. Voice checks as appropriate.  Safety considerations including terrain, weather, personal abilities.",,,,,,,,,
+-121.751039662897,47.4907099783038,5-10 Boulder Loop Low,,Grid search from 1000 foot contour (base of steep terrain) down to Boulder Garden Loop trail.,,,,,,,,,
+-121.753892318686,47.4902238168366,5-11 Boulder Loop Below,,Grid search area west of Little Si trail.  Avoid cliffy areas near base of mountain.,,,,,,,,,
+-121.734747319054,47.489619939114,5-11 Douglas Fir South,,Grid search area From Douglas Fir Trail south to 1000 foot contour. (east of Boulder Garden Loop,,,,,,,,,
+-121.728302640799,47.4907501086076,5-12 Below Main TR,,Grid search area south of main Mt Si trail.  Note location west of the lower junction with the Talus Loop Trail.,,,,,,,,,
+-121.727041581127,47.4925599476602,5-13 Grid,,"Grid search area east of Mt Si trail, south of Roaring Creek trail.  Bounded on east by creek drainage.",,,,,,,,,
+-121.752591133419,47.4951104795,5-14 Little Si South,,Grid search area south of Little Si and north of the upper trail junction with Boulder Garden Loop Tr.  Avoid cliffy areas at the base of mountain (west end of search area). Eastern edge at 1000 foot contour.,,,,,,,,,
+-121.762059938672,47.5068527224493,5-15 Little Si North,,"Grid search area north of Little Si. Access from north end of Little Si trail. South boundary is drainage down to river.  East boundary is 1200 foot contour. North boundary is drainage.  River bank conditions unknown, use caution approaching.",,,,,,,,,
+-121.736076032627,47.5017683347412,5-17 SMR A,,"Grid search in steep terrain to east of Main Mt Si trail.
+Appropriate spacing for down subject. Voice checks as appropriate.  Safety considerations including terrain, weather, personal abilities.",,,,,,,,,
+-121.731135812726,47.5020835237492,5-18 SMR B,,"Grid search in steep terrain.  Appropriate spacing for down subject. Voice checks as appropriate.  Safety considerations including terrain, weather, personal abilities.",,,,,,,,,
+-121.731433868408,47.5009238264213,5-19 SMR C,,Grid search in steep terrain.,,,,,,,,,
+-121.733669893581,47.5065099308408,5-20 ESAR A,,"Grid search in area east of Mt Si summit, south of connector trail.  Low angle terrain only.",,,,,,,,,
+-121.745284596288,47.5133891487052,5-20 Si Plateau,,"Search plateau area north of Mount Si.  Low angle terrain suitable to ESAR team.  Low-angle approach exit is from southeast, from junction of Si connector and Blowout Mtn trail.",,,,,,,,,
+-121.761944444176,47.5014751175124,5-21 Little Si NW,,"Search steep areas on west side of Little Si.  Need team suited to terrain. Appropriate spacing for down subject. Voice checks as appropriate.  Safety considerations including terrain, weather, personal abilities.",,,,,,,,,
+-121.745165063993,47.4967848503476,5-22 North's Road,,Grid search area around Norths Road extension from Old Si Trail,,,,,,,,,
+-121.761117687836,47.4973289543151,5-23 Little Si West,,"Search steep, cliffy areas on the west side of Little Si.  Use caution approaching river. Appropriate spacing for down subject. Voice checks as appropriate.  Safety considerations including terrain, weather, personal abilities.",,,,,,,,,
+-121.709332485185,47.5275612028833,5-29 Dixie Ridge,,"Search ridge NE from Dixie Ridge down to road. Safety is assigned to individual on the team Proceed in Safe Manner and in accordance with training and operational procedures. Take frequent breaks and stay hydrated, be aware of heat related issues ",,,,,,,,,
+-121.701959270109,47.4960926318968,5-27 Voice Check Area 6,,,,,,,,,,,
+-121.702125563931,47.4929903984839,5-28 Voice Check Area 7,,,,,,,,,,,
+-121.701392094267,47.5326175583913,5-31 ESAR LOW,,,,,,,,,,,
+-121.697105784195,47.5414690535033,5-31A,,ESAR Team2,,,,,,,,,
+-121.701654479947,47.5377463884803,5-31B,,,,,,,,,,,
+-121.700244166076,47.53121241488,5-31C,,,,,,,,,,,
+-121.696225521764,47.5251125707632,5-31D,,,,,,,,,,,
+-121.698989868164,47.5223015782654,SMR Team 5,,Ground Search - Rachor Lake -> Drainage via Helo insert,,,,,,,,,
+-121.696844096626,47.5229391393659,SMR Team 6,,Ridgeline -> Drainage via Helo insert,,,,,,,,,
+-121.68923299211,47.5256922278723,ESAR Search Area,,5 ESAR team ground search: Insert via 4x4,,,,,,,,,
+-121.690911554068,47.5104470861258,Low Priority: Potential Search Area,,,,,,,,,,,
+-121.705032704908,47.5248513805311,Helo Aerial Search Zone,,Proposed Aerial Search if assets available,,,,,,,,,
