@@ -320,7 +320,7 @@ public class MapSetPanel : MonoBehaviour
     {
         var s = newLatKmInputField.text;
         var msg = "--";
-        double f = 0f;
+        double f;
         var ok = double.TryParse(s, out f);
         if (!ok)
         {
@@ -343,7 +343,7 @@ public class MapSetPanel : MonoBehaviour
     {
         var s = newLngKmInputField.text;
         var msg = "--";
-        double f = 0f;
+        double f;
         var ok = double.TryParse(s, out f);
         if (!ok)
         {

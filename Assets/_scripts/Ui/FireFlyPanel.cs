@@ -20,7 +20,7 @@ public class FireFlyPanel : MonoBehaviour
     Dropdown viewerJourneyEndDropdown;
     Text fireFlyDfText;
 
-    InputField maxTrackNumber;
+    InputField scaleNumberField;
 
     Button startJourney;
     Button closeButton;
@@ -44,7 +44,7 @@ public class FireFlyPanel : MonoBehaviour
         viewerJourneyStartDropdown = transform.Find("ViewerJourneyStartDropdown").gameObject.GetComponent<Dropdown>();
         viewerJourneyEndDropdown = transform.Find("ViewerJourneyEndDropdown").gameObject.GetComponent<Dropdown>();
 
-        maxTrackNumber = transform.Find("MaxTrackNumberField").gameObject.GetComponent<InputField>();
+        scaleNumberField = transform.Find("ScaleNumberField").gameObject.GetComponent<InputField>();
 
         startJourney = transform.Find("StartJourneyButton").gameObject.GetComponent<Button>();
         startJourney.onClick.AddListener(delegate { StartJourney();  });
@@ -95,6 +95,10 @@ public class FireFlyPanel : MonoBehaviour
         {
             Debug.LogError($"{errmsg}1:{ex.Message}");
         }
+
+        var scaleval = sman.stman.scalemodelnumber.Get();
+        //Debug.Log($"InitVals get:{inival}");
+        scaleNumberField.text = scaleval.ToString("f1");
     }
 
     public void StartJourney()

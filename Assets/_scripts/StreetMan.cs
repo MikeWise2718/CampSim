@@ -23,6 +23,7 @@ namespace CampusSimulator
         public UxSetting<int> maxtrackload = new UxSetting<int>("maxtrackload", 0);
         public UxSetting<int> skiptrackstride = new UxSetting<int>("skiptrackstride", 0);
         public UxSetting<int> skiptrackptstride = new UxSetting<int>("skiptrackptstride", 0);
+        public UxSetting<float> scalemodelnumber = new UxSetting<float>("scalemodelnumber", 1f);
         public UxSettingBool tracksusefragline = new UxSettingBool("tracksusefragline", false);
 
         public List<Street> streetlist = null;
@@ -40,8 +41,9 @@ namespace CampusSimulator
             skiptrackstride.GetInitial(0);
             skiptrackptstride.GetInitial(0);
             tracksusefragline.GetInitial(false);
+            scalemodelnumber.GetInitial(1f);
 
-            Debug.Log($"StreetMan.InitializeValues osmblds:{osmstreets.Get()}   fixedblds:{fixedstreets.Get()}");
+            Debug.Log($"StreetMan.InitializeValues osmblds:{osmstreets.Get()}   fixedblds:{fixedstreets.Get()}  scalemodel:{scalemodelnumber.Get()}");
         }
 
         public void DeleteStreets()
@@ -260,6 +262,7 @@ namespace CampusSimulator
             {139,"drone|--" },
             {144,"drone|--" },
             {196,"drone|--" },
+            {198,"person|kim" },
         };
         Dictionary<string, (string,LinkUse)> trailatts = new Dictionary<string, (string,LinkUse)>()
         {
