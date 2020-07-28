@@ -115,7 +115,11 @@ namespace CampusSimulator
 
         List<string> MtTenFoundSpotSpec = new List<string>()
         {
-            "found-spot:1:0.0:4:4:T",
+            "found-spot:0:0.0:4:4:T",
+        };
+        List<string> MtTenLastseenSpotSpec = new List<string>()
+        {
+            "lastseen-spot:0:0.0:4:4:T",
         };
 
         public List<string> SplitOutDestNodes(List<string> specs)
@@ -279,6 +283,7 @@ namespace CampusSimulator
                 case "MtTen-lastseen":
                     {
                         shortname = "lastseen";
+                        roomspecs = MtTenLastseenSpotSpec;
                         destnodes = new List<string> { "lastseen-spot" };
                         break;
                     }

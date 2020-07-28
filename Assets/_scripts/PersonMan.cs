@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Analytics;
 using UxUtils;
 
 namespace CampusSimulator
@@ -14,7 +15,7 @@ namespace CampusSimulator
         List<string> persnames = new List<string>(); // maintain a sorted list of Persons with destinations
         List<string> wtd_persnames = new List<string>(); // maintain a sorted weighted list of Persons with destinations
 
-        public enum GenderE { male, female };// this is for the appearance avatar
+        public enum GenderE { male, female, other };// this is for the appearance avatar
         public enum empStatusE { Security, FullTimeEmp, Contractor, Visitor, Unknown };
         //public string [] empStatusStr = new  string [] { "Contractor", "FullTimeEmp", "Visitor","Security", "Unknown" };
         //public float [] empStatusWt = new float []{ 60, 10, 10, 5, 5,  };
@@ -41,8 +42,50 @@ namespace CampusSimulator
         {
             DelPersons(); // this wipes out everyone that was created in the
         }
+        //public Person MakePerson(GenderE gender, string persname, string avname, empStatusE empstatus, bool hasHololens = false, bool flagged = false)
+        List<string> mtten_presets = new List<string>()
+        {
+            "m|Jane Doe Found|Girl03|unknown|nothing",
+            "m|Jane Doe LastSeen|Girl03|unknown|nothing",
+        };
+        GenderE GetGender(string s)
+        {
+            switch (s[0])
+            {
+                case 'f': return GenderE.female;
+                case 'm': return GenderE.male;
+                default: return GenderE.other;
+            }
+        }
+        empStatusE GetEmpStat(string s)
+        {
+            switch (s[0])
+            {
+                case 'f': return empStatusE.FullTimeEmp;
+                case 'c': return empStatusE.Contractor;
+                case 's': return empStatusE.Security;
+                case 'v': return empStatusE.Visitor;
+                default: return empStatusE.Unknown;
+            }
+        }
+        void AddPresetPeople(List<string> presetPeople)
+        {
+            foreach(var s in presetPeople)
+            {
+                var sar = s.Split('|');
+                if (sar.Length<5)
+                {
+                    Debug.LogError($"bad personspect:{s}");
+                    continue;
+                }
+                var g = GetGender(sar[0]);
+                var emp = GetEmpStat(sar[3]);
+                var p = MakePerson(g, sar[1], sar[2], emp);
+            }
+        }
         public void SetScene(SceneSelE newregion)
         {
+            var presetPeople = new List<string>();
             switch (newregion)
             {
                 case SceneSelE.MsftRedwest:
@@ -50,10 +93,14 @@ namespace CampusSimulator
                 case SceneSelE.MsftB19focused:
                 case SceneSelE.MsftB121focused:
                     break;
+                case SceneSelE.TeneriffeMtn:
+                    //presetPeople = mtten_presets;
+                    break;
                 default:
                 case SceneSelE.None:
                     break;
             }
+            AddPresetPeople(presetPeople);
         }
         readonly string[] maleFirstNames =
         {

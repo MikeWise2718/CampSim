@@ -930,7 +930,8 @@ namespace GraphAlgos
             }
             if (n < 0 || nodenamelist.Count <= n)
             {
-                throw new UnityException("GetNode: index out of range:" + n);
+                Debug.LogError("GetNode: index out of range:" + n);
+                return null;
             }
             var pname = nodenamelist[n];
             return (nodedict[pname]);
@@ -940,7 +941,9 @@ namespace GraphAlgos
             nodename = LcNode.NormName(nodename);
             if (!IsNodeName(nodename))
             {
-                throw new UnityException("GetNode: No node with this name:" + nodename);
+                Debug.LogError("GetNode: No node with this name:" + nodename);
+                return null;
+                //throw new UnityException("GetNode: No node with this name:" + nodename);
             }
             return (nodedict[nodename]);
         }
