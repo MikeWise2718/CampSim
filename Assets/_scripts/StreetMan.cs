@@ -20,6 +20,9 @@ namespace CampusSimulator
         public UxSettingBool osmstreets = new UxSettingBool("osmstreets", false);
         public UxSettingBool fixedstreets = new UxSettingBool("fixedstreets", false);
 
+        public UxSettingBool showtracks = new UxSettingBool("showtracks", false);
+
+
         public UxSetting<int> maxtrackload = new UxSetting<int>("maxtrackload", 0);
         public UxSetting<int> skiptrackstride = new UxSetting<int>("skiptrackstride", 0);
         public UxSetting<int> skiptrackptstride = new UxSetting<int>("skiptrackptstride", 0);
@@ -27,6 +30,8 @@ namespace CampusSimulator
         public UxSettingBool tracksusefragline = new UxSettingBool("tracksusefragline", false);
 
         public List<Street> streetlist = null;
+
+        public Dictionary<string, Street> lookup = null;
 
         public void InitPhase0()
         {
@@ -37,13 +42,14 @@ namespace CampusSimulator
         {
             osmstreets.GetInitial(false);
             fixedstreets.GetInitial(true);
+            showtracks.GetInitial(true);
             maxtrackload.GetInitial(0);
             skiptrackstride.GetInitial(0);
             skiptrackptstride.GetInitial(0);
             tracksusefragline.GetInitial(false);
             scalemodelnumber.GetInitial(1f);
 
-            Debug.Log($"StreetMan.InitializeValues osmblds:{osmstreets.Get()}   fixedblds:{fixedstreets.Get()}  scalemodel:{scalemodelnumber.Get()}");
+            Debug.Log($"StreetMan.InitializeValues osmblds:{osmstreets.Get()}   fixedblds:{fixedstreets.Get()}  scalemodel:{scalemodelnumber.Get()} showtracks:{showtracks.Get()}");
         }
 
         public void DeleteStreets()
@@ -54,15 +60,17 @@ namespace CampusSimulator
                 Destroy(s);
             }
             streetlist = new List<Street>();
+            lookup = new Dictionary<string, Street>();
         }
 
-        public Street AddStreet(string sname)
+        public Street AddStreet(string sname,string ava,string move,LinkUse use,LcCapType captyp)
         {
             var sgo = new GameObject(sname);
             sgo.transform.parent = this.transform;
             var strt = sgo.AddComponent<Street>();
-            strt.Initialize(this, StreetType.GpxTrack);
+            strt.Initialize(this, StreetType.GpxTrack,ava,move,use,captyp);
             streetlist.Add(strt);
+            lookup[sname] = strt;
             return strt;
         }
         public void InitializeScene(SceneSelE newregion)
@@ -241,45 +249,55 @@ namespace CampusSimulator
             return dftrackpts;
         }
 
+        public Street GetStreet(string sname)
+        {
+            if (!lookup.ContainsKey(sname)) return null;
+            return lookup[sname];
+        }
+
 
 
         Dictionary<int, string> taildict = new Dictionary<int, string>()
         {
-            {0,"person|--" },
-            {1,"person|--" },
-            {2,"person|--" },
-            {3,"person|--" },
-            {11,"person|--" },
-            {22,"person|--" },
-            {61,"person|--" },
-            {28,"heli|--" },
-            {104,"drone|--" },
-            {107,"drone|--" },
-            {108,"drone|--" },
-            {109,"drone|--" },
-            {110,"drone|--" },
-            {111,"drone|--" },
-            {139,"drone|--" },
-            {144,"drone|--" },
-            {196,"drone|--" },
-            {198,"person|kim" },
+            {0,"person|girl001|1.0|--" },
+            {1,"person|man001|1.0|--" },
+            {2,"person|girl002|1.0|--" },
+            {3,"person|man002|1.0|--" },
+            {11,"person|girl003|1.0|--" },
+            {22,"person|man003|1.0|--" },
+            {61,"person|girl004|1.0|--" },
+            {28,"heli|heli|1.0|--" },
+            {104,"drone|drone|1.0|--" },
+            {107,"drone|drone|1.0|--" },
+            {108,"drone|drone|1.0|--" },
+            {109,"drone|drone|1.0|--" },
+            {110,"drone|drone|1.0|--" },
+            {111,"drone|drone|1.0|--" },
+            {139,"drone|drone|1.0|--" },
+            {144,"drone|drone|1.0|--" },
+            {196,"drone|drone|1.0|--" },
+            {198,"person|girl010|1.0|kim" },
         };
-        Dictionary<string, (string,LinkUse)> trailatts = new Dictionary<string, (string,LinkUse)>()
+        Dictionary<string, (string clr,LinkUse linuse,LcCapType captype)> trailatts = new Dictionary<string, (string,LinkUse,LcCapType)>()
         {
-            {"person",("darkred",LinkUse.trackperson)},
-            {"heli",("darkgreen",LinkUse.trackperson)},
-            {"drone",("darkblue",LinkUse.trackperson)},
+            {"person",("darkred",LinkUse.trackperson,LcCapType.anything)},
+            {"heli",("darkgreen",LinkUse.trackperson,LcCapType.anything)},
+            {"drone",("darkblue",LinkUse.trackperson,LcCapType.anything)},
         };
-        public (string cls,string clr,LinkUse use,string desc) Classify(int i)
+        public (string cls,string clr, string ava, LinkUse use,LcCapType captype,string speed,string desc) Classify(int i)
         {
             if (taildict.ContainsKey(i))
             {
                 var sar = taildict[i].Split( '|');
+                if (sar.Length<4)
+                {
+                    Debug.Log("opps");
+                }
                 var cls = sar[0];
-                var (clr, use) = trailatts[cls];
-                return (cls, clr, use, sar[1]);
+                var (clr, use, captyp) = trailatts[cls];
+                return (cls, clr,sar[1], use,captyp, sar[2], sar[3]);
             }
-            return ("unknown", "yellow", LinkUse.legacy, "--");
+            return ("unknown", "yellow","girl001", LinkUse.legacy,LcCapType.anything, "walk", "--");
         }
 
         public void MakeTracks(SimpleDf dft)
@@ -310,10 +328,10 @@ namespace CampusSimulator
             var nodescreated = 0;
             var jman = sman.jnman;
             Street strt = null;
-            var clr = "gray";
             bool executeOnUnknown = false;
             bool addtrack = true;
             string enodename="";
+            var trkname = "";
 
             while ( i<nrows)
             {
@@ -321,12 +339,13 @@ namespace CampusSimulator
                 var pid = ptidx[i];
                 var lat = lats[i];
                 var lng = lngs[i];
+                //Debug.Log($"trkid:{trkid} i:{i} lat:{lat} lng:{lng}");
                 if (trkid != lsttrkid)
                 {
-                    var (cls, nclr, use, _) = Classify(trkid);
-                    clr = nclr;
-                    var sname = $"track-{trkid}-{cls}";
-                    addtrack = executeOnUnknown || cls != "unknown";
+                    //if (trkid > 4) break;
+                    var cls = Classify(trkid);
+                    trkname = $"track-{trkid}-{cls.cls}";
+                    addtrack = executeOnUnknown || cls.cls != "unknown";
 
                     //if (trk > 10) break;
                     ntrksread++;
@@ -340,10 +359,11 @@ namespace CampusSimulator
                     {
                         started = true;
                         ntrkscreated++;
-                        strt = AddStreet(sname);
+                        strt = AddStreet(trkname,cls.ava,cls.speed,cls.use,cls.captype);
                         // add startpoint at new node name
-                        grc.SetCurUseType(use);
-                        var nname = $"{cls}_track_{trkid}_start";
+                        grc.SetCurUseType(cls.use);
+                        var nname = $"{trkname}_start";
+                        //Debug.Log($"Trk start {nname} {lat} {lng}");
                         var node = grc.AddNodePtll(nname, lat, lng);
                         enodename = nname;
                         strt.AddNode(node);
@@ -358,12 +378,13 @@ namespace CampusSimulator
                     // connect from last nodename to new node name
                     if (addtrack)
                     {
-                        var (cls, _, _, _) = Classify(trkid);
-                        var nname = $"{cls}_track_{trkid}_end_{pid}";
-                        enodename = nname;
+                        var cls = Classify(trkid);
+                        var nname = $"{trkname}_{pid}";
+                        enodename = $"{trkname}_end"; ;
                         var lname = $"tracklink_{trkid}_{pid}";
+                        //Debug.Log($"   link to {nname} {lat} {lng}");
                         var link = grc.LinkToPtll(nname, lat, lng, lname: lname);
-                        strt.AddLink(link, clr);
+                        strt.AddLink(link, cls.clr);
                         nodescreated++;
                     }
                     nodesread++;
@@ -374,11 +395,13 @@ namespace CampusSimulator
             }
             if (started)
             {
-                // add endpoint at last node name
-                //grc.AddNodePtll($"enode_{lsttrk}_{pid}", lat, lng); 
+                jman.AddViewerJourneyNode(enodename);
             }
             grc.regman.SetRegion("default");
             sw.Stop();
+            var active = showtracks.Get();
+            this.gameObject.SetActive(active);
+            sman.uiman.SyncState();
             Debug.Log($"StreetMan processed {ntrkscreated}/{ntrksread} tracks and  {nodescreated}/{nodesread} nodes in {sw.ElapSecs()} secs");
         }
 

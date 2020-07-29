@@ -343,7 +343,7 @@ namespace CampusSimulator
             }
         }
 
-        public Journey AddNodeNodeJourneyEphemeral(string fr_node, string tu_node, string pathname,string perform = "")
+        public Journey AddNodeNodeJourneyEphemeral(string fr_node, string tu_node, string pathname, LcCapType captype=LcCapType.anything,string perform = "")
         {
             if (!NodeExists(fr_node)) return null;
             if (!NodeExists(tu_node)) return null;
@@ -352,20 +352,18 @@ namespace CampusSimulator
             {
                 var jsnode = fr_node;
                 var jenode = tu_node;
-                var gm = GameObject.FindObjectOfType<GarageMan>();
 
                 if (perform == "")
                 {
                     perform = GetRandomPersonFormname();
                 }
 
-
                 Leg leg1 = new Leg
                 {
                     snode = jsnode,
                     enode = jenode,
                     form = BirdFormE.person,
-                    capneed = LcCapType.anything,
+                    capneed = captype,
                     formname = perform,
                     vel = 2 * lvelfak
                 };
@@ -710,11 +708,11 @@ namespace CampusSimulator
             var jny = AddBldBldJourney(bdest1, bdest2, pathname);
             return jny;
         }
-        public Journey AddNodeNodeJourneyWithEphemeralPeople(string bdestnode1, string bdestnode2)
+        public Journey AddNodeNodeJourneyWithEphemeralPeople(string bdestnode1, string bdestnode2,LinkUse use=LinkUse.legacy,string ava="")
         {
             CheckFastMode();
             var pathname = $"{bdestnode1} to {bdestnode2}";
-            var jny = AddNodeNodeJourneyEphemeral(bdestnode1, bdestnode2, pathname);
+            var jny = AddNodeNodeJourneyEphemeral(bdestnode1, bdestnode2, pathname,perform:ava);
             return jny;
         }
 
@@ -1035,7 +1033,7 @@ namespace CampusSimulator
             }
         }
 
-        public Journey StartViewerJourney(string frnode,string tunode)
+        public Journey StartViewerJourney(string frnode,string tunode,LinkUse use=LinkUse.legacy,string ava="")
         {
             var jny = AddNodeNodeJourneyWithEphemeralPeople(frnode, tunode);
             //var jny = AddBldNodeBldNodeJourneyWithEphemeralPeople(frnode, tunode);

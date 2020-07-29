@@ -108,7 +108,21 @@ public class FireFlyPanel : MonoBehaviour
         var snode = nodes[sidx];
         var eidx = viewerJourneyEndDropdown.value;
         var enode = nodes[eidx];
-        jman.StartViewerJourney(snode, enode);
+        var sar = snode.Split('_');
+        var sname = sar[0];
+        var st = sman.stman.GetStreet(sname);
+        if (st!=null)
+        {
+            var jsnode = sname + "_start";
+            var jenode = sname + "_end";
+            jman.StartViewerJourney(jsnode, jenode);
+
+        }
+        else
+        {
+            Debug.LogError($"Cound not find street");
+        }
+        //jman.StartViewerJourney(snode, enode);
     }
 
     public void SetScene(CampusSimulator.SceneSelE curscene)

@@ -19,14 +19,22 @@ namespace CampusSimulator
     {
         public StreetMan sm = null;
         public StreetType streetType;
+        public string avaname;
+        public string speed;
+        public LinkUse use;
+        public LcCapType captyp;
         public List<LcNode> nodelist = null;
         public List<LcLink> linklist = null;
         public List<GameObject> golist = null;
 
-        public void Initialize(StreetMan sm,StreetType st)
+        public void Initialize(StreetMan sm,StreetType st,string avaname,string speed,LinkUse use,LcCapType captyp)
         {
             this.sm = sm;
             this.streetType = st;
+            this.avaname = avaname;
+            this.speed = speed;
+            this.use = use;
+            this.captyp = captyp;
             nodelist = new List<LcNode>();
             linklist = new List<LcLink>();
             golist = new List<GameObject>();
