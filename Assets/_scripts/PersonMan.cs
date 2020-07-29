@@ -334,6 +334,9 @@ namespace CampusSimulator
         public Person MakePerson(GenderE gender,string persname,string avname,empStatusE empstatus,bool hasHololens=false,bool flagged=false)
         {
             var pgo = new GameObject(persname);
+            //var ska = sman.stman.scalemodelnumber.Get();
+            //var skav = new Vector3(ska, ska, ska);
+            //pgo.transform.localScale = skav;
             pgo.transform.position = Vector3.zero;
             pgo.transform.parent = this.transform;
             var pers = pgo.AddComponent<Person>();
@@ -358,7 +361,8 @@ namespace CampusSimulator
             //    empstatus = empStatusE.FullTimeEmp;
             //    //Debug.Log(persname +" is a "+empstatus);
             //}
-            return MakePerson(gender, persname, avname, empstatus, flagged:flagged);
+            var pers =  MakePerson(gender, persname, avname, empstatus, flagged:flagged);
+            return pers;
 
             //var pgo = new GameObject(persname);
             //pgo.transform.position = Vector3.zero;

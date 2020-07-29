@@ -308,10 +308,12 @@ namespace CampusSimulator
             var ntrkscreated = 0;
             var nodesread = 0;
             var nodescreated = 0;
+            var jman = sman.jnman;
             Street strt = null;
             var clr = "gray";
             bool executeOnUnknown = false;
-            bool addtracks = true;
+            bool addtrack = true;
+            string enodename="";
 
             while ( i<nrows)
             {
@@ -321,26 +323,31 @@ namespace CampusSimulator
                 var lng = lngs[i];
                 if (trkid != lsttrkid)
                 {
+                    var (cls, nclr, use, _) = Classify(trkid);
+                    clr = nclr;
+                    var sname = $"track-{trkid}-{cls}";
+                    addtrack = executeOnUnknown || cls != "unknown";
+
                     //if (trk > 10) break;
                     ntrksread++;
-                    if (started)
+                    if (started && addtrack)
                     {
                         // add endpoint at last node name
                         //grc.AddNodePtll($"enode_{lsttrk}_{pid}", lat,lng ); 
+                        jman.AddViewerJourneyNode(enodename);
                     }
-                    var (cls,nclr,use,_) = Classify(trkid);
-                    clr = nclr;
-                    var sname = $"track-{trkid}-{cls}";
-                    addtracks = executeOnUnknown || cls != "unknown";
-                    if (addtracks)
+                    if (addtrack)
                     {
+                        started = true;
                         ntrkscreated++;
                         strt = AddStreet(sname);
                         // add startpoint at new node name
                         grc.SetCurUseType(use);
-                        var nname = $"track_{trkid}_start";
+                        var nname = $"{cls}_track_{trkid}_start";
                         var node = grc.AddNodePtll(nname, lat, lng);
+                        enodename = nname;
                         strt.AddNode(node);
+                        jman.AddViewerJourneyNode(nname);
                         nodescreated++;
                     }
                     nodesread++;
@@ -349,9 +356,11 @@ namespace CampusSimulator
                 {
                     // Make new node point
                     // connect from last nodename to new node name
-                    if (addtracks)
+                    if (addtrack)
                     {
-                        var nname = $"tracknode_{trkid}_{pid}";
+                        var (cls, _, _, _) = Classify(trkid);
+                        var nname = $"{cls}_track_{trkid}_end_{pid}";
+                        enodename = nname;
                         var lname = $"tracklink_{trkid}_{pid}";
                         var link = grc.LinkToPtll(nname, lat, lng, lname: lname);
                         strt.AddLink(link, clr);

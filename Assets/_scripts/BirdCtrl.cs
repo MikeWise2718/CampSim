@@ -184,7 +184,7 @@ namespace CampusSimulator
                     {
                         var objPrefab = Resources.Load<GameObject>("obj3d/quadcopterspinning");
                         birdformgo = Instantiate<GameObject>(objPrefab);
-                        var s = 100;
+                        var s = sman.stman.scalemodelnumber.Get()*100;
                         birdformgo.transform.localScale = new Vector3(s, s, s);
                         birdformgo.transform.localRotation = currot;
                         birdformgo.transform.localPosition = curpos;
@@ -213,7 +213,7 @@ namespace CampusSimulator
                             var objPrefab = Resources.Load<GameObject>("people/girl004");
                             birdformgo = Instantiate<GameObject>(objPrefab);
                         }
-                        var s = 1.0f;
+                        var s = sman.stman.scalemodelnumber.Get();
                         birdformgo.transform.localScale = new Vector3(s, s, s);
                         birdformgo.transform.localRotation = currot;
                         //var noise = GraphAlgos.GraphUtil.GetRanFloat(0, 0.6f,"jnygen");

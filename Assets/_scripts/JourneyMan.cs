@@ -4,6 +4,7 @@ using UnityEngine;
 using GraphAlgos;
 using UxUtils;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Xml.XPath;
 
 namespace CampusSimulator
 {
@@ -124,7 +125,7 @@ namespace CampusSimulator
         const int maxman = 10;
 
         public float lvelfak = 1;
-        string GetPersonFormname()
+        string GetRandomPersonFormname()
         {
             string rv = "";
             int diceroll = personcount;
@@ -247,7 +248,7 @@ namespace CampusSimulator
                 var jenode = tu_node;
                 var gm = GameObject.FindObjectOfType<GarageMan>();
 
-                var perform = GetPersonFormname();
+                var perform = GetRandomPersonFormname();
            
 
                 Leg leg1 = new Leg {
@@ -338,6 +339,50 @@ namespace CampusSimulator
                 {
                     sm1.UnReserveSlot();
                 }
+                return null;
+            }
+        }
+
+        public Journey AddNodeNodeJourneyEphemeral(string fr_node, string tu_node, string pathname,string perform = "")
+        {
+            if (!NodeExists(fr_node)) return null;
+            if (!NodeExists(tu_node)) return null;
+
+            try
+            {
+                var jsnode = fr_node;
+                var jenode = tu_node;
+                var gm = GameObject.FindObjectOfType<GarageMan>();
+
+                if (perform == "")
+                {
+                    perform = GetRandomPersonFormname();
+                }
+
+
+                Leg leg1 = new Leg
+                {
+                    snode = jsnode,
+                    enode = jenode,
+                    form = BirdFormE.person,
+                    capneed = LcCapType.anything,
+                    formname = perform,
+                    vel = 2 * lvelfak
+                };
+                var spos = linkctrl.GetNode(jsnode).pt;
+
+
+                var description = " - " + pathname + " " + perform;
+                var jgo = new GameObject();
+                var jny = jgo.AddComponent<Journey>();
+                jny.InitJourney(this, null, null, null, null, description, jorg: "ephemeral");
+                jny.AddLeg(leg1);
+                AddJ(jny);
+                return jny;
+            }
+            catch (UnityException ex)
+            {
+                Debug.LogWarning("Could not add journey from " + fr_node + " to " + tu_node + " " + ex.Message);
                 return null;
             }
         }
@@ -665,6 +710,14 @@ namespace CampusSimulator
             var jny = AddBldBldJourney(bdest1, bdest2, pathname);
             return jny;
         }
+        public Journey AddNodeNodeJourneyWithEphemeralPeople(string bdestnode1, string bdestnode2)
+        {
+            CheckFastMode();
+            var pathname = $"{bdestnode1} to {bdestnode2}";
+            var jny = AddNodeNodeJourneyEphemeral(bdestnode1, bdestnode2, pathname);
+            return jny;
+        }
+
         public Journey AddBldBldJourneyWithEphemeralPeople(string b1, string b2)
         {
             CheckFastMode();
@@ -984,7 +1037,8 @@ namespace CampusSimulator
 
         public Journey StartViewerJourney(string frnode,string tunode)
         {
-            var jny = AddBldNodeBldNodeJourneyWithEphemeralPeople(frnode, tunode);
+            var jny = AddNodeNodeJourneyWithEphemeralPeople(frnode, tunode);
+            //var jny = AddBldNodeBldNodeJourneyWithEphemeralPeople(frnode, tunode);
             //var jny = AddBldBldJourney(frnode, tunode, "startviewerjourney");
             lastViewerStartJourney.SetAndSave(frnode);
             lastViewerEndJourney.SetAndSave(tunode);

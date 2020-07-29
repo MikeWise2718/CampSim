@@ -1440,8 +1440,15 @@ namespace GraphAlgos
         {
             VerfiyNodeExists("GenAstar", sptname);
             VerfiyNodeExists("GenAstar", eptname);
+            if (sptname == eptname)
+            {
+                Debug.LogError("GenAstar called with start and end nodes being the same");
+                return null;
+            }
+
             var spt = nodedict[sptname];
             var ept = nodedict[eptname];
+
 
             foreach (var ptname in nodenamelist)
             {

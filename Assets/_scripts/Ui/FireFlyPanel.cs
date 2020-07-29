@@ -126,9 +126,28 @@ public class FireFlyPanel : MonoBehaviour
     public void SetVals(bool closing = false)
     {
         Debug.Log($"FireFlyPanel.SetVals called - closing:{closing}");
+        var chg = false;
 
-
-        sman.RequestRefresh("FireFlyPanel-SetVals");
+        //Debug.Log($"InitVals get:{inival}");
+        var scalevaltxt = scaleNumberField.text;
+        float val = sman.stman.scalemodelnumber.Get();
+        string msg;
+        var ok = float.TryParse(scalevaltxt, out val);
+        if (ok)
+        {
+            chg = chg || (val != sman.stman.scalemodelnumber.Get());
+            sman.stman.scalemodelnumber.SetAndSave(val);
+            Debug.Log($"FireFlyPanel.SetVal set scalemodenumber to {val}");
+        }
+        else
+        {
+            msg = $"FireFlyPanel.SetVal ScaleNumberField format error scalevaltxt:{scalevaltxt}";
+            Debug.LogError(msg);
+        }
+        if (chg)
+        {
+            sman.RequestRefresh("FireFlyPanel-SetVals");
+        }
     }
 
     float checkInterval = 1f;

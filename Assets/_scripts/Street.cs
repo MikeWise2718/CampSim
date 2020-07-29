@@ -21,6 +21,7 @@ namespace CampusSimulator
         public StreetType streetType;
         public List<LcNode> nodelist = null;
         public List<LcLink> linklist = null;
+        public List<GameObject> golist = null;
 
         public void Initialize(StreetMan sm,StreetType st)
         {
@@ -28,6 +29,7 @@ namespace CampusSimulator
             this.streetType = st;
             nodelist = new List<LcNode>();
             linklist = new List<LcLink>();
+            golist = new List<GameObject>();
         }
 
         public void DestroyStreetThings()
@@ -35,6 +37,11 @@ namespace CampusSimulator
             // the lcndoes should be destroyed in the node list
             nodelist = new List<LcNode>();
             linklist = new List<LcLink>();
+            foreach(var go in golist)
+            {
+                Destroy(go);
+            }
+            golist = new List<GameObject>();
         }
 
         public void AddNode(LcNode node)
@@ -57,6 +64,7 @@ namespace CampusSimulator
             lr.endWidth = 0f;
             GraphUtil.SetColorOfGo(go, clr);
             go.transform.parent = this.transform;
+            golist.Add(go);
         }
 
         // Start is called before the first frame update
