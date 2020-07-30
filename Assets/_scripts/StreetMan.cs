@@ -9,6 +9,7 @@ using GraphAlgos;
 using UnityEngine.UIElements;
 using System.Runtime.InteropServices;
 using UnityEngine.Networking;
+using System.Runtime.Remoting.Metadata.W3cXsd2001;
 
 namespace CampusSimulator
 {
@@ -365,6 +366,7 @@ namespace CampusSimulator
                         var nname = $"{trkname}_start";
                         //Debug.Log($"Trk start {nname} {lat} {lng}");
                         var node = grc.AddNodePtll(nname, lat, lng);
+                        strt.stnode = nname;
                         enodename = nname;
                         strt.AddNode(node);
                         jman.AddViewerJourneyNode(nname);
@@ -380,7 +382,8 @@ namespace CampusSimulator
                     {
                         var cls = Classify(trkid);
                         var nname = $"{trkname}_{pid}";
-                        enodename = $"{trkname}_end"; ;
+                        enodename = nname;
+                        strt.ednode = nname;
                         var lname = $"tracklink_{trkid}_{pid}";
                         //Debug.Log($"   link to {nname} {lat} {lng}");
                         var link = grc.LinkToPtll(nname, lat, lng, lname: lname);

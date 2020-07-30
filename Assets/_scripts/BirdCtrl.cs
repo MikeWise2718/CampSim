@@ -3,10 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using GraphAlgos;
+using System.ComponentModel.Design.Serialization;
 
 namespace CampusSimulator
 {
-    public enum BirdFormE { none, sphere, longsphere, hummingbird, person,car,drone }
+    public enum BirdFormE { none, sphere, longsphere, hummingbird, person,car,drone,drone2,heli }
     public enum BirdStateE { dormant, atstart, running, atgoal, stopped }
 
     public class BirdCtrl : MonoBehaviour
@@ -34,6 +35,7 @@ namespace CampusSimulator
         public string restingAnimationScript = "";
         public int birdformidx = 1;
         public string birdresourcename = "";
+        public float birdscale = 1;
 
         public PathPos pathpos = null;
         public Weg pathweg = null;
@@ -180,11 +182,33 @@ namespace CampusSimulator
                         birdgo.name = "Bird";
                         break;
                     }
+                case BirdFormE.heli:
+                    {
+                        var objPrefab = Resources.Load<GameObject>("obj3d/bell412spinning");
+                        birdformgo = Instantiate<GameObject>(objPrefab);
+                        var s = sman.stman.scalemodelnumber.Get();
+                        if (birdscale > 0)
+                        {
+                            s *= birdscale;
+                        }
+                        birdformgo.transform.localScale = new Vector3(s, s, s);
+                        birdformgo.transform.localRotation = currot;
+                        birdformgo.transform.localPosition = curpos;
+                        movingAnimationScript = "";
+                        restingAnimationScript = "";
+                        //BirdFlyHeight = 1.5f;
+                        birdgo.name = "Bell";
+                        break;
+                    }
                 case BirdFormE.drone:
                     {
                         var objPrefab = Resources.Load<GameObject>("obj3d/quadcopterspinning");
                         birdformgo = Instantiate<GameObject>(objPrefab);
-                        var s = sman.stman.scalemodelnumber.Get()*100;
+                        var s = sman.stman.scalemodelnumber.Get();
+                        if (birdscale > 0)
+                        {
+                            s *= birdscale;
+                        }
                         birdformgo.transform.localScale = new Vector3(s, s, s);
                         birdformgo.transform.localRotation = currot;
                         birdformgo.transform.localPosition = curpos;
@@ -192,6 +216,24 @@ namespace CampusSimulator
                         restingAnimationScript = "";
                         //BirdFlyHeight = 1.5f;
                         birdgo.name = "Phantom";
+                        break;
+                    }
+                case BirdFormE.drone2:
+                    {
+                        var objPrefab = Resources.Load<GameObject>("obj3d/DJI_Mavic_Air_2_Spinning");
+                        birdformgo = Instantiate<GameObject>(objPrefab);
+                        var s = 0.01f*sman.stman.scalemodelnumber.Get();
+                        if (birdscale > 0)
+                        {
+                            s *= birdscale;
+                        }
+                        birdformgo.transform.localScale = new Vector3(s, s, s);
+                        birdformgo.transform.localRotation = currot*Quaternion.Euler(-90,0,0);
+                        birdformgo.transform.localPosition = curpos;
+                        movingAnimationScript = "";
+                        restingAnimationScript = "";
+                        //BirdFlyHeight = 1.5f;
+                        birdgo.name = "Mavic2";
                         break;
                     }
                 case BirdFormE.person:
@@ -210,10 +252,19 @@ namespace CampusSimulator
                         }
                         else
                         {
-                            var objPrefab = Resources.Load<GameObject>("people/girl004");
+                            var resname = "people/girl004";
+                            if (birdresourcename!="")
+                            {
+                                resname = $"people/{birdresourcename}";
+                            }
+                            var objPrefab = Resources.Load<GameObject>(resname);
                             birdformgo = Instantiate<GameObject>(objPrefab);
                         }
                         var s = sman.stman.scalemodelnumber.Get();
+                        if (birdscale>0)
+                        {
+                            s *= birdscale;
+                        }
                         birdformgo.transform.localScale = new Vector3(s, s, s);
                         birdformgo.transform.localRotation = currot;
                         //var noise = GraphAlgos.GraphUtil.GetRanFloat(0, 0.6f,"jnygen");

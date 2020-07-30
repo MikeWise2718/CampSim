@@ -26,6 +26,8 @@ namespace CampusSimulator
         public List<LcNode> nodelist = null;
         public List<LcLink> linklist = null;
         public List<GameObject> golist = null;
+        public string stnode;
+        public string ednode;
 
         public void Initialize(StreetMan sm,StreetType st,string avaname,string speed,LinkUse use,LcCapType captyp)
         {

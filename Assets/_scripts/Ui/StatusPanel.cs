@@ -200,7 +200,7 @@ namespace CampusSimulator
 
         public void GoButton()
         {
-            sman.jnman.LaunchArnie();
+            sman.jnman.LaunchJourneys();
         }
         public void OptionsButton(bool toggleState=true)
         {

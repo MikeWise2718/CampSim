@@ -132,6 +132,7 @@ namespace CampusSimulator
             //Debug.Log("Setting bird path");
             birdctrl.SetBirdPath(pathctrl.path);
             birdctrl.birdresourcename = currentleg.formname;
+            birdctrl.birdscale = currentleg.skafak;
             birdctrl.BirdForm = currentleg.form;
              //Debug.Log("set birdresourcename to:"+currentleg.formname+" legidx:"+legidx);
             //jman.sman.RefreshRegionManGos();

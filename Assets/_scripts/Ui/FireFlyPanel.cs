@@ -113,9 +113,9 @@ public class FireFlyPanel : MonoBehaviour
         var st = sman.stman.GetStreet(sname);
         if (st!=null)
         {
-            var jsnode = sname + "_start";
-            var jenode = sname + "_end";
-            jman.StartViewerJourney(jsnode, jenode);
+            //var jsnode = sname + "_start";
+            //var jenode = sname + "_end";
+            jman.StartViewerJourney(snode, enode,captype:st.captyp,ava:st.avaname);
 
         }
         else
