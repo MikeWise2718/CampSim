@@ -196,7 +196,7 @@ namespace CampusSimulator
                         birdformgo.transform.localPosition = curpos;
                         movingAnimationScript = "";
                         restingAnimationScript = "";
-                        //BirdFlyHeight = 1.5f;
+                        BirdFlyHeight = 100f;
                         birdgo.name = "Bell";
                         break;
                     }
@@ -214,7 +214,7 @@ namespace CampusSimulator
                         birdformgo.transform.localPosition = curpos;
                         movingAnimationScript = "";
                         restingAnimationScript = "";
-                        //BirdFlyHeight = 1.5f;
+                        BirdFlyHeight = 10f;
                         birdgo.name = "Phantom";
                         break;
                     }
@@ -232,7 +232,7 @@ namespace CampusSimulator
                         birdformgo.transform.localPosition = curpos;
                         movingAnimationScript = "";
                         restingAnimationScript = "";
-                        //BirdFlyHeight = 1.5f;
+                        BirdFlyHeight = 10f;
                         birdgo.name = "Mavic2";
                         break;
                     }

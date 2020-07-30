@@ -112,6 +112,7 @@ namespace CampusSimulator
                 {
                     if (legidx != 0)
                     {
+                        Debug.Log($"Jouney {name} restarting");
                         StartLeg(0);
                     }
                     else
@@ -153,6 +154,7 @@ namespace CampusSimulator
             birdctrl.birdresourcename = currentleg.formname;
             birdctrl.birdscale = currentleg.skafak;
             birdctrl.BirdForm = currentleg.form;
+            birdctrl.rundist = currentleg.lambstart * pathctrl.path.pathLength;
              //Debug.Log("set birdresourcename to:"+currentleg.formname+" legidx:"+legidx);
             //jman.sman.RefreshRegionManGos();
             birdctrl.StartBird();

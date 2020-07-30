@@ -860,14 +860,14 @@ namespace CampusSimulator
         string [] rescues = new string [] {
             // trackname | ava | skafak | velfak | lambstart
 
-            "track-0-person|Girl002|1.0|1.0|0.0|--" ,
-            "track-1-person|Man001|1.0|1.5|0.0|--" ,
-            "track-2-person|Girl002|1.0|1.2|0.0|--" ,
-            "track-3-person|Man002|1.0|1.1|0.0|--" ,
-            "track-11-person|Girl003|1.0|1.0|0.0|--" ,
+            "track-0-person|Girl002|1.0|1.0|0.1|--" ,
+            "track-1-person|Man001|1.0|1.5|0.2|--" ,
+            "track-2-person|Girl002|1.0|1.2|0.3|--" ,
+            "track-3-person|Man002|1.0|1.1|0.4|--" ,
+            "track-11-person|Girl003|1.0|1.0|0.5|--" ,
             "track-22-person|Man003|1.0|1.0|0.0|--" ,
             "track-61-person|Girl004|1.0|1.0|0.0|--" ,
-            "track-28-heli|heli|1.0|100.0|0.0|--" ,
+            "track-28-heli|heli|0.5|50.0|0.5|--" ,
             "track-104-drone|drone2|200.0|1.0|0.0|--" ,
             "track-107-drone|drone2|200.0|1.0|0.0|--" ,
             "track-108-drone|drone2|200.0|1.0|0.0|--" ,
