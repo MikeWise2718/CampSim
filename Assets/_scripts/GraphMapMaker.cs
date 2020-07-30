@@ -215,9 +215,11 @@ namespace GraphAlgos
             //lc.AddNodePtxy("tuk-ssm-dw00", -1, 4.4);
             //lc.LinkTooPtxz("tuk-ssm-dw01", -1, -60.7);
             grc.regman.NewNodeRegion("tenmtn-x","blue",false);
-            grc.AddNodePtll("found-spot", 47.520249, -121.721548); // where she was found
+            grc.AddNodePtll("found-spot-dog", 47.520250, -121.721548); // where she was found
+            grc.LinkToPtll("found-spot", 47.520249, -121.721548); // where she was found
             grc.AddLinkByNodeName("found-spot", "reg:tenmtn", LinkUse.walkway);
-            grc.AddNodePtll("lastseen-spot", 47.507194, -121.698050); // where she was found
+            grc.AddNodePtll("lastseen-spot-dog", 47.507195, -121.698050); // where she was found
+            grc.LinkToPtll("lastseen-spot", 47.507194, -121.698050); // where she was found
             grc.AddLinkByNodeName("lastseen-spot", "reg:tenmtn", LinkUse.walkway);
 
             //grc.AddNodePtll("llmd", 47.5016149, -121.7083454);// these are just for debugging the ll->xz mapping

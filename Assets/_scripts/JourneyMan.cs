@@ -349,6 +349,7 @@ namespace CampusSimulator
         {
             switch(form)
             {
+                case "dog": return BirdFormE.dog;
                 case "drone":return BirdFormE.drone;
                 case "drone2": return BirdFormE.drone2;
                 case "heli": return BirdFormE.heli;
@@ -860,7 +861,7 @@ namespace CampusSimulator
         string [] rescues = new string [] {
             // trackname | ava | skafak | velfak | lambstart
 
-            "track-0-person|Girl002|1.0|1.0|0.1|--" ,
+            "track-0-person|dog|1.0|1.0|0.1|--" ,
             "track-1-person|Man001|1.0|1.5|0.2|--" ,
             "track-2-person|Girl002|1.0|1.2|0.3|--" ,
             "track-3-person|Man002|1.0|1.1|0.4|--" ,
