@@ -547,10 +547,21 @@ namespace GraphAlgos
             var rv = yfloor + (float)ranman.NextDouble() * dlt + minRanHeight;
             return (rv);
         }
+        float GetUseOffset(LinkUse use)
+        {
+            switch (use)
+            {
+                //case LinkUse.trackdrone: return 10f;
+                //case LinkUse.trackheli: return 100f;
+                case LinkUse.trackdrone: return 0f;
+                case LinkUse.trackheli: return 0f;
+                default: return 0f;
+            }
+        }
         public LcNode AddNodePtxzNoInc(string ndname, double x, double z, string comment = "")
         {
             var xf = (float)x;
-            var yf = ranHeight();
+            var yf = ranHeight() + GetUseOffset(curUseType);
             var zf = (float)z;
             return (AddNode(ndname, new Vector3(xf, yf, zf), comment: comment));
         }

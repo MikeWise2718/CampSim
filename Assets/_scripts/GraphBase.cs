@@ -192,6 +192,7 @@ namespace GraphAlgos
             {LinkUse.walkwaynoshow,1.0f },
             {LinkUse.walkway,1.0f },
             {LinkUse.driveway,10.0f },
+            {LinkUse.trackperson,1.0f },
         };
         public static Dictionary<LinkUse, float> drivecost = new Dictionary<LinkUse, float>()
         {
@@ -210,15 +211,20 @@ namespace GraphAlgos
             {LinkUse.elecpipe,1.0f },
         };
 
+        public static Dictionary<LinkUse, float> flycost = new Dictionary<LinkUse, float>()
+        {
+            {LinkUse.trackheli,1.0f },
+            {LinkUse.trackdrone,1.0f },
+        };
+
         public static Dictionary<LcCapType, Dictionary<LinkUse, float>> candodict = new Dictionary<LcCapType, Dictionary<LinkUse, float>>()
         {
             {LcCapType.walk,walkcost},
             {LcCapType.drive,drivecost},
             {LcCapType.waterflow,watercost},
             {LcCapType.elecflow,eleccost},
+            {LcCapType.fly,flycost},
         };
-
-
 
         public LinkUse usetype;
 

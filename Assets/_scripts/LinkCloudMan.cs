@@ -372,8 +372,8 @@ namespace CampusSimulator
                 node.lng = v2.y;
                 if (calcHeights)
                 {
-                    var y = GetHeight(node.pt.x, node.pt.z);
-                    node.pt = new Vector3(node.pt.x, y, node.pt.z);
+                    var yoff = GetHeight(node.pt.x, node.pt.z);
+                    node.pt = new Vector3(node.pt.x, 0 + yoff, node.pt.z);
                 }
             }
             var cam = Camera.current;
@@ -489,7 +489,7 @@ namespace CampusSimulator
             stats_nodes_links.x = grc.GetNodeCount();
             stats_nodes_links.y = grc.GetLinkCount();
         }
-        void DeleteGrcGos()
+        public void DeleteGrcGos()
         {
             if (grcgos != null)
             {
@@ -516,9 +516,28 @@ namespace CampusSimulator
                 grc.DelNode(nname);
             }
         }
+        public void DeleteAllNodes()
+        {
+            var grc = GetGraphCtrl();
+            var nodesToDelete = grc.GetLcNodes();
+            foreach (var node in nodesToDelete)
+            {
+                grc.DelNode(node.name);
+            }
+        }
+        public void DeleteAllLinks()
+        {
+            var grc = GetGraphCtrl();
+            var linksToDelete = grc.GetLcLinks();
+            foreach (var link in linksToDelete)
+            {
+                grc.DelLink(link.name);
+            }
+        }
         #region public methods
         public void DestroyLinkCloud()
         {
+            //DelLcGos();
             grctrl = null;
             lastgenmodel = graphSceneE.gen_none;
         }

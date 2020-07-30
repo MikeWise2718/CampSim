@@ -356,7 +356,7 @@ namespace CampusSimulator
             }
         }
 
-        public Journey AddNodeNodeJourneyEphemeral(string fr_node, string tu_node, string pathname, LcCapType captype=LcCapType.anything,string perform = "",float velfak=1f, float skafak = 1, float lambstart = 0)
+        public Journey AddNodeNodeJourneyEphemeral(string fr_node, string tu_node, string pathname, LcCapType captype=LcCapType.anything,string perform = "",float velfak=1f, float skafak = 1, float lambstart = 0,JourneyEnd jend = JourneyEnd.disappear)
         {
             if (!NodeExists(fr_node))
             {
@@ -373,6 +373,7 @@ namespace CampusSimulator
             {
                 var jsnode = fr_node;
                 var jenode = tu_node;
+                
 
                 if (perform == "")
                 {
@@ -397,6 +398,7 @@ namespace CampusSimulator
                 var jgo = new GameObject();
                 var jny = jgo.AddComponent<Journey>();
                 jny.InitJourney(this, null, null, null, null, description, jorg: "ephemeral");
+                jny.journeyEnd = jend;
                 jny.AddLeg(leg1);
                 AddJ(jny);
                 return jny;
@@ -731,11 +733,11 @@ namespace CampusSimulator
             var jny = AddBldBldJourney(bdest1, bdest2, pathname);
             return jny;
         }
-        public Journey AddNodeNodeJourneyWithEphemeralPeople(string bdestnode1, string bdestnode2, LcCapType captype =LcCapType.anything,string ava="",float velfak=1f, float skafak = 1, float lambstart = 0)
+        public Journey AddNodeNodeJourneyWithEphemeralPeople(string bdestnode1, string bdestnode2, LcCapType captype =LcCapType.anything,string ava="",float velfak=1f, float skafak = 1, float lambstart = 0,JourneyEnd jend=JourneyEnd.disappear)
         {
             CheckFastMode();
             var pathname = $"{bdestnode1} to {bdestnode2}";
-            var jny = AddNodeNodeJourneyEphemeral(bdestnode1, bdestnode2, pathname, captype:captype, perform:ava, velfak:velfak, skafak:skafak, lambstart:lambstart);
+            var jny = AddNodeNodeJourneyEphemeral(bdestnode1, bdestnode2, pathname, captype:captype, perform:ava, velfak:velfak, skafak:skafak, lambstart:lambstart,jend:jend);
             return jny;
         }
 
@@ -856,25 +858,25 @@ namespace CampusSimulator
         }
 
         string [] rescues = new string [] {
-            // trackname | ava | velfak | skafak | lambstart
+            // trackname | ava | skafak | velfak | lambstart
 
-            "track-0-person|heli|10.0|1.0|0.0|--" ,
-            "track-1-person|Man001|40.0|2.0|0.0|--" ,
-            "track-2-person|Girl002|10.0|1.0|0.0|--" ,
-            "track-3-person|Man002|10.0|1.0|0.0|--" ,
-            "track-11-person|Girl003|10.0|1.0|0.0|--" ,
-            "track-22-person|Man003|10.0|1.0|0.0|--" ,
-            "track-61-person|Girl004|10.0|1.0|0.0|--" ,
-            "track-28-heli|heli|10.0|1.0|0.0|--" ,
-            "track-104-drone|drone2|10.0|50.0|0.0|--" ,
-            "track-107-drone|drone2|10.0|10.0|0.0|--" ,
-            "track-108-drone|drone|10.0|10.0|0.0|--" ,
-            "track-109-drone|drone2|10.0|10.0|0.0|--" ,
-            "track-110-drone|drone|10.0|10.0|0.0|--" ,
-            "track-139-drone|drone|10.0|10.0|0.0|--" ,
-            "track-144-drone|drone|10.0|10.0|0.0|--" ,
-            "track-196-drone|drone|10.0|10.0|0.0|--" ,
-            "track-198-person|Girl010|1.0|kim" ,
+            "track-0-person|Girl002|1.0|1.0|0.0|--" ,
+            "track-1-person|Man001|1.0|1.5|0.0|--" ,
+            "track-2-person|Girl002|1.0|1.2|0.0|--" ,
+            "track-3-person|Man002|1.0|1.1|0.0|--" ,
+            "track-11-person|Girl003|1.0|1.0|0.0|--" ,
+            "track-22-person|Man003|1.0|1.0|0.0|--" ,
+            "track-61-person|Girl004|1.0|1.0|0.0|--" ,
+            "track-28-heli|heli|1.0|100.0|0.0|--" ,
+            "track-104-drone|drone2|200.0|1.0|0.0|--" ,
+            "track-107-drone|drone2|200.0|1.0|0.0|--" ,
+            "track-108-drone|drone2|200.0|1.0|0.0|--" ,
+            "track-109-drone|drone2|200.0|1.0|0.0|--" ,
+            "track-110-drone|drone2|200.0|1.0|0.0|--" ,
+            "track-139-drone|drone2|200.0|1.0|0.0|--" ,
+            "track-144-drone|drone2|200.0|1.0|0.0|--" ,
+            "track-196-drone|drone2|200.0|1.0|0.0|--" ,
+            "track-198-person|Girl010|1.0|1.0|0.0|kim" ,
            };
 
         public float ParseFloat(string s,float defval)
@@ -889,7 +891,9 @@ namespace CampusSimulator
 
         public void LaunchRescue()
         {
-            foreach(var s in rescues)
+            var glbsizefak = 1f;
+            var glbvelofak = 10f;
+            foreach (var s in rescues)
             {
                 var sar = s.Split('|');
                 if (sar.Length<5)
@@ -900,12 +904,13 @@ namespace CampusSimulator
                 var sname = sar[0];
                 var ava = sar[1];
                 var strt = sman.stman.GetStreet(sname);
-                var vfak = ParseFloat(sar[2],1f);
-                var sfak = ParseFloat(sar[3],1f);
+                var sfak = glbsizefak * ParseFloat(sar[2],1f);
+                var vfak = glbvelofak * ParseFloat(sar[3], 1f);
                 var lamb = ParseFloat(sar[4],0f);
                 if (strt!=null)
                 {
-                    StartViewerJourney(strt.stnode, strt.ednode, captype: strt.captyp, ava: ava,velfak:vfak,skafak:sfak,lambstart:lamb);
+                    //StartViewerJourney(strt.stnode, strt.ednode, captype: LcCapType.anything, ava: ava,velfak:vfak,skafak:sfak,lambstart:lamb);
+                    StartViewerJourney(strt.stnode, strt.ednode, captype: strt.captyp, ava: ava, velfak: vfak, skafak: sfak, lambstart: lamb);
                 }
             }
         }
@@ -1128,7 +1133,7 @@ namespace CampusSimulator
 
         public Journey StartViewerJourney(string frnode,string tunode,LcCapType captype=LcCapType.anything,string ava="",float velfak=1f,float skafak=1,float lambstart=0)
         {
-            var jny = AddNodeNodeJourneyWithEphemeralPeople(frnode, tunode,captype:captype,ava:ava,velfak:velfak,skafak:skafak);
+            var jny = AddNodeNodeJourneyWithEphemeralPeople(frnode, tunode,captype:captype,ava:ava,velfak:velfak,skafak:skafak,lambstart:lambstart,jend:JourneyEnd.restart);
             //var jny = AddBldNodeBldNodeJourneyWithEphemeralPeople(frnode, tunode);
             //var jny = AddBldBldJourney(frnode, tunode, "startviewerjourney");
             lastViewerStartJourney.SetAndSave(frnode);

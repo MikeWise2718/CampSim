@@ -281,9 +281,9 @@ namespace CampusSimulator
         };
         Dictionary<string, (string clr,LinkUse linuse,LcCapType captype)> trailatts = new Dictionary<string, (string,LinkUse,LcCapType)>()
         {
-            {"person",("darkred",LinkUse.trackperson,LcCapType.anything)},
-            {"heli",("darkgreen",LinkUse.trackperson,LcCapType.anything)},
-            {"drone",("darkblue",LinkUse.trackperson,LcCapType.anything)},
+            {"person",("darkred",LinkUse.trackperson,LcCapType.walk)},
+            {"heli",("darkgreen",LinkUse.trackheli,LcCapType.fly)},
+            {"drone",("darkblue",LinkUse.trackdrone,LcCapType.fly)},
         };
         public (string cls,string clr, string ava, LinkUse use,LcCapType captype,string speed,string desc) Classify(int i)
         {

@@ -5,6 +5,7 @@ using GraphAlgos;
 
 namespace CampusSimulator
 {
+    public enum JourneyEnd { disappear, restart, reverse }
 
     public class Journey : MonoBehaviour
     {
@@ -16,6 +17,7 @@ namespace CampusSimulator
         public List<string> legdesc = new List<string>();
         public PathCtrl pathctrl;
         public BirdCtrl birdctrl;
+        public JourneyEnd journeyEnd=JourneyEnd.disappear;
         public int jindex = 0;
         public int legindex = 0;
         public Leg currentleg = null;
@@ -96,10 +98,27 @@ namespace CampusSimulator
             //Debug.Log("StartLeg legidx:" + legidx);
             if (legidx >= nlegs)
             {
-                finishedtime = Time.time;
-                journeyelap = finishedtime - starttime;
-                status = JourneyStatE.AlmostFinished;
-                person.PersonStateStartUntraveling("", "");
+                if (journeyEnd == JourneyEnd.disappear)
+                {
+                    finishedtime = Time.time;
+                    journeyelap = finishedtime - starttime;
+                    status = JourneyStatE.AlmostFinished;
+                    if (person != null)
+                    {
+                        person.PersonStateStartUntraveling("", "");
+                    }
+                }
+                else
+                {
+                    if (legidx != 0)
+                    {
+                        StartLeg(0);
+                    }
+                    else
+                    {
+                        Debug.LogError("No legs in journey");
+                    }    
+                }
                 return;
             }
             if (legidx > 0 && currentleg.form == BirdFormE.car)

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using GraphAlgos;
+using System.Diagnostics.Eventing.Reader;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -92,7 +93,9 @@ namespace CampusSimulator
             {
                 if (usemman)
                 {
-                    linkcyl = sman.mpman.AddLine(link.name, p1, p2, linkForm, linkRadius, lclr:clrname, frag:true );// for flat lines?
+                    bool dofrag = link.usetype != LinkUse.trackdrone || link.usetype != LinkUse.trackheli;
+                    dofrag = true;
+                    linkcyl = sman.mpman.AddLine(link.name, p1, p2, linkForm, linkRadius, lclr:clrname, frag:dofrag );// for flat lines?
                 }
                 else
                 {

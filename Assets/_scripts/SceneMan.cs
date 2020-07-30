@@ -254,6 +254,7 @@ namespace CampusSimulator
             }
             simrundir = "./simrun/" + newscene + "_" + runtimestamp + "/";
             UxUtils.UxSettingsMan.SetScenario(newscene.ToString());
+
             curscene = newscene;
         }
         public (float x,float z) lltoxz(double lat,double lng)
@@ -280,6 +281,8 @@ namespace CampusSimulator
                     ceasesw.Start();
                     // Cease all activity
                     jnman.CeaseSceneActivity();
+                    //lcman.DeleteGrcGos();
+
 
                     // Delete all objects - withough knowledge of identity of new scene
                     psman.DelPersons();
@@ -288,7 +291,10 @@ namespace CampusSimulator
                     stman.DeleteStreets();
                     gaman.DelGarages();
                     vcman.DelVidcams();
+                    lcman.DeleteAllNodes();
+                    //lcman.DeleteAllLinks();
                     lcman.DestroyLinkCloud();
+
                     mpman.DeleteQmap();
                     firstPersonBirdCtrl.DeleteBirdGosAndInit();
                     firstPersonPathCtrl.DeletePathGoesAndInit();
