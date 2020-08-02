@@ -344,10 +344,14 @@ namespace CampusSimulator
                     gaman.SetScene(newscene);
 
                     bdman.SetScene(newscene);// building details, but no nodes and links
+
                     stman.SetScene(newscene);
 
+
+                    lcman.GetGraphCtrl(); // provoke ll function creation
                     lcman.SetScene(newscene); // create or read in most nodes and links
                                               // currently needs to happen after buildings and garages are setup
+
 
                     RealizeFloorPlanStatus();
                     vcman.SetScene(newscene);
@@ -370,6 +374,7 @@ namespace CampusSimulator
                     lcman.DeleteUnconnectedNodes();
 
                     lcman.RefreshGos(); // The gos need to be built now - in principle they are all empty
+                    stman.RefreshGos();
 
 
                     finsw.Stop();

@@ -385,16 +385,19 @@ namespace CampusSimulator
             }
             sman.needsLifted = false;
         }
+        public void CreateLLtoXZfunction()
+        {
 
+        }
         public GraphAlgos.GraphCtrl GetGraphCtrl()
         {
             if (grctrl == null)
             {
                 grctrl = new GraphAlgos.GraphCtrl(sman.graphsdir);
-                if (sman.glbllm!=null)
-                {
-                    grctrl.lltoxz = new GraphCtrl.LtoXZfunction( sman.lltoxz );
-                }
+            }
+            if (grctrl.lltoxz==null && sman.glbllm != null)
+            {
+                grctrl.lltoxz = new GraphCtrl.LtoXZfunction(sman.lltoxz);
             }
             return (grctrl);
         }

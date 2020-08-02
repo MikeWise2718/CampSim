@@ -64,6 +64,29 @@ namespace CampusSimulator
             lookup = new Dictionary<string, Street>();
         }
 
+        public void DeleteGos()
+        {
+            foreach(var st in streetlist)
+            {
+                st.DestroyStreetThings();
+            }
+        }
+
+        public void CreateGos()
+        {
+            foreach (var st in streetlist)
+            {
+                st.CreateStreetThings();
+            }
+        }
+
+        public void RefreshGos()
+        {
+            DeleteGos();
+            CreateGos();
+        }
+
+
         public Street AddStreet(string sname,string ava,string move,LinkUse use,LcCapType captyp)
         {
             var sgo = new GameObject(sname);
