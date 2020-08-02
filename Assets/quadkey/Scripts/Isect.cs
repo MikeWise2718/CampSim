@@ -8,16 +8,26 @@ namespace Aiskwk.Map
 
         // stole this from here: https://stackoverflow.com/a/37406831/3458744
 
-        public Vector3 From { get; }
-        public Vector3 Toto { get; }
+        //public Vector3 From { get; }
+        //public Vector3 Toto { get; }
 
-        public LineSegment2xz(Vector3 @from, Vector3 toto)
+        //public LineSegment2xz(Vector3 @from, Vector3 toto)
+        //{
+        //    From = @from;
+        //    Toto = toto;
+        //}
+
+        public Vector3 from;
+        public Vector3 toto;
+
+        public LineSegment2xz(Vector3 from, Vector3 toto)
         {
-            From = @from;
-            Toto = toto;
+            this.from = from;
+            this.toto = toto;
         }
 
-        public Vector3 Delta => new Vector3(Toto.x - From.x, Toto.y - From.y, Toto.z - From.z);
+
+        public Vector3 Delta => new Vector3(toto.x - from.x, toto.y - from.y, toto.z - from.z);
 
         /// <summary>
         /// Attempt to intersect two line segments.
@@ -33,8 +43,8 @@ namespace Aiskwk.Map
         /// <returns><c>true</c> if the line segments intersect, otherwise <c>false</c>.</returns>
         public bool TryIntersect(LineSegment2xz other, out Vector3 intersectionPoint, out float t, out float u)
         {
-            var p = From;
-            var q = other.From;
+            var p = from;
+            var q = other.from;
             var r = Delta;
             var s = other.Delta;
 
