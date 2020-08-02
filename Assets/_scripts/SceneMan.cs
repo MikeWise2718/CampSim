@@ -373,7 +373,7 @@ namespace CampusSimulator
                     lcman.SetScene3(newscene);  // realize latelinks    
                     lcman.DeleteUnconnectedNodes();
 
-                    lcman.RefreshGos(); // The gos need to be built now - in principle they are all empty
+                    lcman.RefreshGos(deletethings:false); // The gos need to be built now - in principle they are all empty
                     stman.RefreshGos();
 
 

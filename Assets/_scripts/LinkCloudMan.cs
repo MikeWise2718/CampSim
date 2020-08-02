@@ -385,10 +385,6 @@ namespace CampusSimulator
             }
             sman.needsLifted = false;
         }
-        public void CreateLLtoXZfunction()
-        {
-
-        }
         public GraphAlgos.GraphCtrl GetGraphCtrl()
         {
             if (grctrl == null)
@@ -770,9 +766,12 @@ namespace CampusSimulator
                 return (gogencount, 0, 0);
             }
         }
-        public void RefreshGos()
+        public void RefreshGos(bool deletethings=true)
         {
-            DeleteGrcGos();
+            if (deletethings)
+            {
+                DeleteGrcGos();
+            }
             CreateGrcGos();
         }
         public LcNode GetRandomNode()
