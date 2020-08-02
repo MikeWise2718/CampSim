@@ -440,6 +440,8 @@ namespace CampusSimulator
         {
             Debug.Log($"CreateGrcGos-{gogencount} scene:{sman.curscene} isnull:{grcgos==null}");
             var sw = new Aiskwk.Map.StopWatch();
+            var swnd = new Aiskwk.Map.StopWatch();
+            var swlk = new Aiskwk.Map.StopWatch();
             var grc = GetGraphCtrl();
             sman.leditor.SetGraphCtrl(grc);
             if (grcgos == null)
@@ -458,6 +460,8 @@ namespace CampusSimulator
             }
             if (linksvisible)
             {
+
+                swlk.Start();
                 var links = grc.GetLcLinks();
                 foreach (var lnk in links)
                 {
@@ -468,6 +472,7 @@ namespace CampusSimulator
                     var go = LinkGo.MakeLinkGo(sman, lnk, linkfrm, linkrad, clrname,1-linkTrans,this.flatlinks);
                     go.transform.parent = grclinks.transform;
                 }
+                swlk.Stop();
                 //foreach (var lnkname in grc.linknamelist)
                 //{
                 //    var lnk = grc.GetLink(lnkname);
@@ -478,10 +483,13 @@ namespace CampusSimulator
                 //    var go = LinkGo.MakeLinkGo(sman, lnk, linkfrm, linkrad, clrname, 1 - linkTrans, this.flatlinks);
                 //    go.transform.parent = grclinks.transform;
                 //}
-                Debug.Log($"CreateGrcGos - linknamelist size:{grc.linknamelist.Count}");
+                Debug.Log($"CreateGrcGos - linknamelist size:{grc.linknamelist.Count}/{links.Count} took:{swlk.ElapSecs()} secs");
             }
             if (nodesvisible)
             {
+
+                swnd.Start();
+
                 //Debug.Log("Recreating nodegos");
                 var nodes = grc.GetLcNodes();
                 foreach (var node in nodes)
@@ -489,7 +497,8 @@ namespace CampusSimulator
                     if (!CheckCapUseVisibility(node)) continue;
                     CreateNodeGo(node);
                 }
-                Debug.Log($"CreateGrcGos - nodenamelist size:{grc.nodenamelist.Count}");
+                swnd.Stop();
+                Debug.Log($"CreateGrcGos - nodenamelist size:{grc.nodenamelist.Count}/{nodes.Count} took:{swnd.ElapSecs()} secs");
 
 
                 if (showNearestPoint)
