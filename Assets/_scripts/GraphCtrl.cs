@@ -788,6 +788,10 @@ namespace GraphAlgos
             var xf = (float)x;
             var yf = ranHeight();
             var zf = (float)z;
+            //if (lname=="tracklink_0_1")
+            //{
+            //    Debug.Log($"Link to tracklink_0_1");
+            //}
             return (LinkTo(nodename, new Vector3(xf, yf, zf), curUseType, lname, comment));
         }
         public LcLink LinkToPtxyz(string nodename, double x, double y, double z, string lname = "",string comment="")
@@ -1007,6 +1011,11 @@ namespace GraphAlgos
             var sar = new string[2] { node1, node2 };
             var tup = new Tuple<string, string, LinkUse,int,int,string>(node1, node2, usetype,regStepIdx,regid,comment );
             latelinks.Add(tup);
+        }
+
+        public void DeleteLateLinks()
+        {
+            latelinks = new List<Tuple<string, string, LinkUse, int, int, string>>();
         }
 
         public void RealizeLateLinks()
@@ -1380,6 +1389,11 @@ namespace GraphAlgos
             if (!nodekeywords.ContainsKey(key)) return ("");
             return (nodekeywords[key]);
         }
+        public void DeleteKeywords()
+        {
+            nodekeywords = new Dictionary<string, string>();
+        }
+
         #region pathfinding
         LcNode findminfscore(HashSet<LcNode> openset)
         {

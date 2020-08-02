@@ -936,11 +936,11 @@ namespace Aiskwk.Map
             var llbr = llb.GetBottomRight();
             var llur = llb.GetUpperRight();
             var llul = llb.GetUpperLeft();
-            Debug.Log($"RegressLLboxIntoLlmap - llmd:{llmd}");
-            Debug.Log($"RegressLLboxIntoLlmap - llul:{llul}");
-            Debug.Log($"RegressLLboxIntoLlmap - llbr:{llbr}");
-            Debug.Log($"RegressLLboxIntoLlmap - llbl:{llbl}");
-            Debug.Log($"RegressLLboxIntoLlmap - llur:{llur}");
+            //Debug.Log($"RegressLLboxIntoLlmap - llmd:{llmd}");
+            //Debug.Log($"RegressLLboxIntoLlmap - llul:{llul}");
+            //Debug.Log($"RegressLLboxIntoLlmap - llbr:{llbr}");
+            //Debug.Log($"RegressLLboxIntoLlmap - llbl:{llbl}");
+            //Debug.Log($"RegressLLboxIntoLlmap - llur:{llur}");
             var w = llb.extentMeters1.x / 2;
             var h = llb.extentMeters1.y / 2;
             mapcoord.AddRowLatLng(llmd.lat, llmd.lng, 0, 0);

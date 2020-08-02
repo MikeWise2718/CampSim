@@ -63,6 +63,11 @@ namespace CampusSimulator
             dfnodeslist = new List<SimpleDf>();
         }
 
+        public void DeleteStuff()
+        {
+            InitDataFrames();
+        }
+
         public (List<SimpleDf> ways, List<SimpleDf> links, List<SimpleDf> nodes) GetSdfs()
         {
             var rv = (dfwayslist, dflinkslist, dfnodeslist);

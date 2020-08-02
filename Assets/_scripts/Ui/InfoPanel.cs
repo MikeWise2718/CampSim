@@ -123,18 +123,19 @@ public class InfoPanel : MonoBehaviour
             }
         }
         var (refresh, totrefresh, _) = sman.GetRefreshStatus();
+        var (gogen, _, _) = sman.lcman.GetNodeLinkCounts();
         msg += $"Upd:{updatecount} Sim:{simtime} {extext}";
         if (totrefresh)
         {
-            msg += " TR";
+            msg += $" TR {gogen}";
         }
         else if (refresh)
         {
-            msg += " R";
+            msg += $" R {gogen}";
         }
         else
         {
-            msg += "--";
+            msg += $" {sman.lastRefreshTime:f3}";
         }
         simText.text = msg;
         updatecount++;
@@ -168,7 +169,7 @@ public class InfoPanel : MonoBehaviour
             txt += $"{gyr.w:f3} {gyr.x:f3} {gyr.y:f3} {gyr.z:f3}\n";
             geoText.text = txt;
         }
-        var mmsg = "Reg:"+sman.curscene + "\n";
+        var mmsg = $"Reg:{sman.curscene} - {gogen}\n";
         mmsg += System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss zzz\n");
         mmsg += $"P:{sman.psman.GetPersonCount()} V:{sman.veman.GetVehicleCount()} "+
                 $"B:{sman.bdman.GetBuildingCount()} BR:{sman.bdman.GetBroomCount()} VC:{sman.vcman.GetVidcamCount()}\n"+

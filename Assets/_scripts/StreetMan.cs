@@ -113,7 +113,7 @@ namespace CampusSimulator
 
         public void CreateGraphForOsmImport_streets_df(string regionname, string color)
         {
-            Debug.Log($"CreateGraphForOsmImport_streets_df");
+            Debug.Log($"CreateGraphForOsmImport_streets_df region:{regionname}");
             var grc = this.sman.lcman.GetGraphCtrl();
             grc.regman.NewNodeRegion(regionname, color, saveToFile: true);
             var sman = GameObject.FindObjectOfType<SceneMan>();
@@ -166,6 +166,7 @@ namespace CampusSimulator
 
         public void SetScene(SceneSelE newregion)
         {
+            Debug.Log($"StreetMan.SetScene {newregion}");
             var regname = "";
             var trackdir = "";
             var regcolor = "blue";
@@ -232,6 +233,8 @@ namespace CampusSimulator
                 var dftracks = LoadTracks(trackdir);
                 MakeTracks(dftracks);
             }
+            var (gogen, nnodes, nlinks) = sman.lcman.GetNodeLinkCounts();
+            Debug.Log($"StreetMan.SetScene finished gogen:{gogen} nodes:{nnodes}  links:{nlinks}");
         }
 
         public SimpleDf LoadTracks(string trackdir,string trackname="track_points")

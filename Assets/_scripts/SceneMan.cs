@@ -285,6 +285,7 @@ namespace CampusSimulator
 
 
                     // Delete all objects - withough knowledge of identity of new scene
+                    dfman.DeleteStuff();
                     psman.DelPersons();
                     veman.DelVehicles();
                     bdman.DelBuildings();
@@ -292,8 +293,10 @@ namespace CampusSimulator
                     gaman.DelGarages();
                     vcman.DelVidcams();
                     lcman.DeleteAllNodes();
-                    //lcman.DeleteAllLinks();
-                    lcman.DestroyLinkCloud();
+                    lcman.DeleteGrcGos();
+                    //lcman.GetGraphCtrl();
+                    ////lcman.DeleteAllLinks();
+                    //lcman.DestroyLinkCloud();
 
                     mpman.DeleteQmap();
                     firstPersonBirdCtrl.DeleteBirdGosAndInit();
@@ -301,6 +304,8 @@ namespace CampusSimulator
 
                     ceasesw.Stop();
                     initsw.Start();
+
+                    lcman.InitLinkCloud(forcenew: true);
 
                     // Now do value initialization 
                     this.InitializeScene(newscene);// start with setting the scene
@@ -364,6 +369,8 @@ namespace CampusSimulator
                     lcman.SetScene3(newscene);  // realize latelinks    
                     lcman.DeleteUnconnectedNodes();
 
+                    lcman.RefreshGos(); // The gos need to be built now - in principle they are all empty
+
 
                     finsw.Stop();
 
@@ -375,7 +382,8 @@ namespace CampusSimulator
                 catch (Exception ex)
                 {
                     Debug.LogError("Scene "+newscene.ToString()+" not initialized successfully Exception:"+ex.ToString());
-                }   
+                }
+                Debug.Log($"SceneMan.SetScene completed scenario initialization for {curscene}");
             }
             else
             {
@@ -1617,6 +1625,7 @@ namespace CampusSimulator
         float ctrlShitTime = 0;
         float ctrlDhitTime = 0;
         float F5hitTime = 0;
+        float F6hitTime = 0;
         float F10hitTime = 0;
         public void KeyProcessing()
         {
@@ -1653,6 +1662,11 @@ namespace CampusSimulator
                 Debug.Log("F5 - Request Total Refresh");
                 this.RequestRefresh("F5 hit", totalrefresh: true);
             }
+            if (((Time.time - F6hitTime) > 0.5) && Input.GetKeyDown(KeyCode.F6))
+            {
+                Debug.Log("F6 - Request Go Refresh");
+                this.RequestRefresh("F6 hit", totalrefresh: false);
+            }
             if (((Time.time - F10hitTime) > 1) && Input.GetKeyDown(KeyCode.F10))
             {
                 Debug.Log("F10 - Options");
@@ -1677,7 +1691,7 @@ namespace CampusSimulator
                 ctrlDhitTime = Time.time;
             }
         }
-
+        public float lastRefreshTime = 0;
 
         int updateCount = 0;
         private void Update()
@@ -1712,6 +1726,7 @@ namespace CampusSimulator
 
             if (needsrefresh)
             {
+                Debug.Log($"SetScene.Update cnt:{updateCount} needsrefresh:{needsrefresh}");
                 var sw1 = new StopWatch();
                 if (needstotalrefresh)
                 {
@@ -1723,6 +1738,7 @@ namespace CampusSimulator
                     var sw2 = new StopWatch();
                     SetScene(sceneToRefresh, force: true);
                     sw2.Stop();
+                    lastRefreshTime = (float) sw2.Elap().TotalSeconds;
                     Debug.Log($"TotalRefresh SetScene took {sw2.ElapSecs()} secs");
                 }
                 else
@@ -1730,6 +1746,7 @@ namespace CampusSimulator
                     var sw3 = new StopWatch();
                     RefreshSceneManGos(); // in update
                     sw3.Stop();
+                    lastRefreshTime = (float) sw3.Elap().TotalSeconds;
                     Debug.Log($"RefreshSceneManGos took {sw3.ElapSecs()} secs");
                 }
                 uiman.SyncState();

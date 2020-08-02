@@ -295,11 +295,11 @@ namespace CampusSimulator
                 case SceneSelE.TeneriffeMtn:
                     //"m|Jane Doe Found|Girl03|unknown|nothing",
 
-                    sman.psman.AddPersonToBuildingAtNode(PersonMan.GenderE.female, "found-spot", "found-spot-dog", "Connie Haines Dog", "shepherd",
+                    sman.psman.AddPersonToBuildingAtNode(PersonMan.GenderE.female, "found-spot", "found-spot-dog", "Connie Haines Found Dog", "shepherd",
                                                          PersonMan.empStatusE.Unknown, "IdleUnarmed", false, 0, hasHololens: false, hasCamera: true, flagged: true);
                     sman.psman.AddPersonToBuildingAtNode(PersonMan.GenderE.female, "found-spot", "found-spot", "Connie Haines Found", "Girl010",
                                                          PersonMan.empStatusE.Unknown, "IdleUnarmed", false, 0, hasHololens: false, hasCamera: true, flagged: true);
-                    sman.psman.AddPersonToBuildingAtNode(PersonMan.GenderE.female, "lastseen-spot", "lastseen-spot-dog", "Connie Haines Lastseen", "shepherd",
+                    sman.psman.AddPersonToBuildingAtNode(PersonMan.GenderE.female, "lastseen-spot", "lastseen-spot-dog", "Connie Haines Lastseen Dog", "shepherd",
                                                          PersonMan.empStatusE.Unknown, "IdleUnarmed", false, 0, hasHololens: false, hasCamera: true, flagged: true);
                     sman.psman.AddPersonToBuildingAtNode(PersonMan.GenderE.female, "lastseen-spot", "lastseen-spot", "Connie Haines Lastseen", "Girl010",
                                                          PersonMan.empStatusE.Unknown, "IdleUnarmed", false, 0, hasHololens: false, hasCamera: true, flagged: true);

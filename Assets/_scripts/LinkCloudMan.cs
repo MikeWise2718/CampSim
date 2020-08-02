@@ -436,10 +436,10 @@ namespace CampusSimulator
             var node = gcr.GetNode(lptname);
             CreateNodeGo(node);
         }
-        static int gogencount = 0;
+        int gogencount = 0;
         void CreateGrcGos()
         {
-            //Debug.Log("CreateGrcGos "+ gogencount);
+            Debug.Log($"CreateGrcGos-{gogencount} scene:{sman.curscene} isnull:{grcgos==null}");
             var grc = GetGraphCtrl();
             sman.leditor.SetGraphCtrl(grc);
             if (grcgos == null)
@@ -452,6 +452,8 @@ namespace CampusSimulator
                 grcnodes.transform.parent = grcgos.transform;
                 grclinks = new GameObject("links");
                 grclinks.transform.parent = grcgos.transform;
+                var (gogen, nn, nl) = GetNodeLinkCounts();
+                Debug.Log($"CreateGrcGos - gogen:{gogen} nodes:{nn} links:{nl}");
                 gogencount++;
             }
             if (linksvisible)
@@ -524,6 +526,10 @@ namespace CampusSimulator
             {
                 grc.DelNode(node.name);
             }
+            grc.DeleteLateLinks();
+            grc.DeleteKeywords();
+            // todo: delete keywords
+            //        delete latelinks
         }
         public void DeleteAllLinks()
         {
@@ -749,6 +755,17 @@ namespace CampusSimulator
             var gcr = GetGraphCtrl();
             var lpt = gcr.GetNode(name);
             return (lpt);
+        }
+        public (int gogen,int nnodes,int nlinks) GetNodeLinkCounts()
+        {
+            if (grctrl != null)
+            {
+                return (gogencount, grctrl.GetNodeCount(), grctrl.GetLinkCount());
+            }
+            else
+            {
+                return (gogencount, 0, 0);
+            }
         }
         public void RefreshGos()
         {

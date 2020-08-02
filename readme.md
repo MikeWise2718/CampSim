@@ -74,3 +74,73 @@
 
 - Runs, but all the cars (and people now) are missing
      -   This happened to me when I imported without gif-lfs enabled, it wasn't importing the car textures so you didn't see them
+
+
+## Architectural Notes to CampusSimulator - Mike Wise - 1 Aug 2020
+Ideally a program should have tight cohesion in its components and loose coupling between them, also variable and procedure names chosen so as to be self-documenting. 
+Unfortunately, here that proves to be quite a problem. Tight-cohesion is fairly easy, but loose coupling is very difficult, mostly because our objects have multiple dependencies on one another. 
+Here we analyze that.
+
+### Overview
+We have various scenarios, that we refer to as "scenes" (at one time we called them "regions" in some places that word still exists). Scenario would have been slightly better, might change it.
+
+We have a top-level "SceneManager" object that manages our scenarios. The scenarios are composed of groups of objects that are all managed by their own unique manager – normally one manger per type of objects. Example objects are building, people, vehicles, streets, etc.
+
+Management consists of managing their lifetime, and also frequently consolidating and managing the communication to other managers. Looking up the objects by their various identifying characteristics is another function that the managers frequently perform
+
+### Managers
+We use a manager-managees pattern, whereby a single manger manages multiple managees. Not that this is not exactly a singleton pattern since we could in theory have multiple managers – and we will probably need this for example when two scenarios need to interact (which is a definite possibility at this point but not one we have implemented yet).
+A list of our managers
+
+Top Level
+-	`PeopleMan` – Mangers people in the scene, their name, avatar, if they have a camera, etc.
+-	`BuildingMan` – Manages buildings in the scene. Also trees, bushes, building alarms, and a bunch of other things that should probably have their own managers someday.
+-	`VehicleMan` – Manages vehicles (cars) that can move around.
+-	`GarageMan` – Manages places that vehicles can park
+-	`StreetMan` – Manages streets in the scene. Data comes in from OSM through `DataFileMan`
+-	`VideoMan` – Manages fixed cameras that can be in the scene. Also keeps track of viewer camera, and probably should keep track of people cams
+-	`JourneyMan` – manages the journeys people take 
+-	`ZoneMan` – manages evacuation zones people can go to during an evacuation
+Lower Level
+-	`FrameMan` – Manages frames that can be used for ML computer vision (AI) training
+-	`DataFileMan` - Manager – manages data sets (csv, json, etc) for the scenarios
+-	`LinkMan` – manages nodes and links in the scene
+-	`UiMan` – Manges the UI 
+
+
+ 
+## Initialization Sequence
+Originally, we just had a single initialization call per manager, but that simply did not work because of the interdependencies. We now have a multi-phase initialization during a new scene startup.
+-	OneTime Initialization – Initializations that is done once per application instance (CampSim invocation) and is scene independent. For example, `UiMan` finds all the objects that were manually placed in the `UiPrefab` and initializes its references to them. This will not ever change over the application lifetime.
+
+-	Object Deletion – Only significant when a prior scene was instantiated. Current objects in the various managers are deleted. The manager should come to a state that is indistinguishable on each startup.
+
+-	Value Initialization – stored values are read from the `PlayerPref` so that settings can be retained in a scene. Additional initialization that depends only on those settings or is independent of those values can also optionally be performed.
+
+-	Note that from this point `DataFileMan` and `LinkMan` need to be usable.
+
+-	TODO: files are read and data structures are built. 
+
+-	Graphic Object Initialization – gameobjects are created. Here we restrict ourselves to object creation that needs no inter manager communication, whereby most modules will need services from `LinkCloudMan`
+
+-	Object Linking – intramanager initialization that requires the objects to have been created in multiple modules is done
+
+
+## Scene Updating
+During a scenario we can do various things – examples are:
+-	like start some simulation like a building evacuation
+-	change some settings that determine appearance
+-	move our viewer around
+-	change cameras, etc. 
+-	Changing the base scenario would actually be one of these too. 
+Some of these will require changes to the scene that affect the way it is initialized, so we might need to redo some or even all of the initialization.
+We distinguish between three classes.
+-	Total Refresh – those that require the entire scene to be initialized.
+-	Object Refresh – No data is reread in, however all the graphics objects are destroyed and then reinitialized
+-	Partial Object Refresh – Individual game objects are deleted and recreated locally. This should be logged somewhere.
+-	Object modification – attributes (Components) of game objects are modified. This might trigger Unity to do a lot of work, but it does not (should not?) affect our object hierarchy visibly. This should also be logged somewhere.
+
+
+
+
+

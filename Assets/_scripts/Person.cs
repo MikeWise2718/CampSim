@@ -126,7 +126,10 @@ namespace CampusSimulator
             pergo.Init(this);
             height = pergo.GetPersonHeight();
             persGo = pergo;
-            AddHololens();
+            if (this.hasHololens)
+            {
+                AddHololens();
+            }
             pogo.name = this.name + callersfx;
             return pogo;
         }
@@ -288,7 +291,7 @@ namespace CampusSimulator
             var hlparent = GraphAlgos.GraphUtil.GetPart(persGo.gameObject, partname);
             if (!hlparent)
             {
-                Debug.Log("AddHololens - Head Part not found for "+this.personName);
+                Debug.LogError("AddHololens - Head Part not found for "+this.personName);
                 return;
             }
             //Debug.Log("hlparent found:" + hlparent.name);
