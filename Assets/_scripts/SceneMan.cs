@@ -440,7 +440,7 @@ namespace CampusSimulator
         }
         public void RequestRefresh(string requester,bool totalrefresh=false, SceneSelE requestedScene = SceneSelE.None)
         {
-            Debug.Log($"RefreshRequested by {requester} total:{totalrefresh}");    
+            Debug.LogWarning($"RefreshRequested by {requester} total:{totalrefresh}");    
             needsrefresh = true;
             if (totalrefresh)
             {

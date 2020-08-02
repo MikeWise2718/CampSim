@@ -119,10 +119,10 @@ namespace CampusSimulator
                 case LinkVisualOptionsE.None:
                     break;
             }
-            if (sman != null)
-            {
-                sman.RequestRefresh("LinkCloudMan-SetLinkAndNodeVisibility");
-            }
+            //if (sman != null)
+            //{
+            //    sman.RequestRefresh("LinkCloudMan-SetLinkAndNodeVisibility");
+            //}
         }
 
 
@@ -263,12 +263,12 @@ namespace CampusSimulator
         {
             updateCount += 1;
 
-            if (needRefreshUpdateCount > 0 && ((updateCount - needRefreshUpdateCount) > 15))
-            {
-                sman.RequestRefresh("LinkCloudMan-Update on needRefreshUpdateCount>0");
-                needRefreshUpdateCount = 0;
-            }
-            CheckForVisibiltyChanges();
+            //if (needRefreshUpdateCount > 0 && ((updateCount - needRefreshUpdateCount) > 15))
+            //{
+            //    sman.RequestRefresh("LinkCloudMan-Update on needRefreshUpdateCount>0");
+            //    needRefreshUpdateCount = 0;
+            //}
+            //CheckForVisibiltyChanges();
         }
 
         bool CheckCapUseVisibility(LcLink link)
@@ -329,7 +329,10 @@ namespace CampusSimulator
                 sman.needsLifted = false; 
             }
             lastgenmodel = graphScene;
-            sman.RequestRefresh("LinkCloudMan-GenLinkCloud");
+            //if (!sman.RequestRefresh)
+            //{
+            //    sman.RequestRefresh("LinkCloudMan-GenLinkCloud"); //do we need this
+            //}
         }
 
         public bool CanGetHeights()
@@ -469,7 +472,7 @@ namespace CampusSimulator
                     var clrname = linkcolor(lnk);
                     var linkrad = linkradius(lnk);
                     var linkfrm = linkform(lnk);
-                    var go = LinkGo.MakeLinkGo(sman, lnk, linkfrm, linkrad, clrname,1-linkTrans,this.flatlinks);
+                    var go = LinkGo.MakeLinkGo(sman, lnk, linkfrm, linkrad, clrname,1-linkTrans,this.flatlinks,dofrag:true);
                     go.transform.parent = grclinks.transform;
                 }
                 swlk.Stop();

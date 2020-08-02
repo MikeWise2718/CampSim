@@ -2708,6 +2708,7 @@ MonoBehaviour:
   roomAction: 0
   loadVoiceKeysForAllRooms: 0
   curscene: 9
+  lastRefreshTime: 0
   selObs: []
   actgo: {fileID: 0}
 --- !u!1 &98052515
@@ -9435,7 +9436,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -206.47, y: 0.00028324}
-  m_SizeDelta: {x: 413.05, y: 120}
+  m_SizeDelta: {x: 413.05, y: 130}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &398791554
 MonoBehaviour:
@@ -20448,7 +20449,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 565.57, y: 0.00040531}
-  m_SizeDelta: {x: 404.85, y: 120}
+  m_SizeDelta: {x: 404.85, y: 1330}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &867840105
 MonoBehaviour:
@@ -34380,8 +34381,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -590.5, y: 0.00044632}
-  m_SizeDelta: {x: 355, y: 120}
+  m_AnchoredPosition: {x: -600.4, y: 0.00020218}
+  m_SizeDelta: {x: 374.9, y: 130}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1504186772
 MonoBehaviour:
@@ -36426,8 +36427,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 60}
-  m_SizeDelta: {x: 1536, y: 120}
+  m_AnchoredPosition: {x: 0, y: 64}
+  m_SizeDelta: {x: 1600, y: 130}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1589301481
 MonoBehaviour:
@@ -44427,7 +44428,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 181.6, y: 0.00028324}
-  m_SizeDelta: {x: 363.1, y: 120}
+  m_SizeDelta: {x: 363.1, y: 130}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1914043058
 MonoBehaviour:
