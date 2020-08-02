@@ -388,6 +388,7 @@ namespace CampusSimulator
                 {
                     Debug.LogError("Scene "+newscene.ToString()+" not initialized successfully Exception:"+ex.ToString());
                 }
+                CancelRefreshes();
                 Debug.Log($"SceneMan.SetScene completed scenario initialization for {curscene}");
             }
             else
@@ -432,7 +433,11 @@ namespace CampusSimulator
             }
 #endif
         }
-
+        public void CancelRefreshes()
+        {
+            needsrefresh = false;
+            needstotalrefresh = false;
+        }
         public void RequestRefresh(string requester,bool totalrefresh=false, SceneSelE requestedScene = SceneSelE.None)
         {
             Debug.Log($"RefreshRequested by {requester} total:{totalrefresh}");    

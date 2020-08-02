@@ -127,7 +127,7 @@ public class InfoPanel : MonoBehaviour
         msg += $"Upd:{updatecount} Sim:{simtime} {extext}";
         if (totrefresh)
         {
-            msg += $" TR {gogen}";
+            msg += $" TR {gogen+1}";
         }
         else if (refresh)
         {

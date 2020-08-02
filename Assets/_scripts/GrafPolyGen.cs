@@ -527,6 +527,7 @@ public class GrafPolyGen
 
     public static (float val, int idx) FindSmallestPositiveCrossProductYcomponent(List<(int id,Vector3 pt)> ptlist,bool dbout=false)
     {
+        dbout = false;
         // find the index of the middle point of the smallest convex triangle to slice off
         var cpvalmin = float.MaxValue;
         var cpvalminidx = -1;

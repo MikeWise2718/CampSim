@@ -439,6 +439,7 @@ namespace CampusSimulator
         void CreateGrcGos()
         {
             Debug.Log($"CreateGrcGos-{gogencount} scene:{sman.curscene} isnull:{grcgos==null}");
+            var sw = new Aiskwk.Map.StopWatch();
             var grc = GetGraphCtrl();
             sman.leditor.SetGraphCtrl(grc);
             if (grcgos == null)
@@ -457,9 +458,9 @@ namespace CampusSimulator
             }
             if (linksvisible)
             {
-                foreach (var lnkname in grc.linknamelist)
+                var links = grc.GetLcLinks();
+                foreach (var lnk in links)
                 {
-                    var lnk = grc.GetLink(lnkname);
                     if (!CheckCapUseVisibility(lnk)) continue;
                     var clrname = linkcolor(lnk);
                     var linkrad = linkradius(lnk);
@@ -467,16 +468,30 @@ namespace CampusSimulator
                     var go = LinkGo.MakeLinkGo(sman, lnk, linkfrm, linkrad, clrname,1-linkTrans,this.flatlinks);
                     go.transform.parent = grclinks.transform;
                 }
+                //foreach (var lnkname in grc.linknamelist)
+                //{
+                //    var lnk = grc.GetLink(lnkname);
+                //    if (!CheckCapUseVisibility(lnk)) continue;
+                //    var clrname = linkcolor(lnk);
+                //    var linkrad = linkradius(lnk);
+                //    var linkfrm = linkform(lnk);
+                //    var go = LinkGo.MakeLinkGo(sman, lnk, linkfrm, linkrad, clrname, 1 - linkTrans, this.flatlinks);
+                //    go.transform.parent = grclinks.transform;
+                //}
+                Debug.Log($"CreateGrcGos - linknamelist size:{grc.linknamelist.Count}");
             }
             if (nodesvisible)
             {
                 //Debug.Log("Recreating nodegos");
-                foreach (string lptname in grc.linkpoints())
+                var nodes = grc.GetLcNodes();
+                foreach (var node in nodes)
                 {
-                    var node = grc.GetNode(lptname);
                     if (!CheckCapUseVisibility(node)) continue;
                     CreateNodeGo(node);
                 }
+                Debug.Log($"CreateGrcGos - nodenamelist size:{grc.nodenamelist.Count}");
+
+
                 if (showNearestPoint)
                 {
                     var tup = FindClosestPointOnLineCloud(nearestPointRef);
@@ -489,6 +504,8 @@ namespace CampusSimulator
             }
             stats_nodes_links.x = grc.GetNodeCount();
             stats_nodes_links.y = grc.GetLinkCount();
+            sw.Stop();
+            Debug.Log($"CreateGrcGos {gogencount} took {sw.ElapSecs()} secs");
         }
         public void DeleteGrcGos()
         {
