@@ -266,6 +266,22 @@ namespace CampusSimulator
         {
             if (glbllm==null)
             {
+                Debug.LogError($"glbllm is null");
+                return ((float)lng, (float)lat);
+            }
+            if (glbllm.maps==null)
+            {
+                Debug.LogError($"glbllm.mapps is null");
+                return ((float)lng, (float)lat);
+            }
+            if (glbllm.maps.xmap == null)
+            {
+                Debug.LogError($"glbllm.maps.xmap is null");
+                return ((float)lng, (float)lat);
+            }
+            if (glbllm.maps.zmap == null)
+            {
+                Debug.LogError($"glbllm.maps.zmap is null");
                 return ((float)lng, (float)lat);
             }
             var x = (float) glbllm.maps.xmap.Map(lng,lat);
