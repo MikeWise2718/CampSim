@@ -388,15 +388,20 @@ namespace CampusSimulator
             }
             sman.needsLifted = false;
         }
-        public GraphAlgos.GraphCtrl GetGraphCtrl()
+        public void SetLLtoXZ()
+        {
+            grctrl.lltoxz = new GraphCtrl.LtoXZfunction(sman.lltoxz);
+        }
+        public GraphAlgos.GraphCtrl GetGraphCtrl(bool donotallocate=false)
         {
             if (grctrl == null)
             {
+                if (donotallocate)
+                {
+                    return null;
+                }
                 grctrl = new GraphAlgos.GraphCtrl(sman.graphsdir);
-            }
-            if (grctrl.lltoxz == null && sman.glbllm != null)
-            {
-                grctrl.lltoxz = new GraphCtrl.LtoXZfunction(sman.lltoxz);
+                SetLLtoXZ();
             }
             return (grctrl);
         }
@@ -540,16 +545,17 @@ namespace CampusSimulator
         }
         public void DeleteAllNodes()
         {
-            var grc = GetGraphCtrl();
-            var nodesToDelete = grc.GetLcNodes();
-            foreach (var node in nodesToDelete)
+            var grc = GetGraphCtrl(donotallocate:true);
+            if (grc != null)
             {
-                grc.DelNode(node.name);
+                var nodesToDelete = grc.GetLcNodes();
+                foreach (var node in nodesToDelete)
+                {
+                    grc.DelNode(node.name);
+                }
+                grc.DeleteLateLinks();
+                grc.DeleteKeywords();
             }
-            grc.DeleteLateLinks();
-            grc.DeleteKeywords();
-            // todo: delete keywords
-            //        delete latelinks
         }
         public void DeleteAllLinks()
         {
