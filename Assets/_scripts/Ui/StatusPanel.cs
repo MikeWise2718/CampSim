@@ -243,13 +243,13 @@ namespace CampusSimulator
 
         public void ShowTracksButton()
         {
-            var stman = sman.stman;
-            if (stman!=null)
+            var trman = sman.trman;
+            if (trman != null)
             {
                 //var active = stman.gameObject.activeSelf;
-                var active = stman.showtracks.Get();
-                stman.showtracks.SetAndSave(!active);
-                stman.gameObject.SetActive(!active);
+                var active = trman.showtracks.Get();
+                trman.showtracks.SetAndSave(!active);
+                trman.gameObject.SetActive(!active);
                 ColorizeButtonStates();
             }
         }
@@ -267,7 +267,7 @@ namespace CampusSimulator
             SetButtonColor(secButton, "lightblue", sman.frman.detectSecurity.Get(), "S");
             SetButtonColor(visButton, "lightblue", sman.frman.detectVisitor.Get(), "V");
             SetButtonColor(unkButton, "lightblue", sman.frman.detectUnknown.Get(), "U");
-            SetButtonColor(showTracksButton, "lightblue", sman.stman.showtracks.Get(), "Tracks");
+            SetButtonColor(showTracksButton, "lightblue", sman.trman.showtracks.Get(), "Tracks");
             //Debug.LogWarning($"ColorizeButtonStates Vt2D:{sman.frman.visibilityTiedToDetectability.Get()}");
             SetButtonColor(vt2dButton, "lightblue", sman.frman.visibilityTiedToDetectability.Get(), "Vt2D");
             SetButtonColor(frameButton, "pink", sman.frman.frameJourneys.Get(), "Frame");

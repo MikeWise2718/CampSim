@@ -536,7 +536,7 @@ namespace CampusSimulator
             }
         }
 
-
+        public int nTotIsects = 0;
         public GameObject AddLine(string lname, Vector3 pt1, Vector3 pt2,RmLinkFormE lnform=RmLinkFormE.pipe, float lska = 1.0f, float nska = 1.0f, string lclr = "red", string nclr = "", int omit = -1, float widratio = 1, bool wps = true, bool frag=false)
         {
             if (qmapman == null || qmapman.qmm == null) return null;
@@ -544,7 +544,9 @@ namespace CampusSimulator
             GameObject lgo;
             if (frag)
             {
+                qmapman.qmm.qtt.ntotIsects = 0;
                 lgo = qmapman.qmm.qtt.AddFragLine(lname, pt1, pt2,frm, lska, nska, lclr, nclr, omit, widratio, wps);
+                nTotIsects += qmapman.qmm.qtt.ntotIsects;
             }
             else
             {

@@ -186,7 +186,7 @@ namespace CampusSimulator
                     {
                         var objPrefab = Resources.Load<GameObject>("obj3d/bell412spinning");
                         birdformgo = Instantiate<GameObject>(objPrefab);
-                        var s = sman.stman.scalemodelnumber.Get();
+                        var s = sman.trman.scalemodelnumber.Get();
                         if (birdscale > 0)
                         {
                             s *= birdscale;
@@ -204,7 +204,7 @@ namespace CampusSimulator
                     {
                         var objPrefab = Resources.Load<GameObject>("obj3d/quadcopterspinning");
                         birdformgo = Instantiate<GameObject>(objPrefab);
-                        var s = sman.stman.scalemodelnumber.Get();
+                        var s = sman.trman.scalemodelnumber.Get();
                         if (birdscale > 0)
                         {
                             s *= birdscale;
@@ -222,7 +222,7 @@ namespace CampusSimulator
                     {
                         var objPrefab = Resources.Load<GameObject>("obj3d/DJI_Mavic_Air_2_Spinning");
                         birdformgo = Instantiate<GameObject>(objPrefab);
-                        var s = 0.01f*sman.stman.scalemodelnumber.Get();
+                        var s = 0.01f*sman.trman.scalemodelnumber.Get();
                         if (birdscale > 0)
                         {
                             s *= birdscale;
@@ -240,7 +240,7 @@ namespace CampusSimulator
                     {
                         var objPrefab = Resources.Load<GameObject>("dogs/shepherd");
                         birdformgo = Instantiate<GameObject>(objPrefab);
-                        var s = 0.01f * sman.stman.scalemodelnumber.Get();
+                        var s = 0.01f * sman.trman.scalemodelnumber.Get();
                         if (birdscale > 0)
                         {
                             s *= birdscale;
@@ -278,7 +278,7 @@ namespace CampusSimulator
                             var objPrefab = Resources.Load<GameObject>(resname);
                             birdformgo = Instantiate<GameObject>(objPrefab);
                         }
-                        var s = sman.stman.scalemodelnumber.Get();
+                        var s = sman.trman.scalemodelnumber.Get();
                         if (birdscale>0)
                         {
                             s *= birdscale;

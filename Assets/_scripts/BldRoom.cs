@@ -124,7 +124,7 @@ namespace CampusSimulator {
                     //animation["Idle"].time = Random.Range(0.0, animation["Idle"].length);
 
                     pers.roomPogo = persgo;
-                    var ska = bm.sman.stman.scalemodelnumber.Get();
+                    var ska = bm.sman.trman.scalemodelnumber.Get();
                     var skav = new Vector3(ska, ska, ska);
                     persgo.transform.localScale = skav;
                     //persgo.name = pers.personName+"-ava";

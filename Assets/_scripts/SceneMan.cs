@@ -106,6 +106,7 @@ namespace CampusSimulator
         public GarageMan gaman;
         public BuildingMan bdman;
         public StreetMan stman;
+        public TrackMan trman;
         public MapMan mpman;
         public JourneyMan jnman;
         public VidcamMan vcman;
@@ -193,6 +194,7 @@ namespace CampusSimulator
             vcman = FindObjectOfType<VidcamMan>();
             bdman = FindObjectOfType<BuildingMan>();
             stman = FindObjectOfType<StreetMan>();
+            trman = FindObjectOfType<TrackMan>();
             gaman = FindObjectOfType<GarageMan>();
             znman = FindObjectOfType<ZoneMan>();
             jnman = FindObjectOfType<JourneyMan>();
@@ -207,6 +209,7 @@ namespace CampusSimulator
             mpman.sman = this;
             vcman.sman = this;
             stman.sman = this;
+            trman.sman = this;
             bdman.sman = this;
             gaman.sman = this;
             znman.sman = this;
@@ -225,6 +228,7 @@ namespace CampusSimulator
                 vcman.transform.parent = rgo.transform;
                 bdman.transform.parent = rgo.transform;
                 stman.transform.parent = rgo.transform;
+                trman.transform.parent = rgo.transform;
                 gaman.transform.parent = rgo.transform;
                 znman.transform.parent = rgo.transform;
                 jnman.transform.parent = rgo.transform;
@@ -238,6 +242,7 @@ namespace CampusSimulator
             mpman.InitPhase0();
             bdman.InitPhase0();
             stman.InitPhase0();
+            trman.InitPhase0();
             vcman.InitPhase0();
             uiman.InitPhase0();
             dfman.InitPhase0();
@@ -289,7 +294,7 @@ namespace CampusSimulator
                     psman.DelPersons();
                     veman.DelVehicles();
                     bdman.DelBuildings();
-                    stman.DeleteStreets();
+                    trman.DeleteTracks();
                     gaman.DelGarages();
                     vcman.DelVidcams();
                     lcman.DeleteAllNodes();
@@ -322,6 +327,7 @@ namespace CampusSimulator
                     vcman.InitializeScene(newscene);
                     bdman.InitializeScene(newscene);
                     stman.InitializeScene(newscene);
+                    trman.InitializeScene(newscene);
                     gaman.InitializeScene(newscene);
                     znman.InitializeScene(newscene);
                     psman.InitializeScene(newscene);
@@ -344,13 +350,15 @@ namespace CampusSimulator
                     gaman.SetScene(newscene);
 
                     bdman.SetScene(newscene);// building details, but no nodes and links
-
                     stman.SetScene(newscene);
+                    trman.SetScene(newscene);
 
 
                     lcman.GetGraphCtrl(); // provoke ll function creation
                     lcman.SetScene(newscene); // create or read in most nodes and links
                                               // currently needs to happen after buildings and garages are setup
+
+
 
 
                     RealizeFloorPlanStatus();
@@ -374,7 +382,7 @@ namespace CampusSimulator
                     lcman.DeleteUnconnectedNodes();
 
                     lcman.RefreshGos(deletethings:false); // The gos need to be built now - in principle they are all empty
-                    stman.RefreshGos();
+                    trman.RefreshGos();
 
 
                     finsw.Stop();

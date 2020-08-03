@@ -394,7 +394,7 @@ namespace CampusSimulator
             {
                 grctrl = new GraphAlgos.GraphCtrl(sman.graphsdir);
             }
-            if (grctrl.lltoxz==null && sman.glbllm != null)
+            if (grctrl.lltoxz == null && sman.glbllm != null)
             {
                 grctrl.lltoxz = new GraphCtrl.LtoXZfunction(sman.lltoxz);
             }
@@ -466,6 +466,7 @@ namespace CampusSimulator
 
                 swlk.Start();
                 var links = grc.GetLcLinks();
+                sman.mpman.nTotIsects = 0;
                 foreach (var lnk in links)
                 {
                     if (!CheckCapUseVisibility(lnk)) continue;
@@ -476,17 +477,8 @@ namespace CampusSimulator
                     go.transform.parent = grclinks.transform;
                 }
                 swlk.Stop();
-                //foreach (var lnkname in grc.linknamelist)
-                //{
-                //    var lnk = grc.GetLink(lnkname);
-                //    if (!CheckCapUseVisibility(lnk)) continue;
-                //    var clrname = linkcolor(lnk);
-                //    var linkrad = linkradius(lnk);
-                //    var linkfrm = linkform(lnk);
-                //    var go = LinkGo.MakeLinkGo(sman, lnk, linkfrm, linkrad, clrname, 1 - linkTrans, this.flatlinks);
-                //    go.transform.parent = grclinks.transform;
-                //}
-                Debug.Log($"CreateGrcGos - linknamelist size:{grc.linknamelist.Count}/{links.Count} took:{swlk.ElapSecs()} secs");
+                var nisects = sman.mpman.nTotIsects;
+                Debug.Log($"CreateGrcGos - linknamelist size:{grc.linknamelist.Count}/{links.Count} took:{swlk.ElapSecs()} secs  -  isects:{nisects}");
             }
             if (nodesvisible)
             {

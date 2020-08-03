@@ -904,14 +904,14 @@ namespace CampusSimulator
                 }
                 var sname = sar[0];
                 var ava = sar[1];
-                var strt = sman.stman.GetStreet(sname);
+                var trck = sman.trman.GetTrack(sname);
                 var sfak = glbsizefak * ParseFloat(sar[2],1f);
                 var vfak = glbvelofak * ParseFloat(sar[3], 1f);
                 var lamb = ParseFloat(sar[4],0f);
-                if (strt!=null)
+                if (trck!=null)
                 {
                     //StartViewerJourney(strt.stnode, strt.ednode, captype: LcCapType.anything, ava: ava,velfak:vfak,skafak:sfak,lambstart:lamb);
-                    StartViewerJourney(strt.stnode, strt.ednode, captype: strt.captyp, ava: ava, velfak: vfak, skafak: sfak, lambstart: lamb);
+                    StartViewerJourney(trck.stnode, trck.ednode, captype: trck.captyp, ava: ava, velfak: vfak, skafak: sfak, lambstart: lamb);
                 }
             }
         }

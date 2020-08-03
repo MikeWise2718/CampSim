@@ -96,7 +96,7 @@ public class FireFlyPanel : MonoBehaviour
             Debug.LogError($"{errmsg}1:{ex.Message}");
         }
 
-        var scaleval = sman.stman.scalemodelnumber.Get();
+        var scaleval = sman.trman.scalemodelnumber.Get();
         //Debug.Log($"InitVals get:{inival}");
         scaleNumberField.text = scaleval.ToString("f1");
     }
@@ -110,7 +110,7 @@ public class FireFlyPanel : MonoBehaviour
         var enode = nodes[eidx];
         var sar = snode.Split('_');
         var sname = sar[0];
-        var st = sman.stman.GetStreet(sname);
+        var st = sman.trman.GetTrack(sname);
         if (st!=null)
         {
             //var jsnode = sname + "_start";
@@ -144,13 +144,13 @@ public class FireFlyPanel : MonoBehaviour
 
         //Debug.Log($"InitVals get:{inival}");
         var scalevaltxt = scaleNumberField.text;
-        float val = sman.stman.scalemodelnumber.Get();
+        float val = sman.trman.scalemodelnumber.Get();
         string msg;
         var ok = float.TryParse(scalevaltxt, out val);
         if (ok)
         {
-            chg = chg || (val != sman.stman.scalemodelnumber.Get());
-            sman.stman.scalemodelnumber.SetAndSave(val);
+            chg = chg || (val != sman.trman.scalemodelnumber.Get());
+            sman.trman.scalemodelnumber.SetAndSave(val);
             Debug.Log($"FireFlyPanel.SetVal set scalemodenumber to {val}");
         }
         else
