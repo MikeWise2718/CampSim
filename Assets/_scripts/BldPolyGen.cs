@@ -381,7 +381,7 @@ public class BldPolyGen
             }
         }
         var blddf = SimpleDf.SubsetOnStringColVal(dfways, "osmtype", "building");
-        Debug.Log($"Found {blddf.Nrow()} buildings in dfways");
+        Debug.Log($"Found {blddf.Nrow()} buildings in dfways - {dfways.name}");
         var bldtyp = blddf.GetStringCol("osmsubtype");
         var bldwids = blddf.GetStringCol("osm_wid");
         var bldnames = blddf.GetStringCol("name");

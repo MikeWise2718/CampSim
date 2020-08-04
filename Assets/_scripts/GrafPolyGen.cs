@@ -634,7 +634,8 @@ public class GrafPolyGen
         var woutline = RemoveAdjacentEquals( GetOutline(),eps);
         if (_poutline.Count < 3)
         {
-            Debug.LogError($"Not enough distinct points:{woutline.Count} to tesselate - count before dup removeal:{_poutline.Count}");
+            Debug.LogError($"Error tesselating building {parent.name}");
+            Debug.LogError($"Not enough distinct points:{woutline.Count} to tesselate - count before dup removal:{_poutline.Count}");
             return null;
         }
         var area = CalcAreaWithYup(woutline);

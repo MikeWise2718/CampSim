@@ -17,9 +17,9 @@ namespace CampusSimulator
         public string osmloadspec;
 
 
-        private List<SimpleDf> dfwayslist;
-        private List<SimpleDf> dflinkslist;
-        private List<SimpleDf> dfnodeslist;
+        public List<SimpleDf> dfwayslist;
+        public List<SimpleDf> dflinkslist;
+        public List<SimpleDf> dfnodeslist;
 
         public UxSettingBool useDfIndexes = new UxSettingBool("useDfIndexes", true);
         public UxSettingBool useDfLlCoords = new UxSettingBool("useDfLlcoords", true);
@@ -181,6 +181,9 @@ namespace CampusSimulator
             }
         }
 
+        public string fnameways;
+        public string fnamelinks;
+        public string fnamenodes;
 
         public void GetDfsFromResources1(string area1, LatLongMap llm = null)
         {
@@ -191,7 +194,7 @@ namespace CampusSimulator
 
             dfways = null;
             {
-                var fnameways = $"{dname}{area1}_ways.csv";
+                fnameways = $"{dname}{area1}_ways.csv";
                 dfways = new SimpleDf(area1 + "_ways");
                 var wayslist = ReadResource(fnameways);
                 if (wayslist != null)
@@ -203,7 +206,7 @@ namespace CampusSimulator
 
             dflinks = null;
             {
-                var fnamelinks = $"{dname}{area1}_links.csv";
+                fnamelinks = $"{dname}{area1}_links.csv";
                 dflinks = new SimpleDf(area1 + "links");
                 var linkslist = ReadResource(fnamelinks);
                 if (linkslist != null)
@@ -221,7 +224,7 @@ namespace CampusSimulator
 
             dfnodes = null;
             {
-                var fnamenodes = $"{dname}{area1}_nodes.csv";
+                fnamenodes = $"{dname}{area1}_nodes.csv";
                 dfnodes = new SimpleDf(area1 + "nodes");
                 var nodeslist = ReadResource(fnamenodes);
                 if (nodeslist != null)
