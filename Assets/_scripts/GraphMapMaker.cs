@@ -767,7 +767,7 @@ namespace GraphAlgos
         public GenGlobeParameters globpar = new GenGlobeParameters(12, 12, 10, 10);
         public GenCircParameters circpar = new GenCircParameters(12, 10, 0);
         public Range LinkFloor = new Range(0, 0);
-        public void AddGraphToLinkCloud(graphSceneE graphScene,GraphGenerationModeE genMode,bool addWallLinks,bool addfixedStreetLinks,bool genOsmStreetLinks)
+        public void AddGraphToLinkCloud(graphSceneE graphScene,GraphGenerationModeE genMode,bool addWallLinks)
         {
             grc.maxRanHeight = LinkFloor.max;
             grc.minRanHeight = LinkFloor.min;
@@ -790,17 +790,6 @@ namespace GraphAlgos
                         switch (genMode)
                         {
                             case GraphGenerationModeE.GenFromCode:
-                                //lmd.CreatePointsForB11();
-                                //lmd.CreatePointsForB19();
-                                //lmd.CreatePointsForB40();
-                                //lmd.CreatePointsForB43();
-                                //lmd.CreatePointsForB43RoomsFloor1();
-                                //lmd.CreatePointsForB99();
-                                //lmd.CreatePointsForBredwB();
-                                //lmd.CreatePointsForBredwB3floor(height: 9, bldname: "BldRWB");
-                                //lmd.CreatePointsForBsx();
-
-                                //lmd.createPointsFor_msft_b11();
                                 lmd.createPointsFor_msft_b19();
                                 lmd.createPointsFor_msft_b121();
                                 lmd.createPointsFor_msft_b40();
@@ -811,10 +800,10 @@ namespace GraphAlgos
                                 lmd.createPointsFor_msft_bredwb_f3();
                                 lmd.createPointsFor_msft_bsx();
                                 //lmd.createPointsFor_msft_campus();
-                                if (addfixedStreetLinks)
-                                {
-                                    lmd.CreateGraphForOsmImport_msft_streets();
-                                }
+                                //if (addfixedStreetLinks)
+                                //{
+                                //    lmd.CreateGraphForOsmImport_msft_streets();
+                                //}
                                 //if (genOsmStreetLinks)
                                 //{
                                 //    lmd.CreateGraphForOsmImport_msft_streets_df("msft-campus", "blue");
@@ -914,10 +903,10 @@ namespace GraphAlgos
                                 //lmd.CreatePointsForEb12retail();
                                 //lmd.CreatePointsForEb12resident2();
 
-                                if (addfixedStreetLinks)
-                                {
-                                    lmd.CreateGraphForOsmImport_eb12_orig();
-                                }
+                                //if (addfixedStreetLinks)
+                                //{
+                                //    lmd.CreateGraphForOsmImport_eb12_orig();
+                                //}
 
                                 if (addWallLinks)
                                 {
@@ -949,10 +938,11 @@ namespace GraphAlgos
                                 //lmd.CreatePointsForEb12streets2();
                                 //lmd.CreatePointsForEb12retail();
                                 //lmd.CreatePointsForEb12resident2();
-                                if (addfixedStreetLinks)
-                                {
-                                    lmd.CreateGraphForOsmImport_eb12_orig();
-                                }
+
+                                //if (addfixedStreetLinks)
+                                //{
+                                //    lmd.CreateGraphForOsmImport_eb12_orig();
+                                //}
 
                                 if (addWallLinks)
                                 {

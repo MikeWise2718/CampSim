@@ -34,7 +34,7 @@ namespace CampusSimulator
             osmstreets.GetInitial(false);
             fixedstreets.GetInitial(true);
 
-            Debug.Log($"StreetMan.InitializeValues osmblds:{osmstreets.Get()}   fixedblds:{fixedstreets.Get()} ");
+            //Debug.Log($"StreetMan.InitializeValues osmblds:{osmstreets.Get()}   fixedblds:{fixedstreets.Get()} ");
         }
 
         public LinkUse CvtLinkUse(string s, LinkUse def)
@@ -70,7 +70,7 @@ namespace CampusSimulator
 
         public void CreateGraphForOsmImport_streets_df(string regionname, string color)
         {
-            Debug.Log($"CreateGraphForOsmImport_streets_df region:{regionname}");
+            //Debug.Log($"CreateGraphForOsmImport_streets_df region:{regionname}");
             var grc = this.sman.lcman.GetGraphCtrl();
             grc.regman.NewNodeRegion(regionname, color, saveToFile: true);
             var sman = GameObject.FindObjectOfType<SceneMan>();
@@ -116,20 +116,20 @@ namespace CampusSimulator
                     }
                 }
             }
-            this.sman.lcman.CalculateHeights();
+            this.sman.lcman.CalculateAndSetHeightsOnLinkCloud();
             grc.regman.SetRegion("default");
-            Debug.Log($"CreateGraphForOsmImport_streets_df added nodes:{nnodes} links:{nlinks}");
+            //Debug.Log($"CreateGraphForOsmImport_streets_df added nodes:{nnodes} links:{nlinks}");
         }
 
         public void InitializeScene(SceneSelE newregion)
         {
-            Debug.Log($"StreetMan.SetScene {newregion}");
+            //Debug.Log($"StreetMan.InitializeScene {newregion}");
             InitializeValues();
         }
 
         public void SetScene(SceneSelE newregion)
         {
-            Debug.Log($"StreetMan.SetScene {newregion}");
+            //Debug.Log($"StreetMan.SetScene {newregion}");
             var regname = "";
             var regcolor = "blue";
             switch (newregion)

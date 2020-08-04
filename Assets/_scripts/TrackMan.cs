@@ -45,7 +45,7 @@ namespace CampusSimulator
             tracksusefragline.GetInitial(false);
             scalemodelnumber.GetInitial(1f);
 
-            Debug.Log($"TrackMan.InitializeValues   scalemodel:{scalemodelnumber.Get()} showtracks:{showtracks.Get()}");
+            //Debug.Log($"TrackMan.InitializeValues   scalemodel:{scalemodelnumber.Get()} showtracks:{showtracks.Get()}");
         }
 
         public void DeleteTracks()
@@ -97,7 +97,7 @@ namespace CampusSimulator
         }
         public void InitializeScene(SceneSelE newregion)
         {
-            Debug.Log($"TrackMan.SetScene {newregion}");
+            //Debug.Log($"TrackMan.InitializeScene {newregion}");
             tracklist = new List<Track>();
             InitializeValues();
         }
@@ -106,7 +106,7 @@ namespace CampusSimulator
 
         public void SetScene(SceneSelE newregion)
         {
-            Debug.Log($"TrackMan.SetScene {newregion}");
+            //Debug.Log($"TrackMan.SetScene {newregion}");
             var trackdir = "";
             switch (newregion)
             {
@@ -123,7 +123,7 @@ namespace CampusSimulator
                 MakeTracks(dftracks);
             }
             var (gogen, nnodes, nlinks) = sman.lcman.GetNodeLinkCounts();
-            Debug.Log($"TrackMan.SetScene finished gogen:{gogen} nodes:{nnodes}  links:{nlinks}");
+            //Debug.Log($"TrackMan.SetScene finished gogen:{gogen} nodes:{nnodes}  links:{nlinks}");
         }
 
         public SimpleDf LoadTracks(string trackdir,string trackname="track_points")

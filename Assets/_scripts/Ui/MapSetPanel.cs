@@ -162,7 +162,7 @@ public class MapSetPanel : MonoBehaviour
         loadMapsButton.onClick.AddListener(delegate { ButtonClick(loadMapsButton.name); });
         lookupAddressButton.onClick.AddListener(delegate { ButtonClick(lookupAddressButton.name); });
 
-        Debug.Log("MapSetPanel.LinkObjectsAndComponents Found everything apparently");
+        //Debug.Log("MapSetPanel.LinkObjectsAndComponents Found everything apparently");
 
     }
 

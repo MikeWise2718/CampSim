@@ -355,7 +355,7 @@ namespace CampusSimulator
         }
         public void DelBuildings()
         {
-            Debug.Log("DelBuildings called");
+            //Debug.Log("DelBuildings called");
             if (bldlookup != null)
             {
                 var namelist = new List<string>(bldlookup.Keys);

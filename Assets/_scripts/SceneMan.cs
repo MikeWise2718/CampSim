@@ -261,6 +261,12 @@ namespace CampusSimulator
             UxUtils.UxSettingsMan.SetScenario(newscene.ToString());
 
             curscene = newscene;
+            glbllm = null;
+        }
+        public void InitializeGlbLlMap()
+        {
+            glbllm = new LatLongMap($"SceneMan.InitializeGlbLlMap(  ) with curscene:{curscene}");
+            glbllm.InitMapFromSceneSelString(curscene.ToString(), mpman.bespokespec?.llbox); // doesn't handle non-llmap scenes 
         }
         public (float x,float z) lltoxz(double lat,double lng)
         {
@@ -302,7 +308,6 @@ namespace CampusSimulator
                     ceasesw.Start();
                     // Cease all activity
                     jnman.CeaseSceneActivity();
-                    //lcman.DeleteGrcGos();
 
 
                     // Delete all objects - withough knowledge of identity of new scene
@@ -315,9 +320,7 @@ namespace CampusSimulator
                     vcman.DelVidcams();
                     lcman.DeleteAllNodes();
                     lcman.DeleteGrcGos();
-                    //lcman.GetGraphCtrl();
-                    ////lcman.DeleteAllLinks();
-                    //lcman.DestroyLinkCloud();
+
 
                     mpman.DeleteQmap();
                     firstPersonBirdCtrl.DeleteBirdGosAndInit();
@@ -326,18 +329,17 @@ namespace CampusSimulator
                     ceasesw.Stop();
                     initsw.Start();
 
-                    lcman.InitLinkCloud(forcenew: true);
 
                     // Now do value initialization 
                     this.InitializeScene(newscene);// start with setting the scene
-                                                   //glbllm = rmango.AddComponent<LatLongMap>();
-
-                    glbllm = null;
 
                     mpman.InitializeScene(newscene); // bspokespec set here
 
-                    glbllm = new LatLongMap($"SceneMan.SetScene( SceneSelE.{newscene} )");
-                    glbllm.InitMapFromSceneSelString(newscene.ToString(),mpman.bespokespec?.llbox); // doesn't handle non-llmap scense 
+
+                    this.InitializeGlbLlMap();// this needs to happen after mpmap initialize scene obviously
+
+                    lcman.InitializeScene(newscene);
+
 
                     dfman.InitializeScene(newscene);
                     vcman.InitializeScene(newscene);
@@ -349,33 +351,24 @@ namespace CampusSimulator
                     psman.InitializeScene(newscene);
                     veman.InitializeScene(newscene);
                     jnman.InitializeScene(newscene);
-                    lcman.InitializeScene(newscene);
                     frman.InitializeScene(newscene);
                     uiman.InitializeScene(newscene);
 
                     initsw.Stop();
                     setsw.Start();
 
-                    // Now construct our graphical objects
 
 
                     dfman.SetScene(newscene); // should be early to setup data
-
                     mpman.SetScene(newscene);// Note this has an await buried in it and afterwards a call to smam.PostMapLoadSetScene below 
-
                     gaman.SetScene(newscene);
-
                     bdman.SetScene(newscene);// building details, but no nodes and links
-                    stman.SetScene(newscene);
+
+
+                    lcman.SetScene(newscene); // create or read in many nodes and links
+
                     trman.SetScene(newscene);
-
-
-                    lcman.GetGraphCtrl(); // provoke ll function creation
-                    lcman.SetScene(newscene); // create or read in most nodes and links
-                                              // currently needs to happen after buildings and garages are setup
-
-
-
+                    stman.SetScene(newscene);
 
                     RealizeFloorPlanStatus();
                     vcman.SetScene(newscene);
@@ -394,7 +387,7 @@ namespace CampusSimulator
 
                     finsw.Start();
 
-                    lcman.SetScene3(newscene);  // realize latelinks    
+                    lcman.SetSceneFinal(newscene);  // realize latelinks and heights
                     lcman.DeleteUnconnectedNodes();
 
                     lcman.RefreshGos(deletethings:false); // The gos need to be built now - in principle they are all empty
@@ -955,84 +948,7 @@ namespace CampusSimulator
                 RequestRefresh("SceneMan-TranslateEverything");
             }
         }
-        public void GenCampus()
-        {
-            DeleteLinkCloudGos();
-            lcman.GenLinkCloud(graphSceneE.gen_campus, GraphGenerationModeE.GenFromCode);
-            //floorplanctrl.visible = true;
-            RealizeFloorPlanStatus();
-            //CreateLinkCloud();
-        }
-        public void Gen43_1()
-        {
-            DeleteLinkCloudGos();
-            lcman.GenLinkCloud(graphSceneE.gen_b43_1, GraphGenerationModeE.GenFromCode);
-            //floorplanctrl.visible = true;
-            RealizeFloorPlanStatus();
-            //CreateLinkCloud();
-        }
-        public void Gen43_2()
-        {
-            DeleteLinkCloudGos();
-            lcman.GenLinkCloud(graphSceneE.gen_b43_2, GraphGenerationModeE.GenFromCode);
-            //floorplanctrl.visible = true;
-            RealizeFloorPlanStatus();
-            //CreateLinkCloud();
-        }
-        public void Gen43_3()
-        {
-            DeleteLinkCloudGos();
-            lcman.GenLinkCloud(graphSceneE.gen_b43_3, GraphGenerationModeE.GenFromCode);
-            //floorplanctrl.visible = true;
-            RealizeFloorPlanStatus();
-            //CreateLinkCloud();
-        }
-        public void Gen43_4()
-        {
-            DeleteLinkCloudGos();
-            lcman.GenLinkCloud(graphSceneE.gen_b43_4, GraphGenerationModeE.GenFromCode);
-            //floorplanctrl.visible = true;
-            RealizeFloorPlanStatus();
-            //CreateLinkCloud();
-        }
-        public void GenBHO()
-        {
-            DeleteLinkCloudGos();
-            lcman.GenLinkCloud(graphSceneE.gen_bho, GraphGenerationModeE.GenFromCode);
-            //floorplanctrl.visible = true;
-            RealizeFloorPlanStatus();
-            //CreateLinkCloud();
-        }
-        public void GenSphere()
-        {
-            lcman.GenLinkCloud(graphSceneE.gen_sphere, GraphGenerationModeE.GenFromCode);
-            RequestRefresh("SceneMan-GenSphere");
-        }
-        public void GenCirc()
-        {
-
-            lcman.GenLinkCloud(graphSceneE.gen_circ, GraphGenerationModeE.GenFromCode);
-            RequestRefresh("SceneMan-GenCirc");
-        }
-        public void Gen431p2()
-        {
-            DeleteLinkCloudGos();
-            lcman.GenLinkCloud(graphSceneE.gen_b43_1p2, GraphGenerationModeE.GenFromCode);
-            //floorplanctrl.visible = true;
-            RealizeFloorPlanStatus();
-            //CreateLinkCloud();
-            ScaleEverything(0.1375f / 2.0f);
-        }
-
-         public void GenRedwb3()
-        {
-            DeleteLinkCloudGos();
-            lcman.GenLinkCloud(graphSceneE.gen_redwb_3, GraphGenerationModeE.GenFromCode);
-            //floorplanctrl.visible = true;
-            RealizeFloorPlanStatus();
-            //CreateLinkCloud();
-            //keycount = keyman.totalKeywordCount();
-        }
+  
         public void SaveToJsonFile()
         {
             System.IO.Directory.CreateDirectory(graphsdir);
@@ -1752,7 +1668,7 @@ namespace CampusSimulator
             {
                 if (lcman.CanGetHeights())
                 {
-                    lcman.CalculateHeights();
+                    lcman.CalculateAndSetHeightsOnLinkCloud();
                     needsrefresh = true;
                 }
             }

@@ -24,17 +24,6 @@ namespace CampusSimulator
         // Use this for initialization
         void Start()
         {
-            // Create ground
-            //ground = GameObject.CreatePrimitive(PrimitiveType.Plane);
-            //ground.name = "Ground-Plane";
-            //ground.transform.localScale = new Vector3(50, 50, 25);
-            //ground.GetComponent<Renderer>().material.SetColor("_Color", Color.cyan);
-
-            // Create RegionMan
-            //rmango = new GameObject("RegionMan");
-            //sman = rmango.AddComponent<RegionMan>();
-            //sman.rmango = rmango;
-
             // Find RegionMan
             sman = FindObjectOfType<SceneMan>();
 
@@ -129,11 +118,6 @@ namespace CampusSimulator
 
         #region linkcloud commands
 #if UNITY_EDITOR
-        [MenuItem("--LinkCloud/Generate Campus")]
-        static void GenCampus()
-        {
-            sman.GenCampus();
-        }
 
         [MenuItem("--LinkCloud/Refresh Gos")]
         static void RefreshGos()
