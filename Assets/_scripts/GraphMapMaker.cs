@@ -933,16 +933,6 @@ namespace GraphAlgos
                         switch (genMode)
                         {
                             case GraphGenerationModeE.GenFromCode:
-                                //lmd.CreatePointsForEb12streets1();
-                                //lmd.CreatePointsForEb12resident1();
-                                //lmd.CreatePointsForEb12streets2();
-                                //lmd.CreatePointsForEb12retail();
-                                //lmd.CreatePointsForEb12resident2();
-
-                                //if (addfixedStreetLinks)
-                                //{
-                                //    lmd.CreateGraphForOsmImport_eb12_orig();
-                                //}
 
                                 if (addWallLinks)
                                 {
