@@ -390,9 +390,7 @@ namespace CampusSimulator
                     lcman.SetSceneFinal(newscene);  // realize latelinks and heights
                     lcman.DeleteUnconnectedNodes();
 
-                    lcman.RefreshGos(deletethings:false); // The gos need to be built now - in principle they are all empty
-                    trman.RefreshGos();
-
+                    RefreshSceneManGos();// in setscene
 
                     finsw.Stop();
 
@@ -872,7 +870,7 @@ namespace CampusSimulator
         }
         public void ForceRegen()
         {
-            RefreshSceneManGos(); // ForceRegen
+            RefreshSceneManGos(); // ForceRegen from menu
         }
         public void ResetHomeHeight()
         {
@@ -1377,6 +1375,8 @@ namespace CampusSimulator
             gaman.RefreshGos();
             bdman.RefreshGos();
             vcman.RefreshGos();
+            trman.RefreshGos();
+            psman.RefreshGos();
             if (cbman != null)
             {
                 cbman.RefreshGos();
@@ -1394,16 +1394,6 @@ namespace CampusSimulator
 
         }
 #endregion
-
-        //public string startnodecolor = "green";
-        //public string endnodecolor = "red";
-        //public string linkcloudnodecolor = "blue";
-        //public string linkcloudnodecolorx = "steelblue";
-        //public string linkcloudlinkcolor = "yellow";
-        //public string linkhighwaycolor = "steelblue";
-        //public string pathnodecolor = "cyan";
-        //public string pathlinkcolor = "purple";
-        //public string pathlookatcolor = "steelblue";
 
 
         public enum RmColorModeE { nodepathstart, nodepathend, nodecloud, nodecloudx,  linkcloud,linkhighway,linkroad,linkslowroad,linkdriveway, linkwalk,linkwalknoshow, linkexcavate, linksurvey,linkwater,linkreclaimwater,linksewer, linkelec,linkcomms,linkoilgas, pathnode, pathlink, pathlookat, bldwall, 
@@ -1694,7 +1684,7 @@ namespace CampusSimulator
                 else
                 {
                     var sw3 = new StopWatch();
-                    RefreshSceneManGos(); // in update
+                    RefreshSceneManGos(); // in update if needs refresh
                     sw3.Stop();
                     lastRefreshTime = (float) sw3.Elap().TotalSeconds;
                     Debug.Log($"RefreshSceneManGos took {sw3.ElapSecs()} secs");

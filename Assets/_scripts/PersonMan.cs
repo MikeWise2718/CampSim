@@ -392,16 +392,18 @@ namespace CampusSimulator
         {
           //  Debug.Log("DelPersons called");
             var namelist = new List<string>(persnamelookup.Keys);
-            namelist.ForEach(name => DelPerson(name));
+            namelist.ForEach(pname => DelPerson(pname));
         }
-        public void DelPerson(string name)
+        public void DelPerson(string pname)
         {
-          //  Debug.Log("Deleting Person " + name);
+            Debug.Log("Deleting Person " + pname);
             //var go = GameObject.Find(name);
 
-            var pers = persnamelookup[name];
+            var pers = persnamelookup[pname];
             npers--;
-            persnamelookup.Remove(name);
+            persnamelookup.Remove(pname);
+            pers.DeleteGos();
+            Destroy(pers.gameObject);
         }
         public Person GetPerson(string name)
         {

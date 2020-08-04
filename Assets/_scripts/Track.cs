@@ -79,8 +79,8 @@ namespace CampusSimulator
             var i = 0;
             foreach (var (trlink,clr) in trlinklist)
             {
-                dump = dump && ( i< 10);
-                CreateTrackGoesFromLink(trlink,clr,dump:dump);
+                //dump = dump && ( i< 10);
+                CreateTrackGoesFromLink(trlink,clr);
                 i++;
             }
         }
@@ -97,11 +97,11 @@ namespace CampusSimulator
         public void CreateTrackGoesFromLink(LcLink stlink,string clr,bool dump=false)
         {
             var stgo = new GameObject(stlink.name);
-            var yoff = 5;
-            var pt1 = tm.sman.mpman.GetHeightVector3(stlink.node1.pt, yoff);
-            var pt2 = tm.sman.mpman.GetHeightVector3(stlink.node2.pt, yoff);
-            pt1 = stlink.node1.pt;
-            pt2 = stlink.node2.pt;
+//            var yoff = 5;
+//            var pt1 = tm.sman.mpman.GetHeightVector3(stlink.node1.pt, yoff);
+//            var pt2 = tm.sman.mpman.GetHeightVector3(stlink.node2.pt, yoff);
+            var pt1 = stlink.node1.pt;
+            var pt2 = stlink.node2.pt;
             stgo.transform.localPosition = (pt1 + pt2) / 2;
             var lr = stgo.AddComponent<LineRenderer>();
             lr.SetPosition(0, pt1);

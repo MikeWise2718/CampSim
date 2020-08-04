@@ -27,6 +27,8 @@ namespace CampusSimulator
 
         public bool showPersRects;
 
+        public GameObject osmroot;
+
         public List<OsmBldSpec> bldspecs;
 
 
@@ -156,7 +158,7 @@ namespace CampusSimulator
             //Debug.Log($"doosmblds:{doosmblds} osmloadspec{osmloadspec}");
             if (doosmblds)
             {
-                var osmroot = new GameObject("osmblds");
+                osmroot = new GameObject("osmblds");
                 osmroot.transform.parent = this.transform;
                 var pgvd = new PolyGenVekMapDel(sman.mpman.GetHeightVector3);
                 var bpg = new BldPolyGen();
@@ -367,6 +369,11 @@ namespace CampusSimulator
                 bldspecs.ForEach(bs => Destroy(bs.bgo));
             }
             bldspecs = new List<OsmBldSpec>();
+            if (osmroot!=null)
+            {
+                Destroy(osmroot);
+                osmroot = null;
+            }
         }
         public void DelBuilding(string name)
         {

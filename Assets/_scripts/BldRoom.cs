@@ -100,20 +100,21 @@ namespace CampusSimulator {
             {
                 for (int i = 0; i < occman.GetPersonCount(); i++)
                 {
-                    var pers = occman.GetPersonN(i);
+                    var person = occman.GetPersonN(i);
                     //if (pers.personName.Contains("Arnie"))
                     //{
                     //    Debug.Log("Creating ava for " + pers.personName + " i:" + i);
                     //}
-                    var persgo = pers.LoadPersonGo("-ava-br");
-                    var idlescript = pers.idleScript;
-                    var animator = persgo.GetComponent<Animator>();
+                    var pogo = person.GetPogo("-ava-br", createpogo: true, resetposition: true);// room person
+//                    var persgo = pers.CreatePersonGo("-ava-br");// room person
+                    var idlescript = person.idleScript;
+                    var animator = pogo.GetComponent<Animator>();
                     //if (pers.personName=="Yuka Althoff")
                     //{
                     //    Debug.Log("Creating yuka");
                     //}
                     animator.applyRootMotion = false;
-                    pers.perstate = PersonAniStateE.standing;
+                    person.perstate = PersonAniStateE.standing;
 
                     //idlescript = "Samba Dancing";
                     animator.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Animations/" + idlescript);
@@ -123,58 +124,58 @@ namespace CampusSimulator {
                     //var ctrl = animator.runtimeAnimatorController;
                     //animation["Idle"].time = Random.Range(0.0, animation["Idle"].length);
 
-                    pers.roomPogo = persgo;
+                    person.roomPogo = pogo;
                     var ska = bm.sman.trman.scalemodelnumber.Get();
                     var skav = new Vector3(ska, ska, ska);
-                    persgo.transform.localScale = skav;
+                    pogo.transform.localScale = skav;
                     //persgo.name = pers.personName+"-ava";
-                    if (!pers.UseFixedPlace())
+                    if (!person.UseFixedPlace())
                     {
-                        persgo.transform.position = roomformgo.transform.position;
+                        pogo.transform.position = roomformgo.transform.position;
                     }
                     else
                     {
                         var lclc = bm.sman.lcman;
-                        var nodept = lclc.GetNode(pers.homeNode);
+                        var nodept = lclc.GetNode(person.homeNode);
                         var roompt = lclc.GetNode(this.roomNodeName);
                         var diff = nodept.pt - roompt.pt;
                         //var roomrotate = Quaternion.EulerAngles(0, this.alignang, 0);// wierd, apparently EulerAngles is in Radians?
                         var roomrotate = Quaternion.Euler(0, r2d*this.alignang, 0);// this may be wrong?
                         var diffa = roomrotate * diff;
-                        persgo.transform.position = diffa;
+                        pogo.transform.position = diffa;
                     }
 
-                    persgo.transform.SetParent(roomformgo.transform);
+                    pogo.transform.SetParent(roomformgo.transform);
                     ////pogo.transform.Rotate(roomformgo.transform.rotation.eulerAngles);
 
-                    if (pers.hasCamera)
+                    if (person.hasCamera)
                     {
-                        pers.AddCamera(persgo, "BldRoom CreateObjects");
+                        person.AddCamera(pogo, "BldRoom CreateObjects");
                     }
-                    if (pers.hasHololens)
+                    if (person.hasHololens)
                     {
-                        pers.ActivateHololens(true);
+                        person.ActivateHololens(true);
                     }
-                    if (pers.grabbedMainCamera)
+                    if (person.grabbedMainCamera)
                     {
-                        pers.GrabMainCamera();
+                        person.GrabMainCamera();
                     }
 
-                    if (!pers.UseFixedPlace())
+                    if (!person.UseFixedPlace())
                     {
-                        var v = occman.GetOccPosition(pers.roomPlaceIdx);
+                        var v = occman.GetOccPosition(person.roomPlaceIdx);
                         //if (bld.name == "Bld19" && (pers.homeRoom=="b19-f01-lobby"))
                         //{
                         //    Debug.Log(pers.personName + " in " + pers.placeNode + "  idx:" + pers.placeIdx + " personCap:" + personCap + " ang:" + ang/d2r+" x:"+x+" z:"+z);
                         //}
-                        persgo.transform.Translate(new Vector3(v.x, 0, v.z));
-                        var rang = r2d * occman.GetOccAngle(pers.roomPlaceIdx);
+                        pogo.transform.Translate(new Vector3(v.x, 0, v.z));
+                        var rang = r2d * occman.GetOccAngle(person.roomPlaceIdx);
 
-                        persgo.transform.Rotate(new Vector3(0, 270 - rang, 0));
+                        pogo.transform.Rotate(new Vector3(0, 270 - rang, 0));
                     }
                     else
                     {
-                        persgo.transform.Rotate(new Vector3(0, pers.homeRotate, 0));
+                        pogo.transform.Rotate(new Vector3(0, person.homeRotate, 0));
                     }
 
 

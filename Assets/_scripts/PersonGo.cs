@@ -42,7 +42,7 @@ namespace CampusSimulator
         };
         public GameObject GetBodyPart(Person.BodyPart part)
         {
-            GameObject bpgo = null;
+            GameObject bpgo;
             if (gameObject == null) return null;
             switch (part)
             {

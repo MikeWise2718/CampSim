@@ -431,7 +431,7 @@ namespace CampusSimulator
             {
                 if (slot.slotformgo != null)
                 {
-                    if (slot.persgo != null && slot.person.GetVisiblity())
+                    if (slot.pogo != null && slot.person.GetVisiblity())
                     {
                         //if (showOnlyFlaggedPeople && !slot.person.flagged) continue;
                         var rendgo = GetBodyPart(slot.person, personDetectMode);

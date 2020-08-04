@@ -267,7 +267,7 @@ namespace CampusSimulator
                 var lpt = lc.GetNode(roomname);
                 roompt = lpt.pt;
             }
-            var pcap = StrToInt(rar[1], 1);
+            var pcap = StrToInt(rar[1], 1);//roomspecs
             var alignang = StrToFloat(rar[2],0);
             var length = StrToFloat(rar[3],2);
             var width = StrToFloat(rar[4],3);

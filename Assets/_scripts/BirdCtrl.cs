@@ -262,7 +262,8 @@ namespace CampusSimulator
                         //}
                         if (person)
                         {
-                            birdformgo = person.LoadPersonGo("-ava-bc");
+                            //birdformgo = person.CreatePersonGo("-ava-bc");// bird journey person
+                            birdformgo = person.GetPogo("-ava-bc",createpogo:true,resetposition:true);// bird journey person
                             if (person.hasHololens)
                             {
                                 person.ActivateHololens(true);

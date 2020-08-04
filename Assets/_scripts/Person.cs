@@ -43,6 +43,7 @@ namespace CampusSimulator
         public PersonAniStateE perstate = PersonAniStateE.standing;
         public bool isVisible = true;
 
+
         public void SetVisiblity(bool visstat)
         {
             isVisible = visstat;
@@ -115,23 +116,40 @@ namespace CampusSimulator
             return persGo.GetBodyPart(part);
         }
 
-        public GameObject LoadPersonGo(string callersfx)
+        GameObject lastpogo;
+
+        public GameObject CreatePersonGo(string callerSuffix)
         {
             var pfab = GraphAlgos.GraphUtil.GetUniResPrefab("people", avatarName);
-            var pogo = Instantiate<GameObject>(pfab);
+            lastpogo = Instantiate<GameObject>(pfab);// there is no global pogo at this point
             //var animator = pogo.GetComponent<Animator>();
             //animator.applyRootMotion = false;
             //animator.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Animations/PersonIdle");
-            var pergo = pogo.AddComponent<PersonGo>();
-            pergo.Init(this);
-            height = pergo.GetPersonHeight();
-            persGo = pergo;
+            persGo = lastpogo.AddComponent<PersonGo>();
+            persGo.Init(this);
+            height = persGo.GetPersonHeight();
             if (this.hasHololens)
             {
                 AddHololens();
             }
-            pogo.name = this.name + callersfx;
-            return pogo;
+            lastpogo.name = this.name + callerSuffix;
+            return lastpogo;
+        }
+
+        public GameObject GetPogo(string callerSuffix,bool createpogo=false,bool resetposition=false)
+        {
+            if (createpogo)
+            {
+                return CreatePersonGo(callerSuffix);
+            }
+            if (resetposition)
+            {
+                lastpogo.transform.position = Vector3.zero;
+                lastpogo.transform.localRotation = Quaternion.identity;
+                persGo.Init(this);
+                persGo = null;
+            }
+            return lastpogo;
         }
 
 
@@ -201,10 +219,13 @@ namespace CampusSimulator
 
         public void DeleteGos()
         {
-
+            PersonGo pgo;
+            // delete persongo
         }
         public void CreateGos()
         {
+            // create persongo
+            //this.persGo = LoadPersonGo("-ava-br");
         }
         int updatecount = 0;
 

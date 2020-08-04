@@ -115,20 +115,27 @@ namespace CampusSimulator
 
         List<string> MtTenFoundSpotSpec = new List<string>()
         {
-            "found-spot:0:0.0:4:4:T",
+            "found-spot:2:0.0:4:4:T",
         };
         List<string> MtTenLastseenSpotSpec = new List<string>()
         {
-            "lastseen-spot:0:0.0:4:4:T",
+            "lastseen-spot:2:0.0:4:4:T",
         };
+        // See AddOneRoomSpec for decoding
+        //var pcap = StrToInt(rar[1], 1);//roomspecs
+        //var alignang = StrToFloat(rar[2], 0);
+        //var length = StrToFloat(rar[3], 2);
+        //var width = StrToFloat(rar[4], 3);
+        //var frameit = rar[5].ToLower()[0] != 'f';
 
-        public List<string> SplitOutDestNodes(List<string> specs)
+        public List<string> SplitRoomNameOutOfRoomspecs(List<string> specs)
         {
             var dnodes = new List<string>();
             foreach( var sp in specs )
             {
                 var sar = sp.Split(':');
-                dnodes.Add(sar[0]);
+                var roomname = sar[0];
+                dnodes.Add(roomname);
             }
             return dnodes;
         }
@@ -152,7 +159,7 @@ namespace CampusSimulator
                     {
                         maingaragename = "Garage19_1";
                         roomspecs = B19roomspec;
-                        destnodes = SplitOutDestNodes(roomspecs);
+                        destnodes = SplitRoomNameOutOfRoomspecs(roomspecs);
                         shortname = "b19";
                         journeyChoiceWeight = 20;
                         var b19comp = this.transform.gameObject.AddComponent<B19Willow>();
@@ -164,7 +171,7 @@ namespace CampusSimulator
                     {
                         maingaragename = "Garage121_1";
                         roomspecs = B121roomspec;
-                        destnodes = SplitOutDestNodes(roomspecs);
+                        destnodes = SplitRoomNameOutOfRoomspecs(roomspecs);
                         shortname = "b121";
                         journeyChoiceWeight = 20;
                         var b121comp = this.transform.gameObject.AddComponent<B121Willow>();
@@ -277,6 +284,7 @@ namespace CampusSimulator
                     {
                         shortname = "found";
                         roomspecs = MtTenFoundSpotSpec;
+                        defPercentFull = 0;
                         destnodes = new List<string> { "found-spot" };
                         break;
                     }
@@ -284,6 +292,7 @@ namespace CampusSimulator
                     {
                         shortname = "lastseen";
                         roomspecs = MtTenLastseenSpotSpec;
+                        defPercentFull = 0;
                         destnodes = new List<string> { "lastseen-spot" };
                         break;
                     }
@@ -657,6 +666,16 @@ namespace CampusSimulator
                         defPeoplePerRoom = 20;
                         defPercentFull = 1.0f;
                         defRoomArea = 40;
+                        break;
+                    }
+                case "MtTen-foundher":
+                    {
+                        defPercentFull = 0;
+                        break;
+                    }
+                case "MtTen-lastseen":
+                    {
+                        defPercentFull = 0;
                         break;
                     }
                 default:
