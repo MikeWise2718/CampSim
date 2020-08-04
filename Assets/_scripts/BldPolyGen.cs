@@ -540,9 +540,21 @@ public class BldPolyGen
         foreach (var bs in osmblds)
         {
             //GenFixedFormBld(ObjForm.cross, bs.name, bs.loc, bs.height,bs.levels,"db");
-            var bldgo = GenBld(parent, bs, ptscale: ptscale, pgvd: pgvd);
-            bs.bgo = bldgo;
-            rv.Add(bs);
+            //if (bs.name.StartsWith("Microsoft Cafe 16"))
+            //{
+            //    Debug.Log("Have a coffee");
+            //}
+            var nbspts = bs.GetOutline().Count;
+            if (nbspts >= 3)
+            {
+                var bldgo = GenBld(parent, bs, ptscale: ptscale, pgvd: pgvd);
+                bs.bgo = bldgo;
+                rv.Add(bs);
+            }
+            else
+            {
+                Debug.LogWarning($"Building {bs.name} does not have enough outline points:{nbspts}");
+            }
         }
         sw.Stop();
         Debug.Log($"Generation of {regionspec} took {sw.ElapSecs()} secs");

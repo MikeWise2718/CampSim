@@ -222,7 +222,7 @@ public class GrafPolyGen
                 //Debug.Log($"GenPolyGen.GenBld doing floor {i} for {bldname}");
                 StartAccumulatingSegments();
                 SetGenForm(PolyGenForm.tesselate);
-                var fname = $"{bldname}-levvel-{i}";
+                var fname = $"{bldname}-level-{i}";
                 var fheit = levels<2 ? 0 : (i*height / (levels-1));
                 var flrgo = GenMesh(fname, height: fheit, clr: clr, alf: alf, plotTesselation: plotTesselation, onesided: onesided, pgvd: pgvd);
                 flrgo.transform.localScale = new Vector3(ska, ska, ska);
@@ -632,6 +632,10 @@ public class GrafPolyGen
 
         int starcnt = _poutline.Count;
         var woutline = RemoveAdjacentEquals( GetOutline(),eps);
+        if (parent.name.StartsWith("Microsoft Cafe 16"))
+        {
+            Debug.Log("Have a coffee");
+        }
         if (_poutline.Count < 3)
         {
             Debug.LogError($"Error tesselating building {parent.name}");
