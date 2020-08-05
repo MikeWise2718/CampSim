@@ -2,7 +2,7 @@
 using UnityEngine;
 using Aiskwk.Map;
 using System.Linq;
-
+using System.Security.Cryptography;
 
 public delegate Vector3 PolyGenVekMapDel(Vector3 v);
 public enum PolyGenForm { pipes, walls, wallsmesh, tesselate }
@@ -110,7 +110,7 @@ public class GrafPolyGen
             var mgo = qut.CreateMarkerSphere("marker-id:" + p.id, pt, clr: clr);
             mgo.transform.SetParent(parent.transform,worldPositionStays:true);
             var txt = p.id.ToString();
-            var txgo = qut.MakeTextGo(mgo, txt, yoff: 0.2f, sfak: 0.1f);
+            var txgo = qut.MakeTextGo(mgo, txt, yoff: 0.2f, sfak: 0.3f);
             if (i > 0)
             {
                 var pgo = qut.CreatePipe("pipe_" + i, lstpt, pt, clr: clr);
@@ -518,6 +518,95 @@ public class GrafPolyGen
         var area = sum / 2;
         return area;
     }
+    public class LineSegment2xz
+    {
+
+        // stole this from here: https://stackoverflow.com/a/37406831/3458744
+
+        public Vector3 from;
+        public Vector3 toto;
+        public Vector3 delta;
+
+        public LineSegment2xz(Vector3 from, Vector3 toto)
+        {
+            this.from = from;
+            this.toto = toto;
+            this.delta = toto - from;
+        }
+
+
+        public (bool itdid, Vector3 intersectionPoint, float t, float u) TryIntersect(LineSegment2xz other)
+        {
+            var p = from;
+            var q = other.from;
+            var qmp = q - p;
+            //var r = Delta;
+            //var s = other.Delta;
+            var r = delta;
+            var s = other.delta;
+
+            // t = (q - p) × s / (r × s)
+            // u = (q - p) × r / (r × s)
+
+            var denom = r.x*s.z - r.z*s.x;
+            var intersectionPoint = Vector3.zero;
+            var t = 0f;
+            var u = 0f;
+
+            if (denom == 0)
+            {
+                // lines are collinear or parallel
+                t = float.NaN;
+                u = float.NaN;
+                return (false, intersectionPoint, t, u);
+            }
+
+            t = (qmp.x*s.z - qmp.z*s.x) / denom;
+            u = (qmp.x*r.z - qmp.z*r.x) / denom;
+
+            if (t <= 0 || t >= 1 || u <= 0 || u >= 1)
+            {
+                // line segments do not intersect within their ranges
+                return (false, intersectionPoint, t, u);
+            }
+
+            intersectionPoint = p + r*t;
+            return (true, intersectionPoint, t, u);
+        }
+
+    }
+    static bool IntersectsItself(List<(int id, Vector3 pt)> ptlist)
+    {
+        var lseglist = new List<LineSegment2xz>();
+        int npt = ptlist.Count;
+        for(int i=0; i<npt-1; i++)
+        {
+            var p0 = ptlist[i].pt;
+            var p1 = ptlist[i+1].pt;
+            var ls = new LineSegment2xz(p0, p1);
+            lseglist.Add(ls);
+        }
+        lseglist.Add(new LineSegment2xz(ptlist[ npt-1 ].pt, ptlist[ 0 ].pt));
+
+        // try all pairs to see if they intersect
+        for (int i=0; i<npt; i++)
+        {
+            var lsi = lseglist[i];
+            var idi = ptlist[i].id;
+            for (int j=i+1; j<npt; j++)
+            {
+                var lsj = lseglist[j];
+                var idj = ptlist[j].id;
+                var (isect, _, t,u) = lsi.TryIntersect(lsj);
+                //Debug.Log($"      TryIntersect i:{i}({idi}-{idi+1})  j:{j}({idj}-{idj+1}) isect:{isect}  t:{t}  u:{u}");
+                if (isect)
+                {
+                    return isect;
+                }
+            }
+        }
+         return false;
+    }
 
     // Compute barycentric coordinates (u, v, w) for
     // point p with respect to triangle (a, b, c)
@@ -547,9 +636,8 @@ public class GrafPolyGen
         if (bc.z < 0 || 1 < bc.z) return (false, bc);
         return (true,bc);
     }
-    static bool CheckAllOtherPointsOutsideTriangle(List<(int id, Vector3 pt)> ptlist, int i0, int i1, int i2, bool dbout = false)
+    static bool CheckAllOtherPointsOutsideTriangle(List<(int id, Vector3 pt)> ptlist, int i0, int i1, int i2, bool dbout = true)
     {
-        var ok = true;
         var v0 = ptlist[i0].pt;
         var v1 = ptlist[i1].pt;
         var v2 = ptlist[i2].pt;
@@ -558,17 +646,17 @@ public class GrafPolyGen
             if (i == i0 || i == i1 || i == i2) continue;
             var v = ptlist[i].pt;
             var (isInside,bc) = PointInsideTriangle(v, v0, v1, v2);
-            if (dbout && isInside)
-            {
-                Debug.Log($"Point inside {i1} - rejecting");
-            }
+            //if (dbout && isInside)
+            //if (isInside)
+            //{
+            //    Debug.Log($"CheckAllOtherPointsOutsideTriangle Point inside {i1} - rejecting");
+            //}
             if (isInside) return false;
         }
-        return ok;
+        return true;
     }
-    public static (float val, int idx) FindSmallestPositiveCrossProductYcomponent(List<(int id,Vector3 pt)> ptlist,bool dbout=false)
+    public static (float val, int idx) FindSmallestPositiveCrossProductYcomponent(GameObject parent, List<(int id,Vector3 pt)> ptlist,bool dbout=false)
     {
-        dbout = false;
         // find the index of the middle point of the smallest convex triangle to slice off
         var cpvalmin = float.MaxValue;
         var cpvalminidx = -1;
@@ -597,11 +685,16 @@ public class GrafPolyGen
                 Debug.Log($"    i:{i} id:{id} cpval:{cpval} cpiszero:{cpiszero}  cv1:{cv1s} cv2:{cv2s}");
             }
             if (cpval <= 0) continue; // cpval is negative is triangle is concave
-            var ok = CheckAllOtherPointsOutsideTriangle(ptlist, i0, i1, i2, dbout: dbout);
-            if (!ok) continue;
+
 
             if (cpval < cpvalmin)
             {
+                var ok = CheckAllOtherPointsOutsideTriangle(ptlist, i0, i1, i2, dbout: dbout);
+                if (!ok)
+                {
+                    //Debug.Log($"{parent.name} point {i} offsides");
+                    continue;
+                }
                 cpvalmin = cpval;
                 cpvalminidx = i;
             }
@@ -674,8 +767,8 @@ public class GrafPolyGen
     }
     public GameObject TesselateYup(GameObject parent,float height,bool onesided=false, bool plotTesselation = false, PolyGenVekMapDel pgvd = null)
     {
-        int lev = 0;
         var eps = 1e-3f;
+        int lev = 0;
 
         int starcnt = _poutline.Count;
         var woutline = RemoveAdjacentEquals( GetOutline(),eps);
@@ -694,7 +787,7 @@ public class GrafPolyGen
         int iclr = 0;
         if (plotTesselation)
         {
-            var centxt = "Area:" + area.ToString("f2");
+            var centxt = $"Lev:{lev} Area:{area:f2}";
             var clr = qut.GetColorBySeq(iclr++);
             var levpar = GetLevParent(parent, lev++, dbheight);
             PlotOutline(levpar, woutline, centxt, dbheight, clr);
@@ -703,7 +796,7 @@ public class GrafPolyGen
         reverseOpps++;
         if (area==0)
         {
-            Debug.LogWarning("Cannot tesselate zero area polygong - terminating tesselation");
+            Debug.LogWarning("Cannot tesselate zero area polygon - terminating tesselation");
             var go1 = GetAccumulatedMesh("accumesh",pgvd);
             go1.transform.SetParent( parent.transform, worldPositionStays:true );
             return go1;
@@ -716,7 +809,7 @@ public class GrafPolyGen
             area = CalcAreaWithYup(woutline);
             if (plotTesselation)
             {
-                var centxt = "Rev Area:" + area.ToString("f2");
+                var centxt = $"Lev:{lev} Rev Area:{area:f2}";
                 var clr = qut.GetColorBySeq(iclr++);
                 var levpar = GetLevParent(parent, lev++, dbheight);
                 PlotOutline(levpar, woutline, centxt, dbheight, clr);
@@ -724,14 +817,30 @@ public class GrafPolyGen
             }
             Debug.Log($"new area:{area}");
         }
-        var (maxval, maxidx) = FindSmallestPositiveCrossProductYcomponent(woutline);
+        var (maxval, maxidx) = FindSmallestPositiveCrossProductYcomponent(parent,woutline);
         //var (maxval, maxidx) = FindLargestCrossProductYcomponent(woutline);
         StartAccumulatingSegments();
         var fmaxidx = maxidx;
 
-
-        while (true)
+        int iter = 0;
+        int maxiter = woutline.Count+10;
+        int iwarn = 0;
+        while (true && iter<maxiter)
         {
+            if (plotTesselation)
+            {
+                Debug.Log($"Starting lev:{lev} with woutline.Count:{woutline.Count}");
+            }
+            var isect = IntersectsItself(woutline);
+            if (isect && iwarn==0)
+            {
+                Debug.LogWarning($"{parent.name} woutline lev:{lev} intersects itself in Tesselate iter:{iter} woutline.count:{woutline.Count}");
+                //iwarn++;
+            }
+            //else
+            //{
+            //    Debug.Log($"woutline lev:{lev} does not intersect itself in Tesselate iter:{iter} woutline.count:{woutline.Count}");
+            //}
             var i0 = moduloInc(maxidx, -1, woutline.Count);
             var i1 = maxidx;
             var i2 = moduloInc(maxidx, +1, woutline.Count);
@@ -759,22 +868,24 @@ public class GrafPolyGen
             if (plotTesselation)
             {
                 var clr = qut.GetColorBySeq(iclr++);
-                var levpar = GetLevParent(parent, lev++,0);
-                var centxt = "Remove pt:" + woutline[i1].id;
+                var centxt = $"Lev:{lev} Remove pt:{woutline[i1].id}";
+                var levpar = GetLevParent(parent, lev, dbheight);
                 PlotOutline(levpar, woutline, centxt,   dbheight, clr);
                 dbheight += 2;
-                Debug.Log($"Slicing out {maxidx} val:{maxval} ptsleft:{woutline.Count}");
+                var maxidxid = woutline[maxidx].id;
+                Debug.Log($"Slicing out {maxidx}({maxidxid}) val:{maxval} ptsleft:{woutline.Count}");
 
                 PlotTri(levpar, v0, v1, v2, "", height, clr);
                 var v1s = v1.ToString("f3");
                 Debug.Log($"Removing at {i1} - v1:{v1s} woutline.Count:{woutline.Count}");
+                lev++;
             }
             woutline.RemoveAt(i1);
             AddTesselatedTriangle( w0,w1,w2, i0,i1,i2, onesided );
             if (woutline.Count < 3) break; // done
             //(maxval, maxidx) = FindLargestCrossProductYcomponent(woutline);
 
-            (maxval, maxidx) = FindSmallestPositiveCrossProductYcomponent(woutline);
+            (maxval, maxidx) = FindSmallestPositiveCrossProductYcomponent(parent,woutline);
             if (maxidx<0)
             {
                 var remarea = CalcAreaWithYup(woutline);
@@ -787,10 +898,11 @@ public class GrafPolyGen
                 }
                 var curcnt = woutline.Count;
                 Debug.LogError($"{parent.name} Error in teslation  startcount:{starcnt} current:{curcnt} remarea:{remarea:g3} remfrac:{remfrac:g4}");
-                (maxval, maxidx) = FindSmallestPositiveCrossProductYcomponent(woutline, dbout: true);
+                (maxval, maxidx) = FindSmallestPositiveCrossProductYcomponent(parent,woutline, dbout: true);
                 Debug.LogError($"{parent.name} Tesselate maxidx is -1 - breaking tesselation  startarea:{area:g3} fmaxidx:{fmaxidx}");
                 break;
             }
+            iter++;
         }
         var go = GetAccumulatedMesh("accumesh",pgvd);
         go.transform.parent = parent.transform;

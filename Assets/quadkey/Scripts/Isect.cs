@@ -87,7 +87,7 @@ namespace Aiskwk.Map
             }
 
             intersectionPoint = p + r*t;
-            return (false, intersectionPoint, t, u); 
+            return (true, intersectionPoint, t, u); 
         }
 
         private static float Fake2DCross(Vector3 a, Vector3 b)
