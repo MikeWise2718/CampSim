@@ -48,8 +48,9 @@ public class BldPolyGenTest : MonoBehaviour
         latlngmap.InitMapFromSceneSelString("MsftRedwest");
         var hmo = new heightMocker(33);
         var pgvd = new PolyGenVekMapDel(hmo.ChangeHeight);
+        //bpg.LoadRegionOld(this.gameObject, "msftb19area,msftcommons,msftredwest", 1f, pgvd: pgvd, llm: latlngmap);
         //bpg.LoadRegionOld(this.gameObject, "msftcampcore", 1f, pgvd: pgvd, llm: latlngmap);
-        bpg.LoadRegionOld(this.gameObject, "msftb19area,msftcommons,msftredwest", 1f, pgvd: pgvd, llm: latlngmap);
+        bpg.LoadRegionOld(this.gameObject, "tenmtn", 1f, pgvd: pgvd, llm: latlngmap,buildingFilter:"house148",plotTessalation:true);
         //bpg.LoadRegion(this.gameObject, "eb12");
         //bpg.LoadRegion(this.gameObject, "eb12small");
         //bpg.LoadRegion(this.gameObject, "SanFrancisco", ptscale: 1000);
@@ -70,15 +71,5 @@ public class BldPolyGenTest : MonoBehaviour
         bpg.LoadRegionOld(this.gameObject, "eb12small", 1);
     }
 
-    //float lastDumpTime;
-    //private void Update()
-    //{
-    //    //if (Time.time-lastDumpTime>2)
-    //    //{
-    //    //    var pct = 100*GrafPolyGen.reverses*1f / GrafPolyGen.reverseOpps;
-    //    //    Debug.Log($"ReverseOpps:{GrafPolyGen.reverseOpps} Reverses:{GrafPolyGen.reverses} pct:{pct:f1}");
-    //    //    lastDumpTime = Time.time;
-    //    //}
-    //}
 
 }

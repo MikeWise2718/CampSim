@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 using UxUtils;
@@ -45,7 +44,7 @@ namespace CampusSimulator
             tracksusefragline.GetInitial(false);
             scalemodelnumber.GetInitial(1f);
 
-            //Debug.Log($"TrackMan.InitializeValues   scalemodel:{scalemodelnumber.Get()} showtracks:{showtracks.Get()}");
+            Debug.Log($"TrackMan.InitializeValues   scalemodel:{scalemodelnumber.Get()} showtracks:{showtracks.Get()}");
         }
 
         public void DeleteTracks()

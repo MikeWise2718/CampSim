@@ -1,13 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using Aiskwk.Map;
-using UnityEngine.UIElements;
-using System.Text;
 using System.Linq;
-using UnityEngine.AI;
-using System.Data.Common;
-using System.Diagnostics.PerformanceData;
 
 
 public delegate Vector3 PolyGenVekMapDel(Vector3 v);
@@ -114,13 +108,13 @@ public class GrafPolyGen
             psum += pt;
 
             var mgo = qut.CreateMarkerSphere("marker-id:" + p.id, pt, clr: clr);
-            mgo.transform.parent = parent.transform;
+            mgo.transform.SetParent(parent.transform,worldPositionStays:true);
             var txt = p.id.ToString();
             var txgo = qut.MakeTextGo(mgo, txt, yoff: 0.2f, sfak: 0.1f);
             if (i > 0)
             {
                 var pgo = qut.CreatePipe("pipe_" + i, lstpt, pt, clr: clr);
-                pgo.transform.parent = parent.transform;
+                pgo.transform.SetParent( parent.transform, worldPositionStays:true );
             }
             lstpt = pt;
             i++;
@@ -129,13 +123,13 @@ public class GrafPolyGen
         {
             var pcen = psum / i;
             var mgo = qut.CreateMarkerSphere("cen", pcen, size: 0.05f, clr: clr);
-            mgo.transform.parent = parent.transform;
-            var txgo = qut.MakeTextGo(mgo, centxt, yoff: 0.1f, sfak: 0.1f);
+            mgo.transform.SetParent(parent.transform, worldPositionStays: true);
+            qut.MakeTextGo(mgo, centxt, yoff: 0.1f, sfak: 0.1f);
         }
         if (i > 2)
         {
             var pgo = qut.CreatePipe("pipe_" + i, fstpt, lstpt, clr: "blk");
-            pgo.transform.parent = parent.transform;
+            pgo.transform.SetParent(parent.transform, worldPositionStays: true);
         }
     }
 
@@ -201,7 +195,7 @@ public class GrafPolyGen
             StartAccumulatingSegments();
             SetGenForm(PolyGenForm.wallsmesh);
             var wname = $"{bldname}-walls";
-            var walgo = GenMesh(wname, height: height, clr: clr, alf: alf, plotTesselation: plotTesselation, onesided: onesided,pgvd:pgvd);
+            var walgo = GenMesh(wname, height: height, clr: clr, alf: alf, plotTesselation: false, onesided: onesided,pgvd:pgvd);
             walgo.transform.localScale = new Vector3(ska, ska, ska);
             walgo.transform.SetParent(bldgo.transform,worldPositionStays:wps);
         }
@@ -525,6 +519,53 @@ public class GrafPolyGen
         return area;
     }
 
+    // Compute barycentric coordinates (u, v, w) for
+    // point p with respect to triangle (a, b, c)
+    // https://gamedev.stackexchange.com/questions/23743/whats-the-most-efficient-way-to-find-barycentric-coordinates
+    static Vector3 Barycentric(Vector3 p, Vector3 a, Vector3 b, Vector3 c)
+    {
+        Vector3 v0 = b - a, v1 = c - a, v2 = p - a;
+        var d00 = Vector3.Dot(v0, v0);
+        var d01 = Vector3.Dot(v0, v1);
+        var d11 = Vector3.Dot(v1, v1);
+        var d20 = Vector3.Dot(v2, v0);
+        var d21 = Vector3.Dot(v2, v1);
+        var denom = d00 * d11 - d01 * d01;
+        if (denom == 0) denom = 1;
+        var v = (d11 * d20 - d01 * d21) / denom;
+        var w = (d00 * d21 - d01 * d20) / denom;
+        var u = 1.0f - v - w;
+        var rv = new Vector3(v, w, u);
+        return rv;
+    }
+
+    static (bool isInside,Vector3 bc) PointInsideTriangle(Vector3 p, Vector3 a, Vector3 b, Vector3 c)
+    {
+        var bc = Barycentric(p, a, b, c);
+        if (bc.x < 0 || 1 < bc.x) return (false, bc);
+        if (bc.y < 0 || 1 < bc.y) return (false, bc);
+        if (bc.z < 0 || 1 < bc.z) return (false, bc);
+        return (true,bc);
+    }
+    static bool CheckAllOtherPointsOutsideTriangle(List<(int id, Vector3 pt)> ptlist, int i0, int i1, int i2, bool dbout = false)
+    {
+        var ok = true;
+        var v0 = ptlist[i0].pt;
+        var v1 = ptlist[i1].pt;
+        var v2 = ptlist[i2].pt;
+        for (int i = 0; i < ptlist.Count; i++)
+        {
+            if (i == i0 || i == i1 || i == i2) continue;
+            var v = ptlist[i].pt;
+            var (isInside,bc) = PointInsideTriangle(v, v0, v1, v2);
+            if (dbout && isInside)
+            {
+                Debug.Log($"Point inside {i1} - rejecting");
+            }
+            if (isInside) return false;
+        }
+        return ok;
+    }
     public static (float val, int idx) FindSmallestPositiveCrossProductYcomponent(List<(int id,Vector3 pt)> ptlist,bool dbout=false)
     {
         dbout = false;
@@ -556,11 +597,16 @@ public class GrafPolyGen
                 Debug.Log($"    i:{i} id:{id} cpval:{cpval} cpiszero:{cpiszero}  cv1:{cv1s} cv2:{cv2s}");
             }
             if (cpval <= 0) continue; // cpval is negative is triangle is concave
+            var ok = CheckAllOtherPointsOutsideTriangle(ptlist, i0, i1, i2, dbout: dbout);
+            if (!ok) continue;
+
             if (cpval < cpvalmin)
             {
                 cpvalmin = cpval;
                 cpvalminidx = i;
             }
+
+            // need to make sure all the other points fall outside of the v0-v1-v2 triangle now
         }
         if (dbout)
         {
@@ -569,10 +615,11 @@ public class GrafPolyGen
         return (cpvalmin, cpvalminidx);
     }
 
-    GameObject GetLevParent(GameObject parent,int lev)
+    GameObject GetLevParent(GameObject parent,int lev,float height)
     {
         var go = new GameObject($"lev-{lev}");
-        go.transform.parent = parent.transform;
+        go.transform.position = new Vector3(0, height, 0);
+        go.transform.SetParent( parent.transform, worldPositionStays:true );
         return go;
     }
     float mindiff = float.MaxValue;
@@ -632,10 +679,10 @@ public class GrafPolyGen
 
         int starcnt = _poutline.Count;
         var woutline = RemoveAdjacentEquals( GetOutline(),eps);
-        if (parent.name.StartsWith("Microsoft Cafe 16"))
-        {
-            Debug.Log("Have a coffee");
-        }
+        //if (parent.name.StartsWith("Microsoft Cafe 16"))
+        //{
+        //    Debug.Log("Have a coffee");
+        //}
         if (_poutline.Count < 3)
         {
             Debug.LogError($"Error tesselating building {parent.name}");
@@ -649,7 +696,7 @@ public class GrafPolyGen
         {
             var centxt = "Area:" + area.ToString("f2");
             var clr = qut.GetColorBySeq(iclr++);
-            var levpar = GetLevParent(parent, lev++);
+            var levpar = GetLevParent(parent, lev++, dbheight);
             PlotOutline(levpar, woutline, centxt, dbheight, clr);
             dbheight += 2;
         }
@@ -671,7 +718,7 @@ public class GrafPolyGen
             {
                 var centxt = "Rev Area:" + area.ToString("f2");
                 var clr = qut.GetColorBySeq(iclr++);
-                var levpar = GetLevParent(parent, lev++);
+                var levpar = GetLevParent(parent, lev++, dbheight);
                 PlotOutline(levpar, woutline, centxt, dbheight, clr);
                 dbheight += 2;
             }
@@ -712,7 +759,7 @@ public class GrafPolyGen
             if (plotTesselation)
             {
                 var clr = qut.GetColorBySeq(iclr++);
-                var levpar = GetLevParent(parent, lev++);
+                var levpar = GetLevParent(parent, lev++,0);
                 var centxt = "Remove pt:" + woutline[i1].id;
                 PlotOutline(levpar, woutline, centxt,   dbheight, clr);
                 dbheight += 2;

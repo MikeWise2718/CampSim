@@ -524,7 +524,7 @@ public class BldPolyGen
     }
 
 
-    public List<OsmBldSpec> LoadRegionOld(GameObject parent, string regionspec, float ptscale = 1, PolyGenVekMapDel pgvd = null, LatLongMap llm = null)
+    public List<OsmBldSpec> LoadRegionOld(GameObject parent, string regionspec, float ptscale = 1, PolyGenVekMapDel pgvd = null, LatLongMap llm = null, string buildingFilter = "",bool plotTessalation=false)
     {
         var rv = new List<OsmBldSpec>();
         var sw = new Aiskwk.Dataframe.StopWatch();
@@ -537,17 +537,25 @@ public class BldPolyGen
             var lst = LoadOsmBuildingsFromSdfs(_dfways,_dfnodes,_dflinks,ptscale: ptscale,llm:llm);
             osmblds.AddRange(lst);
         }
+        var filterBuildings = buildingFilter != "";
         foreach (var bs in osmblds)
         {
             //GenFixedFormBld(ObjForm.cross, bs.name, bs.loc, bs.height,bs.levels,"db");
-            //if (bs.name.StartsWith("Microsoft Cafe 16"))
-            //{
-            //    Debug.Log("Have a coffee");
-            //}
+            if (filterBuildings)
+            {
+                if (bs.name.StartsWith(buildingFilter))
+                {
+                    Debug.Log($"BldPolyGen.LoadRegionOld found {buildingFilter} plotTesselation:{plotTessalation}");
+                }
+                else
+                {
+                    continue;
+                }
+            }
             var nbspts = bs.GetOutline().Count;
             if (nbspts >= 3)
             {
-                var bldgo = GenBld(parent, bs, ptscale: ptscale, pgvd: pgvd);
+                var bldgo = GenBld(parent, bs, ptscale: ptscale, pgvd: pgvd, plotTesselation:plotTessalation);
                 bs.bgo = bldgo;
                 rv.Add(bs);
             }
