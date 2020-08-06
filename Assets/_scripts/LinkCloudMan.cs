@@ -221,6 +221,7 @@ namespace CampusSimulator
             var gcr = GetGraphCtrl();
             gcr.RealizeLateLinks();
             SetHeights();
+            DeleteUnconnectedNodes();
         }
 
         int updateCount = 0;

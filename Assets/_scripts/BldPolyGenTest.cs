@@ -59,9 +59,9 @@ public class BldPolyGenTest : MonoBehaviour
         //bpg.LoadRegionOld(this.gameObject, "sanfrancisco", 1f, pgvd: pgvd, llm: latlngmap);
         //bpg.LoadRegionOld(this.gameObject, "riggins", 1f, pgvd: pgvd, llm: latlngmap);
         //bpg.LoadRegionOld(this.gameObject, "tenmtn", 1f, pgvd: pgvd, llm: latlngmap);
-        //bpg.LoadRegionOld(this.gameObject, "sanfrancisco", 1f, pgvd: pgvd, llm: latlngmap);
+        bpg.LoadRegionOld(this.gameObject, "sanfrancisco", 1f, pgvd: pgvd, llm: latlngmap);
 
-        bpg.LoadRegionOld(this.gameObject, "sanfrancisco", 1f, pgvd: pgvd, llm: latlngmap,buildingFilter:"yes304",plotTessalation:true);
+        //bpg.LoadRegionOld(this.gameObject, "sanfrancisco", 1f, pgvd: pgvd, llm: latlngmap,buildingFilter:"yes304",plotTessalation:true);
         //bpg.LoadRegionOld(this.gameObject, "tenmtn", 1f, pgvd: pgvd, llm: latlngmap,buildingFilter:"house85",plotTessalation:true);
         //bpg.LoadRegion(this.gameObject, "eb12");
         //bpg.LoadRegion(this.gameObject, "eb12small");

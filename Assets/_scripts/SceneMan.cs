@@ -33,10 +33,10 @@ namespace CampusSimulator
         public float rgoRotate = 0f;
         public Vector3 rgoTranslate = Vector3.zero;
 
-        public string strans0;
-        public string strans1;
-        public string strans2;
-        public string strans3;
+        //public string strans0;
+        //public string strans1;
+        //public string strans2;
+        //public string strans3;
 
         public float home_height = 1.7f;
         float home_rgoScale = 1.0f;
@@ -95,10 +95,10 @@ namespace CampusSimulator
         public SpatialMapperMan smm = null;
 #endif
 
-        private Vector4 trans0;
-        private Vector4 trans1;
-        private Vector4 trans2;
-        private Vector4 trans3;
+        //private Vector4 trans0;
+        //private Vector4 trans1;
+        //private Vector4 trans2;
+        //private Vector4 trans3;
         public Transform rgoTransform;
         public int rgoTransformSetCount = 0;
         public int lastRgoTransformSetCount = -1;
@@ -294,7 +294,7 @@ namespace CampusSimulator
             var z = (float) glbllm.maps.zmap.Map(lng,lat);
             return (x, z);
         }
-        public void SetScene( SceneSelE newscene,bool force=false )
+        public void SetScenario( SceneSelE newscene,bool force=false )
         {
             if (newscene != curscene || force)
             {
@@ -330,18 +330,18 @@ namespace CampusSimulator
                     initsw.Start();
 
 
+
                     // Now do value initialization 
+                    // Low level
+
                     this.InitializeScene(newscene);// start with setting the scene
-
-                    mpman.InitializeScene(newscene); // bspokespec set here
-
-
+                    dfman.InitializeScene(newscene);
+                    mpman.InitializeScene(newscene); // lnglat constants and bspokespec set here
                     this.InitializeGlbLlMap();// this needs to happen after mpmap initialize scene obviously
-
                     lcman.InitializeScene(newscene);
 
 
-                    dfman.InitializeScene(newscene);
+
                     vcman.InitializeScene(newscene);
                     bdman.InitializeScene(newscene);
                     stman.InitializeScene(newscene);
@@ -356,8 +356,6 @@ namespace CampusSimulator
 
                     initsw.Stop();
                     setsw.Start();
-
-
 
                     dfman.SetScene(newscene); // should be early to setup data
                     mpman.SetScene(newscene);// Note this has an await buried in it and afterwards a call to smam.PostMapLoadSetScene below 
@@ -375,21 +373,21 @@ namespace CampusSimulator
                     psman.SetScene(newscene); // needs to be before we populate the buildings
                     veman.SetScene(newscene); // needs to be before we populate the garages
 
-                    bdman.SetScenePostLinkCloud(newscene);// building details that need nodes and links
-                    gaman.SetScenePostLinkCloud(newscene);// garage details that need nodes and links
+                    //bdman.SetScenePostLinkCloud(newscene);// building details that need nodes and links
+                    //gaman.SetScenePostLinkCloud(newscene);// garage details that need nodes and links
 
                     znman.SetScene(newscene);
                     jnman.SetScene(newscene);
                     frman.SetScene(newscene);
                     uiman.SetScene(newscene);
 
-                    setsw.Stop();
-
-                    finsw.Start();
-
+                    bdman.SetScenePostLinkCloud(newscene);// building details that need nodes and links
+                    gaman.SetScenePostLinkCloud(newscene);// garage details that need nodes and links
                     lcman.SetSceneFinal(newscene);  // realize latelinks and heights
-                    lcman.DeleteUnconnectedNodes();
 
+                    setsw.Stop();
+                    finsw.Start();
+ 
                     RefreshSceneManGos();// in setscene
 
                     finsw.Stop();
@@ -1492,16 +1490,19 @@ namespace CampusSimulator
             PlayerPrefs.SetString(initialSceneOptionsKey, inisval);
         }
         #endregion SceneOptions
-
-
-        private void Start()
+        void Awake()
         {
-            Debug.Log("SceneMan.Start called");
+            Debug.Log("SceneMan.Awake called");
             IdentitySystemAndUser();
             InitPhase0();
+        }
+
+        void Start()
+        {
+            Debug.Log("SceneMan.Start called");
             var esi = SceneMan.GetInitialSceneOption();
             curscene = SceneSelE.None; // force it to execute by specifying something it should never be - kind of a kludge
-            SetScene(esi);
+            SetScenario(esi);
         }
         public void ToggleAutoErrorCorrect()
         {
@@ -1676,7 +1677,7 @@ namespace CampusSimulator
                         sceneToRefresh = requestScene;
                     }
                     var sw2 = new StopWatch();
-                    SetScene(sceneToRefresh, force: true);
+                    SetScenario(sceneToRefresh, force: true);
                     sw2.Stop();
                     lastRefreshTime = (float) sw2.Elap().TotalSeconds;
                     Debug.Log($"TotalRefresh SetScene took {sw2.ElapSecs()} secs");
