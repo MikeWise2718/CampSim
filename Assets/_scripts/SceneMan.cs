@@ -117,6 +117,7 @@ namespace CampusSimulator
         public FrameMan frman;
         public CalibMan cbman;
         public DataFileMan dfman;
+        public CoordMapMan coman;
         public UiMan uiman;
         public string runtimestamp = DateTime.UtcNow.ToString("yyyyMMdd-HHmmss");
         public string simrundir;
@@ -188,7 +189,13 @@ namespace CampusSimulator
 #endif
             DisableSpatialMapping();
 
-// Start of new initialzation scheme
+            // Start of initialzation
+
+            // these object don't need to be in the scene view as we don't really inspect them or change their parameters
+            coman = (new GameObject("CoordMapMan")).AddComponent<CoordMapMan>();
+            dfman = (new GameObject("DataFileMan")).AddComponent<DataFileMan>();
+
+            // these object need to be in the scene we are starting because we might inspect them
             uiman = FindObjectOfType<UiMan>();
             mpman = FindObjectOfType<MapMan>();
             vcman = FindObjectOfType<VidcamMan>();
@@ -203,7 +210,9 @@ namespace CampusSimulator
             psman = FindObjectOfType<PersonMan>();
             veman = FindObjectOfType<VehicleMan>();
             frman = FindObjectOfType<FrameMan>();
-            dfman = FindObjectOfType<DataFileMan>();
+
+            dfman.sman = this;
+            coman.sman = this;
 
             uiman.sman = this;
             mpman.sman = this;
@@ -218,7 +227,6 @@ namespace CampusSimulator
             psman.sman = this;
             veman.sman = this;
             frman.sman = this;
-            dfman.sman = this;
 
             bool subbordinatethemall = false;
             if (subbordinatethemall)
@@ -247,6 +255,13 @@ namespace CampusSimulator
             uiman.InitPhase0();
             dfman.InitPhase0();
         }
+
+        //private T CreateObjectAddComp<T>(string cname) 
+        //{
+        //    var go = new GameObject(cname);
+        //    var rv =  go.AddComponent<T>();
+        //    return rv;
+        //}
 
 
         public void InitializeScene(SceneSelE newscene)
@@ -299,6 +314,12 @@ namespace CampusSimulator
         {
             RealizeFloorPlanStatus();
         }
+        public enum InitState { ceaseActivities,deleteModels, initValuesLowLevel, initValues, initModels,initModelsPost,refreshGos,finished }
+        public InitState curInitState;
+        public void SetInitState(InitState initState)
+        {
+            curInitState = initState;
+        }
         public void SetScenario( SceneSelE newscene,bool force=false )
         {
             if (newscene != curscene || force)
@@ -311,11 +332,13 @@ namespace CampusSimulator
                 try
                 {
                     ceasesw.Start();
+                    SetInitState(InitState.ceaseActivities);
                     // Cease all activity
                     jnman.CeaseSceneActivity();
 
 
                     // Delete all objects - withough knowledge of identity of new scene
+                    SetInitState(InitState.deleteModels);
                     dfman.DeleteStuff();
                     psman.DelPersons();
                     veman.DelVehicles();
@@ -334,6 +357,7 @@ namespace CampusSimulator
                     ceasesw.Stop();
                     initsw.Start();
 
+                    SetInitState(InitState.initValuesLowLevel);
 
 
                     // Now do value initialization 
@@ -346,6 +370,7 @@ namespace CampusSimulator
                     lcman.InitializeScene(newscene);
 
 
+                    SetInitState(InitState.initValues);
 
                     vcman.InitializeScene(newscene);
                     bdman.InitializeScene(newscene);
@@ -361,6 +386,8 @@ namespace CampusSimulator
 
                     initsw.Stop();
                     setsw.Start();
+
+                    SetInitState(InitState.initModels);
 
                     dfman.SetScene(newscene); // should be early to setup data
                     mpman.SetScene(newscene);// Note this has an await buried in it and afterwards a call to smam.PostMapLoadSetScene below 
@@ -388,14 +415,18 @@ namespace CampusSimulator
 
                     this.SetScene(newscene);
 
+                    SetInitState(InitState.initModelsPost);
+
                     bdman.SetScenePostLinkCloud(newscene);// building details that need nodes and links
                     gaman.SetScenePostLinkCloud(newscene);// garage details that need nodes and links
                     lcman.SetSceneFinal(newscene);  // realize latelinks and heights
 
                     setsw.Stop();
                     finsw.Start();
- 
+                    SetInitState(InitState.refreshGos);
+
                     RefreshSceneManGos();// in setscenario
+                    SetInitState(InitState.finished);
 
                     finsw.Stop();
 
