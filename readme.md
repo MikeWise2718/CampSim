@@ -76,7 +76,8 @@
      -   This happened to me when I imported without gif-lfs enabled, it wasn't importing the car textures so you didn't see them
 
 
-# Architectural Notes to CampusSimulator – v0.2 - Mike Wise - 6 Aug 2020
+# Architectural Notes to CampusSimulator
+`v0.21 - Mike Wise - 6 Aug 2020`
 Ideally a program should have tight cohesion in its components and loose coupling between them, also variable and procedure names chosen so as to be self-documenting. 
 Unfortunately, here that proves to be quite a problem. Tight-cohesion is fairly easy, but loose coupling is very difficult, mostly because our objects have multiple dependencies on one another. 
 Here we analyze that.
@@ -95,7 +96,7 @@ Managers perform the following functions:
 -	They manage the lifespan of their managees
 -	They usually have managee factories as a method
 A list of our managers
-Top Level
+### Top Level
 -	`PeopleMan` – Mangers people in the scene, their name, avatar, if they have a camera, etc.
 -	`BuildingMan` – Manages buildings in the scene. Also trees, bushes, building alarms, and a bunch of other things that should probably have their own managers someday.
 -	`VehicleMan` – Manages vehicles (cars) that can move around.
@@ -104,7 +105,7 @@ Top Level
 -	`VideoMan` – Manages fixed cameras that can be in the scene. Also keeps track of viewer camera, and probably should keep track of people cams
 -	`JourneyMan` – manages the journeys people take 
 -	`ZoneMan` – manages evacuation zones people can go to during an evacuation
-Lower Level
+### Lower Level
 -	`FrameMan` – Manages frames that can be used for ML computer vision (AI) training
 -	`DataFileMan` - Manager – manages data sets (csv, json, etc) for the scenarios
 -	`LinkMan` – manages nodes and links in the scene
@@ -132,41 +133,41 @@ Graphics manages are the graphical object (in Unity “GameObjects”) and their
 
 ## Initialization Sequence
 Originally, we just had a single initialization call per manager, but eventually that simply did not work because of the interdependencies that came about as our application became more complex. 
-The managers are statically initialized in the scene (to ease development since you can inspect and set variables without running the scene). They are not destroyed during the app (although they can be made subordinate to a single object if need be but I found it did not really help in anyway).
-
+The managers are statically initialized in the scene (to ease development since you can inspect and set variables without running the scene). They are not destroyed during the app (although they can be made subordinate to a single object if needed but I found it did not really help in anyway).
 We now have a multi-phase initialization during a new scene startup.
 This is done once per application invocation instance:
 -	`OneTime Initialization` – Initializations that is done once per application instance (CampSim invocation) and is scene independent. For example, `UiMan` finds all the objects that were manually placed in the `UiPrefab` and initializes its references to them. This will not ever change over the application lifetime. So these calls are not repeated.
-o	Current name and signature `Init0()`
-o	Name should change since `Init0` is not very descriptive
-o	Mostly consists of finding objects
-o	Should only be done once
-o	Should probably be done in manager awakes
-These are done every time we change a scenario, or we do a total refresh of a scene
+-	Current name and signature `Init0()`
+-	Name should change since `Init0` is not very descriptive
+-	Mostly consists of finding objects
+-	Should only be done once
+-	Should probably be done in manager awakes
+
+These are done every time we change a scenario, or we do a total refresh of a scene. <br>
 
 -	`Object Deletion` – Only significant when a prior scene was instantiated. Current objects in the various managers are deleted. The manager should come to a state that is indistinguishable on each startup.
-o	Current name is “DeleteBuildings”, “DeletePeople”, etc.
-o	Should give them all a common
+  -	Current name is “DeleteBuildings”, “DeletePeople”, etc.
+  -	Should give them all a common
 
 -	`LowLevel Initialization` – Scene Initialization of the LoweLevel Services 
-o	Note that from this point `DataFileMan` and `LinkMan` and `CoordMan` need to be usable.
+  -	Note that from this point `DataFileMan` and `LinkMan` and `CoordMan` need to be usable.
 
 -	`Value Initialization` – stored values are read from the `PlayerPref` so that settings can be retained in a scene. Additional initialization that depends only on those settings or is independent of those values can also optionally be performed.
-o	Current name and signature “InitializeMode(SceneSelE newregion) 
+  -	Current name and signature “InitializeMode(SceneSelE newregion) 
 
 
 -	`Model Initialization` – The Model Mentees are created
-o	Current name and signature “SetMode(SceneSelE newregion)”
-o	Can rely on data from other modules that was set in value initialization
+  -	Current name and signature “SetMode(SceneSelE newregion)”
+  -	Can rely on data from other modules that was set in value initialization
 
 -	`Model Initialization Phase2`
-o	Various signatures
-o	Object Linking happens here – intramanager initialization that requires the objects to have been created in multiple modules is done
+  -	Various signatures
+  -	Object Linking happens here – intramanager initialization that requires the objects to have been created in multiple modules is done
 
 
 -	Graphic Object Initialization – gameobjects are created. Here we restrict ourselves to object creation that needs no inter manager communication, whereby most modules will need services from `LinkCloudMan`
-o	Has delete and create signatures
-o	TODO: Has a filter that can be set so that subsets can be handled
+-	Has delete and create signatures
+-	TODO: Has a filter that can be set so that subsets can be handled
 
 ## Scene Updating
 During a scenario we can do various things – examples are:
@@ -184,7 +185,8 @@ We distinguish between five classes. These four are centrally managed:
 -	`Partial Object Refresh` – Individual game objects are deleted and recreated locally. 
 This last one just happens on the fly as we change our model. For example moving an object along by having a model managee change its graphics managee position (gameobject.transform.position) does this.
 -	`Object modification` – attributes (Components) of game objects are modified. This might trigger Unity to do a lot of work, but it does not (should not?) affect our object hierarchy visibly. 
-o	Should I allow a model Mutate To do this directly?
+-	Should I allow a model Mutate To do this directly?
+
 
 
 
