@@ -40,34 +40,52 @@ public class BldPolyGenTest : MonoBehaviour
     {
         bpg = new BldPolyGen();
         //TestEb12();
-        TestMsft();
+        //TestMsft();
+        //TestMtten();
+        TestSeattle();
+        //TestFrisco();
         //Test4();
     }
     void TestMsft()
     {
         var latlngmap = new Aiskwk.Map.LatLongMap("Testmsft");
         latlngmap.InitMapFromSceneSelString("MsftRedwest");
-        var llb = new LatLngBox(new LatLng(37.774900,-122.419400),2,2);
-        latlngmap.InitMapFromSceneSelString("",llb); 
         var hmo = new heightMocker(33);
         var pgvd = new PolyGenVekMapDel(hmo.ChangeHeight);
-        //bpg.LoadRegionOld(this.gameObject, "msftb19area,msftcommons,msftredwest", 1f, pgvd: pgvd, llm: latlngmap);
-        //bpg.LoadRegionOld(this.gameObject, "msftcampcore", 1f, pgvd: pgvd, llm: latlngmap);
+        bpg.LoadRegionOld(this.gameObject, "msftcampcore", 1f, pgvd: pgvd, llm: latlngmap);
 
-        //bpg.LoadRegionOld(this.gameObject, "tenmtn", 1f, pgvd: pgvd, llm: latlngmap);
-        //bpg.LoadRegionOld(this.gameObject, "msftcampcore", 1f, pgvd: pgvd, llm: latlngmap);
-        //bpg.LoadRegionOld(this.gameObject, "sanfrancisco", 1f, pgvd: pgvd, llm: latlngmap);
-        //bpg.LoadRegionOld(this.gameObject, "riggins", 1f, pgvd: pgvd, llm: latlngmap);
-        //bpg.LoadRegionOld(this.gameObject, "tenmtn", 1f, pgvd: pgvd, llm: latlngmap);
-        bpg.LoadRegionOld(this.gameObject, "sanfrancisco", 1f, pgvd: pgvd, llm: latlngmap);
+    }
 
-        //bpg.LoadRegionOld(this.gameObject, "sanfrancisco", 1f, pgvd: pgvd, llm: latlngmap,buildingFilter:"yes304",plotTessalation:true);
+    void TestSeattle()
+    {
+        var latlngmap = new Aiskwk.Map.LatLongMap("Testmsft");
+        latlngmap.InitMapFromSceneSelString("MsftRedwest");
+        var hmo = new heightMocker(33);
+        var pgvd = new PolyGenVekMapDel(hmo.ChangeHeight);
+        bpg.LoadRegionOld(this.gameObject, "seattle", 1f, pgvd: pgvd, llm: latlngmap);
+
+    }
+
+
+    void TestMtten()
+    {
+        var latlngmap = new Aiskwk.Map.LatLongMap("Testmsft");
+        latlngmap.InitMapFromSceneSelString("MsftRedwest");
+        var hmo = new heightMocker(33);
+        var pgvd = new PolyGenVekMapDel(hmo.ChangeHeight);
+        //bpg.LoadRegionOld(this.gameObject, "tenmtn", 1f, pgvd: pgvd, llm: latlngmap);
         //bpg.LoadRegionOld(this.gameObject, "tenmtn", 1f, pgvd: pgvd, llm: latlngmap,buildingFilter:"house85",plotTessalation:true);
-        //bpg.LoadRegion(this.gameObject, "eb12");
-        //bpg.LoadRegion(this.gameObject, "eb12small");
-        //bpg.LoadRegion(this.gameObject, "SanFrancisco", ptscale: 1000);
-        //bpg.LoadRegionOneBld(this.gameObject, "SanFrancisco","w256586268",ptscale:1000);
-        //bpg.LoadRegionOneBld(this.gameObject, "eb12small","w203793425");
+        bpg.LoadRegionOld(this.gameObject, "tenmtn", 1f, pgvd: pgvd, llm: latlngmap, buildingFilter: "house148", plotTessalation: true);
+    }
+    void TestFrisco()
+    {
+        var latlngmap = new Aiskwk.Map.LatLongMap("TestFrisco");
+        var llb = new LatLngBox(new LatLng(37.774900, -122.419400), 2, 2);
+        latlngmap.InitMapFromSceneSelString("", llb);
+        var hmo = new heightMocker(33);
+        var pgvd = new PolyGenVekMapDel(hmo.ChangeHeight);
+        //bpg.LoadRegionOld(this.gameObject, "sanfrancisco", 1f, pgvd: pgvd, llm: latlngmap);
+        bpg.LoadRegionOld(this.gameObject, "sanfrancisco", 1f, pgvd: pgvd, llm: latlngmap,buildingFilter:"yes304",plotTessalation:true);
     }
 
     void Test4()

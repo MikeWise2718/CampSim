@@ -347,17 +347,6 @@ public class BldPolyGen
     }
 
 
-    //public List<Bldspec> LoadOsmBuildings(float ptscale = 1, LatLongMap llm = null)
-    //{
-    //    if (_dfways==null)
-    //    {
-    //        Debug.LogError("LoadOsmBuildingsFromSdfs not initialized");
-    //    }
-    //    var rv = LoadOsmBuildingsFromSdfs(_dfways,_dfnodes,_dflinks,ptscale: ptscale, llm: llm);
-    //    return rv;
-    //}
-
-
     public List<OsmBldSpec> LoadOsmBuildingsFromSdfs(SimpleDf dfways, SimpleDf dfnodes, SimpleDf dflinks, float ptscale = 1, LatLongMap llm = null, bool usenodedict = false)
     {
         var sw = new Aiskwk.Dataframe.StopWatch();

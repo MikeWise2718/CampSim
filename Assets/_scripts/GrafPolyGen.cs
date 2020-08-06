@@ -818,24 +818,23 @@ public class GrafPolyGen
             Debug.Log($"new area:{area}");
         }
         var (maxval, maxidx) = FindSmallestPositiveCrossProductYcomponent(parent,woutline);
-        //var (maxval, maxidx) = FindLargestCrossProductYcomponent(woutline);
         StartAccumulatingSegments();
         var fmaxidx = maxidx;
 
         int iter = 0;
         int maxiter = woutline.Count+10;
         int iwarn = 0;
+        var isect = IntersectsItself(woutline);
+        if (isect && iwarn == 0)
+        {
+            Debug.LogWarning($"{parent.name} woutline lev:{lev} intersects itself in Tesselate iter:{iter} woutline.count:{woutline.Count}");
+            iwarn++;
+        }
         while (true && iter<maxiter)
         {
             if (plotTesselation)
             {
                 Debug.Log($"Starting lev:{lev} with woutline.Count:{woutline.Count}");
-            }
-            var isect = IntersectsItself(woutline);
-            if (isect && iwarn==0)
-            {
-                Debug.LogWarning($"{parent.name} woutline lev:{lev} intersects itself in Tesselate iter:{iter} woutline.count:{woutline.Count}");
-                //iwarn++;
             }
             //else
             //{
@@ -845,23 +844,8 @@ public class GrafPolyGen
             var i1 = maxidx;
             var i2 = moduloInc(maxidx, +1, woutline.Count);
             var v0 = woutline[i0].pt;
-            //var id0 = woutline[i0].id;
             var v1 = woutline[i1].pt;
-            //var id1 = woutline[i1].id;
             var v2 = woutline[i2].pt;
-            //var id2 = woutline[i2].id;
-            //if (ArePtsEq(v0, v1, eps))
-            //{
-            //    //Debug.Log($"Removing {woutline[i1].id} as v0=v1");
-            //    woutline.RemoveAt(i1);
-            //    continue;
-            //}
-            //if (ArePtsEq(v1, v2, eps))
-            //{
-            //    //Debug.Log($"Removing {woutline[i1].id} as v1=v2");
-            //    woutline.RemoveAt(i1);
-            //    continue;
-            //}
             var w0 = new Vector3(v0.x, height, v0.z);
             var w1 = new Vector3(v1.x, height, v1.z);
             var w2 = new Vector3(v2.x, height, v2.z);
@@ -883,7 +867,6 @@ public class GrafPolyGen
             woutline.RemoveAt(i1);
             AddTesselatedTriangle( w0,w1,w2, i0,i1,i2, onesided );
             if (woutline.Count < 3) break; // done
-            //(maxval, maxidx) = FindLargestCrossProductYcomponent(woutline);
 
             (maxval, maxidx) = FindSmallestPositiveCrossProductYcomponent(parent,woutline);
             if (maxidx<0)

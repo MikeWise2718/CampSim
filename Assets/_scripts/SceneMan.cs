@@ -294,6 +294,11 @@ namespace CampusSimulator
             var z = (float) glbllm.maps.zmap.Map(lng,lat);
             return (x, z);
         }
+
+        public void SetScene(SceneSelE newscene)
+        {
+            RealizeFloorPlanStatus();
+        }
         public void SetScenario( SceneSelE newscene,bool force=false )
         {
             if (newscene != curscene || force)
@@ -368,7 +373,7 @@ namespace CampusSimulator
                     trman.SetScene(newscene);
                     stman.SetScene(newscene);
 
-                    RealizeFloorPlanStatus();
+
                     vcman.SetScene(newscene);
                     psman.SetScene(newscene); // needs to be before we populate the buildings
                     veman.SetScene(newscene); // needs to be before we populate the garages
@@ -381,6 +386,8 @@ namespace CampusSimulator
                     frman.SetScene(newscene);
                     uiman.SetScene(newscene);
 
+                    this.SetScene(newscene);
+
                     bdman.SetScenePostLinkCloud(newscene);// building details that need nodes and links
                     gaman.SetScenePostLinkCloud(newscene);// garage details that need nodes and links
                     lcman.SetSceneFinal(newscene);  // realize latelinks and heights
@@ -388,7 +395,7 @@ namespace CampusSimulator
                     setsw.Stop();
                     finsw.Start();
  
-                    RefreshSceneManGos();// in setscene
+                    RefreshSceneManGos();// in setscenario
 
                     finsw.Stop();
 
