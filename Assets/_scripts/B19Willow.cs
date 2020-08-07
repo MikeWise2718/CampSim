@@ -190,14 +190,16 @@ public class B19Willow : MonoBehaviour
             if (osmbld.Get() != _b19_osmbld)
             {
                 var stat = osmbld.Get();
-                var bspec = sman.bdman.FindBldSpecByNameStart("Microsoft Building 19 ");
+                var bspec = sman.bdman.FindBldSpecByNameStart("Microsoft Building 19");
                 if (bspec != null)
                 {
+                    bspec.isVisible = stat;
                     if (bspec.bgo != null)
                     {
                         bspec.bgo.SetActive(stat);
                     }
                 }
+
                 _b19_osmbld = stat;
             }
             if (level01.Get() != _b19_level01)

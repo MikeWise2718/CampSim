@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UxUtils;
 using Aiskwk.Map;
+using System.Data.Common;
 
 namespace CampusSimulator
 {
@@ -19,6 +20,7 @@ namespace CampusSimulator
 
         public SceneMan sman = null;
 
+        // Stats for Inspector 
         public int nBuildings;
         public int nRooms;
         public int nPeople;
@@ -122,22 +124,24 @@ namespace CampusSimulator
             {
                 foreach (var bs in bldspecs)
                 {
-                    if (bs.bgo.name.StartsWith(namestart))
+                    if (bs.osmname.StartsWith(namestart))
                     {
+                        Debug.Log($"Found \"{bs.osmname}\" starts with \"{namestart}\"");
                         return bs;
                     }
                 }
             }
+            Debug.Log($"Found nothing that starts with \"{namestart}\"");
             return null;
         }
 
-        public void InitializeScene(SceneSelE newregion)
+        public void ModelInitialize(SceneSelE newregion)
         {
             bldspecs = new List<OsmBldSpec>();
             InitializeValues();
         }
 
-        public void InitializeValues()
+         void InitializeValues()
         {
             //treeMode = GetInitialTreeMode();
             treeMode.GetInitial(TreeModeE.full);
@@ -148,10 +152,11 @@ namespace CampusSimulator
             Debug.Log($"BuildingMan.InitializeValues walllinks:{walllinks.Get()} osmblds:{osmblds.Get()}   fixedblds:{fixedblds.Get()}");
         }
 
+        public BldPolyGen bpg = null;
 
-        public void SetScene(SceneSelE newregion)
+        public void ModelBuild()
         {
-            Debug.Log($"BuildingMan.SetScene {newregion}");
+            Debug.Log($"BuildingMan.SetScene {sman.curscene}");
             DelBuildings();
 
             var doosmblds = osmblds.Get();
@@ -161,14 +166,15 @@ namespace CampusSimulator
                 osmroot = new GameObject("osmblds");
                 osmroot.transform.parent = this.transform;
                 var pgvd = new PolyGenVekMapDel(sman.mpman.GetHeightVector3);
-                var bpg = new BldPolyGen();
+                bpg = new BldPolyGen();
                 var llm = sman.mpman.GetLatLongMap();
                 var (waysdflst, linksdflist, nodesdflist) = sman.dfman.GetSdfs();
-                var lbgos = bpg.LoadRegion(osmroot, waysdflst, linksdflist, nodesdflist, pgvd: pgvd, llm: llm);
-                bldspecs.AddRange(lbgos);
+                var osmbs = bpg.GetBuildspecsInRegion(waysdflst, linksdflist, nodesdflist, llm:llm);
+                //var osmbs = bpg.GenBuildingsInRegion(osmroot, waysdflst, linksdflist, nodesdflist, pgvd: pgvd, llm: llm);
+                bldspecs.AddRange(osmbs);
             }
 
-            switch (newregion)
+            switch (sman.curscene)
             {
                 case SceneSelE.MsftRedwest:
                 case SceneSelE.MsftCoreCampus:
@@ -191,8 +197,14 @@ namespace CampusSimulator
                     // DelBuildings called above already
                     break;
             }
-
-
+        }
+        public void ModelBuildPostLinkCloud()
+        {
+            ReinitDests();
+            AddRoomsToBuildings();
+            PopulateBuildings();
+            AddExtraPeople();
+            UpdateBldStats();
         }
         public void UpdateBldStats()
         {
@@ -209,7 +221,8 @@ namespace CampusSimulator
         public void MakeBuildings(string filtername)
         {
             var bldlst = Building.GetPredefinedBuildingNames(filtername);
-            bldlst.ForEach(item => MakeBuilding(item));
+            bldlst.ForEach(mbname => MakeBuilding(mbname));
+            bldspecs.ForEach(osmbs => MakeOsmBuilding(osmbs));
         }
         public string presetEvacBldName = "";
         public void EvacPresetBld()
@@ -235,38 +248,36 @@ namespace CampusSimulator
                 z.SetAlarmState(newstate:true, justone:false,startstream:false);
             }
         }
-        public void SetScenePostLinkCloud(SceneSelE newregion)
+        public void AddExtraPeople()
         {
-            ReinitDests();
-            AddRoomsToBuildings();
-            PopulateBuildings();
-            switch (newregion)
+            var newscene = sman.curscene;
+            switch (newscene)
             {
                 case SceneSelE.MsftRedwest:
                 case SceneSelE.MsftCoreCampus:
                 case SceneSelE.MsftB19focused:
                 case SceneSelE.MsftB121focused:
                     presetEvacBldName = "Bld19";
-                    if (newregion == SceneSelE.MsftRedwest)
+                    if (newscene == SceneSelE.MsftRedwest)
                     {
                         presetEvacBldName = "BldRWB";
                     }
                     //var bld = GetBuilding("BldRWB");
                     //bld.AddRedwestBAlarms();
-                    sman.lcman.grctrl.AddLateLink("rwb-f03-cv0-e", "bRWB-os1-o02",GraphAlgos.LinkUse.walkway,"walkway link for garage-RedwestB - 1");
+                    sman.lcman.grctrl.AddLateLink("rwb-f03-cv0-e", "bRWB-os1-o02", GraphAlgos.LinkUse.walkway, "walkway link for garage-RedwestB - 1");
                     sman.lcman.grctrl.AddLateLink("rwb-f03-cv0-s", "bRWB-os2-o01", GraphAlgos.LinkUse.walkway, "walkway link for garage-RedwestB - 2");
                     sman.lcman.grctrl.AddLateLink("rwb-f03-cv3-s", "bRWB-os2-o04", GraphAlgos.LinkUse.walkway, "walkway link for garage-RedwestB -3");
                     sman.lcman.grctrl.AddLateLink("rwb-f03-cv3-e", "bRWB-os3-o02", GraphAlgos.LinkUse.walkway, "walkway link for garage-RedwestB- 4");
-//                    if (sman.fastMode)
-//                    {
-                        sman.lcman.grctrl.AddLateLink("rwb-f03-rm3342", "g_RWB_eee-dt-wpsdoor004", GraphAlgos.LinkUse.walkway, "walkway link for garage-RedwestB- 5");
-//                    }
+                    //                    if (sman.fastMode)
+                    //                    {
+                    sman.lcman.grctrl.AddLateLink("rwb-f03-rm3342", "g_RWB_eee-dt-wpsdoor004", GraphAlgos.LinkUse.walkway, "walkway link for garage-RedwestB- 5");
+                    //                    }
                     sman.lcman.grctrl.AddLateLink("dw-RWB-c18", "g_RWB_eee-dt-dps013", GraphAlgos.LinkUse.driveway, "driveway link for garage at RedwestB - 1");
                     sman.lcman.grctrl.AddLateLink("dw-RWB-c28", "g_RWB_eee-dt-dps006", GraphAlgos.LinkUse.driveway, "driveway link for garage at RedwestB - 2");
                     sman.lcman.grctrl.AddLateLink("dw-RWB-c28", "g_RWB_eee-dt-dps007", GraphAlgos.LinkUse.driveway, "driveway link for garage at RedwestB - 3");
-                    sman.lcman.grctrl.AddLateLink("dw-RWB-c38", "g_RWB_eee-dt-dps001",GraphAlgos.LinkUse.driveway, "driveway link for garage at RedwestB - 4");
-                    sman.psman.AddPersonToBuildingAtNode(PersonMan.GenderE.male,"b19-f01-lobby", "b19-f01-cp0b1", "Arnie Schwarzwald", "Businessman004",
-                                                         PersonMan.empStatusE.Security, "IdleUnarmed", false,180,hasHololens:true,hasCamera:true,flagged:true);
+                    sman.lcman.grctrl.AddLateLink("dw-RWB-c38", "g_RWB_eee-dt-dps001", GraphAlgos.LinkUse.driveway, "driveway link for garage at RedwestB - 4");
+                    sman.psman.AddPersonToBuildingAtNode(PersonMan.GenderE.male, "b19-f01-lobby", "b19-f01-cp0b1", "Arnie Schwarzwald", "Businessman004",
+                                                         PersonMan.empStatusE.Security, "IdleUnarmed", false, 180, hasHololens: true, hasCamera: true, flagged: true);
                     sman.psman.AddPersonToBuildingAtNode(PersonMan.GenderE.female, "b19-f01-lobby", "b19-f01-sp1003", "Audrey Hepburn", "Girl005",
                                                          PersonMan.empStatusE.FullTimeEmp, "Typing", false, 45, hasHololens: false, hasCamera: false, flagged: true);
                     sman.psman.AddPersonToBuildingAtNode(PersonMan.GenderE.male, "b19-f01-lobby", "b19-f01-sp1030", "Clark Gabel", "Man004",
@@ -289,7 +300,7 @@ namespace CampusSimulator
                 case SceneSelE.Eb12:
                     presetEvacBldName = "Eb12-22";
                     sman.psman.AddPersonToBuildingAtNode(PersonMan.GenderE.male, "eb12-16-lob", "eb12-oso1a", "Arnie Schwarzwald", "Businessman004",
-                                                         PersonMan.empStatusE.Security, "IdleUnarmed", false, 0, hasHololens:true, hasCamera: true, flagged: true);
+                                                         PersonMan.empStatusE.Security, "IdleUnarmed", false, 0, hasHololens: true, hasCamera: true, flagged: true);
                     break;
                 default:
                 case SceneSelE.None:
@@ -307,8 +318,8 @@ namespace CampusSimulator
                                                          PersonMan.empStatusE.Unknown, "IdleUnarmed", false, 0, hasHololens: false, hasCamera: true, flagged: true);
                     break;
             }
-            UpdateBldStats();
         }
+
         public string GetRandomBldName(string notthisone="",string ranset="")
         {
             var choosen = "nope!!!";
@@ -339,7 +350,22 @@ namespace CampusSimulator
             var bldlst = new List<Building>(bldlookup.Values);
             bldlst.ForEach(bld => bld.PopulateBuilding());
         }
-
+        public void MakeOsmBuilding(OsmBldSpec bldspec)
+        {
+            var mbname = bldspec.osmname;
+            var bgo = new GameObject(mbname);
+            bgo.transform.position = Vector3.zero;
+            bgo.transform.parent = this.transform;
+            var bld = bgo.AddComponent<Building>();
+            bld.AddOsmBldDetails(this,bldspec);
+            AddBuildingToCollection(bld); /// has to be afterwards because of the sorted names for journeys
+            //bld.llm = bgo.AddComponent<LatLongMap>(); // todo uncomment
+            var origin = $"BuildingMan.MakeOsmBuilding(\"{mbname}\")";
+            bld.llm = new LatLongMap(origin); // todo uncomment
+                                              //bld.llm.AddLlmDetails();
+            //sman.jnman.AddViewerJourneyNodes(bld.destnodes, prefix: $"{mbname}/");
+            UpdateBldStats();
+        }
         public void MakeBuilding(string mbname)
         {
             var bgo = new GameObject(mbname);

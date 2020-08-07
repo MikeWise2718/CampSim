@@ -38,7 +38,7 @@ namespace CampusSimulator
                 bldMode.Set(PrsModeE.full);
             }
         }
-        public void InitializeScene(SceneSelE newregion)
+        public void ModelInitialize(SceneSelE newregion)
         {
             DelPersons(); // this wipes out everyone that was created in the
         }
@@ -83,10 +83,10 @@ namespace CampusSimulator
                 var p = MakePerson(g, sar[1], sar[2], emp);
             }
         }
-        public void SetScene(SceneSelE newregion)
+        public void ModelBuild()
         {
             var presetPeople = new List<string>();
-            switch (newregion)
+            switch (sman.curscene)
             {
                 case SceneSelE.MsftRedwest:
                 case SceneSelE.MsftCoreCampus:

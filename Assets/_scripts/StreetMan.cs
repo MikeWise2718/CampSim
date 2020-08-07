@@ -121,18 +121,18 @@ namespace CampusSimulator
             //Debug.Log($"CreateGraphForOsmImport_streets_df added nodes:{nnodes} links:{nlinks}");
         }
 
-        public void InitializeScene(SceneSelE newregion)
+        public void ModelInitiailze(SceneSelE newregion)
         {
             //Debug.Log($"StreetMan.InitializeScene {newregion}");
             InitializeValues();
         }
 
-        public void SetScene(SceneSelE newregion)
+        public void ModelBuild()
         {
             //Debug.Log($"StreetMan.SetScene {newregion}");
             var regname = "";
             var regcolor = "blue";
-            switch (newregion)
+            switch (sman.curscene)
             {
                 case SceneSelE.MsftRedwest:
                 case SceneSelE.MsftCoreCampus:

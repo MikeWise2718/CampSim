@@ -1153,7 +1153,7 @@ namespace CampusSimulator
             DeleteAllJourneys();
         }
 
-        public void InitializeScene(SceneSelE newregion)
+        public void ModelInitialize(SceneSelE newregion)
         {
             DeleteAllJourneys();
             InitializeValues();
@@ -1168,7 +1168,7 @@ namespace CampusSimulator
 
 
 
-        public void SetScene(SceneSelE newregion)
+        public void ModelBuild()
         {
         }
 

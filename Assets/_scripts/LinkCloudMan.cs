@@ -188,11 +188,11 @@ namespace CampusSimulator
         }
 
 
-        public void SetScene(SceneSelE newregion)
+        public void ModelBuild()
         {
 
             var genmode = graphGenOptions.Get();
-            var graphScene = translate(newregion);
+            var graphScene = translate(sman.curscene);
 
             var mm = new LcMapMaker(grctrl, mappars);
             grctrl.maxRanHeight = LinkFLoor.max;
@@ -216,7 +216,7 @@ namespace CampusSimulator
             }
         }
 
-        public void SetSceneFinal(SceneSelE newregion)
+        public void ModelBuildFinal()
         {
             var gcr = GetGraphCtrl();
             gcr.RealizeLateLinks();
@@ -316,7 +316,7 @@ namespace CampusSimulator
             if (longlatmap == null)
             {
                 //longlatmap = sman.glGetComponent<LatLongMap>();
-                longlatmap = sman.glbllm;
+                longlatmap = sman.coman.glbllm;
                 if (longlatmap == null) return false;
             }
             return true;
@@ -336,7 +336,7 @@ namespace CampusSimulator
 
         public void CalculateAndSetHeightsOnLinkCloud()
         {
-            longlatmap = sman.glbllm;
+            longlatmap = sman.coman.glbllm;
             if (longlatmap == null) return;
             var calcHeights = true;
             var grc = GetGraphCtrl();
@@ -373,7 +373,7 @@ namespace CampusSimulator
                 }
                 grctrl = new GraphCtrl(sman.graphsdir)
                 {
-                    lltoxz = new GraphCtrl.LtoXZfunction(sman.lltoxz)
+                    lltoxz = new GraphCtrl.LtoXZfunction(sman.coman.lltoxz)
                 };
             }
             return (grctrl);
@@ -545,7 +545,7 @@ namespace CampusSimulator
             //DelLcGos();
             grctrl = null;        
         }
-        public void InitializeScene(SceneSelE newregion)
+        public void BaseInitialize(SceneSelE newregion)
         {
             CreateGrcGos();
 

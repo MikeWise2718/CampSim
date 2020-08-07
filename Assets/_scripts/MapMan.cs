@@ -259,12 +259,12 @@ namespace CampusSimulator
             qmapgo.transform.SetParent(this.transform, worldPositionStays: false);
             RealizeMapVisuals();
             //AssignBespoke();
-            if (sman != null && sman.glbllm != null)
+            if (sman.coman.glbllm != null)
             {
                 if (hasLLmap)
                 {
                     // copy the mapcoords from our predefined map
-                    var mapdata = sman.glbllm.mapcoord?.mapdata;
+                    var mapdata = sman.coman.glbllm.mapcoord?.mapdata;
                     if (mapdata != null)
                     {
                         foreach (var p in mapdata)
@@ -284,7 +284,7 @@ namespace CampusSimulator
             var (nbm,nel) = await qmapman.SetModeAndMakeMesh(qmapman.qmapMode);
             //================================================================
 
-            sman.PostMapLoadSetScene(); // this has to go after the await
+            sman.PostMapAsyncLoadSetScene(); // this has to go after the await
             if (nbm>0 || nel>0)
             {
                 // if we loaded bitmaps we need to redraw everything from scratch
@@ -331,25 +331,9 @@ namespace CampusSimulator
             return null;
         }
 
-        public LatLongMap GetLatLongMapOld()
-        {
-            var llm1 = sman.glbllm;
-            var llm = llm1;
-            var llm2 = sman.glbllm;
-            if (!sman.mpman.hasLLmap)
-            {
-                llm2 = sman.mpman.GetLatLongMapQk(QkCoordSys.QkWc);
-                llm = llm2;
-            }
-            //Debug.Log($"llm1 {llm1.initmethod}");
-            //Debug.Log($"llm2 {llm2.initmethod}");
-            //Debug.Log($"sman.mpman.hasLLmap {sman.mpman.hasLLmap}");
-            //Debug.Log($"final llm {llm.initmethod}");
-            return llm;
-        }
         public LatLongMap GetLatLongMap()
         {
-            return sman.glbllm;
+            return sman.coman.glbllm;
         }
 
         public void SetMapPovider(MapProvider map)
@@ -646,9 +630,9 @@ namespace CampusSimulator
             }
             return rv;
         }
-        public void SetScene(SceneSelE newscene)
+        public void ModelBuild()
         {
-            Debug.Log($"MapMan.SetScene: {newscene}");
+            Debug.Log($"MapMan.SetScene: {sman.curscene}");
             RealizeQmapAndMakeMesh();
         }
         void SetMeshCollider(bool enable)
@@ -1024,7 +1008,7 @@ namespace CampusSimulator
         //
 
         SceneSelE lastsceneset = SceneSelE.None;
-        public void InitializeScene(SceneSelE newscene)
+        public void BaseInitialize(SceneSelE newscene)
         {
             Debug.Log($"MapMan.InitializeScene: {newscene}");
             if (newscene == lastsceneset)

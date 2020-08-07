@@ -94,7 +94,7 @@ namespace CampusSimulator
             lookup[sname] = trck;
             return trck;
         }
-        public void InitializeScene(SceneSelE newregion)
+        public void ModeelInitialize(SceneSelE newregion)
         {
             //Debug.Log($"TrackMan.InitializeScene {newregion}");
             tracklist = new List<Track>();
@@ -103,11 +103,11 @@ namespace CampusSimulator
 
 
 
-        public void SetScene(SceneSelE newregion)
+        public void ModelBuild()
         {
-            //Debug.Log($"TrackMan.SetScene {newregion}");
+            //Debug.Log($"TrackMan.SetScene {sman.curscene}");
             var trackdir = "";
-            switch (newregion)
+            switch (sman.curscene)
             {
                 case SceneSelE.TeneriffeMtn:
                     trackdir = "tracks/mtten_rescue_export_1/";

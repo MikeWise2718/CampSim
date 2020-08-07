@@ -1,13 +1,14 @@
 # CampSim
 
 - Author: Mike Wise
-- Last Updated: 23 June 2020 - 15:08
+- Last Updated: 7 August 2020
 
 ## Prerequisites
-- At least 20 GB of free space, 8 GB of memory, and as much CPU/GPU as possible, although GPU is not stricly necessary. 
-- Visual Studio 2017 with Unity support installed, it can probably work with VS Code too, but it is not being used here.
+- At least 20 GB of free space, 8 GB of memory, and as much CPU/GPU as possible.
+- Although GPU is not strictly necessary, I think you will want a Nvidia 1060 or better for decent performance. 
+- Visual Studio 2019 with Unity support installed (will probably still work with older versions of Visual Studio or even VS Code), it can probably work with VS Code too, but it is not being used here.
 
-## Installation instructions (probably obsolete)
+## Installation instructions (probably obsolete)`
 
 1.	Make sure you have a recent version of Git (**git –version**, currently using 2.26.0.windows.1)
 2.	Enable **git-lfs** for your user with **git lfs install**. If you don’t want to do this, you have to do step 7a and 7b (which is no big deal)
@@ -17,8 +18,8 @@
 6.	Find a place where you will keep the project. It should have like 30+ GB free, preferably more so you can make safety clones quickly with no worries. 
 7.  Make sure **git-lfs** is enabled, if not see the sub points below.
 8.	Clone the **CampSim** project into a directory. Will take a few minutes, up to 10 if LFS is pulling down. 
-    - a.	If you didn’t enable **git-lfs** globally, then after it has cloned, enter the directory and enable it locally (**git lfs install --local**) – see <https://github.com/git-lfs/git-lfs/wiki/Installation> for more inforamation
-    - b.	Now do a **git pull** which should pull any missing lfs managed files that were left behind.
+    - a.	If you didn’t enable **git-lfs** globally, then after it has cloned, enter the directory and enable it locally (**git lfs install --local**) – see <https://github.com/git-lfs/git-lfs/wiki/Installation> for more information
+    - b.	Now do a **git pull** which should pull any missing gif-lfs managed files that were left behind.
     - c.	The github repo is 1.86 GB (which is too big, waiting for a complaint email)
 	 - d.	After cloning to disk it is like 5.86 GB
 	 - e.	After compilation and using it for a while it will need around 12-13 GB.
@@ -36,20 +37,19 @@
    - b. Startup screen shot is annotated if needed
 4. Squash all the commits down to one 
    - a. easy with lazygit, ? for help - basically s then enter)
-   - b. i to rename the git expereience
+   - b. i to rename the git experience
 5. Now see if it builds to a BuildWin
 6. Force push it (`git push force`) to override the `tip ahead of branch on remote` message 
 7. Go to Github and do a pull request on master - make some comments for fun
 8. It should merge, their might be conflicts (git isn't perfect')
 9. If there are conflicts - not sure how this goes - if not continue
 10. go to master branch and pull new master
-11. Push to azureepos
+11. Push to azurerepos
 12. Go to ADO and build it
 
 
 
-
-## Startup screen shot
+## Changing Startup screen shot
 1. Assume you have a png - put it in _textures.
 2. Duplicate it.
 3. Change to Sprite 
@@ -58,14 +58,13 @@
    - c. it will have a sprite then as a sub-object
    - d. you can change it back if you want
 4. Now go to player settings and change the startup 
-   - Warning! note that there is a seperate VR startup icon first in the list, don't change that one by mistake and think you have it
+   - Warning! note that there is a separate VR startup icon first in the list, don't change that one by mistake and think you have it
 
 ## Testing
-- TBD
+- TBD (giggle)
 
 ## ToDos
-- A lot of those enum regions (like in BuildingMan) can probably be elimanated 
-- Timings for builds
+- A lot of those enum regions (like in BuildingMan) can probably be eliminated 
 - why is the quadcopter rotating when I move it?
 
 ## Problems and Solutions
@@ -73,10 +72,10 @@
      -	Probably missed step 10 (i.e. the one about **TreesAndShrubs**) above. Otherwise you might need to re-import the **Treespackage** 
 
 - Runs, but all the cars (and people now) are missing
-     -   This happened to me when I imported without gif-lfs enabled, it wasn't importing the car textures so you didn't see them
+     -   This happened to me when I imported without `gif-lfs`   enabled, it wasn't importing the car textures so you didn't see them
 
 
-# Architectural Notes to CampusSimulator
+# Architectural Notes to Campus Simulator
 `v0.21 - Mike Wise - 6 Aug 2020`
 Ideally a program should have tight cohesion in its components and loose coupling between them, also variable and procedure names chosen so as to be self-documenting. 
 Unfortunately, here that proves to be quite a problem. Tight-cohesion is fairly easy, but loose coupling is very difficult, mostly because our objects have multiple dependencies on one another. 
@@ -96,7 +95,7 @@ Managers perform the following functions:
 -	They manage the lifespan of their managees
 -	They usually have managee factories as a method
 A list of our managers
-### Top Level
+### Entity Level
 -	`PeopleMan` – Mangers people in the scene, their name, avatar, if they have a camera, etc.
 -	`BuildingMan` – Manages buildings in the scene. Also trees, bushes, building alarms, and a bunch of other things that should probably have their own managers someday.
 -	`VehicleMan` – Manages vehicles (cars) that can move around.
@@ -105,13 +104,14 @@ A list of our managers
 -	`VideoMan` – Manages fixed cameras that can be in the scene. Also keeps track of viewer camera, and probably should keep track of people cams
 -	`JourneyMan` – manages the journeys people take 
 -	`ZoneMan` – manages evacuation zones people can go to during an evacuation
-### Lower Level
--	`FrameMan` – Manages frames that can be used for ML computer vision (AI) training
+- `FrameMan` – Manages frames that can be used for ML computer vision (AI) training
+
+### Base Service Level
 -	`DataFileMan` - Manager – manages data sets (csv, json, etc) for the scenarios
 -	`LinkMan` – manages nodes and links in the scene
--	`CoordMap` - TODO: actually `sman.glbllm` at the moment
+-	`CoordMap` - manages coordinate system, mainly conversion from latlong to a local coordinate system
 -	`MapMan` - Manages the creation of the map service tiled map and mesh
--	`UiMan` – Managaes the UI 
+-	`UiMan` – Manages the UI 
 ## Managees
 
 Managers manage these “managees”. (“Employees” or “ICs” didn’t really fit…)
@@ -130,7 +130,6 @@ Graphics manages are the graphical object (in Unity “GameObjects”) and their
  
 
 
-
 ## Initialization Sequence
 Originally, we just had a single initialization call per manager, but eventually that simply did not work because of the interdependencies that came about as our application became more complex. 
 The managers are statically initialized in the scene (to ease development since you can inspect and set variables without running the scene). They are not destroyed during the app (although they can be made subordinate to a single object if needed but I found it did not really help in anyway).
@@ -146,29 +145,32 @@ This is done once per application invocation instance:
 These are done every time we change a scenario, or we do a total refresh of a scene. <br>
 
 -	`Object Deletion` – Only significant when a prior scene was instantiated. Current objects in the various managers are deleted. The manager should come to a state that is indistinguishable on each startup.
-  -	Current name is “DeleteBuildings”, “DeletePeople”, etc.
-  -	Should give them all a common
+    -	Current name is “DeleteBuildings”, “DeletePeople”, etc.
+    -	Should give them all a common
+    
+-	`Base Services Initialization` – Scene Initialization of our lower level base services 
+    -	Note that from this point `DataFileMan` and `LinkMan` and `CoordMan` need to be usable.
 
--	`LowLevel Initialization` – Scene Initialization of the LoweLevel Services 
-  -	Note that from this point `DataFileMan` and `LinkMan` and `CoordMan` need to be usable.
-
--	`Value Initialization` – stored values are read from the `PlayerPref` so that settings can be retained in a scene. Additional initialization that depends only on those settings or is independent of those values can also optionally be performed.
-  -	Current name and signature “InitializeMode(SceneSelE newregion) 
-
-
--	`Model Initialization` – The Model Mentees are created
-  -	Current name and signature “SetMode(SceneSelE newregion)”
-  -	Can rely on data from other modules that was set in value initialization
-
--	`Model Initialization Phase2`
-  -	Various signatures
-  -	Object Linking happens here – intramanager initialization that requires the objects to have been created in multiple modules is done
+-	`Model Initialization` – stored settings are (normally read from `PlayerPref`) so that settings can be retained in a scene. 
+    - No intra-model communication should happen here as the values are not guaranteed to be defined
+    - Additional initialization that depends only on stored settings or is independent of those values can also optionally be performed.
+    -	Current name and signature `ModelInitialization(SceneSelE newregion)`
+    - Many of these probably violate the no intra-module communication, we need to clear that up
 
 
--	Graphic Object Initialization – gameobjects are created. Here we restrict ourselves to object creation that needs no inter manager communication, whereby most modules will need services from `LinkCloudMan`
--	Has delete and create signatures
--	TODO: Has a filter that can be set so that subsets can be handled
+-	`Model Initialization` – The Model Managees are created
+    -	Current name and signature “SetMode(SceneSelE newregion)”
+    -	Can rely on data from other modules that was set in value initialization
 
+-	`Model Initialization Post`
+    -	Various signatures
+    -	Object Linking happens here – intra-manager initialization that requires the objects to have been created in multiple modules is done
+
+
+-	Graphic Object Initialization – GameObjects are created. Here we restrict ourselves to object creation that needs no inter manager communication, whereby most modules will need services from `LinkCloudMan`
+    -	Has delete and create signatures
+    -	TODO: Has a filter that can be set so that subsets can be handled
+    
 ## Scene Updating
 During a scenario we can do various things – examples are:
 -	like start some simulation like a building evacuation
@@ -177,17 +179,56 @@ During a scenario we can do various things – examples are:
 -	change cameras, etc. 
 -	Changing the base scenario would actually be one of these too. 
 Some of these will require changes to the scene that affect the way it is initialized, so we might need to redo some or even all of the initialization.
+
 Models can be modified in a `ModelMutate` phase
-We distinguish between five classes. These four are centrally managed:
--	`Total Refresh` – those that require the entire scene to be initialized.
--	`Object Refresh` – No data is reread in, however all the graphics objects are destroyed and then reinitialized
--	`Subset Object Refresh` – TODO: subsets of objects are created and deleted 
--	`Partial Object Refresh` – Individual game objects are deleted and recreated locally. 
-This last one just happens on the fly as we change our model. For example moving an object along by having a model managee change its graphics managee position (gameobject.transform.position) does this.
--	`Object modification` – attributes (Components) of game objects are modified. This might trigger Unity to do a lot of work, but it does not (should not?) affect our object hierarchy visibly. 
--	Should I allow a model Mutate To do this directly?
+We distinguish between five classes. 
+
+All of these are rooted in update, but the first four are queued and combined, and the last one (object modification) is just immediately executed
+
+The first four are centrally managed - i.e. queued up and executed. A higher level refresh is a superset of the lower ones:
+  -	`Total Refresh` – those that require the entire scene to be read in again and re-initialized.
+      - Obviously this takes the longest
+      
+  -	`Object Refresh` – No data is reread in, however all the graphics objects are destroyed and then reinitialized
+      - This should be considerably faster
+  
+  -	`Subset Object Refresh` – subsets of objects are created and deleted
+      - not actually implemented yet
+      - anticipate filters using name lists, name filters and maybe coordinate filters
+      
+  -	`Partial Object Refresh` – Individual game objects are deleted and recreated locally. 
+       - this just happens on the fly as we change our model - rooted from an update event. 
+       
+  -	`Object modification` – attributes (Components) of game objects are modified. This might trigger Unity to do a lot of work, but it does not (should not?) affect our object hierarchy visibly. 
+       - For example moving an object along by having a model managee change its graphics managee position (`gameobject.transform.position`) works this way.
+       - Should I allow a model Mutate To do this directly?
+       - we should call all these routines "MutateModel maybe"
+  
+
+## Individual Manager Notes
+
+### BuildingMan
 
 
+# Big ToDos
+- Eliminate coordinate fixed initialization - use LonLat everywhere
+  - Building positions
+  - Building rooms and corridors
+  - Extra points (in LinkCloud)
 
+- Restructure Buildings
 
+- Fix LinkCloud violation of model managee initialization in object refresh
+  - need a fragline variant that doesn't create objects, but just returns a linked list of fragmented lines
+  - need a fragline variant that then takes those lines and realizes them as game objects
 
+- Eliminate inter-module communication in ModelInitialization
+   - de-public as many variables as possible
+   - make accessor function for the ones left over so we can check for the model initialization state and flag warnings
+
+   
+- Better debugging logger
+  - remote communication 
+  - colors
+  - filterable attributes
+  - indenting- - 

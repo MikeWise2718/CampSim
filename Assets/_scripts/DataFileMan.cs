@@ -80,7 +80,7 @@ namespace CampusSimulator
             useDfLlCoords.GetInitial(true);
         }
 
-        public void InitializeScene(SceneSelE newregion)
+        public void BaseInitialize(SceneSelE newregion)
         {
             Debug.Log($"DataFileMan.InitializeScene {newregion}");
             InitializeValues();
@@ -276,9 +276,9 @@ namespace CampusSimulator
             return listToReturn;
         }
 
-        public void SetScene(SceneSelE newregion)
-        {
-        }
+        //public void SetScene(SceneSelE newregion) don't need this
+        //{
+        //}
 
         // Start is called before the first frame update
         //void Start()

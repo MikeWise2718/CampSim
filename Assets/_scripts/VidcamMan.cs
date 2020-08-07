@@ -40,7 +40,7 @@ namespace CampusSimulator
         }
 
 
-        public void InitializeScene(SceneSelE newscene)
+        public void ModelInitialize(SceneSelE newscene)
         {
             DelVidcams();
             backType.GetInitial();
@@ -76,7 +76,7 @@ namespace CampusSimulator
             vidcamlist.Insert(0,"Viewer");
         }
 
-        public void SetScene(SceneSelE newscene)
+        public void ModelBuild()
         {
             var vcamname = mainCamName.Get();
             if (!vidcam.ContainsKey(vcamname))
@@ -85,7 +85,7 @@ namespace CampusSimulator
             }
             SetMainCameraToVcam(vcamname);
         }
-        public void PostTerrainLoadAdjustments()
+        public void PostMapLoadAdjustments()
         {
             AdjustHeightsForTerrain();
         }

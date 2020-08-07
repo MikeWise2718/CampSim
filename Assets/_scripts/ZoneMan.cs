@@ -118,7 +118,7 @@ namespace CampusSimulator
             sman.RequestRefresh("ZoneMan-RealizeSlotForm");
         }
 
-        public void InitializeScene(SceneSelE newregion)
+        public void ModelInitialize(SceneSelE newregion)
         {
             InitializeValues();
         }
@@ -128,11 +128,11 @@ namespace CampusSimulator
             slotform.GetInitial();
         }
 
-        public void SetScene(SceneSelE newregion)
+        public void ModelBuild()
         {
             InterpretSlotForm();
             DelZones();
-            switch (newregion)
+            switch (sman.curscene)
             {
                 case SceneSelE.MsftB19focused:
                 case SceneSelE.MsftB121focused:

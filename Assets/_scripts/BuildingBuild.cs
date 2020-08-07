@@ -8,6 +8,8 @@ namespace CampusSimulator
     {
         List<GameObject> bldgos;
         List<BldEvacAlarm> bldalarms;
+        public bool isOsmBld = false;
+        OsmBldSpec bldspec = null;
 
         void ActuallyDestroyObjects()
         {
@@ -298,9 +300,53 @@ namespace CampusSimulator
                     }
                 default:
                     {
-                        throw new UnityException("bad building name:" + name);
+                        Debug.LogError("AddBldDetails bad building name:" + name);
+                        break;
                     }
             }
+        }
+
+        public void AddOsmBldDetails(BuildingMan bm,OsmBldSpec bs)
+        {
+            this.bm = bm;
+            bldgos = new List<GameObject>();
+            maingaragename = "";
+            selectionweight = 1;
+            destnodes = new List<string>();
+
+            isOsmBld = true;
+            bldspec = bs;
+            if (bs.GetOutline().Count<3)
+            {
+                bldspec.isVisible = false;
+            }
+            //switch (name)
+            //{
+            //    case "Bld19":
+            //        {
+            //            maingaragename = "Garage19_1";
+            //            roomspecs = B19roomspec;
+            //            destnodes = SplitRoomNameOutOfRoomspecs(roomspecs);
+            //            shortname = "b19";
+            //            journeyChoiceWeight = 20;
+            //            var b19comp = this.transform.gameObject.AddComponent<B19Willow>();
+            //            b19comp.InitializeValues(bm.sman);
+            //            b19comp.MakeItSo();
+            //            break;
+            //        }
+            //    case "EbOphome":
+            //        {
+            //            shortname = "Ophm";
+            //            break;
+            //        }
+            //    case "EbRewe":
+            //        {
+            //            maingaragename = "Eb12_Rewe";
+            //            destnodes = new List<string> { "eb12-rewe-lob", "eb12-rewe-rm01", "eb12-rewe-rm02" };
+            //            shortname = "Rewe";
+            //            break;
+            //        }
+            //}
         }
 
 
@@ -473,7 +519,7 @@ namespace CampusSimulator
         {
             var bgo = GameObject.CreatePrimitive(PrimitiveType.Cube);
             bgo.name = name;
-            var llm = this.bm.sman.glbllm;
+            var llm = this.bm.sman.coman.glbllm;
             bgo.transform.parent = this.transform;
             bgo.transform.position = llm.xycoord(lat, lng);
             bldgos.Add(bgo);
@@ -687,12 +733,22 @@ namespace CampusSimulator
             //AddPeopleToRooms();
         }
 
-
         public void CreateObjects()
         {
+
             bldgos = new List<GameObject>();
             var bmode = bm.bldMode.Get();
             var tmode = bm.treeMode.Get();
+            if (isOsmBld)
+            {
+                var pgvd = new PolyGenVekMapDel(bm.sman.mpman.GetHeightVector3);
+                if (bldspec.isVisible)
+                {
+                    var bgo = bm.bpg.GenBldFromOsmBldSpec(this.gameObject, bldspec, pgvd: pgvd);
+                    bldgos.Add(bgo);
+                }
+                return;
+            }
             var fixedbuildings = bm.fixedblds.Get();
             var dofixed = fixedbuildings && bmode == BuildingMan.BldModeE.full;
             //Debug.Log($"{name} fixedbuildings:{fixedbuildings}  bmode:{bmode}  => dofixed:{dofixed}");

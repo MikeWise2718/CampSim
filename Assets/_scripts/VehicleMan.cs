@@ -21,11 +21,11 @@ namespace CampusSimulator
         public enum VehModeE { none, full };
         public UxEnumSetting<VehModeE> bldMode = new UxEnumSetting<VehModeE>("VehicleMode", VehModeE.full);
 
-        public void InitializeScene(SceneSelE newregion)
+        public void ModelInitiailze(SceneSelE newregion)
         {
         }
 
-        public void SetScene(SceneSelE newregion)
+        public void ModelBuild()
         {
         }
         readonly string[] countyCodes =

@@ -126,7 +126,7 @@ namespace CampusSimulator
         public bool needsLifted = false;
 
 
-        public LatLongMap glbllm;
+        //public LatLongMap glbllm;
 
         public bool arcoreTrack = false;
 
@@ -264,7 +264,7 @@ namespace CampusSimulator
         //}
 
 
-        public void InitializeScene(SceneSelE newscene)
+        public void BaseInitialize(SceneSelE newscene)
         {
             // Here we do two things
             //
@@ -276,45 +276,45 @@ namespace CampusSimulator
             UxUtils.UxSettingsMan.SetScenario(newscene.ToString());
 
             curscene = newscene;
-            glbllm = null;
         }
-        public void InitializeGlbLlMap()
-        {
-            glbllm = new LatLongMap($"SceneMan.InitializeGlbLlMap(  ) with curscene:{curscene}");
-            glbllm.InitMapFromSceneSelString(curscene.ToString(), mpman.bespokespec?.llbox); // doesn't handle non-llmap scenes 
-        }
-        public (float x,float z) lltoxz(double lat,double lng)
-        {
-            if (glbllm==null)
-            {
-                Debug.LogError($"glbllm is null");
-                return ((float)lng, (float)lat);
-            }
-            if (glbllm.maps==null)
-            {
-                Debug.LogError($"glbllm.mapps is null");
-                return ((float)lng, (float)lat);
-            }
-            if (glbllm.maps.xmap == null)
-            {
-                Debug.LogError($"glbllm.maps.xmap is null");
-                return ((float)lng, (float)lat);
-            }
-            if (glbllm.maps.zmap == null)
-            {
-                Debug.LogError($"glbllm.maps.zmap is null");
-                return ((float)lng, (float)lat);
-            }
-            var x = (float) glbllm.maps.xmap.Map(lng,lat);
-            var z = (float) glbllm.maps.zmap.Map(lng,lat);
-            return (x, z);
-        }
+        //public void InitializeGlbLlMap()
+        //{
+        //    glbllm = new LatLongMap($"SceneMan.InitializeGlbLlMap(  ) with curscene:{curscene}");
+        //    glbllm.InitMapFromSceneSelString(curscene.ToString(), mpman.bespokespec?.llbox); // doesn't handle non-llmap scenes 
+        //}
+        //public (float x,float z) lltoxz(double lat,double lng)
+        //{
+        //    var glbm = glbllm;
+        //    if (glbm == null)
+        //    {
+        //        Debug.LogError($"glbllm is null");
+        //        return ((float)lng, (float)lat);
+        //    }
+        //    if (glbm.maps==null)
+        //    {
+        //        Debug.LogError($"glbllm.mapps is null");
+        //        return ((float)lng, (float)lat);
+        //    }
+        //    if (glbm.maps.xmap == null)
+        //    {
+        //        Debug.LogError($"glbllm.maps.xmap is null");
+        //        return ((float)lng, (float)lat);
+        //    }
+        //    if (glbm.maps.zmap == null)
+        //    {
+        //        Debug.LogError($"glbllm.maps.zmap is null");
+        //        return ((float)lng, (float)lat);
+        //    }
+        //    var x = (float)glbm.maps.xmap.Map(lng,lat);
+        //    var z = (float)glbm.maps.zmap.Map(lng,lat);
+        //    return (x, z);
+        //}
 
-        public void SetScene(SceneSelE newscene)
+        public void ModelBuild()
         {
             RealizeFloorPlanStatus();
         }
-        public enum InitState { ceaseActivities,deleteModels, initValuesLowLevel, initValues, initModels,initModelsPost,refreshGos,finished }
+        public enum InitState { ceaseActivities,deleteModels, baseInit, modelInit, modelBuild,modelBuildPost,refreshGos,finished }
         public InitState curInitState;
         public void SetInitState(InitState initState)
         {
@@ -357,69 +357,68 @@ namespace CampusSimulator
                     ceasesw.Stop();
                     initsw.Start();
 
-                    SetInitState(InitState.initValuesLowLevel);
+                    SetInitState(InitState.baseInit);
 
 
                     // Now do value initialization 
                     // Low level
 
-                    this.InitializeScene(newscene);// start with setting the scene
-                    dfman.InitializeScene(newscene);
-                    mpman.InitializeScene(newscene); // lnglat constants and bspokespec set here
-                    this.InitializeGlbLlMap();// this needs to happen after mpmap initialize scene obviously
-                    lcman.InitializeScene(newscene);
+                    this.BaseInitialize(newscene);// start with setting the scene - curscene set here
+                    dfman.BaseInitialize(newscene);
+                    mpman.BaseInitialize(newscene); // lnglat constants and bspokespec set here
+                    coman.BaseInitialize(newscene); // must happen after mpman.InitializeScene - should pull longlat code out of there and make coman the first component sman call (i.e. before dfman)
+                    lcman.BaseInitialize(newscene);
 
 
-                    SetInitState(InitState.initValues);
+                    SetInitState(InitState.modelInit);
 
-                    vcman.InitializeScene(newscene);
-                    bdman.InitializeScene(newscene);
-                    stman.InitializeScene(newscene);
-                    trman.InitializeScene(newscene);
-                    gaman.InitializeScene(newscene);
-                    znman.InitializeScene(newscene);
-                    psman.InitializeScene(newscene);
-                    veman.InitializeScene(newscene);
-                    jnman.InitializeScene(newscene);
-                    frman.InitializeScene(newscene);
-                    uiman.InitializeScene(newscene);
+                    vcman.ModelInitialize(newscene);
+                    bdman.ModelInitialize(newscene);
+                    stman.ModelInitiailze(newscene);
+                    trman.ModeelInitialize(newscene);
+                    gaman.ModelInitialize(newscene);
+                    znman.ModelInitialize(newscene);
+                    psman.ModelInitialize(newscene);
+                    veman.ModelInitiailze(newscene);
+                    jnman.ModelInitialize(newscene);
+                    frman.ModelInitialize(newscene);
+                    uiman.ModelInitialize(newscene);
 
                     initsw.Stop();
                     setsw.Start();
 
-                    SetInitState(InitState.initModels);
+                    SetInitState(InitState.modelBuild);
 
-                    dfman.SetScene(newscene); // should be early to setup data
-                    mpman.SetScene(newscene);// Note this has an await buried in it and afterwards a call to smam.PostMapLoadSetScene below 
-                    gaman.SetScene(newscene);
-                    bdman.SetScene(newscene);// building details, but no nodes and links
-
-
-                    lcman.SetScene(newscene); // create or read in many nodes and links
-
-                    trman.SetScene(newscene);
-                    stman.SetScene(newscene);
+                    mpman.ModelBuild();// Note this has an await buried in it and afterwards a call to smam.PostMapLoadSetScene below 
+                    gaman.ModelBuild();
+                    bdman.ModelBuild();// building details, but no nodes and links
 
 
-                    vcman.SetScene(newscene);
-                    psman.SetScene(newscene); // needs to be before we populate the buildings
-                    veman.SetScene(newscene); // needs to be before we populate the garages
+                    lcman.ModelBuild(); // create or read in many nodes and links
+
+                    trman.ModelBuild();
+                    stman.ModelBuild();
+
+
+                    vcman.ModelBuild();
+                    psman.ModelBuild(); // needs to be before we populate the buildings
+                    veman.ModelBuild(); // needs to be before we populate the garages
 
                     //bdman.SetScenePostLinkCloud(newscene);// building details that need nodes and links
                     //gaman.SetScenePostLinkCloud(newscene);// garage details that need nodes and links
 
-                    znman.SetScene(newscene);
-                    jnman.SetScene(newscene);
-                    frman.SetScene(newscene);
-                    uiman.SetScene(newscene);
+                    znman.ModelBuild();
+                    jnman.ModelBuild();
+                    frman.ModelBuild();
+                    uiman.ModelBuild();
 
-                    this.SetScene(newscene);
+                    this.ModelBuild();
 
-                    SetInitState(InitState.initModelsPost);
+                    SetInitState(InitState.modelBuildPost);
 
-                    bdman.SetScenePostLinkCloud(newscene);// building details that need nodes and links
-                    gaman.SetScenePostLinkCloud(newscene);// garage details that need nodes and links
-                    lcman.SetSceneFinal(newscene);  // realize latelinks and heights
+                    bdman.ModelBuildPostLinkCloud();// building details that need nodes and links
+                    gaman.ModelBuildPostLinkCloud();// garage details that need nodes and links
+                    lcman.ModelBuildFinal();  // realize latelinks and heights
 
                     setsw.Stop();
                     finsw.Start();
@@ -449,9 +448,9 @@ namespace CampusSimulator
             requestScene = SceneSelE.None;
         }
 
-        public void PostMapLoadSetScene()
+        public void PostMapAsyncLoadSetScene()
         {
-            vcman.PostTerrainLoadAdjustments();
+            vcman.PostMapLoadAdjustments();
         }
 
         public void SaveSceneState()
