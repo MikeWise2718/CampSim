@@ -22,14 +22,13 @@ namespace CampusSimulator
 
         // Stats for Inspector 
         public int nBuildings;
+        public int nSkippedBuildingsWithoutOsmPoints;
         public int nRooms;
         public int nPeople;
         public int nPeopleInRooms;
         public int nVehicles;
 
         public bool showPersRects;
-
-        public GameObject osmroot;
 
         public List<OsmBldSpec> bldspecs;
 
@@ -156,6 +155,11 @@ namespace CampusSimulator
 
         public void ModelBuild()
         {
+            nBuildings = 0;
+            nSkippedBuildingsWithoutOsmPoints = 0;
+            nRooms = 0;
+            nPeople = 0;
+            nVehicles = 0;
             Debug.Log($"BuildingMan.SetScene {sman.curscene}");
             DelBuildings();
 
@@ -163,8 +167,6 @@ namespace CampusSimulator
             //Debug.Log($"doosmblds:{doosmblds} osmloadspec{osmloadspec}");
             if (doosmblds)
             {
-                osmroot = new GameObject("osmblds");
-                osmroot.transform.parent = this.transform;
                 var pgvd = new PolyGenVekMapDel(sman.mpman.GetHeightVector3);
                 bpg = new BldPolyGen();
                 var llm = sman.mpman.GetLatLongMap();
@@ -352,6 +354,11 @@ namespace CampusSimulator
         }
         public void MakeOsmBuilding(OsmBldSpec bldspec)
         {
+            if (bldspec.GetOutline().Count<3)
+            {
+                nSkippedBuildingsWithoutOsmPoints += 1;
+                return;
+            }
             var mbname = bldspec.osmname;
             var bgo = new GameObject(mbname);
             bgo.transform.position = Vector3.zero;
@@ -395,11 +402,6 @@ namespace CampusSimulator
                 bldspecs.ForEach(bs => Destroy(bs.bgo));
             }
             bldspecs = new List<OsmBldSpec>();
-            if (osmroot!=null)
-            {
-                Destroy(osmroot);
-                osmroot = null;
-            }
         }
         public void DelBuilding(string name)
         {

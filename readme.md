@@ -211,12 +211,32 @@ The first four are centrally managed - i.e. queued up and executed. A higher lev
 
 
 # Big ToDos
+
+- Better map calibration
+  - CoordMapMan calibration echo on and off
+  - Sphino use
+  - Refine coordinates
+  - 
+
+  
+
 - Eliminate coordinate fixed initialization - use LonLat everywhere
   - Building positions
   - Building rooms and corridors
   - Extra points (in LinkCloud)
 
 - Restructure Buildings
+
+- Azure function for OSM retrieve 
+  - Python code
+  - json output
+
+  
+- DataFrame extentions
+  - csvc extensions for dataframe extra data
+  - json outout and input
+  - python version based on pandas
+
 
 - Fix LinkCloud violation of model managee initialization in object refresh
   - need a fragline variant that doesn't create objects, but just returns a linked list of fragmented lines
@@ -231,4 +251,4 @@ The first four are centrally managed - i.e. queued up and executed. A higher lev
   - remote communication 
   - colors
   - filterable attributes
-  - indenting- - 
+  - indenting functionality
