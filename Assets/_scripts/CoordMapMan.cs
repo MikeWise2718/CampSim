@@ -17,6 +17,8 @@ namespace CampusSimulator
 
         public LatLongMap glbllm;
 
+        public bool showCoords;
+
         public void InitPhase0()
         {
         }
@@ -53,6 +55,33 @@ namespace CampusSimulator
             return (x, z);
         }
 
+        public (double lat, double lng) xztoll(float x, float z)
+        {
+            if (glbllm == null)
+            {
+                Debug.LogError($"CoordMapMan.glbllm is null");
+                return (x,z);
+            }
+            if (glbllm.maps == null)
+            {
+                Debug.LogError($"CoordMapMan.glbllm.mapps is null");
+                return (x, z);
+            }
+            if (glbllm.maps.xmap == null)
+            {
+                Debug.LogError($"CoordMapMan.glbllm.maps.xmap is null");
+                return (x, z);
+            }
+            if (glbllm.maps.zmap == null)
+            {
+                Debug.LogError($"CoordMapMan.glbllm.maps.zmap is null");
+                return (x, z);
+            }
+            var lat = (float)glbllm.maps.latmap.Map(x,z);
+            var lng = (float)glbllm.maps.lngmap.Map(x,z);
+            return (lat,lng);
+        }
+
         public void DeleteStuff()
         {
         }
@@ -60,6 +89,10 @@ namespace CampusSimulator
 
         public void InitializeValues()
         {
+            showCoords = false;
+            oldShowCoords = false;
+            sphereScale = 1;
+            oldSphereScale = 1;
         }
 
         public void BaseInitialize(SceneSelE newregion)
@@ -70,15 +103,44 @@ namespace CampusSimulator
             InitializeGlbLlMap();
         }
 
-        // Start is called before the first frame update
-        void Start()
-        {
 
+        GameObject coordMakersGo = null;
+
+        public void Destruct()
+        {
+            if (coordMakersGo!=null)
+            {
+                Destroy(coordMakersGo);
+                coordMakersGo = null;
+            }
         }
+        public float sphereScale = 1;
+        public void Construct()
+        {
+            //            var ska = glbllm.llbox.diagonalInMeters / 250;
+            var ska = sphereScale;
+            coordMakersGo = glbllm.mapcoord.MakeNativeCoordMarkers(ska: ska, clr: "yellow", wps: true);
+            coordMakersGo.transform.parent = this.transform;
+        }
+
+        float oldSphereScale = 1;
+        bool oldShowCoords = false;
 
         // Update is called once per frame
         void Update()
         {
+            if (oldShowCoords!=showCoords || oldSphereScale!=sphereScale)
+            {
+                if (showCoords)
+                {
+                    Construct();
+                }
+                else
+                {
+                    Destruct();
+                }
+                oldShowCoords = showCoords;
+            }
 
         }
     }

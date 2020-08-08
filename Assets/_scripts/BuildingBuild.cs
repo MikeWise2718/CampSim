@@ -306,6 +306,29 @@ namespace CampusSimulator
             }
         }
 
+        public void EchoOutline(GameObject parent,OsmBldSpec bs)
+        {
+            var ska = 0.5f;
+            var oline = bs.GetOutline();
+            var clr = "green";
+            for (int i = 0; i < oline.Count; i++)
+            {
+                var sph = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                sph.name = "Marker " + i;
+                sph.transform.localScale = new Vector3(ska, ska, ska);
+                var z = oline[i].z;
+                var x = oline[i].x;
+                var (lat, lng) = bm.sman.coman.xztoll(x, z);
+                sph.transform.position = new Vector3(x, 0, z);
+                sph.transform.SetParent(parent.transform, worldPositionStays: true);
+                var spi = sph.AddComponent<Aiskwk.Map.QsphInfo>();
+                spi.latLng = new Aiskwk.Map.LatLng(lat, lng);
+                spi.mapPoint = null;
+                Aiskwk.Map.qut.SetColorOfGo(sph, clr);
+            }
+        }
+
+
         public void AddOsmBldDetails(BuildingMan bm,OsmBldSpec bs)
         {
             this.bm = bm;
@@ -316,37 +339,7 @@ namespace CampusSimulator
 
             isOsmBld = true;
             bldspec = bs;
-            if (bs.GetOutline().Count<3)
-            {
-                bldspec.isVisible = false;
-            }
-            //switch (name)
-            //{
-            //    case "Bld19":
-            //        {
-            //            maingaragename = "Garage19_1";
-            //            roomspecs = B19roomspec;
-            //            destnodes = SplitRoomNameOutOfRoomspecs(roomspecs);
-            //            shortname = "b19";
-            //            journeyChoiceWeight = 20;
-            //            var b19comp = this.transform.gameObject.AddComponent<B19Willow>();
-            //            b19comp.InitializeValues(bm.sman);
-            //            b19comp.MakeItSo();
-            //            break;
-            //        }
-            //    case "EbOphome":
-            //        {
-            //            shortname = "Ophm";
-            //            break;
-            //        }
-            //    case "EbRewe":
-            //        {
-            //            maingaragename = "Eb12_Rewe";
-            //            destnodes = new List<string> { "eb12-rewe-lob", "eb12-rewe-rm01", "eb12-rewe-rm02" };
-            //            shortname = "Rewe";
-            //            break;
-            //        }
-            //}
+            EchoOutline(this.gameObject, bs);
         }
 
 

@@ -499,6 +499,7 @@ namespace Aiskwk.Map
         public double lathat;
         public double xhat;
         public double zhat;
+        public string cmt;
         public double Val(string vname)
         {
             switch (vname)
@@ -550,9 +551,9 @@ namespace Aiskwk.Map
         //{
         //    mapdata.Add(new MapCoordPoint { lng = lng, lat = lat, x = x, z = z });
         //}
-        public void AddRowLatLng(double dlat, double dlng, double dx, double dz)
+        public void AddRowLatLng(double dlat, double dlng, double dx, double dz,string dcmt="")
         {
-            mapdata.Add(new MapCoordPoint { lng = dlng, lat = dlat, x = dx, z = dz });
+            mapdata.Add(new MapCoordPoint { lng = dlng, lat = dlat, x = dx, z = dz, cmt = dcmt });
         }
         public int Count()
         {
@@ -674,7 +675,11 @@ namespace Aiskwk.Map
             foreach (var md in mapdata)
             {
                 var sph = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                sph.name = coordsys + "Marker " + i;
+                sph.name = $"{coordsys}-Marker{i}";
+                if (md.cmt!="")
+                {
+                    sph.name += $"-{md.cmt}";
+                }
                 sph.transform.localScale = new Vector3(ska, ska, ska);
                 double x = 0;
                 double z = 0;
@@ -866,12 +871,20 @@ namespace Aiskwk.Map
 
                     ////mapcoord.AddRowLatLng(47.65945816, -122.14133453, -1960.446 + 8.31, -1217.206 + 7.53);
                     //mapcoord.AddRowLatLng(47.65945816, -122.14133453, 0,0);
+                    //mapcoord.AddRowLatLng(47.640490, -122.133797, -149.1, 0.2, "b43 pt1");
+                    //mapcoord.AddRowLatLng(47.639079, -122.134960, 28.0, -31.4, "b43 pt2");
+                    //mapcoord.AddRowLatLng(47.638526, -122.134519, 75.4, 19.9, "b43 pt3");
+                    //mapcoord.AddRowLatLng(47.639368, -122.133926, -29.4, 30.8, "b43 pt4");
+                    //mapcoord.AddRowLatLng(47.641066, -122.136018, -155.44, -177.96, "b99 pt5");
 
-                    mapcoord.AddRowLatLng(47.640490, -122.133797, -149.1, 0.2);
-                    mapcoord.AddRowLatLng(47.639079, -122.134960, 28.0, -31.4);
-                    mapcoord.AddRowLatLng(47.638526, -122.134519, 75.4, 19.9);
-                    mapcoord.AddRowLatLng(47.639368, -122.133926, -29.4, 30.8);
-                    mapcoord.AddRowLatLng(47.641066, -122.136018, -155.44, -177.96);
+                    mapcoord.AddRowLatLng(47.6404838562012, -122.133811950684, -149.1, 0.2,"b43 ne");
+                    mapcoord.AddRowLatLng(47.6390609741211, -122.134971618652, 28.0, -31.4, "b43 wsw");
+                    mapcoord.AddRowLatLng(47.6385154724121, -122.13452911377, 75.4, 19.9, "b43 se");
+                    mapcoord.AddRowLatLng(47.6393661499023, -122.133941650391, -29.4, 30.8, "b43 e");
+                    mapcoord.AddRowLatLng(47.641056060791, -122.136032104492, -155.44, -177.96, "StudioX pt1");
+                    mapcoord.AddRowLatLng(47.6601486206055, -122.139656066895, -2083.53, -1124.21, "redwb nen");
+                    //mapcoord.AddRowLatLng(47.6372909545898, -122.135841369629, 230.8, -20.1, "b22 ne");
+                    mapcoord.AddRowLatLng(47.6525115966797, -122.142036437988, -1220.32, -1020.44, "rwb w");
                     ok = true;
                     break;
                 case "Eb12":
