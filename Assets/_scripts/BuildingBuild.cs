@@ -247,7 +247,7 @@ namespace CampusSimulator
                         selectionweight = 10;
                         destnodes = new List<string> { "bRWB-f01-lobby", "rwb-f03-rm3999" };
                         SceneMan sman = FindObjectOfType<SceneMan>();
-                        //var destnodelst = sman.linkcloudctrl.FindNodes("rwb-f03-rm");
+                        //var destnodelst = sman.lcman.FindNodes("rwb-f03-rm");
                         //Debug.Log("Found " + destnodelst.Count + "destinations for "+name);
                         shortname = "bRWB";
                         defPeoplePerRoom = 2;
@@ -362,7 +362,7 @@ namespace CampusSimulator
             }
         }
 
-        public void EchoOutline(GameObject parent,OsmBldSpec bs, PolyGenVekMapDel pgvd = null)
+        public void EchOsmOutline(GameObject parent,OsmBldSpec bs, PolyGenVekMapDel pgvd = null)
         {
             var pgo = new GameObject("osmmarkers");
             pgo.transform.SetParent(parent.transform, worldPositionStays: false);
@@ -406,7 +406,7 @@ namespace CampusSimulator
 
 
 
-        void AddQuad(GameObject pgo, string name, Vector3 bscale, Vector3 brot, Vector3 bpos, string cname = "")
+        void AddQuadGos(GameObject pgo, string name, Vector3 bscale, Vector3 brot, Vector3 bpos, string cname = "")
         {
             var bgo = GameObject.CreatePrimitive(PrimitiveType.Quad);
             bgo.name = name;
@@ -421,7 +421,7 @@ namespace CampusSimulator
                 rrenderer.material.shader = Shader.Find("Transparent/Diffuse");
             }
         }
-        void AddQuadHouse(string name, Vector3 bscale, double brot, Vector3 bpos, string sidecolor = "white", string rufcolor = "dirtyred")
+        void AddQuadHouseGos(string name, Vector3 bscale, double brot, Vector3 bpos, string sidecolor = "white", string rufcolor = "dirtyred")
         {
             //       Debug.Log("Adding house of quads " + name);
             var yelev = bm.sman.mpman.GetHeight(bpos.x, bpos.z);
@@ -438,17 +438,17 @@ namespace CampusSimulator
             var yoff =  Vector3.up / 2;
             var zoff = Vector3.forward / 2;
             var pgo = new GameObject(name);
-            AddQuad(pgo, "floor", ones, new Vector3(-90, 0, 0), -yoff, sidecolor);
-            AddQuad(pgo, "ceil", ones, new Vector3(+90, 0, 0), yoff, sidecolor);
-            AddQuad(pgo, "front", ones, new Vector3(0, 180, 0), zoff, sidecolor);
-            AddQuad(pgo, "back", ones, new Vector3(0, 0, 0), -zoff, sidecolor);
-            AddQuad(pgo, "left", ones, new Vector3(0, -90, 0), xoff, sidecolor);
-            AddQuad(pgo, "right", ones, new Vector3(0, 90, 0), -xoff, sidecolor);
+            AddQuadGos(pgo, "floor", ones, new Vector3(-90, 0, 0), -yoff, sidecolor);
+            AddQuadGos(pgo, "ceil", ones, new Vector3(+90, 0, 0), yoff, sidecolor);
+            AddQuadGos(pgo, "front", ones, new Vector3(0, 180, 0), zoff, sidecolor);
+            AddQuadGos(pgo, "back", ones, new Vector3(0, 0, 0), -zoff, sidecolor);
+            AddQuadGos(pgo, "left", ones, new Vector3(0, -90, 0), xoff, sidecolor);
+            AddQuadGos(pgo, "right", ones, new Vector3(0, 90, 0), -xoff, sidecolor);
             // now roof structure
-            AddQuad(pgo, "rufback", new Vector3(1, sq22, 1), new Vector3(+45, 0, 0), new Vector3(0, 0.75f, -0.25f), rufcolor);
-            AddQuad(pgo, "ruffront", new Vector3(1, sq22, 1), new Vector3(135, 0, 0), new Vector3(0, 0.75f, 0.25f), rufcolor);
-            AddQuad(pgo, "sideleft", sq2v, new Vector3(0, -90, 45), xoff + yoff, sidecolor);
-            AddQuad(pgo, "sideright", sq2v, new Vector3(0, 90, 45), -xoff + yoff, sidecolor);
+            AddQuadGos(pgo, "rufback", new Vector3(1, sq22, 1), new Vector3(+45, 0, 0), new Vector3(0, 0.75f, -0.25f), rufcolor);
+            AddQuadGos(pgo, "ruffront", new Vector3(1, sq22, 1), new Vector3(135, 0, 0), new Vector3(0, 0.75f, 0.25f), rufcolor);
+            AddQuadGos(pgo, "sideleft", sq2v, new Vector3(0, -90, 45), xoff + yoff, sidecolor);
+            AddQuadGos(pgo, "sideright", sq2v, new Vector3(0, 90, 45), -xoff + yoff, sidecolor);
 
             pgo.transform.localScale = bscale;
             pgo.transform.Rotate(0, (float)brot, 0);
@@ -458,7 +458,7 @@ namespace CampusSimulator
 
         }
         // AddFlatQuadHouse("blk2", new Vector3(26.9f, 5, 16.7f), -3.4, new Vector3(56.53f, 4f, -35.05f));
-        void AddFlatQuadHouse(string name, Vector3 bscale, double brot, Vector3 bpos, string sidecolor = "white", string rufcolor = "dimgray")
+        void AddFlatQuadHouseGos(string name, Vector3 bscale, double brot, Vector3 bpos, string sidecolor = "white", string rufcolor = "dimgray")
         {
             var yelev = bm.sman.mpman.GetHeight(bpos.x, bpos.z);
             bpos = bpos + yelev * Vector3.up;
@@ -474,12 +474,12 @@ namespace CampusSimulator
             var yoff = Vector3.up / 2;
             var zoff = Vector3.forward / 2;
             var pgo = new GameObject(name);
-            AddQuad(pgo, "floor", ones, new Vector3(-90, 0, 0), -yoff, sidecolor);
-            AddQuad(pgo, "roof", ones, new Vector3(+90, 0, 0), yoff, rufcolor);
-            AddQuad(pgo, "front", ones, new Vector3(0, 180, 0), zoff, sidecolor);
-            AddQuad(pgo, "back", ones, new Vector3(0, 0, 0), -zoff, sidecolor);
-            AddQuad(pgo, "left", ones, new Vector3(0, -90, 0), xoff, sidecolor);
-            AddQuad(pgo, "right", ones, new Vector3(0, 90, 0), -xoff, sidecolor);
+            AddQuadGos(pgo, "floor", ones, new Vector3(-90, 0, 0), -yoff, sidecolor);
+            AddQuadGos(pgo, "roof", ones, new Vector3(+90, 0, 0), yoff, rufcolor);
+            AddQuadGos(pgo, "front", ones, new Vector3(0, 180, 0), zoff, sidecolor);
+            AddQuadGos(pgo, "back", ones, new Vector3(0, 0, 0), -zoff, sidecolor);
+            AddQuadGos(pgo, "left", ones, new Vector3(0, -90, 0), xoff, sidecolor);
+            AddQuadGos(pgo, "right", ones, new Vector3(0, 90, 0), -xoff, sidecolor);
 
 
             pgo.transform.localScale = bscale;
@@ -491,7 +491,7 @@ namespace CampusSimulator
 
         }
 
-        void AddMfCube(string name, Vector3 bscale, double brot, Vector3 bpos, string cname = "")
+        void AddMfCubeGos(string name, Vector3 bscale, double brot, Vector3 bpos, string cname = "")
         {
             var yelev = bm.sman.mpman.GetHeight(bpos.x, bpos.z);
             bpos = bpos + yelev * Vector3.up;
@@ -503,12 +503,12 @@ namespace CampusSimulator
             var yoff = Vector3.up / 2;
             var zoff = Vector3.forward / 2;
             var pgo = new GameObject(name);
-            AddQuad(pgo, "floor", ones, new Vector3(-90, 0, 0), -yoff, "red");
-            AddQuad(pgo, "ceil", ones, new Vector3(+90, 0, 0), yoff, "blue");
-            AddQuad(pgo, "front", ones, new Vector3(0, 180, 0), zoff, "green");
-            AddQuad(pgo, "back", ones, new Vector3(0, 0, 0), -zoff, "yellow");
-            AddQuad(pgo, "left", ones, new Vector3(0, -90, 0), xoff, "cyan");
-            AddQuad(pgo, "right", ones, new Vector3(0, +90, 0), -xoff, "magenta");
+            AddQuadGos(pgo, "floor", ones, new Vector3(-90, 0, 0), -yoff, "red");
+            AddQuadGos(pgo, "ceil", ones, new Vector3(+90, 0, 0), yoff, "blue");
+            AddQuadGos(pgo, "front", ones, new Vector3(0, 180, 0), zoff, "green");
+            AddQuadGos(pgo, "back", ones, new Vector3(0, 0, 0), -zoff, "yellow");
+            AddQuadGos(pgo, "left", ones, new Vector3(0, -90, 0), xoff, "cyan");
+            AddQuadGos(pgo, "right", ones, new Vector3(0, +90, 0), -xoff, "magenta");
             pgo.transform.localScale = bscale;
             pgo.transform.Rotate(0, (float)brot, 0);
             pgo.transform.position = bpos;
@@ -517,7 +517,7 @@ namespace CampusSimulator
         }
 
 
-        void AddBlock(string name, Vector3 bscale, double brot, Vector3 bpos, string cname = "")
+        void AddBlockGos(string name, Vector3 bscale, double brot, Vector3 bpos, string cname = "")
         {
             var yelev = bm.sman.mpman.GetHeight(bpos.x, bpos.z);
             bpos = bpos + yelev * Vector3.up;
@@ -682,7 +682,7 @@ namespace CampusSimulator
                 {
                     var bgo = bm.bpg.GenBldFromOsmBldSpec(this.gameObject, bldspec, pgvd: pgvd);
                     bldgos.Add(bgo);
-                    EchoOutline(this.gameObject, bldspec,pgvd:pgvd);
+                    EchOsmOutline(this.gameObject, bldspec,pgvd:pgvd);
                 }
                 return;
             }
@@ -695,8 +695,8 @@ namespace CampusSimulator
                     {
                         if (dofixed)
                         {
-                            AddBlock("blk1", new Vector3(108, 20, 80), 23.3, new Vector3(-60.9f, 10, 18.9f));
-                            AddBlock("blk2", new Vector3(40, 10, 22), -15.5, new Vector3(12.6f, 5, 21.8f));
+                            AddBlockGos("blk1", new Vector3(108, 20, 80), 23.3, new Vector3(-60.9f, 10, 18.9f));
+                            AddBlockGos("blk2", new Vector3(40, 10, 22), -15.5, new Vector3(12.6f, 5, 21.8f));
                         }
                         break;
                     }
@@ -705,7 +705,7 @@ namespace CampusSimulator
                         //AddHouse("testhouse", Vector3.one, 0, new Vector3(-6.6f, 1, -97.6f));
                         if (dofixed)
                         {
-                            AddQuadHouse("testhouse", Vector3.one, 0, Vector3.zero);
+                            AddQuadHouseGos("testhouse", Vector3.one, 0, Vector3.zero);
                         }
                         break;
                     }
@@ -718,8 +718,8 @@ namespace CampusSimulator
                         AddEb12Alarms();
                         if (dofixed)
                         {
-                            AddQuadHouse("blk1", new Vector3(23, 8, 14), -1.343, new Vector3(15.26f, 2f, 34.92f), rufcolor: "darkslategray");
-                            AddQuadHouse("blk2", new Vector3(23, 8, 14), -1.343, new Vector3(38.16f, 2f, 38.23f), rufcolor: "darkslategray");
+                            AddQuadHouseGos("blk1", new Vector3(23, 8, 14), -1.343, new Vector3(15.26f, 2f, 34.92f), rufcolor: "darkslategray");
+                            AddQuadHouseGos("blk2", new Vector3(23, 8, 14), -1.343, new Vector3(38.16f, 2f, 38.23f), rufcolor: "darkslategray");
                         }
 
                         if (tmode == BuildingMan.TreeModeE.full)
@@ -750,15 +750,15 @@ namespace CampusSimulator
                     {
                         if (dofixed)
                         {
-                            AddBlock("carport1", new Vector3(23.5f, 2, 0.1f), 0, new Vector3(21.9f, 1, -11.1f), "darkbrown");
-                            AddBlock("carport2", new Vector3(0.1f, 2, 6.7f), 0, new Vector3(10.2f, 1, -7.7f), "darkbrown");
-                            AddBlock("carport3", new Vector3(0.1f, 2, 6.7f), 0, new Vector3(33.6f, 1, -7.7f), "darkbrown");
+                            AddBlockGos("carport1", new Vector3(23.5f, 2, 0.1f), 0, new Vector3(21.9f, 1, -11.1f), "darkbrown");
+                            AddBlockGos("carport2", new Vector3(0.1f, 2, 6.7f), 0, new Vector3(10.2f, 1, -7.7f), "darkbrown");
+                            AddBlockGos("carport3", new Vector3(0.1f, 2, 6.7f), 0, new Vector3(33.6f, 1, -7.7f), "darkbrown");
                             AddBlockR("carport4", new Vector3(23.8f, 0.2f, 6.7f), new Vector3(-4.4f, 0, 0), new Vector3(21.6f, 2.5f, -7.7f), "silver");
                             float x = 10.2f;
                             for (int i = 1; i < 8; i++)
                             {
                                 x += 2.925f;
-                                AddBlock("carportpole" + i, new Vector3(0.1f, 2.7f, 0.1f), 0, new Vector3(x, 1.35f, -4.65f), "darkbrown");
+                                AddBlockGos("carportpole" + i, new Vector3(0.1f, 2.7f, 0.1f), 0, new Vector3(x, 1.35f, -4.65f), "darkbrown");
                             }
                         }
                         break;
@@ -767,7 +767,7 @@ namespace CampusSimulator
                     {
                         if (dofixed)
                         {
-                            AddQuadHouse("blk1", new Vector3(25.75f, 6.5f, 14.67f), -3.4 + 90, new Vector3(-17.8f, 3.25f, 34.7f), rufcolor: "dimgray");
+                            AddQuadHouseGos("blk1", new Vector3(25.75f, 6.5f, 14.67f), -3.4 + 90, new Vector3(-17.8f, 3.25f, 34.7f), rufcolor: "dimgray");
                         }
                         break;
                     }
@@ -775,7 +775,7 @@ namespace CampusSimulator
                     {
                         if (dofixed)
                         {
-                            AddFlatQuadHouse("blk1", new Vector3(14.91f, 6.5f, 6.48f), -3.4, new Vector3(-24.2f, 3.25f, 9.5f), rufcolor: "dimgray");
+                            AddFlatQuadHouseGos("blk1", new Vector3(14.91f, 6.5f, 6.48f), -3.4, new Vector3(-24.2f, 3.25f, 9.5f), rufcolor: "dimgray");
                         }
                         break;
                     }
@@ -784,7 +784,7 @@ namespace CampusSimulator
 
                         if (dofixed)
                         {
-                            AddQuadHouse("blk1", new Vector3(15.7f, 6.5f, 12.17f), -3.4, new Vector3(-11.2f, 3.25f, -6.2f), rufcolor: "dimgray");
+                            AddQuadHouseGos("blk1", new Vector3(15.7f, 6.5f, 12.17f), -3.4, new Vector3(-11.2f, 3.25f, -6.2f), rufcolor: "dimgray");
                         }
                         break;
                     }
@@ -792,12 +792,7 @@ namespace CampusSimulator
                     {
                         if (dofixed)
                         {
-                            AddQuadHouse("haus", new Vector3(28.6f, 13f, 13.91f), -3.4, new Vector3(18.9f, 3.25f, -30.1f));
-                            //AddBlock("blk1", new Vector3(28.6f, 6.5f, 13.91f), -3.4, new Vector3(18.9f, 3.25f, -30.1f));
-                            //AddBlockR("ruf1", new Vector3(28.6f, 0.1f, 10f), new Vector3(+45, -3.4f, 0), new Vector3(18.7f, 10f, -26.6f), "red");
-                            //AddBlockR("ruf2", new Vector3(28.6f, 0.1f, 10f), new Vector3(-45, -3.4f, 0), new Vector3(19.1f, 10f, -33.6f), "red");
-                            //AddBlockR("sid1", new Vector3(10f, 0.1f, 10f), new Vector3(45, -3.4f, 90), new Vector3(33.1f, 6.3f, -29.1f), "white");
-                            //AddBlockR("sid2", new Vector3(10f, 0.1f, 10f), new Vector3(45, -3.4f, 90), new Vector3(4.8f, 6.4f, -31.0f), "white");
+                            AddQuadHouseGos("haus", new Vector3(28.6f, 13f, 13.91f), -3.4, new Vector3(18.9f, 3.25f, -30.1f));
                         }
                         break;
                     }
@@ -805,12 +800,7 @@ namespace CampusSimulator
                     {
                         if (dofixed)
                         {
-                            AddQuadHouse("haus", new Vector3(26.0f, 13f, 13.91f), -3.4, new Vector3(-14.6f, 3.25f, -31.7f));
-                            //AddBlock("blk1", new Vector3(26.0f, 6.5f, 13.91f),                 -3.4,     new Vector3(-14.6f, 3.25f, -31.7f));
-                            //AddBlockR("ruf1", new Vector3(26.0f, 0.1f, 10f), new Vector3(+45, -3.4f, 0), new Vector3(-14.8f, 10f, -28.2f), "red");
-                            //AddBlockR("ruf2", new Vector3(26.0f, 0.1f, 10f), new Vector3(-45, -3.4f, 0), new Vector3(-14.4f, 10f, -35.2f), "red");
-                            //AddBlockR("sid1", new Vector3(10f, 0.1f, 10f), new Vector3(45, -3.4f, 90),   new Vector3(-1.7f,  6.3f,-31.0f), "white");
-                            //AddBlockR("sid2", new Vector3(10f, 0.1f, 10f), new Vector3(45, -3.4f, 90), new Vector3(-27.5f, 6.4f, -32.5f), "white");
+                            AddQuadHouseGos("haus", new Vector3(26.0f, 13f, 13.91f), -3.4, new Vector3(-14.6f, 3.25f, -31.7f));
                         }
                         break;
                     }
@@ -818,10 +808,10 @@ namespace CampusSimulator
                     {
                         if (dofixed)
                         {
-                            AddFlatQuadHouse("blk1", new Vector3(26.9f, 5, 16.7f), -3.4, new Vector3(54.6f, 4f, -2.7f));
-                            AddFlatQuadHouse("blk2", new Vector3(26.9f, 5, 16.7f), -3.4, new Vector3(56.53f, 4f, -35.05f));
-                            AddFlatQuadHouse("blk3", new Vector3(10.75f, 5, 66.87f), -3.4, new Vector3(74.1f, 4f, -8.5f));
-                            AddFlatQuadHouse("blk4", new Vector3(15.88f, 5, 20.17f), -3.4, new Vector3(66.3f, 4f, 34.8f));
+                            AddFlatQuadHouseGos("blk1", new Vector3(26.9f, 5, 16.7f), -3.4, new Vector3(54.6f, 4f, -2.7f));
+                            AddFlatQuadHouseGos("blk2", new Vector3(26.9f, 5, 16.7f), -3.4, new Vector3(56.53f, 4f, -35.05f));
+                            AddFlatQuadHouseGos("blk3", new Vector3(10.75f, 5, 66.87f), -3.4, new Vector3(74.1f, 4f, -8.5f));
+                            AddFlatQuadHouseGos("blk4", new Vector3(15.88f, 5, 20.17f), -3.4, new Vector3(66.3f, 4f, 34.8f));
                         }
                         break;
                     }
@@ -829,14 +819,12 @@ namespace CampusSimulator
                     {
                         if (dofixed)
                         {
-                            AddQuadHouse("blk1", new Vector3(60, 5, 60), -28.82 + 90, new Vector3(300.5f, 2.5f, 156.1f), rufcolor: "darkgreen");
+                            AddQuadHouseGos("blk1", new Vector3(60, 5, 60), -28.82 + 90, new Vector3(300.5f, 2.5f, 156.1f), rufcolor: "darkgreen");
                         }
                         break;
                     }
                 case "BldRWB":
                     {
-                        //AddResource("pine1", "TreesAndShrubs/PineTree", new Vector3(0.4f, 0.4f, 0.4f), 180, new Vector3(-1987.0f, 0, -1167.7f));
-                        //AddResource("pine2", "TreesAndShrubs/PineTree", new Vector3(0.4f, 0.4f, 0.4f), 180, new Vector3(-1959.9f, 0, -1242.6f));
                         if (bm.sman.curscene == SceneSelE.MsftB19focused || bm.sman.curscene == SceneSelE.MsftB121focused)
                         {
                             defPercentFull = 0.05f;

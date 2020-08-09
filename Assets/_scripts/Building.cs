@@ -95,8 +95,8 @@ namespace CampusSimulator
             }
             if (destnodelst.Count > 0)
             {
-                //Debug.Log("Found " + destnodelst.Count + " dests for " + name);
-                destnodes = destnodelst;
+                Debug.Log("Found " + destnodelst.Count + " dests for " + name);
+                destnodes = destnodelst;// in ReinitDests
             }
         }
         public void EmptyRooms()

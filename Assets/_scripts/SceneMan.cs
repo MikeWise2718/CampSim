@@ -416,7 +416,7 @@ namespace CampusSimulator
 
                     SetInitState(InitState.modelBuildPost);
 
-                    bdman.ModelBuildPostLinkCloud();// building details that need nodes and links
+                    bdman.ModelBuildPostLinkCloud();// building details that need nodes and links - i.e destrooms are derived from nodes
                     gaman.ModelBuildPostLinkCloud();// garage details that need nodes and links
                     lcman.ModelBuildFinal();  // realize latelinks and heights
 
