@@ -17,15 +17,17 @@ public class B19Willow : MonoBehaviour
     public UxSetting<bool> osmbld = new UxSetting<bool>("B19_osmbld", false);
 
     public CampusSimulator.SceneMan sman=null;
+    public CampusSimulator.Building bld = null;
 
     public UxEnumSetting<B19_MaterialMode> b19_materialMode = new UxEnumSetting<B19_MaterialMode>("B19_MaterialMode", B19_MaterialMode.glass);
     //   public UxSetting<bool> visibilityTiedToDetectability = new UxSetting<bool>("FrameVisibilityTiedToDetectability", true);
     // public B19_MaterialMode materialMode = B19_MaterialMode.materialed;
 
 
-    public void InitializeValues(CampusSimulator.SceneMan sman)
+    public void InitializeValues(CampusSimulator.SceneMan sman,CampusSimulator.Building bld)
     {
         this.sman = sman;
+        this.bld = bld;
         b19_materialMode.GetInitial(B19_MaterialMode.glasswalls);
         loadmodel.GetInitial(true);
         _b19_level01 = level01.GetInitial(true);
@@ -190,9 +192,10 @@ public class B19Willow : MonoBehaviour
             if (osmbld.Get() != _b19_osmbld)
             {
                 var stat = osmbld.Get();
-                var bspec = sman.bdman.FindBldSpecByNameStart("Microsoft Building 19");
+                var bspec = sman.bdman.FindBldSpecByNameStart(bld.osmnamestart);
                 if (bspec != null)
                 {
+                    sman.bdman.RegisterBsBld(bspec, bld);
                     bspec.isVisible = stat;
                     if (bspec.bgo != null)
                     {

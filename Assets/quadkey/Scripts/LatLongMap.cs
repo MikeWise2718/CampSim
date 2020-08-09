@@ -803,23 +803,23 @@ namespace Aiskwk.Map
             var ok = false;
             switch (dataSetName)
             {
-                case "Bld43":
-                    AddRowLatLng(47.640490, -122.133797, -149.1, 0.2);
-                    AddRowLatLng(47.639079, -122.134960, 28.0, -31.4);
-                    AddRowLatLng(47.638526, -122.134519, 75.4, 19.9);
-                    AddRowLatLng(47.639368, -122.133926, -29.4, 30.8);
-                    AddRowLatLng(47.641066, -122.136018, -155.44, -177.96);
-                    ok = true;
-                    break;
-                case "BldRWB":
-                    double xadj = 10.5;
-                    double zadj = 3.0;
-                    AddRowLatLng(47.660078, -122.140175, 72.70 + xadj, 4.77 + zadj);// upper left
-                    AddRowLatLng(47.659377, -122.140189, -5.35 + xadj, 4.77 + zadj);// lower left
-                    AddRowLatLng(47.660150, -122.139328, 81.23 + xadj, -59.70 + zadj);// upper right
-                    AddRowLatLng(47.659457, -122.139339, 3.18 + xadj, -59.70 + zadj);// lower right
-                    ok = true;
-                    break;
+                //case "Bld-43-old":
+                //    AddRowLatLng(47.640490, -122.133797, -149.1, 0.2);
+                //    AddRowLatLng(47.639079, -122.134960, 28.0, -31.4);
+                //    AddRowLatLng(47.638526, -122.134519, 75.4, 19.9);
+                //    AddRowLatLng(47.639368, -122.133926, -29.4, 30.8);
+                //    AddRowLatLng(47.641066, -122.136018, -155.44, -177.96);
+                //    ok = true;
+                //    break;
+                //case "Bld-RWB-old":
+                //    double xadj = 10.5;
+                //    double zadj = 3.0;
+                //    AddRowLatLng(47.660078, -122.140175, 72.70 + xadj, 4.77 + zadj);// upper left
+                //    AddRowLatLng(47.659377, -122.140189, -5.35 + xadj, 4.77 + zadj);// lower left
+                //    AddRowLatLng(47.660150, -122.139328, 81.23 + xadj, -59.70 + zadj);// upper right
+                //    AddRowLatLng(47.659457, -122.139339, 3.18 + xadj, -59.70 + zadj);// lower right
+                //    ok = true;
+                //    break;
                 case "test":
                     AddRowLatLng(1, 1, 40, 25);
                     AddRowLatLng(2, 2, 45, 20);

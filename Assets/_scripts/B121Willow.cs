@@ -16,14 +16,14 @@ public class B121Willow : MonoBehaviour
     public UxSetting<bool> plumbing = new UxSetting<bool>("B121_plumbing", true);
     public UxSetting<bool> osmbld = new UxSetting<bool>("B121_osmbld", false);
 
-    public CampusSimulator.SceneMan sman=null;
+    public CampusSimulator.SceneMan sman;
 
     public UxEnumSetting<b121_MaterialMode> b121_materialMode = new UxEnumSetting<b121_MaterialMode>("B121_MaterialMode", b121_MaterialMode.glass);
     //   public UxSetting<bool> visibilityTiedToDetectability = new UxSetting<bool>("FrameVisibilityTiedToDetectability", true);
     // public B19_MaterialMode materialMode = B19_MaterialMode.materialed;
 
 
-
+    CampusSimulator.Building bld;
 
 
     bool _b121_WillowModelLoaded = false;
@@ -42,10 +42,11 @@ public class B121Willow : MonoBehaviour
     GameObject b121lgo = null;
     GameObject b121pgo = null;
 
-    public void InitializeValues(CampusSimulator.SceneMan sman)
+    public void InitializeValues(CampusSimulator.SceneMan sman,CampusSimulator.Building bld)
     {
         //Debug.Log("B121Willow.InitializeValues");
         this.sman = sman;
+        this.bld = bld;
         b121_materialMode.GetInitial(b121_MaterialMode.glasswalls);
         loadmodel.GetInitial(true);
         _b121_shell = shell.GetInitial(true);
@@ -203,9 +204,11 @@ public class B121Willow : MonoBehaviour
             if (osmbld.Get() != _b121_osmbld)
             {
                 var stat = osmbld.Get();
-                var bspec = sman.bdman.FindBldSpecByNameStart("Microsoft Building 121");
+                var bspec = sman.bdman.FindBldSpecByNameStart(bld.osmnamestart);
+                
                 if (bspec != null)
                 {
+                    sman.bdman.RegisterBsBld(bspec, bld);
                     bspec.isVisible = stat;
                     if (bspec.bgo != null)
                     {

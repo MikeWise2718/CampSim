@@ -19,13 +19,14 @@ namespace CampusSimulator
         public string shortname;
         public int selectionweight;
         public Dictionary<string,BldRoom> roomdict=new Dictionary<string, BldRoom>();
-        public LatLongMap llm;
+        //public LatLongMap llm;
         public GameObject roomlistgo;
         public float defAngAlign = 0f;
         public int defPeoplePerRoom = 2;
         public float defPercentFull = 1.0f;
         public float defRoomArea = 10;
         public float journeyChoiceWeight = 1;
+        public string osmnamestart = "";
 
         //System.Random ranman = new System.Random();
         public Person GetRandomFreeToTravelPerson(string ranset="")

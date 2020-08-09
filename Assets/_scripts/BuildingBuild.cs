@@ -53,15 +53,13 @@ namespace CampusSimulator
         }
         List<string> B121roomspec = new List<string>()
         {
+            // room name,pcap,alignang,length,width,frameit
             "b121-f01-lobby:6:-18.5:4:4:T",
         };
 
-        // defPeoplePerRoom = 8;
-        // defPercentFull = 0.80f;
-        // defRoomArea = 16;
-        // defAngAlign = 24.0f;
         List<string> B19roomspec = new List<string>()
         {
+            // room name,pcap,alignang,length,width,frameit - see AddOneRoomSpec for code
             "b19-f01-lobby:1:-18.5:4:4:T",
             "b19-f01-rm1001:8:-18.5:4:4:T",
             "b19-f01-rm1002:5:-18.5:4:4:T",
@@ -105,6 +103,7 @@ namespace CampusSimulator
 
         List<string> Eb12roomspec = new List<string>()
         {
+            // room name,pcap,alignang,length,width,frameit - see AddOneRoomSpec for code
             "eb12-08-lob:11:0.0:4:4:T",
             "eb12-10-lob:15:0.0:4:4:T",
             "eb12-12-lob:7:0.0:4:4:T",
@@ -117,19 +116,14 @@ namespace CampusSimulator
 
         List<string> MtTenFoundSpotSpec = new List<string>()
         {
+            // room name,pcap,alignang,length,width,frameit - see AddOneRoomSpec for code
             "found-spot:2:0.0:4:4:T",
         };
         List<string> MtTenLastseenSpotSpec = new List<string>()
         {
+            // room name,pcap,alignang,length,width,frameit - see AddOneRoomSpec for code
             "lastseen-spot:2:0.0:4:4:T",
         };
-        // See AddOneRoomSpec for decoding
-        //var pcap = StrToInt(rar[1], 1);//roomspecs
-        //var alignang = StrToFloat(rar[2], 0);
-        //var length = StrToFloat(rar[3], 2);
-        //var width = StrToFloat(rar[4], 3);
-        //var frameit = rar[5].ToLower()[0] != 'f';
-
         public List<string> SplitRoomNameOutOfRoomspecs(List<string> specs)
         {
             var dnodes = new List<string>();
@@ -148,37 +142,58 @@ namespace CampusSimulator
             maingaragename = "";
             selectionweight = 1;
             destnodes = new List<string>();
+            defPeoplePerRoom = 2;
+            defPercentFull = 1.0f;
+            defRoomArea = 10;
+            osmnamestart = "";
+
             switch (name)
             {
-                //case "Bld11":
-                //    {
-                //        maingaragename = "Garage11_1";
-                //        destnodes = new List<string> { "b11-f01-lobby" };
-                //        shortname = "b11";
-                //        break;
-                //    }
                 case "Bld19":
                     {
+                        osmnamestart = "Microsoft Building 19";
                         maingaragename = "Garage19_1";
                         roomspecs = B19roomspec;
                         destnodes = SplitRoomNameOutOfRoomspecs(roomspecs);
                         shortname = "b19";
                         journeyChoiceWeight = 20;
+                        if (bm.sman.curscene == SceneSelE.MsftB19focused)
+                        {
+                            bm.sman.jnman.preferedJourneyBuildingName = name;
+                        }
+                        defPeoplePerRoom = 8;
+                        defPercentFull = 0.80f;
+                        defRoomArea = 16;
+                        defAngAlign = 24.0f;
+
                         var b19comp = this.transform.gameObject.AddComponent<B19Willow>();
-                        b19comp.InitializeValues(bm.sman);
+                        b19comp.InitializeValues(bm.sman, this);
                         b19comp.MakeItSo();
+
                         break;
                     }
                 case "Bld121":
                     {
+                        osmnamestart = "Microsoft Building 121";
                         maingaragename = "Garage121_1";
                         roomspecs = B121roomspec;
                         destnodes = SplitRoomNameOutOfRoomspecs(roomspecs);
                         shortname = "b121";
                         journeyChoiceWeight = 20;
+
+                        if (bm.sman.curscene == SceneSelE.MsftB121focused)
+                        {
+                            bm.sman.jnman.preferedJourneyBuildingName = name;
+                        }
+                        defPeoplePerRoom = 8;
+                        defPercentFull = 0.80f;
+                        defRoomArea = 16;
+                        defAngAlign = 24.0f;
+
                         var b121comp = this.transform.gameObject.AddComponent<B121Willow>();
-                        b121comp.InitializeValues(bm.sman);
+                        b121comp.InitializeValues(bm.sman, this);
                         b121comp.MakeItSo();
+
                         break;
                     }
                 case "Bld40":
@@ -186,6 +201,10 @@ namespace CampusSimulator
                         maingaragename = "Garage40_1";
                         destnodes = new List<string> { "b40-f01-lobby" };
                         shortname = "b40";
+
+                        defPeoplePerRoom = 20;
+                        defPercentFull = 1.0f;
+                        defRoomArea = 40;
                         break;
                     }
                 case "Bld43":
@@ -193,6 +212,10 @@ namespace CampusSimulator
                         maingaragename = "Garage43_1";
                         destnodes = new List<string> { "b43-f01-rm1001", "b43-f01-rm1002", "b43-f01-rm1003" };
                         shortname = "b43";
+
+                        defPeoplePerRoom = 4;
+                        defPercentFull = 1.0f;
+                        defRoomArea = 15;
                         break;
                     }
                 case "BldSX":
@@ -200,6 +223,10 @@ namespace CampusSimulator
                         maingaragename = "GarageX_1";
                         destnodes = new List<string> { "bSX-f01-lobby" };
                         shortname = "bSX";
+
+                        defPeoplePerRoom = 20;
+                        defPercentFull = 1.0f;
+                        defRoomArea = 40;
                         break;
                     }
                 case "Bld99":
@@ -207,6 +234,11 @@ namespace CampusSimulator
                         maingaragename = "Garage99_1";
                         destnodes = new List<string> { "b99-f01-lobby" };
                         shortname = "b99";
+
+                        defPeoplePerRoom = 20;
+                        defPercentFull = 1.0f;
+                        defRoomArea = 40;
+
                         break;
                     }
                 case "BldRWB":
@@ -218,6 +250,21 @@ namespace CampusSimulator
                         //var destnodelst = sman.linkcloudctrl.FindNodes("rwb-f03-rm");
                         //Debug.Log("Found " + destnodelst.Count + "destinations for "+name);
                         shortname = "bRWB";
+                        defPeoplePerRoom = 2;
+                        if (bm.sman.curscene == SceneSelE.MsftB19focused || bm.sman.curscene == SceneSelE.MsftB121focused)
+                        {
+                            defPercentFull = 0.05f;
+                        }
+                        else
+                        {
+                            defPercentFull = 0.95f;
+                        }
+                        defRoomArea = 10;
+                        defAngAlign = -10;
+                        if (bm.sman.curscene == SceneSelE.MsftRedwest)
+                        {
+                            bm.sman.jnman.preferedJourneyBuildingName = name;
+                        }
                         break;
                     }
                 case "Eb12-22":
@@ -227,6 +274,10 @@ namespace CampusSimulator
                         destnodes = new List<string> { "eb12-08-lob", "eb12-10-lob", "eb12-12-lob","eb12-14-lob",
                                                        "eb12-16-lob", "eb12-18-lob", "eb12-20-lob","eb12-22-lob" };
                         shortname = "eb12";
+                        defPeoplePerRoom = 10;
+                        defPercentFull = 1.0f;
+                        defRoomArea = 10;
+                        defAngAlign = 0;
                         break;
                     }
                 case "Eb12-test":
@@ -274,6 +325,9 @@ namespace CampusSimulator
                         maingaragename = "Eb12_Rewe";
                         destnodes = new List<string> { "eb12-rewe-lob", "eb12-rewe-rm01", "eb12-rewe-rm02" };
                         shortname = "Rewe";
+                        defPeoplePerRoom = 5; // 20
+                        defPercentFull = 1.0f;
+                        defRoomArea = 100;
                         break;
                     }
                 case "DubBld1":
@@ -286,16 +340,18 @@ namespace CampusSimulator
                     {
                         shortname = "found";
                         roomspecs = MtTenFoundSpotSpec;
-                        defPercentFull = 0;
                         destnodes = new List<string> { "found-spot" };
+
+                        defPercentFull = 0;
                         break;
                     }
                 case "MtTen-lastseen":
                     {
                         shortname = "lastseen";
                         roomspecs = MtTenLastseenSpotSpec;
-                        defPercentFull = 0;
                         destnodes = new List<string> { "lastseen-spot" };
+
+                        defPercentFull = 0;
                         break;
                     }
                 default:
@@ -306,8 +362,10 @@ namespace CampusSimulator
             }
         }
 
-        public void EchoOutline(GameObject parent,OsmBldSpec bs)
+        public void EchoOutline(GameObject parent,OsmBldSpec bs, PolyGenVekMapDel pgvd = null)
         {
+            var pgo = new GameObject("osmmarkers");
+            pgo.transform.SetParent(parent.transform, worldPositionStays: false);
             var ska = 0.5f;
             var oline = bs.GetOutline();
             var clr = "green";
@@ -319,8 +377,13 @@ namespace CampusSimulator
                 var z = oline[i].z;
                 var x = oline[i].x;
                 var (lat, lng) = bm.sman.coman.xztoll(x, z);
-                sph.transform.position = new Vector3(x, 0, z);
-                sph.transform.SetParent(parent.transform, worldPositionStays: true);
+                var pos = new Vector3(x, 0, z);
+                if (pgvd!=null)
+                {
+                    pos = pgvd(pos);
+                }
+                sph.transform.position = pos;
+                sph.transform.SetParent(pgo.transform, worldPositionStays: true);
                 var spi = sph.AddComponent<Aiskwk.Map.QsphInfo>();
                 spi.latLng = new Aiskwk.Map.LatLng(lat, lng);
                 spi.mapPoint = null;
@@ -339,7 +402,6 @@ namespace CampusSimulator
 
             isOsmBld = true;
             bldspec = bs;
-            EchoOutline(this.gameObject, bs);
         }
 
 
@@ -605,126 +667,7 @@ namespace CampusSimulator
             var beac = ago.AddComponent<BldEvacAlarm>();
             beac.Init(this, apos);  
         }
-        public void DefineBuildingConstants()
-        {
-            defPeoplePerRoom = 2;
-            defPercentFull = 1.0f;
-            defRoomArea = 10;
-            var bmode = bm.bldMode.Get();
-            switch (name)
-            {
-
-                case "Eb12-22":
-                    {
-                        defPeoplePerRoom = 10;
-                        defPercentFull = 1.0f;
-                        defRoomArea = 10;
-                        defAngAlign = 0;
-                        break;
-                    }
-                case "EbRewe":
-                    {
-                        defPeoplePerRoom = 5; // 20
-                        defPercentFull = 1.0f;
-                        defRoomArea = 100;
-                        break;
-                    }
-                case "BldRWB":
-                    { 
-                        defPeoplePerRoom = 2;
-                        if (bm.sman.curscene == SceneSelE.MsftB19focused || bm.sman.curscene == SceneSelE.MsftB121focused  )
-                        {
-                            defPercentFull = 0.05f;
-                        }
-                        else
-                        {
-                            defPercentFull = 0.95f;
-                        }
-                        defRoomArea = 10;
-                        defAngAlign = -10;
-                        if (bm.sman.curscene == SceneSelE.MsftRedwest)
-                        {
-                            bm.sman.jnman.preferedJourneyBuildingName = name;
-                        }
-                        break;
-                    }
-                case "Bld11":
-                    {
-                        defPeoplePerRoom = 20;
-                        defPercentFull = 1.0f;
-                        defRoomArea = 40;
-                        break;
-                    }
-                case "Bld19":
-                    {
-                        if (bm.sman.curscene == SceneSelE.MsftB19focused)
-                        {
-                            bm.sman.jnman.preferedJourneyBuildingName = name;
-                        }
-                        defPeoplePerRoom = 8;
-                        defPercentFull = 0.80f;
-                        defRoomArea = 16;
-                        defAngAlign = 24.0f;
-                        break;
-                    }
-                case "Bld121":
-                    {
-                        if (bm.sman.curscene == SceneSelE.MsftB121focused)
-                        {
-                            bm.sman.jnman.preferedJourneyBuildingName = name;
-                        }
-                        defPeoplePerRoom = 8;
-                        defPercentFull = 0.80f;
-                        defRoomArea = 16;
-                        defAngAlign = 24.0f;
-                        break;
-                    }
-                case "Bld40":
-                    {
-                        defPeoplePerRoom = 20;
-                        defPercentFull = 1.0f;
-                        defRoomArea = 40;
-                        break;
-                    }
-                case "Bld43":
-                    {
-                        defPeoplePerRoom = 4;
-                        defPercentFull = 1.0f;
-                        defRoomArea = 15;
-                        break;
-                    }
-                case "Bld99":
-                    {
-                        defPeoplePerRoom = 20;
-                        defPercentFull = 1.0f;
-                        defRoomArea = 40;
-                        break;
-                    }
-                case "BldSX":
-                    {
-                        defPeoplePerRoom = 20;
-                        defPercentFull = 1.0f;
-                        defRoomArea = 40;
-                        break;
-                    }
-                case "MtTen-foundher":
-                    {
-                        defPercentFull = 0;
-                        break;
-                    }
-                case "MtTen-lastseen":
-                    {
-                        defPercentFull = 0;
-                        break;
-                    }
-                default:
-                    {
-                        //Debug.Log("No building gos for " + name);
-                        break;
-                    }
-            }
-            //AddPeopleToRooms();
-        }
+ 
 
         public void CreateObjects()
         {
@@ -739,6 +682,7 @@ namespace CampusSimulator
                 {
                     var bgo = bm.bpg.GenBldFromOsmBldSpec(this.gameObject, bldspec, pgvd: pgvd);
                     bldgos.Add(bgo);
+                    EchoOutline(this.gameObject, bldspec,pgvd:pgvd);
                 }
                 return;
             }

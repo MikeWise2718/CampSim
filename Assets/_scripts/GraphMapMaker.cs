@@ -1023,7 +1023,7 @@ namespace GraphAlgos
             //Debug.Log("MakeJson nnodes:" + nnodes + " nlinks:" + nlinks);
             return jsonlc;
         }
-        public static GraphCtrl AddJsonToLinkCloud(JsonLinkCloud jsonlc, GraphCtrl grc)
+        public static void AddJsonToLinkCloud(JsonLinkCloud jsonlc, GraphCtrl grc)
         {
             var reg = jsonlc.region;
             Debug.Log("   AddJsonToLinkCloud reg.name:" + reg.name);
@@ -1048,7 +1048,7 @@ namespace GraphAlgos
                 }
             }
             grc.floorMan = jsonlc.floorplan;
-            return grc;
+            return;
         }
     }
 }

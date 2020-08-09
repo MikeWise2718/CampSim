@@ -91,10 +91,13 @@ Management consists of managing their lifetime, and also frequently consolidatin
 ## Managers
 We use a manager-managees pattern, whereby a single manger manages multiple managees. Not that this is not exactly a singleton pattern since we could in theory have multiple managers – and we will probably need this for example when two scenarios need to interact (which is a definite possibility at this point but not one we have implemented yet). They usually encompass the factory pattern.
 Managers perform the following functions:
--	They mediate communication between different kinds of objects by providing lookup dictionaries
+-	They mediate communication between different kinds of objects by providing lookup dictionaries or whatever is needed
 -	They manage the lifespan of their managees
 -	They usually have managee factories as a method
-A list of our managers
+
+We have top-level or Entity-level servcies, and base services (we sometimes call them low-level services)
+
+A list of our managers, first the more interesting Entity level service, then the low level ones
 ### Entity Level
 -	`PeopleMan` – Mangers people in the scene, their name, avatar, if they have a camera, etc.
 -	`BuildingMan` – Manages buildings in the scene. Also trees, bushes, building alarms, and a bunch of other things that should probably have their own managers someday.
@@ -107,11 +110,12 @@ A list of our managers
 - `FrameMan` – Manages frames that can be used for ML computer vision (AI) training
 
 ### Base Service Level
--	`DataFileMan` - Manager – manages data sets (csv, json, etc) for the scenarios
--	`LinkMan` – manages nodes and links in the scene
+- `LinkCloudMan` – manages nodes and links in the scene. The oldest code in the collection
+- `DataFileMan` - Manager – manages data sets (csv, json, etc) for the scenarios
 -	`CoordMap` - manages coordinate system, mainly conversion from latlong to a local coordinate system
 -	`MapMan` - Manages the creation of the map service tiled map and mesh
 -	`UiMan` – Manages the UI 
+
 ## Managees
 
 Managers manage these “managees”. (“Employees” or “ICs” didn’t really fit…)
@@ -205,27 +209,112 @@ The first four are centrally managed - i.e. queued up and executed. A higher lev
        - we should call all these routines "MutateModel maybe"
   
 
-## Individual Manager Notes
+## Base Service Manager Notes
+
+### LinkCloudMan
+  - Represants various graphs in the scene
+    - Can find a path through them awith an A-star algorithm
+    - The oldest code in the project, so often doesn't follow conventions we adopted later
+    
+### MapMan
+  - A mapping tool that is (in theory at least) usable as a seperate package
+    - Seperate pacakge is named quadkey (I liked the name, but it is not optimal)
+    - Can currently accomidate maps from Azure, Bing, Google, and OSM
+    - Uses tile APIs which are compatible across thse services so more can easily be added
+    - Forms the basis of the "Simulation Starter Kit"
+    - This code is kept in a seperate directory for development purposes and occasionally merged back into
+    - A lot of the complexity of its use stems from the wish to keep it as a seperate package
+    - Uses multiple meshes with normal-vector blending on the edges to acheive larger scale 
+    - TODO: parallel fetches of the bitmaps enabling much faster detailed map initialization
+    - TODO: currently muliple mesh only divides things up in the N-S direction, need to do E-W  as well
+    
+### DataFileMan
+  - Can read in CSV files into a simple dataframe like interfaces
+    - TODO: Make it read and write JSON as well   
+    
+### CoordMan
+   - Capable of maps alighed differnelty from North-South, but I would not recommend doing that
+   - Uses a set of point that a regression is performed against to determine the mapping
+
+   
+### UIman
+   - Our user interface module
+   - TODO: Proper tabs see ()
+
+## Entitiy Service Manager Notes
+
+### PersonMan
+Manages all the people, their identiies, names, if they have hololens's or phones, their cameras, etc.
+  - TODO: Troubleshoot bug that lets person manage its own avatar permanently instead of delegating to Zones, Rooms, and Birdctlrs
+
 
 ### BuildingMan
+The building manager is one of the most complex models. Each building entitiy manages a large number of other entities:
+  - Representation of various sorts and sometimes multiple
+    - Fixed profiles (ad hoc representations that we programmed by hand) - these sometimes have trees and bushes too
+    - Osmprofiles (Osm profiles read in)
+    - Detailed models (Ususlly comign from Revit, imported as OBJ or FBX)
+  - Roooms
+    - rooms can be occupied by various numers of people
+    - Rooms are potentially destinations for journeys
+    - Rooms have various representstion
+      - Fixed (ad hoc representations that we programmed by hand (a square plane)
+      - Azure Atlas proiles (TODO)
+  - Paths - link-node represetnations of paths through the building
+    - The graphical representation of this is managed by linkcloud
+  - Sensors - todo - but represent the basis for a ADT integraion
+    - Will probably start with tenmparture sensors   
+  - Building Alarms (for triggering evacuations)
+  
 
+### VehicleMan
+Manages vehicles (cars) that can move around.
+
+
+### GarageMan
+Manages places that vehicles can park
+
+
+### StreetMan
+Manages streets in the scene. Data comes in from OSM through `DataFileMan`
+
+### VideoMan
+
+Manages fixed cameras that can be in the scene. Also keeps track of viewer camera, and probably should keep track of people cams
+
+### JourneyMan
+Manages the journeys people take
+
+### ZoneMan
+manages evacuation zones people can go to during an evacuation
+
+### FrameMan
+Manages frames that can be used for ML computer vision (AI) training
 
 # Big ToDos
 
 - Better map calibration
-  - CoordMapMan calibration echo on and off
-  - Sphino use
-  - Refine coordinates
-  - 
-
+  - CoordMapMan calibration point error size
   
+- Introduce Managers for Paths and Birds
 
 - Eliminate coordinate fixed initialization - use LonLat everywhere
   - Building positions
   - Building rooms and corridors
   - Extra points (in LinkCloud)
 
+- Fix LinkCloud gameobject generation time problem
+  - LinkCloud man uses the fragline function from MapMan during object refresh this has two bad effects
+    - It takes a lot of time which reduces the usefulness
+    - It is really part of the model generation, since these nodes are used for the A-star
+  - To fix this we need to 
+    - Abstract the addfragline so that it gives back the line segments
+    - Rewrite LinkCloud to use this when the pipe is being added to a map, especially during street generation
+    - Rewrite LinkCloud to use the mapman gpuinstancing pipegenereation
+
 - Restructure Buildings
+  - Reduce two case stements in BuildingMan to one
+  - Move the building mesh generations to their own components or something
 
 - Azure function for OSM retrieve 
   - Python code
@@ -237,6 +326,11 @@ The first four are centrally managed - i.e. queued up and executed. A higher lev
   - json outout and input
   - python version based on pandas
 
+
+- Scene data out of linkcloud
+  - Room networks into BuildingMan and components
+  - Garage networks into Garage Man
+  - Eliminate graph scene selectors - at least for MSFT and EB, leave for tests
 
 - Fix LinkCloud violation of model managee initialization in object refresh
   - need a fragline variant that doesn't create objects, but just returns a linked list of fragmented lines

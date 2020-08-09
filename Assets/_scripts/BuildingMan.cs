@@ -116,6 +116,20 @@ namespace CampusSimulator
         public void InitPhase0()
         {
         }
+        Dictionary<OsmBldSpec, Building> bsDict;
+
+        public void RegisterBsBld(OsmBldSpec bs, Building bld)
+        {
+            bsDict[bs] = bld;
+        }
+        public Building GetBsBld(OsmBldSpec bs)
+        {
+            if (!bsDict.ContainsKey(bs))
+            {
+                return null;
+            }
+            return bsDict[bs];
+        }
 
         public OsmBldSpec FindBldSpecByNameStart(string namestart)
         {
@@ -137,6 +151,7 @@ namespace CampusSimulator
         public void ModelInitialize(SceneSelE newregion)
         {
             bldspecs = new List<OsmBldSpec>();
+            bsDict = new Dictionary<OsmBldSpec, Building>();
             InitializeValues();
         }
 
@@ -344,7 +359,7 @@ namespace CampusSimulator
         public void AddRoomsToBuildings()
         {
             var bldlst = new List<Building>(bldlookup.Values);
-            bldlst.ForEach(bld => bld.DefineBuildingConstants());
+            //bldlst.ForEach(bld => bld.DefineBuildingConstants());
             bldlst.ForEach(bld => bld.AddRoomsToBuilding());
         }
         public void PopulateBuildings()
@@ -360,16 +375,21 @@ namespace CampusSimulator
                 return;
             }
             var mbname = bldspec.osmname;
-            var bgo = new GameObject(mbname);
-            bgo.transform.position = Vector3.zero;
-            bgo.transform.parent = this.transform;
-            var bld = bgo.AddComponent<Building>();
-            bld.AddOsmBldDetails(this,bldspec);
-            AddBuildingToCollection(bld); /// has to be afterwards because of the sorted names for journeys
+            var bld = GetBsBld(bldspec);
+            if (bld == null)
+            {
+                // we need to make a new one if this wasn't reserved from a fixed building
+                var bgo = new GameObject(mbname);
+                bgo.transform.position = Vector3.zero;
+                bgo.transform.parent = this.transform;
+                bld = bgo.AddComponent<Building>();
+                AddBuildingToCollection(bld); /// has to be afterwards because of the sorted names for journeys
+            }
+            bld.AddOsmBldDetails(this, bldspec);
             //bld.llm = bgo.AddComponent<LatLongMap>(); // todo uncomment
-            var origin = $"BuildingMan.MakeOsmBuilding(\"{mbname}\")";
-            bld.llm = new LatLongMap(origin); // todo uncomment
-                                              //bld.llm.AddLlmDetails();
+            //var origin = $"BuildingMan.MakeOsmBuilding(\"{mbname}\")";
+            //bld.llm = new LatLongMap(origin); // todo uncomment
+            //bld.llm.AddLlmDetails();
             //sman.jnman.AddViewerJourneyNodes(bld.destnodes, prefix: $"{mbname}/");
             UpdateBldStats();
         }
@@ -382,8 +402,8 @@ namespace CampusSimulator
             bld.AddBldDetails(this);
             AddBuildingToCollection(bld); /// has to be afterwards because of the sorted names for journeys
             //bld.llm = bgo.AddComponent<LatLongMap>(); // todo uncomment
-            var origin = $"BuildingMan.MakeBuilding(\"{mbname}\")";
-            bld.llm = new LatLongMap(origin); // todo uncomment
+            //var origin = $"BuildingMan.MakeBuilding(\"{mbname}\")";
+            //bld.llm = new LatLongMap(origin); // todo uncomment
                                         //bld.llm.AddLlmDetails();
             sman.jnman.AddViewerJourneyNodes(bld.destnodes,prefix:$"{mbname}/");
             UpdateBldStats();
