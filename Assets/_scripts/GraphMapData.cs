@@ -2155,6 +2155,19 @@ namespace GraphAlgos
 
 
 
+
+        public void createPointsFor_msft_drones()
+        {
+            var xs = 0;
+            var zs = 0;
+            grc.regman.NewNodeRegion("msft-drones", "purple", saveToFile: true);
+            grc.AddNodePtxyz("b19-dronepad", -458.5 + xs, 0.000, 104.1+ zs, comment: "");
+            grc.AddLinkByNodeName("b19-dronepad", "b19-os1-o00", LinkUse.walkway);
+            grc.AddNodePtxyz("b121-dronepad", -806.4 + xs, 0.000, -508.5 + zs, comment: "");
+            grc.AddLinkByNodeName("b121-dronepad", "b121-os1-o004", LinkUse.walkway);
+            grc.AddLinkByNodeName("b121-dronepad", "b19-dronepad", LinkUse.trackdrone);
+            grc.regman.SetRegion("default");
+        }
         public void createPointsFor_msft_b19()  // machine generated - do not edit
         {
             grc.regman.NewNodeRegion("msft-b19", "purple", saveToFile: true);

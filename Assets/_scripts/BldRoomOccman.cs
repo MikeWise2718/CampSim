@@ -8,6 +8,7 @@ namespace CampusSimulator
 
     public class BldRoomOccMan : MonoBehaviour
     {
+        public BuildingMan bman;
         public enum roomSlotStatE { free, reserved, occupied };
         public roomSlotStatE[] occlookup = null;
         float rad;
@@ -18,6 +19,8 @@ namespace CampusSimulator
         int orincap;
         int maxcap;
         BldRoom room;
+        BldDronePad pad;
+        string placename;
         public bool slotsCanExpand;
         const float d2r = Mathf.PI / 180;
         const float r2d = 180 / Mathf.PI;
@@ -84,6 +87,24 @@ namespace CampusSimulator
         {
             occlookup = new roomSlotStatE[ncap];
             this.room = room;
+            this.bman = room.bm;
+            this.pad = null;
+            this.placename = room.roomFullName;
+            this.length = length;
+            this.width = width;
+            this.rad = 0.8f * Mathf.Min(length, width) / 2;
+            this.slotsCanExpand = slotsCanExpand;
+            this.ncap = ncap;
+            this.orincap = ncap;
+            occDict = new Dictionary<string, Person>();
+        }
+        public void init(BldDronePad pad, int ncap, float length, float width, bool slotsCanExpand)
+        {
+            occlookup = new roomSlotStatE[ncap];
+            this.pad = pad;
+            this.bman = pad.bm;
+            this.room = null;
+            this.placename = pad.padFullName;
             this.length = length;
             this.width = width;
             this.rad = 0.8f * Mathf.Min(length, width) / 2;
@@ -140,7 +161,8 @@ namespace CampusSimulator
             {
                 if (pers.roomPlaceIdx >= occlookup.Length)
                 {
-                    Debug.Log("BldRoomOccman index out of range (" + pers.roomPlaceIdx + ">=" + occlookup.Length + " in room " + room.roomFullName);
+                    var msg =$"BldRoomOccman index out of range ({pers.roomPlaceIdx} >= {occlookup.Length} in roomm/pad {placename}";
+                    Debug.LogError(msg);
                 }
                 else
                 {
@@ -329,12 +351,24 @@ namespace CampusSimulator
             for (int i = 0; i < ncap; i++)
             {
                 var v = GetOccPosition(i);
-                var pt = room.roomformgo.transform.position + v;
+                var ptform = GetTransform();
+                var pt = ptform.position + v;
                 var clr = "green";
                 if (IsOccupied(i)) clr = "red";
                 if (IsReserved(i)) clr = "yellow";
                 var sgo = GraphAlgos.GraphUtil.CreateMarkerSphere("c" + i, pt, clr: clr);
-                sgo.transform.parent = room.roomformgo.transform;
+                sgo.transform.parent = ptform;
+            }
+        }
+        public Transform GetTransform()
+        {          
+            if (this.pad==null)
+            {
+                return room.roomformgo.transform;
+            }
+            else
+            {
+                return pad.padformgo.transform;
             }
         }
         public void EmptyRoom()
@@ -357,7 +391,7 @@ namespace CampusSimulator
             if (doDoubleCap)
             {
                 DoubleNcap();
-                room.bm.sman.RequestRefresh("BldRoomOccman-Update on doDoubleCap");
+                bman.sman.RequestRefresh("BldRoomOccman-Update on doDoubleCap");
                 doDoubleCap = false;
             }
 

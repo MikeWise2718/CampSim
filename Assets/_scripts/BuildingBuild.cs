@@ -56,6 +56,13 @@ namespace CampusSimulator
             // room name,pcap,alignang,length,width,frameit
             "b121-f01-lobby:6:-18.5:4:4:T",
         };
+        public static List<string> MsftDronePadspec = new List<string>()
+        {
+            // room name,pcap,alignang,length,width,frameit
+            "b121-dronepad:6:0:4:4:T",
+            "b19-dronepad:6:0:4:4:T",
+        };
+
 
         List<string> B19roomspec = new List<string>()
         {
@@ -180,7 +187,6 @@ namespace CampusSimulator
                         destnodes = SplitRoomNameOutOfRoomspecs(roomspecs);
                         shortname = "b121";
                         journeyChoiceWeight = 20;
-
                         if (bm.sman.curscene == SceneSelE.MsftB121focused)
                         {
                             bm.sman.jnman.preferedJourneyBuildingName = name;
@@ -245,10 +251,8 @@ namespace CampusSimulator
                     {
                         maingaragename = "GarageRWB_1";
                         selectionweight = 10;
-                        destnodes = new List<string> { "bRWB-f01-lobby", "rwb-f03-rm3999" };
-                        SceneMan sman = FindObjectOfType<SceneMan>();
-                        //var destnodelst = sman.lcman.FindNodes("rwb-f03-rm");
-                        //Debug.Log("Found " + destnodelst.Count + "destinations for "+name);
+                        destnodes = new List<string> { "bRWB-f01-lobby", "rwb-f03-rm3999" }; // reset in reinitdests
+                        
                         shortname = "bRWB";
                         defPeoplePerRoom = 2;
                         if (bm.sman.curscene == SceneSelE.MsftB19focused || bm.sman.curscene == SceneSelE.MsftB121focused)
@@ -359,6 +363,10 @@ namespace CampusSimulator
                         Debug.LogError("AddBldDetails bad building name:" + name);
                         break;
                     }
+            }
+            if (shortname != "")
+            {
+                bldpadspecs = bm.GetFilteredPadSpecs(shortname);
             }
         }
 

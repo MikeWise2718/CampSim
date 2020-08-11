@@ -16,9 +16,11 @@ namespace CampusSimulator
         //public string drivestartnode;
         public List<string> destnodes = new List<string>();
         public List<string> roomspecs = new List<string>();
+        public List<string> bldpadspecs = new List<string>();
         public string shortname;
         public int selectionweight;
         public Dictionary<string,BldRoom> roomdict=new Dictionary<string, BldRoom>();
+        public Dictionary<string, BldDronePad> paddict = new Dictionary<string, BldDronePad>();
         //public LatLongMap llm;
         public GameObject roomlistgo;
         public float defAngAlign = 0f;
@@ -239,6 +241,27 @@ namespace CampusSimulator
             bm.RegisterRoom(roomname, roomcomp);
             roomgo.transform.parent = roomlistgo.transform;
         }
+
+        public void AddOnePad(string padname)
+        {
+            var padgo = new GameObject(padname);
+            var padcomp = padgo.AddComponent<BldDronePad>();
+            padcomp.Initialize(this, padname, padname);
+            var padpt = this.transform.position;
+
+            if (lc.IsNodeName(padname))
+            {
+                var lpt = lc.GetNode(padname);
+                padpt = lpt.pt;
+            }
+            var alignang = defAngAlign;
+            var pcap = defPeoplePerRoom;
+            var area = defRoomArea;
+            padcomp.SetStatsArea(padpt, pcap, alignang, area, true);
+            paddict[padname] = padcomp;
+            bm.RegisterPad(padname, padcomp);
+            padgo.transform.parent = roomlistgo.transform;
+        }
         public int StrToInt(string str,int defval)
         {
             int val;
@@ -278,6 +301,34 @@ namespace CampusSimulator
             bm.RegisterRoom(roomname, roomcomp);
             roomgo.transform.parent = roomlistgo.transform;
         }
+
+        public void AddOnePadSpec(string padspec)
+        {
+            //Debug.Log("AddOneRoomSpec:" + roomspec);
+            var rar = padspec.Split(':');
+            var padname = rar[0];
+
+            var padgo = new GameObject(padname);
+            var padcomp = padgo.AddComponent<BldDronePad>();
+            padcomp.Initialize(this, padname, padname);
+            var roompt = this.transform.position;
+
+            if (lc.IsNodeName(padname))
+            {
+                var lpt = lc.GetNode(padname);
+                roompt = lpt.pt;
+            }
+            var pcap = StrToInt(rar[1], 1);//roomspecs
+            var alignang = StrToFloat(rar[2], 0);
+            var length = StrToFloat(rar[3], 2);
+            var width = StrToFloat(rar[4], 3);
+            var frameit = rar[5].ToLower()[0] != 'f';
+            padcomp.SetStats(roompt, pcap, alignang, length, width, frameit);
+            paddict[padname] = padcomp;
+            bm.RegisterPad(padname, padcomp);
+            padgo.transform.parent = roomlistgo.transform;
+        }
+
         public void AddRoomsToBuilding()
         {
             roomdict = new Dictionary<string,BldRoom>();
@@ -294,6 +345,7 @@ namespace CampusSimulator
             {
                 roomspecs.ForEach(roomspec => AddOneRoomSpec(roomspec));
             }
+            bldpadspecs.ForEach(padspec => AddOnePadSpec(padspec));
             bm.UpdateBldStats();
         }
 
@@ -304,6 +356,8 @@ namespace CampusSimulator
             //   Debug.Log("Deleted "+bldgos.Count + +" goes for building "+name);
             var roomlist = new List<BldRoom>(roomdict.Values);
             roomlist.ForEach(brm => brm.DeleteGos());
+            var padlist = new List<BldDronePad>(paddict.Values);
+            padlist.ForEach(pad => pad.DeleteGos());
         }
         public void CreateGos()
         {
@@ -311,6 +365,8 @@ namespace CampusSimulator
             //   Debug.Log("Created " + bldgos.Count + " gos for building "+name);
             var roomlist = new List<BldRoom>(roomdict.Values);
             roomlist.ForEach(brm => brm.CreateGos());
+            var padlist = new List<BldDronePad>(paddict.Values);
+            padlist.ForEach(pad => pad.CreateGos());
         }
         // Update is called once per frame
         //void Update()

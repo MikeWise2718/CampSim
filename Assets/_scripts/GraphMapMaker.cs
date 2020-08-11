@@ -791,6 +791,7 @@ namespace GraphAlgos
                         {
                             case GraphGenerationModeE.GenFromCode:
                                 lmd.createPointsFor_msft_b19();
+                                lmd.createPointsFor_msft_drones();
                                 lmd.createPointsFor_msft_b121();
                                 lmd.createPointsFor_msft_b40();
                                 lmd.createPointsFor_msft_b43();
@@ -799,17 +800,6 @@ namespace GraphAlgos
                                 lmd.createPointsFor_msft_bredwb();
                                 lmd.createPointsFor_msft_bredwb_f3();
                                 lmd.createPointsFor_msft_bsx();
-                                //lmd.createPointsFor_msft_campus();
-                                //if (addfixedStreetLinks)
-                                //{
-                                //    lmd.CreateGraphForOsmImport_msft_streets();
-                                //}
-                                //if (genOsmStreetLinks)
-                                //{
-                                //    lmd.CreateGraphForOsmImport_msft_streets_df("msft-campus", "blue");
-                                //}
-
-                                //lmd.CreateGraphForOsmImport_MsftCampusBldSmall();
                                 if (addWallLinks)
                                 { 
                                     lmd.CreateGraphForOsmImport_msftb19area();

@@ -1166,12 +1166,9 @@ namespace CampusSimulator
             lastViewerEndJourney.GetInitial("");
         }
 
-
-
         public void ModelBuild()
         {
         }
-
 
         string ObjDetClassify(string resname)
         {
