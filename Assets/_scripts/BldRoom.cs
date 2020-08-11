@@ -109,20 +109,19 @@ namespace CampusSimulator {
 //                    var persgo = pers.CreatePersonGo("-ava-br");// room person
                     var idlescript = person.idleScript;
                     var animator = pogo.GetComponent<Animator>();
-                    //if (pers.personName=="Yuka Althoff")
-                    //{
-                    //    Debug.Log("Creating yuka");
-                    //}
-                    animator.applyRootMotion = false;
-                    person.perstate = PersonAniStateE.standing;
+                    if (animator != null)
+                    {
+                        animator.applyRootMotion = false;
+                        person.perstate = PersonAniStateE.standing;
 
-                    //idlescript = "Samba Dancing";
-                    animator.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Animations/" + idlescript);
-                    PersonMan.UnsyncAnimation(animator, idlescript, "BldRoom");
-                    //var aclip = animator.runtimeAnimatorController.animationClips[0];
-                    //animator.Play(idlescript, 0, GraphAlgos.GraphUtil.GetRanFloat(0, 1) );// unsync the animations
-                    //var ctrl = animator.runtimeAnimatorController;
-                    //animation["Idle"].time = Random.Range(0.0, animation["Idle"].length);
+                        //idlescript = "Samba Dancing";
+                        animator.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Animations/" + idlescript);
+                        PersonMan.UnsyncAnimation(animator, idlescript, "BldRoom");
+                        //var aclip = animator.runtimeAnimatorController.animationClips[0];
+                        //animator.Play(idlescript, 0, GraphAlgos.GraphUtil.GetRanFloat(0, 1) );// unsync the animations
+                        //var ctrl = animator.runtimeAnimatorController;
+                        //animation["Idle"].time = Random.Range(0.0, animation["Idle"].length);
+                    }
 
                     person.roomPogo = pogo;
                     var ska = bm.sman.trman.scalemodelnumber.Get();

@@ -96,7 +96,7 @@ namespace CampusSimulator
             {
                 if (!expectFailure)
                 {
-                    Debug.Log("Bad roomname lookup " + roomname);
+                    Debug.LogError($"Bad roomname lookup {roomname}");
                 }
                 return null;
             }

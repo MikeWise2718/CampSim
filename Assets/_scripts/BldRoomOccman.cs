@@ -346,7 +346,7 @@ namespace CampusSimulator
             var ang = d2r * (i * 360.0f / ncap);
             return ang;
         }
-        public void CreateNodes()
+        public void CreateNodes(float size=0.2f)
         {
             for (int i = 0; i < ncap; i++)
             {
@@ -356,7 +356,7 @@ namespace CampusSimulator
                 var clr = "green";
                 if (IsOccupied(i)) clr = "red";
                 if (IsReserved(i)) clr = "yellow";
-                var sgo = GraphAlgos.GraphUtil.CreateMarkerSphere("c" + i, pt, clr: clr);
+                var sgo = GraphAlgos.GraphUtil.CreateMarkerSphere("c" + i, pt, clr: clr, size:size);
                 sgo.transform.parent = ptform;
             }
         }

@@ -113,12 +113,15 @@ namespace CampusSimulator {
                     //{
                     //    Debug.Log("Creating yuka");
                     //}
-                    animator.applyRootMotion = false;
-                    person.perstate = PersonAniStateE.standing;
+                    if (animator != null)
+                    {
+                        animator.applyRootMotion = false;
+                        person.perstate = PersonAniStateE.standing;
 
-                    //idlescript = "Samba Dancing";
-                    animator.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Animations/" + idlescript);
-                    PersonMan.UnsyncAnimation(animator, idlescript, "BldRoom");
+                        //idlescript = "Samba Dancing";
+                        animator.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Animations/" + idlescript);
+                        PersonMan.UnsyncAnimation(animator, idlescript, "BldRoom");
+                    }
                     //var aclip = animator.runtimeAnimatorController.animationClips[0];
                     //animator.Play(idlescript, 0, GraphAlgos.GraphUtil.GetRanFloat(0, 1) );// unsync the animations
                     //var ctrl = animator.runtimeAnimatorController;
@@ -126,8 +129,7 @@ namespace CampusSimulator {
 
                     person.roomPogo = pogo;
                     var ska = bm.sman.trman.scalemodelnumber.Get();
-                    var skav = new Vector3(ska, ska, ska);
-                    pogo.transform.localScale = skav;
+                    pogo.transform.localScale *= ska;
                     //persgo.name = pers.personName+"-ava";
                     if (!person.UseFixedPlace())
                     {
@@ -183,7 +185,7 @@ namespace CampusSimulator {
             }
             if (createnodes)
             {
-                occman.CreateNodes();
+                occman.CreateNodes(size: 0.05f); ;
             }
             padformgo.transform.position = pos;
             padformgo.transform.rotation = Quaternion.Euler(0, alignang, 0);

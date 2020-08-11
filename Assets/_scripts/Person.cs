@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 
 namespace CampusSimulator
@@ -11,6 +12,7 @@ namespace CampusSimulator
         BuildingMan bm = null;
         public PersonMan.GenderE personGender;
         public string personName = "";
+        public string avatarType = "";
         public string avatarName = "";
         public PersonStateE personState=PersonStateE.freeToTravel;
         public string idleScript = "";
@@ -42,6 +44,8 @@ namespace CampusSimulator
         public bool flagged = false;
         public PersonAniStateE perstate = PersonAniStateE.standing;
         public bool isVisible = true;
+        public float scale;
+        public Vector3 rotate;
 
 
         public void SetVisiblity(bool visstat)
@@ -55,12 +59,13 @@ namespace CampusSimulator
 
 
 
-        public void AddPrsDetails(PersonMan pm,PersonMan.GenderE gender,string persname,string avatarname, PersonMan.empStatusE empstat,bool hasHololens=false)
+        public void AddPrsDetails(PersonMan pm,PersonMan.GenderE gender,string persname,string avatartype,string avatarname, PersonMan.empStatusE empstat,bool hasHololens=false, float ska = 1, float xrot = 0, float yrot = 0, float zrot = 0)
         {
             this.pm = pm;
             this.bm = pm.sman.bdman;
             this.personGender = gender;
             this.personName = persname;
+            this.avatarType = avatartype;
             this.avatarName = avatarname;
             this.idleScript = "";
             this.walkScript = "";
@@ -73,6 +78,8 @@ namespace CampusSimulator
             this.homeNode = "";
             this.empStatus = empstat;
             this.hasHololens = hasHololens;
+            this.scale = ska;
+            this.rotate = new Vector3( xrot,yrot,zrot );
             //this.prsgos = new List<GameObject>();
         }
 
@@ -120,20 +127,68 @@ namespace CampusSimulator
 
         public GameObject CreatePersonGo(string callerSuffix)
         {
-            var pfab = GraphAlgos.GraphUtil.GetUniResPrefab("people", avatarName);
-            lastpogo = Instantiate<GameObject>(pfab);// there is no global pogo at this point
+            var dirname = "People";
+            var ispeople = true;
+            if (avatarType!="Person")
+            {
+                dirname = avatarType;
+                ispeople = false;
+            }
+            var pfab = GraphAlgos.GraphUtil.GetUniResPrefab(dirname, avatarName);
+            var ipogo = Instantiate<GameObject>(pfab);// there is no global pogo at this point
+            ipogo.name = "instance";
+            ipogo.transform.localScale = new Vector3(scale, scale, scale);
+            ipogo.transform.localRotation *= Quaternion.Euler( rotate );
+            var pogo = new GameObject();
+            ipogo.transform.parent = pogo.transform;
             //var animator = pogo.GetComponent<Animator>();
             //animator.applyRootMotion = false;
             //animator.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Animations/PersonIdle");
-            persGo = lastpogo.AddComponent<PersonGo>();
-            persGo.Init(this);
-            height = persGo.GetPersonHeight();
-            if (this.hasHololens)
+            if (ispeople)
             {
-                AddHololens();
+                persGo = ipogo.AddComponent<PersonGo>();
+                persGo.Init(this);
+                height = persGo.GetPersonHeight();
+                if (this.hasHololens)
+                {
+                    AddHololens();
+                }
             }
-            lastpogo.name = this.name + callerSuffix;
-            return lastpogo;
+            pogo.name = this.name + callerSuffix;
+            lastpogo = pogo;
+            return pogo;
+        }
+
+        public GameObject CreatePersonGoOld(string callerSuffix)
+        {
+            var dirname = "People";
+            var ispeople = true;
+            if (avatarType != "Person")
+            {
+                dirname = avatarType;
+                ispeople = false;
+            }
+            var pfab = GraphAlgos.GraphUtil.GetUniResPrefab(dirname, avatarName);
+            var pogo = Instantiate<GameObject>(pfab);// there is no global pogo at this point
+            pogo.name = "instance";
+            pogo.transform.localScale = new Vector3(scale, scale, scale);
+            pogo.transform.localRotation *= Quaternion.Euler(rotate);
+            //var animator = pogo.GetComponent<Animator>();
+            //animator.applyRootMotion = false;
+            //animator.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Animations/PersonIdle");
+            if (ispeople)
+            {
+                persGo = pogo.AddComponent<PersonGo>();
+                persGo.Init(this);
+                height = persGo.GetPersonHeight();
+                if (this.hasHololens)
+                {
+                    AddHololens();
+                }
+            }
+            pogo.name = this.name + callerSuffix;
+            lastpogo = pogo;
+            return pogo;
         }
 
         public GameObject GetPogo(string callerSuffix,bool createpogo=false,bool resetposition=false)

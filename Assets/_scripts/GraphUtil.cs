@@ -36,15 +36,15 @@ namespace GraphAlgos
         }
 
         static Dictionary<string, GameObject> uniresdict = new Dictionary<string, GameObject>();
-        public static GameObject GetUniResPrefab(string dname,string name)
+        public static GameObject GetUniResPrefab(string dirname,string name)
         {
             if (!uniresdict.ContainsKey(name))
             {
                 var realname = name;
-                if (dname != "")
+                if (dirname != "")
                 {
-                    if (!dname.EndsWith("/")) dname += "/";
-                    realname = dname + name;
+                    if (!dirname.EndsWith("/")) dirname += "/";
+                    realname = dirname + name;
                 }
                 var go = Resources.Load<GameObject>(realname);
                 var clder = go.GetComponent<Collider>();

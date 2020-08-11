@@ -218,6 +218,21 @@ namespace CampusSimulator
                     }
                 }
             }
+
+            var padlist = new List<BldDronePad>(paddict.Values);
+            foreach (var pad in padlist)
+            {
+                for (int i = 0; i < pad.personCap; i++)
+                {
+                    if (GraphAlgos.GraphUtil.FlipBiasedCoin(cointoss_pctFull, "popbld"))
+                    {
+                        var p = bm.sman.psman.MakeRandomPersonDrone();
+                        p.AssignHomeLocation(name, pad.name, pad.name);
+                        pad.Occupy(p, regen: false);
+                        npoped++;
+                    }
+                }
+            }
             //Debug.Log("Populated building " + name + " with "+npoped+" roomcount:" + roomlist.Count);
         }
 
