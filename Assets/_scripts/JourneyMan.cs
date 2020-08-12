@@ -1081,7 +1081,8 @@ namespace CampusSimulator
             Journeys.Remove(jny);
             UpdateLegCount();
         }
-        public bool spawnjourneys = false;
+        public bool spawnrunjourneys = false;
+        public bool spawnflyjourneys = false;
         public bool randomize = false;
         public bool allowdupdests = false;
         public float spawninterval = 4f; // each journey takes around 75 secs
@@ -1102,7 +1103,8 @@ namespace CampusSimulator
             }
             Journeys = new List<Journey>();
             UpdateLegCount();
-            spawnjourneys = false;
+            spawnrunjourneys = false;
+            spawnflyjourneys = false;
         }
 
         List<string> viewerJourneyNodes;
@@ -1470,7 +1472,7 @@ namespace CampusSimulator
                 ndeleted++;
             }
             // Journey spawning
-            if (spawnjourneys)
+            if (spawnrunjourneys)
             {
                 SpawnJourneysByBuilding();
             }
