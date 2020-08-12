@@ -173,37 +173,7 @@ namespace CampusSimulator
             return pogo;
         }
 
-        public GameObject CreatePersonGoOld(string callerSuffix)
-        {
-            var dirname = "People";
-            var ispeople = true;
-            if (avatarType != "Person")
-            {
-                dirname = avatarType;
-                ispeople = false;
-            }
-            var pfab = GraphAlgos.GraphUtil.GetUniResPrefab(dirname, avatarName);
-            var pogo = Instantiate<GameObject>(pfab);// there is no global pogo at this point
-            pogo.name = "instance";
-            pogo.transform.localScale = new Vector3(scale, scale, scale);
-            pogo.transform.localRotation *= Quaternion.Euler(rotate);
-            //var animator = pogo.GetComponent<Animator>();
-            //animator.applyRootMotion = false;
-            //animator.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Animations/PersonIdle");
-            if (ispeople)
-            {
-                persGo = pogo.AddComponent<PersonGo>();
-                persGo.Init(this,lastpogo);
-                height = persGo.GetPersonHeight();
-                if (this.hasHololens)
-                {
-                    AddHololens();
-                }
-            }
-            pogo.name = this.name + callerSuffix;
-            lastpogo = pogo;
-            return pogo;
-        }
+
 
         public GameObject GetPogo(string callerSuffix,bool createpogo=false,bool resetposition=false)
         {

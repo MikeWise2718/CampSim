@@ -50,6 +50,7 @@ namespace GraphAlgos
         public GraphCtrl grc;
         public string name;
         public Vector3 pt;
+        public Vector3 pto;
         public Transform transform;
         public int transformSetCount = 0;
         public HashSet<Weg> wegtos;
@@ -93,6 +94,7 @@ namespace GraphAlgos
             this.grc = grc;
             this.name = name;
             this.pt = pt;
+            this.pto = pt;
             this.usetype = usetype;
             this.regid = nodeRegion.regid;
             this.comment = comment;
@@ -215,6 +217,7 @@ namespace GraphAlgos
         {
             {LinkUse.trackheli,1.0f },
             {LinkUse.trackdrone,1.0f },
+            {LinkUse.droneway,1.0f },
         };
 
         public static Dictionary<LcCapType, Dictionary<LinkUse, float>> candodict = new Dictionary<LcCapType, Dictionary<LinkUse, float>>()

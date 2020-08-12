@@ -294,6 +294,16 @@ namespace CampusSimulator
             return rv;
         }
 
+        bool IsFragable(LcLink link)
+        {
+            var rv = true;
+            if (link.usetype== LinkUse.droneway)
+            {
+                rv = false;
+            }
+            return rv;
+        }
+
         bool CheckCapUseVisibility(LcNode node)
         {
             var rv = true;
@@ -350,8 +360,12 @@ namespace CampusSimulator
                 node.lng = v2.y;
                 if (calcHeights)
                 {
-                    var yoff = GetHeight(node.pt.x, node.pt.z);
-                    node.pt = new Vector3(node.pt.x, 0 + yoff, node.pt.z);
+                    var yoff = GetHeight(node.pto.x, node.pto.z);
+                    //if (node.pto.y>5)
+                    //{
+                    //    Debug.Log("Here is one");
+                    //}
+                    node.pt = new Vector3(node.pto.x, node.pto.y + yoff, node.pto.z);
                 }
             }
             var cam = Camera.current;
@@ -448,10 +462,11 @@ namespace CampusSimulator
                 foreach (var lnk in links)
                 {
                     if (!CheckCapUseVisibility(lnk)) continue;
+                    var dofrag = IsFragable(lnk);
                     var clrname = linkcolor(lnk);
                     var linkrad = linkradius(lnk);
                     var linkfrm = linkform(lnk);
-                    var go = LinkGo.MakeLinkGo(sman, lnk, linkfrm, linkrad, clrname,1-linkTrans,this.flatlinks,dofrag:true);
+                    var go = LinkGo.MakeLinkGo(sman, lnk, linkfrm, linkrad, clrname,1-linkTrans,this.flatlinks,dofrag:dofrag);
                     go.transform.parent = grclinks.transform;
                 }
                 swlk.Stop();
@@ -589,7 +604,6 @@ namespace CampusSimulator
         {
             return nodeColorOverrides[nodename];
         }
-
 
         private string nodecolor(string nodename)
         {

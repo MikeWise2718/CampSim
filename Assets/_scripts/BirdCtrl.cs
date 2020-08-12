@@ -36,6 +36,7 @@ namespace CampusSimulator
         public int birdformidx = 1;
         public string birdresourcename = "";
         public float birdscale = 1;
+        public bool lookatpoint = true;
 
         public PathPos pathpos = null;
         public Weg pathweg = null;
@@ -263,7 +264,7 @@ namespace CampusSimulator
                         if (person)
                         {
                             //birdformgo = person.CreatePersonGo("-ava-bc");// bird journey person
-                            birdformgo = person.GetPogo("-ava-bc",createpogo:true,resetposition:true);// bird journey person
+                            birdformgo = person.GetPogo("-ava-bc",createpogo:true,resetposition:false);// bird journey person
                             if (person.hasHololens)
                             {
                                 person.ActivateHololens(true);
@@ -285,7 +286,10 @@ namespace CampusSimulator
                             s *= birdscale;
                         }
                         birdformgo.transform.localScale = new Vector3(s, s, s);
-                        birdformgo.transform.localRotation = currot;
+                        if (lookatpoint)
+                        {
+                            birdformgo.transform.localRotation = currot;
+                        }
                         //var noise = GraphAlgos.GraphUtil.GetRanFloat(0, 0.6f,"jnygen");
                         var newpos = new Vector3(curpos.x+0.3f, curpos.y - 1.55f, curpos.z);
                         birdformgo.transform.localPosition = newpos;
@@ -411,14 +415,17 @@ namespace CampusSimulator
         {
             rundist += BirdSpeedFactor*BirdSpeed*deltatime; // deltaTime is time to complete last frame
             curpt = GetPathPoint(rundist);
-            var curlookpt = GetPathPoint(rundist + lookaheadtime + deltatime,curpos:false);
             var delt = curpt - lastcurpt;
             if (deltatime > 0)
             {
                 birdVelVek = delt / deltatime;
             }
             birdgo.transform.localPosition += delt;
-            birdgo.transform.LookAt(curlookpt);
+            if (lookatpoint)
+            {
+                var curlookpt = GetPathPoint(rundist + lookaheadtime + deltatime, curpos: false);
+                birdgo.transform.LookAt(curlookpt);
+            }
             lastcurpt = curpt;
             SetAnimationScript();
             

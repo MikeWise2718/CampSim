@@ -14,6 +14,7 @@ namespace CampusSimulator
         Dictionary<string, Building> bldlookup = new Dictionary<string, Building>();
         List<string> bldnames = new List<string>(); // maintain a sorted list of buildings with destinations
         List<string> wtdbldnames = new List<string>(); // maintain a sorted weighted list of buildings with destinations
+        List<string> dronebldnames = new List<string>(); // maintain a  weighted list of buildings with drone destinations
 
         Dictionary<string, BldRoom> noderoomlookup = new Dictionary<string, BldRoom>(); // a home for fixed nodes that need to know their building
         Dictionary<string, BldRoom> roomlookup = new Dictionary<string, BldRoom>();
@@ -25,6 +26,7 @@ namespace CampusSimulator
 
         // Stats for Inspector 
         public int nBuildings;
+        public int nDroneBuildings;
         public int nSkippedBuildingsWithoutOsmPoints;
         public int nRooms;
         public int nPads;
@@ -192,8 +194,18 @@ namespace CampusSimulator
 
         public void ModelInitialize(SceneSelE newregion)
         {
+            bldlookup = new Dictionary<string, Building>();
+            bldnames = new List<string>(); // maintain a sorted list of buildings with destinations
+            wtdbldnames = new List<string>(); // maintain a sorted weighted list of buildings with destinations
+            dronebldnames = new List<string>(); // maintain a  weighted list of buildings with drone destinations
+
+            noderoomlookup = new Dictionary<string, BldRoom>(); // a home for fixed nodes that need to know their building
+            roomlookup = new Dictionary<string, BldRoom>();
+            nodepadlookup = new Dictionary<string, BldDronePad>(); // a home for fixed nodes that need to know their building
+            padlookup = new Dictionary<string, BldDronePad>();
             bldspecs = new List<OsmBldSpec>();
             bsDict = new Dictionary<OsmBldSpec, Building>();
+
             InitializeValues();
         }
 
@@ -245,7 +257,6 @@ namespace CampusSimulator
             nPeople = 0;
             nVehicles = 0;
             Debug.Log($"BuildingMan.SetScene {sman.curscene}");
-            DelBuildings();
 
             var doosmblds = osmblds.Get();
             //Debug.Log($"doosmblds:{doosmblds} osmloadspec{osmloadspec}");
@@ -291,11 +302,22 @@ namespace CampusSimulator
             AddRoomsToBuildings();
             PopulateBuildings();
             AddExtraPeople();
+            dronebldnames = new List<string>();
+            foreach (var bld in bldlookup.Values)
+            {
+                var npads = bld.GetPads().Count;
+                if (npads > 0)
+                {
+                    dronebldnames.Add(bld.name);
+                    dronebldnames.Sort();
+                }
+            }
             UpdateBldStats();
         }
         public void UpdateBldStats()
         {
             nBuildings = bldlookup.Count;
+            nDroneBuildings = dronebldnames.Count;
             nRooms = roomlookup.Count;
             nPads = padlookup.Count;
             nPeople = sman.psman.GetPersonCount();
@@ -306,7 +328,10 @@ namespace CampusSimulator
             }
             nVehicles = sman.veman.GetVehicleCount();
             nDrones = 0;
-            nDronesOnPads = 0;
+            foreach (var pad in padlookup.Values)
+            {
+                nDronesOnPads += pad.GetAllPeopleInRoom().Count;
+            }
         }
         public void MakeBuildings(string filtername)
         {
@@ -419,6 +444,20 @@ namespace CampusSimulator
             //Debug.Log("Choose " + choosen + " after " + ntries + " tries");
             return choosen;
         }
+        public string GetRandomDroneBldName(string notthisone = "", string ranset = "")
+        {
+            var choosen = "nope!!!";
+            var ntries = 0;
+            var maxtries = 10;
+            while (ntries == 0 || (choosen == notthisone && ntries < maxtries))
+            {
+                var diceroll = GraphAlgos.GraphUtil.GetRanInt(dronebldnames.Count, ranset);
+                choosen = dronebldnames[diceroll];
+                ntries++;
+            }
+            //Debug.Log("Choose " + choosen + " after " + ntries + " tries");
+            return choosen;
+        }
         public Building GetRandomBld(string notthisone = "",string ranset="")
         {
             var bname = GetRandomBldName(notthisone,ranset);
@@ -451,15 +490,14 @@ namespace CampusSimulator
                 bgo.transform.position = Vector3.zero;
                 bgo.transform.parent = this.transform;
                 bld = bgo.AddComponent<Building>();
-                AddBuildingToCollection(bld); /// has to be afterwards because of the sorted names for journeys
             }
             bld.AddOsmBldDetails(this, bldspec);
+            AddBuildingToCollection(bld);
             //bld.llm = bgo.AddComponent<LatLongMap>(); // todo uncomment
             //var origin = $"BuildingMan.MakeOsmBuilding(\"{mbname}\")";
             //bld.llm = new LatLongMap(origin); // todo uncomment
             //bld.llm.AddLlmDetails();
             //sman.jnman.AddViewerJourneyNodes(bld.destnodes, prefix: $"{mbname}/");
-            UpdateBldStats();
         }
         public void MakeBuilding(string mbname)
         {
@@ -468,28 +506,40 @@ namespace CampusSimulator
             bgo.transform.parent = this.transform;
             var bld = bgo.AddComponent<Building>();
             bld.AddBldDetails(this);
-            AddBuildingToCollection(bld); /// has to be afterwards because of the sorted names for journeys
+            AddBuildingToCollection(bld);
+
             //bld.llm = bgo.AddComponent<LatLongMap>(); // todo uncomment
             //var origin = $"BuildingMan.MakeBuilding(\"{mbname}\")";
             //bld.llm = new LatLongMap(origin); // todo uncomment
-                                        //bld.llm.AddLlmDetails();
+            //bld.llm.AddLlmDetails();
             sman.jnman.AddViewerJourneyNodes(bld.destnodes,prefix:$"{mbname}/");
-            UpdateBldStats();
         }
         public void DelBuildings()
         {
+
+
             //Debug.Log("DelBuildings called");
             if (bldlookup != null)
             {
                 var namelist = new List<string>(bldlookup.Keys);
                 namelist.ForEach(name => DelBuilding(name));
             }
-            bldlookup = new Dictionary<string, Building>();
+            bldlookup = null;
             if (bldspecs != null)
             {
                 bldspecs.ForEach(bs => Destroy(bs.bgo));
             }
-            bldspecs = new List<OsmBldSpec>();
+            bldspecs = null;
+
+            bldlookup = null;
+            bldnames = null;
+            wtdbldnames = null;
+            dronebldnames = null;
+
+            noderoomlookup = null;
+            roomlookup = null;
+            nodepadlookup = null;
+            padlookup = null;
         }
         public void DelBuilding(string name)
         {
@@ -539,6 +589,7 @@ namespace CampusSimulator
                 }
                 wtdbldnames.Sort();
             }
+
             bldlookup[building.name] = building;
             //Debug.Log("Added bld " + building.name);
         }
@@ -549,10 +600,12 @@ namespace CampusSimulator
         }
         public int GetBuildingCount()
         {
+            if (bldnames == null) return 0;
             return bldnames.Count;
         }
         public int GetBroomCount()
         {
+            if (roomlookup == null) return 0;
             return roomlookup.Count;
         }
         public void ReinitDests()

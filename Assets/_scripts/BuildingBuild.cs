@@ -692,7 +692,6 @@ namespace CampusSimulator
                     bldgos.Add(bgo);
                     EchOsmOutline(this.gameObject, bldspec,pgvd:pgvd);
                 }
-                return;
             }
             var fixedbuildings = bm.fixedblds.Get();
             var dofixed = fixedbuildings && bmode == BuildingMan.BldModeE.full;

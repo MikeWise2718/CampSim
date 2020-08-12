@@ -197,9 +197,9 @@ namespace CampusSimulator
                 }
             }
             calcVeks();
-            var y = zm.sman.mpman.GetHeight(x, z);
+            //var y = zm.sman.mpman.GetHeight(x, z);
             //Debug.Log($"{name}  x:{x} y:{y} z:{z}  ang:{ang}");
-            slotformgo.transform.position = new Vector3(x, y, z);
+            slotformgo.transform.position = new Vector3(x, 0, z);
             slotformgo.transform.rotation = Quaternion.Euler(0, ang + 90, 0);
         }
 

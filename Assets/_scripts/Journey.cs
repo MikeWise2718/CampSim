@@ -153,6 +153,7 @@ namespace CampusSimulator
             birdctrl.SetBirdPath(pathctrl.path);
             birdctrl.birdresourcename = currentleg.formname;
             birdctrl.birdscale = currentleg.skafak;
+            birdctrl.lookatpoint = currentleg.lookatpt;
             birdctrl.BirdForm = currentleg.form;
             birdctrl.rundist = currentleg.lambstart * pathctrl.path.pathLength;
              //Debug.Log("set birdresourcename to:"+currentleg.formname+" legidx:"+legidx);

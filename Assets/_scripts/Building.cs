@@ -34,12 +34,17 @@ namespace CampusSimulator
         public Person GetRandomFreeToTravelPerson(string ranset="")
         {
             var peeps = GetFreePeopleInRooms();
-            var dronepeeps = GetFreeDronesInRooms();
-            peeps.AddRange(dronepeeps);
-            var npeeps = peeps.Count;
             if (peeps.Count == 0)  return null;
             var i = GraphAlgos.GraphUtil.GetRanInt(peeps.Count,ranset);
             return peeps[i];
+        }
+
+        public Person GetRandomFreeToTravelDrone(string ranset = "")
+        {
+            var dronepeeps = GetFreeDronesInRooms();
+            if (dronepeeps.Count == 0) return null;
+            var i = GraphAlgos.GraphUtil.GetRanInt(dronepeeps.Count, ranset);
+            return dronepeeps[i];
         }
 
         public BldRoom GetFirstFreeRoom()
@@ -57,8 +62,22 @@ namespace CampusSimulator
         public BldRoom GetRandomRoom(string ranset="")
         {
             var brooms = GetRooms();
+            if (brooms.Count == 0)
+            {
+                return null;
+            }
             var i = GraphAlgos.GraphUtil.GetRanInt(brooms.Count,ranset);
             return brooms[i];
+        }
+        public BldDronePad GetRandomPad(string ranset = "")
+        {
+            var pads = GetPads();
+            if (pads.Count==0)
+            {
+                return null;
+            }
+            var i = GraphAlgos.GraphUtil.GetRanInt(pads.Count, ranset);
+            return pads[i];
         }
 
         public string GetRandomDest(string ranset="")
@@ -212,6 +231,11 @@ namespace CampusSimulator
         {
             var roomlist = new List<BldRoom>(roomdict.Values);
             return roomlist;
+        }
+        public List<BldDronePad> GetPads()
+        {
+            var padlist = new List<BldDronePad>(paddict.Values);
+            return padlist;
         }
 
         public void PopulateBuilding()

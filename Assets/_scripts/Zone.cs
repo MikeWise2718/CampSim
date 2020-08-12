@@ -221,8 +221,8 @@ namespace CampusSimulator
                     AddSlot(name, idx, x,z,  ang);
                     var nname = SlotNameNode(idx);
                     //lclc.AddNodePtxy(nname, x, z);
-                    var y = mman.GetHeight(x, z);
-                    lclc.AddNode(nname,new Vector3(x,y,z),domodv:false);
+                    //var y = mman.GetHeight(x, z);
+                    lclc.AddNode(nname,new Vector3(x,0,z),domodv:false);
                     //Debug.Log("Added zone slot node:" + nname+" idx:"+idx+" x:"+x.ToString("f1")+" z:"+z.ToString("f1"));
                 }
                 x0 = x0 - dz;
