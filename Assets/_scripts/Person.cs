@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using UnityEditor;
 using UnityEngine;
 
 namespace CampusSimulator
@@ -44,8 +45,10 @@ namespace CampusSimulator
         public bool flagged = false;
         public PersonAniStateE perstate = PersonAniStateE.standing;
         public bool isVisible = true;
+        public bool isdronelike = false;
         public float scale;
         public Vector3 rotate;
+        public Vector3 tran;
 
 
         public void SetVisiblity(bool visstat)
@@ -59,7 +62,7 @@ namespace CampusSimulator
 
 
 
-        public void AddPrsDetails(PersonMan pm,PersonMan.GenderE gender,string persname,string avatartype,string avatarname, PersonMan.empStatusE empstat,bool hasHololens=false, float ska = 1, float xrot = 0, float yrot = 0, float zrot = 0)
+        public void AddPrsDetails(PersonMan pm,PersonMan.GenderE gender,string persname,string avatartype,string avatarname, PersonMan.empStatusE empstat,bool hasHololens, float ska,Vector3 rot, Vector3 trans)
         {
             this.pm = pm;
             this.bm = pm.sman.bdman;
@@ -79,7 +82,8 @@ namespace CampusSimulator
             this.empStatus = empstat;
             this.hasHololens = hasHololens;
             this.scale = ska;
-            this.rotate = new Vector3( xrot,yrot,zrot );
+            this.rotate = rot;
+            this.tran = trans;
             //this.prsgos = new List<GameObject>();
         }
 
@@ -99,7 +103,16 @@ namespace CampusSimulator
             this.placeBld = bldname;
             this.placeRoom = roomname;
             this.placeNode = nodename;
-            var broom = bm.GetBroom(this.placeRoom);
+            var broom = bm.GetBroom(this.placeRoom,expectFailure:true);
+            if (broom==null)
+            {
+                var bpad = bm.GetBpad(this.placeRoom);
+                if (bpad==null)
+                {
+                    Debug.LogError($"Person.AssignHomeLocation error lookin up placeRoom:{placeRoom}");
+                    return;
+                }
+            }
             bm.AssociateNodeWithRoom(placeNode, broom);
         }
         public bool IsInHomeBuilding()
@@ -139,15 +152,16 @@ namespace CampusSimulator
             ipogo.name = "instance";
             ipogo.transform.localScale = new Vector3(scale, scale, scale);
             ipogo.transform.localRotation *= Quaternion.Euler( rotate );
+            ipogo.transform.position = tran;
             var pogo = new GameObject();
-            ipogo.transform.parent = pogo.transform;
+            ipogo.transform.SetParent(pogo.transform,worldPositionStays:false);
             //var animator = pogo.GetComponent<Animator>();
             //animator.applyRootMotion = false;
             //animator.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Animations/PersonIdle");
             if (ispeople)
             {
                 persGo = ipogo.AddComponent<PersonGo>();
-                persGo.Init(this);
+                persGo.Init(this, lastpogo);
                 height = persGo.GetPersonHeight();
                 if (this.hasHololens)
                 {
@@ -179,7 +193,7 @@ namespace CampusSimulator
             if (ispeople)
             {
                 persGo = pogo.AddComponent<PersonGo>();
-                persGo.Init(this);
+                persGo.Init(this,lastpogo);
                 height = persGo.GetPersonHeight();
                 if (this.hasHololens)
                 {
@@ -195,13 +209,14 @@ namespace CampusSimulator
         {
             if (createpogo)
             {
-                return CreatePersonGo(callerSuffix);
+                var pogo = CreatePersonGo(callerSuffix);
+                return pogo;
             }
             if (resetposition)
             {
                 lastpogo.transform.position = Vector3.zero;
                 lastpogo.transform.localRotation = Quaternion.identity;
-                persGo.Init(this);
+                persGo.Init(this, lastpogo);
                 persGo = null;
             }
             return lastpogo;
@@ -268,6 +283,17 @@ namespace CampusSimulator
             }
             return rv;
         }
+
+        public BldDronePad GetCurrentPad()
+        {
+            BldDronePad rv = null;
+            if (bm.IsPad(placeRoom))
+            {
+                rv = bm.GetBpad(placeRoom);
+            }
+            return rv;
+        }
+
 
 
 

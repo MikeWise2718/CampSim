@@ -633,6 +633,7 @@ namespace CampusSimulator
             { LinkUse.trackperson,SceneMan.RmColorModeE.trackperson },
             { LinkUse.trackheli,SceneMan.RmColorModeE.trackheli },
             { LinkUse.trackdrone,SceneMan.RmColorModeE.trackdrone },
+            { LinkUse.droneway,SceneMan.RmColorModeE.trackdrone },
         };
 
 

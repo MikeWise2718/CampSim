@@ -34,6 +34,8 @@ namespace CampusSimulator
         public Person GetRandomFreeToTravelPerson(string ranset="")
         {
             var peeps = GetFreePeopleInRooms();
+            var dronepeeps = GetFreeDronesInRooms();
+            peeps.AddRange(dronepeeps);
             var npeeps = peeps.Count;
             if (peeps.Count == 0)  return null;
             var i = GraphAlgos.GraphUtil.GetRanInt(peeps.Count,ranset);
@@ -175,6 +177,18 @@ namespace CampusSimulator
             var roomlist = new List<BldRoom>(roomdict.Values);
             var peeplist = new List<Person>();
             foreach (var broom in roomlist)
+            {
+                var broompeeps = broom.GetFreePeopleInRoom();
+                peeplist.AddRange(broompeeps);
+            }
+            return peeplist;
+        }
+
+        public List<Person> GetFreeDronesInRooms()
+        {
+            var padlist = new List<BldDronePad>(paddict.Values);
+            var peeplist = new List<Person>();
+            foreach (var broom in padlist)
             {
                 var broompeeps = broom.GetFreePeopleInRoom();
                 peeplist.AddRange(broompeeps);

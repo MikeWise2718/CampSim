@@ -1432,7 +1432,7 @@ namespace CampusSimulator
 
 
         public enum RmColorModeE { nodepathstart, nodepathend, nodecloud, nodecloudx,  linkcloud,linkhighway,linkroad,linkslowroad,linkdriveway, linkwalk,linkwalknoshow, linkexcavate, linksurvey,linkwater,linkreclaimwater,linksewer, linkelec,linkcomms,linkoilgas, pathnode, pathlink, pathlookat, bldwall, 
-                                   trackperson,trackheli,trackdrone }
+                                   trackperson,trackheli,trackdrone,droneway }
 
 
 
@@ -1468,7 +1468,8 @@ namespace CampusSimulator
 
             { RmColorModeE.trackperson, ("darkred",0.2f,RmLinkFormE.pipe)},
             { RmColorModeE.trackheli, ("darkgreen",0.2f,RmLinkFormE.pipe)},
-            { RmColorModeE.trackdrone, ("darkblue",0.2f,RmLinkFormE.pipe)},
+            { RmColorModeE.trackdrone, ("deeppurple",0.2f,RmLinkFormE.pipe)},
+            { RmColorModeE.droneway, ("darkblue",0.2f,RmLinkFormE.pipe)},
         };
 
 

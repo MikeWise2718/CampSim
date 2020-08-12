@@ -108,7 +108,7 @@ namespace CampusSimulator {
                     var pogo = person.GetPogo("-ava-br", createpogo: true, resetposition: true);// room person
 //                    var persgo = pers.CreatePersonGo("-ava-br");// room person
                     var idlescript = person.idleScript;
-                    var animator = pogo.GetComponent<Animator>();
+                    var animator = pogo.GetComponentInChildren<Animator>();
                     if (animator != null)
                     {
                         animator.applyRootMotion = false;

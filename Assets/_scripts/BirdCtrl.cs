@@ -289,12 +289,15 @@ namespace CampusSimulator
                         //var noise = GraphAlgos.GraphUtil.GetRanFloat(0, 0.6f,"jnygen");
                         var newpos = new Vector3(curpos.x+0.3f, curpos.y - 1.55f, curpos.z);
                         birdformgo.transform.localPosition = newpos;
-                        movingAnimationScript = "Animations/PersonWalk";
-                        restingAnimationScript = "Animations/PersonIdle";
                         //BirdFlyHeight = 1.5f;
                         birdgo.name = birdresourcename;
                         if (person)
                         {
+                            if (!person.isdronelike)
+                            {
+                                movingAnimationScript = "Animations/PersonWalk";
+                                restingAnimationScript = "Animations/PersonIdle";
+                            }
                             if (person.hasCamera)
                             {
                                 person.AddCamera(birdformgo, "BirdCtrl CreateBirdFormGos");
@@ -465,7 +468,7 @@ namespace CampusSimulator
         {
             if (movingAnimationScript != "")
             {
-                var acomp = birdformgo.GetComponent<Animator>();
+                var acomp = birdformgo.GetComponentInChildren<Animator>();
                 if (acomp != null)
                 {
                     acomp.applyRootMotion = false;
@@ -489,13 +492,13 @@ namespace CampusSimulator
                 }
                 else
                 {
-                    Debug.Log("Could not find animatior component on birdformgo");
+                    Debug.LogWarning($"Could not find animator on birdformgo for script:{movingAnimationScript}");
                 }
             }
         }
         void ClearAimationScript()
         {
-            var acomp = birdformgo.GetComponent<Animator>();
+            var acomp = birdformgo.GetComponentInChildren<Animator>();
             if (acomp != null)
             {
                 acomp.applyRootMotion = false;

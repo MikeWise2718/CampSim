@@ -72,15 +72,15 @@ namespace CampusSimulator
             }
         }
 
-        public BldRoom GetAssociatedPad(string nodename)
+        public BldDronePad GetAssociatedPad(string nodename)
         {
-            if (IsRoom(nodename))
+            if (IsPad(nodename))
             {
-                return roomlookup[nodename];
+                return padlookup[nodename];
             }
-            else if (IsRoomAssociatedNode(nodename))
+            else if (IsPadAssociatedNode(nodename))
             {
-                return noderoomlookup[nodename];
+                return nodepadlookup[nodename];
             }
             else
             {
@@ -106,6 +106,24 @@ namespace CampusSimulator
         {
             return new List<BldRoom>(roomlookup.Values);
         }
+
+        public BldDronePad GetBpad(string padname, bool expectFailure = false)
+        {
+            if (!padlookup.ContainsKey(padname))
+            {
+                if (!expectFailure)
+                {
+                    Debug.LogError($"Bad padname lookup {padname}");
+                }
+                return null;
+            }
+            return padlookup[padname];
+        }
+        public List<BldDronePad> GetPads()
+        {
+            return new List<BldDronePad>(padlookup.Values);
+        }
+
 
         public void ToggleBld()
         {
@@ -562,11 +580,13 @@ namespace CampusSimulator
         }
         public bool IsRoom(string nodename)
         {
-            return roomlookup.ContainsKey(nodename);
+            var rv = roomlookup.ContainsKey(nodename);
+            return rv;
         }
         public bool IsPad(string nodename)
         {
-            return padlookup.ContainsKey(nodename);
+            var rv = padlookup.ContainsKey(nodename);
+            return rv;
         }
         public bool IsRoomAssociatedNode(string nodename)
         {
@@ -595,7 +615,7 @@ namespace CampusSimulator
         }
         public bool IsRoomlike(string nodename)
         {
-            return IsRoom(nodename) || IsRoomAssociatedNode(nodename);
+            return IsRoom(nodename) || IsRoomAssociatedNode(nodename) || IsPad(nodename) || IsPadAssociatedNode(nodename);
         }
         public bool IsPadlike(string nodename)
         {
@@ -627,7 +647,14 @@ namespace CampusSimulator
             var broom = GetAssociatedRoom(vacnode);
             if (!broom)
             {
-                Debug.Log("Can't vacate slot:" + vacnode);
+                var bpad = GetAssociatedPad(vacnode);
+                if (!bpad)
+                {
+                    Debug.LogWarning($"BuildingMan cannot find vacnode as room or pad - can not vacate slot:{vacnode}");
+                    return;
+                }
+                bpad.Vacate(person);
+                return;
             }
             broom.Vacate(person);
             //person.AssignCurLocation(vacnode, vacnode);

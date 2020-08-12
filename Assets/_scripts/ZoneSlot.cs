@@ -170,7 +170,7 @@ namespace CampusSimulator
 
                 //pogo = person.CreatePersonGo("-ava-zs"); // zone person
                 pogo = person.GetPogo("-ava-zs",createpogo:true,resetposition:true); // zone person
-                var animator = pogo.GetComponent<Animator>();
+                var animator = pogo.GetComponentInChildren<Animator>();
                 animator.applyRootMotion = false;
                 var script = person.idleScript;
                 person.perstate = PersonAniStateE.standing;

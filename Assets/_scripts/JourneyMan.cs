@@ -727,7 +727,7 @@ namespace CampusSimulator
             var pathname = $"{b1} to {b2}";
             if (journeyMessages)
             {
-                Debug.Log($"Spawning journey {pathname}");
+                Debug.Log($"Spawning ABNBJWEP journey {pathname}");
             }
             var bdest1 = bar1[1];
             var bdest2 = bar2[1];
@@ -758,7 +758,7 @@ namespace CampusSimulator
             var pathname = bc1.shortname + " to " + bc2.shortname;
             if (journeyMessages)
             {
-                Debug.Log("Spawning journey " + pathname);
+                Debug.Log("Spawning ABBJWEP journey " + pathname);
             }
             var bdest1 = bc1.GetRandomDest("jnygen");
             var bdest2 = bc2.GetRandomDest("jnygen");
@@ -787,7 +787,7 @@ namespace CampusSimulator
             var roomslot = room.ReserveRoomSlot();
             if (journeyMessages)
             {
-                Debug.Log("Spawning journey for " + person.personName + "from " + person.placeRoom + " to " + room.roomFullName);
+                Debug.Log("Spawning APJ journey for " + person.personName + "from " + person.placeRoom + " to " + room.roomFullName);
             }
             return AddPersonBldroomJourney(person, room, roomslot);
         }
@@ -803,7 +803,7 @@ namespace CampusSimulator
             var person = bc1.GetRandomFreeToTravelPerson("jnygen");
             if (person == null)
             {
-                Debug.LogWarning("AddPersonBldRoomJourney failed building b1:" + b1 + " GetRandomFreeToTravel Person returned null");
+                //Debug.LogWarning("AddPersonBldRoomJourney failed building b1:" + b1 + " GetRandomFreeToTravel Person returned null"); this is not actually an error
                 return null;
             }
             bool interBuilding = GraphAlgos.GraphUtil.FlipBiasedCoin(pctInterBuildingJourneys);
@@ -821,7 +821,7 @@ namespace CampusSimulator
             var roomslot = room.ReserveRoomSlot();
             if (journeyMessages)
             {
-                Debug.Log("Spawning journey for " + person.personName+" from "+person.placeRoom + " to "+room.roomFullName);
+                Debug.Log("Spawning APBRJ journey for " + person.personName+" from "+person.placeRoom + " to "+room.roomFullName);
             }
             Journey jny;
             if (interBuilding || bc1 == bc2) // 2nd clause might be true by accident
@@ -1186,6 +1186,66 @@ namespace CampusSimulator
             return rv;
         }
         void SpawnJourneysByBuilding()
+        {
+            var nbldcnt = bm.GetBuildingCount();
+            if (nbldcnt == 0)
+            {
+                nspawnfails++;
+                Debug.LogWarning("Cannot spawn jouneys without buildings nbldcnt:" + nbldcnt + " tries:" + nspawntries + " fails:" + nspawnfails);
+                return; // no buildings so no journeys
+            }
+            if (nspawntries == 0 || (Time.time - lastspawn) > spawninterval)
+            {
+                for (int i = 0; i < nspawnbatch; i++)
+                {
+                    lvelfak = 1;
+                    if (sman.fastMode)
+                    {
+                        lvelfak = 2.5f;
+                    }
+                    Debug.Log($"SJBB {i} spawning nbldcnt:{nbldcnt} tries:{nspawntries} fails:{nspawnfails}");
+                    Journey jny;
+                    var b1 = bm.GetRandomBldName("");
+                    if (preferedJourneyBuildingName != "")
+                    {
+                        if (GraphAlgos.GraphUtil.FlipBiasedCoin(preferedJourneyBuildingBias))
+                        {
+                            b1 = preferedJourneyBuildingName;
+                        }
+                    }
+                    var donotchoose = (allowdupdests ? "" : b1);
+                    var b2 = bm.GetRandomBldName(donotchoose);
+                    if (preferedJourneyBuildingName != "")
+                    {
+                        if (GraphAlgos.GraphUtil.FlipBiasedCoin(preferedJourneyBuildingBias))
+                        {
+                            b2 = preferedJourneyBuildingName;
+                        }
+                    }
+                    var movepeople = true;
+                    if (movepeople)
+                    {
+                        jny = AddPersonBldRoomJourney(b1, b2);
+                    }
+                    else
+                    {
+                        jny = AddBldBldJourneyWithEphemeralPeople(b1, b2);
+                    }
+                    if (jny == null)
+                    {
+                        nspawnfails++;
+                    }
+                    else
+                    {
+                        nspawned++;
+                    }
+                    nspawntries++;
+                    lastspawn = Time.time;
+                }
+            }
+        }
+
+        void SpawnDroneJourneysByBuilding()
         {
             var nbldcnt = bm.GetBuildingCount();
             if (nbldcnt == 0)
