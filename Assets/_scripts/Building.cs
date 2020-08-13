@@ -295,55 +295,34 @@ namespace CampusSimulator
             roomgo.transform.parent = roomlistgo.transform;
         }
 
-        public void AddOnePad(string padname)
-        {
-            var padgo = new GameObject(padname);
-            var padcomp = padgo.AddComponent<BldDronePad>();
-            padcomp.Initialize(this, padname, padname);
-            var padpt = this.transform.position;
-
-            if (lc.IsNodeName(padname))
-            {
-                var lpt = lc.GetNode(padname);
-                padpt = lpt.pt;
-            }
-            var alignang = defAngAlign;
-            var pcap = defPeoplePerRoom;
-            var area = defRoomArea;
-            padcomp.SetStatsArea(padpt, pcap, alignang, area, true);
-            paddict[padname] = padcomp;
-            bm.RegisterPad(padname, padcomp);
-            padgo.transform.parent = roomlistgo.transform;
-        }
         public int StrToInt(string str,int defval)
         {
-            int val;
-            var status = int.TryParse(str, out val);
+            var status = int.TryParse(str, out int val);
             return (status ? val : defval);
         }
         public float StrToFloat(string str, float devval)
         {
-            float val;
-            var status = float.TryParse(str, out val);
+            var status = float.TryParse(str, out float val);
             return (status ? val : devval);
         }
 
-        public void AddOneRoomSpec(string roomspec)
+        public void AddOneRoomFromStringRoomspec(string roomspec)
         {
-            //Debug.Log("AddOneRoomSpec:" + roomspec);
             var rar = roomspec.Split(':');
             var roomname = rar[0];
-
+            var roomnodename = roomname;
+            if (!lc.IsNodeName(roomnodename))
+            {
+                Debug.LogError($"Building.AddOneRoomFromStringRoomspec - bad padspec{roomspec}");
+                return;
+            }
+            var lpt = lc.GetNode(roomnodename);
             var roomgo = new GameObject(roomname);
             var roomcomp = roomgo.AddComponent<BldRoom>();
-            roomcomp.Initialize(this, roomname, roomname);
-            var roompt = this.transform.position;
+            roomcomp.Initialize(this, roomname, roomnodename);
+            var roompt = lpt.pt;
 
-            if (lc.IsNodeName(roomname))
-            {
-                var lpt = lc.GetNode(roomname);
-                roompt = lpt.pt;
-            }
+
             var pcap = StrToInt(rar[1], 1);//roomspecs
             var alignang = StrToFloat(rar[2],0);
             var length = StrToFloat(rar[3],2);
@@ -355,22 +334,36 @@ namespace CampusSimulator
             roomgo.transform.parent = roomlistgo.transform;
         }
 
-        public void AddOnePadSpec(string padspec)
+        public void AddOnePadFromStringPadspec(string padspec)
         {
             //Debug.Log("AddOneRoomSpec:" + roomspec);
             var rar = padspec.Split(':');
             var padname = rar[0];
-
+            var padnodename = padname;
+            if (padname.EndsWith("centertop"))
+            {
+                if (!isOsmBld)
+                {
+                    Debug.LogError($"Building.AddOnePadFromStringPadspec - cannot compute center of building without OsmBldSpec");
+                    return;
+                }
+                var bs = bm.GetBldBs(this);
+                var ptcen = bs.GetCenterTop();
+                var gc = bm.sman.lcman.GetGraphCtrl();
+                var ptcen1 = bm.sman.mpman.GetHeightVector3(ptcen);// we have to do this extra because we are post linkcloud
+                gc.AddNodePtxyz(padnodename, ptcen1.x,ptcen1.y,ptcen1.z);
+            }
+            else if (!lc.IsNodeName(padnodename))
+            { 
+                Debug.LogError($"Building.AddOnePadFromStringPadspec - bad padspec{padspec}");
+                return;
+            }
+            var lpt = lc.GetNode(padnodename);
             var padgo = new GameObject(padname);
             var padcomp = padgo.AddComponent<BldDronePad>();
-            padcomp.Initialize(this, padname, padname);
-            var roompt = this.transform.position;
+            padcomp.Initialize(this, padname, padnodename);
+            var roompt = lpt.pt;
 
-            if (lc.IsNodeName(padname))
-            {
-                var lpt = lc.GetNode(padname);
-                roompt = lpt.pt;
-            }
             var pcap = StrToInt(rar[1], 1);//roomspecs
             var alignang = StrToFloat(rar[2], 0);
             var length = StrToFloat(rar[3], 2);
@@ -380,6 +373,7 @@ namespace CampusSimulator
             paddict[padname] = padcomp;
             bm.RegisterPad(padname, padcomp);
             padgo.transform.parent = roomlistgo.transform;
+            bm.sman.drman.RegisterDronePad(padcomp);
         }
 
         public void AddRoomsToBuilding()
@@ -396,9 +390,9 @@ namespace CampusSimulator
             }
             else
             {
-                roomspecs.ForEach(roomspec => AddOneRoomSpec(roomspec));
+                roomspecs.ForEach(roomspec => AddOneRoomFromStringRoomspec(roomspec));
             }
-            bldpadspecs.ForEach(padspec => AddOnePadSpec(padspec));
+            bldpadspecs.ForEach(padspec => AddOnePadFromStringPadspec(padspec));
             bm.UpdateBldStats();
         }
 

@@ -21,6 +21,10 @@ namespace CampusSimulator
         public enum VehModeE { none, full };
         public UxEnumSetting<VehModeE> bldMode = new UxEnumSetting<VehModeE>("VehicleMode", VehModeE.full);
 
+        public void InitPhase0()
+        {
+        }
+
         public void ModelInitiailze(SceneSelE newregion)
         {
         }

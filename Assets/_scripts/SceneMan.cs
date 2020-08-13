@@ -113,6 +113,7 @@ namespace CampusSimulator
         public LocationMan loman;
         public PersonMan psman;
         public VehicleMan veman;
+        public DroneMan drman;
         public ZoneMan znman;
         public FrameMan frman;
         public CalibMan cbman;
@@ -209,6 +210,7 @@ namespace CampusSimulator
                                                        // causes lots of error messages
             psman = FindObjectOfType<PersonMan>();
             veman = FindObjectOfType<VehicleMan>();
+            drman = FindObjectOfType<DroneMan>();
             frman = FindObjectOfType<FrameMan>();
 
             dfman.sman = this;
@@ -226,6 +228,7 @@ namespace CampusSimulator
             //loman.sman = this;
             psman.sman = this;
             veman.sman = this;
+            drman.sman = this;
             frman.sman = this;
 
             bool subbordinatethemall = false;
@@ -243,6 +246,7 @@ namespace CampusSimulator
                 //loman.transform.parent = rgo.transform;
                 psman.transform.parent = rgo.transform;
                 veman.transform.parent = rgo.transform;
+                drman.transform.parent = rgo.transform;
                 frman.transform.parent = rgo.transform;
                 dfman.transform.parent = rgo.transform;
             }
@@ -254,6 +258,9 @@ namespace CampusSimulator
             vcman.InitPhase0();
             uiman.InitPhase0();
             dfman.InitPhase0();
+            veman.InitPhase0();
+            drman.InitPhase0();
+
         }
 
         //private T CreateObjectAddComp<T>(string cname) 
@@ -346,8 +353,10 @@ namespace CampusSimulator
                     trman.DeleteTracks();
                     gaman.DelGarages();
                     vcman.DelVidcams();
-                    lcman.DeleteAllNodes();
+                    drman.DeleteDroneInfra();
+                    veman.DelVehicles();
                     lcman.DeleteGrcGos();
+                    lcman.DeleteAllNodes();
 
 
                     mpman.DeleteQmap();
@@ -380,6 +389,7 @@ namespace CampusSimulator
                     znman.ModelInitialize(newscene);
                     psman.ModelInitialize(newscene);
                     veman.ModelInitiailze(newscene);
+                    drman.ModelInitiailze(newscene);
                     jnman.ModelInitialize(newscene);
                     frman.ModelInitialize(newscene);
                     uiman.ModelInitialize(newscene);
@@ -403,6 +413,7 @@ namespace CampusSimulator
                     vcman.ModelBuild();
                     psman.ModelBuild(); // needs to be before we populate the buildings
                     veman.ModelBuild(); // needs to be before we populate the garages
+                    drman.ModelBuild(); // needs to be before we populate the garages
 
                     //bdman.SetScenePostLinkCloud(newscene);// building details that need nodes and links
                     //gaman.SetScenePostLinkCloud(newscene);// garage details that need nodes and links
@@ -416,9 +427,10 @@ namespace CampusSimulator
 
                     SetInitState(InitState.modelBuildPost);
 
+                    lcman.ModelBuildFinal();  // realize latelinks and heights
                     bdman.ModelBuildPostLinkCloud();// building details that need nodes and links - i.e destrooms are derived from nodes
                     gaman.ModelBuildPostLinkCloud();// garage details that need nodes and links
-                    lcman.ModelBuildFinal();  // realize latelinks and heights
+                    drman.ModelBuildPostLinkCloud();// dronman details that need nodes and links
 
                     setsw.Stop();
                     finsw.Start();

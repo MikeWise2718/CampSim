@@ -13,6 +13,7 @@ using System;
 public class OsmBldSpec
 {
     public string osmname;
+    public string shortname;
     public string bldtyp;
     public string wid;
     public float height;
@@ -27,7 +28,7 @@ public class OsmBldSpec
     List<Vector3> boutline;
     public GameObject bgo;
 
-    public OsmBldSpec(string name, string bldtyp, string wid, float height = 0, int levels = 0, float bscale = 1)
+    public OsmBldSpec(string nname, string bldtyp, string wid, float height = 0, int levels = 0, float bscale = 1)
     {
         if (height == 0 && levels == 0)
         {
@@ -42,7 +43,7 @@ public class OsmBldSpec
         {
             levels = 1;
         }
-        this.osmname = name;
+        this.osmname = nname;
         this.bldtyp = bldtyp.ToLower();
         this.bscale = bscale;
         this.wid = wid;
@@ -50,6 +51,8 @@ public class OsmBldSpec
         this.levels = levels;
         this.bgo = null;
         this.isVisible = true;
+        this.shortname = osmname.Replace("Microsoft Building ","Bld");
+        //Debug.Log($"osmname:{osmname}  shortname:{shortname}");
     }
     public void AddPos(double lat, double lng, float x, float z)
     {
@@ -73,7 +76,22 @@ public class OsmBldSpec
         var rv = new List<Vector3>(boutline);
         return rv;
     }
-
+    public Vector3 GetCenterTop()
+    {
+        var rv = Vector3.zero;
+        var y = height * levels;
+        if (boutline.Count > 0)
+        {
+            var vsum = Vector3.zero;
+            foreach (var pt in boutline)
+            {
+                vsum += pt;
+            }
+            var ndiv = boutline.Count;
+            rv = new Vector3(vsum.x / ndiv, y, vsum.z / ndiv);
+        }
+        return rv;
+    }
     static Dictionary<string, string> clrcvt = new Dictionary<string, string>()
         {
             { "construction","brown" },

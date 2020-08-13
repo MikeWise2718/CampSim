@@ -283,8 +283,7 @@ namespace CampusSimulator
             {
                 default:
                 case 0: return ("quadcopter", 3f, phantomrot, phantomlift);
-                case 1: return ("quadcopterspinning", 3f, phantomrot, phantomlift);
-                case 2: return ("DJI_Mavic_Air_2_Spinning", 3f, mavrot, mavlift);
+                case 1: return ("DJI_Mavic_Air_2", 3f, mavrot, mavlift);
             }
         }
         public string GetRandomAvatarName(GenderE gender)

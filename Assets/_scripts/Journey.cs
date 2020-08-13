@@ -218,6 +218,15 @@ namespace CampusSimulator
                     {
                         jman.bm.OccupyNode(enddest, person);
                     }
+                    else
+                    {
+                        var bpad = jman.bm.GetAssociatedPad(enddest);
+                        if (bpad)
+                        {
+                            jman.bm.OccupyNode(enddest, person);
+                        }
+
+                    }
                 }
             }
             status = JourneyStatE.Finished;

@@ -21,6 +21,7 @@ namespace CampusSimulator {
 
         public string padFullName;
         public string padNodeName;
+        public string padHighName;
 
         public void Initialize(Building bld, string roomname, string nodename)
         {

@@ -161,10 +161,12 @@ namespace CampusSimulator
         {
         }
         Dictionary<OsmBldSpec, Building> bsDict;
+        Dictionary<Building, OsmBldSpec> bsRevDict;
 
         public void RegisterBsBld(OsmBldSpec bs, Building bld)
         {
             bsDict[bs] = bld;
+            bsRevDict[bld] = bs;
         }
         public Building GetBsBld(OsmBldSpec bs)
         {
@@ -173,6 +175,14 @@ namespace CampusSimulator
                 return null;
             }
             return bsDict[bs];
+        }
+        public OsmBldSpec GetBldBs(Building bld)
+        {
+            if (!bsRevDict.ContainsKey(bld))
+            {
+                return null;
+            }
+            return bsRevDict[bld];
         }
 
         public OsmBldSpec FindBldSpecByNameStart(string namestart)
@@ -205,6 +215,7 @@ namespace CampusSimulator
             padlookup = new Dictionary<string, BldDronePad>();
             bldspecs = new List<OsmBldSpec>();
             bsDict = new Dictionary<OsmBldSpec, Building>();
+            bsRevDict = new Dictionary<Building, OsmBldSpec>();
 
             InitializeValues();
         }
@@ -490,9 +501,11 @@ namespace CampusSimulator
                 bgo.transform.position = Vector3.zero;
                 bgo.transform.parent = this.transform;
                 bld = bgo.AddComponent<Building>();
+                RegisterBsBld(bldspec, bld);
             }
             bld.AddOsmBldDetails(this, bldspec);
             AddBuildingToCollection(bld);
+
             //bld.llm = bgo.AddComponent<LatLongMap>(); // todo uncomment
             //var origin = $"BuildingMan.MakeOsmBuilding(\"{mbname}\")";
             //bld.llm = new LatLongMap(origin); // todo uncomment
@@ -516,8 +529,6 @@ namespace CampusSimulator
         }
         public void DelBuildings()
         {
-
-
             //Debug.Log("DelBuildings called");
             if (bldlookup != null)
             {
@@ -540,6 +551,8 @@ namespace CampusSimulator
             roomlookup = null;
             nodepadlookup = null;
             padlookup = null;
+            bsDict = null;
+            bsRevDict = null;
         }
         public void DelBuilding(string name)
         {
@@ -575,7 +588,7 @@ namespace CampusSimulator
         {
             if (bldlookup.ContainsKey(building.name))
             {
-                Debug.Log("Tried to add duplicate building:" + building.name);
+                Debug.Log("Tried to add duplicate building:" + building.name); // this can happen with osmbuildings
                 return;
             }
             var ndests = building.GetRoomListFromNodes().Count;
@@ -677,8 +690,21 @@ namespace CampusSimulator
         public void OccupyNode(string destnode, Person person)
         {
             var broom = this.GetAssociatedRoom(destnode);
-            person.AssignCurLocation(broom.bld.name, broom.name, destnode);
-            broom.Occupy(person);
+            if (broom != null)
+            {
+                person.AssignCurLocation(broom.bld.name, broom.name, destnode);
+                broom.Occupy(person);
+            }
+            else
+            {
+                var bpad = this.GetAssociatedPad(destnode);
+                if (bpad!=null)
+                {
+                    person.AssignCurLocation(bpad.bld.name, bpad.name, destnode);
+                    bpad.Occupy(person);
+                }
+            }
+
         }
         public void ForceFrameAllRooms(bool doit)
         {

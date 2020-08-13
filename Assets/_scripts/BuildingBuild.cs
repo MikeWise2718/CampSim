@@ -60,7 +60,10 @@ namespace CampusSimulator
         {
             // room name,pcap,alignang,length,width,frameit
             "b121-dronepad:6:0:4:4:T",
+            //"b121-dronepad-centertop:6:0:4:4:T",
             "b19-dronepad:6:0:4:4:T",
+            //"b19-dronepad-centertop:6:0:4:4:T",
+            "Bld122-dronepad-centertop:6:0:4:4:T",
         };
 
 
@@ -400,6 +403,7 @@ namespace CampusSimulator
         }
 
 
+
         public void AddOsmBldDetails(BuildingMan bm,OsmBldSpec bs)
         {
             this.bm = bm;
@@ -407,9 +411,25 @@ namespace CampusSimulator
             maingaragename = "";
             selectionweight = 1;
             destnodes = new List<string>();
-
             isOsmBld = true;
+            //if (bs.osmname.Contains("122"))
+            //{
+            //    Debug.Log("b122");
+            //}
+            if (shortname == null )
+            {
+                shortname = bs.shortname; // don't override an existing shortname in case we have double defs
+            }
             bldspec = bs;
+
+            if (shortname!=null && shortname != "")
+            {
+                //if (shortname=="Bld122")
+                //{
+                //    Debug.Log("b122");
+                //}
+                bldpadspecs = bm.GetFilteredPadSpecs(shortname);
+            }
         }
 
 
