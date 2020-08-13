@@ -157,7 +157,7 @@ public class MapSetPanel : MonoBehaviour
 
         closeButton.onClick.AddListener(delegate { uiman.ClosePanel(); });
         copyClipboardButton.onClick.AddListener(delegate { ButtonClick(copyClipboardButton.name); });
-        deleteSettingsButton.onClick.AddListener(delegate { ButtonClick(deleteSettingsButton.name); });
+        //deleteSettingsButton.onClick.AddListener(delegate { ButtonClick(deleteSettingsButton.name); });
         deleteMapsButton.onClick.AddListener(delegate { ButtonClick(deleteMapsButton.name); });
         loadMapsButton.onClick.AddListener(delegate { ButtonClick(loadMapsButton.name); });
         lookupAddressButton.onClick.AddListener(delegate { ButtonClick(lookupAddressButton.name); });
@@ -190,7 +190,7 @@ public class MapSetPanel : MonoBehaviour
 
     public void InitVals()
     {
-        //Debug.Log($"MapSetPanel.InitVals called scene:{sman.curscene} iscustomizable:{mman.isCustomizable}");
+        Debug.Log($"MapSetPanel.InitVals called scene:{sman.curscene} iscustomizable:{mman.isCustomizable}");
 
         InitCheckNeedSetModeRefresh();
 

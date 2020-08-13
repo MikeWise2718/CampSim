@@ -1032,7 +1032,7 @@ namespace CampusSimulator
             maptrans = mapTrans.Get();
 
             //hasLLmap = HasLLmap.Get();
-            isCustomizable = locIsCustomizable.Get();
+            //isCustomizable = locIsCustomizable.Get(); why is this a setting?
 
             transform.localRotation = Quaternion.identity;
             transform.Rotate(maprot.x, maprot.y, maprot.z);
