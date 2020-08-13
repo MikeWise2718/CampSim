@@ -74,7 +74,7 @@ namespace CampusSimulator {
             instance++;
             padformgo.transform.parent = this.transform;
             //Debug.Log("Generating roomformgo:" + roomformselector);
-            bool createfloor = true;
+            bool createfloor = false;
             if (!occman)
             {
                 Debug.LogWarning("occman is null in BldRoom for building " + bld.name);

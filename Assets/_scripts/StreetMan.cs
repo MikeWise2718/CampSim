@@ -116,7 +116,7 @@ namespace CampusSimulator
                     }
                 }
             }
-            this.sman.lcman.CalculateAndSetHeightsOnLinkCloud();
+            //this.sman.lcman.CalculateAndSetHeightsOnLinkCloud();
             grc.regman.SetRegion("default");
             //Debug.Log($"CreateGraphForOsmImport_streets_df added nodes:{nnodes} links:{nlinks}");
         }

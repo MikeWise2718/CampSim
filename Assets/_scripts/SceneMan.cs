@@ -1697,7 +1697,7 @@ namespace CampusSimulator
             {
                 if (lcman.CanGetHeights())
                 {
-                    lcman.CalculateAndSetHeightsOnLinkCloud();
+                    //lcman.CalculateAndSetHeightsOnLinkCloud();
                     needsrefresh = true;
                 }
             }
