@@ -380,6 +380,7 @@ namespace GraphAlgos
             return rd;
         }
     }
+    [Serializable]
     public class Weg
     {
         public Guid id=Guid.NewGuid();
@@ -412,6 +413,7 @@ namespace GraphAlgos
             return (rv);
         }
     }
+    [Serializable]
     public class PathPos
     {
         public Path path;
@@ -437,6 +439,7 @@ namespace GraphAlgos
             this.wegDistSoFar = weg.distance * lambda;
         }
     }
+    [Serializable]
     public class Path
     {
         public Vector3 startpt = Vector3.zero;
