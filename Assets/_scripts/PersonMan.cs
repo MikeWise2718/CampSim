@@ -147,6 +147,23 @@ namespace CampusSimulator
             }
             return "could not find free name";
         }
+        public string GenRandomDroneName(GenderE gender,string dispavname)
+        {
+            int maxiter = 10;// if we can't get a unique name after 10 tries give up :)
+            int iter = 0;
+            while (iter < maxiter)
+            {
+                var genderlist = (gender == GenderE.male ? maleFirstNames : femaleFirstNames);
+                var fname = dispavname;
+                var lname = GraphAlgos.GraphUtil.GetRanListEntry(genderlist, "popbld");
+                var name = fname + "-" + lname;
+                if (!persnamelookup.ContainsKey(name))
+                {
+                    return name;
+                }
+            }
+            return "could not find free name";
+        }
         static string[] idlescripts =
         {
             "PersonIdle",
@@ -272,7 +289,7 @@ namespace CampusSimulator
             pers.empStatus = empstat;
             pers.flagged = flagged;
         }
-        public (string avname,float scale,Vector3 rot, Vector3 tran) GetRandomAvatarDroneName()
+        public (string dispavname,string avname,float scale,Vector3 rot, Vector3 tran) GetRandomAvatarDroneName()
         {
             var i = GraphAlgos.GraphUtil.GetRanInt(3, "popbld");
             var phantomrot = Vector3.zero;
@@ -282,8 +299,8 @@ namespace CampusSimulator
             switch (i)
             {
                 default:
-                case 0: return ("quadcopter", 3f, phantomrot, phantomlift);
-                case 1: return ("DJI_Mavic_Air_2", 3f, mavrot, mavlift);
+                case 0: return ("Phantom","quadcopter", 3f, phantomrot, phantomlift);
+                case 1: return ("Mavic","DJI_Mavic_Air_2", 3f, mavrot, mavlift);
             }
         }
         public string GetRandomAvatarName(GenderE gender)
@@ -365,6 +382,10 @@ namespace CampusSimulator
             
             var pers = pgo.AddComponent<Person>();
             pers.AddPrsDetails(this, gender, persname,avtype, avname,empstatus,hasHololens,ska: avaska, avarot,avatran);
+            if (isdronelike)
+            {
+                pers.avatarNameMoving = pers.avatarName + "spinning";
+            }
             AddPersonToCollection(pers); /// has to be afterwards because of the sorted names for journeys
             pers.idleScript = PersonMan.GetIdleScript(pers.avatarName);
             pers.walkScript = "PersonRunning";
@@ -403,8 +424,8 @@ namespace CampusSimulator
         public Person MakeRandomPersonDrone()
         {
             var gender = GetRandomGender();
-            var persname = GenRandomName(gender);
-            var (avname,avska,avrot,avtran) = GetRandomAvatarDroneName();
+            var (dispavname,avname,avska,avrot,avtran) = GetRandomAvatarDroneName();
+            var dronename = GenRandomDroneName(gender,dispavname);
             var flagged = GraphAlgos.GraphUtil.FlipBiasedCoin(0.25f, "popbld");
 
             var empstatus = empStatusE.FullTimeEmp;
@@ -414,7 +435,7 @@ namespace CampusSimulator
             //    //Debug.Log(persname +" is a "+empstatus);
             //}
             //var pers = MakePerson(gender, persname, "Person",  avname, empstatus, flagged: flagged);
-            var pers = MakePerson(gender, persname, "Obj3d", avname,  avaska:avska, avarot:avrot,avatran:avtran, empstatus, flagged: flagged,isdronelike:true );
+            var pers = MakePerson(gender, dronename, "Obj3d", avname,  avaska:avska, avarot:avrot,avatran:avtran, empstatus, flagged: flagged,isdronelike:true );
             return pers;
 
             //var pgo = new GameObject(persname);

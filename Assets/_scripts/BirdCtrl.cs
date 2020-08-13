@@ -264,7 +264,7 @@ namespace CampusSimulator
                         if (person)
                         {
                             //birdformgo = person.CreatePersonGo("-ava-bc");// bird journey person
-                            birdformgo = person.GetPogo("-ava-bc",createpogo:true,resetposition:false);// bird journey person
+                            birdformgo = person.GetPogo("-ava-bc",createpogo:true,resetposition:false,moving:true);// bird journey person
                             if (person.hasHololens)
                             {
                                 person.ActivateHololens(true);

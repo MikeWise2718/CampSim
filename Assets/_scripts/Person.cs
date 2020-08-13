@@ -15,6 +15,7 @@ namespace CampusSimulator
         public string personName = "";
         public string avatarType = "";
         public string avatarName = "";
+        public string avatarNameMoving = "";
         public PersonStateE personState=PersonStateE.freeToTravel;
         public string idleScript = "";
         public string danceScript = "";
@@ -70,6 +71,7 @@ namespace CampusSimulator
             this.personName = persname;
             this.avatarType = avatartype;
             this.avatarName = avatarname;
+            this.avatarNameMoving = avatarname;
             this.idleScript = "";
             this.walkScript = "";
             this.danceScript = "";
@@ -138,7 +140,7 @@ namespace CampusSimulator
 
         GameObject lastpogo;
 
-        public GameObject CreatePersonGo(string callerSuffix)
+        public GameObject CreatePersonGo(string callerSuffix,bool moving=false)
         {
             var dirname = "People";
             var ispeople = true;
@@ -147,7 +149,8 @@ namespace CampusSimulator
                 dirname = avatarType;
                 ispeople = false;
             }
-            var pfab = GraphAlgos.GraphUtil.GetUniResPrefab(dirname, avatarName);
+            var avatarNameUse = (moving ? avatarNameMoving : avatarName);
+            var pfab = GraphAlgos.GraphUtil.GetUniResPrefab(dirname, avatarNameUse);
             var ipogo = Instantiate<GameObject>(pfab);// there is no global pogo at this point
             ipogo.name = "instance";
             ipogo.transform.localScale = new Vector3(scale, scale, scale);
@@ -175,11 +178,11 @@ namespace CampusSimulator
 
 
 
-        public GameObject GetPogo(string callerSuffix,bool createpogo=false,bool resetposition=false)
+        public GameObject GetPogo(string callerSuffix,bool createpogo=false,bool resetposition=false,bool moving=false)
         {
             if (createpogo)
             {
-                var pogo = CreatePersonGo(callerSuffix);
+                var pogo = CreatePersonGo(callerSuffix,moving:moving);
                 return pogo;
             }
             if (resetposition)
