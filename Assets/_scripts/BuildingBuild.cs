@@ -272,6 +272,12 @@ namespace CampusSimulator
                         {
                             bm.sman.jnman.preferedJourneyBuildingName = name;
                         }
+                        //var lcman = bm.sman.lcman;
+                        //var grctrl = lcman.GetGraphCtrl();
+                        //var mm = new GraphAlgos.LcMapMaker(grctrl, lcman.mappars);
+                        //var lmd = new GraphAlgos.LcMapData(mm, grctrl);
+                        //lmd.createPointsFor_msft_bredwb();
+                        //lmd.createPointsFor_msft_bredwb_f3();
                         break;
                     }
                 case "Eb12-22":
