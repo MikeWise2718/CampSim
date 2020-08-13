@@ -57,7 +57,7 @@ namespace CampusSimulator
             for(int i=0; i<pads.Count; i++)
             {
                 var pad1 = pads[i];
-                for (int j = 0; j < pads.Count; j++)
+                for (int j = i+1; j < pads.Count; j++)
                 {
                     var pad2 = pads[j];
                     grc.AddLinkByNodeName(pad1.padHighName, pad2.padHighName,GraphAlgos.LinkUse.droneway);
