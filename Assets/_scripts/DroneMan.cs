@@ -48,7 +48,7 @@ namespace CampusSimulator
                 // this should really be a pad method - adding a high node
                 var padnode = grc.GetNode(pad.padNodeName);
                 pad.padHighName = $"{pad.padNodeName}-high";
-                var highpt = padnode.pt + 20*Vector3.up;
+                var highpt = padnode.pt + 16*Vector3.up;
                 grc.AddNodePtxyz(pad.padHighName, highpt.x, highpt.y, highpt.z);
                 grc.AddLinkByNodeName(pad.padNodeName, pad.padHighName,GraphAlgos.LinkUse.droneway);
             }

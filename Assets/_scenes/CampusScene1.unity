@@ -47400,7 +47400,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2000583190}
-  - component: {fileID: 2000583189}
   - component: {fileID: 2000583191}
   m_Layer: 0
   m_Name: DroneMan
@@ -47409,20 +47408,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2000583189
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2000583188}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba1c49e10b59edd4eaeb6c9a6db5f1b1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sman: {fileID: 0}
-  nvehs: 0
 --- !u!4 &2000583190
 Transform:
   m_ObjectHideFlags: 0

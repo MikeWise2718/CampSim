@@ -584,11 +584,11 @@ namespace CampusSimulator
  
                 var msg = $"{person.personName} traveling to {bpad.name} with drone ";
                 person.PersonStateStartWaitingToTravel();
-                var stardelay = GraphAlgos.GraphUtil.GetRanFloat(0.5f, 5f);
+                var stardelay = GraphAlgos.GraphUtil.GetRanFloat(0.5f, 15f);
                 var jgo = new GameObject();
                 var jny = jgo.AddComponent<Journey>();
                 // jny.InitJourney(this, null, msg);
-                jny.InitJourney(this, person, null, null, null, msg, 5, stardelay, jorg: "pers,bld,rm");
+                jny.InitJourney(this, person, null, null, null, msg, 0.5f, stardelay, jorg: "pers,bld,rm");
                 jny.AddLeg(leg1);
                 AddJ(jny);
                 return jny;

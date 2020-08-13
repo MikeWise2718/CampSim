@@ -302,8 +302,10 @@ namespace CampusSimulator
                     MakeBuildings("MtTen");
                     break;
                 default:
+                    MakeBuildings("");
+                    break;
                 case SceneSelE.None:
-                    // DelBuildings called above already
+                    // do nothing
                     break;
             }
         }
@@ -346,8 +348,11 @@ namespace CampusSimulator
         }
         public void MakeBuildings(string filtername)
         {
-            var bldlst = Building.GetPredefinedBuildingNames(filtername);
-            bldlst.ForEach(mbname => MakeBuilding(mbname));
+            if (filtername != "")
+            {
+                var bldlst = Building.GetPredefinedBuildingNames(filtername);
+                bldlst.ForEach(mbname => MakeBuilding(mbname));
+            }
             bldspecs.ForEach(osmbs => MakeOsmBuilding(osmbs));
         }
         public string presetEvacBldName = "";
@@ -602,7 +607,6 @@ namespace CampusSimulator
                 }
                 wtdbldnames.Sort();
             }
-
             bldlookup[building.name] = building;
             //Debug.Log("Added bld " + building.name);
         }
