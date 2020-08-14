@@ -140,6 +140,10 @@ namespace CampusSimulator
 
             linkTrans = GetLinkTransInitial();
             var lopt = lvisOptions.GetInitial();
+            if (SceneMan.showNoPipes)
+            {
+                lopt = LinkVisualOptionsE.None;
+            }
             SetLinkAndNodeVisibility(lopt.ToString());
             graphGenOptions.GetInitial();
             InitNodeColorOverrides();

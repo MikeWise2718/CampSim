@@ -1,5 +1,4 @@
-﻿#define UNITYSIM
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 #if USE_KEYWORDRECOGNIZER
@@ -25,7 +24,6 @@ namespace CampusSimulator
 
         public LinkedList<string> loglist = null;
 
-        public bool unitySim = false;
         public string logfilenameroot = "brlog";
 
         public GameObject rgo;
@@ -33,10 +31,6 @@ namespace CampusSimulator
         public float rgoRotate = 0f;
         public Vector3 rgoTranslate = Vector3.zero;
 
-        //public string strans0;
-        //public string strans1;
-        //public string strans2;
-        //public string strans3;
 
         public float home_height = 1.7f;
         float home_rgoScale = 1.0f;
@@ -62,7 +56,14 @@ namespace CampusSimulator
         public bool autoerrorcorrect = false;
         private bool needsrefresh = false;
         private bool needstotalrefresh = false;
+
         public SceneSelE requestScene = SceneSelE.None;
+        public SceneSelE curscene = SceneSelE.None;
+
+        public static bool kickOffRun = false;
+        public static bool kickOffFly = false;
+        public static bool kickOffEvac = false;
+        public static bool showNoPipes = false;
 
 
         public GameObject rmango;
@@ -95,10 +96,6 @@ namespace CampusSimulator
         public SpatialMapperMan smm = null;
 #endif
 
-        //private Vector4 trans0;
-        //private Vector4 trans1;
-        //private Vector4 trans2;
-        //private Vector4 trans3;
         public Transform rgoTransform;
         public int rgoTransformSetCount = 0;
         public int lastRgoTransformSetCount = -1;
@@ -470,6 +467,7 @@ namespace CampusSimulator
             mpman.SaveSceneState();
         }
 
+ 
         public void Quit()
         {
             SaveSceneState();
@@ -1507,7 +1505,7 @@ namespace CampusSimulator
         {
             return linkformdict[mode].form;
         }
-        public SceneSelE curscene = SceneSelE.None;
+
         #region SceneOptions
         static List<string> sceneOptions = new List<string>(System.Enum.GetNames(typeof(SceneSelE)));
         static string initialSceneOptionsKey = "InitialScene";
@@ -1519,19 +1517,31 @@ namespace CampusSimulator
         {
             return sceneOptions[ival];
         }
-        public static SceneSelE GetSceneOptionsEnum(string sval)
+        public static SceneSelE GetSceneOptionsEnum(string sval,string source)
         {
-            SceneSelE enumval;
-            System.Enum.TryParse<SceneSelE>(sval, true, out enumval);
+            var ok = System.Enum.TryParse<SceneSelE>(sval, true, out SceneSelE enumval);
+            if (!ok)
+            {
+                Debug.LogError($"Bad scene option ({sval}) specified in {source}");
+            }
             return enumval;
         }
         public static SceneSelE GetInitialSceneOption()
         {
             var einival = SceneSelE.MsftB121focused; // default scene
-            if (PlayerPrefs.HasKey(initialSceneOptionsKey))
+            kickOffFly = GraphUtil.ParmBool("-fly");
+            kickOffRun = GraphUtil.ParmBool("-run");
+            kickOffEvac = GraphUtil.ParmBool("-evac");
+            showNoPipes = GraphUtil.ParmBool("-nopipes");
+            var (cmdlineScene, clscenename) = GraphUtil.ParmString("-scene", "");
+            if (cmdlineScene)
+            {
+                einival = GetSceneOptionsEnum(clscenename,"command line");
+            }
+            else if (PlayerPrefs.HasKey(initialSceneOptionsKey))
             {
                 var inival = PlayerPrefs.GetString(initialSceneOptionsKey, "");
-                einival = GetSceneOptionsEnum(inival);
+                einival = GetSceneOptionsEnum(inival,"Unity PlayerPrefs registry");
             }
             return einival;
         }
@@ -1550,6 +1560,7 @@ namespace CampusSimulator
         void Start()
         {
             Debug.Log("SceneMan.Start called");
+
             var esi = SceneMan.GetInitialSceneOption();
             curscene = SceneSelE.None; // force it to execute by specifying something it should never be - kind of a kludge
             SetScenario(esi);
@@ -1701,6 +1712,22 @@ namespace CampusSimulator
             if (updateCount==0)
             {
                 //Debug.Log("First update");
+            }
+            if (updateCount == 10)
+            {
+                if (kickOffRun)
+                {
+                    jnman.spawnrunjourneys = true;
+                }
+                if (kickOffFly)
+                {
+                    jnman.spawnflyjourneys = true;
+                }
+                if (kickOffEvac)
+                {
+                    bdman.EvacPresetBld();
+                }
+                uiman.SyncState();
             }
             checkTripod();
             SetArcoreTracking();

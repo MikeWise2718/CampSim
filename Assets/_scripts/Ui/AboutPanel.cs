@@ -239,7 +239,6 @@ public class AboutPanel : MonoBehaviour
                 msg += "\nScene Cam lastActiveSceneView is null";
             }
 #endif
-
             msg += $"\n\nUnity Version: {Application.unityVersion}";
             msg += $"\nUnity Platform:{Application.platform}";
 
@@ -251,6 +250,8 @@ public class AboutPanel : MonoBehaviour
             var (winname, username, userdomname) = GetSecurityPrincipalNames();
             msg += $"\n\nWindows Identity:{winname}";
             msg += $"\nEnvironment.UserName:{username} DomainName:{userdomname}";
+
+
         }
         catch (Exception ex)
         {

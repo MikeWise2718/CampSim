@@ -67,7 +67,14 @@ public class HelpPanel : MonoBehaviour
             msg += "\n"   + "Ctrl-C              - Interrupt bitmap loading";
             msg += "\n\n" + "Ctrl-Q Ctrl-Q       - Quit Application (hit ctrl-q twice)";
             msg += "\n\n" + "Bugs/Requests/Info  - Contact: mwise@microsoft.com (Mike Wise)";
-            msg += "\n"   + "                               brujo@microsoft.com (Bruce E. Johnson)";
+            msg += "\n" + "                               brujo@microsoft.com (Bruce E. Johnson)";
+
+            var  args = GraphAlgos.GraphUtil.GetArgs();
+            msg += "$\n\nCommand line arguments:{args.Length}";
+            for (int i = 0; i < args.Count; i++)
+            {
+                msg += $"\n   {i}:{args[i]}";
+            }
         }
         catch (Exception ex)
         {

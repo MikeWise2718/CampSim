@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace CampusSimulator
 {
-    public enum zslotstateE { available, welcome, reserved, inactive, donotpark, pleaseverfiy }
+    public enum zslotstateE { available, occupied, reserved, inactive, donotpark  }
     public enum zslotPosE { center, front, back, left, right }
 
     public class ZoneSlot : MonoBehaviour
@@ -16,11 +16,10 @@ namespace CampusSimulator
             {
                 default:
                 case zslotstateE.available: return path +"sign_available";
-                case zslotstateE.welcome: return path + "sign_welcome";
+                case zslotstateE.occupied: return path + "sign_welcome";
                 case zslotstateE.reserved: return path + "sign_reserved";
                 case zslotstateE.inactive: return path + "sign_inactive";
                 case zslotstateE.donotpark: return path + "sign_donotpark";
-                case zslotstateE.pleaseverfiy: return path + "sign_pleaseverfiy";
             }
         }
         public Zone zone;
@@ -197,9 +196,9 @@ namespace CampusSimulator
                 }
             }
             calcVeks();
-            //var y = zm.sman.mpman.GetHeight(x, z);
+            var y = zm.sman.mpman.GetHeight(x, z);
             //Debug.Log($"{name}  x:{x} y:{y} z:{z}  ang:{ang}");
-            slotformgo.transform.position = new Vector3(x, 0, z);
+            slotformgo.transform.position = new Vector3(x, y, z);
             slotformgo.transform.rotation = Quaternion.Euler(0, ang + 90, 0);
         }
 
@@ -231,7 +230,7 @@ namespace CampusSimulator
             this.avatarname = pers.avatarName;
             this.avatarrotate = GraphAlgos.GraphUtil.GetRanFloat(0, 360);
 
-            SetSlotState(zslotstateE.welcome);
+            SetSlotState(zslotstateE.occupied);
             DeleteGos(); // makes sense to redo all the goes because the car has to be created
             CreateGos();
         }
