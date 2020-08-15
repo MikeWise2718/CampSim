@@ -36,7 +36,7 @@ namespace GraphAlgos
         }
 
         static List<string> cookedArgs = null;
-        public static List<string> GetArgs(bool addtestparms = true)
+        public static List<string> GetArgs(bool addtestparms = false)
         {
             if (cookedArgs == null)
             {

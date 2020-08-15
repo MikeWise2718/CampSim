@@ -70,7 +70,7 @@ public class HelpPanel : MonoBehaviour
             msg += "\n" + "                               brujo@microsoft.com (Bruce E. Johnson)";
 
             var  args = GraphAlgos.GraphUtil.GetArgs();
-            msg += "$\n\nCommand line arguments:{args.Length}";
+            msg += $"\n\nCommand line arguments:{args.Count}";
             for (int i = 0; i < args.Count; i++)
             {
                 msg += $"\n   {i}:{args[i]}";

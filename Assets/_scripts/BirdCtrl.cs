@@ -37,6 +37,7 @@ namespace CampusSimulator
         public string birdresourcename = "";
         public float birdscale = 1;
         public bool lookatpoint = true;
+        public bool flatlookatpoint = false;
 
         public PathPos pathpos = null;
         public Weg pathweg = null;
@@ -45,6 +46,7 @@ namespace CampusSimulator
         public Guid wegguid = Guid.Empty;
         public string swegguid = Guid.Empty.ToString();
         public int cntgp = 0;
+        public Vector3 moveoffset = new Vector3(0.3f, -1.55f, 0);
 
         static public GameObject birdgoes = null;
         public Person person = null;
@@ -286,13 +288,12 @@ namespace CampusSimulator
                             s *= birdscale;
                         }
                         birdformgo.transform.localScale = new Vector3(s, s, s);
-                        if (lookatpoint)
-                        {
-                            birdformgo.transform.localRotation = currot;
-                        }
+                        //if (lookatpoint)
+                        //{
+                        birdformgo.transform.localRotation = currot;
+                        //}
                         //var noise = GraphAlgos.GraphUtil.GetRanFloat(0, 0.6f,"jnygen");
-                        var newpos = new Vector3(curpos.x+0.3f, curpos.y - 1.55f, curpos.z);
-                        birdformgo.transform.localPosition = newpos;
+                        birdformgo.transform.localPosition = curpos + moveoffset;
                         //BirdFlyHeight = 1.5f;
                         birdgo.name = birdresourcename;
                         if (person)
@@ -424,7 +425,18 @@ namespace CampusSimulator
             if (lookatpoint)
             {
                 var curlookpt = GetPathPoint(rundist + lookaheadtime + deltatime, curpos: false);
-                birdgo.transform.LookAt(curlookpt);
+                if (flatlookatpoint)
+                {
+                    var flatlookpt = new Vector3(curlookpt.x, 0, curlookpt.z);
+                    if (flatlookpt.magnitude > 0.1f)
+                    {
+                        birdgo.transform.LookAt(flatlookpt);
+                    }
+                }
+                else
+                {
+                    birdgo.transform.LookAt(curlookpt);
+                }
             }
             lastcurpt = curpt;
             SetAnimationScript();

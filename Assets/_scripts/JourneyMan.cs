@@ -16,7 +16,8 @@ namespace CampusSimulator
         public BirdFormE form;
         public LcCapType capneed;
         public string formname;
-        public bool lookatpt;
+        public bool lookatpt=true;
+        public bool flatlookatpt = false;
         public Vehicle vehicle;
         public float vel;
         public float dist;
@@ -33,7 +34,7 @@ namespace CampusSimulator
 
     public enum JourneyStatE { NotStarted, WaitingToStart, Started, AlmostFinished, Finished, Failed }
 
-  
+
     public class JourneyMan : MonoBehaviour
     {
 
@@ -78,7 +79,7 @@ namespace CampusSimulator
                 System.IO.Directory.CreateDirectory(jlogdir);
                 jnyLogFileName = jlogdir + "Journeys-" + scenename + "-" + dtnow + ".csv";
             }
-            catch(System.Exception ex)
+            catch (System.Exception ex)
             {
                 logJourneys = false;
                 var msg = "Error creating journey log directory";
@@ -86,7 +87,7 @@ namespace CampusSimulator
             }
         }
 
-        public void LogJourney(Journey jny,BldRoom b1,BldRoom b2)
+        public void LogJourney(Journey jny, BldRoom b1, BldRoom b2)
         {
             if (!logJourneys) return;
             try
@@ -158,11 +159,11 @@ namespace CampusSimulator
 
         bool NodeExists(string nodename)
         {
-            if (nodename==null) return false;
+            if (nodename == null) return false;
             return this.sman.lcman.IsNodeName(nodename);
         }
 
-        public Journey AddInterBuildingJourney(Person pers, BldRoom broom,int roomslot)
+        public Journey AddInterBuildingJourney(Person pers, BldRoom broom, int roomslot)
         {
             //Debug.Log("Adding Interbuilding Journey for " + pers.personName + " to " + broom.name);
             CheckFastMode();
@@ -191,7 +192,7 @@ namespace CampusSimulator
             var bld2 = broom.bld;
             if (!(bld1.name == bld2.name))
             {
-                Debug.LogWarning("Not the same building - no journey frbroom:"+frbroom.roomFullName+"  broom:"+broom.roomFullName);
+                Debug.LogWarning("Not the same building - no journey frbroom:" + frbroom.roomFullName + "  broom:" + broom.roomFullName);
                 broom.UnReserveRoomSlot(roomslot);// not in same building
                 return null;
             }
@@ -208,16 +209,15 @@ namespace CampusSimulator
                     form = BirdFormE.person,
                     capneed = LcCapType.walk,
                     formname = perform,
-                    vel = 2 * lvelfak,
-                    lookatpt = true
+                    vel = 2 * lvelfak
                 };
                 var spos = linkctrl.GetNode(jsnode).pt;
 
-                leg.enode = broom.roomNodeName; 
+                leg.enode = broom.roomNodeName;
                 if (!NodeExists(leg.enode)) return null;
 
                 pers.PersonStateStartWaitingToTravel();
-                var msg = (pers.personName+" interbuiding leg.snode:" + leg.snode + " enode:" + leg.enode );
+                var msg = (pers.personName + " interbuiding leg.snode:" + leg.snode + " enode:" + leg.enode);
                 if (journeyMessages)
                 {
                     Debug.Log(msg);
@@ -227,14 +227,14 @@ namespace CampusSimulator
                 var jny = jgo.AddComponent<Journey>();
                 var findelaysecs = 2f;
                 var stardelaysecs = GraphAlgos.GraphUtil.GetRanFloat(0, 15);
-                jny.InitJourney(this, pers, null,frbroom,broom, msg, findelaysecs, stardelaysecs,jorg:"interbld");
+                jny.InitJourney(this, pers, null, frbroom, broom, msg, findelaysecs, stardelaysecs, jorg: "interbld");
                 jny.AddLeg(leg);
                 AddJ(jny);
                 return jny;
             }
             catch (UnityException ex)
             {
-                Debug.LogWarning("Could not add interbuilding journey for "+pers.personName +" from" + frbroom.name + " to "+broom.name+" " + ex.Message);
+                Debug.LogWarning("Could not add interbuilding journey for " + pers.personName + " from" + frbroom.name + " to " + broom.name + " " + ex.Message);
                 broom.UnReserveRoomSlot(roomslot);
                 return null;
             }
@@ -245,8 +245,8 @@ namespace CampusSimulator
             if (!NodeExists(tu_node)) return null;
             bool reservedCar = false;
             bool reservedSlot = false;
-            GarageSlot sm1=null;
-            GarageSlot sm2=null;
+            GarageSlot sm1 = null;
+            GarageSlot sm2 = null;
             try
             {
                 var jsnode = fr_node;
@@ -254,16 +254,16 @@ namespace CampusSimulator
                 var gm = GameObject.FindObjectOfType<GarageMan>();
 
                 var perform = GetRandomPersonFormname();
-           
 
-                Leg leg1 = new Leg {
+
+                Leg leg1 = new Leg
+                {
                     snode = jsnode,
                     enode = "",
                     form = BirdFormE.person,
                     capneed = LcCapType.walk,
                     formname = perform,
-                    vel = 2 * lvelfak,
-                    lookatpt = true
+                    vel = 2 * lvelfak
                 };
                 var spos = linkctrl.GetNode(jsnode).pt;
                 sm1 = gm.GetClosestFreeCar(spos);
@@ -286,15 +286,15 @@ namespace CampusSimulator
                 {
                     carform = BirdFormE.sphere;
                 }
-                Leg leg2 = new Leg {
+                Leg leg2 = new Leg
+                {
                     snode = leg1.enode,
                     enode = "",
                     form = carform,
                     vehicle = sm1.vehicle,
                     capneed = LcCapType.drive,
                     formname = sm1.carformname,
-                    vel = 20 * lvelfak,
-                    lookatpt = true
+                    vel = 20 * lvelfak
                 };
                 var epos = linkctrl.GetNode(jenode).pt;
                 sm2 = gm.GetClosestAvailableSlot(epos);
@@ -317,19 +317,19 @@ namespace CampusSimulator
                 sm2.ReserveSlot();
                 reservedSlot = true;
 
-                Leg leg3 = new Leg {
+                Leg leg3 = new Leg
+                {
                     snode = leg2.enode,
                     enode = jenode,
                     form = BirdFormE.person,
                     capneed = LcCapType.walk,
                     formname = perform,
-                    vel = 2 * lvelfak,
-                    lookatpt = true
+                    vel = 2 * lvelfak
                 };
                 var description = " - " + pathname + " " + perform + " " + sm1.carformname;
                 var jgo = new GameObject();
                 var jny = jgo.AddComponent<Journey>();
-                jny.InitJourney(this, null,null,null,null, description,jorg: "ephemeral");
+                jny.InitJourney(this, null, null, null, null, description, jorg: "ephemeral");
                 jny.AddLeg(leg1);
                 jny.AddLeg(leg2);
                 jny.AddLeg(leg3);
@@ -353,17 +353,17 @@ namespace CampusSimulator
 
         BirdFormE locformfunc(string form)
         {
-            switch(form)
+            switch (form)
             {
                 case "dog": return BirdFormE.dog;
-                case "drone":return BirdFormE.drone;
+                case "drone": return BirdFormE.drone;
                 case "drone2": return BirdFormE.drone2;
                 case "heli": return BirdFormE.heli;
                 default: return BirdFormE.person;
             }
         }
 
-        public Journey AddNodeNodeJourneyEphemeral(string fr_node, string tu_node, string pathname, LcCapType captype=LcCapType.anything,string perform = "",float velfak=1f, float skafak = 1, float lambstart = 0,JourneyEnd jend = JourneyEnd.disappear)
+        public Journey AddNodeNodeJourneyEphemeral(string fr_node, string tu_node, string pathname, LcCapType captype = LcCapType.anything, string perform = "", float velfak = 1f, float skafak = 1, float lambstart = 0, JourneyEnd jend = JourneyEnd.disappear)
         {
             if (!NodeExists(fr_node))
             {
@@ -380,7 +380,7 @@ namespace CampusSimulator
             {
                 var jsnode = fr_node;
                 var jenode = tu_node;
-                
+
 
                 if (perform == "")
                 {
@@ -396,8 +396,7 @@ namespace CampusSimulator
                     formname = perform,
                     skafak = skafak,
                     lambstart = lambstart,
-                    vel = 2 * lvelfak * velfak,
-                    lookatpt = true
+                    vel = 2 * lvelfak * velfak
                 };
                 var spos = linkctrl.GetNode(jsnode).pt;
 
@@ -418,7 +417,7 @@ namespace CampusSimulator
             }
         }
 
-        public Journey AddPersonBldroomJourney(Person person, BldRoom broom,int roomslot)
+        public Journey AddPersonBldroomJourney(Person person, BldRoom broom, int roomslot)
         {
             if (!person)
             {
@@ -447,8 +446,7 @@ namespace CampusSimulator
                     form = BirdFormE.person,
                     capneed = LcCapType.walk,
                     formname = perform,
-                    vel = 2 * lvelfak,
-                    lookatpt = true
+                    vel = 2 * lvelfak
                 };
                 var spos = linkctrl.GetNode(jsnode).pt;
                 sm1 = gm.GetClosestFreeCar(spos);
@@ -479,8 +477,7 @@ namespace CampusSimulator
                     capneed = LcCapType.drive,
                     vehicle = sm1.vehicle,
                     formname = sm1.carformname,
-                    vel = 20 * lvelfak,
-                    lookatpt = true
+                    vel = 20 * lvelfak
                 };
 
                 var epos = linkctrl.GetNode(jenode).pt;
@@ -489,7 +486,7 @@ namespace CampusSimulator
                 {
                     if (journeyMessages)
                     {
-                        Debug.LogWarning("Could not create journey for "+person.personName +"  to  " + broom.name + " - no parking slots at dest");
+                        Debug.LogWarning("Could not create journey for " + person.personName + "  to  " + broom.name + " - no parking slots at dest");
                     }
                     if (sm1)
                     {
@@ -528,8 +525,7 @@ namespace CampusSimulator
                     form = BirdFormE.person,
                     capneed = LcCapType.walk,
                     formname = perform,
-                    vel = 2 * lvelfak,
-                    lookatpt = true
+                    vel = 2 * lvelfak
                 };
                 var msg = person.personName + " traveling to " + broom.name + " with a " + sm1.carformname;
                 person.PersonStateStartWaitingToTravel();
@@ -537,7 +533,7 @@ namespace CampusSimulator
                 var jgo = new GameObject();
                 var jny = jgo.AddComponent<Journey>();
                 // jny.InitJourney(this, null, msg);
-                jny.InitJourney(this, person, sm1.vehicle,frroom,broom, msg, 5, stardelay,jorg:"pers,bld,rm");
+                jny.InitJourney(this, person, sm1.vehicle, frroom, broom, msg, 5, stardelay, jorg: "pers,bld,rm");
                 jny.AddLeg(leg1);
                 jny.AddLeg(leg2);
                 jny.AddLeg(leg3);
@@ -546,7 +542,7 @@ namespace CampusSimulator
             }
             catch (UnityException ex)
             {
-                Debug.LogWarning("Could not add journey for "+person.personName+ " from " + fr_node + " to " + tu_node + " " + ex.Message);
+                Debug.LogWarning("Could not add journey for " + person.personName + " from " + fr_node + " to " + tu_node + " " + ex.Message);
                 return null;
             }
         }
@@ -579,9 +575,10 @@ namespace CampusSimulator
                     capneed = LcCapType.fly,
                     formname = perform,
                     vel = 5 * lvelfak,
-                    lookatpt = false
+                    lookatpt = true,  // drone
+                    flatlookatpt = true
                 };
- 
+
                 var msg = $"{person.personName} traveling to {bpad.name} with drone ";
                 person.PersonStateStartWaitingToTravel();
                 var stardelay = GraphAlgos.GraphUtil.GetRanFloat(0.5f, 15f);
@@ -616,8 +613,7 @@ namespace CampusSimulator
                     form = BirdFormE.person,
                     capneed = LcCapType.walk,
                     formname = perform,
-                    vel = 3 * lvelfak,
-                    lookatpt = true
+                    vel = 3 * lvelfak
                 };
                 var spos = linkctrl.GetNode(jsnode).pt;
                 var zslt = zm.GetClosestAvailableSlot(spos);
@@ -643,7 +639,7 @@ namespace CampusSimulator
                 var jgo = new GameObject();
                 var jny = jgo.AddComponent<Journey>();
                 var frroom = bm.GetBroom(person.placeRoom);
-                jny.InitJourney(this, person, null,frroom,null, msg, 0, stardelay,jorg:"evac");
+                jny.InitJourney(this, person, null, frroom, null, msg, 0, stardelay, jorg: "evac");
                 jny.AddLeg(leg);
                 AddJ(jny);
                 return jny;
@@ -676,8 +672,7 @@ namespace CampusSimulator
                     form = BirdFormE.person,
                     capneed = LcCapType.walk,
                     formname = perform,
-                    vel = 2 * lvelfak,
-                    lookatpt = true
+                    vel = 2 * lvelfak
                 };
                 var spos = linkctrl.GetNode(jsnode).pt;
 
@@ -694,10 +689,10 @@ namespace CampusSimulator
                 var jny = jgo.AddComponent<Journey>();
                 var findelaysecs = 2f;
                 if (startdelaysecs < 0)
-                { 
+                {
                     startdelaysecs = GraphAlgos.GraphUtil.GetRanFloat(0, 15);
                 }
-                jny.InitJourney(this, pers, null,froom,broom, msg, findelaysecs, startdelaysecs,jorg:"fixedpers,room");
+                jny.InitJourney(this, pers, null, froom, broom, msg, findelaysecs, startdelaysecs, jorg: "fixedpers,room");
                 jny.AddLeg(leg);
                 AddJ(jny);
                 return jny;
@@ -709,7 +704,7 @@ namespace CampusSimulator
             }
         }
 
-        public Journey AddJourneyBackHome(Person pers, string pathname, float startdelaysecs = -1,float startdelaymax=15) // this could probably be subsituted with the above
+        public Journey AddJourneyBackHome(Person pers, string pathname, float startdelaysecs = -1, float startdelaymax = 15) // this could probably be subsituted with the above
         {
             CheckFastMode();
             var fr_node = pers.placeNode;
@@ -726,8 +721,7 @@ namespace CampusSimulator
                     form = BirdFormE.person,
                     capneed = LcCapType.walk,
                     formname = perform,
-                    vel = 2 * lvelfak,
-                    lookatpt = true
+                    vel = 2 * lvelfak
                 };
                 var spos = linkctrl.GetNode(jsnode).pt;
 
@@ -740,7 +734,7 @@ namespace CampusSimulator
                 {
                     Debug.Log(msg);
                 }
-                var stardelay = GraphAlgos.GraphUtil.GetRanFloat(0.5f, 5f,"jnygen");
+                var stardelay = GraphAlgos.GraphUtil.GetRanFloat(0.5f, 5f, "jnygen");
                 var jgo = new GameObject();
                 var jny = jgo.AddComponent<Journey>();
                 var findelaysecs = 2f;
@@ -748,9 +742,9 @@ namespace CampusSimulator
                 {
                     startdelaysecs = GraphAlgos.GraphUtil.GetRanFloat(0, startdelaymax);
                 }
-                var froom = bm.GetBroom(pers.placeRoom,expectFailure:true);
+                var froom = bm.GetBroom(pers.placeRoom, expectFailure: true);
                 var broom = bm.GetBroom(pers.homeRoom);
-                jny.InitJourney(this, pers,null,froom,broom, msg, findelaysecs, startdelaysecs,jorg:"backhome");
+                jny.InitJourney(this, pers, null, froom, broom, msg, findelaysecs, startdelaysecs, jorg: "backhome");
                 jny.AddLeg(leg);
                 AddJ(jny);
                 return jny;
@@ -765,7 +759,7 @@ namespace CampusSimulator
         {
             CheckFastMode();
             var bar1 = b1.Split('/');
-            if (bar1.Length!=2)
+            if (bar1.Length != 2)
             {
                 Debug.LogError($"Bad building1/node1 in AddBldNodeBldNodeJourneyWithEphemeralPeople:{b1}");
                 return null;
@@ -796,11 +790,11 @@ namespace CampusSimulator
             var jny = AddBldBldJourney(bdest1, bdest2, pathname);
             return jny;
         }
-        public Journey AddNodeNodeJourneyWithEphemeralPeople(string bdestnode1, string bdestnode2, LcCapType captype =LcCapType.anything,string ava="",float velfak=1f, float skafak = 1, float lambstart = 0,JourneyEnd jend=JourneyEnd.disappear)
+        public Journey AddNodeNodeJourneyWithEphemeralPeople(string bdestnode1, string bdestnode2, LcCapType captype = LcCapType.anything, string ava = "", float velfak = 1f, float skafak = 1, float lambstart = 0, JourneyEnd jend = JourneyEnd.disappear)
         {
             CheckFastMode();
             var pathname = $"{bdestnode1} to {bdestnode2}";
-            var jny = AddNodeNodeJourneyEphemeral(bdestnode1, bdestnode2, pathname, captype:captype, perform:ava, velfak:velfak, skafak:skafak, lambstart:lambstart,jend:jend);
+            var jny = AddNodeNodeJourneyEphemeral(bdestnode1, bdestnode2, pathname, captype: captype, perform: ava, velfak: velfak, skafak: skafak, lambstart: lambstart, jend: jend);
             return jny;
         }
 
@@ -824,7 +818,7 @@ namespace CampusSimulator
             }
             var bdest1 = bc1.GetRandomDest("jnygen");
             var bdest2 = bc2.GetRandomDest("jnygen");
-            var jny = AddBldBldJourney(bdest1,bdest2, pathname);
+            var jny = AddBldBldJourney(bdest1, bdest2, pathname);
             return jny;
         }
         public void CheckFastMode()
@@ -889,7 +883,7 @@ namespace CampusSimulator
             var roomslot = room.ReserveRoomSlot();
             if (journeyMessages)
             {
-                Debug.Log("Spawning APBRJ journey for " + person.personName+" from "+person.placeRoom + " to "+room.roomFullName);
+                Debug.Log("Spawning APBRJ journey for " + person.personName + " from " + person.placeRoom + " to " + room.roomFullName);
             }
             Journey jny;
             if (interBuilding || bc1 == bc2) // 2nd clause might be true by accident
@@ -930,7 +924,7 @@ namespace CampusSimulator
                 return null;
             }
             var pad = bc2.GetRandomPad("jnygen");
-            if (pad==null)
+            if (pad == null)
             {
                 Debug.LogWarning($"AddDroneJourney failed as b2:{b2} has no drone pads");
                 return null;
@@ -966,7 +960,7 @@ namespace CampusSimulator
             }
             if (pers.IsInHomeRoom())
             {
-                AddPersonToRoomJourney(pers, room, msg,startdelaysecs:1);
+                AddPersonToRoomJourney(pers, room, msg, startdelaysecs: 1);
             }
             else
             {
@@ -976,7 +970,7 @@ namespace CampusSimulator
             Debug.Log("Arnie Launched to " + room + " - " + msg);
         }
 
-        string [] rescues = new string [] {
+        string[] rescues = new string[] {
             // trackname | ava | skafak | velfak | lambstart
 
             "track-0-person|dog|1.0|1.0|0.1|--" ,
@@ -998,7 +992,7 @@ namespace CampusSimulator
             "track-198-person|Girl010|1.0|1.0|0.0|kim" ,
            };
 
-        public float ParseFloat(string s,float defval)
+        public float ParseFloat(string s, float defval)
         {
             var ok = float.TryParse(s, out float res);
             if (!ok)
@@ -1015,7 +1009,7 @@ namespace CampusSimulator
             foreach (var s in rescues)
             {
                 var sar = s.Split('|');
-                if (sar.Length<5)
+                if (sar.Length < 5)
                 {
                     Debug.LogError($"Bad rescue string - needs more fields:{s}");
                     continue;
@@ -1023,10 +1017,10 @@ namespace CampusSimulator
                 var sname = sar[0];
                 var ava = sar[1];
                 var trck = sman.trman.GetTrack(sname);
-                var sfak = glbsizefak * ParseFloat(sar[2],1f);
+                var sfak = glbsizefak * ParseFloat(sar[2], 1f);
                 var vfak = glbvelofak * ParseFloat(sar[3], 1f);
-                var lamb = ParseFloat(sar[4],0f);
-                if (trck!=null)
+                var lamb = ParseFloat(sar[4], 0f);
+                if (trck != null)
                 {
                     //StartViewerJourney(strt.stnode, strt.ednode, captype: LcCapType.anything, ava: ava,velfak:vfak,skafak:sfak,lambstart:lamb);
                     StartViewerJourney(trck.stnode, trck.ednode, captype: trck.captyp, ava: ava, velfak: vfak, skafak: sfak, lambstart: lamb);
@@ -1059,13 +1053,13 @@ namespace CampusSimulator
             var perlist = bld.GetAllPeopleInRooms();
             if (n > perlist.Count) n = perlist.Count;
 
-            for (int i= 0; i<n; i++)
+            for (int i = 0; i < n; i++)
             {
                 var pers = perlist[i];
                 var pathname = "Spawning evacuation of " + pers.personName + " from building " + bld.shortname + " to an evacuation zone";
                 if (journeyMessages)
                 {
-                  Debug.Log(pathname);
+                    Debug.Log(pathname);
                 }
                 AddEvacJourney(pers, pathname);
             }
@@ -1084,12 +1078,12 @@ namespace CampusSimulator
             for (int i = 0; i < n; i++)
             {
                 var pers = perlist[i];
-                var pathname = "Spawning unevacuation of " + pers.personName + " from zone " + zone.name + " to homeroom:"+pers.homeNode;
+                var pathname = "Spawning unevacuation of " + pers.personName + " from zone " + zone.name + " to homeroom:" + pers.homeNode;
                 if (journeyMessages)
                 {
                     Debug.Log(pathname);
                 }
-                AddJourneyBackHome(pers, pathname,startdelaymax:sdm);
+                AddJourneyBackHome(pers, pathname, startdelaymax: sdm);
             }
         }
         bool doStreamJourneys = false;
@@ -1120,7 +1114,7 @@ namespace CampusSimulator
                 pers.empStatus = PersonMan.empStatusE.Unknown;
                 if (bm.sman.curscene == SceneSelE.MsftB19focused || bm.sman.curscene == SceneSelE.MsftB121focused)
                 {
-                    if (bld.name=="Bld19")
+                    if (bld.name == "Bld19")
                     {
                         pers.homeNode = "b19-f01-rm1031";// send them all to the same room
                     }
@@ -1128,7 +1122,7 @@ namespace CampusSimulator
             }
             else
             {
-                if (pers.empStatus== PersonMan.empStatusE.Unknown)// squash rouge unknowns
+                if (pers.empStatus == PersonMan.empStatusE.Unknown)// squash rouge unknowns
                 {
                     pers.empStatus = PersonMan.empStatusE.FullTimeEmp;
                 }
@@ -1153,9 +1147,9 @@ namespace CampusSimulator
         public void spawnStreamJourneys()
         {
             var now = Time.time;
-            if ((now-streamLastTime)>streamGapCur)
+            if ((now - streamLastTime) > streamGapCur)
             {
-                CreateStreamJourneys(streamZone,streamBld);
+                CreateStreamJourneys(streamZone, streamBld);
                 streamGapCur = GraphAlgos.GraphUtil.GetRanFloat(streamGapMin, streamGapMax, "spawnstreaming");
                 streamLastTime = now;
             }
@@ -1239,12 +1233,12 @@ namespace CampusSimulator
             viewerJourneyNodes.Add(jnode);
         }
 
-        public void AddViewerJourneyNodes(IEnumerable<string> jnodes,string prefix="")
+        public void AddViewerJourneyNodes(IEnumerable<string> jnodes, string prefix = "")
         {
-            foreach(var jn in jnodes)
+            foreach (var jn in jnodes)
             {
                 var nodename = jn;
-                if (prefix!="")
+                if (prefix != "")
                 {
                     nodename = prefix + jn;
                 }
@@ -1252,9 +1246,9 @@ namespace CampusSimulator
             }
         }
 
-        public Journey StartViewerJourney(string frnode,string tunode,LcCapType captype=LcCapType.anything,string ava="",float velfak=1f,float skafak=1,float lambstart=0)
+        public Journey StartViewerJourney(string frnode, string tunode, LcCapType captype = LcCapType.anything, string ava = "", float velfak = 1f, float skafak = 1, float lambstart = 0)
         {
-            var jny = AddNodeNodeJourneyWithEphemeralPeople(frnode, tunode,captype:captype,ava:ava,velfak:velfak,skafak:skafak,lambstart:lambstart,jend:JourneyEnd.restart);
+            var jny = AddNodeNodeJourneyWithEphemeralPeople(frnode, tunode, captype: captype, ava: ava, velfak: velfak, skafak: skafak, lambstart: lambstart, jend: JourneyEnd.restart);
             //var jny = AddBldNodeBldNodeJourneyWithEphemeralPeople(frnode, tunode);
             //var jny = AddBldBldJourney(frnode, tunode, "startviewerjourney");
             lastViewerStartJourney.SetAndSave(frnode);
@@ -1262,7 +1256,7 @@ namespace CampusSimulator
             return jny;
         }
 
-        public string [] GetJourneyNodes()
+        public string[] GetJourneyNodes()
         {
             var rv = viewerJourneyNodes.ToArray();
             return rv;
@@ -1294,7 +1288,7 @@ namespace CampusSimulator
         {
             resname = resname.ToLower();
             string rv = "car";
-            if (resname=="")
+            if (resname == "")
             {
                 rv = "";
             }
@@ -1384,7 +1378,7 @@ namespace CampusSimulator
                         lvelfak = 2.5f;
                     }
                     //Debug.Log("spawning nbldcnt:" + nbldcnt + " tries:" + nspawntries + " fails:" + nspawnfails);
-                    Journey jny=null;
+                    Journey jny = null;
                     var b1 = bm.GetRandomDroneBldName("");
                     if (preferedJourneyBuildingName != "")
                     {
@@ -1435,7 +1429,7 @@ namespace CampusSimulator
             {
                 var jny = Journeys[i];
                 var setit = false;
-                if (frontjnyhack && jny.frontjny && jny.frontjny.birdctrl.wegguid!=jny.birdctrl.wegguid)
+                if (frontjnyhack && jny.frontjny && jny.frontjny.birdctrl.wegguid != jny.birdctrl.wegguid)
                 {
                     var bc1 = jny.birdctrl;
                     var bc2 = jny.frontjny.birdctrl;
@@ -1451,7 +1445,7 @@ namespace CampusSimulator
                         }
                     }
                     //Debug.Log(jny.person.personName+" frontdist preinited to " + dist);
-                } 
+                }
                 if (!setit)
                 {
                     jny.frontjny = null;
@@ -1462,16 +1456,16 @@ namespace CampusSimulator
                 jny.njnysOnWeg = 0;
             }
 
-            for (var i1=0; i1<njnys; i1++)
+            for (var i1 = 0; i1 < njnys; i1++)
             {
                 var jny1 = Journeys[i1];
                 var bc1 = jny1.birdctrl;
-                for (var i2 = 0; i2<njnys; i2++)
+                for (var i2 = 0; i2 < njnys; i2++)
                 {
                     if (i1 == i2) continue;
                     var jny2 = Journeys[i2];
                     var bc2 = jny2.birdctrl;
-                    if (bc1.wegguid==bc2.wegguid)
+                    if (bc1.wegguid == bc2.wegguid)
                     {
                         jny1.njnysOnWeg++;
                         jny2.njnysOnWeg++;
@@ -1486,13 +1480,13 @@ namespace CampusSimulator
 
                         var jf = jny1;
                         var jb = jny2;
-                        if (dist<0)
+                        if (dist < 0)
                         {
                             jb = jny1;
                             jf = jny2;
                             dist = -dist;
                         }
-                        if (dist<jf.backdist)
+                        if (dist < jf.backdist)
                         {
                             jf.backdist = dist;
                             jf.backjny = jb;
@@ -1509,21 +1503,21 @@ namespace CampusSimulator
             {
                 var jny = Journeys[i];
                 var fak = 1;
-                if (jny.currentleg!=null)
+                if (jny.currentleg != null)
                 {
                     if (jny.currentleg.capneed == LcCapType.drive) fak = 6;
                 }
-                if (jny.frontdist<0.1f*fak)
+                if (jny.frontdist < 0.1f * fak)
                 {
-                    jny.birdctrl.BirdSpeedFactor = GraphAlgos.GraphUtil.GetRanFloat(0.05f, 0.15f,"jngyen")*fak;
+                    jny.birdctrl.BirdSpeedFactor = GraphAlgos.GraphUtil.GetRanFloat(0.05f, 0.15f, "jngyen") * fak;
                 }
-                else if (jny.frontdist < 1*fak)
+                else if (jny.frontdist < 1 * fak)
                 {
-                    jny.birdctrl.BirdSpeedFactor = jny.frontdist*fak;
+                    jny.birdctrl.BirdSpeedFactor = jny.frontdist * fak;
                 }
-                else if (jny.backdist < 1*fak)
+                else if (jny.backdist < 1 * fak)
                 {
-                   jny.birdctrl.BirdSpeedFactor = 2.0f-jny.backdist;
+                    jny.birdctrl.BirdSpeedFactor = 2.0f - jny.backdist;
                 }
                 else
                 {
@@ -1534,14 +1528,8 @@ namespace CampusSimulator
         int updateCount = 0;
         // Update is called once per frame
         float lastSpawnTime = 0;
-        void Update() 
+        void DoJourneyHousekeeping()
         {
-            updateCount++;
-            if (updateCount<=8) // no journeys for the first 8 updates
-            {
-                return;
-            }
-
             // Journey housekeeping
             var nstarted = 0;
             var ndeleted = 0;
@@ -1583,27 +1571,48 @@ namespace CampusSimulator
                 }
                 lastSpawnTime = Time.time;
             }
-            foreach ( var jny in deletelist)
+            foreach (var jny in deletelist)
             {
                 DeleteJourney(jny);
                 Destroy(jny.gameObject);
                 ndeleted++;
             }
-            // Journey spawning
-            if (spawnrunjourneys)
+            // Journey spawning - give everybody a chance to spawn
+            var diceroll = GraphAlgos.GraphUtil.GetRanInt(3, "journeyspawn");
+            switch (diceroll)
             {
-                SpawnJourneysByBuilding();
-            }
-            if (spawnflyjourneys)
-            {
-                SpawnDroneJourneysByBuilding();
-            }
-            if (doStreamJourneys)
-            {
-                spawnStreamJourneys();
+                case 0:
+                    if (spawnrunjourneys)
+                    {
+                        SpawnJourneysByBuilding();
+                    }
+                    break;
+                case 1:
+                    if (spawnflyjourneys)
+                    {
+                        SpawnDroneJourneysByBuilding();
+                    }
+                    break;
+                case 2:
+                    if (doStreamJourneys)
+                    {
+                        spawnStreamJourneys();
+                    }
+                    break;
             }
             ModifyJourneySpeeds();
             //Debug.Log("Updatecount:" + updateCount + " started:" + nstarted + " deleted:" + ndeleted);
         }
+        void Update()
+        {
+            updateCount++;
+            if (updateCount <= 8) // no journeys for the first 8 updates
+            {
+                return;
+            }
+            DoJourneyHousekeeping();
+        }
     }
+
+
 }

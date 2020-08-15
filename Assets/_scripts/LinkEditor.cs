@@ -42,9 +42,9 @@ namespace CampusSimulator
             olargeNodes = largeNodes;
             oeditMode = editMode;
             checkForNodeMovement = editMode;
-#if UNITY_EDITOR
-            Selection.selectionChanged += OnSelectionChange;
-#endif
+//#if UNITY_EDITOR
+//            Selection.selectionChanged += OnSelectionChange;
+//#endif
         }
         public void InitPhase0(LinkCloudMan lm,SceneMan sm)
         {
@@ -244,11 +244,11 @@ namespace CampusSimulator
             }
             EnsureSelection();
         }
-        GameObject oldact;
+        //GameObject oldact;
         //string wasname = "null";
         string newname = "null";
-        void OnSelectionChange()
-        {
+        //void OnSelectionChange()
+        //{
             //if (oldact)
             //{
             //    wasname = oldact.name;
@@ -260,6 +260,6 @@ namespace CampusSimulator
             //}
             //Debug.Log("LinkEdit.OnSelectionChange - was:" + wasname + "  now:" + newname);
             //oldact = Selection.activeGameObject;
-        }
+        //}
     }
 }
