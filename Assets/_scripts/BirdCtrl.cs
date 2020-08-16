@@ -427,7 +427,7 @@ namespace CampusSimulator
                 var curlookpt = GetPathPoint(rundist + lookaheadtime + deltatime, curpos: false);
                 if (flatlookatpoint)
                 {
-                    var flatlookpt = new Vector3(curlookpt.x, 0, curlookpt.z);
+                    var flatlookpt = new Vector3(curlookpt.x, curpt.y, curlookpt.z);
                     if (flatlookpt.magnitude > 0.1f)
                     {
                         birdgo.transform.LookAt(flatlookpt);

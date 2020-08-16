@@ -18,6 +18,7 @@ namespace CampusSimulator
         public string formname;
         public bool lookatpt=true;
         public bool flatlookatpt = false;
+        public float xoff = 0.3f;
         public Vehicle vehicle;
         public float vel;
         public float dist;
@@ -576,7 +577,8 @@ namespace CampusSimulator
                     formname = perform,
                     vel = 5 * lvelfak,
                     lookatpt = true,  // drone
-                    flatlookatpt = true
+                    flatlookatpt = true,
+                    xoff = 0.6f
                 };
 
                 var msg = $"{person.personName} traveling to {bpad.name} with drone ";

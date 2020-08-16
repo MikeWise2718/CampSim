@@ -292,9 +292,11 @@ namespace CampusSimulator
         public (string dispavname,string avname,float scale,Vector3 rot, Vector3 tran) GetRandomAvatarDroneName()
         {
             var i = GraphAlgos.GraphUtil.GetRanInt(3, "popbld");
-            var phantomrot = Vector3.zero;
+            //var phantomrot = new Vector3(0, 0, 0);
+            var phantomrot = new Vector3(0, 90, 0);
             var phantomlift = new Vector3(0, 0.117f, 0);
-            var mavrot = new Vector3(0, 0, 90);
+            //var mavrot = new Vector3(0, 0, 90);
+            var mavrot = (Quaternion.Euler(0, 0, 0)).eulerAngles;
             var mavlift = new Vector3(0, 0.074f, 0);
             switch (i)
             {
