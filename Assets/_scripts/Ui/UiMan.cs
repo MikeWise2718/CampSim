@@ -72,13 +72,14 @@ namespace CampusSimulator
             listenForKeys = false;
         }
 
-        public void InitializeScene(SceneSelE newscene)
+        public void ModelInitialize(SceneSelE newscene)
         {
             // most initialization has to happen after the scenes have set their variables, so there is not much here to do
         }
 
-        public void SetScene(SceneSelE newscene)
+        public void ModelBuild()
         {
+            var newscene = sman.curscene;
             //Debug.Log($"UiMan.SetScene: {newscene}");
             optpan.SetScene(newscene);
             stapan.SetScene(newscene);
@@ -101,6 +102,7 @@ namespace CampusSimulator
         }
         public void ClosePanel()
         {
+            Debug.Log($"UiMan.ClosePanel");
             stapan.CloseButton();
         }
         public void HideUi()

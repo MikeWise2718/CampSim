@@ -547,10 +547,21 @@ namespace GraphAlgos
             var rv = yfloor + (float)ranman.NextDouble() * dlt + minRanHeight;
             return (rv);
         }
+        float GetUseOffset(LinkUse use)
+        {
+            switch (use)
+            {
+                //case LinkUse.trackdrone: return 10f;
+                //case LinkUse.trackheli: return 100f;
+                case LinkUse.trackdrone: return 0f;
+                case LinkUse.trackheli: return 0f;
+                default: return 0f;
+            }
+        }
         public LcNode AddNodePtxzNoInc(string ndname, double x, double z, string comment = "")
         {
             var xf = (float)x;
-            var yf = ranHeight();
+            var yf = ranHeight() + GetUseOffset(curUseType);
             var zf = (float)z;
             return (AddNode(ndname, new Vector3(xf, yf, zf), comment: comment));
         }
@@ -562,7 +573,7 @@ namespace GraphAlgos
                 return null;
             }
             var (x, z) = lltoxz(lat, lng);
-            Debug.Log($"AddNodePtll lat:{lat} lng:{lng}  x:{x} z:{z}");
+            //Debug.Log($"AddNodePtll lat:{lat} lng:{lng}  x:{x} z:{z}");
             var rv = AddNodePtxzNoInc(ndname, x, z, comment);
             regman.curNodeRegion.IncDefStepIdx();
             return rv;
@@ -777,6 +788,10 @@ namespace GraphAlgos
             var xf = (float)x;
             var yf = ranHeight();
             var zf = (float)z;
+            //if (lname=="tracklink_0_1")
+            //{
+            //    Debug.Log($"Link to tracklink_0_1");
+            //}
             return (LinkTo(nodename, new Vector3(xf, yf, zf), curUseType, lname, comment));
         }
         public LcLink LinkToPtxyz(string nodename, double x, double y, double z, string lname = "",string comment="")
@@ -930,7 +945,8 @@ namespace GraphAlgos
             }
             if (n < 0 || nodenamelist.Count <= n)
             {
-                throw new UnityException("GetNode: index out of range:" + n);
+                Debug.LogError("GetNode: index out of range:" + n);
+                return null;
             }
             var pname = nodenamelist[n];
             return (nodedict[pname]);
@@ -940,7 +956,9 @@ namespace GraphAlgos
             nodename = LcNode.NormName(nodename);
             if (!IsNodeName(nodename))
             {
-                throw new UnityException("GetNode: No node with this name:" + nodename);
+                Debug.LogError("GetNode: No node with this name:" + nodename);
+                return null;
+                //throw new UnityException("GetNode: No node with this name:" + nodename);
             }
             return (nodedict[nodename]);
         }
@@ -993,6 +1011,11 @@ namespace GraphAlgos
             var sar = new string[2] { node1, node2 };
             var tup = new Tuple<string, string, LinkUse,int,int,string>(node1, node2, usetype,regStepIdx,regid,comment );
             latelinks.Add(tup);
+        }
+
+        public void DeleteLateLinks()
+        {
+            latelinks = new List<Tuple<string, string, LinkUse, int, int, string>>();
         }
 
         public void RealizeLateLinks()
@@ -1366,6 +1389,11 @@ namespace GraphAlgos
             if (!nodekeywords.ContainsKey(key)) return ("");
             return (nodekeywords[key]);
         }
+        public void DeleteKeywords()
+        {
+            nodekeywords = new Dictionary<string, string>();
+        }
+
         #region pathfinding
         LcNode findminfscore(HashSet<LcNode> openset)
         {
@@ -1437,8 +1465,15 @@ namespace GraphAlgos
         {
             VerfiyNodeExists("GenAstar", sptname);
             VerfiyNodeExists("GenAstar", eptname);
+            if (sptname == eptname)
+            {
+                Debug.LogError("GenAstar called with start and end nodes being the same");
+                return null;
+            }
+
             var spt = nodedict[sptname];
             var ept = nodedict[eptname];
+
 
             foreach (var ptname in nodenamelist)
             {

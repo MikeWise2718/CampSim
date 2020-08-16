@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace CampusSimulator
 {
-    public enum zslotstateE { available, welcome, reserved, inactive, donotpark, pleaseverfiy }
+    public enum zslotstateE { available, occupied, reserved, inactive, donotpark  }
     public enum zslotPosE { center, front, back, left, right }
 
     public class ZoneSlot : MonoBehaviour
@@ -16,11 +16,10 @@ namespace CampusSimulator
             {
                 default:
                 case zslotstateE.available: return path +"sign_available";
-                case zslotstateE.welcome: return path + "sign_welcome";
+                case zslotstateE.occupied: return path + "sign_welcome";
                 case zslotstateE.reserved: return path + "sign_reserved";
                 case zslotstateE.inactive: return path + "sign_inactive";
                 case zslotstateE.donotpark: return path + "sign_donotpark";
-                case zslotstateE.pleaseverfiy: return path + "sign_pleaseverfiy";
             }
         }
         public Zone zone;
@@ -55,7 +54,7 @@ namespace CampusSimulator
         public GameObject parkbox;
         public GameObject raspibox;
         public GameObject sign;
-        public GameObject persgo;
+        public GameObject pogo;
         // Use this for initialization
 
         public void Initialize(Zone zone, int num, float x, float z, float ang, float width)
@@ -168,8 +167,9 @@ namespace CampusSimulator
                 //var script = PersonMan.GetIdleScript(avatarname, persgo);
                 //animator.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Animations/"+script);
 
-                persgo = person.LoadPersonGo("-ava-zs");
-                var animator = persgo.GetComponent<Animator>();
+                //pogo = person.CreatePersonGo("-ava-zs"); // zone person
+                pogo = person.GetPogo("-ava-zs",createpogo:true,resetposition:true); // zone person
+                var animator = pogo.GetComponentInChildren<Animator>();
                 animator.applyRootMotion = false;
                 var script = person.idleScript;
                 person.perstate = PersonAniStateE.standing;
@@ -177,18 +177,18 @@ namespace CampusSimulator
                 animator.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Animations/"+script);
                 PersonMan.UnsyncAnimation(animator, script, "ZoneSlot");
 
-                persgo.name = persname;
-                persgo.transform.parent = slotformgo.transform;
-                persgo.transform.position = slotformgo.transform.position;
-                persgo.transform.rotation = slotformgo.transform.rotation;
-                persgo.transform.Rotate(new Vector3(0, avatarrotate, 0));
+                pogo.name = persname;
+                pogo.transform.parent = slotformgo.transform;
+                pogo.transform.position = slotformgo.transform.position;
+                pogo.transform.rotation = slotformgo.transform.rotation;
+                pogo.transform.Rotate(new Vector3(0, avatarrotate, 0));
                 if (person.hasHololens)
                 {
                     person.ActivateHololens(true);
                 }
                 if (person.hasCamera)
                 {
-                    person.AddCamera(persgo, "ZoneSlot CreateObjects");
+                    person.AddCamera(pogo, "ZoneSlot CreateObjects");
                 }
                 if (person.grabbedMainCamera)
                 {
@@ -230,7 +230,7 @@ namespace CampusSimulator
             this.avatarname = pers.avatarName;
             this.avatarrotate = GraphAlgos.GraphUtil.GetRanFloat(0, 360);
 
-            SetSlotState(zslotstateE.welcome);
+            SetSlotState(zslotstateE.occupied);
             DeleteGos(); // makes sense to redo all the goes because the car has to be created
             CreateGos();
         }

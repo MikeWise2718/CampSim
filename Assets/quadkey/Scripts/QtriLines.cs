@@ -135,10 +135,10 @@ namespace Aiskwk.Map
             var ls1 = new LineSegment2xz(pt1, pt2);
             for (int i = 0; i < trilinesegs.Count; i++)
             {
-                var (ls2, pname, clr) = trilinesegs[i];
+                var (ls2, _, _) = trilinesegs[i];
                 if (i != omit)
                 {
-                    var isect = ls1.TryIntersect(ls2, out var pti, out var t, out var u);
+                    var (isect,pti,t,u) = ls1.TryIntersect(ls2);
                     if (isect)
                     {
                         var (ptii, _, _) = qmm.GetWcMeshPosProjectedAlongYnew(pti,coordsys:coordsys, db:db);

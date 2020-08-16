@@ -157,12 +157,12 @@ public class MapSetPanel : MonoBehaviour
 
         closeButton.onClick.AddListener(delegate { uiman.ClosePanel(); });
         copyClipboardButton.onClick.AddListener(delegate { ButtonClick(copyClipboardButton.name); });
-        deleteSettingsButton.onClick.AddListener(delegate { ButtonClick(deleteSettingsButton.name); });
+        //deleteSettingsButton.onClick.AddListener(delegate { ButtonClick(deleteSettingsButton.name); });
         deleteMapsButton.onClick.AddListener(delegate { ButtonClick(deleteMapsButton.name); });
         loadMapsButton.onClick.AddListener(delegate { ButtonClick(loadMapsButton.name); });
         lookupAddressButton.onClick.AddListener(delegate { ButtonClick(lookupAddressButton.name); });
 
-        Debug.Log("MapSetPanel.LinkObjectsAndComponents Found everything apparently");
+        //Debug.Log("MapSetPanel.LinkObjectsAndComponents Found everything apparently");
 
     }
 
@@ -190,7 +190,7 @@ public class MapSetPanel : MonoBehaviour
 
     public void InitVals()
     {
-        //Debug.Log($"MapSetPanel.InitVals called scene:{sman.curscene} iscustomizable:{mman.isCustomizable}");
+        Debug.Log($"MapSetPanel.InitVals called scene:{sman.curscene} iscustomizable:{mman.isCustomizable}");
 
         InitCheckNeedSetModeRefresh();
 
@@ -320,7 +320,7 @@ public class MapSetPanel : MonoBehaviour
     {
         var s = newLatKmInputField.text;
         var msg = "--";
-        double f = 0f;
+        double f;
         var ok = double.TryParse(s, out f);
         if (!ok)
         {
@@ -343,7 +343,7 @@ public class MapSetPanel : MonoBehaviour
     {
         var s = newLngKmInputField.text;
         var msg = "--";
-        double f = 0f;
+        double f;
         var ok = double.TryParse(s, out f);
         if (!ok)
         {

@@ -20,6 +20,8 @@ public class FireFlyPanel : MonoBehaviour
     Dropdown viewerJourneyEndDropdown;
     Text fireFlyDfText;
 
+    InputField scaleNumberField;
+
     Button startJourney;
     Button closeButton;
 
@@ -41,6 +43,8 @@ public class FireFlyPanel : MonoBehaviour
 
         viewerJourneyStartDropdown = transform.Find("ViewerJourneyStartDropdown").gameObject.GetComponent<Dropdown>();
         viewerJourneyEndDropdown = transform.Find("ViewerJourneyEndDropdown").gameObject.GetComponent<Dropdown>();
+
+        scaleNumberField = transform.Find("ScaleNumberField").gameObject.GetComponent<InputField>();
 
         startJourney = transform.Find("StartJourneyButton").gameObject.GetComponent<Button>();
         startJourney.onClick.AddListener(delegate { StartJourney();  });
@@ -91,6 +95,10 @@ public class FireFlyPanel : MonoBehaviour
         {
             Debug.LogError($"{errmsg}1:{ex.Message}");
         }
+
+        var scaleval = sman.trman.scalemodelnumber.Get();
+        //Debug.Log($"InitVals get:{inival}");
+        scaleNumberField.text = scaleval.ToString("f1");
     }
 
     public void StartJourney()
@@ -100,7 +108,21 @@ public class FireFlyPanel : MonoBehaviour
         var snode = nodes[sidx];
         var eidx = viewerJourneyEndDropdown.value;
         var enode = nodes[eidx];
-        jman.StartViewerJourney(snode, enode);
+        var sar = snode.Split('_');
+        var sname = sar[0];
+        var st = sman.trman.GetTrack(sname);
+        if (st!=null)
+        {
+            //var jsnode = sname + "_start";
+            //var jenode = sname + "_end";
+            jman.StartViewerJourney(snode, enode,captype:st.captyp,ava:st.avaname);
+
+        }
+        else
+        {
+            Debug.LogError($"Cound not find street");
+        }
+        //jman.StartViewerJourney(snode, enode);
     }
 
     public void SetScene(CampusSimulator.SceneSelE curscene)
@@ -118,9 +140,28 @@ public class FireFlyPanel : MonoBehaviour
     public void SetVals(bool closing = false)
     {
         Debug.Log($"FireFlyPanel.SetVals called - closing:{closing}");
+        var chg = false;
 
-
-        sman.RequestRefresh("FireFlyPanel-SetVals");
+        //Debug.Log($"InitVals get:{inival}");
+        var scalevaltxt = scaleNumberField.text;
+        float val = sman.trman.scalemodelnumber.Get();
+        string msg;
+        var ok = float.TryParse(scalevaltxt, out val);
+        if (ok)
+        {
+            chg = chg || (val != sman.trman.scalemodelnumber.Get());
+            sman.trman.scalemodelnumber.SetAndSave(val);
+            Debug.Log($"FireFlyPanel.SetVal set scalemodenumber to {val}");
+        }
+        else
+        {
+            msg = $"FireFlyPanel.SetVal ScaleNumberField format error scalevaltxt:{scalevaltxt}";
+            Debug.LogError(msg);
+        }
+        if (chg)
+        {
+            sman.RequestRefresh("FireFlyPanel-SetVals");
+        }
     }
 
     float checkInterval = 1f;

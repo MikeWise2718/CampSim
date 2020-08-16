@@ -6,6 +6,10 @@ using UxUtils;
 using Aiskwk.Map;
 using Aiskwk.Dataframe;
 using GraphAlgos;
+using UnityEngine.UIElements;
+using System.Runtime.InteropServices;
+using UnityEngine.Networking;
+using System.Runtime.Remoting.Metadata.W3cXsd2001;
 
 namespace CampusSimulator
 {
@@ -17,6 +21,9 @@ namespace CampusSimulator
         public UxSettingBool osmstreets = new UxSettingBool("osmstreets", false);
         public UxSettingBool fixedstreets = new UxSettingBool("fixedstreets", false);
 
+
+
+
         public void InitPhase0()
         {
         }
@@ -26,15 +33,10 @@ namespace CampusSimulator
         {
             osmstreets.GetInitial(false);
             fixedstreets.GetInitial(true);
-            Debug.Log($"StreetMan.InitializeValues osmblds:{osmstreets.Get()}   fixedblds:{fixedstreets.Get()}");
+
+            //Debug.Log($"StreetMan.InitializeValues osmblds:{osmstreets.Get()}   fixedblds:{fixedstreets.Get()} ");
         }
 
-
-        public void InitializeScene(SceneSelE newregion)
-        {
-            Debug.Log($"StreetMan.SetScene {newregion}");
-            InitializeValues();
-        }
         public LinkUse CvtLinkUse(string s, LinkUse def)
         {
             var rv = def;
@@ -68,7 +70,7 @@ namespace CampusSimulator
 
         public void CreateGraphForOsmImport_streets_df(string regionname, string color)
         {
-            Debug.Log($"CreateGraphForOsmImport_streets_df");
+            //Debug.Log($"CreateGraphForOsmImport_streets_df region:{regionname}");
             var grc = this.sman.lcman.GetGraphCtrl();
             grc.regman.NewNodeRegion(regionname, color, saveToFile: true);
             var sman = GameObject.FindObjectOfType<SceneMan>();
@@ -114,16 +116,23 @@ namespace CampusSimulator
                     }
                 }
             }
-            this.sman.lcman.CalculateHeights();
+            //this.sman.lcman.CalculateAndSetHeightsOnLinkCloud();
             grc.regman.SetRegion("default");
-            Debug.Log($"CreateGraphForOsmImport_streets_df added nodes:{nnodes} links:{nlinks}");
+            //Debug.Log($"CreateGraphForOsmImport_streets_df added nodes:{nnodes} links:{nlinks}");
         }
 
-        public void SetScene(SceneSelE newregion)
+        public void ModelInitiailze(SceneSelE newregion)
         {
+            //Debug.Log($"StreetMan.InitializeScene {newregion}");
+            InitializeValues();
+        }
+
+        public void ModelBuild()
+        {
+            //Debug.Log($"StreetMan.SetScene {newregion}");
             var regname = "";
             var regcolor = "blue";
-            switch (newregion)
+            switch (sman.curscene)
             {
                 case SceneSelE.MsftRedwest:
                 case SceneSelE.MsftCoreCampus:
@@ -173,25 +182,15 @@ namespace CampusSimulator
                     break;
                 default:
                 case SceneSelE.None:
-                    // DelBuildings called above already
                     break;
             }
             if (regname != "")
             {
                CreateGraphForOsmImport_streets_df(regname,regcolor);
             }
+            var (gogen, nnodes, nlinks) = sman.lcman.GetNodeLinkCounts();
+            Debug.Log($"StreetMan.SetScene finished gogen:{gogen} nodes:{nnodes}  links:{nlinks}");
         }
 
-        // Start is called before the first frame update
-        //void Start()
-        //{
-
-        //}
-
-        //// Update is called once per frame
-        //void Update()
-        //{
-
-        //}
     }
 }

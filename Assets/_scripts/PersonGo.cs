@@ -11,13 +11,19 @@ namespace CampusSimulator
         public bool toggleCamera;
         public bool toggleMainCamera;
         public bool sendOnJourney;
+        public Animator animator;
+        public GameObject pogo;
 
         public enum humanoidTypeE { ModPeople, Biped, Unknown, Unchecked }
         public humanoidTypeE humanoidType = humanoidTypeE.Unchecked;
 
-        public void Init(Person person)
+        public void Init(Person person,GameObject pogo)
         {
             this.person = person;
+            if (pogo != null)
+            {
+                this.animator = pogo.GetComponentInChildren<Animator>();
+            }
             SetAvatarType();
             //this.building = person.GetBuilding();   doesn't have to be in a building
         }
@@ -42,7 +48,7 @@ namespace CampusSimulator
         };
         public GameObject GetBodyPart(Person.BodyPart part)
         {
-            GameObject bpgo = null;
+            GameObject bpgo;
             if (gameObject == null) return null;
             switch (part)
             {

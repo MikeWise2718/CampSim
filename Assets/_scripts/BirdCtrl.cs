@@ -3,10 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using GraphAlgos;
+using System.ComponentModel.Design.Serialization;
 
 namespace CampusSimulator
 {
-    public enum BirdFormE { none, sphere, longsphere, hummingbird, person,car,drone }
+    public enum BirdFormE { none, sphere, longsphere, hummingbird, person,dog, car,drone,drone2,heli }
     public enum BirdStateE { dormant, atstart, running, atgoal, stopped }
 
     public class BirdCtrl : MonoBehaviour
@@ -34,6 +35,9 @@ namespace CampusSimulator
         public string restingAnimationScript = "";
         public int birdformidx = 1;
         public string birdresourcename = "";
+        public float birdscale = 1;
+        public bool lookatpoint = true;
+        public bool flatlookatpoint = false;
 
         public PathPos pathpos = null;
         public Weg pathweg = null;
@@ -42,6 +46,7 @@ namespace CampusSimulator
         public Guid wegguid = Guid.Empty;
         public string swegguid = Guid.Empty.ToString();
         public int cntgp = 0;
+        public Vector3 moveoffset = new Vector3(0.3f, -1.55f, 0);
 
         static public GameObject birdgoes = null;
         public Person person = null;
@@ -180,18 +185,76 @@ namespace CampusSimulator
                         birdgo.name = "Bird";
                         break;
                     }
-                case BirdFormE.drone:
+                case BirdFormE.heli:
                     {
-                        var objPrefab = Resources.Load<GameObject>("obj3d/quadcopterspinning");
+                        var objPrefab = Resources.Load<GameObject>("obj3d/bell412spinning");
                         birdformgo = Instantiate<GameObject>(objPrefab);
-                        var s = 100;
+                        var s = sman.trman.scalemodelnumber.Get();
+                        if (birdscale > 0)
+                        {
+                            s *= birdscale;
+                        }
                         birdformgo.transform.localScale = new Vector3(s, s, s);
                         birdformgo.transform.localRotation = currot;
                         birdformgo.transform.localPosition = curpos;
                         movingAnimationScript = "";
                         restingAnimationScript = "";
-                        //BirdFlyHeight = 1.5f;
+                        BirdFlyHeight = 100f;
+                        birdgo.name = "Bell";
+                        break;
+                    }
+                case BirdFormE.drone:
+                    {
+                        var objPrefab = Resources.Load<GameObject>("obj3d/quadcopterspinning");
+                        birdformgo = Instantiate<GameObject>(objPrefab);
+                        var s = sman.trman.scalemodelnumber.Get();
+                        if (birdscale > 0)
+                        {
+                            s *= birdscale;
+                        }
+                        birdformgo.transform.localScale = new Vector3(s, s, s);
+                        birdformgo.transform.localRotation = currot;
+                        birdformgo.transform.localPosition = curpos;
+                        movingAnimationScript = "";
+                        restingAnimationScript = "";
+                        BirdFlyHeight = 10f;
                         birdgo.name = "Phantom";
+                        break;
+                    }
+                case BirdFormE.drone2:
+                    {
+                        var objPrefab = Resources.Load<GameObject>("obj3d/DJI_Mavic_Air_2_Spinning");
+                        birdformgo = Instantiate<GameObject>(objPrefab);
+                        var s = 0.01f*sman.trman.scalemodelnumber.Get();
+                        if (birdscale > 0)
+                        {
+                            s *= birdscale;
+                        }
+                        birdformgo.transform.localScale = new Vector3(s, s, s);
+                        birdformgo.transform.localRotation = currot*Quaternion.Euler(-90,0,0);
+                        birdformgo.transform.localPosition = curpos;
+                        movingAnimationScript = "";
+                        restingAnimationScript = "";
+                        BirdFlyHeight = 10f;
+                        birdgo.name = "Mavic2";
+                        break;
+                    }
+                case BirdFormE.dog:
+                    {
+                        var objPrefab = Resources.Load<GameObject>("dogs/shepherd");
+                        birdformgo = Instantiate<GameObject>(objPrefab);
+                        var s = 0.01f * sman.trman.scalemodelnumber.Get();
+                        if (birdscale > 0)
+                        {
+                            s *= birdscale;
+                        }
+                        birdformgo.transform.localScale = new Vector3(s, s, s);
+                        birdformgo.transform.localRotation = currot;// * Quaternion.Euler(-90, 0, 0);
+                        birdformgo.transform.localPosition = curpos;
+                        movingAnimationScript = "";
+                        restingAnimationScript = "";
+                        //BirdFlyHeight = 10f;
+                        birdgo.name = "Shepard";
                         break;
                     }
                 case BirdFormE.person:
@@ -202,7 +265,8 @@ namespace CampusSimulator
                         //}
                         if (person)
                         {
-                            birdformgo = person.LoadPersonGo("-ava-bc");
+                            //birdformgo = person.CreatePersonGo("-ava-bc");// bird journey person
+                            birdformgo = person.GetPogo("-ava-bc",createpogo:true,resetposition:false,moving:true);// bird journey person
                             if (person.hasHololens)
                             {
                                 person.ActivateHololens(true);
@@ -210,21 +274,35 @@ namespace CampusSimulator
                         }
                         else
                         {
-                            var objPrefab = Resources.Load<GameObject>("people/girl004");
+                            var resname = "people/girl004";
+                            if (birdresourcename!="")
+                            {
+                                resname = $"people/{birdresourcename}";
+                            }
+                            var objPrefab = Resources.Load<GameObject>(resname);
                             birdformgo = Instantiate<GameObject>(objPrefab);
                         }
-                        var s = 1.0f;
+                        var s = sman.trman.scalemodelnumber.Get();
+                        if (birdscale>0)
+                        {
+                            s *= birdscale;
+                        }
                         birdformgo.transform.localScale = new Vector3(s, s, s);
+                        //if (lookatpoint)
+                        //{
                         birdformgo.transform.localRotation = currot;
+                        //}
                         //var noise = GraphAlgos.GraphUtil.GetRanFloat(0, 0.6f,"jnygen");
-                        var newpos = new Vector3(curpos.x+0.3f, curpos.y - 1.55f, curpos.z);
-                        birdformgo.transform.localPosition = newpos;
-                        movingAnimationScript = "Animations/PersonWalk";
-                        restingAnimationScript = "Animations/PersonIdle";
+                        birdformgo.transform.localPosition = curpos + moveoffset;
                         //BirdFlyHeight = 1.5f;
                         birdgo.name = birdresourcename;
                         if (person)
                         {
+                            if (!person.isdronelike)
+                            {
+                                movingAnimationScript = "Animations/PersonWalk";
+                                restingAnimationScript = "Animations/PersonIdle";
+                            }
                             if (person.hasCamera)
                             {
                                 person.AddCamera(birdformgo, "BirdCtrl CreateBirdFormGos");
@@ -338,14 +416,28 @@ namespace CampusSimulator
         {
             rundist += BirdSpeedFactor*BirdSpeed*deltatime; // deltaTime is time to complete last frame
             curpt = GetPathPoint(rundist);
-            var curlookpt = GetPathPoint(rundist + lookaheadtime + deltatime,curpos:false);
             var delt = curpt - lastcurpt;
             if (deltatime > 0)
             {
                 birdVelVek = delt / deltatime;
             }
             birdgo.transform.localPosition += delt;
-            birdgo.transform.LookAt(curlookpt);
+            if (lookatpoint)
+            {
+                var curlookpt = GetPathPoint(rundist + lookaheadtime + deltatime, curpos: false);
+                if (flatlookatpoint)
+                {
+                    var flatlookpt = new Vector3(curlookpt.x, curpt.y, curlookpt.z);
+                    if (flatlookpt.magnitude > 0.1f)
+                    {
+                        birdgo.transform.LookAt(flatlookpt);
+                    }
+                }
+                else
+                {
+                    birdgo.transform.LookAt(curlookpt);
+                }
+            }
             lastcurpt = curpt;
             SetAnimationScript();
             
@@ -395,7 +487,7 @@ namespace CampusSimulator
         {
             if (movingAnimationScript != "")
             {
-                var acomp = birdformgo.GetComponent<Animator>();
+                var acomp = birdformgo.GetComponentInChildren<Animator>();
                 if (acomp != null)
                 {
                     acomp.applyRootMotion = false;
@@ -419,13 +511,13 @@ namespace CampusSimulator
                 }
                 else
                 {
-                    Debug.Log("Could not find animatior component on birdformgo");
+                    Debug.LogWarning($"Could not find animator on birdformgo for script:{movingAnimationScript}");
                 }
             }
         }
         void ClearAimationScript()
         {
-            var acomp = birdformgo.GetComponent<Animator>();
+            var acomp = birdformgo.GetComponentInChildren<Animator>();
             if (acomp != null)
             {
                 acomp.applyRootMotion = false;

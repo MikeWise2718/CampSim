@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UxUtils;
 using Aiskwk.Map;
+using System.Data.Common;
 
 namespace CampusSimulator
 {
@@ -13,21 +14,32 @@ namespace CampusSimulator
         Dictionary<string, Building> bldlookup = new Dictionary<string, Building>();
         List<string> bldnames = new List<string>(); // maintain a sorted list of buildings with destinations
         List<string> wtdbldnames = new List<string>(); // maintain a sorted weighted list of buildings with destinations
+        List<string> dronebldnames = new List<string>(); // maintain a  weighted list of buildings with drone destinations
+
         Dictionary<string, BldRoom> noderoomlookup = new Dictionary<string, BldRoom>(); // a home for fixed nodes that need to know their building
         Dictionary<string, BldRoom> roomlookup = new Dictionary<string, BldRoom>();
-       
+        Dictionary<string, BldDronePad> nodepadlookup = new Dictionary<string, BldDronePad>(); // a home for fixed nodes that need to know their building
+        Dictionary<string, BldDronePad> padlookup = new Dictionary<string, BldDronePad>();
+
 
         public SceneMan sman = null;
 
+        // Stats for Inspector 
         public int nBuildings;
+        public int nDroneBuildings;
+        public int nSkippedBuildingsWithoutOsmPoints;
         public int nRooms;
+        public int nPads;
         public int nPeople;
         public int nPeopleInRooms;
+        public int nDrones;
+        public int nDronesOnPads;
         public int nVehicles;
 
         public bool showPersRects;
 
         public List<OsmBldSpec> bldspecs;
+        public List<string> scene_padspecs;
 
 
         public UxSettingBool walllinks = new UxSettingBool("walllinks", false);
@@ -51,7 +63,7 @@ namespace CampusSimulator
             {
                 return roomlookup[nodename];
             }
-            else if (IsAssociatedNode(nodename))
+            else if (IsRoomAssociatedNode(nodename))
             {
                 return noderoomlookup[nodename];
             }
@@ -60,8 +72,25 @@ namespace CampusSimulator
                 Debug.Log("Bad Associated Room lookup  - " + nodename);
                 return null;
             }
-
         }
+
+        public BldDronePad GetAssociatedPad(string nodename)
+        {
+            if (IsPad(nodename))
+            {
+                return padlookup[nodename];
+            }
+            else if (IsPadAssociatedNode(nodename))
+            {
+                return nodepadlookup[nodename];
+            }
+            else
+            {
+                Debug.Log("Bad Associated Room lookup  - " + nodename);
+                return null;
+            }
+        }
+
 
         public BldRoom GetBroom(string roomname,bool expectFailure=false)
         {
@@ -69,7 +98,7 @@ namespace CampusSimulator
             {
                 if (!expectFailure)
                 {
-                    Debug.Log("Bad roomname lookup " + roomname);
+                    Debug.LogError($"Bad roomname lookup {roomname}");
                 }
                 return null;
             }
@@ -79,6 +108,24 @@ namespace CampusSimulator
         {
             return new List<BldRoom>(roomlookup.Values);
         }
+
+        public BldDronePad GetBpad(string padname, bool expectFailure = false)
+        {
+            if (!padlookup.ContainsKey(padname))
+            {
+                if (!expectFailure)
+                {
+                    Debug.LogError($"Bad padname lookup {padname}");
+                }
+                return null;
+            }
+            return padlookup[padname];
+        }
+        public List<BldDronePad> GetPads()
+        {
+            return new List<BldDronePad>(padlookup.Values);
+        }
+
 
         public void ToggleBld()
         {
@@ -113,6 +160,30 @@ namespace CampusSimulator
         public void InitPhase0()
         {
         }
+        Dictionary<OsmBldSpec, Building> bsDict;
+        Dictionary<Building, OsmBldSpec> bsRevDict;
+
+        public void RegisterBsBld(OsmBldSpec bs, Building bld)
+        {
+            bsDict[bs] = bld;
+            bsRevDict[bld] = bs;
+        }
+        public Building GetBsBld(OsmBldSpec bs)
+        {
+            if (!bsDict.ContainsKey(bs))
+            {
+                return null;
+            }
+            return bsDict[bs];
+        }
+        public OsmBldSpec GetBldBs(Building bld)
+        {
+            if (!bsRevDict.ContainsKey(bld))
+            {
+                return null;
+            }
+            return bsRevDict[bld];
+        }
 
         public OsmBldSpec FindBldSpecByNameStart(string namestart)
         {
@@ -120,22 +191,36 @@ namespace CampusSimulator
             {
                 foreach (var bs in bldspecs)
                 {
-                    if (bs.bgo.name.StartsWith(namestart))
+                    if (bs.osmname.StartsWith(namestart))
                     {
+                        Debug.Log($"Found \"{bs.osmname}\" starts with \"{namestart}\"");
                         return bs;
                     }
                 }
             }
+            Debug.Log($"Found nothing that starts with \"{namestart}\"");
             return null;
         }
 
-        public void InitializeScene(SceneSelE newregion)
+        public void ModelInitialize(SceneSelE newregion)
         {
+            bldlookup = new Dictionary<string, Building>();
+            bldnames = new List<string>(); // maintain a sorted list of buildings with destinations
+            wtdbldnames = new List<string>(); // maintain a sorted weighted list of buildings with destinations
+            dronebldnames = new List<string>(); // maintain a  weighted list of buildings with drone destinations
+
+            noderoomlookup = new Dictionary<string, BldRoom>(); // a home for fixed nodes that need to know their building
+            roomlookup = new Dictionary<string, BldRoom>();
+            nodepadlookup = new Dictionary<string, BldDronePad>(); // a home for fixed nodes that need to know their building
+            padlookup = new Dictionary<string, BldDronePad>();
             bldspecs = new List<OsmBldSpec>();
+            bsDict = new Dictionary<OsmBldSpec, Building>();
+            bsRevDict = new Dictionary<Building, OsmBldSpec>();
+
             InitializeValues();
         }
 
-        public void InitializeValues()
+         void InitializeValues()
         {
             //treeMode = GetInitialTreeMode();
             treeMode.GetInitial(TreeModeE.full);
@@ -143,35 +228,67 @@ namespace CampusSimulator
             walllinks.GetInitial(false);
             osmblds.GetInitial(true);
             fixedblds.GetInitial(false);
+            scene_padspecs = new List<string>();
             Debug.Log($"BuildingMan.InitializeValues walllinks:{walllinks.Get()} osmblds:{osmblds.Get()}   fixedblds:{fixedblds.Get()}");
         }
 
-
-        public void SetScene(SceneSelE newregion)
+        public List<string> GetFilteredPadNames(string prefix)
         {
-            Debug.Log($"BuildingMan.SetScene {newregion}");
-            DelBuildings();
+            var rv = new List<string>();
+            foreach(var ps in scene_padspecs)
+            {
+                if(ps.StartsWith(prefix))
+                {
+                    var padname = ps.Split(':')[0]; // trim the name out
+                    rv.Add(padname);
+                }
+            }
+            return rv;
+        }
+        public List<string> GetFilteredPadSpecs(string prefix)
+        {
+            var rv = new List<string>();
+            foreach (var ps in scene_padspecs)
+            {
+                if (ps.StartsWith(prefix))
+                {
+                    rv.Add(ps);
+                }
+            }
+            return rv;
+        }
+
+        public BldPolyGen bpg = null;
+
+        public void ModelBuild()
+        {
+            nBuildings = 0;
+            nSkippedBuildingsWithoutOsmPoints = 0;
+            nRooms = 0;
+            nPeople = 0;
+            nVehicles = 0;
+            Debug.Log($"BuildingMan.SetScene {sman.curscene}");
 
             var doosmblds = osmblds.Get();
             //Debug.Log($"doosmblds:{doosmblds} osmloadspec{osmloadspec}");
             if (doosmblds)
             {
-                var osmroot = new GameObject("osmblds");
-                osmroot.transform.parent = this.transform;
                 var pgvd = new PolyGenVekMapDel(sman.mpman.GetHeightVector3);
-                var bpg = new BldPolyGen();
+                bpg = new BldPolyGen();
                 var llm = sman.mpman.GetLatLongMap();
                 var (waysdflst, linksdflist, nodesdflist) = sman.dfman.GetSdfs();
-                var lbgos = bpg.LoadRegion(osmroot, waysdflst, linksdflist, nodesdflist, pgvd: pgvd, llm: llm);
-                bldspecs.AddRange(lbgos);
+                var osmbs = bpg.GetBuildspecsInRegion(waysdflst, linksdflist, nodesdflist, llm:llm);
+                //var osmbs = bpg.GenBuildingsInRegion(osmroot, waysdflst, linksdflist, nodesdflist, pgvd: pgvd, llm: llm);
+                bldspecs.AddRange(osmbs);
             }
 
-            switch (newregion)
+            switch (sman.curscene)
             {
                 case SceneSelE.MsftRedwest:
                 case SceneSelE.MsftCoreCampus:
                 case SceneSelE.MsftB19focused:
                 case SceneSelE.MsftB121focused:
+                    scene_padspecs = Building.MsftDronePadspec;
                     MakeBuildings("Bld");
                     break;
                 case SceneSelE.MsftDublin:
@@ -181,18 +298,41 @@ namespace CampusSimulator
                 case SceneSelE.Eb12:
                     MakeBuildings("Eb");
                     break;
+                case SceneSelE.TeneriffeMtn:
+                    MakeBuildings("MtTen");
+                    break;
                 default:
+                    MakeBuildings("");
+                    break;
                 case SceneSelE.None:
-                    // DelBuildings called above already
+                    // do nothing
                     break;
             }
-
-
+        }
+        public void ModelBuildPostLinkCloud()
+        {
+            ReinitDests();
+            AddRoomsToBuildings();
+            PopulateBuildings();
+            AddExtraPeople();
+            dronebldnames = new List<string>();
+            foreach (var bld in bldlookup.Values)
+            {
+                var npads = bld.GetPads().Count;
+                if (npads > 0)
+                {
+                    dronebldnames.Add(bld.name);
+                    dronebldnames.Sort();
+                }
+            }
+            UpdateBldStats();
         }
         public void UpdateBldStats()
         {
             nBuildings = bldlookup.Count;
+            nDroneBuildings = dronebldnames.Count;
             nRooms = roomlookup.Count;
+            nPads = padlookup.Count;
             nPeople = sman.psman.GetPersonCount();
             nPeopleInRooms = 0;
             foreach( var broom in roomlookup.Values )
@@ -200,11 +340,20 @@ namespace CampusSimulator
                 nPeopleInRooms += broom.GetAllPeopleInRoom().Count;
             }
             nVehicles = sman.veman.GetVehicleCount();
+            nDrones = 0;
+            foreach (var pad in padlookup.Values)
+            {
+                nDronesOnPads += pad.GetAllPeopleInRoom().Count;
+            }
         }
         public void MakeBuildings(string filtername)
         {
-            var bldlst = Building.GetPredefinedBuildingNames(filtername);
-            bldlst.ForEach(item => MakeBuilding(item));
+            if (filtername != "")
+            {
+                var bldlst = Building.GetPredefinedBuildingNames(filtername);
+                bldlst.ForEach(mbname => MakeBuilding(mbname));
+            }
+            bldspecs.ForEach(osmbs => MakeOsmBuilding(osmbs));
         }
         public string presetEvacBldName = "";
         public void EvacPresetBld()
@@ -230,51 +379,44 @@ namespace CampusSimulator
                 z.SetAlarmState(newstate:true, justone:false,startstream:false);
             }
         }
-        public void SetScenePostLinkCloud(SceneSelE newregion)
+        public void AddExtraPeople()
         {
-            ReinitDests();
-            AddRoomsToBuildings();
-            PopulateBuildings();
-            switch (newregion)
+            var newscene = sman.curscene;
+            switch (newscene)
             {
                 case SceneSelE.MsftRedwest:
                 case SceneSelE.MsftCoreCampus:
                 case SceneSelE.MsftB19focused:
                 case SceneSelE.MsftB121focused:
                     presetEvacBldName = "Bld19";
-                    if (newregion == SceneSelE.MsftRedwest)
+                    if (newscene == SceneSelE.MsftRedwest)
                     {
                         presetEvacBldName = "BldRWB";
                     }
                     //var bld = GetBuilding("BldRWB");
                     //bld.AddRedwestBAlarms();
-                    sman.lcman.grctrl.AddLateLink("rwb-f03-cv0-e", "bRWB-os1-o02",GraphAlgos.LinkUse.walkway,"walkway link for garage-RedwestB - 1");
+                    sman.lcman.grctrl.AddLateLink("rwb-f03-cv0-e", "bRWB-os1-o02", GraphAlgos.LinkUse.walkway, "walkway link for garage-RedwestB - 1");
                     sman.lcman.grctrl.AddLateLink("rwb-f03-cv0-s", "bRWB-os2-o01", GraphAlgos.LinkUse.walkway, "walkway link for garage-RedwestB - 2");
                     sman.lcman.grctrl.AddLateLink("rwb-f03-cv3-s", "bRWB-os2-o04", GraphAlgos.LinkUse.walkway, "walkway link for garage-RedwestB -3");
                     sman.lcman.grctrl.AddLateLink("rwb-f03-cv3-e", "bRWB-os3-o02", GraphAlgos.LinkUse.walkway, "walkway link for garage-RedwestB- 4");
-//                    if (sman.fastMode)
-//                    {
-                        sman.lcman.grctrl.AddLateLink("rwb-f03-rm3342", "g_RWB_eee-dt-wpsdoor004", GraphAlgos.LinkUse.walkway, "walkway link for garage-RedwestB- 5");
-//                    }
+                    //                    if (sman.fastMode)
+                    //                    {
+                    sman.lcman.grctrl.AddLateLink("rwb-f03-rm3342", "g_RWB_eee-dt-wpsdoor004", GraphAlgos.LinkUse.walkway, "walkway link for garage-RedwestB- 5");
+                    //                    }
                     sman.lcman.grctrl.AddLateLink("dw-RWB-c18", "g_RWB_eee-dt-dps013", GraphAlgos.LinkUse.driveway, "driveway link for garage at RedwestB - 1");
                     sman.lcman.grctrl.AddLateLink("dw-RWB-c28", "g_RWB_eee-dt-dps006", GraphAlgos.LinkUse.driveway, "driveway link for garage at RedwestB - 2");
                     sman.lcman.grctrl.AddLateLink("dw-RWB-c28", "g_RWB_eee-dt-dps007", GraphAlgos.LinkUse.driveway, "driveway link for garage at RedwestB - 3");
-                    sman.lcman.grctrl.AddLateLink("dw-RWB-c38", "g_RWB_eee-dt-dps001",GraphAlgos.LinkUse.driveway, "driveway link for garage at RedwestB - 4");
-                    sman.psman.AddPersonToBuildingAtNode(PersonMan.GenderE.male,"b19-f01-lobby", "b19-f01-cp0b1", "Arnie Schwarzwald", "Businessman004",
-                                                         PersonMan.empStatusE.Security, "IdleUnarmed", false,180,hasHololens:true,hasCamera:true,flagged:true);
+                    sman.lcman.grctrl.AddLateLink("dw-RWB-c38", "g_RWB_eee-dt-dps001", GraphAlgos.LinkUse.driveway, "driveway link for garage at RedwestB - 4");
+                    sman.psman.AddPersonToBuildingAtNode(PersonMan.GenderE.male, "b19-f01-lobby", "b19-f01-cp0b1", "Arnie Schwarzwald", "Businessman004",
+                                                         PersonMan.empStatusE.Security, "IdleUnarmed", false, 180, hasHololens: true, hasCamera: true, flagged: true);
                     sman.psman.AddPersonToBuildingAtNode(PersonMan.GenderE.female, "b19-f01-lobby", "b19-f01-sp1003", "Audrey Hepburn", "Girl005",
                                                          PersonMan.empStatusE.FullTimeEmp, "Typing", false, 45, hasHololens: false, hasCamera: false, flagged: true);
                     sman.psman.AddPersonToBuildingAtNode(PersonMan.GenderE.male, "b19-f01-lobby", "b19-f01-sp1030", "Clark Gabel", "Man004",
                                                          PersonMan.empStatusE.Contractor, "Typing", false, -48f, hasHololens: false, hasCamera: false, flagged: true);
                     sman.psman.AddPersonToBuildingAtNode(PersonMan.GenderE.male, "b19-f01-lobby", "b19-f01-sp1029", "Anthony Hopkins", "Man010",
                                                          PersonMan.empStatusE.FullTimeEmp, "Typing", false, 40f, hasHololens: false, hasCamera: false, flagged: true);
-                    //sman.psman.b19idchange("Dave Agarwal","Visitor",flagged:true);
-                    //sman.psman.b19idchange("Liam Lee", "Visitor", flagged: true);
-                    //sman.psman.b19idchange("Aditi Wilcox", "Visitor", flagged: true);
-                    //sman.psman.b19idchange("Adidi Blanc", "Visitor", flagged: true);
-                    //sman.psman.b19idchange("Gabriel Suzuki", "Contractor", flagged: true);
-                    //sman.psman.b19idchange("Ava Wilson", "Unknown", flagged: true);
-                    //sman.psman.b19idchange("Qi Brown", "Contractor", flagged: true);
+
+
 
 
                     break;
@@ -284,14 +426,26 @@ namespace CampusSimulator
                 case SceneSelE.Eb12:
                     presetEvacBldName = "Eb12-22";
                     sman.psman.AddPersonToBuildingAtNode(PersonMan.GenderE.male, "eb12-16-lob", "eb12-oso1a", "Arnie Schwarzwald", "Businessman004",
-                                                         PersonMan.empStatusE.Security, "IdleUnarmed", false, 0, hasHololens:true, hasCamera: true, flagged: true);
+                                                         PersonMan.empStatusE.Security, "IdleUnarmed", false, 0, hasHololens: true, hasCamera: true, flagged: true);
                     break;
                 default:
                 case SceneSelE.None:
                     break;
+                case SceneSelE.TeneriffeMtn:
+                    //"m|Jane Doe Found|Girl03|unknown|nothing",
+
+                    sman.psman.AddPersonToBuildingAtNode(PersonMan.GenderE.female, "found-spot", "found-spot-dog", "Connie Haines Found Dog", "shepherd",
+                                                         PersonMan.empStatusE.Unknown, "IdleUnarmed", false, 0, hasHololens: false, hasCamera: true, flagged: true);
+                    sman.psman.AddPersonToBuildingAtNode(PersonMan.GenderE.female, "found-spot", "found-spot", "Connie Haines Found", "Girl010",
+                                                         PersonMan.empStatusE.Unknown, "IdleUnarmed", false, 0, hasHololens: false, hasCamera: true, flagged: true);
+                    sman.psman.AddPersonToBuildingAtNode(PersonMan.GenderE.female, "lastseen-spot", "lastseen-spot-dog", "Connie Haines Lastseen Dog", "shepherd",
+                                                         PersonMan.empStatusE.Unknown, "IdleUnarmed", false, 0, hasHololens: false, hasCamera: true, flagged: true);
+                    sman.psman.AddPersonToBuildingAtNode(PersonMan.GenderE.female, "lastseen-spot", "lastseen-spot", "Connie Haines Lastseen", "Girl010",
+                                                         PersonMan.empStatusE.Unknown, "IdleUnarmed", false, 0, hasHololens: false, hasCamera: true, flagged: true);
+                    break;
             }
-            UpdateBldStats();
         }
+
         public string GetRandomBldName(string notthisone="",string ranset="")
         {
             var choosen = "nope!!!";
@@ -306,6 +460,20 @@ namespace CampusSimulator
             //Debug.Log("Choose " + choosen + " after " + ntries + " tries");
             return choosen;
         }
+        public string GetRandomDroneBldName(string notthisone = "", string ranset = "")
+        {
+            var choosen = "nope!!!";
+            var ntries = 0;
+            var maxtries = 10;
+            while (ntries == 0 || (choosen == notthisone && ntries < maxtries))
+            {
+                var diceroll = GraphAlgos.GraphUtil.GetRanInt(dronebldnames.Count, ranset);
+                choosen = dronebldnames[diceroll];
+                ntries++;
+            }
+            //Debug.Log("Choose " + choosen + " after " + ntries + " tries");
+            return choosen;
+        }
         public Building GetRandomBld(string notthisone = "",string ranset="")
         {
             var bname = GetRandomBldName(notthisone,ranset);
@@ -314,7 +482,7 @@ namespace CampusSimulator
         public void AddRoomsToBuildings()
         {
             var bldlst = new List<Building>(bldlookup.Values);
-            bldlst.ForEach(bld => bld.DefineBuildingConstants());
+            //bldlst.ForEach(bld => bld.DefineBuildingConstants());
             bldlst.ForEach(bld => bld.AddRoomsToBuilding());
         }
         public void PopulateBuildings()
@@ -322,7 +490,33 @@ namespace CampusSimulator
             var bldlst = new List<Building>(bldlookup.Values);
             bldlst.ForEach(bld => bld.PopulateBuilding());
         }
+        public void MakeOsmBuilding(OsmBldSpec bldspec)
+        {
+            if (bldspec.GetOutline().Count<3)
+            {
+                nSkippedBuildingsWithoutOsmPoints += 1;
+                return;
+            }
+            var mbname = bldspec.osmname;
+            var bld = GetBsBld(bldspec);
+            if (bld == null)
+            {
+                // we need to make a new one if this wasn't reserved from a fixed building
+                var bgo = new GameObject(mbname);
+                bgo.transform.position = Vector3.zero;
+                bgo.transform.parent = this.transform;
+                bld = bgo.AddComponent<Building>();
+                RegisterBsBld(bldspec, bld);
+            }
+            bld.AddOsmBldDetails(this, bldspec);
+            AddBuildingToCollection(bld);
 
+            //bld.llm = bgo.AddComponent<LatLongMap>(); // todo uncomment
+            //var origin = $"BuildingMan.MakeOsmBuilding(\"{mbname}\")";
+            //bld.llm = new LatLongMap(origin); // todo uncomment
+            //bld.llm.AddLlmDetails();
+            //sman.jnman.AddViewerJourneyNodes(bld.destnodes, prefix: $"{mbname}/");
+        }
         public void MakeBuilding(string mbname)
         {
             var bgo = new GameObject(mbname);
@@ -330,28 +524,40 @@ namespace CampusSimulator
             bgo.transform.parent = this.transform;
             var bld = bgo.AddComponent<Building>();
             bld.AddBldDetails(this);
-            AddBuildingToCollection(bld); /// has to be afterwards because of the sorted names for journeys
+            AddBuildingToCollection(bld);
+
             //bld.llm = bgo.AddComponent<LatLongMap>(); // todo uncomment
-            var origin = $"BuildingMan.MakeBuilding(\"{mbname}\")";
-            bld.llm = new LatLongMap(origin); // todo uncomment
-                                        //bld.llm.AddLlmDetails();
+            //var origin = $"BuildingMan.MakeBuilding(\"{mbname}\")";
+            //bld.llm = new LatLongMap(origin); // todo uncomment
+            //bld.llm.AddLlmDetails();
             sman.jnman.AddViewerJourneyNodes(bld.destnodes,prefix:$"{mbname}/");
-            UpdateBldStats();
         }
         public void DelBuildings()
         {
-            Debug.Log("DelBuildings called");
+            //Debug.Log("DelBuildings called");
             if (bldlookup != null)
             {
                 var namelist = new List<string>(bldlookup.Keys);
                 namelist.ForEach(name => DelBuilding(name));
             }
-            bldlookup = new Dictionary<string, Building>();
+            bldlookup = null;
             if (bldspecs != null)
             {
                 bldspecs.ForEach(bs => Destroy(bs.bgo));
             }
-            bldspecs = new List<OsmBldSpec>();
+            bldspecs = null;
+
+            bldlookup = null;
+            bldnames = null;
+            wtdbldnames = null;
+            dronebldnames = null;
+
+            noderoomlookup = null;
+            roomlookup = null;
+            nodepadlookup = null;
+            padlookup = null;
+            bsDict = null;
+            bsRevDict = null;
         }
         public void DelBuilding(string name)
         {
@@ -387,7 +593,7 @@ namespace CampusSimulator
         {
             if (bldlookup.ContainsKey(building.name))
             {
-                Debug.Log("Tried to add duplicate building:" + building.name);
+                Debug.Log("Tried to add duplicate building:" + building.name); // this can happen with osmbuildings
                 return;
             }
             var ndests = building.GetRoomListFromNodes().Count;
@@ -411,10 +617,12 @@ namespace CampusSimulator
         }
         public int GetBuildingCount()
         {
+            if (bldnames == null) return 0;
             return bldnames.Count;
         }
         public int GetBroomCount()
         {
+            if (roomlookup == null) return 0;
             return roomlookup.Count;
         }
         public void ReinitDests()
@@ -428,7 +636,7 @@ namespace CampusSimulator
         {
             if (roomlookup.ContainsKey(roomname))
             {
-                Debug.LogError("In BuildingMan - Room being registered twice:" + roomname);
+                Debug.LogError($"In BuildingMan - Room being registered twice:{roomname}");
             }
             roomlookup[roomname] = bldRoom;
         }
@@ -436,27 +644,71 @@ namespace CampusSimulator
         {
             if (!roomlookup.ContainsKey(roomname))
             {
-                Debug.LogError("In BuildingMan - Room being unregistered that was not registered:" + roomname);
+                Debug.LogError($"In BuildingMan - Room being unregistered that was not registered:{roomname}");
             }
             roomlookup.Remove(roomname);
         }
         public bool IsRoom(string nodename)
         {
-            return roomlookup.ContainsKey(nodename);
+            var rv = roomlookup.ContainsKey(nodename);
+            return rv;
         }
-        public bool IsAssociatedNode(string nodename)
+        public bool IsPad(string nodename)
+        {
+            var rv = padlookup.ContainsKey(nodename);
+            return rv;
+        }
+        public bool IsRoomAssociatedNode(string nodename)
         {
             return noderoomlookup.ContainsKey(nodename);
         }
+        public void RegisterPad(string padname, BldDronePad pad)
+        {
+            if (padlookup.ContainsKey(padname))
+            {
+                Debug.LogError($"In BuildingMan - Pad being registered twice:{padname}");
+            }
+            padlookup[padname] = pad;
+        }
+        public void UnRegisterPad(string padname)
+        {
+            if (!padlookup.ContainsKey(padname))
+            {
+                Debug.LogError($"In BuildingMan - Pad being unregistered that was not registered:{padname}");
+            }
+            padlookup.Remove(padname);
+        }
+
+        public bool IsPadAssociatedNode(string nodename)
+        {
+            return nodepadlookup.ContainsKey(nodename);
+        }
         public bool IsRoomlike(string nodename)
         {
-            return IsRoom(nodename) || IsAssociatedNode(nodename);
+            return IsRoom(nodename) || IsRoomAssociatedNode(nodename) || IsPad(nodename) || IsPadAssociatedNode(nodename);
+        }
+        public bool IsPadlike(string nodename)
+        {
+            return IsPad(nodename) || IsPadAssociatedNode(nodename);
         }
         public void OccupyNode(string destnode, Person person)
         {
             var broom = this.GetAssociatedRoom(destnode);
-            person.AssignCurLocation(broom.bld.name, broom.name, destnode);
-            broom.Occupy(person);
+            if (broom != null)
+            {
+                person.AssignCurLocation(broom.bld.name, broom.name, destnode);
+                broom.Occupy(person);
+            }
+            else
+            {
+                var bpad = this.GetAssociatedPad(destnode);
+                if (bpad!=null)
+                {
+                    person.AssignCurLocation(bpad.bld.name, bpad.name, destnode);
+                    bpad.Occupy(person);
+                }
+            }
+
         }
         public void ForceFrameAllRooms(bool doit)
         {
@@ -478,7 +730,14 @@ namespace CampusSimulator
             var broom = GetAssociatedRoom(vacnode);
             if (!broom)
             {
-                Debug.Log("Can't vacate slot:" + vacnode);
+                var bpad = GetAssociatedPad(vacnode);
+                if (!bpad)
+                {
+                    Debug.LogWarning($"BuildingMan cannot find vacnode as room or pad - can not vacate slot:{vacnode}");
+                    return;
+                }
+                bpad.Vacate(person);
+                return;
             }
             broom.Vacate(person);
             //person.AssignCurLocation(vacnode, vacnode);

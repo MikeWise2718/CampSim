@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using GraphAlgos;
+using System.Diagnostics.Eventing.Reader;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -64,7 +65,7 @@ namespace CampusSimulator
         }
         public static bool usemman = true;
 
-        public static GameObject MakeLinkGo(SceneMan sman, LcLink link, RmLinkFormE linkForm, float linkRadius, string clrname,float alf,bool flatlink=false)
+        public static GameObject MakeLinkGo(SceneMan sman, LcLink link, RmLinkFormE linkForm, float linkRadius, string clrname,float alf,bool flatlink=false,bool dofrag=true)
         {
             var go = new GameObject();
             var linkgo = go.AddComponent<LinkGo>();
@@ -92,7 +93,8 @@ namespace CampusSimulator
             {
                 if (usemman)
                 {
-                    linkcyl = sman.mpman.AddLine(link.name, p1, p2, linkForm, linkRadius, lclr:clrname, frag:true );// for flat lines?
+                    //bool dofrag = link.usetype != LinkUse.trackdrone || link.usetype != LinkUse.trackheli;
+                    linkcyl = sman.mpman.AddLine(link.name, p1, p2, linkForm, linkRadius, lclr:clrname, frag:dofrag );// for flat lines?
                 }
                 else
                 {
@@ -109,6 +111,7 @@ namespace CampusSimulator
             {
                 linkcyl.transform.parent = go.transform;
             }
+            link.lgo = go;
             return go;
         }
     }

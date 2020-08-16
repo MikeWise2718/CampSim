@@ -12,6 +12,8 @@ public class HelpPanel : MonoBehaviour
     UiMan uiman;
 
     Text helpText;
+    Button copyClipboardButton;
+
     Button closeButton;
 
 
@@ -25,8 +27,12 @@ public class HelpPanel : MonoBehaviour
     {
         uiman = sman.uiman;
         helpText = transform.Find("HelpText").GetComponent<Text>();
+        copyClipboardButton = transform.Find("ClipboardCopyButton").gameObject.GetComponent<Button>();
         closeButton = transform.Find("CloseButton").gameObject.GetComponent<Button>();
+
         closeButton.onClick.AddListener(delegate { uiman.ClosePanel(); });
+        copyClipboardButton.onClick.AddListener(delegate { ButtonClick(copyClipboardButton.name); });
+
     }
     public void SetScene(CampusSimulator.SceneSelE curscene)
     {
@@ -67,7 +73,14 @@ public class HelpPanel : MonoBehaviour
             msg += "\n"   + "Ctrl-C              - Interrupt bitmap loading";
             msg += "\n\n" + "Ctrl-Q Ctrl-Q       - Quit Application (hit ctrl-q twice)";
             msg += "\n\n" + "Bugs/Requests/Info  - Contact: mwise@microsoft.com (Mike Wise)";
-            msg += "\n"   + "                               brujo@microsoft.com (Bruce E. Johnson)";
+            msg += "\n" + "                               brujo@microsoft.com (Bruce E. Johnson)";
+
+            var  args = GraphAlgos.GraphUtil.GetArgs();
+            msg += $"\n\nCommand line arguments:{args.Count}";
+            for (int i = 0; i < args.Count; i++)
+            {
+                msg += $"\n   {i}:{args[i]}";
+            }
         }
         catch (Exception ex)
         {
@@ -77,7 +90,19 @@ public class HelpPanel : MonoBehaviour
         }
         helpText.text = msg;
     }
-
+    void ButtonClick(string buttonname)
+    {
+        Debug.Log($"{buttonname} clicked:" + Time.time);
+        switch (buttonname)
+        {
+            case "ClipboardCopyButton":
+                {
+                    Debug.Log($"CopyText {helpText.text.Length} chars");
+                    Aiskwk.Map.qut.CopyTextToClipboard(helpText.text);
+                    break;
+                }
+        }
+    }
 
     // Update is called once per frame
     //void Update()

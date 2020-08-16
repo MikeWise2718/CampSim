@@ -1,5 +1,4 @@
-﻿#define UNITYSIM
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 #if USE_KEYWORDRECOGNIZER
@@ -25,7 +24,6 @@ namespace CampusSimulator
 
         public LinkedList<string> loglist = null;
 
-        public bool unitySim = false;
         public string logfilenameroot = "brlog";
 
         public GameObject rgo;
@@ -33,10 +31,6 @@ namespace CampusSimulator
         public float rgoRotate = 0f;
         public Vector3 rgoTranslate = Vector3.zero;
 
-        public string strans0;
-        public string strans1;
-        public string strans2;
-        public string strans3;
 
         public float home_height = 1.7f;
         float home_rgoScale = 1.0f;
@@ -62,7 +56,14 @@ namespace CampusSimulator
         public bool autoerrorcorrect = false;
         private bool needsrefresh = false;
         private bool needstotalrefresh = false;
+
         public SceneSelE requestScene = SceneSelE.None;
+        public SceneSelE curscene = SceneSelE.None;
+
+        public static bool kickOffRun = false;
+        public static bool kickOffFly = false;
+        public static bool kickOffEvac = false;
+        public static bool showNoPipes = false;
 
 
         public GameObject rmango;
@@ -95,10 +96,6 @@ namespace CampusSimulator
         public SpatialMapperMan smm = null;
 #endif
 
-        private Vector4 trans0;
-        private Vector4 trans1;
-        private Vector4 trans2;
-        private Vector4 trans3;
         public Transform rgoTransform;
         public int rgoTransformSetCount = 0;
         public int lastRgoTransformSetCount = -1;
@@ -106,16 +103,19 @@ namespace CampusSimulator
         public GarageMan gaman;
         public BuildingMan bdman;
         public StreetMan stman;
+        public TrackMan trman;
         public MapMan mpman;
         public JourneyMan jnman;
         public VidcamMan vcman;
         public LocationMan loman;
         public PersonMan psman;
         public VehicleMan veman;
+        public DroneMan drman;
         public ZoneMan znman;
         public FrameMan frman;
         public CalibMan cbman;
         public DataFileMan dfman;
+        public CoordMapMan coman;
         public UiMan uiman;
         public string runtimestamp = DateTime.UtcNow.ToString("yyyyMMdd-HHmmss");
         public string simrundir;
@@ -124,7 +124,7 @@ namespace CampusSimulator
         public bool needsLifted = false;
 
 
-        public LatLongMap glbllm;
+        //public LatLongMap glbllm;
 
         public bool arcoreTrack = false;
 
@@ -187,12 +187,19 @@ namespace CampusSimulator
 #endif
             DisableSpatialMapping();
 
-// Start of new initialzation scheme
+            // Start of initialzation
+
+            // these object don't need to be in the scene view as we don't really inspect them or change their parameters
+            coman = (new GameObject("CoordMapMan")).AddComponent<CoordMapMan>();
+            dfman = (new GameObject("DataFileMan")).AddComponent<DataFileMan>();
+
+            // these object need to be in the scene we are starting because we might inspect them
             uiman = FindObjectOfType<UiMan>();
             mpman = FindObjectOfType<MapMan>();
             vcman = FindObjectOfType<VidcamMan>();
             bdman = FindObjectOfType<BuildingMan>();
             stman = FindObjectOfType<StreetMan>();
+            trman = FindObjectOfType<TrackMan>();
             gaman = FindObjectOfType<GarageMan>();
             znman = FindObjectOfType<ZoneMan>();
             jnman = FindObjectOfType<JourneyMan>();
@@ -200,13 +207,17 @@ namespace CampusSimulator
                                                        // causes lots of error messages
             psman = FindObjectOfType<PersonMan>();
             veman = FindObjectOfType<VehicleMan>();
+            drman = FindObjectOfType<DroneMan>();
             frman = FindObjectOfType<FrameMan>();
-            dfman = FindObjectOfType<DataFileMan>();
+
+            dfman.sman = this;
+            coman.sman = this;
 
             uiman.sman = this;
             mpman.sman = this;
             vcman.sman = this;
             stman.sman = this;
+            trman.sman = this;
             bdman.sman = this;
             gaman.sman = this;
             znman.sman = this;
@@ -214,8 +225,8 @@ namespace CampusSimulator
             //loman.sman = this;
             psman.sman = this;
             veman.sman = this;
+            drman.sman = this;
             frman.sman = this;
-            dfman.sman = this;
 
             bool subbordinatethemall = false;
             if (subbordinatethemall)
@@ -225,12 +236,14 @@ namespace CampusSimulator
                 vcman.transform.parent = rgo.transform;
                 bdman.transform.parent = rgo.transform;
                 stman.transform.parent = rgo.transform;
+                trman.transform.parent = rgo.transform;
                 gaman.transform.parent = rgo.transform;
                 znman.transform.parent = rgo.transform;
                 jnman.transform.parent = rgo.transform;
                 //loman.transform.parent = rgo.transform;
                 psman.transform.parent = rgo.transform;
                 veman.transform.parent = rgo.transform;
+                drman.transform.parent = rgo.transform;
                 frman.transform.parent = rgo.transform;
                 dfman.transform.parent = rgo.transform;
             }
@@ -238,13 +251,24 @@ namespace CampusSimulator
             mpman.InitPhase0();
             bdman.InitPhase0();
             stman.InitPhase0();
+            trman.InitPhase0();
             vcman.InitPhase0();
             uiman.InitPhase0();
             dfman.InitPhase0();
+            veman.InitPhase0();
+            drman.InitPhase0();
+
         }
 
+        //private T CreateObjectAddComp<T>(string cname) 
+        //{
+        //    var go = new GameObject(cname);
+        //    var rv =  go.AddComponent<T>();
+        //    return rv;
+        //}
 
-        public void InitializeScene(SceneSelE newscene)
+
+        public void BaseInitialize(SceneSelE newscene)
         {
             // Here we do two things
             //
@@ -254,19 +278,53 @@ namespace CampusSimulator
             }
             simrundir = "./simrun/" + newscene + "_" + runtimestamp + "/";
             UxUtils.UxSettingsMan.SetScenario(newscene.ToString());
+
             curscene = newscene;
         }
-        public (float x,float z) lltoxz(double lat,double lng)
+        //public void InitializeGlbLlMap()
+        //{
+        //    glbllm = new LatLongMap($"SceneMan.InitializeGlbLlMap(  ) with curscene:{curscene}");
+        //    glbllm.InitMapFromSceneSelString(curscene.ToString(), mpman.bespokespec?.llbox); // doesn't handle non-llmap scenes 
+        //}
+        //public (float x,float z) lltoxz(double lat,double lng)
+        //{
+        //    var glbm = glbllm;
+        //    if (glbm == null)
+        //    {
+        //        Debug.LogError($"glbllm is null");
+        //        return ((float)lng, (float)lat);
+        //    }
+        //    if (glbm.maps==null)
+        //    {
+        //        Debug.LogError($"glbllm.mapps is null");
+        //        return ((float)lng, (float)lat);
+        //    }
+        //    if (glbm.maps.xmap == null)
+        //    {
+        //        Debug.LogError($"glbllm.maps.xmap is null");
+        //        return ((float)lng, (float)lat);
+        //    }
+        //    if (glbm.maps.zmap == null)
+        //    {
+        //        Debug.LogError($"glbllm.maps.zmap is null");
+        //        return ((float)lng, (float)lat);
+        //    }
+        //    var x = (float)glbm.maps.xmap.Map(lng,lat);
+        //    var z = (float)glbm.maps.zmap.Map(lng,lat);
+        //    return (x, z);
+        //}
+
+        public void ModelBuild()
         {
-            if (glbllm==null)
-            {
-                return ((float)lng, (float)lat);
-            }
-            var x = (float) glbllm.maps.xmap.Map(lng,lat);
-            var z = (float) glbllm.maps.zmap.Map(lng,lat);
-            return (x, z);
+            RealizeFloorPlanStatus();
         }
-        public void SetScene( SceneSelE newscene,bool force=false )
+        public enum InitState { ceaseActivities,deleteModels, baseInit, modelInit, modelBuild,modelBuildPost,refreshGos,finished }
+        public InitState curInitState;
+        public void SetInitState(InitState initState)
+        {
+            curInitState = initState;
+        }
+        public void SetScenario( SceneSelE newscene,bool force=false )
         {
             if (newscene != curscene || force)
             {
@@ -278,16 +336,26 @@ namespace CampusSimulator
                 try
                 {
                     ceasesw.Start();
+                    SetInitState(InitState.ceaseActivities);
                     // Cease all activity
                     jnman.CeaseSceneActivity();
 
+
                     // Delete all objects - withough knowledge of identity of new scene
+                    SetInitState(InitState.deleteModels);
+                    dfman.DeleteStuff();
                     psman.DelPersons();
                     veman.DelVehicles();
                     bdman.DelBuildings();
+                    trman.DeleteTracks();
                     gaman.DelGarages();
                     vcman.DelVidcams();
-                    lcman.DestroyLinkCloud();
+                    drman.DeleteDroneInfra();
+                    veman.DelVehicles();
+                    lcman.DeleteGrcGos();
+                    lcman.DeleteAllNodes();
+
+
                     mpman.DeleteQmap();
                     firstPersonBirdCtrl.DeleteBirdGosAndInit();
                     firstPersonPathCtrl.DeletePathGoesAndInit();
@@ -295,67 +363,79 @@ namespace CampusSimulator
                     ceasesw.Stop();
                     initsw.Start();
 
+                    SetInitState(InitState.baseInit);
+
+
                     // Now do value initialization 
-                    this.InitializeScene(newscene);// start with setting the scene
-                                                   //glbllm = rmango.AddComponent<LatLongMap>();
+                    // Low level
 
-                    glbllm = null;
+                    this.BaseInitialize(newscene);// start with setting the scene - curscene set here
+                    dfman.BaseInitialize(newscene);
+                    mpman.BaseInitialize(newscene); // lnglat constants and bspokespec set here
+                    coman.BaseInitialize(newscene); // must happen after mpman.InitializeScene - should pull longlat code out of there and make coman the first component sman call (i.e. before dfman)
+                    lcman.BaseInitialize(newscene);
 
-                    mpman.InitializeScene(newscene); // bspokespec set here
 
-                    glbllm = new LatLongMap($"SceneMan.SetScene( SceneSelE.{newscene} )");
-                    glbllm.InitMapFromSceneSelString(newscene.ToString(),mpman.bespokespec?.llbox); // doesn't handle non-llmap scense 
+                    SetInitState(InitState.modelInit);
 
-                    dfman.InitializeScene(newscene);
-                    vcman.InitializeScene(newscene);
-                    bdman.InitializeScene(newscene);
-                    stman.InitializeScene(newscene);
-                    gaman.InitializeScene(newscene);
-                    znman.InitializeScene(newscene);
-                    psman.InitializeScene(newscene);
-                    veman.InitializeScene(newscene);
-                    jnman.InitializeScene(newscene);
-                    lcman.InitializeScene(newscene);
-                    frman.InitializeScene(newscene);
-                    uiman.InitializeScene(newscene);
+                    vcman.ModelInitialize(newscene);
+                    bdman.ModelInitialize(newscene);
+                    stman.ModelInitiailze(newscene);
+                    trman.ModeelInitialize(newscene);
+                    gaman.ModelInitialize(newscene);
+                    znman.ModelInitialize(newscene);
+                    psman.ModelInitialize(newscene);
+                    veman.ModelInitiailze(newscene);
+                    drman.ModelInitiailze(newscene);
+                    jnman.ModelInitialize(newscene);
+                    frman.ModelInitialize(newscene);
+                    uiman.ModelInitialize(newscene);
 
                     initsw.Stop();
                     setsw.Start();
 
-                    // Now construct our graphical objects
+                    SetInitState(InitState.modelBuild);
+
+                    mpman.ModelBuild();// Note this has an await buried in it and afterwards a call to smam.PostMapLoadSetScene below 
+                    gaman.ModelBuild();
+                    bdman.ModelBuild();// building details, but no nodes and links
 
 
-                    dfman.SetScene(newscene); // should be early to setup data
+                    lcman.ModelBuild(); // create or read in many nodes and links
 
-                    mpman.SetScene(newscene);// Note this has an await buried in it and afterwards a call to smam.PostMapLoadSetScene below 
+                    trman.ModelBuild();
+                    stman.ModelBuild();
 
-                    gaman.SetScene(newscene);
 
-                    bdman.SetScene(newscene);// building details, but no nodes and links
-                    stman.SetScene(newscene);
+                    vcman.ModelBuild();
+                    psman.ModelBuild(); // needs to be before we populate the buildings
+                    veman.ModelBuild(); // needs to be before we populate the garages
+                    drman.ModelBuild(); // needs to be before we populate the garages
 
-                    lcman.SetScene(newscene); // create or read in most nodes and links
-                                              // currently needs to happen after buildings and garages are setup
+                    //bdman.SetScenePostLinkCloud(newscene);// building details that need nodes and links
+                    //gaman.SetScenePostLinkCloud(newscene);// garage details that need nodes and links
 
-                    RealizeFloorPlanStatus();
-                    vcman.SetScene(newscene);
-                    psman.SetScene(newscene); // needs to be before we populate the buildings
-                    veman.SetScene(newscene); // needs to be before we populate the garages
+                    znman.ModelBuild();
+                    jnman.ModelBuild();
+                    frman.ModelBuild();
+                    uiman.ModelBuild();
 
-                    bdman.SetScenePostLinkCloud(newscene);// building details that need nodes and links
-                    gaman.SetScenePostLinkCloud(newscene);// garage details that need nodes and links
+                    this.ModelBuild();
 
-                    znman.SetScene(newscene);
-                    jnman.SetScene(newscene);
-                    frman.SetScene(newscene);
-                    uiman.SetScene(newscene);
+                    SetInitState(InitState.modelBuildPost);
+
+                    lcman.ModelBuildFinal();  // realize latelinks and heights
+                    bdman.ModelBuildPostLinkCloud();// building details that need nodes and links - i.e destrooms are derived from nodes
+                    gaman.ModelBuildPostLinkCloud();// garage details that need nodes and links
+                    drman.ModelBuildPostLinkCloud();// dronman details that need nodes and links
 
                     setsw.Stop();
-
                     finsw.Start();
+                    SetInitState(InitState.refreshGos);
 
-                    lcman.SetScene3(newscene);  // realize latelinks    
-                    lcman.DeleteUnconnectedNodes();
+                    RefreshSceneManGos();// in setscenario
+                    SetInitState(InitState.finished);
+
                     finsw.Stop();
 
                     Debug.Log($"SceneMan.SetScene {newscene} finished");
@@ -366,7 +446,9 @@ namespace CampusSimulator
                 catch (Exception ex)
                 {
                     Debug.LogError("Scene "+newscene.ToString()+" not initialized successfully Exception:"+ex.ToString());
-                }   
+                }
+                CancelRefreshes();
+                Debug.Log($"SceneMan.SetScene completed scenario initialization for {curscene}");
             }
             else
             {
@@ -375,9 +457,9 @@ namespace CampusSimulator
             requestScene = SceneSelE.None;
         }
 
-        public void PostMapLoadSetScene()
+        public void PostMapAsyncLoadSetScene()
         {
-            vcman.PostTerrainLoadAdjustments();
+            vcman.PostMapLoadAdjustments();
         }
 
         public void SaveSceneState()
@@ -385,6 +467,7 @@ namespace CampusSimulator
             mpman.SaveSceneState();
         }
 
+ 
         public void Quit()
         {
             SaveSceneState();
@@ -410,10 +493,14 @@ namespace CampusSimulator
             }
 #endif
         }
-
+        public void CancelRefreshes()
+        {
+            needsrefresh = false;
+            needstotalrefresh = false;
+        }
         public void RequestRefresh(string requester,bool totalrefresh=false, SceneSelE requestedScene = SceneSelE.None)
         {
-            Debug.Log($"RefreshRequested by {requester} total:{totalrefresh}");    
+            Debug.LogWarning($"RefreshRequested by {requester} total:{totalrefresh}");    
             needsrefresh = true;
             if (totalrefresh)
             {
@@ -828,7 +915,7 @@ namespace CampusSimulator
         }
         public void ForceRegen()
         {
-            RefreshSceneManGos(); // ForceRegen
+            RefreshSceneManGos(); // ForceRegen from menu
         }
         public void ResetHomeHeight()
         {
@@ -904,84 +991,7 @@ namespace CampusSimulator
                 RequestRefresh("SceneMan-TranslateEverything");
             }
         }
-        public void GenCampus()
-        {
-            DeleteLinkCloudGos();
-            lcman.GenLinkCloud(graphSceneE.gen_campus, GraphGenerationModeE.GenFromCode);
-            //floorplanctrl.visible = true;
-            RealizeFloorPlanStatus();
-            //CreateLinkCloud();
-        }
-        public void Gen43_1()
-        {
-            DeleteLinkCloudGos();
-            lcman.GenLinkCloud(graphSceneE.gen_b43_1, GraphGenerationModeE.GenFromCode);
-            //floorplanctrl.visible = true;
-            RealizeFloorPlanStatus();
-            //CreateLinkCloud();
-        }
-        public void Gen43_2()
-        {
-            DeleteLinkCloudGos();
-            lcman.GenLinkCloud(graphSceneE.gen_b43_2, GraphGenerationModeE.GenFromCode);
-            //floorplanctrl.visible = true;
-            RealizeFloorPlanStatus();
-            //CreateLinkCloud();
-        }
-        public void Gen43_3()
-        {
-            DeleteLinkCloudGos();
-            lcman.GenLinkCloud(graphSceneE.gen_b43_3, GraphGenerationModeE.GenFromCode);
-            //floorplanctrl.visible = true;
-            RealizeFloorPlanStatus();
-            //CreateLinkCloud();
-        }
-        public void Gen43_4()
-        {
-            DeleteLinkCloudGos();
-            lcman.GenLinkCloud(graphSceneE.gen_b43_4, GraphGenerationModeE.GenFromCode);
-            //floorplanctrl.visible = true;
-            RealizeFloorPlanStatus();
-            //CreateLinkCloud();
-        }
-        public void GenBHO()
-        {
-            DeleteLinkCloudGos();
-            lcman.GenLinkCloud(graphSceneE.gen_bho, GraphGenerationModeE.GenFromCode);
-            //floorplanctrl.visible = true;
-            RealizeFloorPlanStatus();
-            //CreateLinkCloud();
-        }
-        public void GenSphere()
-        {
-            lcman.GenLinkCloud(graphSceneE.gen_sphere, GraphGenerationModeE.GenFromCode);
-            RequestRefresh("SceneMan-GenSphere");
-        }
-        public void GenCirc()
-        {
-
-            lcman.GenLinkCloud(graphSceneE.gen_circ, GraphGenerationModeE.GenFromCode);
-            RequestRefresh("SceneMan-GenCirc");
-        }
-        public void Gen431p2()
-        {
-            DeleteLinkCloudGos();
-            lcman.GenLinkCloud(graphSceneE.gen_b43_1p2, GraphGenerationModeE.GenFromCode);
-            //floorplanctrl.visible = true;
-            RealizeFloorPlanStatus();
-            //CreateLinkCloud();
-            ScaleEverything(0.1375f / 2.0f);
-        }
-
-         public void GenRedwb3()
-        {
-            DeleteLinkCloudGos();
-            lcman.GenLinkCloud(graphSceneE.gen_redwb_3, GraphGenerationModeE.GenFromCode);
-            //floorplanctrl.visible = true;
-            RealizeFloorPlanStatus();
-            //CreateLinkCloud();
-            //keycount = keyman.totalKeywordCount();
-        }
+  
         public void SaveToJsonFile()
         {
             System.IO.Directory.CreateDirectory(graphsdir);
@@ -1410,6 +1420,8 @@ namespace CampusSimulator
             gaman.RefreshGos();
             bdman.RefreshGos();
             vcman.RefreshGos();
+            trman.RefreshGos();
+            psman.RefreshGos();
             if (cbman != null)
             {
                 cbman.RefreshGos();
@@ -1428,18 +1440,9 @@ namespace CampusSimulator
         }
 #endregion
 
-        //public string startnodecolor = "green";
-        //public string endnodecolor = "red";
-        //public string linkcloudnodecolor = "blue";
-        //public string linkcloudnodecolorx = "steelblue";
-        //public string linkcloudlinkcolor = "yellow";
-        //public string linkhighwaycolor = "steelblue";
-        //public string pathnodecolor = "cyan";
-        //public string pathlinkcolor = "purple";
-        //public string pathlookatcolor = "steelblue";
 
-
-        public enum RmColorModeE { nodepathstart, nodepathend, nodecloud, nodecloudx,  linkcloud,linkhighway,linkroad,linkslowroad,linkdriveway, linkwalk,linkwalknoshow, linkexcavate, linksurvey,linkwater,linkreclaimwater,linksewer, linkelec,linkcomms,linkoilgas, pathnode, pathlink, pathlookat, bldwall }
+        public enum RmColorModeE { nodepathstart, nodepathend, nodecloud, nodecloudx,  linkcloud,linkhighway,linkroad,linkslowroad,linkdriveway, linkwalk,linkwalknoshow, linkexcavate, linksurvey,linkwater,linkreclaimwater,linksewer, linkelec,linkcomms,linkoilgas, pathnode, pathlink, pathlookat, bldwall, 
+                                   trackperson,trackheli,trackdrone,droneway }
 
 
 
@@ -1472,6 +1475,11 @@ namespace CampusSimulator
             { RmColorModeE.pathlookat, ("steelblue",0.1f,RmLinkFormE.pipe)},
 
             { RmColorModeE.bldwall, ("steelblue",0.1f,RmLinkFormE.wall)},
+
+            { RmColorModeE.trackperson, ("darkred",0.2f,RmLinkFormE.pipe)},
+            { RmColorModeE.trackheli, ("darkgreen",0.2f,RmLinkFormE.pipe)},
+            { RmColorModeE.trackdrone, ("deeppurple",0.2f,RmLinkFormE.pipe)},
+            { RmColorModeE.droneway, ("darkblue",0.2f,RmLinkFormE.pipe)},
         };
 
 
@@ -1497,7 +1505,7 @@ namespace CampusSimulator
         {
             return linkformdict[mode].form;
         }
-        public SceneSelE curscene = SceneSelE.None;
+
         #region SceneOptions
         static List<string> sceneOptions = new List<string>(System.Enum.GetNames(typeof(SceneSelE)));
         static string initialSceneOptionsKey = "InitialScene";
@@ -1509,19 +1517,31 @@ namespace CampusSimulator
         {
             return sceneOptions[ival];
         }
-        public static SceneSelE GetSceneOptionsEnum(string sval)
+        public static SceneSelE GetSceneOptionsEnum(string sval,string source)
         {
-            SceneSelE enumval;
-            System.Enum.TryParse<SceneSelE>(sval, true, out enumval);
+            var ok = System.Enum.TryParse<SceneSelE>(sval, true, out SceneSelE enumval);
+            if (!ok)
+            {
+                Debug.LogError($"Bad scene option ({sval}) specified in {source}");
+            }
             return enumval;
         }
         public static SceneSelE GetInitialSceneOption()
         {
             var einival = SceneSelE.MsftB121focused; // default scene
-            if (PlayerPrefs.HasKey(initialSceneOptionsKey))
+            kickOffFly = GraphUtil.ParmBool("-fly");
+            kickOffRun = GraphUtil.ParmBool("-run");
+            kickOffEvac = GraphUtil.ParmBool("-evac");
+            showNoPipes = GraphUtil.ParmBool("-nopipes");
+            var (cmdlineScene, clscenename) = GraphUtil.ParmString("-scene", "");
+            if (cmdlineScene)
+            {
+                einival = GetSceneOptionsEnum(clscenename,"command line");
+            }
+            else if (PlayerPrefs.HasKey(initialSceneOptionsKey))
             {
                 var inival = PlayerPrefs.GetString(initialSceneOptionsKey, "");
-                einival = GetSceneOptionsEnum(inival);
+                einival = GetSceneOptionsEnum(inival,"Unity PlayerPrefs registry");
             }
             return einival;
         }
@@ -1530,16 +1550,20 @@ namespace CampusSimulator
             PlayerPrefs.SetString(initialSceneOptionsKey, inisval);
         }
         #endregion SceneOptions
-
-
-        private void Start()
+        void Awake()
         {
-            Debug.Log("SceneMan.Start called");
+            Debug.Log("SceneMan.Awake called");
             IdentitySystemAndUser();
             InitPhase0();
+        }
+
+        void Start()
+        {
+            Debug.Log("SceneMan.Start called");
+
             var esi = SceneMan.GetInitialSceneOption();
             curscene = SceneSelE.None; // force it to execute by specifying something it should never be - kind of a kludge
-            SetScene(esi);
+            SetScenario(esi);
         }
         public void ToggleAutoErrorCorrect()
         {
@@ -1603,6 +1627,7 @@ namespace CampusSimulator
         float ctrlShitTime = 0;
         float ctrlDhitTime = 0;
         float F5hitTime = 0;
+        float F6hitTime = 0;
         float F10hitTime = 0;
         public void KeyProcessing()
         {
@@ -1639,6 +1664,11 @@ namespace CampusSimulator
                 Debug.Log("F5 - Request Total Refresh");
                 this.RequestRefresh("F5 hit", totalrefresh: true);
             }
+            if (((Time.time - F6hitTime) > 0.5) && Input.GetKeyDown(KeyCode.F6))
+            {
+                Debug.Log("F6 - Request Go Refresh");
+                this.RequestRefresh("F6 hit", totalrefresh: false);
+            }
             if (((Time.time - F10hitTime) > 1) && Input.GetKeyDown(KeyCode.F10))
             {
                 Debug.Log("F10 - Options");
@@ -1663,7 +1693,7 @@ namespace CampusSimulator
                 ctrlDhitTime = Time.time;
             }
         }
-
+        public float lastRefreshTime = 0;
 
         int updateCount = 0;
         private void Update()
@@ -1683,6 +1713,22 @@ namespace CampusSimulator
             {
                 //Debug.Log("First update");
             }
+            if (updateCount == 10)
+            {
+                if (kickOffRun)
+                {
+                    jnman.spawnrunjourneys = true;
+                }
+                if (kickOffFly)
+                {
+                    jnman.spawnflyjourneys = true;
+                }
+                if (kickOffEvac)
+                {
+                    bdman.EvacPresetBld();
+                }
+                uiman.SyncState();
+            }
             checkTripod();
             SetArcoreTracking();
 
@@ -1690,7 +1736,7 @@ namespace CampusSimulator
             {
                 if (lcman.CanGetHeights())
                 {
-                    lcman.CalculateHeights();
+                    //lcman.CalculateAndSetHeightsOnLinkCloud();
                     needsrefresh = true;
                 }
             }
@@ -1698,6 +1744,7 @@ namespace CampusSimulator
 
             if (needsrefresh)
             {
+                Debug.Log($"SetScene.Update cnt:{updateCount} needsrefresh:{needsrefresh}");
                 var sw1 = new StopWatch();
                 if (needstotalrefresh)
                 {
@@ -1707,15 +1754,17 @@ namespace CampusSimulator
                         sceneToRefresh = requestScene;
                     }
                     var sw2 = new StopWatch();
-                    SetScene(sceneToRefresh, force: true);
+                    SetScenario(sceneToRefresh, force: true);
                     sw2.Stop();
+                    lastRefreshTime = (float) sw2.Elap().TotalSeconds;
                     Debug.Log($"TotalRefresh SetScene took {sw2.ElapSecs()} secs");
                 }
                 else
                 {
                     var sw3 = new StopWatch();
-                    RefreshSceneManGos(); // in update
+                    RefreshSceneManGos(); // in update if needs refresh
                     sw3.Stop();
+                    lastRefreshTime = (float) sw3.Elap().TotalSeconds;
                     Debug.Log($"RefreshSceneManGos took {sw3.ElapSecs()} secs");
                 }
                 uiman.SyncState();

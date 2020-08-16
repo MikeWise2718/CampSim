@@ -25,15 +25,17 @@ public class OptionsPanel : MonoBehaviour
     HelpPanel helpPanel;
     GameObject aboutPanelGo;
     AboutPanel aboutPanel;
-    Toggle visualToggle;
-    Toggle mapsetToggle;
-    Toggle frameToggle;
-    Toggle fireFlyToggle;
-    Toggle buildingsToggle;
-    Toggle generalToggle;
-    Toggle helpToggle;
-    Toggle aboutToggle;
-    ToggleGroup togGroup;
+
+    Button visualsTabButton;
+    Button mapsetTabButton;
+    Button frameTabButton;
+    Button fireflyTabButton;
+    Button generalTabButton;
+    Button helpTabButton;
+    Button aboutTabButton;
+
+    enum TabState { Visuals,MapSet,FireFly,Frames,Buildings,General,Help,About }
+    TabState tabstate;
     // Start is called before the first frame update
     public void Init0()
     {
@@ -56,72 +58,85 @@ public class OptionsPanel : MonoBehaviour
         helpPanelGo = transform.Find("HelpPanel").gameObject;
         helpPanel = helpPanelGo.GetComponent<HelpPanel>();
 
-        visualToggle = transform.Find("VisualsToggle").GetComponent<Toggle>();
-        mapsetToggle = transform.Find("MapSetToggle").GetComponent<Toggle>();
-        frameToggle = transform.Find("FrameToggle").GetComponent<Toggle>();
-        fireFlyToggle = transform.Find("FireFlyToggle").GetComponent<Toggle>();
-        buildingsToggle = transform.Find("BuildingsToggle").GetComponent<Toggle>();
-        generalToggle = transform.Find("GeneralToggle").GetComponent<Toggle>();
-        helpToggle = transform.Find("HelpToggle").GetComponent<Toggle>();
-        aboutToggle = transform.Find("AboutToggle").GetComponent<Toggle>();
-
-        visualToggle.onValueChanged.AddListener(delegate { OptionsTabToggle(); });
-        mapsetToggle.onValueChanged.AddListener(delegate { OptionsTabToggle(); });
-        frameToggle.onValueChanged.AddListener(delegate { OptionsTabToggle(); });
-        fireFlyToggle.onValueChanged.AddListener(delegate { OptionsTabToggle(); });
-        buildingsToggle.onValueChanged.AddListener(delegate { OptionsTabToggle(); });
-        generalToggle.onValueChanged.AddListener(delegate { OptionsTabToggle(); });
-        helpToggle.onValueChanged.AddListener(delegate { OptionsTabToggle(); });
-        aboutToggle.onValueChanged.AddListener(delegate { OptionsTabToggle(); });
 
 
-        togGroup = GetComponent<ToggleGroup>();
-        togGroup.allowSwitchOff = true; // otherwise it does not save state correctly when we turn off the panel
+        visualsTabButton = transform.Find("VisualsTabButton").GetComponent<Button>();
+        mapsetTabButton = transform.Find("MapSetTabButton").GetComponent<Button>();
+        frameTabButton = transform.Find("FrameTabButton").GetComponent<Button>();
+        fireflyTabButton = transform.Find("FireFlyTabButton").GetComponent<Button>();
+        generalTabButton = transform.Find("GeneralTabButton").GetComponent<Button>();
+        aboutTabButton = transform.Find("AboutTabButton").GetComponent<Button>();
+        helpTabButton = transform.Find("HelpTabButton").GetComponent<Button>();
+
+        visualsTabButton.onClick.AddListener(delegate { SetTabState(TabState.Visuals); });
+        mapsetTabButton.onClick.AddListener(delegate { SetTabState(TabState.MapSet); });
+        frameTabButton.onClick.AddListener(delegate { SetTabState(TabState.Frames); });
+        fireflyTabButton.onClick.AddListener(delegate { SetTabState(TabState.FireFly); });
+        generalTabButton.onClick.AddListener(delegate { SetTabState(TabState.General); });
+        aboutTabButton.onClick.AddListener(delegate { SetTabState(TabState.About); });
+        helpTabButton.onClick.AddListener(delegate { SetTabState(TabState.Help); });
+
+
         //SyncOptionsTabState();
+    }
+    
+    void SetTabState(TabState newstate)
+    {
+        tabstate = newstate;
+        SyncOptionsTabState();
     }
     public void SyncOptionsTabState()
     {
         if (!visualPanelGo) return; // not initialized yet
-        //Debug.Log($"SyncOptionsTabState fftog:{fireFlyToggle.isOn}  frtog:{frameToggle.isOn}");
-        visualPanelGo.SetActive(visualToggle.isOn);
-        mapSetGo.SetActive(mapsetToggle.isOn);
-        framePanelGo.SetActive(frameToggle.isOn);
-        fireFlyPanelGo.SetActive(fireFlyToggle.isOn);
-        buildingsPanelGo.SetActive(buildingsToggle.isOn);
-        generalPanelGo.SetActive(generalToggle.isOn);
-        helpPanelGo.SetActive(helpToggle.isOn);
-        aboutPanelGo.SetActive(aboutToggle.isOn);
-        if (aboutToggle.isOn)
-        {
-            aboutPanel.FillAboutPanel();
-        }
-        if (visualToggle.isOn)
+
+        visualPanelGo.SetActive(tabstate == TabState.Visuals);
+        mapSetGo.SetActive(tabstate == TabState.MapSet);
+        framePanelGo.SetActive(tabstate == TabState.Frames);
+        fireFlyPanelGo.SetActive(tabstate == TabState.FireFly);
+        buildingsPanelGo.SetActive(tabstate == TabState.Buildings);
+        generalPanelGo.SetActive(tabstate == TabState.General);
+        helpPanelGo.SetActive(tabstate == TabState.Help);
+        aboutPanelGo.SetActive(tabstate == TabState.About);
+
+        uiman.stapan.SetButtonColor(visualsTabButton, "lightgreen", tabstate == TabState.Visuals, "Visuals");
+        uiman.stapan.SetButtonColor(mapsetTabButton, "lightgreen", tabstate == TabState.MapSet, "MapSet");
+        uiman.stapan.SetButtonColor(frameTabButton, "lightgreen", tabstate == TabState.Frames, "Frames");
+        uiman.stapan.SetButtonColor(fireflyTabButton, "lightgreen", tabstate == TabState.FireFly, "Firefly");
+        uiman.stapan.SetButtonColor(generalTabButton, "lightgreen", tabstate == TabState.General, "General");
+        uiman.stapan.SetButtonColor(helpTabButton, "lightgreen", tabstate == TabState.Help, "Help");
+        uiman.stapan.SetButtonColor(aboutTabButton, "lightgreen", tabstate == TabState.About, "About");
+
+        if (visualPanelGo.activeSelf)
         {
             visualsPanel.InitVals();
         }
-        if (mapsetToggle.isOn)
+        if (mapSetGo.activeSelf)
         {
             mapSetPanel.InitVals();
         }
-        if (frameToggle.isOn)
+        if (framePanelGo.activeSelf)
         {
             framePanel.InitVals();
         }
-        if (fireFlyToggle.isOn)
+        if (fireFlyPanelGo.activeSelf)
         {
             fireFlyPanel.InitVals();
         }
-        if (buildingsToggle.isOn)
+        if (buildingsPanelGo.activeSelf)
         {
             buildingsPanel.InitVals();
         }
-        if (helpToggle.isOn)
+        if (generalPanelGo.activeSelf)
+        {
+            generalPanel.InitVals();
+        }
+        if (helpPanelGo.activeSelf)
         {
             helpPanel.FillHelpPanel();
         }
-        if (generalToggle.isOn)
+        if (aboutPanelGo.activeSelf)
         {
-            generalPanel.InitVals();
+            aboutPanel.FillAboutPanel();
         }
     }
     public void ChangingOptionsDialog(bool isOpening)
@@ -135,27 +150,27 @@ public class OptionsPanel : MonoBehaviour
         else
         {
             // if we are not opening then we must be closing
-            if (visualToggle.isOn)
+            if (visualPanelGo.activeSelf)
             {
                 visualsPanel.SetVals(closing: true);
             }
-            if (mapsetToggle.isOn)
+            if (mapSetGo.activeSelf)
             {
                 mapSetPanel.SetVals(closing:true);
             }
-            if (frameToggle.isOn)
+            if (framePanelGo.activeSelf)
             {
                 framePanel.SetVals(closing: true);
             }
-            if (fireFlyToggle.isOn)
+            if (fireFlyPanelGo.activeSelf)
             {
                 fireFlyPanel.SetVals(closing: true);
             }
-            if (buildingsToggle.isOn)
+            if (buildingsPanelGo.activeSelf)
             {
                 buildingsPanel.SetVals(closing: true);
             }
-            if (generalToggle.isOn)
+            if (generalPanelGo.activeSelf)
             {
                 generalPanel.SetVals(closing: true);
             }

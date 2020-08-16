@@ -219,6 +219,7 @@ namespace Aiskwk.Map
             colorTable["yellow"] = new Color(1, 1, 0);
             colorTable["dy"] = new Color(0.5f, 0.5f, 0);
             colorTable["lightyellow"] = new Color(1, 1, 0.5f);
+            colorTable["goldenrod"] = rgbbyte(218, 165, 32);
             // oranges
             colorTable["orange"] = new Color(1, 0.5f, 0);
             colorTable["lightorange"] = new Color(1, 0.75f, 0);

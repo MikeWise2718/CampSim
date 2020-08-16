@@ -253,7 +253,7 @@ public class VisualsPanel : MonoBehaviour
         {
             var curregionstr = SceneMan.GetSceneOptionsString(initialScene.value);
             SceneMan.SetInitialSceneOption(curregionstr);
-            var reqScene = SceneMan.GetSceneOptionsEnum(curregionstr);
+            var reqScene = SceneMan.GetSceneOptionsEnum(curregionstr,"UI");
             if (reqScene != sman.curscene)
             {
                 chg = true;

@@ -105,7 +105,7 @@ namespace CampusSimulator
                     break;
             }
         }
-        public void InitializeScene(SceneSelE newregion)
+        public void ModelInitialize(SceneSelE newregion)
         {
             InitializeValues();
         }
@@ -130,11 +130,11 @@ namespace CampusSimulator
         }
         #endregion SlotForm Visuals
 
-        public void SetScene(SceneSelE newregion)
+        public void ModelBuild()
         {
             InterpretSlotForm();
             DelGarages();
-            switch (newregion)
+            switch (sman.curscene)
             {
                 case SceneSelE.MsftDublin:
                     MakeGarages("MsDub");
@@ -156,7 +156,7 @@ namespace CampusSimulator
         }
 
 
-        public void SetScenePostLinkCloud(SceneSelE newregion)
+        public void ModelBuildPostLinkCloud()
         {
             PopulateGaragesWithVehicles();
         }

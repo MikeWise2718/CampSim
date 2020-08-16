@@ -5,6 +5,7 @@ using GraphAlgos;
 
 namespace CampusSimulator
 {
+    public enum JourneyEnd { disappear, restart, reverse }
 
     public class Journey : MonoBehaviour
     {
@@ -16,6 +17,7 @@ namespace CampusSimulator
         public List<string> legdesc = new List<string>();
         public PathCtrl pathctrl;
         public BirdCtrl birdctrl;
+        public JourneyEnd journeyEnd=JourneyEnd.disappear;
         public int jindex = 0;
         public int legindex = 0;
         public Leg currentleg = null;
@@ -41,7 +43,15 @@ namespace CampusSimulator
         public float backdist = 0;
         public int njnysOnWeg = 0;
         public float jnyTime = 0;
+        public bool pullViewer = false;
 
+        public bool IsRunning()
+        {
+            var rv = false;
+            if (status == JourneyStatE.Started || 
+                status == JourneyStatE.AlmostFinished) rv = true;
+            return rv;
+        }
 
 
         public void InitJourney(JourneyMan jman, Person pers, Vehicle vehi,BldRoom br1,BldRoom br2, string description, float finsecs = 5, float starsecs = 3,string jorg="")
@@ -88,10 +98,28 @@ namespace CampusSimulator
             //Debug.Log("StartLeg legidx:" + legidx);
             if (legidx >= nlegs)
             {
-                finishedtime = Time.time;
-                journeyelap = finishedtime - starttime;
-                status = JourneyStatE.AlmostFinished;
-                person.PersonStateStartUntraveling("", "");
+                if (journeyEnd == JourneyEnd.disappear)
+                {
+                    finishedtime = Time.time;
+                    journeyelap = finishedtime - starttime;
+                    status = JourneyStatE.AlmostFinished;
+                    if (person != null)
+                    {
+                        person.PersonStateStartUntraveling("", "");
+                    }
+                }
+                else
+                {
+                    if (legidx != 0)
+                    {
+                        Debug.Log($"Jouney {name} restarting");
+                        StartLeg(0);
+                    }
+                    else
+                    {
+                        Debug.LogError("No legs in journey");
+                    }    
+                }
                 return;
             }
             if (legidx > 0 && currentleg.form == BirdFormE.car)
@@ -124,7 +152,12 @@ namespace CampusSimulator
             //Debug.Log("Setting bird path");
             birdctrl.SetBirdPath(pathctrl.path);
             birdctrl.birdresourcename = currentleg.formname;
+            birdctrl.birdscale = currentleg.skafak;
+            birdctrl.lookatpoint = currentleg.lookatpt;
+            birdctrl.flatlookatpoint = currentleg.flatlookatpt;
+            birdctrl.moveoffset = new Vector3(currentleg.xoff, birdctrl.moveoffset.y, birdctrl.moveoffset.z);
             birdctrl.BirdForm = currentleg.form;
+            birdctrl.rundist = currentleg.lambstart * pathctrl.path.pathLength;
              //Debug.Log("set birdresourcename to:"+currentleg.formname+" legidx:"+legidx);
             //jman.sman.RefreshRegionManGos();
             birdctrl.StartBird();
@@ -187,6 +220,15 @@ namespace CampusSimulator
                     {
                         jman.bm.OccupyNode(enddest, person);
                     }
+                    else
+                    {
+                        var bpad = jman.bm.GetAssociatedPad(enddest);
+                        if (bpad)
+                        {
+                            jman.bm.OccupyNode(enddest, person);
+                        }
+
+                    }
                 }
             }
             status = JourneyStatE.Finished;
@@ -201,12 +243,22 @@ namespace CampusSimulator
         //{
 
         //}
-
+        float lastUpdatedLoggedTime = 0;
+        float updateLogInterval = 1;
+        public void UpdatePosition()
+        {
+            PathPos pos = birdctrl.GetBirdPos();
+            if (IsRunning() && (Time.time-lastUpdatedLoggedTime)>updateLogInterval)
+            {
+                Debug.Log($"Jny:{name} position:{pos.pt:f1}");
+                lastUpdatedLoggedTime = Time.time;
+            }
+        }
         //// Update is called once per frame
-        //void Update()
-        //{
-
-        //}
+        void Update()
+        {
+            UpdatePosition();
+        }
 
     }
 

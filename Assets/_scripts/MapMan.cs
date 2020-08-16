@@ -185,13 +185,18 @@ namespace CampusSimulator
             var (v, _, _) = qmapman.qmm.GetWcMeshPosProjectedAlongYnew(p);
             return v.y;
         }
+
         public Vector3 GetHeightVector3(Vector3 p)
+        {
+            return GetHeightVector3(p, 0);
+        }
+        public Vector3 GetHeightVector3(Vector3 p,float yoff)
         {
             if (qmapman == null || qmapman.qmm == null) return Vector3.zero;
             var oy = p.y;
             var np = new Vector3(p.x, 0, p.z);
             var (v, _, _) = qmapman.qmm.GetWcMeshPosProjectedAlongYnew(np,cliptocorners:true);
-            var nv = new Vector3(v.x, v.y + oy, v.z);
+            var nv = new Vector3(v.x, v.y + oy + yoff, v.z);
             return nv;
         }
 
@@ -254,12 +259,12 @@ namespace CampusSimulator
             qmapgo.transform.SetParent(this.transform, worldPositionStays: false);
             RealizeMapVisuals();
             //AssignBespoke();
-            if (sman != null && sman.glbllm != null)
+            if (sman.coman.glbllm != null)
             {
                 if (hasLLmap)
                 {
                     // copy the mapcoords from our predefined map
-                    var mapdata = sman.glbllm.mapcoord?.mapdata;
+                    var mapdata = sman.coman.glbllm.mapcoord?.mapdata;
                     if (mapdata != null)
                     {
                         foreach (var p in mapdata)
@@ -279,7 +284,7 @@ namespace CampusSimulator
             var (nbm,nel) = await qmapman.SetModeAndMakeMesh(qmapman.qmapMode);
             //================================================================
 
-            sman.PostMapLoadSetScene(); // this has to go after the await
+            sman.PostMapAsyncLoadSetScene(); // this has to go after the await
             if (nbm>0 || nel>0)
             {
                 // if we loaded bitmaps we need to redraw everything from scratch
@@ -326,25 +331,9 @@ namespace CampusSimulator
             return null;
         }
 
-        public LatLongMap GetLatLongMapOld()
-        {
-            var llm1 = sman.glbllm;
-            var llm = llm1;
-            var llm2 = sman.glbllm;
-            if (!sman.mpman.hasLLmap)
-            {
-                llm2 = sman.mpman.GetLatLongMapQk(QkCoordSys.QkWc);
-                llm = llm2;
-            }
-            //Debug.Log($"llm1 {llm1.initmethod}");
-            //Debug.Log($"llm2 {llm2.initmethod}");
-            //Debug.Log($"sman.mpman.hasLLmap {sman.mpman.hasLLmap}");
-            //Debug.Log($"final llm {llm.initmethod}");
-            return llm;
-        }
         public LatLongMap GetLatLongMap()
         {
-            return sman.glbllm;
+            return sman.coman.glbllm;
         }
 
         public void SetMapPovider(MapProvider map)
@@ -531,7 +520,7 @@ namespace CampusSimulator
             }
         }
 
-
+        public int nTotIsects = 0;
         public GameObject AddLine(string lname, Vector3 pt1, Vector3 pt2,RmLinkFormE lnform=RmLinkFormE.pipe, float lska = 1.0f, float nska = 1.0f, string lclr = "red", string nclr = "", int omit = -1, float widratio = 1, bool wps = true, bool frag=false)
         {
             if (qmapman == null || qmapman.qmm == null) return null;
@@ -539,7 +528,9 @@ namespace CampusSimulator
             GameObject lgo;
             if (frag)
             {
+                qmapman.qmm.qtt.ntotIsects = 0;
                 lgo = qmapman.qmm.qtt.AddFragLine(lname, pt1, pt2,frm, lska, nska, lclr, nclr, omit, widratio, wps);
+                nTotIsects += qmapman.qmm.qtt.ntotIsects;
             }
             else
             {
@@ -639,9 +630,9 @@ namespace CampusSimulator
             }
             return rv;
         }
-        public void SetScene(SceneSelE newscene)
+        public void ModelBuild()
         {
-            Debug.Log($"MapMan.SetScene: {newscene}");
+            Debug.Log($"MapMan.SetScene: {sman.curscene}");
             RealizeQmapAndMakeMesh();
         }
         void SetMeshCollider(bool enable)
@@ -1017,7 +1008,7 @@ namespace CampusSimulator
         //
 
         SceneSelE lastsceneset = SceneSelE.None;
-        public void InitializeScene(SceneSelE newscene)
+        public void BaseInitialize(SceneSelE newscene)
         {
             Debug.Log($"MapMan.InitializeScene: {newscene}");
             if (newscene == lastsceneset)
@@ -1041,7 +1032,7 @@ namespace CampusSimulator
             maptrans = mapTrans.Get();
 
             //hasLLmap = HasLLmap.Get();
-            isCustomizable = locIsCustomizable.Get();
+            //isCustomizable = locIsCustomizable.Get(); why is this a setting?
 
             transform.localRotation = Quaternion.identity;
             transform.Rotate(maprot.x, maprot.y, maprot.z);

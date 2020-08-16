@@ -214,15 +214,19 @@ namespace GraphAlgos
             //lc.SetCurUseType(LcUseType.driveway);
             //lc.AddNodePtxy("tuk-ssm-dw00", -1, 4.4);
             //lc.LinkTooPtxz("tuk-ssm-dw01", -1, -60.7);
-            grc.regman.SetRegion("tenmtn-x");
-            grc.AddNodePtll("foundspot", 47.520249, -121.721548); // where she was found
-            grc.AddLinkByNodeName("foundspot", "reg:tenmtn", LinkUse.walkway);
+            grc.regman.NewNodeRegion("tenmtn-x","blue",false);
+            grc.AddNodePtll("found-spot-dog", 47.520250, -121.721548); // where she was found
+            grc.LinkToPtll("found-spot", 47.520249, -121.721548); // where she was found
+            grc.AddLinkByNodeName("found-spot", "reg:tenmtn", LinkUse.walkway);
+            grc.AddNodePtll("lastseen-spot-dog", 47.507195, -121.698050); // where she was found
+            grc.LinkToPtll("lastseen-spot", 47.507194, -121.698050); // where she was found
+            grc.AddLinkByNodeName("lastseen-spot", "reg:tenmtn", LinkUse.walkway);
 
-            grc.AddNodePtll("llmd", 47.5016149, -121.7083454);// midpoint
-            grc.LinkToPtll( "llul", 47.5465240, -121.7748213);
-            grc.LinkToPtll( "llur", 47.5465240, -121.6418695);
-            grc.LinkToPtll( "llbr", 47.4567059, -121.6418695);
-            grc.LinkToPtll( "llbl", 47.4567059, -121.7748213);
+            //grc.AddNodePtll("llmd", 47.5016149, -121.7083454);// these are just for debugging the ll->xz mapping
+            //grc.LinkToPtll( "llul", 47.5465240, -121.7748213);
+            //grc.LinkToPtll( "llur", 47.5465240, -121.6418695);
+            //grc.LinkToPtll( "llbr", 47.4567059, -121.6418695);
+            //grc.LinkToPtll( "llbl", 47.4567059, -121.7748213);
 
 
 
@@ -763,7 +767,7 @@ namespace GraphAlgos
         public GenGlobeParameters globpar = new GenGlobeParameters(12, 12, 10, 10);
         public GenCircParameters circpar = new GenCircParameters(12, 10, 0);
         public Range LinkFloor = new Range(0, 0);
-        public void AddGraphToLinkCloud(graphSceneE graphScene,GraphGenerationModeE genMode,bool addWallLinks,bool addfixedStreetLinks,bool genOsmStreetLinks)
+        public void AddGraphToLinkCloud(graphSceneE graphScene,GraphGenerationModeE genMode,bool addWallLinks)
         {
             grc.maxRanHeight = LinkFloor.max;
             grc.minRanHeight = LinkFloor.min;
@@ -786,18 +790,8 @@ namespace GraphAlgos
                         switch (genMode)
                         {
                             case GraphGenerationModeE.GenFromCode:
-                                //lmd.CreatePointsForB11();
-                                //lmd.CreatePointsForB19();
-                                //lmd.CreatePointsForB40();
-                                //lmd.CreatePointsForB43();
-                                //lmd.CreatePointsForB43RoomsFloor1();
-                                //lmd.CreatePointsForB99();
-                                //lmd.CreatePointsForBredwB();
-                                //lmd.CreatePointsForBredwB3floor(height: 9, bldname: "BldRWB");
-                                //lmd.CreatePointsForBsx();
-
-                                //lmd.createPointsFor_msft_b11();
                                 lmd.createPointsFor_msft_b19();
+                                lmd.createPointsFor_msft_drones();
                                 lmd.createPointsFor_msft_b121();
                                 lmd.createPointsFor_msft_b40();
                                 lmd.createPointsFor_msft_b43();
@@ -806,17 +800,6 @@ namespace GraphAlgos
                                 lmd.createPointsFor_msft_bredwb();
                                 lmd.createPointsFor_msft_bredwb_f3();
                                 lmd.createPointsFor_msft_bsx();
-                                //lmd.createPointsFor_msft_campus();
-                                if (addfixedStreetLinks)
-                                {
-                                    lmd.CreateGraphForOsmImport_msft_streets();
-                                }
-                                //if (genOsmStreetLinks)
-                                //{
-                                //    lmd.CreateGraphForOsmImport_msft_streets_df("msft-campus", "blue");
-                                //}
-
-                                //lmd.CreateGraphForOsmImport_MsftCampusBldSmall();
                                 if (addWallLinks)
                                 { 
                                     lmd.CreateGraphForOsmImport_msftb19area();
@@ -910,10 +893,10 @@ namespace GraphAlgos
                                 //lmd.CreatePointsForEb12retail();
                                 //lmd.CreatePointsForEb12resident2();
 
-                                if (addfixedStreetLinks)
-                                {
-                                    lmd.CreateGraphForOsmImport_eb12_orig();
-                                }
+                                //if (addfixedStreetLinks)
+                                //{
+                                //    lmd.CreateGraphForOsmImport_eb12_orig();
+                                //}
 
                                 if (addWallLinks)
                                 {
@@ -940,15 +923,6 @@ namespace GraphAlgos
                         switch (genMode)
                         {
                             case GraphGenerationModeE.GenFromCode:
-                                //lmd.CreatePointsForEb12streets1();
-                                //lmd.CreatePointsForEb12resident1();
-                                //lmd.CreatePointsForEb12streets2();
-                                //lmd.CreatePointsForEb12retail();
-                                //lmd.CreatePointsForEb12resident2();
-                                if (addfixedStreetLinks)
-                                {
-                                    lmd.CreateGraphForOsmImport_eb12_orig();
-                                }
 
                                 if (addWallLinks)
                                 {
@@ -1039,7 +1013,7 @@ namespace GraphAlgos
             //Debug.Log("MakeJson nnodes:" + nnodes + " nlinks:" + nlinks);
             return jsonlc;
         }
-        public static GraphCtrl AddJsonToLinkCloud(JsonLinkCloud jsonlc, GraphCtrl grc)
+        public static void AddJsonToLinkCloud(JsonLinkCloud jsonlc, GraphCtrl grc)
         {
             var reg = jsonlc.region;
             Debug.Log("   AddJsonToLinkCloud reg.name:" + reg.name);
@@ -1064,7 +1038,7 @@ namespace GraphAlgos
                 }
             }
             grc.floorMan = jsonlc.floorplan;
-            return grc;
+            return;
         }
     }
 }

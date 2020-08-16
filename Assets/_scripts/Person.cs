@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
+using UnityEditor;
 using UnityEngine;
 
 namespace CampusSimulator
@@ -11,7 +13,9 @@ namespace CampusSimulator
         BuildingMan bm = null;
         public PersonMan.GenderE personGender;
         public string personName = "";
+        public string avatarType = "";
         public string avatarName = "";
+        public string avatarNameMoving = "";
         public PersonStateE personState=PersonStateE.freeToTravel;
         public string idleScript = "";
         public string danceScript = "";
@@ -42,6 +46,11 @@ namespace CampusSimulator
         public bool flagged = false;
         public PersonAniStateE perstate = PersonAniStateE.standing;
         public bool isVisible = true;
+        public bool isdronelike = false;
+        public float scale;
+        public Vector3 rotate;
+        public Vector3 tran;
+
 
         public void SetVisiblity(bool visstat)
         {
@@ -54,13 +63,15 @@ namespace CampusSimulator
 
 
 
-        public void AddPrsDetails(PersonMan pm,PersonMan.GenderE gender,string persname,string avatarname, PersonMan.empStatusE empstat,bool hasHololens=false)
+        public void AddPrsDetails(PersonMan pm,PersonMan.GenderE gender,string persname,string avatartype,string avatarname, PersonMan.empStatusE empstat,bool hasHololens, float ska,Vector3 rot, Vector3 trans)
         {
             this.pm = pm;
             this.bm = pm.sman.bdman;
             this.personGender = gender;
             this.personName = persname;
+            this.avatarType = avatartype;
             this.avatarName = avatarname;
+            this.avatarNameMoving = avatarname;
             this.idleScript = "";
             this.walkScript = "";
             this.danceScript = "";
@@ -72,6 +83,9 @@ namespace CampusSimulator
             this.homeNode = "";
             this.empStatus = empstat;
             this.hasHololens = hasHololens;
+            this.scale = ska;
+            this.rotate = rot;
+            this.tran = trans;
             //this.prsgos = new List<GameObject>();
         }
 
@@ -91,7 +105,16 @@ namespace CampusSimulator
             this.placeBld = bldname;
             this.placeRoom = roomname;
             this.placeNode = nodename;
-            var broom = bm.GetBroom(this.placeRoom);
+            var broom = bm.GetBroom(this.placeRoom,expectFailure:true);
+            if (broom==null)
+            {
+                var bpad = bm.GetBpad(this.placeRoom);
+                if (bpad==null)
+                {
+                    Debug.LogError($"Person.AssignHomeLocation error lookin up placeRoom:{placeRoom}");
+                    return;
+                }
+            }
             bm.AssociateNodeWithRoom(placeNode, broom);
         }
         public bool IsInHomeBuilding()
@@ -115,20 +138,61 @@ namespace CampusSimulator
             return persGo.GetBodyPart(part);
         }
 
-        public GameObject LoadPersonGo(string callersfx)
+        GameObject lastpogo;
+
+        public GameObject CreatePersonGo(string callerSuffix,bool moving=false)
         {
-            var pfab = GraphAlgos.GraphUtil.GetUniResPrefab("people", avatarName);
-            var pogo = Instantiate<GameObject>(pfab);
+            var dirname = "People";
+            var ispeople = true;
+            if (avatarType!="Person")
+            {
+                dirname = avatarType;
+                ispeople = false;
+            }
+            var avatarNameUse = (moving ? avatarNameMoving : avatarName);
+            var pfab = GraphAlgos.GraphUtil.GetUniResPrefab(dirname, avatarNameUse);
+            var ipogo = Instantiate<GameObject>(pfab);// there is no global pogo at this point
+            ipogo.name = "instance";
+            ipogo.transform.localScale = new Vector3(scale, scale, scale);
+            ipogo.transform.localRotation *= Quaternion.Euler( rotate );
+            ipogo.transform.position = tran;
+            var pogo = new GameObject();
+            ipogo.transform.SetParent(pogo.transform,worldPositionStays:false);
             //var animator = pogo.GetComponent<Animator>();
             //animator.applyRootMotion = false;
             //animator.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Animations/PersonIdle");
-            var pergo = pogo.AddComponent<PersonGo>();
-            pergo.Init(this);
-            height = pergo.GetPersonHeight();
-            persGo = pergo;
-            AddHololens();
-            pogo.name = this.name + callersfx;
+            if (ispeople)
+            {
+                persGo = ipogo.AddComponent<PersonGo>();
+                persGo.Init(this, lastpogo);
+                height = persGo.GetPersonHeight();
+                if (this.hasHololens)
+                {
+                    AddHololens();
+                }
+            }
+            pogo.name = this.name + callerSuffix;
+            lastpogo = pogo;
             return pogo;
+        }
+
+
+
+        public GameObject GetPogo(string callerSuffix,bool createpogo=false,bool resetposition=false,bool moving=false)
+        {
+            if (createpogo)
+            {
+                var pogo = CreatePersonGo(callerSuffix,moving:moving);
+                return pogo;
+            }
+            if (resetposition)
+            {
+                lastpogo.transform.position = Vector3.zero;
+                lastpogo.transform.localRotation = Quaternion.identity;
+                persGo.Init(this, lastpogo);
+                persGo = null;
+            }
+            return lastpogo;
         }
 
 
@@ -193,15 +257,29 @@ namespace CampusSimulator
             return rv;
         }
 
+        public BldDronePad GetCurrentPad()
+        {
+            BldDronePad rv = null;
+            if (bm.IsPad(placeRoom))
+            {
+                rv = bm.GetBpad(placeRoom);
+            }
+            return rv;
+        }
+
+
 
 
 
         public void DeleteGos()
         {
-
+            PersonGo pgo;
+            // delete persongo
         }
         public void CreateGos()
         {
+            // create persongo
+            //this.persGo = LoadPersonGo("-ava-br");
         }
         int updatecount = 0;
 
@@ -288,7 +366,7 @@ namespace CampusSimulator
             var hlparent = GraphAlgos.GraphUtil.GetPart(persGo.gameObject, partname);
             if (!hlparent)
             {
-                Debug.Log("AddHololens - Head Part not found for "+this.personName);
+                Debug.LogError("AddHololens - Head Part not found for "+this.personName);
                 return;
             }
             //Debug.Log("hlparent found:" + hlparent.name);

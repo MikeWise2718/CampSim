@@ -50,6 +50,7 @@ namespace GraphAlgos
         public GraphCtrl grc;
         public string name;
         public Vector3 pt;
+        public Vector3 pto;
         public Transform transform;
         public int transformSetCount = 0;
         public HashSet<Weg> wegtos;
@@ -93,6 +94,7 @@ namespace GraphAlgos
             this.grc = grc;
             this.name = name;
             this.pt = pt;
+            this.pto = pt;
             this.usetype = usetype;
             this.regid = nodeRegion.regid;
             this.comment = comment;
@@ -168,13 +170,14 @@ namespace GraphAlgos
         }
     }
 
-    public enum LcCapType { walk, drive, waterflow, elecflow, anything }
-    public enum LinkUse { legacy, highway, road, slowroad, driveway, walkway, walkwaynoshow, marker, excavation, waterpipe, recwaterpipe,sewerpipe, elecpipe,commspipe,oilgaspipe, bldwall }
+    public enum LcCapType { walk, drive, waterflow, elecflow, anything, fly }
+    public enum LinkUse { legacy, highway, road, slowroad, driveway, walkway, walkwaynoshow, marker, excavation, waterpipe, recwaterpipe,sewerpipe, elecpipe,commspipe,oilgaspipe, bldwall, trackperson,trackheli,trackdrone, droneway }
 
     [Serializable]
     public class LcLink
     {
         public GraphCtrl grc;
+        public GameObject lgo;
 
         public static bool CanDoCapFromUse(LcCapType cap,LinkUse use)
         {
@@ -191,6 +194,7 @@ namespace GraphAlgos
             {LinkUse.walkwaynoshow,1.0f },
             {LinkUse.walkway,1.0f },
             {LinkUse.driveway,10.0f },
+            {LinkUse.trackperson,1.0f },
         };
         public static Dictionary<LinkUse, float> drivecost = new Dictionary<LinkUse, float>()
         {
@@ -209,15 +213,21 @@ namespace GraphAlgos
             {LinkUse.elecpipe,1.0f },
         };
 
+        public static Dictionary<LinkUse, float> flycost = new Dictionary<LinkUse, float>()
+        {
+            {LinkUse.trackheli,1.0f },
+            {LinkUse.trackdrone,1.0f },
+            {LinkUse.droneway,1.0f },
+        };
+
         public static Dictionary<LcCapType, Dictionary<LinkUse, float>> candodict = new Dictionary<LcCapType, Dictionary<LinkUse, float>>()
         {
             {LcCapType.walk,walkcost},
             {LcCapType.drive,drivecost},
             {LcCapType.waterflow,watercost},
             {LcCapType.elecflow,eleccost},
+            {LcCapType.fly,flycost},
         };
-
-
 
         public LinkUse usetype;
 
@@ -370,6 +380,7 @@ namespace GraphAlgos
             return rd;
         }
     }
+    [Serializable]
     public class Weg
     {
         public Guid id=Guid.NewGuid();
@@ -402,6 +413,7 @@ namespace GraphAlgos
             return (rv);
         }
     }
+    [Serializable]
     public class PathPos
     {
         public Path path;
@@ -427,6 +439,7 @@ namespace GraphAlgos
             this.wegDistSoFar = weg.distance * lambda;
         }
     }
+    [Serializable]
     public class Path
     {
         public Vector3 startpt = Vector3.zero;

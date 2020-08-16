@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Analytics;
 using UxUtils;
 
 namespace CampusSimulator
@@ -14,7 +15,7 @@ namespace CampusSimulator
         List<string> persnames = new List<string>(); // maintain a sorted list of Persons with destinations
         List<string> wtd_persnames = new List<string>(); // maintain a sorted weighted list of Persons with destinations
 
-        public enum GenderE { male, female };// this is for the appearance avatar
+        public enum GenderE { male, female, other };// this is for the appearance avatar
         public enum empStatusE { Security, FullTimeEmp, Contractor, Visitor, Unknown };
         //public string [] empStatusStr = new  string [] { "Contractor", "FullTimeEmp", "Visitor","Security", "Unknown" };
         //public float [] empStatusWt = new float []{ 60, 10, 10, 5, 5,  };
@@ -37,23 +38,71 @@ namespace CampusSimulator
                 bldMode.Set(PrsModeE.full);
             }
         }
-        public void InitializeScene(SceneSelE newregion)
+        public void ModelInitialize(SceneSelE newregion)
         {
             DelPersons(); // this wipes out everyone that was created in the
         }
-        public void SetScene(SceneSelE newregion)
+        //public Person MakePerson(GenderE gender, string persname, string avname, empStatusE empstatus, bool hasHololens = false, bool flagged = false)
+        List<string> mtten_presets = new List<string>()
         {
-            switch (newregion)
+            "m|Jane Doe Found|Girl03|unknown|nothing",
+            "m|Jane Doe LastSeen|Girl03|unknown|nothing",
+        };
+        GenderE GetGender(string s)
+        {
+            switch (s[0])
+            {
+                case 'f': return GenderE.female;
+                case 'm': return GenderE.male;
+                default: return GenderE.other;
+            }
+        }
+        empStatusE GetEmpStat(string s)
+        {
+            switch (s[0])
+            {
+                case 'f': return empStatusE.FullTimeEmp;
+                case 'c': return empStatusE.Contractor;
+                case 's': return empStatusE.Security;
+                case 'v': return empStatusE.Visitor;
+                default: return empStatusE.Unknown;
+            }
+        }
+        void AddPresetPeople(List<string> presetPeople)
+        {
+            foreach(var s in presetPeople)
+            {
+                var sar = s.Split('|');
+                if (sar.Length<5)
+                {
+                    Debug.LogError($"bad personspect:{s}");
+                    continue;
+                }
+                var g = GetGender(sar[0]);
+                var emp = GetEmpStat(sar[3]);
+                var personname = sar[1];
+                var avname = sar[2];
+                var p = MakePerson(g, personname, "person", avname, emp,hasHololens:false);
+            }
+        }
+        public void ModelBuild()
+        {
+            var presetPeople = new List<string>();
+            switch (sman.curscene)
             {
                 case SceneSelE.MsftRedwest:
                 case SceneSelE.MsftCoreCampus:
                 case SceneSelE.MsftB19focused:
                 case SceneSelE.MsftB121focused:
                     break;
+                case SceneSelE.TeneriffeMtn:
+                    //presetPeople = mtten_presets;
+                    break;
                 default:
                 case SceneSelE.None:
                     break;
             }
+            AddPresetPeople(presetPeople);
         }
         readonly string[] maleFirstNames =
         {
@@ -98,6 +147,23 @@ namespace CampusSimulator
             }
             return "could not find free name";
         }
+        public string GenRandomDroneName(GenderE gender,string dispavname)
+        {
+            int maxiter = 10;// if we can't get a unique name after 10 tries give up :)
+            int iter = 0;
+            while (iter < maxiter)
+            {
+                var genderlist = (gender == GenderE.male ? maleFirstNames : femaleFirstNames);
+                var fname = dispavname;
+                var lname = GraphAlgos.GraphUtil.GetRanListEntry(genderlist, "popbld");
+                var name = fname + "-" + lname;
+                if (!persnamelookup.ContainsKey(name))
+                {
+                    return name;
+                }
+            }
+            return "could not find free name";
+        }
         static string[] idlescripts =
         {
             "PersonIdle",
@@ -120,6 +186,7 @@ namespace CampusSimulator
 
         public static void UnsyncAnimation(Animator animator, string clipname, string caller)
         {
+            if (animator == null) return;
             clipname = clipname.ToLower();
             var unsync = true;
             if (caller == "BirdCtrl") unsync = false;
@@ -198,7 +265,7 @@ namespace CampusSimulator
             var broom = sman.bdman.GetBroom(roomname);
             var bld = broom.bld;
 
-            var pers = MakePerson(gender, personname, avatarname, empstat,hasHololens);
+            var pers = MakePerson(gender, personname, "Person", avatarname, empstat,hasHololens);
             pers.AssignHomeLocation(bld.name, broom.name, nodename, homeRoomPlacefixed: true,homeRotate:homeRotate);
             pers.idleScript = idlescript;
             if (!freeToTravel)
@@ -221,6 +288,22 @@ namespace CampusSimulator
             pers.personName = pname;
             pers.empStatus = empstat;
             pers.flagged = flagged;
+        }
+        public (string dispavname,string avname,float scale,Vector3 rot, Vector3 tran) GetRandomAvatarDroneName()
+        {
+            var i = GraphAlgos.GraphUtil.GetRanInt(3, "popbld");
+            //var phantomrot = new Vector3(0, 0, 0);
+            var phantomrot = new Vector3(0, 90, 0);
+            var phantomlift = new Vector3(0, 0.117f, 0);
+            //var mavrot = new Vector3(0, 0, 90);
+            var mavrot = (Quaternion.Euler(0, 0, 0)).eulerAngles;
+            var mavlift = new Vector3(0, 0.074f, 0);
+            switch (i)
+            {
+                default:
+                case 0: return ("Phantom","quadcopter", 3f, phantomrot, phantomlift);
+                case 1: return ("Mavic","DJI_Mavic_Air_2", 3f, mavrot, mavlift);
+            }
         }
         public string GetRandomAvatarName(GenderE gender)
         {
@@ -267,7 +350,7 @@ namespace CampusSimulator
                 {
                     if (pers.perstate == PersonAniStateE.standing)
                     {
-                        var acomp = pers.persGo.gameObject.GetComponent<Animator>();
+                        var acomp = pers.persGo.gameObject.GetComponentInChildren<Animator>();
                         var script = pers.danceScript;
                         if (!_dancing) script = pers.idleScript;
                         acomp.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Animations/"+script);
@@ -284,18 +367,33 @@ namespace CampusSimulator
         }
         public bool _dancing = false;
 
-        public Person MakePerson(GenderE gender,string persname,string avname,empStatusE empstatus,bool hasHololens=false,bool flagged=false)
+        public Person MakePerson(GenderE gender, string persname, string avtype, string avname, empStatusE empstatus, bool hasHololens = false, bool flagged = false, bool isdronelike = false)
+        {
+            var rv = MakePerson(gender, persname, avtype, avname, 1, Vector3.zero, Vector3.zero,empstatus:empstatus, hasHololens: hasHololens, flagged: flagged, isdronelike: isdronelike);
+            return rv;
+        }
+
+        public Person MakePerson(GenderE gender, string persname, string avtype, string avname, float avaska, Vector3 avarot, Vector3 avatran, empStatusE empstatus, bool hasHololens = false, bool flagged = false, bool isdronelike = false)
         {
             var pgo = new GameObject(persname);
+            //var ska = sman.stman.scalemodelnumber.Get();
+            //var skav = new Vector3(ska, ska, ska);
+            //pgo.transform.localScale = skav;
             pgo.transform.position = Vector3.zero;
             pgo.transform.parent = this.transform;
+            
             var pers = pgo.AddComponent<Person>();
-            pers.AddPrsDetails(this, gender, persname, avname,empstatus,hasHololens);
+            pers.AddPrsDetails(this, gender, persname,avtype, avname,empstatus,hasHololens,ska: avaska, avarot,avatran);
+            if (isdronelike)
+            {
+                pers.avatarNameMoving = pers.avatarName + "spinning";
+            }
             AddPersonToCollection(pers); /// has to be afterwards because of the sorted names for journeys
             pers.idleScript = PersonMan.GetIdleScript(pers.avatarName);
             pers.walkScript = "PersonRunning";
             pers.danceScript = "Samba Dancing";
             pers.flagged = flagged;
+            pers.isdronelike = isdronelike;
             return pers;
         }
         public Person MakeRandomPerson()
@@ -311,7 +409,36 @@ namespace CampusSimulator
             //    empstatus = empStatusE.FullTimeEmp;
             //    //Debug.Log(persname +" is a "+empstatus);
             //}
-            return MakePerson(gender, persname, avname, empstatus, flagged:flagged);
+            var pers =  MakePerson(gender, persname, "Person", avname, empstatus, flagged:flagged);
+            return pers;
+
+            //var pgo = new GameObject(persname);
+            //pgo.transform.position = Vector3.zero;
+            //pgo.transform.parent = this.transform;
+            //var pers = pgo.AddComponent<Person>();
+            //pers.AddPrsDetails(this,gender,persname,avname,empstatus);
+            //AddPersonToCollection(pers); /// has to be afterwards because of the sorted names for journeys
+            //pers.idleScript = PersonMan.GetIdleScript(pers.avatarName);
+            //pers.walkScript = "PersonRunning";
+            //pers.danceScript = "SambaDancing";
+            //return pers;
+        }
+        public Person MakeRandomPersonDrone()
+        {
+            var gender = GetRandomGender();
+            var (dispavname,avname,avska,avrot,avtran) = GetRandomAvatarDroneName();
+            var dronename = GenRandomDroneName(gender,dispavname);
+            var flagged = GraphAlgos.GraphUtil.FlipBiasedCoin(0.25f, "popbld");
+
+            var empstatus = empStatusE.FullTimeEmp;
+            //if (persname == "Phil Nakamura")
+            //{
+            //    empstatus = empStatusE.FullTimeEmp;
+            //    //Debug.Log(persname +" is a "+empstatus);
+            //}
+            //var pers = MakePerson(gender, persname, "Person",  avname, empstatus, flagged: flagged);
+            var pers = MakePerson(gender, dronename, "Obj3d", avname,  avaska:avska, avarot:avrot,avatran:avtran, empstatus, flagged: flagged,isdronelike:true );
+            return pers;
 
             //var pgo = new GameObject(persname);
             //pgo.transform.position = Vector3.zero;
@@ -326,12 +453,12 @@ namespace CampusSimulator
         }
         public List<Person> MakeRandomPerson(int n)
         {
-            Debug.Log("MakeRandomPerson n:" + n);
+            Debug.Log($"MakeRandomPerson n:{n}");
             var rv = new List<Person>();
             for (int i = 0; i < n; i++)
             {
                 var pers = MakeRandomPerson();
-                Debug.Log("Made person " + pers.personName);
+                Debug.Log($"Made person {pers.personName}");
                 rv.Add(pers);
             }
             Debug.Log("MRP count:" + rv.Count);
@@ -339,33 +466,35 @@ namespace CampusSimulator
         }
         public void DelPersons()
         {
-          //  Debug.Log("DelPersons called");
+          //  Debug.Log(#"DelPersons called");
             var namelist = new List<string>(persnamelookup.Keys);
-            namelist.ForEach(name => DelPerson(name));
+            namelist.ForEach(pname => DelPerson(pname));
         }
-        public void DelPerson(string name)
+        public void DelPerson(string pname)
         {
-          //  Debug.Log("Deleting Person " + name);
+            //Debug.Log($"Deleting Person {pname}");
             //var go = GameObject.Find(name);
 
-            var pers = persnamelookup[name];
+            var pers = persnamelookup[pname];
             npers--;
-            persnamelookup.Remove(name);
+            persnamelookup.Remove(pname);
+            pers.DeleteGos();
+            Destroy(pers.gameObject);
         }
-        public Person GetPerson(string name)
+        public Person GetPerson(string pname)
         {
-            if (!persnamelookup.ContainsKey(name))
+            if (!persnamelookup.ContainsKey(pname))
             {
-                Debug.Log("Bad Person lookup:" + name);
+                Debug.LogWarning($"Bad Person lookup:{pname}");
                 return null;
             }
-            return persnamelookup[name];
+            return persnamelookup[pname];
         }
         public void AddPersonToCollection(Person Person)
         {
             if (persnamelookup.ContainsKey(Person.name))
             {
-                Debug.Log("Tried to add duplicate Person:" + Person.name);
+                Debug.LogWarning($"Tried to add duplicate Person:{Person.name}");
                 return;
             }
             persnamelookup[Person.name] = Person;

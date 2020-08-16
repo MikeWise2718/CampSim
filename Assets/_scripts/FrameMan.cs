@@ -228,7 +228,7 @@ namespace CampusSimulator
             }
         }
 
-        public void InitializeScene(SceneSelE newregion)
+        public void ModelInitialize(SceneSelE newregion)
         {
             GetInitials();
         }
@@ -254,7 +254,7 @@ namespace CampusSimulator
             //Debug.Log($"FrameMan.SetScene {newregion}- vt2d:{visibilityTiedToDetectability.Get()} valueretrieved:{visibilityTiedToDetectability.ValueRetrievedFromPersistentStore()}");
         }
 
-        public void SetScene(SceneSelE newregion)
+        public void ModelBuild()
         {
         }
 
@@ -431,7 +431,7 @@ namespace CampusSimulator
             {
                 if (slot.slotformgo != null)
                 {
-                    if (slot.persgo != null && slot.person.GetVisiblity())
+                    if (slot.pogo != null && slot.person.GetVisiblity())
                     {
                         //if (showOnlyFlaggedPeople && !slot.person.flagged) continue;
                         var rendgo = GetBodyPart(slot.person, personDetectMode);

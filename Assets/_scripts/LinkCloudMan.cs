@@ -119,10 +119,10 @@ namespace CampusSimulator
                 case LinkVisualOptionsE.None:
                     break;
             }
-            if (sman != null)
-            {
-                sman.RequestRefresh("LinkCloudMan-SetLinkAndNodeVisibility");
-            }
+            //if (sman != null)
+            //{
+            //    sman.RequestRefresh("LinkCloudMan-SetLinkAndNodeVisibility");
+            //}
         }
 
 
@@ -140,9 +140,14 @@ namespace CampusSimulator
 
             linkTrans = GetLinkTransInitial();
             var lopt = lvisOptions.GetInitial();
+            if (SceneMan.showNoPipes)
+            {
+                lopt = LinkVisualOptionsE.None;
+            }
             SetLinkAndNodeVisibility(lopt.ToString());
             graphGenOptions.GetInitial();
             InitNodeColorOverrides();
+            //grctrl = GetGraphCtrl();
             //Debug.Log("Initial ggo get:" + graphGenOptions.Get());
             //Debug.Log("Initial ggo getInitial:" + graphGenOptions.GetInitial());
             //Debug.Log("Initial ggo get:" + graphGenOptions.Get());
@@ -151,68 +156,76 @@ namespace CampusSimulator
 
         void Start()
         {
-            initVals();
-        }
-
-        public void InitializeScene(SceneSelE newregion)
-        {
-            LcMapMaker.Reset();
-            initVals();
+            //initVals();
         }
 
 
-        public void SetScene(SceneSelE newregion)
+
+        graphSceneE translate(SceneSelE ss)
         {
-            //Debug.Log("SetScene2");
-            var genmode = graphGenOptions.Get();
-            switch (newregion)
+            var rv = graphSceneE.gen_none;
+            switch (ss)
             {
                 case SceneSelE.MsftCoreCampus:
                 case SceneSelE.MsftB19focused:
                 case SceneSelE.MsftB121focused:
                 case SceneSelE.MsftRedwest:
-                    GenLinkCloud(graphSceneE.gen_campus, genmode);
+                    rv = graphSceneE.gen_campus;
                     break;
                 case SceneSelE.MsftDublin:
-                    GenLinkCloud(graphSceneE.gen_dublin, genmode);
+                    rv = graphSceneE.gen_dublin;
                     break;
                 case SceneSelE.TukSouCen:
-                    GenLinkCloud(graphSceneE.gen_tukwila, genmode);
+                    rv = graphSceneE.gen_tukwila;
                     break;
                 case SceneSelE.Eb12small:
-                    GenLinkCloud(graphSceneE.gen_eb12_small, genmode);
+                    rv = graphSceneE.gen_eb12_small;
                     break;
                 case SceneSelE.Eb12:
-                    GenLinkCloud(graphSceneE.gen_eb12, genmode);
+                    rv = graphSceneE.gen_eb12;
                     break;
                 case SceneSelE.TeneriffeMtn:
-                    GenLinkCloud(graphSceneE.gen_tenmtn, genmode);
+                    rv = graphSceneE.gen_tenmtn;
                     break;
             }
-            //if (newregion == SceneSelE.MsftCoreCampus || newregion == SceneSelE.MsftB19focused || newregion == SceneSelE.MsftRedwest)
-            //{
-            //    GenLinkCloud(graphSceneE.gen_campus,genmode);
-            //}
-            //else if (newregion == SceneSelE.MsftDublin)
-            //{
-            //    GenLinkCloud(graphSceneE.gen_dublin, genmode);
-            //}
-            //else if (newregion == SceneSelE.Tukwila)
-            //{
-            //    GenLinkCloud(graphSceneE.gen_tukwila, genmode);
-            //    //CorrectPositionDiff(new Vector3(0, 0, 80));
-            //}
-            //else if (newregion == SceneSelE.Eb12)
-            //{
-            //    //Debug.Log("Eb12 gen from code");
-            //    GenLinkCloud(graphSceneE.gen_eb12, genmode);
-            //}
+            return rv;
         }
 
-        public void SetScene3(SceneSelE newregion)
+
+        public void ModelBuild()
+        {
+
+            var genmode = graphGenOptions.Get();
+            var graphScene = translate(sman.curscene);
+
+            var mm = new LcMapMaker(grctrl, mappars);
+            grctrl.maxRanHeight = LinkFLoor.max;
+            grctrl.minRanHeight = LinkFLoor.min;
+
+            mm.maxVoiceKeywords = this.maxVoiceKeywords;
+            var awl = sman.bdman.walllinks.Get();
+            mm.AddGraphToLinkCloud(graphScene, genmode, addWallLinks: awl);
+            nVoiceKeywords = mm.nVoiceKeywords;
+        }
+
+        public void SetHeights()
+        {
+            if (CanGetHeights())
+            {
+                CalculateAndSetHeightsOnLinkCloud();
+            }
+            else
+            {
+                sman.needsLifted = false;
+            }
+        }
+
+        public void ModelBuildFinal()
         {
             var gcr = GetGraphCtrl();
             gcr.RealizeLateLinks();
+            SetHeights();
+            DeleteUnconnectedNodes();
         }
 
         int updateCount = 0;
@@ -263,12 +276,12 @@ namespace CampusSimulator
         {
             updateCount += 1;
 
-            if (needRefreshUpdateCount > 0 && ((updateCount - needRefreshUpdateCount) > 15))
-            {
-                sman.RequestRefresh("LinkCloudMan-Update on needRefreshUpdateCount>0");
-                needRefreshUpdateCount = 0;
-            }
-            CheckForVisibiltyChanges();
+            //if (needRefreshUpdateCount > 0 && ((updateCount - needRefreshUpdateCount) > 15))
+            //{
+            //    sman.RequestRefresh("LinkCloudMan-Update on needRefreshUpdateCount>0");
+            //    needRefreshUpdateCount = 0;
+            //}
+            //CheckForVisibiltyChanges();
         }
 
         bool CheckCapUseVisibility(LcLink link)
@@ -281,6 +294,16 @@ namespace CampusSimulator
             else if (filterOnUse)
             {
                 rv = link.usetype==this.usefilter;
+            }
+            return rv;
+        }
+
+        bool IsFragable(LcLink link)
+        {
+            var rv = true;
+            if (link.usetype== LinkUse.droneway)
+            {
+                rv = false;
             }
             return rv;
         }
@@ -299,38 +322,7 @@ namespace CampusSimulator
             return rv;
         }
 
-        // LinkCloud Stuff
-        public graphSceneE lastgenmodel = graphSceneE.gen_none;
 
-        public void GenLinkCloud(graphSceneE graphScene,GraphGenerationModeE genmode)
-        {
-            this.graphScene = graphScene;
-            grctrl = GetGraphCtrl();
-            var mm = new LcMapMaker(grctrl, mappars);
-            grctrl.maxRanHeight = LinkFLoor.max;
-            grctrl.minRanHeight = LinkFLoor.min;
-
-            mm.maxVoiceKeywords = this.maxVoiceKeywords;
-            var addWallLinks = sman.bdman.walllinks.Get();
-            //var genOsmStreetLinks = sman.stman.osmstreets.Get();
-            //var addfixedStreetLinks = sman.stman.fixedstreets.Get();
-            var genOsmStreetLinks = true;
-            var addfixedStreetLinks = false;
-
-            //Debug.Log($"GenLinkCloud addWallLinks:{addWallLinks}");
-            mm.AddGraphToLinkCloud(graphScene,genmode,addWallLinks, addfixedStreetLinks,genOsmStreetLinks);
-            nVoiceKeywords = mm.nVoiceKeywords;
-            if (CanGetHeights())
-            {
-                CalculateHeights();
-            }
-            else
-            {
-                sman.needsLifted = false; 
-            }
-            lastgenmodel = graphScene;
-            sman.RequestRefresh("LinkCloudMan-GenLinkCloud");
-        }
 
         public bool CanGetHeights()
         {
@@ -338,7 +330,7 @@ namespace CampusSimulator
             if (longlatmap == null)
             {
                 //longlatmap = sman.glGetComponent<LatLongMap>();
-                longlatmap = sman.glbllm;
+                longlatmap = sman.coman.glbllm;
                 if (longlatmap == null) return false;
             }
             return true;
@@ -356,9 +348,9 @@ namespace CampusSimulator
             return y;
         }
 
-        public void CalculateHeights()
+        public void CalculateAndSetHeightsOnLinkCloud()
         {
-            longlatmap = sman.glbllm;
+            longlatmap = sman.coman.glbllm;
             if (longlatmap == null) return;
             var calcHeights = true;
             var grc = GetGraphCtrl();
@@ -372,8 +364,12 @@ namespace CampusSimulator
                 node.lng = v2.y;
                 if (calcHeights)
                 {
-                    var y = GetHeight(node.pt.x, node.pt.z);
-                    node.pt = new Vector3(node.pt.x, y, node.pt.z);
+                    var yoff = GetHeight(node.pto.x, node.pto.z);
+                    //if (node.pto.y>5)
+                    //{
+                    //    Debug.Log("Here is one");
+                    //}
+                    node.pt = new Vector3(node.pto.x, node.pto.y + yoff, node.pto.z);
                 }
             }
             var cam = Camera.current;
@@ -385,16 +381,18 @@ namespace CampusSimulator
             }
             sman.needsLifted = false;
         }
-
-        public GraphAlgos.GraphCtrl GetGraphCtrl()
+        public GraphCtrl GetGraphCtrl(bool donotallocate=false)
         {
             if (grctrl == null)
             {
-                grctrl = new GraphAlgos.GraphCtrl(sman.graphsdir);
-                if (sman.glbllm!=null)
+                if (donotallocate)
                 {
-                    grctrl.lltoxz = new GraphCtrl.LtoXZfunction( sman.lltoxz );
+                    return null;
                 }
+                grctrl = new GraphCtrl(sman.graphsdir)
+                {
+                    lltoxz = new GraphCtrl.LtoXZfunction(sman.coman.lltoxz)
+                };
             }
             return (grctrl);
         }
@@ -436,10 +434,13 @@ namespace CampusSimulator
             var node = gcr.GetNode(lptname);
             CreateNodeGo(node);
         }
-        static int gogencount = 0;
+        int gogencount = 0;
         void CreateGrcGos()
         {
-            //Debug.Log("CreateGrcGos "+ gogencount);
+            Debug.Log($"CreateGrcGos-{gogencount} scene:{sman.curscene} isnull:{grcgos==null}");
+            var sw = new Aiskwk.Map.StopWatch();
+            var swnd = new Aiskwk.Map.StopWatch();
+            var swlk = new Aiskwk.Map.StopWatch();
             var grc = GetGraphCtrl();
             sman.leditor.SetGraphCtrl(grc);
             if (grcgos == null)
@@ -452,30 +453,46 @@ namespace CampusSimulator
                 grcnodes.transform.parent = grcgos.transform;
                 grclinks = new GameObject("links");
                 grclinks.transform.parent = grcgos.transform;
+                var (gogen, nn, nl) = GetNodeLinkCounts();
+                Debug.Log($"CreateGrcGos - gogen:{gogen} nodes:{nn} links:{nl}");
                 gogencount++;
             }
             if (linksvisible)
             {
-                foreach (var lnkname in grc.linknamelist)
+
+                swlk.Start();
+                var links = grc.GetLcLinks();
+                sman.mpman.nTotIsects = 0;
+                foreach (var lnk in links)
                 {
-                    var lnk = grc.GetLink(lnkname);
                     if (!CheckCapUseVisibility(lnk)) continue;
+                    var dofrag = IsFragable(lnk);
                     var clrname = linkcolor(lnk);
                     var linkrad = linkradius(lnk);
                     var linkfrm = linkform(lnk);
-                    var go = LinkGo.MakeLinkGo(sman, lnk, linkfrm, linkrad, clrname,1-linkTrans,this.flatlinks);
+                    var go = LinkGo.MakeLinkGo(sman, lnk, linkfrm, linkrad, clrname,1-linkTrans,this.flatlinks,dofrag:dofrag);
                     go.transform.parent = grclinks.transform;
                 }
+                swlk.Stop();
+                var nisects = sman.mpman.nTotIsects;
+                Debug.Log($"CreateGrcGos - linknamelist size:{grc.linknamelist.Count}/{links.Count} took:{swlk.ElapSecs()} secs  -  isects:{nisects}");
             }
             if (nodesvisible)
             {
+
+                swnd.Start();
+
                 //Debug.Log("Recreating nodegos");
-                foreach (string lptname in grc.linkpoints())
+                var nodes = grc.GetLcNodes();
+                foreach (var node in nodes)
                 {
-                    var node = grc.GetNode(lptname);
                     if (!CheckCapUseVisibility(node)) continue;
                     CreateNodeGo(node);
                 }
+                swnd.Stop();
+                Debug.Log($"CreateGrcGos - nodenamelist size:{grc.nodenamelist.Count}/{nodes.Count} took:{swnd.ElapSecs()} secs");
+
+
                 if (showNearestPoint)
                 {
                     var tup = FindClosestPointOnLineCloud(nearestPointRef);
@@ -488,8 +505,10 @@ namespace CampusSimulator
             }
             stats_nodes_links.x = grc.GetNodeCount();
             stats_nodes_links.y = grc.GetLinkCount();
+            sw.Stop();
+            Debug.Log($"CreateGrcGos {gogencount} took {sw.ElapSecs()} secs");
         }
-        void DeleteGrcGos()
+        public void DeleteGrcGos()
         {
             if (grcgos != null)
             {
@@ -516,19 +535,42 @@ namespace CampusSimulator
                 grc.DelNode(nname);
             }
         }
+        public void DeleteAllNodes()
+        {
+            var grc = GetGraphCtrl(donotallocate:true);
+            if (grc != null)
+            {
+                var nodesToDelete = grc.GetLcNodes();
+                foreach (var node in nodesToDelete)
+                {
+                    grc.DelNode(node.name);
+                }
+                grc.DeleteLateLinks();
+                grc.DeleteKeywords();
+            }
+        }
+        public void DeleteAllLinks()
+        {
+            var grc = GetGraphCtrl();
+            var linksToDelete = grc.GetLcLinks();
+            foreach (var link in linksToDelete)
+            {
+                grc.DelLink(link.name);
+            }
+        }
         #region public methods
         public void DestroyLinkCloud()
         {
-            grctrl = null;
-            lastgenmodel = graphSceneE.gen_none;
+            //DelLcGos();
+            grctrl = null;        
         }
-        public void InitLinkCloud(bool forcenew = true)
+        public void BaseInitialize(SceneSelE newregion)
         {
-            if (forcenew)
-            {
-                DestroyLinkCloud();
-            }
             CreateGrcGos();
+
+            LcMapMaker.Reset();
+            initVals();
+
         }
         public void DelLcGos()
         {
@@ -566,7 +608,6 @@ namespace CampusSimulator
         {
             return nodeColorOverrides[nodename];
         }
-
 
         private string nodecolor(string nodename)
         {
@@ -607,6 +648,10 @@ namespace CampusSimulator
             { LinkUse.commspipe,SceneMan.RmColorModeE.linkcomms },
             { LinkUse.oilgaspipe,SceneMan.RmColorModeE.linkoilgas },
             { LinkUse.bldwall,SceneMan.RmColorModeE.bldwall },
+            { LinkUse.trackperson,SceneMan.RmColorModeE.trackperson },
+            { LinkUse.trackheli,SceneMan.RmColorModeE.trackheli },
+            { LinkUse.trackdrone,SceneMan.RmColorModeE.trackdrone },
+            { LinkUse.droneway,SceneMan.RmColorModeE.trackdrone },
         };
 
 
@@ -728,9 +773,23 @@ namespace CampusSimulator
             var lpt = gcr.GetNode(name);
             return (lpt);
         }
-        public void RefreshGos()
+        public (int gogen,int nnodes,int nlinks) GetNodeLinkCounts()
         {
-            DeleteGrcGos();
+            if (grctrl != null)
+            {
+                return (gogencount, grctrl.GetNodeCount(), grctrl.GetLinkCount());
+            }
+            else
+            {
+                return (gogencount, 0, 0);
+            }
+        }
+        public void RefreshGos(bool deletethings=true)
+        {
+            if (deletethings)
+            {
+                DeleteGrcGos();
+            }
             CreateGrcGos();
         }
         public LcNode GetRandomNode()

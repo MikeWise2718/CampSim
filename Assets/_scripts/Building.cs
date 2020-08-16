@@ -16,25 +16,35 @@ namespace CampusSimulator
         //public string drivestartnode;
         public List<string> destnodes = new List<string>();
         public List<string> roomspecs = new List<string>();
+        public List<string> bldpadspecs = new List<string>();
         public string shortname;
         public int selectionweight;
         public Dictionary<string,BldRoom> roomdict=new Dictionary<string, BldRoom>();
-        public LatLongMap llm;
+        public Dictionary<string, BldDronePad> paddict = new Dictionary<string, BldDronePad>();
+        //public LatLongMap llm;
         public GameObject roomlistgo;
         public float defAngAlign = 0f;
         public int defPeoplePerRoom = 2;
         public float defPercentFull = 1.0f;
         public float defRoomArea = 10;
         public float journeyChoiceWeight = 1;
+        public string osmnamestart = "";
 
         //System.Random ranman = new System.Random();
         public Person GetRandomFreeToTravelPerson(string ranset="")
         {
             var peeps = GetFreePeopleInRooms();
-            var npeeps = peeps.Count;
             if (peeps.Count == 0)  return null;
             var i = GraphAlgos.GraphUtil.GetRanInt(peeps.Count,ranset);
             return peeps[i];
+        }
+
+        public Person GetRandomFreeToTravelDrone(string ranset = "")
+        {
+            var dronepeeps = GetFreeDronesInRooms();
+            if (dronepeeps.Count == 0) return null;
+            var i = GraphAlgos.GraphUtil.GetRanInt(dronepeeps.Count, ranset);
+            return dronepeeps[i];
         }
 
         public BldRoom GetFirstFreeRoom()
@@ -52,8 +62,22 @@ namespace CampusSimulator
         public BldRoom GetRandomRoom(string ranset="")
         {
             var brooms = GetRooms();
+            if (brooms.Count == 0)
+            {
+                return null;
+            }
             var i = GraphAlgos.GraphUtil.GetRanInt(brooms.Count,ranset);
             return brooms[i];
+        }
+        public BldDronePad GetRandomPad(string ranset = "")
+        {
+            var pads = GetPads();
+            if (pads.Count==0)
+            {
+                return null;
+            }
+            var i = GraphAlgos.GraphUtil.GetRanInt(pads.Count, ranset);
+            return pads[i];
         }
 
         public string GetRandomDest(string ranset="")
@@ -94,8 +118,8 @@ namespace CampusSimulator
             }
             if (destnodelst.Count > 0)
             {
-                //Debug.Log("Found " + destnodelst.Count + " dests for " + name);
-                destnodes = destnodelst;
+                Debug.Log("Found " + destnodelst.Count + " dests for " + name);
+                destnodes = destnodelst;// in ReinitDests
             }
         }
         public void EmptyRooms()
@@ -179,6 +203,18 @@ namespace CampusSimulator
             return peeplist;
         }
 
+        public List<Person> GetFreeDronesInRooms()
+        {
+            var padlist = new List<BldDronePad>(paddict.Values);
+            var peeplist = new List<Person>();
+            foreach (var broom in padlist)
+            {
+                var broompeeps = broom.GetFreePeopleInRoom();
+                peeplist.AddRange(broompeeps);
+            }
+            return peeplist;
+        }
+
         public List<Person> GetAllPeopleInRooms()
         {
             var roomlist = new List<BldRoom>(roomdict.Values);
@@ -196,6 +232,11 @@ namespace CampusSimulator
             var roomlist = new List<BldRoom>(roomdict.Values);
             return roomlist;
         }
+        public List<BldDronePad> GetPads()
+        {
+            var padlist = new List<BldDronePad>(paddict.Values);
+            return padlist;
+        }
 
         public void PopulateBuilding()
         {
@@ -211,6 +252,21 @@ namespace CampusSimulator
                         var p = bm.sman.psman.MakeRandomPerson();
                         p.AssignHomeLocation(name,broom.name, broom.name);
                         broom.Occupy(p,regen:false);
+                        npoped++;
+                    }
+                }
+            }
+
+            var padlist = new List<BldDronePad>(paddict.Values);
+            foreach (var pad in padlist)
+            {
+                for (int i = 0; i < pad.personCap; i++)
+                {
+                    if (GraphAlgos.GraphUtil.FlipBiasedCoin(cointoss_pctFull, "popbld"))
+                    {
+                        var p = bm.sman.psman.MakeRandomPersonDrone();
+                        p.AssignHomeLocation(name, pad.name, pad.name);
+                        pad.Occupy(p, regen: false);
                         npoped++;
                     }
                 }
@@ -238,36 +294,36 @@ namespace CampusSimulator
             bm.RegisterRoom(roomname, roomcomp);
             roomgo.transform.parent = roomlistgo.transform;
         }
+
         public int StrToInt(string str,int defval)
         {
-            int val;
-            var status = int.TryParse(str, out val);
+            var status = int.TryParse(str, out int val);
             return (status ? val : defval);
         }
         public float StrToFloat(string str, float devval)
         {
-            float val;
-            var status = float.TryParse(str, out val);
+            var status = float.TryParse(str, out float val);
             return (status ? val : devval);
         }
 
-        public void AddOneRoomSpec(string roomspec)
+        public void AddOneRoomFromStringRoomspec(string roomspec)
         {
-            //Debug.Log("AddOneRoomSpec:" + roomspec);
             var rar = roomspec.Split(':');
             var roomname = rar[0];
-
+            var roomnodename = roomname;
+            if (!lc.IsNodeName(roomnodename))
+            {
+                Debug.LogError($"Building.AddOneRoomFromStringRoomspec - bad padspec{roomspec}");
+                return;
+            }
+            var lpt = lc.GetNode(roomnodename);
             var roomgo = new GameObject(roomname);
             var roomcomp = roomgo.AddComponent<BldRoom>();
-            roomcomp.Initialize(this, roomname, roomname);
-            var roompt = this.transform.position;
+            roomcomp.Initialize(this, roomname, roomnodename);
+            var roompt = lpt.pt;
 
-            if (lc.IsNodeName(roomname))
-            {
-                var lpt = lc.GetNode(roomname);
-                roompt = lpt.pt;
-            }
-            var pcap = StrToInt(rar[1], 1);
+
+            var pcap = StrToInt(rar[1], 1);//roomspecs
             var alignang = StrToFloat(rar[2],0);
             var length = StrToFloat(rar[3],2);
             var width = StrToFloat(rar[4],3);
@@ -277,6 +333,49 @@ namespace CampusSimulator
             bm.RegisterRoom(roomname, roomcomp);
             roomgo.transform.parent = roomlistgo.transform;
         }
+
+        public void AddOnePadFromStringPadspec(string padspec)
+        {
+            //Debug.Log("AddOneRoomSpec:" + roomspec);
+            var rar = padspec.Split(':');
+            var padname = rar[0];
+            var padnodename = padname;
+            if (padname.EndsWith("centertop"))
+            {
+                if (!isOsmBld)
+                {
+                    Debug.LogError($"Building.AddOnePadFromStringPadspec - cannot compute center of building without OsmBldSpec");
+                    return;
+                }
+                var bs = bm.GetBldBs(this);
+                var ptcen = bs.GetCenterTop();
+                var gc = bm.sman.lcman.GetGraphCtrl();
+                var ptcen1 = bm.sman.mpman.GetHeightVector3(ptcen);// we have to do this extra because we are post linkcloud
+                gc.AddNodePtxyz(padnodename, ptcen1.x,ptcen1.y,ptcen1.z);
+            }
+            else if (!lc.IsNodeName(padnodename))
+            { 
+                Debug.LogError($"Building.AddOnePadFromStringPadspec - bad padspec{padspec}");
+                return;
+            }
+            var lpt = lc.GetNode(padnodename);
+            var padgo = new GameObject(padname);
+            var padcomp = padgo.AddComponent<BldDronePad>();
+            padcomp.Initialize(this, padname, padnodename);
+            var roompt = lpt.pt;
+
+            var pcap = StrToInt(rar[1], 1);//roomspecs
+            var alignang = StrToFloat(rar[2], 0);
+            var length = StrToFloat(rar[3], 2);
+            var width = StrToFloat(rar[4], 3);
+            var frameit = rar[5].ToLower()[0] != 'f';
+            padcomp.SetStats(roompt, pcap, alignang, length, width, frameit);
+            paddict[padname] = padcomp;
+            bm.RegisterPad(padname, padcomp);
+            padgo.transform.parent = roomlistgo.transform;
+            bm.sman.drman.RegisterDronePad(padcomp);
+        }
+
         public void AddRoomsToBuilding()
         {
             roomdict = new Dictionary<string,BldRoom>();
@@ -291,8 +390,9 @@ namespace CampusSimulator
             }
             else
             {
-                roomspecs.ForEach(roomspec => AddOneRoomSpec(roomspec));
+                roomspecs.ForEach(roomspec => AddOneRoomFromStringRoomspec(roomspec));
             }
+            bldpadspecs.ForEach(padspec => AddOnePadFromStringPadspec(padspec));
             bm.UpdateBldStats();
         }
 
@@ -303,6 +403,8 @@ namespace CampusSimulator
             //   Debug.Log("Deleted "+bldgos.Count + +" goes for building "+name);
             var roomlist = new List<BldRoom>(roomdict.Values);
             roomlist.ForEach(brm => brm.DeleteGos());
+            var padlist = new List<BldDronePad>(paddict.Values);
+            padlist.ForEach(pad => pad.DeleteGos());
         }
         public void CreateGos()
         {
@@ -310,6 +412,8 @@ namespace CampusSimulator
             //   Debug.Log("Created " + bldgos.Count + " gos for building "+name);
             var roomlist = new List<BldRoom>(roomdict.Values);
             roomlist.ForEach(brm => brm.CreateGos());
+            var padlist = new List<BldDronePad>(paddict.Values);
+            padlist.ForEach(pad => pad.CreateGos());
         }
         // Update is called once per frame
         //void Update()

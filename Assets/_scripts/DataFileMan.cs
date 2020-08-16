@@ -17,9 +17,9 @@ namespace CampusSimulator
         public string osmloadspec;
 
 
-        private List<SimpleDf> dfwayslist;
-        private List<SimpleDf> dflinkslist;
-        private List<SimpleDf> dfnodeslist;
+        public List<SimpleDf> dfwayslist;
+        public List<SimpleDf> dflinkslist;
+        public List<SimpleDf> dfnodeslist;
 
         public UxSettingBool useDfIndexes = new UxSettingBool("useDfIndexes", true);
         public UxSettingBool useDfLlCoords = new UxSettingBool("useDfLlcoords", true);
@@ -63,6 +63,11 @@ namespace CampusSimulator
             dfnodeslist = new List<SimpleDf>();
         }
 
+        public void DeleteStuff()
+        {
+            InitDataFrames();
+        }
+
         public (List<SimpleDf> ways, List<SimpleDf> links, List<SimpleDf> nodes) GetSdfs()
         {
             var rv = (dfwayslist, dflinkslist, dfnodeslist);
@@ -75,7 +80,7 @@ namespace CampusSimulator
             useDfLlCoords.GetInitial(true);
         }
 
-        public void InitializeScene(SceneSelE newregion)
+        public void BaseInitialize(SceneSelE newregion)
         {
             Debug.Log($"DataFileMan.InitializeScene {newregion}");
             InitializeValues();
@@ -176,6 +181,9 @@ namespace CampusSimulator
             }
         }
 
+        public string fnameways;
+        public string fnamelinks;
+        public string fnamenodes;
 
         public void GetDfsFromResources1(string area1, LatLongMap llm = null)
         {
@@ -186,7 +194,7 @@ namespace CampusSimulator
 
             dfways = null;
             {
-                var fnameways = $"{dname}{area1}_ways.csv";
+                fnameways = $"{dname}{area1}_ways.csv";
                 dfways = new SimpleDf(area1 + "_ways");
                 var wayslist = ReadResource(fnameways);
                 if (wayslist != null)
@@ -198,7 +206,7 @@ namespace CampusSimulator
 
             dflinks = null;
             {
-                var fnamelinks = $"{dname}{area1}_links.csv";
+                fnamelinks = $"{dname}{area1}_links.csv";
                 dflinks = new SimpleDf(area1 + "links");
                 var linkslist = ReadResource(fnamelinks);
                 if (linkslist != null)
@@ -207,7 +215,7 @@ namespace CampusSimulator
                 }
                 if (useDfIndexes.Get())
                 {
-                    Debug.Log($"Using indexes on {fnamelinks}");
+                    //Debug.Log($"Using indexes on {fnamelinks}");
                     dflinks.AddIndex("osm_wid");
                     dflinks.AddIndex("osm_nid_1");
                 }
@@ -216,7 +224,7 @@ namespace CampusSimulator
 
             dfnodes = null;
             {
-                var fnamenodes = $"{dname}{area1}_nodes.csv";
+                fnamenodes = $"{dname}{area1}_nodes.csv";
                 dfnodes = new SimpleDf(area1 + "nodes");
                 var nodeslist = ReadResource(fnamenodes);
                 if (nodeslist != null)
@@ -225,26 +233,29 @@ namespace CampusSimulator
                 }
                 if (useDfIndexes.Get())
                 {
-                    Debug.Log($"Using indexes on {fnamenodes}");
+                    //Debug.Log($"Using indexes on {fnamenodes}");
                     dfnodes.AddIndex("osm_nid");
                 }
                 //Debug.Log($"Read {dfnodes.Nrow()} links from {fnamenodes}");
             }
             if (llm != null)
             {
-                Debug.Log($"Converting coords with llm {llm.origin} - {llm.initmethod}");
+                //Debug.Log($"Converting coords with llm {llm.origin} - {llm.initmethod}");
                 ConvertNodeCoords(dfnodes, llm);
             }
             var okways = dfways.CheckConsistency("DataFileMan.GetDfsFromResources", quiet:true);
             var oklinks = dflinks.CheckConsistency("DataFileMan.GetDfsFromResources", quiet: true);
             var oknodes = dfnodes.CheckConsistency("DataFileMan.GetDfsFromResources", quiet: true);
-            Debug.Log($"Df consistency check for {area1} ways:{okways}  links:{oklinks}  nodes:{oknodes}");
+            if (!okways || !oklinks || !oknodes)
+            {
+                Debug.LogWarning($"Df consistency check for {area1} ways:{okways}  links:{oklinks}  nodes:{oknodes}");
+            }
             dfwayslist.Add(dfways);
             dflinkslist.Add(dflinks);
             dfnodeslist.Add(dfnodes);
         }
 
-        public List<string> ReadResource(string pathname)
+        public static List<string> ReadResource(string pathname)
         {
             var idx = pathname.IndexOf(".csv");
             if (idx > 0)
@@ -265,9 +276,9 @@ namespace CampusSimulator
             return listToReturn;
         }
 
-        public void SetScene(SceneSelE newregion)
-        {
-        }
+        //public void SetScene(SceneSelE newregion) don't need this
+        //{
+        //}
 
         // Start is called before the first frame update
         //void Start()
