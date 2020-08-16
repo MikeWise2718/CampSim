@@ -12,6 +12,8 @@ public class HelpPanel : MonoBehaviour
     UiMan uiman;
 
     Text helpText;
+    Button copyClipboardButton;
+
     Button closeButton;
 
 
@@ -25,8 +27,12 @@ public class HelpPanel : MonoBehaviour
     {
         uiman = sman.uiman;
         helpText = transform.Find("HelpText").GetComponent<Text>();
+        copyClipboardButton = transform.Find("ClipboardCopyButton").gameObject.GetComponent<Button>();
         closeButton = transform.Find("CloseButton").gameObject.GetComponent<Button>();
+
         closeButton.onClick.AddListener(delegate { uiman.ClosePanel(); });
+        copyClipboardButton.onClick.AddListener(delegate { ButtonClick(copyClipboardButton.name); });
+
     }
     public void SetScene(CampusSimulator.SceneSelE curscene)
     {
@@ -84,7 +90,19 @@ public class HelpPanel : MonoBehaviour
         }
         helpText.text = msg;
     }
-
+    void ButtonClick(string buttonname)
+    {
+        Debug.Log($"{buttonname} clicked:" + Time.time);
+        switch (buttonname)
+        {
+            case "ClipboardCopyButton":
+                {
+                    Debug.Log($"CopyText {helpText.text.Length} chars");
+                    Aiskwk.Map.qut.CopyTextToClipboard(helpText.text);
+                    break;
+                }
+        }
+    }
 
     // Update is called once per frame
     //void Update()
