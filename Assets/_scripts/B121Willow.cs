@@ -116,14 +116,18 @@ public class B121Willow : MonoBehaviour
     public GameObject LoadObjFile(GameObject parent,string resourcename,string objname,float ska=1,float xrot=0, float xoff = 0, float yoff = 0,float zoff=0)
     {
         var obprefab = Resources.Load<GameObject>(resourcename);
-        var objgo = Instantiate<GameObject>(obprefab);
-        var ftm = ska;
-        objgo.name = objname;
-        objgo.transform.localScale = new Vector3(ftm, ftm, ftm);
-        objgo.transform.position = new Vector3(xoff,yoff,zoff);
-        objgo.transform.Rotate(new Vector3(xrot, 0, 0));
-        objgo.transform.SetParent(parent.transform,worldPositionStays:false);
-        return objgo;
+        if (obprefab != null)
+        {
+            var objgo = Instantiate<GameObject>(obprefab);
+            var ftm = ska;
+            objgo.name = objname;
+            objgo.transform.localScale = new Vector3(ftm, ftm, ftm);
+            objgo.transform.position = new Vector3(xoff, yoff, zoff);
+            objgo.transform.Rotate(new Vector3(xrot, 0, 0));
+            objgo.transform.SetParent(parent.transform, worldPositionStays: false);
+            return objgo;
+        }
+        return null;
     }
 
     public void DestroyOneGo(ref GameObject bgo)

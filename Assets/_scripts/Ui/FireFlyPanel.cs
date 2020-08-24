@@ -20,7 +20,8 @@ public class FireFlyPanel : MonoBehaviour
     Dropdown viewerJourneyEndDropdown;
     Text fireFlyDfText;
 
-    InputField scaleNumberField;
+    InputField droneScaleField;
+    InputField peopleScaleField;
 
     Button startJourney;
     Button closeButton;
@@ -44,7 +45,8 @@ public class FireFlyPanel : MonoBehaviour
         viewerJourneyStartDropdown = transform.Find("ViewerJourneyStartDropdown").gameObject.GetComponent<Dropdown>();
         viewerJourneyEndDropdown = transform.Find("ViewerJourneyEndDropdown").gameObject.GetComponent<Dropdown>();
 
-        scaleNumberField = transform.Find("ScaleNumberField").gameObject.GetComponent<InputField>();
+        droneScaleField = transform.Find("droneScaleField").gameObject.GetComponent<InputField>();
+        peopleScaleField = transform.Find("peopleScaleField").gameObject.GetComponent<InputField>();
 
         startJourney = transform.Find("StartJourneyButton").gameObject.GetComponent<Button>();
         startJourney.onClick.AddListener(delegate { StartJourney();  });
@@ -98,7 +100,7 @@ public class FireFlyPanel : MonoBehaviour
 
         var scaleval = sman.trman.scalemodelnumber.Get();
         //Debug.Log($"InitVals get:{inival}");
-        scaleNumberField.text = scaleval.ToString("f1");
+        droneScaleField.text = scaleval.ToString("f1");
     }
 
     public void StartJourney()
@@ -143,7 +145,7 @@ public class FireFlyPanel : MonoBehaviour
         var chg = false;
 
         //Debug.Log($"InitVals get:{inival}");
-        var scalevaltxt = scaleNumberField.text;
+        var scalevaltxt = droneScaleField.text;
         float val = sman.trman.scalemodelnumber.Get();
         string msg;
         var ok = float.TryParse(scalevaltxt, out val);

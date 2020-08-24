@@ -31,6 +31,7 @@ public class OptionsPanel : MonoBehaviour
     Button frameTabButton;
     Button fireflyTabButton;
     Button generalTabButton;
+    Button buildingsTabButton;
     Button helpTabButton;
     Button aboutTabButton;
 
@@ -64,6 +65,7 @@ public class OptionsPanel : MonoBehaviour
         mapsetTabButton = transform.Find("MapSetTabButton").GetComponent<Button>();
         frameTabButton = transform.Find("FrameTabButton").GetComponent<Button>();
         fireflyTabButton = transform.Find("FireFlyTabButton").GetComponent<Button>();
+        buildingsTabButton = transform.Find("BuildingsTabButton").GetComponent<Button>();
         generalTabButton = transform.Find("GeneralTabButton").GetComponent<Button>();
         aboutTabButton = transform.Find("AboutTabButton").GetComponent<Button>();
         helpTabButton = transform.Find("HelpTabButton").GetComponent<Button>();
@@ -72,6 +74,7 @@ public class OptionsPanel : MonoBehaviour
         mapsetTabButton.onClick.AddListener(delegate { SetTabState(TabState.MapSet); });
         frameTabButton.onClick.AddListener(delegate { SetTabState(TabState.Frames); });
         fireflyTabButton.onClick.AddListener(delegate { SetTabState(TabState.FireFly); });
+        buildingsTabButton.onClick.AddListener(delegate { SetTabState(TabState.Buildings); });
         generalTabButton.onClick.AddListener(delegate { SetTabState(TabState.General); });
         aboutTabButton.onClick.AddListener(delegate { SetTabState(TabState.About); });
         helpTabButton.onClick.AddListener(delegate { SetTabState(TabState.Help); });
@@ -103,6 +106,7 @@ public class OptionsPanel : MonoBehaviour
         uiman.stapan.SetButtonColor(frameTabButton, "lightgreen", tabstate == TabState.Frames, "Frames");
         uiman.stapan.SetButtonColor(fireflyTabButton, "lightgreen", tabstate == TabState.FireFly, "Firefly");
         uiman.stapan.SetButtonColor(generalTabButton, "lightgreen", tabstate == TabState.General, "General");
+        uiman.stapan.SetButtonColor(buildingsTabButton, "lightgreen", tabstate == TabState.Buildings, "Buildings");
         uiman.stapan.SetButtonColor(helpTabButton, "lightgreen", tabstate == TabState.Help, "Help");
         uiman.stapan.SetButtonColor(aboutTabButton, "lightgreen", tabstate == TabState.About, "About");
 
