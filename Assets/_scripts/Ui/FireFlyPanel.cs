@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using CampusSimulator;
+using UxUtils;
 
 public class FireFlyPanel : MonoBehaviour
 {
@@ -22,6 +23,7 @@ public class FireFlyPanel : MonoBehaviour
 
     InputField droneScaleField;
     InputField peopleScaleField;
+    InputField vehicleScaleField;
 
     Button startJourney;
     Button closeButton;
@@ -45,8 +47,9 @@ public class FireFlyPanel : MonoBehaviour
         viewerJourneyStartDropdown = transform.Find("ViewerJourneyStartDropdown").gameObject.GetComponent<Dropdown>();
         viewerJourneyEndDropdown = transform.Find("ViewerJourneyEndDropdown").gameObject.GetComponent<Dropdown>();
 
-        droneScaleField = transform.Find("droneScaleField").gameObject.GetComponent<InputField>();
-        peopleScaleField = transform.Find("peopleScaleField").gameObject.GetComponent<InputField>();
+        droneScaleField = transform.Find("DroneScaleField").gameObject.GetComponent<InputField>();
+        peopleScaleField = transform.Find("PeopleScaleField").gameObject.GetComponent<InputField>();
+        vehicleScaleField = transform.Find("VehicleScaleField").gameObject.GetComponent<InputField>();
 
         startJourney = transform.Find("StartJourneyButton").gameObject.GetComponent<Button>();
         startJourney.onClick.AddListener(delegate { StartJourney();  });
@@ -98,9 +101,12 @@ public class FireFlyPanel : MonoBehaviour
             Debug.LogError($"{errmsg}1:{ex.Message}");
         }
 
-        var scaleval = sman.trman.scalemodelnumber.Get();
-        //Debug.Log($"InitVals get:{inival}");
-        droneScaleField.text = scaleval.ToString("f1");
+        var dscaleval = sman.trman.dronescalemodelnumber.Get();
+        droneScaleField.text = dscaleval.ToString("f1");
+        var pscaleval = sman.trman.peoplescalemodelnumber.Get();
+        peopleScaleField.text = pscaleval.ToString("f1");
+        var vscaleval = sman.trman.vehiclescalemodelnumber.Get();
+        vehicleScaleField.text = vscaleval.ToString("f1");
     }
 
     public void StartJourney()
@@ -138,28 +144,35 @@ public class FireFlyPanel : MonoBehaviour
         tx = $"SimpleDf Index Counts - Ways:{rv1} Links:{rv2} Nodes:{rv3}";
         fireFlyDfText.text = tx;
     }
-
+    public bool SetScaleVale(InputField ifield,UxSetting<float> scalemodelnumber,string fieldname)
+    {
+        bool chg = false;
+        var stxt = ifield.text;
+        var ok = float.TryParse(stxt, out var val);
+        if (ok)
+        {
+            chg = (val != scalemodelnumber.Get());
+            scalemodelnumber.SetAndSave(val);
+            var msg = $"FireFlyPanel.SetVal set {fieldname}scalemodelnumber to {val}";
+            Debug.Log(msg);
+        }
+        else
+        {
+            var msg = $"FireFlyPanel.SetVal {fieldname}scalemodelnumber format error scalevaltxt:{stxt}";
+            Debug.LogError(msg);
+        }
+        return chg;
+    }
     public void SetVals(bool closing = false)
     {
         Debug.Log($"FireFlyPanel.SetVals called - closing:{closing}");
         var chg = false;
 
-        //Debug.Log($"InitVals get:{inival}");
-        var scalevaltxt = droneScaleField.text;
-        float val = sman.trman.scalemodelnumber.Get();
-        string msg;
-        var ok = float.TryParse(scalevaltxt, out val);
-        if (ok)
-        {
-            chg = chg || (val != sman.trman.scalemodelnumber.Get());
-            sman.trman.scalemodelnumber.SetAndSave(val);
-            Debug.Log($"FireFlyPanel.SetVal set scalemodenumber to {val}");
-        }
-        else
-        {
-            msg = $"FireFlyPanel.SetVal ScaleNumberField format error scalevaltxt:{scalevaltxt}";
-            Debug.LogError(msg);
-        }
+        chg = chg || SetScaleVale(droneScaleField, sman.trman.dronescalemodelnumber, "drone");
+        sman.trman.scalemodelnumber.SetAndSave(sman.trman.dronescalemodelnumber.Get());
+        chg = chg || SetScaleVale(peopleScaleField, sman.trman.peoplescalemodelnumber, "people");
+        chg = chg || SetScaleVale(vehicleScaleField, sman.trman.vehiclescalemodelnumber, "vehicle");
+
         if (chg)
         {
             sman.RequestRefresh("FireFlyPanel-SetVals");

@@ -24,6 +24,9 @@ namespace CampusSimulator
         public UxSetting<int> skiptrackstride = new UxSetting<int>("skiptrackstride", 0);
         public UxSetting<int> skiptrackptstride = new UxSetting<int>("skiptrackptstride", 0);
         public UxSetting<float> scalemodelnumber = new UxSetting<float>("scalemodelnumber", 1f);
+        public UxSetting<float> peoplescalemodelnumber = new UxSetting<float>("peoplescalemodelnumber", 1f);
+        public UxSetting<float> dronescalemodelnumber = new UxSetting<float>("dronescalemodelnumber", 1f);
+        public UxSetting<float> vehiclescalemodelnumber = new UxSetting<float>("vehiclescalemodelnumber", 1f);
         public UxSettingBool tracksusefragline = new UxSettingBool("tracksusefragline", false);
 
         public List<Track> tracklist = null;
@@ -43,8 +46,11 @@ namespace CampusSimulator
             skiptrackptstride.GetInitial(0);
             tracksusefragline.GetInitial(false);
             scalemodelnumber.GetInitial(1f);
+            dronescalemodelnumber.GetInitial(1f);
+            peoplescalemodelnumber.GetInitial(1f);
+            vehiclescalemodelnumber.GetInitial(1f);
 
-            Debug.Log($"TrackMan.InitializeValues   scalemodel:{scalemodelnumber.Get()} showtracks:{showtracks.Get()}");
+            Debug.Log($"TrackMan.InitializeValues   showtracks:{showtracks.Get()}");
         }
 
         public void DeleteTracks()
