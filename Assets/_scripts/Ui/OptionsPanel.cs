@@ -101,14 +101,15 @@ public class OptionsPanel : MonoBehaviour
         helpPanelGo.SetActive(tabstate == TabState.Help);
         aboutPanelGo.SetActive(tabstate == TabState.About);
 
-        uiman.stapan.SetButtonColor(visualsTabButton, "lightgreen", tabstate == TabState.Visuals, "Visuals");
-        uiman.stapan.SetButtonColor(mapsetTabButton, "lightgreen", tabstate == TabState.MapSet, "MapSet");
-        uiman.stapan.SetButtonColor(frameTabButton, "lightgreen", tabstate == TabState.Frames, "Frames");
-        uiman.stapan.SetButtonColor(fireflyTabButton, "lightgreen", tabstate == TabState.FireFly, "Firefly");
-        uiman.stapan.SetButtonColor(generalTabButton, "lightgreen", tabstate == TabState.General, "General");
-        uiman.stapan.SetButtonColor(buildingsTabButton, "lightgreen", tabstate == TabState.Buildings, "Buildings");
-        uiman.stapan.SetButtonColor(helpTabButton, "lightgreen", tabstate == TabState.Help, "Help");
-        uiman.stapan.SetButtonColor(aboutTabButton, "lightgreen", tabstate == TabState.About, "About");
+        var activeButtonClr = "lightgray";
+        uiman.stapan.SetButtonColor(visualsTabButton, activeButtonClr, tabstate == TabState.Visuals, "Visuals");
+        uiman.stapan.SetButtonColor(mapsetTabButton, activeButtonClr, tabstate == TabState.MapSet, "MapSet");
+        uiman.stapan.SetButtonColor(frameTabButton, activeButtonClr, tabstate == TabState.Frames, "Frames");
+        uiman.stapan.SetButtonColor(fireflyTabButton, activeButtonClr, tabstate == TabState.FireFly, "Firefly");
+        uiman.stapan.SetButtonColor(generalTabButton, activeButtonClr, tabstate == TabState.General, "General");
+        uiman.stapan.SetButtonColor(buildingsTabButton, activeButtonClr, tabstate == TabState.Buildings, "Buildings");
+        uiman.stapan.SetButtonColor(helpTabButton, activeButtonClr, tabstate == TabState.Help, "Help");
+        uiman.stapan.SetButtonColor(aboutTabButton, activeButtonClr, tabstate == TabState.About, "About");
 
         if (visualPanelGo.activeSelf)
         {
