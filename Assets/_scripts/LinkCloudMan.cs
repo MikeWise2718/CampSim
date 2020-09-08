@@ -305,6 +305,10 @@ namespace CampusSimulator
             {
                 rv = false;
             }
+            if (link.node1.pt.y>0 || link.node2.pt.y>0)
+            {
+                rv = false;
+            }    
             return rv;
         }
 

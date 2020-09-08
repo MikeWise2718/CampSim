@@ -2167,8 +2167,8 @@ namespace GraphAlgos
             grc.LinkToPtxyz("b121-f02-2203-2", -832.23 + xs, 4.000, -484.05 + zs, LinkUse.walkway, comment: ""); //  1 nn:1 nl:0
             grc.LinkToPtxyz("b121-f02-2200-1", -832.00 + xs, 4.130, -488.38 + zs, LinkUse.walkway, comment: ""); //  1 nn:1 nl:0
             grc.LinkToPtxyz("b121-f02-2200-9", -861.90 + xs, 4.130, -499.30 + zs, LinkUse.walkway, comment: ""); //  1 nn:1 nl:0
-            grc.LinkToPtxyz("b121-f02-2060-1", -860.60 + xs, 4.130, -505.60 + zs, LinkUse.walkway, comment: ""); //  1 nn:1 nl:0
-            grc.LinkToPtxyz("b121-f02-2060-2", -862.30 + xs, 4.130, -506.20 + zs, LinkUse.walkway, comment: ""); //  1 nn:1 nl:0
+            grc.LinkToPtxyz("b121-f02-2060-1", -860.60 + xs, 4.280, -505.60 + zs, LinkUse.walkway, comment: ""); //  1 nn:1 nl:0
+            grc.LinkToPtxyz("b121-f02-2060-2", -862.30 + xs, 4.280, -506.20 + zs, LinkUse.walkway, comment: ""); //  1 nn:1 nl:0
 
             grc.AddNodePtxyz("b121-dw-d01", -824.40 + xs, 0.000, -593.2 + zs, comment: ""); //  1 nn:1 nl:0
             grc.LinkToPtxyz("b121-dw-d02", -777.0 + xs, 0.000, -725.6 + zs, LinkUse.driveway, comment: ""); //  2 nn:1 nl:1

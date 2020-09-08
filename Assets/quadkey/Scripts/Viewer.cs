@@ -617,13 +617,13 @@ namespace Aiskwk.Map
         void MoveViewerToHome()
         {
             //Debug.Log($"MoveViewerToHome pos:{home.viewerPosition:f1} rot:{home.viewerRotation:f1}");
-            var homepos = home.viewerPosition;
-            var homerot = Vector3.zero; /// this seems wierd, but we seemingly have the homeRotation coded in the toplevel Viewer rotation already
+            var newpos = home.viewerPosition;
+            var newrot = Vector3.zero; /// this seems wierd, but we seemingly have the homeRotation coded in the toplevel Viewer rotation already
 
 
             var bodyeuler = bodyPrefabRotation.eulerAngles;
             // the following two lines don't work
-            var qqrot = Quaternion.FromToRotation(bodyeuler, homerot);
+            var qqrot = Quaternion.FromToRotation(bodyeuler, newrot);
             var angtorot = qqrot.eulerAngles;
             //Debug.Log($"MoveViewerToHome bodyeuler:{bodyeuler:f1} ");
             //Debug.Log($"MoveViewerToHome ang:{angtorot:f1} ");
@@ -631,8 +631,37 @@ namespace Aiskwk.Map
 
             RotateViewerNoTimeFak(-bodyeuler.y);// this only handles the y-axis so it is wrong....
 
-            TranslateViewerToPosition(homepos);
+            TranslateViewerToPosition(newpos);
             TranslateViewer(0, 0);// TODO: this shouldn't be necessary but it is for MsftB19focused for some reason....
+        }
+        void MoveViewerToStoredPos(int ipos)
+        {
+            var newpos = home.viewerPosition;
+            var newrot = 0f; /// this seems wierd, but we seemingly have the homeRotation coded in the toplevel Viewer rotation already
+            Debug.Log($"MoveViewerToStoredPos:{ipos} pos:{home.viewerPosition:f1} rot:{home.viewerRotation:f1}");
+            switch (ipos)
+            {
+                case 1:
+                    //grc.LinkToPtxyz("b121-f01-1071", -850.70 + xs, 0.000, -487.7 + zs, LinkUse.walkway, comment: ""); //  1 nn:1 nl:0
+                    newpos = new Vector3(-850.70f,73.05f,-487.70f);
+                    newrot = 32.9f;
+                    break;
+                case 2:
+                    //grc.LinkToPtxyz("b121-f02-2060-2", -862.30 + xs, 4.280, -506.20 + zs, LinkUse.walkway, comment: ""); //  1 nn:1 nl:0
+                    newpos = new Vector3(-862.3f, 77.05f, -506.2f);
+                    newrot = -24.7f;
+                    break;
+                case 3:
+                    newpos = new Vector3(-862.3f, 77.05f, -506.2f);
+                    newrot = 23.86f;
+                    break;
+                default:
+                    return; // do nothing
+            }
+            //var bodyeuler = bodyPrefabRotation.eulerAngles;
+
+            body.transform.localRotation = Quaternion.Euler(0, newrot, 0);
+            transform.position = newpos;
         }
 
         Vector3 lstnrm = Vector3.up;
@@ -793,6 +822,7 @@ namespace Aiskwk.Map
         float ctrlDhit = float.MinValue;
         float ctrlShit = float.MinValue;
         float ctrlMhit = float.MinValue;
+        float ctrlThit = float.MinValue;
         float lftArrowHit = 0;
         float rgtArrowHit = 0;
         float ctrlWhit = 0;
@@ -941,6 +971,31 @@ namespace Aiskwk.Map
                     MoveViewerToHome();
                 }
                 ctrlHhit = Time.time;
+            }
+            if (Time.time - ctrlThit < 2)
+            {
+                //Debug.Log($"hit second ctrl-T char");
+                if (Input.GetKey(KeyCode.Alpha1))
+                {
+                    MoveViewerToStoredPos(1);
+                }
+                if (Input.GetKey(KeyCode.Alpha2))
+                {
+                    MoveViewerToStoredPos(2);
+                }
+                if (Input.GetKey(KeyCode.Alpha3))
+                {
+                    MoveViewerToStoredPos(3);
+                }
+                //if (!Input.GetKey(KeyCode.T) && !Input.GetKey(KeyCode.RightControl) && !Input.GetKey(KeyCode.LeftControl))
+                //{
+                //    //ctrlThit = float.MinValue;
+                //}
+            }
+            if (Input.GetKey(KeyCode.T) && ctrlpressed)
+            {
+                Debug.Log($"hit T {Time.time - ctrlThit} hitgap3:{hitgap3} doTrackThings:{doTrackThings}");
+                ctrlThit = Time.time;
             }
             if (Input.GetKey(KeyCode.Alpha0))
             {
