@@ -2136,12 +2136,39 @@ namespace GraphAlgos
             var zs = 0;
             //xs = 0;
             //zs = 0;
-            grc.AddNodePtxyz("b121-f01-lobby", -811.80 + xs, 0.000, -485.8 + zs, comment: ""); //  1 nn:1 nl:0
+            grc.AddNodePtxyz("b121-f01-lobby", -811.80 + xs, 0.200, -485.8 + zs, comment: ""); //  1 nn:1 nl:0
             grc.LinkToPtxyz("b121-os1-o001", -808.1 + xs, 0.000, -484.8 + zs, LinkUse.walkway, comment: ""); //  2 nn:1 nl:1
             grc.LinkToPtxyz("b121-os1-o002", -807.200 + xs, 0.000, -486.0 + zs, LinkUse.walkway, comment: ""); //  2 nn:1 nl:1
             grc.LinkToPtxyz("b121-os1-o003", -808.600 + xs, 0.000, -492.0 + zs, LinkUse.walkway, comment: ""); //  2 nn:1 nl:1
             grc.LinkToPtxyz("b121-os1-o004", -817.900 + xs, 0.000, -503.0 + zs, LinkUse.walkway, comment: ""); //  2 nn:1 nl:1
             grc.LinkToPtxyz("b121-os1-o005", -830.800 + xs, 0.000, -523.0 + zs, LinkUse.walkway, comment: ""); //  2 nn:1 nl:1
+
+            // path to 1071
+            grc.LinkToPtxyz("b121-f01-lobby", "b121-f01-1000", -821.50 + xs, 0.200, -486.8 + zs, LinkUse.walkway, comment: ""); //  1 nn:1 nl:0
+            grc.LinkToPtxyz("b121-f01-1531", -823.00 + xs, 0.000, -482.8 + zs, LinkUse.walkway, comment: ""); //  1 nn:1 nl:0
+            grc.LinkToPtxyz("b121-f01-1531-1", -825.70 + xs, 0.000, -480.8 + zs, LinkUse.walkway, comment: ""); //  1 nn:1 nl:0
+            grc.LinkToPtxyz("b121-f01-1203-1", -833.90 + xs, 0.000, -484.1 + zs, LinkUse.walkway, comment: ""); //  1 nn:1 nl:0
+            grc.LinkToPtxyz("b121-f01-1202-1", -836.20 + xs, 0.000, -477.8 + zs, LinkUse.walkway, comment: ""); //  1 nn:1 nl:0
+            grc.LinkToPtxyz("b121-f01-1205-1", -849.20 + xs, 0.000, -482.5 + zs, LinkUse.walkway, comment: ""); //  1 nn:1 nl:0
+            grc.LinkToPtxyz("b121-f01-1071", -850.70 + xs, 0.000, -487.7 + zs, LinkUse.walkway, comment: ""); //  1 nn:1 nl:0
+
+            // path to 2060
+            grc.LinkToPtxyz("b121-f01-1531", "b121-f01-1531-2", -820.06 + xs, 0.000, -481.6 + zs, LinkUse.walkway, comment: ""); //  1 nn:1 nl:0
+            grc.LinkToPtxyz("b121-f01-str102-1", -818.35 + xs, 1.150, -481.1 + zs, LinkUse.walkway, comment: ""); //  1 nn:1 nl:0
+            grc.LinkToPtxyz("b121-f01-str102-2", -816.26 + xs, 2.500, -480.56 + zs, LinkUse.walkway, comment: ""); //  1 nn:1 nl:0
+            grc.LinkToPtxyz("b121-f01-str102-3", -815.3 + xs, 2.500, -480.2 + zs, LinkUse.walkway, comment: ""); //  1 nn:1 nl:0
+            grc.LinkToPtxyz("b121-f01-str102-4", -814.7 + xs, 2.600, -482.4 + zs, LinkUse.walkway, comment: ""); //  1 nn:1 nl:0
+            grc.LinkToPtxyz("b121-f01-str102-5", -816.2 + xs, 2.600, -483.0 + zs, LinkUse.walkway, comment: ""); //  1 nn:1 nl:0
+            grc.LinkToPtxyz("b121-f01-str102-6", -818.4 + xs, 4.100, -483.77 + zs, LinkUse.walkway, comment: ""); //  1 nn:1 nl:0
+
+            grc.LinkToPtxyz("b121-f02-2100-1", -820.0 + xs, 4.100, -484.4 + zs, LinkUse.walkway, comment: ""); //  1 nn:1 nl:0
+            grc.LinkToPtxyz("b121-f02-2100-2", -824.1 + xs, 4.050, -480.9 + zs, LinkUse.walkway, comment: ""); //  1 nn:1 nl:0
+            grc.LinkToPtxyz("b121-f02-2203-1", -826.3 + xs, 4.000, -481.6 + zs, LinkUse.walkway, comment: ""); //  1 nn:1 nl:0
+            grc.LinkToPtxyz("b121-f02-2203-2", -832.23 + xs, 4.000, -484.05 + zs, LinkUse.walkway, comment: ""); //  1 nn:1 nl:0
+            grc.LinkToPtxyz("b121-f02-2200-1", -832.00 + xs, 4.130, -488.38 + zs, LinkUse.walkway, comment: ""); //  1 nn:1 nl:0
+            grc.LinkToPtxyz("b121-f02-2200-9", -861.90 + xs, 4.130, -499.30 + zs, LinkUse.walkway, comment: ""); //  1 nn:1 nl:0
+            grc.LinkToPtxyz("b121-f02-2060-1", -860.60 + xs, 4.130, -505.60 + zs, LinkUse.walkway, comment: ""); //  1 nn:1 nl:0
+            grc.LinkToPtxyz("b121-f02-2060-2", -862.30 + xs, 4.130, -506.20 + zs, LinkUse.walkway, comment: ""); //  1 nn:1 nl:0
 
             grc.AddNodePtxyz("b121-dw-d01", -824.40 + xs, 0.000, -593.2 + zs, comment: ""); //  1 nn:1 nl:0
             grc.LinkToPtxyz("b121-dw-d02", -777.0 + xs, 0.000, -725.6 + zs, LinkUse.driveway, comment: ""); //  2 nn:1 nl:1
