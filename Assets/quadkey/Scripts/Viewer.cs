@@ -89,11 +89,11 @@ namespace Aiskwk.Map
                 Debug.LogWarning($"Viewer.SetVtm - DoTrackThings:{doTrackThings}");
             }
         }
-        public void InitViewer(QmapMesh qmm,ViewerState homespec=null)
+        public void InitViewer(QmapMesh qmm, ViewerState homespec = null)
         {
             //Debug.Log("InitViewer");
             this.qmm = qmm;
-            if (homespec!=null)
+            if (homespec != null)
             {
                 home = homespec;
             }
@@ -170,7 +170,7 @@ namespace Aiskwk.Map
             }
             transform.SetParent(parent.transform, worldPositionStays: true);// reconnect
             transform.localRotation = Quaternion.Euler(home.viewerRotation); // Think this has to match the rotation it was built with
-                                                                               // or we get problems when we follownormal along the mesh
+                                                                             // or we get problems when we follownormal along the mesh
             TranslateViewer(0, 0);
             RotateViewer(0);
             //Debug.Log($"ReAdjustViewerInitialPosition - after  scale:{transform.localScale} rotation:{transform.localRotation.eulerAngles}");
@@ -263,7 +263,7 @@ namespace Aiskwk.Map
         }
         void DestroyGo(ref GameObject go)
         {
-            if(go!=null)
+            if (go != null)
             {
                 Destroy(go);
                 go = null;
@@ -281,7 +281,7 @@ namespace Aiskwk.Map
         public bool pinCameraToFrame = false;
         public bool showNormalRod = false;
         public bool showDroppings = false;
-        public void MakeAvatar(string avaname, float angle, Vector3 shift, float scale = 1,float visorscale=2)
+        public void MakeAvatar(string avaname, float angle, Vector3 shift, float scale = 1, float visorscale = 2)
         {
             Debug.Log($"MakeAvatar {avaname} angle:{angle}");
             Debug.Log($"MakeAvatar - Viewer rotation before  {transform.localRotation.eulerAngles}");
@@ -303,8 +303,8 @@ namespace Aiskwk.Map
 
             visor.transform.position = vv;
             var vska = visorscale;
-            visor.transform.localScale = new Vector3(vska,vska/2,vska);
-            visor.transform.localRotation = Quaternion.Euler(0, -angle, 0); 
+            visor.transform.localScale = new Vector3(vska, vska / 2, vska);
+            visor.transform.localRotation = Quaternion.Euler(0, -angle, 0);
             visor.transform.SetParent(body.transform, worldPositionStays: false);
             qut.SetColorOfGo(visor, Color.black);
 
@@ -343,84 +343,47 @@ namespace Aiskwk.Map
             rodgo.transform.SetParent(transform, worldPositionStays: false);
             Debug.Log($"MakeAvatar - Viewer rotation after  {transform.localRotation.eulerAngles}");
         }
+        static Dictionary<ViewerCamPosition, Vector3> viewerVectorPos = new Dictionary<ViewerCamPosition, Vector3>{
+            {ViewerCamPosition.Eyes, new Vector3(0, 1.75f, 0.4f)},
+            {ViewerCamPosition.FloatBehindDiv4, new Vector3(0, 2.2f, -2)},
+            {ViewerCamPosition.FloatBehindDiv2, new Vector3(0, 3, -6)},
+            {ViewerCamPosition.FloatBehind, new Vector3(0, 6, -12)},
+            {ViewerCamPosition.FloatBehindTimes2, new Vector3(0, 12, -24)},
+            {ViewerCamPosition.FloatBehindTimes4, new Vector3(0, 24, -48)},
+        };
         public void SetCamPosition()
         {
             var camtrans = camgo.gameObject.transform;
             var curparent = camtrans.parent;
             camtrans.SetParent(null, worldPositionStays: true);
-            switch (viewerCamPosition)
-            {
-                case ViewerCamPosition.Eyes:
-                    {
-                        camtrans.position = new Vector3(0, 1.75f, 0.4f);
-                        break;
-                    }
-                case ViewerCamPosition.FloatBehindDiv4:
-                    {
-                        camtrans.position = new Vector3(0, 12f/8, -24f/8);
-                        break;
-                    }
-                case ViewerCamPosition.FloatBehindDiv2:
-                    {
-                        camtrans.position = new Vector3(0, 12f / 4, -24f / 4);
-                        break;
-                    }
-                case ViewerCamPosition.FloatBehind:
-                    {
-                        camtrans.position = new Vector3(0, 12f/2, -24f/2);
-                        break;
-                    }
-                case ViewerCamPosition.FloatBehindTimes2:
-                    {
-                        camtrans.position = new Vector3(0, 12f, -24f);
-                        break;
-                    }
-                case ViewerCamPosition.FloatBehindTimes4:
-                    {
-                        camtrans.position = new Vector3(0, 24f, -48f);
-                        break;
-                    }
-            }
+            camtrans.position = viewerVectorPos[viewerCamPosition];
             camtrans.SetParent(curparent, worldPositionStays: false);
             var rot = camtrans.localRotation.eulerAngles;
             camtrans.localRotation *= Quaternion.Euler(0, -rot.y, 0);
         }
+        static Dictionary<ViewerCamPosition, ViewerCamPosition> nextpos = new Dictionary<ViewerCamPosition, ViewerCamPosition>{
+            {ViewerCamPosition.Eyes,ViewerCamPosition.FloatBehindDiv4 },
+            {ViewerCamPosition.FloatBehindDiv4, ViewerCamPosition.FloatBehindDiv2 },
+            {ViewerCamPosition.FloatBehindDiv2, ViewerCamPosition.FloatBehind },
+            {ViewerCamPosition.FloatBehind, ViewerCamPosition.FloatBehindTimes2},
+            {ViewerCamPosition.FloatBehindTimes2, ViewerCamPosition.FloatBehindTimes4},
+            {ViewerCamPosition.FloatBehindTimes4, ViewerCamPosition.Eyes},
+        };
+        static Dictionary<ViewerCamPosition, ViewerCamPosition> prevpos = new Dictionary<ViewerCamPosition, ViewerCamPosition>{
+            {ViewerCamPosition.Eyes,ViewerCamPosition.FloatBehindTimes4},
+            {ViewerCamPosition.FloatBehindDiv4, ViewerCamPosition.Eyes },
+            {ViewerCamPosition.FloatBehindDiv2, ViewerCamPosition.FloatBehindDiv4 },
+            {ViewerCamPosition.FloatBehind, ViewerCamPosition.FloatBehindDiv2},
+            {ViewerCamPosition.FloatBehindTimes2, ViewerCamPosition.FloatBehind},
+            {ViewerCamPosition.FloatBehindTimes4, ViewerCamPosition.FloatBehindTimes2 },
+
+        };
+
+
         public void ShiftCamPosition()
         {
             var oldViewerCamPosition = viewerCamPosition;
-            switch (viewerCamPosition)
-            {
-                case ViewerCamPosition.Eyes:
-                    {
-                        viewerCamPosition = ViewerCamPosition.FloatBehindTimes4;
-                        break;
-                    }
-                case ViewerCamPosition.FloatBehindDiv4:
-                    {
-                        viewerCamPosition = ViewerCamPosition.Eyes;
-                        break;
-                    }
-                case ViewerCamPosition.FloatBehindDiv2:
-                    {
-                        viewerCamPosition = ViewerCamPosition.FloatBehindDiv4;
-                        break;
-                    }
-                case ViewerCamPosition.FloatBehind:
-                    {
-                        viewerCamPosition = ViewerCamPosition.FloatBehindDiv2;
-                        break;
-                    }
-                case ViewerCamPosition.FloatBehindTimes2:
-                    {
-                        viewerCamPosition = ViewerCamPosition.FloatBehind;
-                        break;
-                    }
-                case ViewerCamPosition.FloatBehindTimes4:
-                    {
-                        viewerCamPosition = ViewerCamPosition.FloatBehindTimes2;
-                        break;
-                    }
-            }
+            viewerCamPosition = prevpos[oldViewerCamPosition];
             Debug.Log($"ShiftCamPosition old:{oldViewerCamPosition} new:{viewerCamPosition} ");
             SetCamPosition();
         }
