@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Aiskwk.Map
 {
     public enum ViewerAvatar { SphereMan, CapsuleMan, SimpleTruck, Minehaul1, Shovel1, Dozer1, Dozer2, Rover, QuadCopter, Car012 };
-    public enum ViewerCamPosition { Eyes, FloatBehindDiv2, FloatBehind, FloatBehindTimes2, FloatBehindTimes4 }
+    public enum ViewerCamPosition { Eyes, FloatBehindDiv4, FloatBehindDiv2, FloatBehind, FloatBehindTimes2, FloatBehindTimes4 }
     public enum ViewerControl { Position, Velocity }
 
     public class ViewerState
@@ -283,8 +283,8 @@ namespace Aiskwk.Map
         public bool showDroppings = false;
         public void MakeAvatar(string avaname, float angle, Vector3 shift, float scale = 1,float visorscale=2)
         {
-            //Debug.Log($"MakeAvatar {avaname} angle:{angle}");
-            //Debug.Log($"MakeAvatar - Viewer rotation before  {transform.localRotation.eulerAngles}");
+            Debug.Log($"MakeAvatar {avaname} angle:{angle}");
+            Debug.Log($"MakeAvatar - Viewer rotation before  {transform.localRotation.eulerAngles}");
 
             DestroyAvatar();
             moveplane = new GameObject("moveplane");
@@ -341,40 +341,50 @@ namespace Aiskwk.Map
                 qut.SetColorOfGo(rod, Color.blue);
             }
             rodgo.transform.SetParent(transform, worldPositionStays: false);
-            //Debug.Log($"MakeAvatar - Viewer rotation after  {transform.localRotation.eulerAngles}");
+            Debug.Log($"MakeAvatar - Viewer rotation after  {transform.localRotation.eulerAngles}");
         }
         public void SetCamPosition()
         {
+            var camtrans = camgo.gameObject.transform;
+            var curparent = camtrans.parent;
+            camtrans.SetParent(null, worldPositionStays: true);
             switch (viewerCamPosition)
             {
                 case ViewerCamPosition.Eyes:
                     {
-                        camgo.transform.position = new Vector3(0, 1.75f, 0.4f);
+                        camtrans.position = new Vector3(0, 1.75f, 0.4f);
+                        break;
+                    }
+                case ViewerCamPosition.FloatBehindDiv4:
+                    {
+                        camtrans.position = new Vector3(0, 12f/8, -24f/8);
                         break;
                     }
                 case ViewerCamPosition.FloatBehindDiv2:
                     {
-                        camgo.transform.position = new Vector3(0, 12f/4, -24f/4);
+                        camtrans.position = new Vector3(0, 12f / 4, -24f / 4);
                         break;
                     }
                 case ViewerCamPosition.FloatBehind:
                     {
-                        camgo.transform.position = new Vector3(0, 12f/2, -24f/2);
+                        camtrans.position = new Vector3(0, 12f/2, -24f/2);
                         break;
                     }
                 case ViewerCamPosition.FloatBehindTimes2:
                     {
-                        camgo.transform.position = new Vector3(0, 12f, -24f);
+                        camtrans.position = new Vector3(0, 12f, -24f);
                         break;
                     }
                 case ViewerCamPosition.FloatBehindTimes4:
                     {
-                        camgo.transform.position = new Vector3(0, 24f, -48f);
+                        camtrans.position = new Vector3(0, 24f, -48f);
                         break;
                     }
             }
+            camtrans.SetParent(curparent, worldPositionStays: false);
+            var rot = camtrans.localRotation.eulerAngles;
+            camtrans.localRotation *= Quaternion.Euler(0, -rot.y, 0);
         }
-
         public void ShiftCamPosition()
         {
             var oldViewerCamPosition = viewerCamPosition;
@@ -385,9 +395,14 @@ namespace Aiskwk.Map
                         viewerCamPosition = ViewerCamPosition.FloatBehindTimes4;
                         break;
                     }
-                case ViewerCamPosition.FloatBehindDiv2:
+                case ViewerCamPosition.FloatBehindDiv4:
                     {
                         viewerCamPosition = ViewerCamPosition.Eyes;
+                        break;
+                    }
+                case ViewerCamPosition.FloatBehindDiv2:
+                    {
+                        viewerCamPosition = ViewerCamPosition.FloatBehindDiv4;
                         break;
                     }
                 case ViewerCamPosition.FloatBehind:
@@ -602,6 +617,18 @@ namespace Aiskwk.Map
             ////Debug.Log($"RotateViewer: {rotate}");
         }
 
+        void RotateViewerToYangle(float yangle)
+        {
+            Debug.Log($"RotateViewerToYangle - Viewer rotation before  {transform.localRotation.eulerAngles}");
+
+            bodyPlaneRotation = Quaternion.Euler(new Vector3(0, yangle, 0));
+            moveplane.transform.localRotation = bodyPlaneRotation;
+            bodyPrefabRotation = Quaternion.Euler(new Vector3(0, yangle, 0));
+            body.transform.localRotation = Quaternion.FromToRotation(Vector3.up, lstnrm) * bodyPrefabRotation;
+
+            Debug.Log($"RotateViewerToYangle - Viewer rotation after   {transform.localRotation.eulerAngles}");
+        }
+
         void RotateViewerNoTimeFak(float rotate)
         {
             Debug.Log($"RotateViewerNoTimeFak - Viewer rotation before  {transform.localRotation.eulerAngles}");
@@ -644,12 +671,12 @@ namespace Aiskwk.Map
                 case 1:
                     //grc.LinkToPtxyz("b121-f01-1071", -850.70 + xs, 0.000, -487.7 + zs, LinkUse.walkway, comment: ""); //  1 nn:1 nl:0
                     newpos = new Vector3(-850.70f,73.05f,-487.70f);
-                    newrot = 32.9f;
+                    newrot = 37.8f;
                     break;
                 case 2:
                     //grc.LinkToPtxyz("b121-f02-2060-2", -862.30 + xs, 4.280, -506.20 + zs, LinkUse.walkway, comment: ""); //  1 nn:1 nl:0
                     newpos = new Vector3(-862.3f, 77.05f, -506.2f);
-                    newrot = -24.7f;
+                    newrot = 41.1f;
                     break;
                 case 3:
                     newpos = new Vector3(-862.3f, 77.05f, -506.2f);
@@ -659,8 +686,7 @@ namespace Aiskwk.Map
                     return; // do nothing
             }
             //var bodyeuler = bodyPrefabRotation.eulerAngles;
-
-            body.transform.localRotation = Quaternion.Euler(0, newrot, 0);
+            RotateViewerToYangle(newrot);
             transform.position = newpos;
         }
 
@@ -1150,14 +1176,14 @@ namespace Aiskwk.Map
             if (updateCount > 0)
             {
                 rv = (old_viewerAvatar != viewerAvatar) ||
-                     (old_viewerCamPosition != viewerCamPosition) ||
+                     //(old_viewerCamPosition != viewerCamPosition) || // todo - rebuilding viewer does not respect current viewing angle
                      (old_showNormalRod != showNormalRod) ||
                      (old_pinCameraToFrame != pinCameraToFrame);
             }
             updateCount++;
             old_showNormalRod = showNormalRod;
             old_viewerAvatar = viewerAvatar;
-            old_viewerCamPosition = viewerCamPosition;
+            //old_viewerCamPosition = viewerCamPosition;
             old_pinCameraToFrame = pinCameraToFrame;
             return rv;
         }
