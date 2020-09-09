@@ -633,17 +633,21 @@ namespace Aiskwk.Map
             {
                 case 1:
                     //grc.LinkToPtxyz("b121-f01-1071", -850.70 + xs, 0.000, -487.7 + zs, LinkUse.walkway, comment: ""); //  1 nn:1 nl:0
-                    newpos = new Vector3(-850.70f,73.05f,-487.70f);
+                    newpos = new Vector3(-850.70f,73.05f,-487.70f); // "b121-f01-1071"
                     newrot = 37.8f;
                     break;
                 case 2:
                     //grc.LinkToPtxyz("b121-f02-2060-2", -862.30 + xs, 4.280, -506.20 + zs, LinkUse.walkway, comment: ""); //  1 nn:1 nl:0
-                    newpos = new Vector3(-862.3f, 77.05f, -506.2f);
+                    newpos = new Vector3(-862.3f, 77.05f, -506.2f);// "b121-f02-2060-2"
                     newrot = 41.1f;
                     break;
                 case 3:
-                    newpos = new Vector3(-862.3f, 77.05f, -506.2f);
-                    newrot = 23.86f;
+                    newpos = new Vector3(-828.12f, 81.25f, -467.71f);// "b121-f03-31-2"
+                    newrot = 48.31f;
+                    break;
+                case 4:
+                    newpos = new Vector3(-821.76f, 81.25f, -480.29f);// "b121-f03-3100-2"
+                    newrot = 48.31f;
                     break;
                 default:
                     return; // do nothing
@@ -921,6 +925,10 @@ namespace Aiskwk.Map
             {
                 SetSceneCamToMainCam();
             }
+            //if (Input.GetKey(KeyCode.N))
+            //{
+            //    SetSceneCamToMainCam();
+            //}
             //if (Input.GetKey(KeyCode.D) && Time.time - ctrlDhit > hitgap3)
             //{
             //    showDroppings = !showDroppings;
@@ -975,6 +983,10 @@ namespace Aiskwk.Map
                 if (Input.GetKey(KeyCode.Alpha3))
                 {
                     MoveViewerToStoredPos(3);
+                }
+                if (Input.GetKey(KeyCode.Alpha4))
+                {
+                    MoveViewerToStoredPos(4);
                 }
                 //if (!Input.GetKey(KeyCode.T) && !Input.GetKey(KeyCode.RightControl) && !Input.GetKey(KeyCode.LeftControl))
                 //{

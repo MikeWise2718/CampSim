@@ -6,7 +6,7 @@ using UxUtils;
 
 public class B121Willow : MonoBehaviour
 {
-    public enum b121_MaterialMode {  raw, materialed, glass, glasswalls };
+    public enum b121_MaterialMode {  raw, materialed, glasswalls, glassfloors, glass };
 
     public UxSetting<bool> loadmodel = new UxSetting<bool>("B121_WillowModel", true);
     public UxSetting<bool> shell = new UxSetting<bool>("B121_shell", true);
@@ -476,35 +476,49 @@ public class B121Willow : MonoBehaviour
                         matname = "ComputerGlass";
                         break;
                     case b121_MaterialMode.materialed:
-                        if (!bldmatmap.ContainsKey(partmat))
                         {
-                            Debug.LogWarning($"Missing material:{partmat}");
+                            if (!bldmatmap.ContainsKey(partmat))
+                            {
+                                Debug.LogWarning($"Missing material:{partmat}");
+                            }
+                            else
+                            {
+                                matname = bldmatmap[partmat];
+                            }
+                            break;
                         }
-                        else
-                        {
-                            matname = bldmatmap[partmat];
-                        }
-                        break;
                     case b121_MaterialMode.glasswalls:
-                        var pnl = pname.ToLower(); ;
-                        //if (pnl.Contains("floor_slab"))
-                        //{
-                        //    Debug.Log("floor_slab");
-                        //}
-                        //if (pnl.Contains("solid") || pnl.Contains("wall") || pnl.Contains("door") || pnl.Contains("composite_part"))
-                        if (pnl.Contains("interior") || pnl.Contains("floor") || pnl.Contains("door"))
                         {
-                            matname = "ComputerGlass";
+                            var pnl = pname.ToLower();
+                            if (pnl.Contains("interior") || pnl.Contains("door"))
+                            {
+                                matname = "ComputerGlass";
+                            }
+                            else
+                            {
+                                matname = bldmatmap[partmat];
+                            }
+                            break;
                         }
-                        else
+                    case b121_MaterialMode.glassfloors:
                         {
-                            matname = bldmatmap[partmat];
+                            var pnl = pname.ToLower();
+                            if (pnl.Contains("interior") || pnl.Contains("floor") || pnl.Contains("door"))
+                            {
+                                matname = "ComputerGlass";
+                            }
+                            else
+                            {
+                                matname = bldmatmap[partmat];
+                            }
+                            break;
                         }
-                        break;
                     case b121_MaterialMode.raw:
-                        //matname = parcom[1];
-                        matname = "";
-                        break;
+                        {
+                            //matname = parcom[1];
+                            matname = "";
+                            break;
+                        }
                 }
                 if (matname != "")
                 {
