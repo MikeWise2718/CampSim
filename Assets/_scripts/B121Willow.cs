@@ -302,7 +302,7 @@ public class B121Willow : MonoBehaviour
             //Debug.Log($"loadedThisTime:{loadedThisTime}");
             if (loadedThisTime || b121_materialMode.Get() != lastMaterialMode)
             {
-                lastMaterialMode = b121_materialMode.Get();
+                
                 ActuateMaterialMode();
             }
         }
@@ -346,6 +346,64 @@ public class B121Willow : MonoBehaviour
         }
         return curgo;
     }
+
+    public bool IsMonitor(string partname)
+    {
+        if (partname.Contains("Monitor_MS_Wall"))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public void AssignMonitorMat(GameObject pogo, string partname, string partfiltername)
+    {
+        var rend = pogo.GetComponent<Renderer>();
+        var mats = new Material[rend.materials.Length];
+        for (var j = 0; j < rend.materials.Length; j++)
+        {
+            mats[j] = GetMonitorMat(partname);
+        }
+        rend.materials = mats;
+    }
+    List<string> monitorMatNames = new List<string>()
+    {
+        "MavericWave",
+        "Microsoft",
+        "Caustic",
+        "campsim",
+        "EclipseSpectrum",
+        "WinterScene1"
+    };
+    List<(string name,Material mat)> monitorMaterials = null;
+    int matcount = 0;
+    public void InitMonitorMaterials()
+    {
+        matcount = 0;
+        monitorMaterials = new List<(string name, Material mat)>();
+        foreach( var matname in monitorMatNames)
+        {
+            var fullmatname = $"Materials/{matname}";
+            var newmat = Resources.Load<Material>(fullmatname);
+            if (newmat!=null)
+            {
+                monitorMaterials.Add((fullmatname,newmat));
+            }
+            else
+            {
+                Debug.LogError($"Could not load material{fullmatname}");
+            }
+        }
+    }
+    public Material GetMonitorMat(string partname)
+    {
+        int mlen = monitorMaterials.Count;
+        var rv = monitorMaterials[matcount % mlen];
+        matcount++;
+        //Debug.Log($"Got {rv.name} for {partname} matcount:{matcount}");
+        return rv.mat;
+    }
+
     public void AssignPartMat(GameObject rootgo,string partname,string partfiltername,string matname)
     {
         if (matname=="")
@@ -356,18 +414,10 @@ public class B121Willow : MonoBehaviour
         var pogo = GetPart(rootgo, partname,canfail:true);
         if (pogo!=null)
         {
-            var fullmatname = "Materials/" + matname;
-            var mat = Resources.Load<Material>(fullmatname);
-            if (!mat)
-            {
-                Debug.LogWarning("Material "+fullmatname+" not found in Resources");
-                return;
-            }
-            //renderer.material = mat;
-            ChangeMaterial(pogo,partfiltername, mat);
+            ChangeMaterial(pogo, partfiltername, matname);
         }
     }
-    void ChangeMaterial(GameObject pogo,string partfiltername,Material newMat)
+    void ChangeMaterial(GameObject pogo,string partfiltername,string matname)
     {
         var children = pogo.GetComponentsInChildren<Renderer>();
         //Debug.Log($"B121Willow.Change Material -Changing {pogo.name} children({children.Length}) to material:{newMat.name} - filter:{partfiltername}");
@@ -376,12 +426,33 @@ public class B121Willow : MonoBehaviour
         {
             partfiltername = partfiltername.Remove(last);
         }
+        var dodynmat = matname == "MonitorMat";
+        Material newMat=null;
+        if (!dodynmat)
+        {
+            var fullmatname = "Materials/" + matname;
+            newMat = Resources.Load<Material>(fullmatname);
+            if (!newMat)
+            {
+                Debug.LogWarning("Material " + fullmatname + " not found in Resources");
+                return;
+            }
+        }
+        //renderer.material = mat;
         var nhits = 0;
         foreach (var rend in children)
         {
             if (rend.name.StartsWith(partfiltername))
             {
+                //if (rend.materials.Length>1)
+                //{
+                //    // Debug.Log("it is so"); // this never happens, but somehow renderers could have multiple materials
+                //}
                 var mats = new Material[rend.materials.Length];
+                if (dodynmat)
+                {
+                    newMat = GetMonitorMat(rend.name);
+                }
                 for (var j = 0; j < rend.materials.Length; j++)
                 {
                     mats[j] = newMat;
@@ -435,7 +506,7 @@ public class B121Willow : MonoBehaviour
         {"Computer_Metal_2Mat","Aluminium"},
         {"PC_Monitor_ColorMat","ComputerGlass"},
         {"PC_Monitor_GlassMat","ComputerGlass"},
-        {"MonitorMat","BlueLight" },
+        {"MonitorMat","MonitorMat" },
         {"Generic_-_Plastic_-_BlackMat","PlasticHololens"},
         {"Generic_-_Plastic_-_GreyMat","PlasticHololens"},
         {"IKE080018_2Mat","Aluminium"},
@@ -459,6 +530,8 @@ public class B121Willow : MonoBehaviour
 
     public void ActuateMaterialMode(bool writepartlisttofile=true)
     {
+        lastMaterialMode = b121_materialMode.Get();
+        InitMonitorMaterials();
         var doit = true;
         if (doit)
         {

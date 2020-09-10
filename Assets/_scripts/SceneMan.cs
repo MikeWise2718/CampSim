@@ -1553,6 +1553,7 @@ namespace CampusSimulator
         void Awake()
         {
             Debug.Log("SceneMan.Awake called");
+            Debug.Log($"Monitors connected:{Display.displays.Length}");
             IdentitySystemAndUser();
             InitPhase0();
         }
