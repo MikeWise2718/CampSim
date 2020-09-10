@@ -189,7 +189,7 @@ namespace CampusSimulator
                     {
                         var objPrefab = Resources.Load<GameObject>("obj3d/bell412spinning");
                         birdformgo = Instantiate<GameObject>(objPrefab);
-                        var s = sman.trman.scalemodelnumber.Get();
+                        var s = sman.trman.dronescalemodelnumber.Get();
                         if (birdscale > 0)
                         {
                             s *= birdscale;
@@ -207,7 +207,7 @@ namespace CampusSimulator
                     {
                         var objPrefab = Resources.Load<GameObject>("obj3d/quadcopterspinning");
                         birdformgo = Instantiate<GameObject>(objPrefab);
-                        var s = sman.trman.scalemodelnumber.Get();
+                        var s = sman.trman.dronescalemodelnumber.Get();
                         if (birdscale > 0)
                         {
                             s *= birdscale;
@@ -225,7 +225,7 @@ namespace CampusSimulator
                     {
                         var objPrefab = Resources.Load<GameObject>("obj3d/DJI_Mavic_Air_2_Spinning");
                         birdformgo = Instantiate<GameObject>(objPrefab);
-                        var s = 0.01f*sman.trman.scalemodelnumber.Get();
+                        var s = 0.01f*sman.trman.dronescalemodelnumber.Get();
                         if (birdscale > 0)
                         {
                             s *= birdscale;
@@ -243,7 +243,7 @@ namespace CampusSimulator
                     {
                         var objPrefab = Resources.Load<GameObject>("dogs/shepherd");
                         birdformgo = Instantiate<GameObject>(objPrefab);
-                        var s = 0.01f * sman.trman.scalemodelnumber.Get();
+                        var s = 0.01f * sman.trman.peoplescalemodelnumber.Get();
                         if (birdscale > 0)
                         {
                             s *= birdscale;
@@ -282,7 +282,7 @@ namespace CampusSimulator
                             var objPrefab = Resources.Load<GameObject>(resname);
                             birdformgo = Instantiate<GameObject>(objPrefab);
                         }
-                        var s = sman.trman.scalemodelnumber.Get();
+                        var s = sman.trman.peoplescalemodelnumber.Get();
                         if (birdscale>0)
                         {
                             s *= birdscale;
@@ -325,7 +325,8 @@ namespace CampusSimulator
                         //birdformgo = Instantiate<GameObject>(objPrefab);
                         birdformgo = VehicleMan.LoadCarGo(birdgo,birdresourcename);
                         //var s = 1.0f;
-                        //birdformgo.transform.localScale = new Vector3(s, s, s);
+                        var s = sman.trman.vehiclescalemodelnumber.Get();
+                        birdformgo.transform.localScale = new Vector3(s, s, s);
                         birdformgo.transform.localRotation = currot;
                         var noise = GraphAlgos.GraphUtil.GetRanFloat(0, 0.5f, "jnygen");
                         var newpos = new Vector3(curpos.x+1.2f+noise, curpos.y - 1.55f, curpos.z);

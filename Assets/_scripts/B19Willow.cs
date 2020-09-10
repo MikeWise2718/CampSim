@@ -156,21 +156,24 @@ public class B19Willow : MonoBehaviour
                 defpos = new Vector3(defpos.x, yoff+defpos.y, defpos.z);
             }
             var obprefab = Resources.Load<GameObject>("Willow/B19/B19-Willow");
-            b19go = Instantiate<GameObject>(obprefab);
-            var ftm = 0.3048f;
-            b19go.transform.localScale = new Vector3(ftm,ftm,ftm);
-            b19go.transform.position = defpos;
-            b19go.transform.Rotate(new Vector3(-90, 26, 0));
-            b19go.transform.parent = this.transform;
-            _b19_WillowModelLoaded = true;
-            _b19_level01 = true;
-            _b19_level02 = true;
-            _b19_level03 = true;
-            _b19_floors = true;
-            _b19_doors = true;
-            _b19_hvac = true;
-            _b19_osmbld = sman.bdman.osmblds.Get();
-            loadedThisTime = true;
+            if (obprefab != null)
+            {
+                b19go = Instantiate<GameObject>(obprefab);
+                var ftm = 0.3048f;
+                b19go.transform.localScale = new Vector3(ftm, ftm, ftm);
+                b19go.transform.position = defpos;
+                b19go.transform.Rotate(new Vector3(-90, 26, 0));
+                b19go.transform.parent = this.transform;
+                _b19_WillowModelLoaded = true;
+                _b19_level01 = true;
+                _b19_level02 = true;
+                _b19_level03 = true;
+                _b19_floors = true;
+                _b19_doors = true;
+                _b19_hvac = true;
+                _b19_osmbld = sman.bdman.osmblds.Get();
+                loadedThisTime = true;
+            }
         }
         else if(!loadmodel.Get() && _b19_WillowModelLoaded)
         {

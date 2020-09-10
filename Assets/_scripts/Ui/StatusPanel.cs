@@ -29,6 +29,11 @@ namespace CampusSimulator
         Button visButton;
         Button unkButton;
         Button vt2dButton;
+
+        Button traButton;
+        Button pipButton;
+
+
         Button goButton;
         Button optionsButton;
         Button showTracksButton;
@@ -70,6 +75,8 @@ namespace CampusSimulator
             visButton = transform.Find("VisButton").gameObject.GetComponent<Button>();
             unkButton = transform.Find("UnkButton").gameObject.GetComponent<Button>();
             vt2dButton = transform.Find("Vt2DButton").gameObject.GetComponent<Button>();
+            traButton = transform.Find("TraButton").gameObject.GetComponent<Button>();
+            pipButton = transform.Find("PipButton").gameObject.GetComponent<Button>();
 
             runButton.onClick.AddListener(delegate { RunButton(); });
             flyButton.onClick.AddListener(delegate { FlyButton(); });
@@ -88,6 +95,8 @@ namespace CampusSimulator
             unkButton.onClick.AddListener(delegate { DetectUnkButton(); });
             goButton.onClick.AddListener(delegate { GoButton(); });
             optionsButton.onClick.AddListener(delegate { OptionsButton(); });
+            traButton.onClick.AddListener(delegate { DetectTraButton(); });
+            pipButton.onClick.AddListener(delegate { DetectPipButton(); });
         }
         public void SetScene(CampusSimulator.SceneSelE curscene)
         {
@@ -287,6 +296,8 @@ namespace CampusSimulator
             SetButtonColor(visButton, "lightblue", sman.frman.detectVisitor.Get(), "V");
             SetButtonColor(unkButton, "lightblue", sman.frman.detectUnknown.Get(), "U");
             SetButtonColor(showTracksButton, "lightblue", sman.trman.showtracks.Get(), "Tracks");
+            SetButtonColor(traButton, "lightblue", sman.bdman.transwalls, "Tr");
+            SetButtonColor(pipButton, "lightblue", sman.lcman.pipevis, "Pi");
             //Debug.LogWarning($"ColorizeButtonStates Vt2D:{sman.frman.visibilityTiedToDetectability.Get()}");
             SetButtonColor(vt2dButton, "lightblue", sman.frman.visibilityTiedToDetectability.Get(), "Vt2D");
             SetButtonColor(frameButton, "pink", sman.frman.frameJourneys.Get(), "Frame");
@@ -321,6 +332,21 @@ namespace CampusSimulator
         public void DetectUnkButton()
         {
             sman.frman.detectUnknown.SetAndSave(!sman.frman.detectUnknown.Get());
+            ColorizeButtonStates();
+            //SetButtonColor(unkButton, "lightblue", sman.frman.detectUnknown.Get(), "U");
+        }
+
+        public void DetectTraButton()
+        {
+            sman.bdman.transwalls = !sman.bdman.transwalls;
+            sman.bdman.TransBld121Button();
+            ColorizeButtonStates();
+            //SetButtonColor(unkButton, "lightblue", sman.frman.detectUnknown.Get(), "U");
+        }
+        public void DetectPipButton()
+        {
+            sman.lcman.pipevis = !sman.lcman.pipevis;
+            sman.lcman.PipeVisButton();
             ColorizeButtonStates();
             //SetButtonColor(unkButton, "lightblue", sman.frman.detectUnknown.Get(), "U");
         }

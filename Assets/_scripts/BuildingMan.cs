@@ -45,6 +45,7 @@ namespace CampusSimulator
         public UxSettingBool walllinks = new UxSettingBool("walllinks", false);
         public UxSettingBool osmblds = new UxSettingBool("osmblds", true);
         public UxSettingBool fixedblds = new UxSettingBool("fixedblds", false);
+        public bool transwalls = false;
 
 
         // To do - get rid of bldmode and treemode regions in BuildingMan
@@ -228,6 +229,7 @@ namespace CampusSimulator
             walllinks.GetInitial(false);
             osmblds.GetInitial(true);
             fixedblds.GetInitial(false);
+            transwalls = false;
             scene_padspecs = new List<string>();
             Debug.Log($"BuildingMan.InitializeValues walllinks:{walllinks.Get()} osmblds:{osmblds.Get()}   fixedblds:{fixedblds.Get()}");
         }
@@ -256,6 +258,60 @@ namespace CampusSimulator
                 }
             }
             return rv;
+        }
+
+        public void InitTransvis()
+        {
+            var bld121 = GetBuilding("Bld121", couldFail: true);
+            if (bld121 == null)
+            {
+                Debug.LogError($"No Bld121 in scene");
+                return;
+            }
+            var b121comp = bld121.GetComponent<B121Willow>();
+            if (b121comp == null)
+            {
+                Debug.LogError($"No B121 Component attached to Bld121 in scene");
+                return;
+            }
+            transwalls = b121comp.b121_materialMode.Get() == B121Willow.b121_MaterialMode.glasswalls;
+        }
+
+        public void TransBld121Button()
+        {
+            var bld121 = GetBuilding("Bld121", couldFail: true);
+            if (bld121==null)
+            {
+                Debug.LogError($"No Bld121 in scene");
+                return;
+            }
+            var b121comp= bld121.GetComponent<B121Willow>();
+            if (b121comp == null)
+            {
+                Debug.LogError($"No B121 Component attached to Bld121 in scene");
+                return;
+            }
+            var needtrans = transwalls;
+            var oristate = b121comp.b121_materialMode.Get();
+            if (needtrans)
+            {
+                b121comp.b121_materialMode.SetAndSave(B121Willow.b121_MaterialMode.glasswalls);
+            }
+            else
+            {
+                b121comp.b121_materialMode.SetAndSave(B121Willow.b121_MaterialMode.materialed);
+            }
+            var curstate = b121comp.b121_materialMode.Get();
+            if (oristate!=curstate)
+            {
+                Debug.Log($"Bld121 {oristate} changed to {curstate} - refresh required");
+                b121comp.ActuateMaterialMode();
+                //sman.RequestRefresh("TransBld121Button", totalrefresh: false);
+            }
+            else
+            {
+                Debug.Log($"Bld121 {oristate} unchanged to {curstate} - no refresh required");
+            }
         }
 
         public BldPolyGen bpg = null;

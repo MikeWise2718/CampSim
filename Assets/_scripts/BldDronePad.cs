@@ -129,7 +129,7 @@ namespace CampusSimulator {
                     //animation["Idle"].time = Random.Range(0.0, animation["Idle"].length);
 
                     person.roomPogo = pogo;
-                    var ska = bm.sman.trman.scalemodelnumber.Get();
+                    var ska = bm.sman.trman.peoplescalemodelnumber.Get();
                     pogo.transform.localScale *= ska;
                     //persgo.name = pers.personName+"-ava";
                     if (!person.UseFixedPlace())

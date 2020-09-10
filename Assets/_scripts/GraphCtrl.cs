@@ -148,9 +148,11 @@ namespace GraphAlgos
         public int regid;
         public bool saveToFile;
         public int maxDefStepIdx;
+        public GameObject reggo;
         public NodeRegion()
         {
             maxDefStepIdx = 1;
+            reggo = null;
         }
         public int GetCurStepIdx()
         {
