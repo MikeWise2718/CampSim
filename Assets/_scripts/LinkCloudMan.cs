@@ -39,8 +39,25 @@ namespace CampusSimulator
         public int maxVoiceKeywords = 100;
         public int nVoiceKeywords = 0;
 
+        public bool pipevis = true;
 
-
+        public void PipeVisButton()
+        {
+            var needvis = pipevis;
+            var oristate = lvisOptions.Get();
+            var curstate = needvis ? LinkVisualOptionsE.NodesAndLinks: LinkVisualOptionsE.None;
+            if (oristate != curstate)
+            {
+                Debug.Log($"linkvis {oristate} changed to {curstate} - refresh required");
+                lvisOptions.SetAndSave(curstate);
+                sman.lcman.SetLinkAndNodeVisibility(curstate.ToString());
+                sman.RequestRefresh("pipevisbutton");
+            }
+            else
+            { 
+                Debug.Log($"linkvis {oristate} unchanged to {curstate} - no refresh required");
+            }
+        }
 
 
         #region LinkTransparency
@@ -138,6 +155,7 @@ namespace CampusSimulator
             LinkFLoor = new Range(0, 0);
             nodesvisible = true;
 
+
             linkTrans = GetLinkTransInitial();
             var lopt = lvisOptions.GetInitial();
             if (SceneMan.showNoPipes)
@@ -145,6 +163,7 @@ namespace CampusSimulator
                 lopt = LinkVisualOptionsE.None;
             }
             SetLinkAndNodeVisibility(lopt.ToString());
+            pipevis = lopt!= LinkVisualOptionsE.None;
             graphGenOptions.GetInitial();
             InitNodeColorOverrides();
             //grctrl = GetGraphCtrl();

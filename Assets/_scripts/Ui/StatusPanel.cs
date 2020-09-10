@@ -296,8 +296,8 @@ namespace CampusSimulator
             SetButtonColor(visButton, "lightblue", sman.frman.detectVisitor.Get(), "V");
             SetButtonColor(unkButton, "lightblue", sman.frman.detectUnknown.Get(), "U");
             SetButtonColor(showTracksButton, "lightblue", sman.trman.showtracks.Get(), "Tracks");
-            SetButtonColor(traButton, "lightblue", sman.bdman.transwalls.Get(), "Tr");
-            SetButtonColor(pipButton, "lightblue", sman.bdman.transwalls.Get(), "Pi");
+            SetButtonColor(traButton, "lightblue", sman.bdman.transwalls, "Tr");
+            SetButtonColor(pipButton, "lightblue", sman.lcman.pipevis, "Pi");
             //Debug.LogWarning($"ColorizeButtonStates Vt2D:{sman.frman.visibilityTiedToDetectability.Get()}");
             SetButtonColor(vt2dButton, "lightblue", sman.frman.visibilityTiedToDetectability.Get(), "Vt2D");
             SetButtonColor(frameButton, "pink", sman.frman.frameJourneys.Get(), "Frame");
@@ -338,15 +338,15 @@ namespace CampusSimulator
 
         public void DetectTraButton()
         {
-            sman.bdman.transwalls.SetAndSave(!sman.bdman.transwalls.Get());
+            sman.bdman.transwalls = !sman.bdman.transwalls;
             sman.bdman.TransBld121Button();
             ColorizeButtonStates();
             //SetButtonColor(unkButton, "lightblue", sman.frman.detectUnknown.Get(), "U");
         }
         public void DetectPipButton()
         {
-            sman.bdman.transwalls.SetAndSave(!sman.bdman.transwalls.Get());
-            sman.bdman.TransBld121Button();
+            sman.lcman.pipevis = !sman.lcman.pipevis;
+            sman.lcman.PipeVisButton();
             ColorizeButtonStates();
             //SetButtonColor(unkButton, "lightblue", sman.frman.detectUnknown.Get(), "U");
         }

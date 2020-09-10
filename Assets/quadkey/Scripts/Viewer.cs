@@ -285,7 +285,8 @@ namespace Aiskwk.Map
         {
             Debug.Log($"MakeAvatar {avaname} angle:{angle}");
             Debug.Log($"MakeAvatar - Viewer rotation before  {transform.localRotation.eulerAngles}");
-
+            // TODO: if we are remaking an existing viewer, we probably need to save rotations here and restore them later on
+            // see 
             DestroyAvatar();
             moveplane = new GameObject("moveplane");
             body = new GameObject("body");
@@ -358,6 +359,8 @@ namespace Aiskwk.Map
             camtrans.SetParent(null, worldPositionStays: true);
             camtrans.position = viewerVectorPos[viewerCamPosition];
             camtrans.SetParent(curparent, worldPositionStays: false);
+
+            // now force the camera rotation back to zero 
             var rot = camtrans.localRotation.eulerAngles;
             camtrans.localRotation *= Quaternion.Euler(0, -rot.y, 0);
         }
