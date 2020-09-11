@@ -187,7 +187,7 @@ namespace Aiskwk.Map
             }
             transform.SetParent(parent.transform, worldPositionStays: true);// reconnect
             transform.localRotation = Quaternion.Euler(home.rot); // Think this has to match the rotation it was built with
-                                                                             // or we get problems when we follownormal along the mesh
+                                                                  // or we get problems when we follownormal along the mesh
             TranslateViewer(0, 0);
             RotateViewer(0);
             //Debug.Log($"ReAdjustViewerInitialPosition - after  scale:{transform.localScale} rotation:{transform.localRotation.eulerAngles}");
@@ -718,49 +718,59 @@ namespace Aiskwk.Map
         //bpg.LoadRegionOld(this.gameObject, "msftcampcore", 1f, pgvd: pgvd, llm: latlngmap);
 
         Dictionary<string, ViewerState> telelocs = new Dictionary<string, ViewerState>();
+
+
+
         public void InitTestTelelocs()
         {
-            telelocs = new Dictionary<string, ViewerState>();
-            telelocs["t5"] = new ViewerState()
+            telelocs = new Dictionary<string, ViewerState>()
             {
-                pos = new Vector3(-850.70f, 73.05f, -487.70f), // "b121-f01-1071"
-                rot = new Vector3(0, 37.8f, 0),
-                avatar = ViewerAvatar.QuadCopter,
-                camconfig = ViewerCamConfig.FloatBehind,
-                vctrl = ViewerControl.Position
-            };
-            telelocs["t1"] =  new ViewerState()
+                { "t5",new ViewerState()
+                    {
+                        pos = new Vector3(-850.70f, 73.05f, -487.70f), // "b121-f01-1071"
+                        rot = new Vector3(0, 37.8f, 0),
+                        avatar = ViewerAvatar.QuadCopter,
+                        camconfig = ViewerCamConfig.FloatBehind,
+                        vctrl = ViewerControl.Position
+                    } 
+                },
+                { "t1", new ViewerState()
                     {
                         pos = new Vector3(-850.70f, 73.05f, -487.70f), // "b121-f01-1071"
                         rot = new Vector3(0, 37.8f, 0),
                         avatar = ViewerAvatar.QuadCopter2,
                         camconfig = ViewerCamConfig.FloatBehind,
                         vctrl = ViewerControl.Position
-                    };
-            telelocs["t2"] = new ViewerState()
+                    } 
+                },
+                { "t2", new ViewerState()
                     {
                         pos = new Vector3(-862.3f, 77.05f, -506.2f),// "b121-f02-2060-2"
                         rot = new Vector3(0, 41.1f, 0),
                         avatar = ViewerAvatar.QuadCopter2,
                         camconfig = ViewerCamConfig.FloatBehind,
                         vctrl = ViewerControl.Position
-                    };
-            telelocs["t3"] = new ViewerState()
+                    } 
+                },
+                { "t3",new ViewerState()
                     {
                         pos = new Vector3(-828.12f, 81.25f, -467.71f),// "b121-f03-31-2"
                         rot = new Vector3(0, 48.31f, 0),
                         avatar = ViewerAvatar.QuadCopter2,
                         camconfig = ViewerCamConfig.FloatBehind,
                         vctrl = ViewerControl.Position
-                    };
-            telelocs["t4"] = new ViewerState()
+                    } 
+                },
+                { "t4", new ViewerState()
                     {
                         pos = new Vector3(-821.76f, 81.25f, -480.29f),// "b121-f03-3100-2"
                         rot = new Vector3(0, 48.31f, 0),
                         avatar = ViewerAvatar.QuadCopter2,
                         camconfig = ViewerCamConfig.FloatBehind,
                         vctrl = ViewerControl.Position
-                    };
+                    } 
+                } 
+            };
         }
         public (bool ok, ViewerState vst) TestTeleporter2(string trigger)
         {
