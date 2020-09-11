@@ -223,7 +223,7 @@ namespace CampusSimulator
                     }
                 case BirdFormE.drone2:
                     {
-                        var objPrefab = Resources.Load<GameObject>("obj3d/DJI_Mavic_Air_2_Spinning");
+                        var objPrefab = Resources.Load<GameObject>("obj3d/DJI_Mavic_Air_2spinning");
                         birdformgo = Instantiate<GameObject>(objPrefab);
                         var s = 0.01f*sman.trman.dronescalemodelnumber.Get();
                         if (birdscale > 0)

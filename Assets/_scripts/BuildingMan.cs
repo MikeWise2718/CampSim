@@ -230,6 +230,7 @@ namespace CampusSimulator
             osmblds.GetInitial(true);
             fixedblds.GetInitial(false);
             transwalls = false;
+            InitTranswalls();
             scene_padspecs = new List<string>();
             Debug.Log($"BuildingMan.InitializeValues walllinks:{walllinks.Get()} osmblds:{osmblds.Get()}   fixedblds:{fixedblds.Get()}");
         }
@@ -260,7 +261,7 @@ namespace CampusSimulator
             return rv;
         }
 
-        public void InitTransvis()
+        public void InitTranswalls()
         {
             var bld121 = GetBuilding("Bld121", couldFail: true);
             if (bld121 == null)

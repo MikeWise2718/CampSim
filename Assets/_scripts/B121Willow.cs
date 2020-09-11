@@ -164,7 +164,7 @@ public class B121Willow : MonoBehaviour
             if (sman != null)
             {
                 var yheit = sman.mpman.GetHeight(defpos.x, defpos.z);
-                //Debug.Log($"B19 yoff:{yoff}");
+                Debug.Log($"Loading B121 - height - xofs:{xofs} yofs:{yofs} zofs:{zofs} yheit(from map):{yheit} total:{yheit+defpos.y}");
                 defpos = new Vector3(defpos.x, yheit + defpos.y, defpos.z);
             }
             b121go.transform.Rotate(new Vector3(0, -20.15f, 0));

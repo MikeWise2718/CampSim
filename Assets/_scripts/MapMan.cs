@@ -164,7 +164,7 @@ namespace CampusSimulator
         public UxSettingVector3 viewerPosition = new UxSettingVector3("viewerPosition", Vector3.zero);
         public UxSettingVector3 viewerRotation = new UxSettingVector3("viewerRotation", Vector3.zero);
         public UxEnumSetting<ViewerAvatar> viewerAvatar = new UxEnumSetting<ViewerAvatar>("viewerAvatar", ViewerAvatar.QuadCopter);
-        public UxEnumSetting<ViewerCamPosition> viewerCamPosition = new UxEnumSetting<ViewerCamPosition>("viewerCamPosition", ViewerCamPosition.FloatBehind);
+        public UxEnumSetting<ViewerCamConfig> viewerCamPosition = new UxEnumSetting<ViewerCamConfig>("viewerCamPosition", ViewerCamConfig.FloatBehind);
         public UxEnumSetting<ViewerControl> viewerControl = new UxEnumSetting<ViewerControl>("viewerControl", ViewerControl.Velocity);
 
         public UxSetting<float> hmult = new UxSetting<float>("Hmult", 1f );
@@ -208,15 +208,7 @@ namespace CampusSimulator
                 qmapman.DeleteQmm();
             }
         }
-        //void CreateQmap()
-        //{
-        //    qmapgo = new GameObject("QmapMan");
-        //    qmapman = qmapgo.AddComponent<QmapMan>();
-        //    qmapman.qmapMode = QmapMan.QmapModeE.Bespoke;
-        //    qmapman.bespoke = bspko;
 
-        //    RealizeQmap();
-        //}
 
         void AssignBespoke()
         {
@@ -670,7 +662,7 @@ namespace CampusSimulator
             xdistkm = 1;
             zdistkm = 1;
  
-            viewHome = new ViewerState(Vector3.zero, Vector3.zero, ViewerAvatar.QuadCopter, ViewerCamPosition.FloatBehind, ViewerControl.Velocity);
+            viewHome = new ViewerState(Vector3.zero, Vector3.zero, ViewerAvatar.QuadCopter, ViewerCamConfig.FloatBehind, ViewerControl.Velocity);
 
             switch (newscene)
             {
@@ -687,9 +679,9 @@ namespace CampusSimulator
                     hasLLmap = true;
                     isCustomizable = false;
 
-                    viewHome.viewerAvatarValue = ViewerAvatar.QuadCopter;
-                    viewHome.viewerPosition = new Vector3(-451.5f, 3f, 98.3f);
-                    viewHome.viewerRotation = new Vector3(0, -60, 0);
+                    viewHome.avatar = ViewerAvatar.QuadCopter2;
+                    viewHome.pos = new Vector3(-451.5f, 3f, 98.3f);
+                    viewHome.rot = new Vector3(0, -60, 0);
                     break;
                 case SceneSelE.MsftB121focused:
                     //maplat = 47.639217;
@@ -707,9 +699,9 @@ namespace CampusSimulator
                     lod = 16;
                     hasLLmap = true;
 
-                    viewHome.viewerAvatarValue = ViewerAvatar.QuadCopter;
-                    viewHome.viewerPosition = new Vector3(-778, 10f, -524);
-                    viewHome.viewerRotation = new Vector3(0, -40, 0);
+                    viewHome.avatar = ViewerAvatar.QuadCopter2;
+                    viewHome.pos = new Vector3(-778, 10f, -524);
+                    viewHome.rot = new Vector3(0, -40, 0);
                     isCustomizable = false;
                     break;
                 case SceneSelE.MsftB19focused:
@@ -728,9 +720,9 @@ namespace CampusSimulator
                     lod = 16;
                     hasLLmap = true;
 
-                    viewHome.viewerAvatarValue = ViewerAvatar.QuadCopter;
-                    viewHome.viewerPosition = new Vector3(-451.5f, 3f, 98.3f);
-                    viewHome.viewerRotation = new Vector3(0, -60, 0);
+                    viewHome.avatar = ViewerAvatar.QuadCopter;
+                    viewHome.pos = new Vector3(-451.5f, 3f, 98.3f);
+                    viewHome.rot = new Vector3(0, -60, 0);
 
                     isCustomizable = false;
                     break;
@@ -743,9 +735,9 @@ namespace CampusSimulator
                     xdistkm = 1;
                     zdistkm = 1;
 
-                    viewHome.viewerAvatarValue = ViewerAvatar.QuadCopter;
-                    viewHome.viewerPosition = new Vector3(-2035.2f, 3.8f, -1173.5f);
-                    viewHome.viewerRotation = new Vector3(0, 163.310f, 0);
+                    viewHome.avatar = ViewerAvatar.QuadCopter2;
+                    viewHome.pos = new Vector3(-2035.2f, 3.8f, -1173.5f);
+                    viewHome.rot = new Vector3(0, 163.310f, 0);
 
                     isCustomizable = false;
                     hasLLmap = true;
@@ -761,7 +753,7 @@ namespace CampusSimulator
                     hasLLmap = false;
                     isCustomizable = false;
 
-                    viewHome.viewerAvatarValue = ViewerAvatar.QuadCopter;
+                    viewHome.avatar = ViewerAvatar.QuadCopter;
 
                     break;
                 case SceneSelE.Eb12small:
@@ -777,7 +769,7 @@ namespace CampusSimulator
                     hasLLmap = true;
                     isCustomizable = false;
 
-                    viewHome.viewerAvatarValue = ViewerAvatar.QuadCopter;
+                    viewHome.avatar = ViewerAvatar.QuadCopter;
 
 
                     break;
@@ -792,8 +784,8 @@ namespace CampusSimulator
                     roty2 = -90; // this value aligns pipes to map (uses x-z coords)
                     hasLLmap = true;
                     isCustomizable = false;
-                    viewHome.viewerAvatarValue = ViewerAvatar.QuadCopter;
-                    viewHome.viewerRotation = new Vector3(0, -90, 0);
+                    viewHome.avatar = ViewerAvatar.QuadCopter;
+                    viewHome.rot = new Vector3(0, -90, 0);
 
 
                     break;
@@ -815,7 +807,7 @@ namespace CampusSimulator
                     roty2 = 0;
                     //nodesPerQuadKey = 8;
                     //vviewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
-                    viewHome.viewerAvatarValue = ViewerAvatar.QuadCopter;
+                    viewHome.avatar = ViewerAvatar.QuadCopter;
 
                     hasLLmap = false;
                     isCustomizable = false;
@@ -831,7 +823,7 @@ namespace CampusSimulator
                     hasLLmap = false;
                     isCustomizable = false;
 
-                    viewHome.viewerAvatarValue = ViewerAvatar.QuadCopter;
+                    viewHome.avatar = ViewerAvatar.QuadCopter;
 
                     break;
                 case SceneSelE.Frankfurt:
@@ -846,7 +838,7 @@ namespace CampusSimulator
                     isCustomizable = false;
                     //vviewerDefaultRotation = new Vector3(0, 0, 0);
                     //vviewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
-                    viewHome.viewerAvatarValue = ViewerAvatar.QuadCopter;
+                    viewHome.avatar = ViewerAvatar.QuadCopter;
 
                     break;
                 case SceneSelE.MsftDublin:
@@ -859,7 +851,7 @@ namespace CampusSimulator
                     hasLLmap = true;
                     isCustomizable = false;
                     //vviewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
-                    viewHome.viewerAvatarValue = ViewerAvatar.QuadCopter;
+                    viewHome.avatar = ViewerAvatar.QuadCopter;
                     break;
 
 
@@ -876,8 +868,8 @@ namespace CampusSimulator
                     useViewer = true;
                     roty2 = 0;
 
-                    viewHome.viewerAvatarValue = ViewerAvatar.Rover;
-                    viewHome.viewerPosition = new Vector3(0, -60, 0);
+                    viewHome.avatar = ViewerAvatar.Rover;
+                    viewHome.pos = new Vector3(0, -60, 0);
 
                     mapscale = 1f;
                     isCustomizable = false;
@@ -897,7 +889,7 @@ namespace CampusSimulator
                     roty2 = 0;
                     mapscale = 1f;
                     isCustomizable = true;
-                    viewHome.viewerAvatarValue = ViewerAvatar.QuadCopter;
+                    viewHome.avatar = ViewerAvatar.QuadCopter;
                     hasLLmap = false;
                     break;
                 case SceneSelE.HiddenLakeLookout:
@@ -912,7 +904,7 @@ namespace CampusSimulator
                     useViewer = true;
                     roty2 = 0;
                     mapscale = 1f;
-                    viewHome.viewerAvatarValue = ViewerAvatar.QuadCopter;
+                    viewHome.avatar = ViewerAvatar.QuadCopter;
                     hasLLmap = false;
                     isCustomizable = false;
                     break;
@@ -928,7 +920,7 @@ namespace CampusSimulator
                     useViewer = true;
                     roty2 = 0;
                     mapscale = 1f;
-                    viewHome.viewerAvatarValue = ViewerAvatar.QuadCopter;
+                    viewHome.avatar = ViewerAvatar.QuadCopter;
                     hasLLmap = false;
                     isCustomizable = false;
                     break;
@@ -944,7 +936,7 @@ namespace CampusSimulator
                     useViewer = true;
                     roty2 = 0;
                     mapscale = 1f;
-                    viewHome.viewerAvatarValue = ViewerAvatar.QuadCopter;
+                    viewHome.avatar = ViewerAvatar.QuadCopter;
                     hasLLmap = false;
                     isCustomizable = false;
                     break;
