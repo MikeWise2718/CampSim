@@ -648,6 +648,17 @@ namespace CampusSimulator
             }
             return pt;
         }
+        Vector3 GetNodePt(string nodename)
+        {
+            var node = sman.lcman.GetNode(nodename);
+            if (node == null)
+            {
+                sman.Lgg($"MapMan.AddB121Telelocs Cound not find {nodename}", "red");
+                return Vector3.zero;
+            }
+            return node.pt;
+        }
+
         public void AddB121Telelocs()
         {
             var viewer = GameObject.FindObjectOfType<Viewer>();
@@ -661,7 +672,8 @@ namespace CampusSimulator
             {
                 { "t5",new ViewerState()
                     {
-                        pos = GetNodePt(new Vector3(-850.70f, 73.05f, -487.70f), "b121-f01-1071"),
+                        //pos = GetNodePt(new Vector3(-850.70f, 73.05f, -487.70f), "b121-f01-1071"),
+                        pos = GetNodePt("b121-f01-1071"),
                         rot = new Vector3(0, 37.8f, 0),
                         avatar = ViewerAvatar.QuadCopter,
                         camconfig = ViewerCamConfig.FloatBehind,
@@ -670,7 +682,8 @@ namespace CampusSimulator
                 },
                 { "t1", new ViewerState()
                     {
-                        pos = GetNodePt(new Vector3(-850.70f, 73.05f, -487.70f), "b121-f01-1071"),
+                        //pos = GetNodePt(new Vector3(-850.70f, 73.05f, -487.70f), "b121-f01-1071"),
+                        pos = GetNodePt("b121-f01-1071"),
                         rot = new Vector3(0, 37.8f, 0),
                         avatar = ViewerAvatar.QuadCopter2,
                         camconfig = ViewerCamConfig.FloatBehind,
@@ -679,7 +692,8 @@ namespace CampusSimulator
                 },
                 { "t2", new ViewerState()
                     {
-                        pos = GetNodePt(new Vector3(-862.3f, 77.05f, -506.2f), "b121-f02-2060-2"),
+                        //pos = GetNodePt(new Vector3(-862.3f, 77.05f, -506.2f), "b121-f02-2060-2"),
+                        pos = GetNodePt("b121-f02-2060-2"),
                         rot = new Vector3(0, 41.1f, 0),
                         avatar = ViewerAvatar.QuadCopter2,
                         camconfig = ViewerCamConfig.FloatBehind,
@@ -688,7 +702,8 @@ namespace CampusSimulator
                 },
                 { "t3",new ViewerState()
                     {
-                        pos = GetNodePt(new Vector3(-828.12f, 81.25f, -467.71f), "b121-f03-31-2"),
+                        //pos = GetNodePt(new Vector3(-828.12f, 81.25f, -467.71f), "b121-f03-31-2"),
+                        pos = GetNodePt("b121-f03-31-2"),
                         rot = new Vector3(0, 48.31f, 0),
                         avatar = ViewerAvatar.QuadCopter2,
                         camconfig = ViewerCamConfig.FloatBehind,
@@ -697,7 +712,8 @@ namespace CampusSimulator
                 },
                 { "t4", new ViewerState()
                     {
-                        pos = GetNodePt(new Vector3(-821.76f, 81.25f, -480.29f), "b121-f03-3100-2"),
+                        //pos = GetNodePt(new Vector3(-821.76f, 81.25f, -480.29f), "b121-f03-3100-2"),
+                        pos = GetNodePt("b121-f03-3100-2"),
                         rot = new Vector3(0, 48.31f, 0),
                         avatar = ViewerAvatar.QuadCopter2,
                         camconfig = ViewerCamConfig.FloatBehind,
