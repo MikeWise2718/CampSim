@@ -719,11 +719,29 @@ namespace Aiskwk.Map
 
         Dictionary<string, ViewerState> telelocs = new Dictionary<string, ViewerState>();
 
-
-
+        public void AddTelelLoc(string trigger,ViewerState vst)
+        {
+            telelocs[trigger] = vst;
+        }
+        public void AddTelelLoc(Dictionary<string, ViewerState> newtelelocs)
+        {
+            foreach( var k in newtelelocs.Keys )
+            {
+                telelocs[k] = newtelelocs[k];
+            }
+        }
+        public void InitTelelocsToEmpty()
+        {
+            telelocs = new Dictionary<string, ViewerState>();
+        }
         public void InitTestTelelocs()
         {
-            telelocs = new Dictionary<string, ViewerState>()
+            telelocs = new Dictionary<string, ViewerState>();
+            AddTestTelelocs();
+        }
+        public void AddTestTelelocs()
+        { 
+            var newtls = new Dictionary<string,ViewerState>() 
             {
                 { "t5",new ViewerState()
                     {
@@ -771,6 +789,7 @@ namespace Aiskwk.Map
                     } 
                 } 
             };
+            AddTelelLoc(newtls);
         }
         public (bool ok, ViewerState vst) TestTeleporter2(string trigger)
         {

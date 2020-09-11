@@ -230,7 +230,6 @@ namespace CampusSimulator
             osmblds.GetInitial(true);
             fixedblds.GetInitial(false);
             transwalls = false;
-            InitTranswalls();
             scene_padspecs = new List<string>();
             Debug.Log($"BuildingMan.InitializeValues walllinks:{walllinks.Get()} osmblds:{osmblds.Get()}   fixedblds:{fixedblds.Get()}");
         }
@@ -276,6 +275,7 @@ namespace CampusSimulator
                 return;
             }
             transwalls = b121comp.b121_materialMode.Get() == B121Willow.b121_MaterialMode.glasswalls;
+            sman.uiman.SyncState();
         }
 
         public void TransBld121Button()
@@ -368,6 +368,7 @@ namespace CampusSimulator
         }
         public void ModelBuildPostLinkCloud()
         {
+            InitTranswalls();// this can only be done after b121 is initialized
             ReinitDests();
             AddRoomsToBuildings();
             PopulateBuildings();

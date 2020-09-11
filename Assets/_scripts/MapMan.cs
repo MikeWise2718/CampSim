@@ -624,9 +624,104 @@ namespace CampusSimulator
         }
         public void ModelBuild()
         {
-            Debug.Log($"MapMan.SetScene: {sman.curscene}");
+            Debug.Log($"MapMan.ModelBuild: {sman.curscene}");
             RealizeQmapAndMakeMesh();
         }
+        Vector3 GetNodePt(Vector3 exppt,string nodename)
+        {
+            var node = sman.lcman.GetNode(nodename);
+            if (node==null)
+            {
+                sman.Lgg($"MapMan.AddB121Telelocs Cound not find {nodename}","red");
+                return exppt;
+            }
+            var pt = node.pt;
+            var dist = Vector3.Distance(exppt, pt);
+            if (dist > 1)
+            {
+                sman.Lgg($"MapMan.AddB121Telelocs node:{nodename} pts too far apart {dist:f1} pt:{pt:f1} exppt:{exppt:f1}", "red");
+                //return exppt;
+            }
+            else
+            {
+                sman.Lgg($"MapMan.AddB121Telelocs node:{nodename} pts ok {dist:f1} pt:{pt:f1} exppt:{exppt:f1}", "green");
+            }
+            return pt;
+        }
+        public void AddB121Telelocs()
+        {
+            var viewer = GameObject.FindObjectOfType<Viewer>();
+            if (viewer==null)
+            {
+                Debug.LogError($"MapMan.AddB121telelocs could not find Viewer");
+                return;
+            }
+            var lcman = sman.lcman;
+            var newtls = new Dictionary<string, ViewerState>()
+            {
+                { "t5",new ViewerState()
+                    {
+                        pos = GetNodePt(new Vector3(-850.70f, 73.05f, -487.70f), "b121-f01-1071"),
+                        rot = new Vector3(0, 37.8f, 0),
+                        avatar = ViewerAvatar.QuadCopter,
+                        camconfig = ViewerCamConfig.FloatBehind,
+                        vctrl = ViewerControl.Position
+                    }
+                },
+                { "t1", new ViewerState()
+                    {
+                        pos = GetNodePt(new Vector3(-850.70f, 73.05f, -487.70f), "b121-f01-1071"),
+                        rot = new Vector3(0, 37.8f, 0),
+                        avatar = ViewerAvatar.QuadCopter2,
+                        camconfig = ViewerCamConfig.FloatBehind,
+                        vctrl = ViewerControl.Position
+                    }
+                },
+                { "t2", new ViewerState()
+                    {
+                        pos = GetNodePt(new Vector3(-862.3f, 77.05f, -506.2f), "b121-f02-2060-2"),
+                        rot = new Vector3(0, 41.1f, 0),
+                        avatar = ViewerAvatar.QuadCopter2,
+                        camconfig = ViewerCamConfig.FloatBehind,
+                        vctrl = ViewerControl.Position
+                    }
+                },
+                { "t3",new ViewerState()
+                    {
+                        pos = GetNodePt(new Vector3(-828.12f, 81.25f, -467.71f), "b121-f03-31-2"),
+                        rot = new Vector3(0, 48.31f, 0),
+                        avatar = ViewerAvatar.QuadCopter2,
+                        camconfig = ViewerCamConfig.FloatBehind,
+                        vctrl = ViewerControl.Position
+                    }
+                },
+                { "t4", new ViewerState()
+                    {
+                        pos = GetNodePt(new Vector3(-821.76f, 81.25f, -480.29f), "b121-f03-3100-2"),
+                        rot = new Vector3(0, 48.31f, 0),
+                        avatar = ViewerAvatar.QuadCopter2,
+                        camconfig = ViewerCamConfig.FloatBehind,
+                        vctrl = ViewerControl.Position
+                    }
+                }
+            };
+            viewer.InitTelelocsToEmpty();
+            viewer.AddTelelLoc(newtls);
+        }
+
+        public void ModelBuildFinal()
+        {
+            Debug.Log($"MapMan.ModelBuildFinal: {sman.curscene}");
+            switch(sman.curscene)
+            {
+                case SceneSelE.MsftB121focused:
+                    {
+                        AddB121Telelocs();
+                        break;
+                    }
+            }
+        }
+
         void SetMeshCollider(bool enable)
         {
             Debug.Log("Qmap funciton SetMeshCollider - Not implemented yet");

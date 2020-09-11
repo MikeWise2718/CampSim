@@ -388,11 +388,11 @@ namespace CampusSimulator
                 if (calcHeights)
                 {
                     var yoff = GetHeight(node.pto.x, node.pto.z);
-                    //if (node.pto.y>5)
-                    //{
-                    //    Debug.Log("Here is one");
-                    //}
                     node.pt = new Vector3(node.pto.x, node.pto.y + yoff, node.pto.z);
+                    if (node.name == "b121-f01-1071")
+                    {
+                        Debug.Log($"{node.name} pt:{node.pt:f1} pto:{node.pto:f1}");
+                    }
                 }
             }
             var cam = Camera.current;

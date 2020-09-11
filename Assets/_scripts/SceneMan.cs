@@ -332,7 +332,7 @@ namespace CampusSimulator
                 var initsw = new StopWatch(start: false);
                 var setsw = new StopWatch(start: false);
                 var finsw = new StopWatch(start: false);
-                Debug.LogWarning($"SceneMan-Setting scenario to {newscene} - curscene:{curscene} - force:{force}");
+                Lgg($"SceneMan-Setting scenario to {newscene} - curscene:{curscene} - force:{force}","cyan");
                 try
                 {
                     ceasesw.Start();
@@ -378,6 +378,7 @@ namespace CampusSimulator
 
                     SetInitState(InitState.modelInit);
 
+                    Lgg($"ModelInitialize start", "cyan");
                     vcman.ModelInitialize(newscene);
                     bdman.ModelInitialize(newscene);
                     stman.ModelInitiailze(newscene);
@@ -395,6 +396,9 @@ namespace CampusSimulator
                     setsw.Start();
 
                     SetInitState(InitState.modelBuild);
+
+                    Lgg($"ModelBuild start", "cyan");
+
 
                     mpman.ModelBuild();// Note this has an await buried in it and afterwards a call to smam.PostMapLoadSetScene below 
                     gaman.ModelBuild();
@@ -424,7 +428,10 @@ namespace CampusSimulator
 
                     SetInitState(InitState.modelBuildPost);
 
+                    this.Lgg("lcman.ModelBuildFinal", "yellow");
                     lcman.ModelBuildFinal();  // realize latelinks and heights
+                    mpman.ModelBuildFinal();
+
                     bdman.ModelBuildPostLinkCloud();// building details that need nodes and links - i.e destrooms are derived from nodes
                     gaman.ModelBuildPostLinkCloud();// garage details that need nodes and links
                     drman.ModelBuildPostLinkCloud();// dronman details that need nodes and links
@@ -456,6 +463,31 @@ namespace CampusSimulator
             }
             requestScene = SceneSelE.None;
         }
+
+        public void Lgg(string msg,string color)
+        {
+            var nmsg = $"<color={color}>{msg}</color>";
+            Debug.Log(nmsg);
+        }
+
+        public void Lgg(string msg, string[] color )
+        {
+            if (color.Length == 0)
+            {
+                Debug.Log(msg);
+            }
+            else
+            {
+                var nmsg = $"<color={color[0]}>{msg}</color>";
+                Debug.Log(nmsg);
+                //var spos = msg.IndexOf("|");
+                //if (spos >= 0)
+                //{
+
+                //}
+            }
+        }
+
 
         public void PostMapAsyncLoadSetScene()
         {
