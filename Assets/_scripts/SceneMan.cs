@@ -466,26 +466,47 @@ namespace CampusSimulator
 
         public void Lgg(string msg,string color)
         {
-            var nmsg = $"<color={color}>{msg}</color>";
-            Debug.Log(nmsg);
+            Lgg(msg, new string[] { color });
+            //var nmsg = $"<color={color}>{msg}</color>";
+            //Debug.Log(nmsg);
         }
-
-        public void Lgg(string msg, string[] color )
+        public string ColorCode(string msg, string[] color, string delim = "|")
         {
             if (color.Length == 0)
             {
-                Debug.Log(msg);
+                return msg;
             }
-            else
+            var delimIdxes = new List<int>();
             {
-                var nmsg = $"<color={color[0]}>{msg}</color>";
-                Debug.Log(nmsg);
-                //var spos = msg.IndexOf("|");
-                //if (spos >= 0)
-                //{
-
-                //}
+                var idx = msg.IndexOf(delim);
+                while (idx >= 0)
+                {
+                    delimIdxes.Add(idx);
+                    idx = msg.IndexOf(delim, idx+1);
+                }
             }
+            var iclr = 0;
+            var nmsg = $"<color={color[0]}>";
+            var sidx = nmsg.Length;
+            nmsg += msg;
+            var lidx = 0;
+            foreach (var idx in delimIdxes)
+            {
+                iclr = (iclr + 1) % color.Length;
+                var isrt = $"</color><color={color[iclr]}>";
+                sidx += idx-lidx;
+                nmsg = nmsg.Remove(sidx, delim.Length);// remove the delim
+                nmsg = nmsg.Insert(sidx, isrt);
+                sidx += isrt.Length - delim.Length;
+                lidx = idx;
+            }
+            nmsg += "</color>";
+            return nmsg;
+        }
+        public void Lgg(string msg, string[] color, string delim = "|")
+        {
+            var nmsg = ColorCode(msg, color, delim);
+            Debug.Log(nmsg);
         }
 
 
@@ -1584,7 +1605,7 @@ namespace CampusSimulator
         #endregion SceneOptions
         void Awake()
         {
-            Debug.Log("SceneMan.Awake called");
+            Lgg("SceneMan.|Awake| called", new string[] { "red","white"} );
             Debug.Log($"Monitors connected:{Display.displays.Length}");
             IdentitySystemAndUser();
             InitPhase0();
