@@ -663,48 +663,6 @@ namespace Aiskwk.Map
             TranslateViewerToPosition(newpos);
             TranslateViewer(0, 0);// TODO: this shouldn't be necessary but it is for MsftB19focused for some reason....
         }
-        (bool ok, ViewerState state) GetStoredPos(int ipos)
-        {
-            bool valid = false;
-            var vst = GetViewerState();
-            var newpos = vst.pos;
-            var newrot = vst.rot;
-            switch (ipos)
-            {
-                case 5:
-                    //grc.LinkToPtxyz("b121-f01-1071", -850.70 + xs, 0.000, -487.7 + zs, LinkUse.walkway, comment: ""); //  1 nn:1 nl:0
-                    newpos = new Vector3(-850.70f, 73.05f, -487.70f); // "b121-f01-1071"
-                    newrot = new Vector3(0, 37.8f, 0);
-                    vst.avatar = ViewerAvatar.QuadCopter2;
-                    valid = true;
-                    break;
-                case 1:
-                    //grc.LinkToPtxyz("b121-f01-1071", -850.70 + xs, 0.000, -487.7 + zs, LinkUse.walkway, comment: ""); //  1 nn:1 nl:0
-                    newpos = new Vector3(-850.70f, 73.05f, -487.70f); // "b121-f01-1071"
-                    newrot = new Vector3(0, 37.8f, 0);
-                    valid = true;
-                    break;
-                case 2:
-                    //grc.LinkToPtxyz("b121-f02-2060-2", -862.30 + xs, 4.280, -506.20 + zs, LinkUse.walkway, comment: ""); //  1 nn:1 nl:0
-                    newpos = new Vector3(-862.3f, 77.05f, -506.2f);// "b121-f02-2060-2"
-                    newrot = new Vector3(0, 41.1f, 0);
-                    valid = true;
-                    break;
-                case 3:
-                    newpos = new Vector3(-828.12f, 81.25f, -467.71f);// "b121-f03-31-2"
-                    newrot = new Vector3(0, 48.31f, 0);
-                    valid = true;
-                    break;
-                case 4:
-                    newpos = new Vector3(-821.76f, 81.25f, -480.29f);// "b121-f03-3100-2"
-                    newrot = new Vector3(0, 48.31f, 0);
-                    valid = true;
-                    break;
-            }
-            vst.pos = newpos;
-            vst.rot = newrot;
-            return (valid, vst);
-        }
         public delegate (bool ok, ViewerState vst) TeleporterDelegate(string trigger);
         TeleporterDelegate teleporter = null;
 
@@ -712,6 +670,11 @@ namespace Aiskwk.Map
         {
             InitTestTelelocs();
             teleporter = this.TestTeleporter2;
+        }
+
+        public void SetTeleporter(TeleporterDelegate tpd)
+        {
+            teleporter = tpd;
         }
 
         //var pgvd = new PolyGenVekMapDel(hmo.ChangeHeight);

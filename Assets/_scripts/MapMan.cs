@@ -658,19 +658,13 @@ namespace CampusSimulator
             }
             return node.pt;
         }
+        Dictionary<string,(string nodename, ViewerState viewerState)> teleportLocs = null;
 
         public void AddB121Telelocs()
         {
-            var viewer = GameObject.FindObjectOfType<Viewer>();
-            if (viewer==null)
+            teleportLocs = new Dictionary<string,(string, ViewerState)>()
             {
-                Debug.LogError($"MapMan.AddB121telelocs could not find Viewer");
-                return;
-            }
-            var lcman = sman.lcman;
-            var newtls = new Dictionary<string, ViewerState>()
-            {
-                { "t5",new ViewerState()
+                { "t5",("b121-f01-1071", new ViewerState()
                     {
                         //pos = GetNodePt(new Vector3(-850.70f, 73.05f, -487.70f), "b121-f01-1071"),
                         pos = GetNodePt("b121-f01-1071"),
@@ -678,9 +672,9 @@ namespace CampusSimulator
                         avatar = ViewerAvatar.QuadCopter,
                         camconfig = ViewerCamConfig.FloatBehind,
                         vctrl = ViewerControl.Position
-                    }
+                    })
                 },
-                { "t1", new ViewerState()
+                { "t1",("b121-f01-1071", new ViewerState()
                     {
                         //pos = GetNodePt(new Vector3(-850.70f, 73.05f, -487.70f), "b121-f01-1071"),
                         pos = GetNodePt("b121-f01-1071"),
@@ -688,9 +682,9 @@ namespace CampusSimulator
                         avatar = ViewerAvatar.QuadCopter2,
                         camconfig = ViewerCamConfig.FloatBehind,
                         vctrl = ViewerControl.Position
-                    }
+                    })
                 },
-                { "t2", new ViewerState()
+                { "t2", ("b121-f02-2060-2",new ViewerState()
                     {
                         //pos = GetNodePt(new Vector3(-862.3f, 77.05f, -506.2f), "b121-f02-2060-2"),
                         pos = GetNodePt("b121-f02-2060-2"),
@@ -698,9 +692,9 @@ namespace CampusSimulator
                         avatar = ViewerAvatar.QuadCopter2,
                         camconfig = ViewerCamConfig.FloatBehind,
                         vctrl = ViewerControl.Position
-                    }
+                    })
                 },
-                { "t3",new ViewerState()
+                { "t3",("b121-f03-31-2",new ViewerState()
                     {
                         //pos = GetNodePt(new Vector3(-828.12f, 81.25f, -467.71f), "b121-f03-31-2"),
                         pos = GetNodePt("b121-f03-31-2"),
@@ -708,9 +702,9 @@ namespace CampusSimulator
                         avatar = ViewerAvatar.QuadCopter2,
                         camconfig = ViewerCamConfig.FloatBehind,
                         vctrl = ViewerControl.Position
-                    }
+                    })
                 },
-                { "t4", new ViewerState()
+                { "t4", ("b121-f03-3100-2",new ViewerState()
                     {
                         //pos = GetNodePt(new Vector3(-821.76f, 81.25f, -480.29f), "b121-f03-3100-2"),
                         pos = GetNodePt("b121-f03-3100-2"),
@@ -718,12 +712,29 @@ namespace CampusSimulator
                         avatar = ViewerAvatar.QuadCopter2,
                         camconfig = ViewerCamConfig.FloatBehind,
                         vctrl = ViewerControl.Position
-                    }
+                    })
                 }
             };
-            viewer.InitTelelocsToEmpty();
-            viewer.AddTelelLoc(newtls);
+            var viewer = GameObject.FindObjectOfType<Viewer>();
+            if (viewer == null)
+            {
+                Debug.LogError($"MapMan.AddB121telelocs could not find Viewer");
+                return;
+            }
+            //viewer.InitTelelocsToEmpty();
+            //viewer.AddTelelLoc(teleportLocs);
+
+            viewer.SetTeleporter(MapManTeleporterDelegate);
         }
+        (bool ok, ViewerState vst) MapManTeleporterDelegate(string trigger)
+        {
+            if (teleportLocs.ContainsKey(trigger))
+            {
+                return (true, teleportLocs[trigger].viewerState);
+            }
+            return (false, null);
+        }
+
 
         public void ModelBuildFinal()
         {
