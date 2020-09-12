@@ -730,6 +730,11 @@ namespace CampusSimulator
         {
             if (teleportLocs.ContainsKey(trigger))
             {
+                var nodename = teleportLocs[trigger].nodename;
+                var vst = teleportLocs[trigger].viewerState;
+                var pt = GetNodePt(nodename);
+                vst.pos = pt;
+                sman.Lgg($"Node |{nodename}| mapped to |{pt:f1}",new string[] { "red", "cyan" } );
                 return (true, teleportLocs[trigger].viewerState);
             }
             return (false, null);
