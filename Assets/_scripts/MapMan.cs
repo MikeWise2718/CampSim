@@ -210,6 +210,16 @@ namespace CampusSimulator
         }
 
 
+        public void DeleteCachedMaps()
+        {
+            if (qmapman != null)
+            {
+                qmapman.qmm.DeleteCachedMapsAndElevations();
+            }
+        }
+
+
+
         void AssignBespoke()
         {
             //var fak = 2*0.4096f;

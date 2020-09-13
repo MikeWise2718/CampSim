@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Runtime.InteropServices;
-using UnityEditorInternal;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace Aiskwk.Map
 {
@@ -37,7 +35,6 @@ namespace Aiskwk.Map
             this.vctrl = vctrl;
         }
     }
-
 
     public class Viewer : MonoBehaviour
     {

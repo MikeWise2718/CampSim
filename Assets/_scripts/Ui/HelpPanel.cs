@@ -11,7 +11,7 @@ public class HelpPanel : MonoBehaviour
     public CampusSimulator.SceneMan sman;
     UiMan uiman;
 
-    Text helpText;
+    Text helpTabText;
     Button copyClipboardButton;
 
     Button closeButton;
@@ -26,7 +26,7 @@ public class HelpPanel : MonoBehaviour
     void LinkObjectsAndComponents()
     {
         uiman = sman.uiman;
-        helpText = transform.Find("HelpText").GetComponent<Text>();
+        //helpText = transform.Find("HelpText").GetComponent<Text>();
         copyClipboardButton = transform.Find("ClipboardCopyButton").gameObject.GetComponent<Button>();
         closeButton = transform.Find("CloseButton").gameObject.GetComponent<Button>();
 
@@ -36,7 +36,7 @@ public class HelpPanel : MonoBehaviour
     }
     public void SetScene(CampusSimulator.SceneSelE curscene)
     {
-        FillHelpPanel();
+        //FillHelpPanel();
     }
 
 
@@ -54,10 +54,12 @@ public class HelpPanel : MonoBehaviour
             font = consolas;
         }
 
-        helpText.font = font;
-        helpText.fontSize = 24;
-        helpText.alignment = TextAnchor.UpperLeft;
-        helpText.verticalOverflow = VerticalWrapMode.Overflow;
+        var go = GameObject.Find("HelpTabText");
+        helpTabText = go.GetComponent<Text>();
+        helpTabText.font = font;
+        helpTabText.fontSize = 24;
+        helpTabText.alignment = TextAnchor.UpperLeft;
+        helpTabText.verticalOverflow = VerticalWrapMode.Overflow;
         string msg = "Time Now: " + utc.ToString("yyyy-MM-dd HH:mm:ss UTC") + "\n";
         try
         {
@@ -88,7 +90,7 @@ public class HelpPanel : MonoBehaviour
             Debug.LogError("Error filling help text");
             Debug.LogError(ex.ToString());
         }
-        helpText.text = msg;
+        helpTabText.text = msg;
     }
     void ButtonClick(string buttonname)
     {
@@ -97,8 +99,8 @@ public class HelpPanel : MonoBehaviour
         {
             case "ClipboardCopyButton":
                 {
-                    Debug.Log($"CopyText {helpText.text.Length} chars");
-                    Aiskwk.Map.qut.CopyTextToClipboard(helpText.text);
+                    Debug.Log($"CopyText {helpTabText.text.Length} chars");
+                    Aiskwk.Map.qut.CopyTextToClipboard(helpTabText.text);
                     break;
                 }
         }

@@ -412,7 +412,7 @@ namespace CampusSimulator
                 {
                     return null;
                 }
-                grctrl = new GraphCtrl(sman.graphsdir)
+                grctrl = new GraphCtrl(sman.rgo, sman.graphsdir)
                 {
                     lltoxz = new GraphCtrl.LtoXZfunction(sman.coman.lltoxz)
                 };

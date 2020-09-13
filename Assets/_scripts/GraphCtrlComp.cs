@@ -22,6 +22,7 @@ namespace CampusSimulator
         {
             this.grc = grc;
             this.lcman = lcman;
+
         }
 
         void RefreshVals()
