@@ -46,6 +46,9 @@ namespace CampusSimulator
         public UxSettingBool osmblds = new UxSettingBool("osmblds", true);
         public UxSettingBool fixedblds = new UxSettingBool("fixedblds", false);
         public bool transwalls = false;
+        public bool showhvac = false;
+        public bool showelec = false;
+        public bool showplum = false;
 
 
         // To do - get rid of bldmode and treemode regions in BuildingMan
@@ -259,7 +262,6 @@ namespace CampusSimulator
             }
             return rv;
         }
-
         public void InitTranswalls()
         {
             var bld121 = GetBuilding("Bld121", couldFail: true);
@@ -275,21 +277,23 @@ namespace CampusSimulator
                 return;
             }
             transwalls = b121comp.b121_materialMode.Get() == B121Willow.b121_MaterialMode.glasswalls;
+            showhvac = b121comp.hvac.Get();
+            showelec = b121comp.lighting.Get();
             sman.uiman.SyncState();
         }
 
         public void TransBld121Button()
         {
             var bld121 = GetBuilding("Bld121", couldFail: true);
-            if (bld121==null)
+            if (bld121 == null)
             {
-                Debug.LogError($"No Bld121 in scene");
+                Debug.LogError($"BuildingMan.TransBld121Button - No Bld121 in scene");
                 return;
             }
-            var b121comp= bld121.GetComponent<B121Willow>();
+            var b121comp = bld121.GetComponent<B121Willow>();
             if (b121comp == null)
             {
-                Debug.LogError($"No B121 Component attached to Bld121 in scene");
+                Debug.LogError($"BuildingMan.TransBld121Button - No B121 Component attached to Bld121 in scene");
                 return;
             }
             var needtrans = transwalls;
@@ -303,7 +307,7 @@ namespace CampusSimulator
                 b121comp.b121_materialMode.SetAndSave(B121Willow.b121_MaterialMode.materialed);
             }
             var curstate = b121comp.b121_materialMode.Get();
-            if (oristate!=curstate)
+            if (oristate != curstate)
             {
                 Debug.Log($"Bld121 {oristate} changed to {curstate} - refresh required");
                 b121comp.ActuateMaterialMode();
@@ -313,6 +317,56 @@ namespace CampusSimulator
             {
                 Debug.Log($"Bld121 {oristate} unchanged to {curstate} - no refresh required");
             }
+        }
+
+        public void ShowHvacBld121Button()
+        {
+            var bld121 = GetBuilding("Bld121", couldFail: true);
+            if (bld121==null)
+            {
+                Debug.LogError($"BuildingMan.ShowHvacBld121Button - No Bld121 in scene");
+                return;
+            }
+            var b121comp= bld121.GetComponent<B121Willow>();
+            if (b121comp == null)
+            {
+                Debug.LogError($"BuildingMan.ShowHvacBld121Button - No B121 Component attached to Bld121 in scene");
+                return;
+            }
+            b121comp.ActuateShowHvac(showhvac);
+        }
+        public void ShowElecBld121Button()
+        {
+            var bld121 = GetBuilding("Bld121", couldFail: true);
+            if (bld121 == null)
+            {
+                Debug.LogError($"BuildingMan.ShowElecBld121Button - No Bld121 in scene");
+                return;
+            }
+            var b121comp = bld121.GetComponent<B121Willow>();
+            if (b121comp == null)
+            {
+                Debug.LogError($"BuildingMan.ShowElecBld121Button - No B121 Component attached to Bld121 in scene");
+                return;
+            }
+            b121comp.ActuateShowLighting(showelec);
+        }
+
+        public void ShowPlumBld121Button()
+        {
+            var bld121 = GetBuilding("Bld121", couldFail: true);
+            if (bld121 == null)
+            {
+                Debug.LogError($"BuildingMan.ShowPlumBld121Button - No Bld121 in scene");
+                return;
+            }
+            var b121comp = bld121.GetComponent<B121Willow>();
+            if (b121comp == null)
+            {
+                Debug.LogError($"BuildingMan.ShowPlumBld121Button - No B121 Component attached to Bld121 in scene");
+                return;
+            }
+            b121comp.ActuateShowPlumbing(showplum);
         }
 
         public BldPolyGen bpg = null;

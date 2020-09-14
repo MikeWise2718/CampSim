@@ -148,6 +148,31 @@ public class B121Willow : MonoBehaviour
         DestroyOneGo(ref b121pgo);
         DestroyOneGo(ref b121go);
     }
+    float bshellska = 0.025f;
+    float bang = -90;
+    float bxoff = 1.6f;
+    float bzoff = 1.3f;
+
+    public void LoadShell()
+    {
+        b121sgo = LoadObjFile(b121go, "Willow/B121/1716045-BH-AR-BASE_R20", "shell", ska: bshellska);
+    }
+    public void LoadInterior()
+    {
+        b121igo = LoadObjFile(b121go, "Willow/B121/1716045-BH-AR-INTERIOR_R20", "interior", ska: bshellska);
+    }
+    public void LoadHvac()
+    {
+        b121hgo = LoadObjFile(b121go, "Willow/B121/1716045-BH-HVAC-B121_2020", "hvac", xrot: bang, zoff: bzoff, xoff: bxoff);
+    }
+    public void LoadLighting()
+    {
+        b121lgo = LoadObjFile(b121go, "Willow/B121/1716045-BH-LIGHTING-B121_2020", "lighting", xrot: bang, zoff: bzoff, xoff: bxoff);
+    }
+    public void LoadPlumbing()
+    {
+        b121pgo = LoadObjFile(b121go, "Willow/B121/1716045-BH-PLUMBING-B121_2020", "plumbing", xrot: bang, zoff: bzoff, xoff: bxoff);
+    }
     public void MakeItSo()
     {
         bool loadedThisTime = false;
@@ -222,10 +247,6 @@ public class B121Willow : MonoBehaviour
                 }
                 _b121_osmbld = stat;
             }
-            var bshellska = 0.025f;
-            var bang = -90;
-            var bxoff = 1.6f;
-            var bzoff = 1.3f;
 
             if (shell.Get() != _b121_shell)
             {
@@ -233,7 +254,7 @@ public class B121Willow : MonoBehaviour
                 //b121sgo.SetActive(stat);
                 if (stat)
                 {
-                    b121sgo = LoadObjFile(b121go, "Willow/B121/1716045-BH-AR-BASE_R20", "shell", ska: bshellska);
+                    LoadShell();
                     loadedThisTime = true;
                 }
                 else
@@ -248,7 +269,7 @@ public class B121Willow : MonoBehaviour
                 var stat = interiorwalls.Get();
                 if (stat)
                 {
-                    b121igo = LoadObjFile(b121go, "Willow/B121/1716045-BH-AR-INTERIOR_R20", "interior", ska: bshellska);
+                    LoadInterior();
                     loadedThisTime = true;
                 }
                 else
@@ -262,7 +283,7 @@ public class B121Willow : MonoBehaviour
                 var stat = hvac.Get();
                 if (stat)
                 {
-                    b121hgo = LoadObjFile(b121go, "Willow/B121/1716045-BH-HVAC-B121_2020", "hvac", xrot: bang, zoff:bzoff, xoff:bxoff);
+                    LoadHvac();
                     loadedThisTime = true;
                 }
                 else
@@ -276,7 +297,7 @@ public class B121Willow : MonoBehaviour
                 var stat = lighting.Get();
                 if (stat)
                 {
-                    b121lgo = LoadObjFile(b121go, "Willow/B121/1716045-BH-LIGHTING-B121_2020", "lighting", xrot:bang, zoff: bzoff, xoff: bxoff);
+                    LoadLighting();
                     loadedThisTime = true;
                 }
                 else
@@ -290,7 +311,7 @@ public class B121Willow : MonoBehaviour
                 var stat = plumbing.Get();
                 if (stat)
                 {
-                    b121pgo = LoadObjFile(b121go, "Willow/B121/1716045-BH-PLUMBING-B121_2020", "plumbing", xrot: bang, zoff: bzoff, xoff: bxoff);
+                    LoadPlumbing();
                     loadedThisTime = true;
                 }
                 else
@@ -301,8 +322,7 @@ public class B121Willow : MonoBehaviour
             }
             //Debug.Log($"loadedThisTime:{loadedThisTime}");
             if (loadedThisTime || b121_materialMode.Get() != lastMaterialMode)
-            {
-                
+            {              
                 ActuateMaterialMode();
             }
         }
@@ -527,6 +547,61 @@ public class B121Willow : MonoBehaviour
         {"FloorMaterial","FloorMaterial"},
     };
 
+    public void ActuateShowHvac(bool showhvac)
+    {
+        if (showhvac)
+        {
+            if (b121hgo==null)
+            {
+                LoadHvac();
+            }
+            b121hgo.SetActive(true);
+        }
+        else
+        {
+            if (b121hgo!=null)
+            {
+                b121hgo.SetActive(false);
+            }
+        }    
+    }
+    public void ActuateShowLighting(bool showlighting)
+    {
+        if (showlighting)
+        {
+            if (b121lgo == null)
+            {
+                LoadLighting();
+            }
+            b121lgo.SetActive(true);
+        }
+        else
+        {
+            if (b121lgo != null)
+            {
+                b121lgo.SetActive(false);
+            }
+        }
+    }
+
+    public void ActuateShowPlumbing(bool showplumbing)
+    {
+        if (showplumbing)
+        {
+            if (b121pgo == null)
+            {
+                LoadPlumbing();
+            }
+            b121pgo.SetActive(true);
+        }
+        else
+        {
+            if (b121pgo != null)
+            {
+                b121pgo.SetActive(false);
+            }
+        }
+    }
 
     public void ActuateMaterialMode(bool writepartlisttofile=true)
     {

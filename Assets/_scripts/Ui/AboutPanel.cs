@@ -95,17 +95,6 @@ public class AboutPanel : MonoBehaviour
         Debug.Log($"{buttonname} clicked:" + Time.time);
         switch (buttonname)
         {
-            case "CloseButton":
-                {
-                    var spcomp = FindObjectOfType<StatusPanel>();
-                    spcomp.OptionsButton();
-                    break;
-                }
-            case "CopyClipboardButton":
-                {
-                    Aiskwk.Map.qut.CopyTextToClipboard(aboutTabText.text);
-                    break;
-                }
             case "DeleteSettingsButton":
                 {
                     Debug.LogWarning("PlayerPref Settings Deleted");
@@ -116,6 +105,17 @@ public class AboutPanel : MonoBehaviour
                 {
                     Debug.LogWarning("Deleteing Cached Maps");
                     sman.mpman.DeleteCachedMaps();
+                    break;
+                }
+            case "CloseButton":
+                {
+                    var spcomp = FindObjectOfType<StatusPanel>();
+                    spcomp.OptionsButton();
+                    break;
+                }
+            case "CopyClipboardButton":
+                {
+                    Aiskwk.Map.qut.CopyTextToClipboard(aboutTabText.text);
                     break;
                 }
         }
