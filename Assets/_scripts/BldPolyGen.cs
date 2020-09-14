@@ -480,7 +480,7 @@ public class BldPolyGen
         var rv = pg.GenBld(parent, bldname, height, levels, clr, alf: 0.5f,dowalls:dowalls,dofloors: dofloors,doroof:doroof, ptscale: ptscale, pgvd:pgvd);
         return rv;
     }
-    public GameObject GenBldFromOsmBldSpec(GameObject parent, OsmBldSpec bs, bool plotTesselation = false, float ptscale = 1, PolyGenVekMapDel pgvd = null)
+    public GameObject GenBldFromOsmBldSpec(GameObject parent, OsmBldSpec bs, bool plotTesselation = false, float ptscale = 1, PolyGenVekMapDel pgvd = null,float alf=0.5f)
     {
         pg.SetOutline(bs.GetOutline());
         var clr = bs.GetColor();
@@ -493,7 +493,7 @@ public class BldPolyGen
             dowalls = false;
             dofloors = false;
         }
-        var rv = pg.GenBld(parent, bldname, bs.height, bs.levels, clr, alf: 0.5f, dowalls: dowalls, dofloors: dofloors, doroof: doroof, plotTesselation: plotTesselation, ptscale: ptscale, pgvd: pgvd);
+        var rv = pg.GenBld(parent, bldname, bs.height, bs.levels, clr, alf: alf, dowalls: dowalls, dofloors: dofloors, doroof: doroof, plotTesselation: plotTesselation, ptscale: ptscale, pgvd: pgvd);
         return rv;
     }
 

@@ -29,6 +29,7 @@ public class BuildingsPanel : MonoBehaviour
 
     Toggle walllinks_toggle;
     Toggle osmblds_toggle;
+    Toggle osmbldstrans_toggle;
     Toggle fixedblds_toggle;
     Toggle osmstreets_toggle;
     Toggle fixedstreets_toggle;
@@ -71,6 +72,7 @@ public class BuildingsPanel : MonoBehaviour
 
         walllinks_toggle = transform.Find("WallLinksToggle").GetComponent<Toggle>();
         osmblds_toggle = transform.Find("OsmBldsToggle").GetComponent<Toggle>();
+        osmbldstrans_toggle = transform.Find("OsmBldsTransToggle").GetComponent<Toggle>();
         fixedblds_toggle = transform.Find("FixedBldsToggle").GetComponent<Toggle>();
 
         osmstreets_toggle = transform.Find("OsmStreetsToggle").GetComponent<Toggle>();
@@ -121,6 +123,7 @@ public class BuildingsPanel : MonoBehaviour
 
         walllinks_toggle.isOn = bdman.walllinks.Get();
         osmblds_toggle.isOn = bdman.osmblds.Get();
+        osmbldstrans_toggle.isOn = bdman.osmbldstrans.Get();
         fixedblds_toggle.isOn = bdman.fixedblds.Get();
 
         osmstreets_toggle.isOn = stman.osmstreets.Get();
@@ -282,6 +285,7 @@ public class BuildingsPanel : MonoBehaviour
 
         tchg = tchg || bdman.walllinks.SetAndSave(walllinks_toggle.isOn);
         tchg = tchg || bdman.osmblds.SetAndSave(osmblds_toggle.isOn);
+        tchg = tchg || bdman.osmbldstrans.SetAndSave(osmbldstrans_toggle.isOn);
         tchg = tchg || stman.osmstreets.SetAndSave(osmstreets_toggle.isOn);
         tchg = tchg || stman.fixedstreets.SetAndSave(fixedstreets_toggle.isOn);
         chg = chg || bdman.fixedblds.SetAndSave(fixedblds_toggle.isOn);

@@ -44,6 +44,7 @@ namespace CampusSimulator
 
         public UxSettingBool walllinks = new UxSettingBool("walllinks", false);
         public UxSettingBool osmblds = new UxSettingBool("osmblds", true);
+        public UxSettingBool osmbldstrans = new UxSettingBool("osmbldstrans", true);
         public UxSettingBool fixedblds = new UxSettingBool("fixedblds", false);
         public bool transwalls = false;
         public bool showhvac = false;
@@ -231,10 +232,11 @@ namespace CampusSimulator
             bldMode.GetInitial(BldModeE.full);
             walllinks.GetInitial(false);
             osmblds.GetInitial(true);
+            osmbldstrans.GetInitial(true);
             fixedblds.GetInitial(false);
             transwalls = false;
             scene_padspecs = new List<string>();
-            Debug.Log($"BuildingMan.InitializeValues walllinks:{walllinks.Get()} osmblds:{osmblds.Get()}   fixedblds:{fixedblds.Get()}");
+            Debug.Log($"BuildingMan.InitializeValues walllinks:{walllinks.Get()} osmblds:{osmblds.Get()} osmbldstrans:{osmbldstrans.Get()}   fixedblds:{fixedblds.Get()}");
         }
 
         public List<string> GetFilteredPadNames(string prefix)

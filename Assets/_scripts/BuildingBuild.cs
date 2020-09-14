@@ -714,7 +714,12 @@ namespace CampusSimulator
                 var pgvd = new PolyGenVekMapDel(bm.sman.mpman.GetHeightVector3);
                 if (bldspec.isVisible)
                 {
-                    var bgo = bm.bpg.GenBldFromOsmBldSpec(this.gameObject, bldspec, pgvd: pgvd);
+                    var alf = 1f;
+                    if (bm.osmbldstrans.Get())
+                    {
+                        alf = 0.5f;
+                    }
+                    var bgo = bm.bpg.GenBldFromOsmBldSpec(this.gameObject, bldspec, pgvd: pgvd,alf:alf);
                     bldgos.Add(bgo);
                     EchOsmOutline(this.gameObject, bldspec,pgvd:pgvd);
                 }
