@@ -22,7 +22,7 @@ namespace Aiskwk.Map
 
         public List<(LineSegment2xz, string, string)> trilinesegs = null;
 
-        public (int, int) AddPoint(string lname, List<(Vector3, float)> ptlist, Vector3 pt, float dist)
+        public (int, int) AddPoint(string lname, List<(Vector3 pt, float lamb)> ptlist, Vector3 pt, float dist)
         {
             var ipos = 0;
             var eps = 1e-6;
@@ -33,9 +33,9 @@ namespace Aiskwk.Map
             if (ptlist.Count > 0)
             {
                 var pt1 = ptlist[imin];
-                if (dist < pt1.Item2)
+                if (dist < pt1.lamb)
                 {
-                    //Debug.Log($"Inserting at begining pt1.Item2:{pt1.Item2}");
+                    //Debug.Log($"Inserting at begining pt1.lamb:{pt1.lamb}");
                     ipos = 0;
                 }
                 else if (ptlist.Count == 1)
@@ -46,12 +46,12 @@ namespace Aiskwk.Map
                 {
                     if (minmax)
                     {
-                        if (Math.Abs(pt1.Item2 - dist) < eps)
+                        if (Math.Abs(pt1.lamb - dist) < eps)
                         {
                             ipos = -1;
                         }
                         var pt2 = ptlist[imax];
-                        if (Math.Abs(pt2.Item2 - dist) < eps)
+                        if (Math.Abs(pt2.lamb - dist) < eps)
                         {
                             ipos = -1;
                         }
@@ -60,19 +60,19 @@ namespace Aiskwk.Map
                             var niter = 0;
                             while (imin < imax)
                             {
-                                //Debug.Log($"{niter} imax:{imax} dmin:{ptlist[imin].Item2}   imin:{imin} dmax:{ptlist[imax].Item2}");
+                                //Debug.Log($"{niter} imax:{imax} dmin:{ptlist[imin].lamb}   imin:{imin} dmax:{ptlist[imax].lamb}");
                                 var inew = (imin + imax) / 2;
                                 var pnx = ptlist[inew];
-                                if (Math.Abs(pnx.Item2 - dist) < eps)
+                                if (Math.Abs(pnx.lamb - dist) < eps)
                                 {
                                     ipos = -1;
                                     break;
                                 }
-                                if (dist < pnx.Item2)
+                                if (dist < pnx.lamb)
                                 {
                                     imax = inew;
                                 }
-                                else if (pnx.Item2 < dist)
+                                else if (pnx.lamb < dist)
                                 {
                                     imin = inew;
                                 }

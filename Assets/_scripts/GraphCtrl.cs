@@ -1128,7 +1128,10 @@ namespace GraphAlgos
             }
             return (minnode);
         }
-        public Tuple<LcLink,Vector3> FindClosestPointOnLineCloud(Vector3 pt,List<LcLink> links)
+
+
+
+        public (LcLink link, Vector3 pos) FindClosestPointOnLineCloud(Vector3 pt,List<LcLink> links)
         {
             var rpt = Vector3.zero;
             LcLink rlink = null;
@@ -1144,9 +1147,9 @@ namespace GraphAlgos
                     rlink = lnk;
                 }
             }
-            return new Tuple<LcLink,Vector3>(rlink,rpt);
+            return (rlink,rpt);
         }
-        public Tuple<LcLink, Vector3> FindClosestPointOnLineCloudTuple(Vector3 pt)
+        public (LcLink link, Vector3 pos) FindClosestPointOnLineCloudTuple(Vector3 pt)
         {
             var links = linkdict.Values.ToList();
             return FindClosestPointOnLineCloud(pt, links);
@@ -1155,9 +1158,9 @@ namespace GraphAlgos
         {
             var links = linkdict.Values.ToList();
             var v1 = FindClosestPointOnLineCloud(pt, links);
-            return (v1.Item1, v1.Item2);
+            return v1;
         }
-        public Tuple<LcLink, Vector3> FindClosestPointOnLineCloud(Vector3 pt,NodeRegion region)
+        public (LcLink link, Vector3 pos) FindClosestPointOnLineCloud(Vector3 pt,NodeRegion region)
         {
             var links = GetLinksInRegion(region.regid);
             return FindClosestPointOnLineCloud(pt, links);

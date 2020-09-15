@@ -640,26 +640,7 @@ namespace Aiskwk.Map
             Debug.Log($"RotateViewerNoTimeFak - Viewer rotation after   {transform.localRotation.eulerAngles}");
         }
 
-        void MoveViewerToHome()
-        {
-            //Debug.Log($"MoveViewerToHome pos:{home.viewerPosition:f1} rot:{home.viewerRotation:f1}");
-            var newpos = home.pos;
-            var newrot = Vector3.zero; /// this seems wierd, but we seemingly have the homeRotation coded in the toplevel Viewer rotation already
 
-
-            var bodyeuler = bodyPrefabRotation.eulerAngles;
-            // the following two lines don't work
-            var qqrot = Quaternion.FromToRotation(bodyeuler, newrot);
-            var angtorot = qqrot.eulerAngles;
-            //Debug.Log($"MoveViewerToHome bodyeuler:{bodyeuler:f1} ");
-            //Debug.Log($"MoveViewerToHome ang:{angtorot:f1} ");
-            // aparently it starts from zero every time
-
-            RotateViewerNoTimeFak(-bodyeuler.y);// this only handles the y-axis so it is wrong....
-
-            TranslateViewerToPosition(newpos);
-            TranslateViewer(0, 0);// TODO: this shouldn't be necessary but it is for MsftB19focused for some reason....
-        }
         public delegate (bool ok, ViewerState vst) TeleporterDelegate(string trigger);
         TeleporterDelegate teleporter = null;
 
@@ -789,9 +770,34 @@ namespace Aiskwk.Map
             }
             viewerControl = vst.vctrl;
             RotateViewerToYangle(vst.rot.y);
+            var (vn, _, _) = qmm.GetWcMeshPosProjectedAlongYnew(vst.pos);
             transform.position = vst.pos;
+            altitude = vst.pos.y-vn.y;
         }
+        void MoveViewerToHomeOld()
+        {
+            //Debug.Log($"MoveViewerToHome pos:{home.viewerPosition:f1} rot:{home.viewerRotation:f1}");
+            var newpos = home.pos;
+            var newrot = Vector3.zero; /// this seems wierd, but we seemingly have the homeRotation coded in the toplevel Viewer rotation already
 
+
+            var bodyeuler = bodyPrefabRotation.eulerAngles;
+            // the following two lines don't work
+            var qqrot = Quaternion.FromToRotation(bodyeuler, newrot);
+            var angtorot = qqrot.eulerAngles;
+            //Debug.Log($"MoveViewerToHome bodyeuler:{bodyeuler:f1} ");
+            //Debug.Log($"MoveViewerToHome ang:{angtorot:f1} ");
+            // aparently it starts from zero every time
+
+            RotateViewerNoTimeFak(-bodyeuler.y);// this only handles the y-axis so it is wrong....
+
+            TranslateViewerToPosition(newpos);
+            TranslateViewer(0, 0);// TODO: this shouldn't be necessary but it is for MsftB19focused for some reason....
+        }
+        void MoveViewerToHome()
+        {
+            SetViewerInState(home);
+        }
 
         Vector3 lstnrm = Vector3.up;
         void TranslateViewerProjected(float xmove, float zmove)

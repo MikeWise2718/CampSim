@@ -35,7 +35,7 @@ public class OptionsPanel : MonoBehaviour
     Button helpTabButton;
     Button aboutTabButton;
 
-    enum TabState { Visuals,MapSet,FireFly,Frames,Buildings,General,Help,About }
+    public enum TabState { Visuals,MapSet,FireFly,Frames,Buildings,General,Help,About }
     TabState tabstate;
     // Start is called before the first frame update
     public void Init0()
@@ -83,7 +83,7 @@ public class OptionsPanel : MonoBehaviour
         //SyncOptionsTabState();
     }
     
-    void SetTabState(TabState newstate)
+    public void SetTabState(TabState newstate)
     {
         tabstate = newstate;
         SyncOptionsTabState();

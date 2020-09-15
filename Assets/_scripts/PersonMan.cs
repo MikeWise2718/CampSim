@@ -387,6 +387,11 @@ namespace CampusSimulator
             if (isdronelike)
             {
                 pers.avatarNameMoving = pers.avatarName + "spinning";
+                pers.scale *= sman.trman.dronescalemodelnumber.Get();
+            }
+            else
+            {
+                pers.scale *= sman.trman.peoplescalemodelnumber.Get();
             }
             AddPersonToCollection(pers); /// has to be afterwards because of the sorted names for journeys
             pers.idleScript = PersonMan.GetIdleScript(pers.avatarName);

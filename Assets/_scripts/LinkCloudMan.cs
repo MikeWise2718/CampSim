@@ -34,7 +34,7 @@ namespace CampusSimulator
         public GraphAlgos.GraphCtrl grctrl = null;
         public LatLongMap longlatmap = null;
 
-        public bool showNearestPoint = false;
+        public bool showNearestPoint = true;
         public Vector3 nearestPointRef = new Vector3(5, 0, 5);
         public int maxVoiceKeywords = 100;
         public int nVoiceKeywords = 0;
@@ -175,6 +175,7 @@ namespace CampusSimulator
 
         void Start()
         {
+            Debug.Log("start LinkCloudMan");
             //initVals();
         }
 
@@ -290,18 +291,6 @@ namespace CampusSimulator
             return chg;
         }
 
-        // Update is called once per frame
-        void Update()
-        {
-            updateCount += 1;
-
-            //if (needRefreshUpdateCount > 0 && ((updateCount - needRefreshUpdateCount) > 15))
-            //{
-            //    sman.RequestRefresh("LinkCloudMan-Update on needRefreshUpdateCount>0");
-            //    needRefreshUpdateCount = 0;
-            //}
-            //CheckForVisibiltyChanges();
-        }
 
         bool CheckCapUseVisibility(LcLink link)
         {
@@ -457,6 +446,8 @@ namespace CampusSimulator
             var node = gcr.GetNode(lptname);
             CreateNodeGo(node);
         }
+        GameObject pnsph = null;
+
         int gogencount = 0;
         void CreateGrcGos()
         {
@@ -519,10 +510,10 @@ namespace CampusSimulator
                 if (showNearestPoint)
                 {
                     var tup = FindClosestPointOnLineCloud(nearestPointRef);
-                    var npt = tup.Item2;
-                    var nname = "linknearsph-";
+                    var npt = tup.pos;
+                    var nname = "linknearsphere";
 
-                    var pnsph = GraphUtil.CreateMarkerSphere(nname, npt, size: 2.5f *sman.linknodescale*markerNodeSize, clr: "red",alf:1-linkTrans);
+                    pnsph = GraphUtil.CreateMarkerSphere(nname, npt, size: 2.5f *sman.linknodescale*markerNodeSize, clr: "red",alf:1-linkTrans);
                     pnsph.transform.parent = grcgos.transform;
                 }
             }
@@ -593,7 +584,7 @@ namespace CampusSimulator
 
             LcMapMaker.Reset();
             initVals();
-
+            //showNearestPoint = true;
         }
         public void DelLcGos()
         {
@@ -858,10 +849,10 @@ namespace CampusSimulator
             var gcr = GetGraphCtrl();
             return (gcr.IsNodeName(pname));
         }
-        public Tuple<LcLink, Vector3> FindClosestPointOnLineCloud(Vector3 pt)
+        public (LcLink link, Vector3 pos) FindClosestPointOnLineCloud(Vector3 pt)
         {
             var gcr = GetGraphCtrl();
-            return (gcr.FindClosestPointOnLineCloudTuple(pt));
+            return gcr.FindClosestPointOnLineCloudTuple(pt);
         }
         public LcLink FindClosestLinkOnLineCloudFiltered(string filter, Vector3 pt)
         {
@@ -873,5 +864,42 @@ namespace CampusSimulator
             gcr.noiseUpNodes(maxdist, maxdist, maxdist);
         }
         #endregion
+
+        GameObject vgo = null;
+        // Update is called once per frame
+        void Update()
+        {
+            updateCount += 1;
+
+
+            if (showNearestPoint)
+            {
+                if (vgo == null)
+                {
+                    vgo = GameObject.Find("Viewer");
+                }
+                if (vgo != null)
+                {
+                    nearestPointRef = vgo.transform.position;
+                    var tup = FindClosestPointOnLineCloud(nearestPointRef);
+                    var nname = "linknearsphere";
+                    if (pnsph == null)
+                    {
+                        pnsph = GraphUtil.CreateMarkerSphere(nname, tup.pos, size: 2.5f * sman.linknodescale * markerNodeSize, clr: "red");
+                        pnsph.transform.parent = grcgos.transform;
+                    }
+                    pnsph.transform.position = tup.pos;
+                }
+            }
+
+
+            //if (needRefreshUpdateCount > 0 && ((updateCount - needRefreshUpdateCount) > 15))
+            //{
+            //    sman.RequestRefresh("LinkCloudMan-Update on needRefreshUpdateCount>0");
+            //    needRefreshUpdateCount = 0;
+            //}
+            //CheckForVisibiltyChanges();
+        }
+
     }
 }

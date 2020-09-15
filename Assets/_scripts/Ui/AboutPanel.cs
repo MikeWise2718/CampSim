@@ -183,25 +183,10 @@ public class AboutPanel : MonoBehaviour
         }
         return sid;
     }
-
-    public void FillAboutPanel()
+    public string GetAboutText()
     {
-        if (aboutTabText == null)
-        {
-            Init();
-        }
-
         var sysver = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
         var utc = System.DateTime.UtcNow;
-        Font arial;
-        arial = (Font)Resources.GetBuiltinResource(typeof(Font), "Arial.ttf");
-
-        var go = GameObject.Find("AboutTabText");
-        aboutTabText = go.GetComponent<Text>();
-        aboutTabText.font = arial;
-        aboutTabText.fontSize = 24;
-        aboutTabText.alignment = TextAnchor.UpperLeft;
-        aboutTabText.verticalOverflow = VerticalWrapMode.Truncate;
         string msg = "System Info";
         try
         {
@@ -239,12 +224,13 @@ public class AboutPanel : MonoBehaviour
             }
 
             msg += $"\n\nDisplays:{Display.displays.Length}";
-            for(int i=0; i<Display.displays.Length; i++)
+            for (int i = 0; i < Display.displays.Length; i++)
             {
                 var dd = Display.displays[i];
                 msg += $" \n  {i}  native: {dd.systemWidth},{dd.systemHeight}";
                 msg += $"       rendering: {dd.renderingWidth},{dd.renderingHeight}";
             }
+            msg += $"\nPlayerPrefs - UnitySelectMonitor:{PlayerPrefs.GetInt("UnitySelectMonitor")}";
 
 #if UNITY_EDITOR
             var svc = UnityEditor.SceneView.lastActiveSceneView.camera;
@@ -280,11 +266,39 @@ public class AboutPanel : MonoBehaviour
             Debug.LogError("Error filling about box text");
             Debug.LogError(ex.ToString());
         }
+        return msg;
+    }
+
+
+    public List<string> GetAboutTextAsList()
+    {
+        var msg = GetAboutText();
+        var rv = new List<string>(msg.Split('\n'));
+        return rv;
+    }
+    public void FillAboutPanel()
+    {
+        if (aboutTabText == null)
+        {
+            Init();
+        }
+
+        var sysver = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+        var utc = System.DateTime.UtcNow;
+        Font arial;
+        arial = (Font)Resources.GetBuiltinResource(typeof(Font), "Arial.ttf");
+
+        var go = GameObject.Find("AboutTabText");
+        aboutTabText = go.GetComponent<Text>();
+        aboutTabText.font = arial;
+        aboutTabText.fontSize = 24;
+        aboutTabText.alignment = TextAnchor.UpperLeft;
+        aboutTabText.verticalOverflow = VerticalWrapMode.Truncate;
         //var sv = aboutTextCanvas.GetComponent<ScrollView>();
         //var label = new UnityEngine.UIElements.TextField();
         //label.value = msg;
         //sv.contentContainer.Add(label);
-        aboutTabText.text = msg;
+        aboutTabText.text = GetAboutText();
         //Debug.Log("msg:" + msg);
     }
 

@@ -64,6 +64,8 @@ namespace CampusSimulator
             "b19-dronepad:6:0:4:4:T",
             //"b19-dronepad-centertop:6:0:4:4:T",
             "Bld122-dronepad-centertop:6:0:4:4:T",
+            "Bld123-dronepad-centertop:6:0:4:4:T",
+            "Bld99-dronepad-centertop:6:0:4:4:T",
         };
 
 

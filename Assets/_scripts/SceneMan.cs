@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
+
 #if USE_KEYWORDRECOGNIZER
 using UnityEngine.Windows.Speech;
 #endif
 using System.Linq;
 using GraphAlgos;
 using UnityEngine.Analytics;
+using TMPro;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -1586,6 +1589,7 @@ namespace CampusSimulator
             kickOffRun = GraphUtil.ParmBool("-run");
             kickOffEvac = GraphUtil.ParmBool("-evac");
             showNoPipes = GraphUtil.ParmBool("-nopipes");
+
             var (cmdlineScene, clscenename) = GraphUtil.ParmString("-scene", "");
             if (cmdlineScene)
             {
@@ -1618,6 +1622,20 @@ namespace CampusSimulator
             var esi = SceneMan.GetInitialSceneOption();
             curscene = SceneSelE.None; // force it to execute by specifying something it should never be - kind of a kludge
             SetScenario(esi);
+            var dohelp = GraphUtil.ParmBool("-help");
+            if (dohelp)
+            {
+                var flines = new List<string>();
+                flines.AddRange(uiman.helpan.GetHelpTextAsList());
+                flines.AddRange(uiman.abtpan.GetAboutTextAsList());
+                File.WriteAllLines("help.txt", flines);
+
+                uiman.stapan.OptionsButton(true);
+                uiman.optpan.SetTabState(OptionsPanel.TabState.Help);
+
+                //System.Console.WriteLine("*** Dohelp  ***");
+                //Application.Quit();
+            }
         }
         public void ToggleAutoErrorCorrect()
         {
