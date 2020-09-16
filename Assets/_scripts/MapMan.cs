@@ -767,7 +767,15 @@ namespace CampusSimulator
 
         public (bool ok, Vector3 pos) FindClosestPoint(Vector3 pos)
         {
-            return (false,Vector3.zero);
+            var (link,cpos) = sman.lcman.FindClosestPointOnLineCloud(pos);
+            if (link == null)
+            {
+                return (false, Vector3.zero);
+            }
+            else
+            {
+                return (true, cpos);
+            }
         }
 
 
