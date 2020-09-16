@@ -49,16 +49,18 @@ namespace CampusSimulator
             var bmaxheight = 0f;
             foreach (var bs in sman.bdman.bldspecs)
             {
-                var bheight = bs.height;
+                var bcen = bs.GetCenterTop();
+                var mapheight = sman.mpman.GetHeight(bcen.x,bcen.z);
+                var bheight = mapheight + bcen.y;
                 if (bmaxheight < bheight)
                 {
                     bmaxheight = bheight;
                 }
             }
-            if (flyheight<bmaxheight)
-            {
-                flyheight = bmaxheight;
-            }
+            //if (flyheight<bmaxheight) somehow the buildings are too high....
+            //{
+            //    flyheight = bmaxheight;
+            //}
 
             var padmax = 0f;
             foreach (var pad in pads)
@@ -74,7 +76,6 @@ namespace CampusSimulator
                 flyheight = padmax;
             }
             flyheight = flyheight + 16;
-
             sman.Lgg($"Drone Flightheight:{flyheight} bldmax:{bmaxheight} padmax:{padmax}","green");
             foreach (var pad in pads)
             {
