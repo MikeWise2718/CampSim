@@ -640,6 +640,9 @@ namespace Aiskwk.Map
             Debug.Log($"RotateViewerNoTimeFak - Viewer rotation after   {transform.localRotation.eulerAngles}");
         }
 
+        public delegate (bool ok, Vector3 pos) FindClosestPointDelegate(Vector3 pos);
+        FindClosestPointDelegate findclosepointer = null;
+
 
         public delegate (bool ok, ViewerState vst) TeleporterDelegate(string trigger);
         TeleporterDelegate teleporter = null;
@@ -753,6 +756,27 @@ namespace Aiskwk.Map
             if (valid)
             {
                 SetViewerInState(vst);
+            }
+        }
+
+        void MoveViewerToClosePoint()
+        {
+            if (findclosepointer == null)
+            {
+                Debug.Log("MoveViewerToClosePoint - findclosepointer is null - exiting");
+                return;
+            }
+            Debug.Log("MoveViewerToClosePoint");
+            var curpos = transform.position;
+            var (ok,newpt) = findclosepointer(curpos);
+            if (ok)
+            {
+                var movetopt = new Vector3(newpt.x, curpos.y, newpt.z);
+                MoveToPosition(newpt);
+            }
+            else
+            {
+                Debug.LogError($"findclosepointer error");
             }
         }
 
@@ -947,6 +971,7 @@ namespace Aiskwk.Map
             UnityEditor.SceneView.lastActiveSceneView.AlignViewToObject(viewercam.transform);
 #endif
         }
+        float f2Hit = float.MinValue;
         float ctrlAhit = float.MinValue;
         float ctrlHhit = float.MinValue;
         float ctrlVhit = float.MinValue;
@@ -1073,6 +1098,7 @@ namespace Aiskwk.Map
                 RotateCamPositionTopPrev();
                 ctrlEhit = Time.time;
             }
+
             if (Input.GetKey(KeyCode.A) && ctrlpressed)
             {
                 //Debug.Log($"hit A {Time.time - ctrlAhit} hitgap3:{hitgap3} doTrackThings:{doTrackThings}");
@@ -1113,6 +1139,11 @@ namespace Aiskwk.Map
             {
                 //Debug.Log($"hit T {Time.time - ctrlThit}");
                 ctrlThit = Time.time;
+            }
+            if (Input.GetKey(KeyCode.F2) && Time.time-f2Hit >hitgap3 )
+            {
+                MoveViewerToClosePoint();
+                f2Hit = Time.time;
             }
             if (Input.GetKey(KeyCode.Alpha0))
             {

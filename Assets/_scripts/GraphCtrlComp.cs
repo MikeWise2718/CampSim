@@ -12,11 +12,7 @@ namespace CampusSimulator
 
         public int nnodes;
         public int nlinks;
-        public int nregions;
-        public List<string> regiondesc=null;
-        public int regionNodeSum;
-        public string NodeMultiplicty = "";
-        public bool dumpMultiNodes = false;
+
 
         public void Init(LinkCloudMan lcman,GraphAlgos.GraphCtrl grc)
         {
@@ -34,10 +30,7 @@ namespace CampusSimulator
             }
             nnodes = grc.GetNodeCount();
             nlinks = grc.GetLinkCount();
-            nregions = grc.regman.GetNodeRegionCount();
-            regiondesc = grc.regman.GetNodeRegionsDesc();
-            regionNodeSum = grc.regman.GetNodeRegionCountSum();
-            NodeMultiplicty = grc.regman.GetMultiplicityDesc();
+            grc.regman.RefreshVals();
         }
 
         int updcount = 0;
@@ -46,14 +39,9 @@ namespace CampusSimulator
         {
             if (updcount % 300 == 0)
             {
-                RefreshVals();
+                RefreshVals();// wtf? There must be a better way than this.
             }
             updcount += 1;
-            if (dumpMultiNodes)
-            {
-                grc.regman.DumpMultiNodes();
-                dumpMultiNodes = false;
-            }
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using Aiskwk.Map;
 using GraphAlgos;
+using CampusSimulator;
 
 [Serializable]
 public class NodeRegion
@@ -36,12 +37,31 @@ public class NodeRegionMan : MonoBehaviour
     GraphCtrl grc;
     Dictionary<string, NodeRegion> regionDict;
     public NodeRegion curNodeRegion;
+    public int nnodes;
+    public int nlinks;
+    public int nregions;
+    public List<string> regiondesc = null;
+    public int regionNodeSum;
+    public string NodeMultiplicty = "";
+    public bool dumpMultiNodes = false;
+
+
     public void Init(GraphCtrl grc)
     {
         this.grc = grc;
         regionDict = new Dictionary<string, NodeRegion>();
         curNodeRegion = NewNodeRegion("default", "red", false);
     }
+    public void RefreshVals()
+    {
+        nregions = GetNodeRegionCount();
+        regiondesc = GetNodeRegionsDesc();
+        regionNodeSum = GetNodeRegionCountSum();
+        NodeMultiplicty = GetMultiplicityDesc();
+        nnodes = grc.GetNodeCount();
+        nlinks = grc.GetLinkCount();
+    }
+
     public List<NodeRegion> GetRegions()
     {
         var rv = new List<NodeRegion>(regionDict.Values);
@@ -195,6 +215,11 @@ public class NodeRegionMan : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (dumpMultiNodes)
+        {
+            grc.regman.DumpMultiNodes();
+            dumpMultiNodes = false;
+        }
 
     }
 }

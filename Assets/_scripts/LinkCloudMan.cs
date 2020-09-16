@@ -507,15 +507,6 @@ namespace CampusSimulator
                 Debug.Log($"CreateGrcGos - nodenamelist size:{grc.nodenamelist.Count}/{nodes.Count} took:{swnd.ElapSecs()} secs");
 
 
-                if (showNearestPoint)
-                {
-                    var tup = FindClosestPointOnLineCloud(nearestPointRef);
-                    var npt = tup.pos;
-                    var nname = "linknearsphere";
-
-                    pnsph = GraphUtil.CreateMarkerSphere(nname, npt, size: 2.5f *sman.linknodescale*markerNodeSize, clr: "red",alf:1-linkTrans);
-                    pnsph.transform.parent = grcgos.transform;
-                }
             }
             stats_nodes_links.x = grc.GetNodeCount();
             stats_nodes_links.y = grc.GetLinkCount();
@@ -885,7 +876,7 @@ namespace CampusSimulator
                     var nname = "linknearsphere";
                     if (pnsph == null)
                     {
-                        pnsph = GraphUtil.CreateMarkerSphere(nname, tup.pos, size: 2.5f * sman.linknodescale * markerNodeSize, clr: "red");
+                        pnsph = GraphUtil.CreateMarkerSphere(nname, tup.pos, size: 1.5f * sman.linknodescale * markerNodeSize, clr: "deeppurple");
                         pnsph.transform.parent = grcgos.transform;
                     }
                     pnsph.transform.position = tup.pos;

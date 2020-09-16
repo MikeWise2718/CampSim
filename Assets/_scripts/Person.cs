@@ -273,7 +273,7 @@ namespace CampusSimulator
 
         public void DeleteGos()
         {
-            PersonGo pgo;
+            // PersonGo pgo;
             // delete persongo
         }
         public void CreateGos()

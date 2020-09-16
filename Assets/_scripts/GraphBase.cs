@@ -176,7 +176,7 @@ namespace GraphAlgos
     [Serializable]
     public class LcLink
     {
-        public GraphCtrl grc;
+        // public GraphCtrl grc;  //  commented out - this leads to an object composition cycle I think....
         public GameObject lgo;
 
         public static bool CanDoCapFromUse(LcCapType cap,LinkUse use)
@@ -257,7 +257,7 @@ namespace GraphAlgos
 
         public LcLink(GraphCtrl grc, string name, LcNode node1, LcNode node2, LinkUse usetype=LinkUse.legacy,string comment="")
         {
-            this.grc = grc;
+            //this.grc = grc;
             this.usetype = usetype;
             this.name = name;
             this.node1 = node1;

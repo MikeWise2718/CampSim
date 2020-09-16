@@ -148,10 +148,12 @@ public class B121Willow : MonoBehaviour
         DestroyOneGo(ref b121pgo);
         DestroyOneGo(ref b121go);
     }
-    float bshellska = 0.025f;
-    float bang = -90;
-    float bxoff = 1.6f;
-    float bzoff = 1.3f;
+    public float bshellska = 0.025f;
+    public float bangle = -90;
+    public Vector3 bpos;
+    public float ymapheit;
+    public float xhlp_boff = 1.6f;
+    public float zhlp_boff = 1.3f;
 
     public void LoadShell()
     {
@@ -163,15 +165,15 @@ public class B121Willow : MonoBehaviour
     }
     public void LoadHvac()
     {
-        b121hgo = LoadObjFile(b121go, "Willow/B121/1716045-BH-HVAC-B121_2020", "hvac", xrot: bang, zoff: bzoff, xoff: bxoff);
+        b121hgo = LoadObjFile(b121go, "Willow/B121/1716045-BH-HVAC-B121_2020", "hvac", xrot: bangle, zoff: zhlp_boff, xoff: xhlp_boff);
     }
     public void LoadLighting()
     {
-        b121lgo = LoadObjFile(b121go, "Willow/B121/1716045-BH-LIGHTING-B121_2020", "lighting", xrot: bang, zoff: bzoff, xoff: bxoff);
+        b121lgo = LoadObjFile(b121go, "Willow/B121/1716045-BH-LIGHTING-B121_2020", "lighting", xrot: bangle, zoff: zhlp_boff, xoff: xhlp_boff);
     }
     public void LoadPlumbing()
     {
-        b121pgo = LoadObjFile(b121go, "Willow/B121/1716045-BH-PLUMBING-B121_2020", "plumbing", xrot: bang, zoff: bzoff, xoff: bxoff);
+        b121pgo = LoadObjFile(b121go, "Willow/B121/1716045-BH-PLUMBING-B121_2020", "plumbing", xrot: bangle, zoff: zhlp_boff, xoff: xhlp_boff);
     }
     public void MakeItSo()
     {
@@ -180,20 +182,19 @@ public class B121Willow : MonoBehaviour
         if (loadmodel.Get() && !_b121_WillowModelLoaded)
         {
             b121go = new GameObject("B121-Willow");
-            var xofs = 0;
-            var yofs = 0;
-            //var yofs = -1;
-            //var yoff = 5.8f;
-            var zofs = 0;
-            Vector3 defpos = new Vector3(-789 + xofs, yofs, -436 + zofs);
+            bpos = new Vector3(-789, 0, -436);
             if (sman != null)
             {
-                var yheit = sman.mpman.GetHeight(defpos.x, defpos.z);
-                Debug.Log($"Loading B121 - height - xofs:{xofs} yofs:{yofs} zofs:{zofs} yheit(from map):{yheit} total:{yheit+defpos.y}");
-                defpos = new Vector3(defpos.x, yheit + defpos.y, defpos.z);
+                ymapheit = sman.mpman.GetHeight(bpos.x, bpos.z);
+                if (sman.mpman.useElevations.Get())
+                {
+                    ymapheit -= 1.0f; // adjust for map irrgularities - doesn't work well
+                }
+                Debug.Log($"Loading B121 - height - bpos:{bpos:f1} yheit(from map):{ymapheit} total:{ymapheit+bpos.y}");
+                bpos = new Vector3(bpos.x, ymapheit + bpos.y, bpos.z);
             }
             b121go.transform.Rotate(new Vector3(0, -20.15f, 0));
-            b121go.transform.position = defpos;
+            b121go.transform.position = bpos;
             b121go.transform.SetParent(this.transform,worldPositionStays:false);
 
             _b121_shell = false;
