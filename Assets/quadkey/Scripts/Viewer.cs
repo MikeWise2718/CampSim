@@ -643,6 +643,11 @@ namespace Aiskwk.Map
         public delegate (bool ok, Vector3 pos) FindClosestPointDelegate(Vector3 pos);
         FindClosestPointDelegate findclosepointer = null;
 
+        public void SetFindClosestPointDelegate(FindClosestPointDelegate fcpd)
+        {
+            findclosepointer = fcpd;
+        }
+
 
         public delegate (bool ok, ViewerState vst) TeleporterDelegate(string trigger);
         TeleporterDelegate teleporter = null;
