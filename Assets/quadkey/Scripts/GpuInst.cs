@@ -12,7 +12,7 @@ namespace Aiskwk.Map
         public static void SetColorNewMat(GameObject go, Color cclr)
         {
             var rend = go.GetComponent<Renderer>();
-            var shader = Shader.Find("Diffuse");
+            var shader = Shader.Find("Standard");
             rend.material = new Material(shader);
             rend.material.enableInstancing = true;
             rend.material.color = cclr;
@@ -139,11 +139,11 @@ namespace Aiskwk.Map
             GameObject sharedgo;
             if (alpha < 1)
             {
-                sharedgo = GetShared(ptype, clr);
+                sharedgo = GetSharedTransparent(ptype, clr);
             }
             else
             {
-                sharedgo = GetSharedTransparent(ptype, clr);
+                sharedgo = GetShared(ptype, clr);
             }
             Transform tform = UnityEngine.Object.Instantiate<Transform>(sharedgo.transform);
             var cclr = qut.GetColorByName(clr, alpha: alpha);

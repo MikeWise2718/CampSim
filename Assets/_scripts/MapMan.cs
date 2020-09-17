@@ -4,6 +4,7 @@ using UnityEngine;
 using UxUtils;
 using Aiskwk.Map;
 using System.Runtime.InteropServices;
+using Boo.Lang.Runtime.DynamicDispatching;
 
 namespace CampusSimulator
 {
@@ -764,17 +765,48 @@ namespace CampusSimulator
             //public delegate (bool ok, Vector3 pos) FindClosestPointDelegate(Vector3 pos);
             viewer.SetFindClosestPointDelegate(FindClosestPoint);
         }
-
-        public (bool ok, Vector3 pos) FindClosestPoint(Vector3 pos)
+        public float FindClosestOfThree(float c1,float c2,float c3, float org)
         {
-            var (link,cpos) = sman.lcman.FindClosestPointOnLineCloud(pos);
+            var gap = Mathf.Abs(c1 - org);
+            var rv = c1;
+            var gap2 = Mathf.Abs(c2 - org);
+            if (gap2<gap)
+            {
+                gap = gap2;
+                rv = c2;
+            }
+            var gap3 = Mathf.Abs(c3 - org);
+            if (gap3 < gap)
+            {
+                gap = gap3;
+                rv = c3;
+            }
+            return rv;
+        }
+        public (bool ok, Vector3 pos, Vector3 rot) FindClosestPoint(Vector3 pos0,Vector3 rot0)
+        {
+            var (link,cpos) = sman.lcman.FindClosestPointOnLineCloud(pos0);
+            var nrot = rot0;
+            if (link!=null)
+            {
+                var pt1 = link.node1.pt;
+                var pt2 = link.node2.pt;
+                var dx = pt1.x - pt2.x;
+                var dz = pt1.z - pt2.z;
+                var at2 = Mathf.Atan2(dx, dz);
+                var newang = 180*at2/Mathf.PI;
+                var newangadj = FindClosestOfThree(newang - 180, newang, newang + 180, rot0.y);
+                var dang = rot0.y - newang;
+                nrot = new Vector3(rot0.x, newangadj, rot0.z);
+                Debug.Log($"FCP dx:{dx:f1} dz:{dz:f1} at2:{at2:f3} newang:{newang:f1} newangadj:{newangadj:f1} dang:{dang:f1}    rot0:{rot0:f1} nrot:{nrot:f1}");
+            }
             if (link == null)
             {
-                return (false, Vector3.zero);
+                return (false, Vector3.zero, Vector3.zero);
             }
             else
             {
-                return (true, cpos);
+                return (true, cpos, nrot);
             }
         }
 
@@ -787,6 +819,11 @@ namespace CampusSimulator
                 case SceneSelE.MsftB121focused:
                     {
                         AddB121Telelocs();
+                        AddViewSnapToClosestPoint();
+                        break;
+                    }
+                default:
+                    {
                         AddViewSnapToClosestPoint();
                         break;
                     }

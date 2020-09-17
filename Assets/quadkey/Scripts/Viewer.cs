@@ -18,6 +18,12 @@ namespace Aiskwk.Map
         public ViewerAvatar avatar = ViewerAvatar.CapsuleMan;
         public ViewerCamConfig camconfig = ViewerCamConfig.Eyes;
         public ViewerControl vctrl = ViewerControl.Position;
+
+        public bool hasCameraCarriage = false;
+        public int nCameras = 0;
+        public float angstart = 0;
+        public float angend = 0;
+        public bool carriageOn = false;
         public ViewerState()
         {
             pos = Vector3.zero;
@@ -25,6 +31,11 @@ namespace Aiskwk.Map
             avatar = ViewerAvatar.CapsuleMan;
             camconfig = ViewerCamConfig.Eyes;
             vctrl = ViewerControl.Position;
+            hasCameraCarriage = false;
+            nCameras = 0;
+            angstart = 0;
+            angend = 0;
+            carriageOn = false;
         }
         public ViewerState(Vector3 pos, Vector3 rot, ViewerAvatar ava = ViewerAvatar.CapsuleMan, ViewerCamConfig cam = ViewerCamConfig.Eyes, ViewerControl vctrl = ViewerControl.Position)
         {
@@ -34,6 +45,27 @@ namespace Aiskwk.Map
             this.camconfig = cam;
             this.vctrl = vctrl;
         }
+        public void AddCarriage(int ncameras,float angstart,float angend)
+        {
+            hasCameraCarriage = true;
+            this.nCameras = ncameras;
+            this.angstart = angstart;
+            this.angend = angend;
+            carriageOn = false;
+        }
+        public void TurnCarriageOn()
+        {
+            if (!hasCameraCarriage)
+            {
+                AddCarriage(3, -20, 20);
+            }
+            carriageOn = true;
+        }
+        public void TurnCarriageOff()
+        {
+            carriageOn = false;
+        }
+
     }
 
     public class Viewer : MonoBehaviour
@@ -46,12 +78,21 @@ namespace Aiskwk.Map
         GameObject bodyprefab = null;
         GameObject camgo = null;
         GameObject rodgo = null;
+        GameObject carriagego = null;
         Light lightcomp;
         static Camera viewercam;
         bool doTrackThings = false;
         public ViewerAvatar viewerAvatar = ViewerAvatar.CapsuleMan;
         public ViewerCamConfig viewerCamPosition = ViewerCamConfig.Eyes;
         public ViewerControl viewerControl = ViewerControl.Position;
+
+        bool carriageCameraExists = true;
+        int carriageCameras = 3;
+        float carriageAngleStart = -20;
+        float carriageAngleEnd = 20;
+        bool carriageOn = false;
+        List<Camera> carriageCams = null;
+
         public Quaternion bodyPrefabRotation = Quaternion.identity;
         public Quaternion bodyPlaneRotation = Quaternion.identity;
         public string qcmdescriptor = "";
@@ -100,6 +141,11 @@ namespace Aiskwk.Map
             vn.avatar = viewerAvatar;
             vn.camconfig = viewerCamPosition;
             vn.vctrl = viewerControl;
+            vn.hasCameraCarriage = carriageCameraExists;
+            vn.nCameras = carriageCameras;
+            vn.angstart = carriageAngleStart;
+            vn.angend = carriageAngleEnd;
+            vn.carriageOn = carriageOn;
             return vn;
         }
         public void InitViewer(QmapMesh qmm, ViewerState homespec = null)
@@ -117,6 +163,11 @@ namespace Aiskwk.Map
             viewerAvatar = home.avatar;
             viewerCamPosition = home.camconfig;
             viewerControl = home.vctrl;
+            carriageCameraExists = home.hasCameraCarriage;
+            carriageCameras = home.nCameras;
+            carriageOn = home.carriageOn;
+            carriageAngleStart = home.angstart;
+            carriageAngleEnd = home.angend;
             //var (vo,_, istat) = qmm.GetWcMeshPosFromLambda(0.5f, 0.5f);
             var (vo, _, istat) = qmm.GetWcMeshPosProjectedAlongYnew(home.pos);
             transform.position = vo;
@@ -129,22 +180,6 @@ namespace Aiskwk.Map
         }
 
 
-        public void DumpViewer()
-        {
-            int iter = 0;
-            var t = transform;
-            var s = t.localScale.x.ToString("f3");
-            var pname = $"{t.name}({s})";
-            while (true)
-            {
-                if (iter++ > 20) break;
-                if (t.parent == null) break;
-                t = t.parent;
-                s = t.localScale.x.ToString("f3");
-                pname = $"{t.name}({s})-{pname}";
-            }
-            Debug.Log($"ViewerPath:{pname}");
-        }
         public Transform GetRootTransform(Transform t)
         {
             int iter = 0;
@@ -273,6 +308,11 @@ namespace Aiskwk.Map
                 Destroy(rodgo);
                 rodgo = null;
             }
+            if (carriagego != null)
+            {
+                Destroy(carriagego);
+                carriagego = null;
+            }
             viewercam = null;
         }
         void DestroyGo(ref GameObject go)
@@ -290,6 +330,7 @@ namespace Aiskwk.Map
             DestroyGo(ref camgo);
             DestroyGo(ref body);
             DestroyGo(ref moveplane);
+            DestroyGo(ref carriagego);
             viewercam = null;
         }
         public bool pinCameraToFrame = false;
@@ -348,12 +389,33 @@ namespace Aiskwk.Map
             rodgo = new GameObject("rodgo");
             if (showNormalRod)
             {
-                var rod = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+                var rodcyl = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
                 var rodheight = 4.0f;
-                rod.transform.localScale = new Vector3(0.2f, rodheight, 0.2f);
-                rod.transform.position = new Vector3(0, rodheight * 0.75f, 0);
-                rod.transform.SetParent(rodgo.transform, worldPositionStays: false);
-                qut.SetColorOfGo(rod, Color.blue);
+                rodcyl.transform.localScale = new Vector3(0.2f, rodheight, 0.2f);
+                rodcyl.transform.position = new Vector3(0, rodheight * 0.75f, 0);
+                rodcyl.transform.SetParent(rodgo.transform, worldPositionStays: false);
+                qut.SetColorOfGo(rodcyl, Color.blue);
+            }
+            if (carriageCameraExists)
+            {
+                carriagego = new GameObject("carriagego");
+                carriageCams = new List<Camera>();
+                if (carriageCameras > 0)
+                {
+                    var ang = carriageAngleStart;
+                    var angdelt = (carriageAngleEnd - carriageAngleStart) / (carriageCameras-1);
+                    for (int i = 0; i < carriageCameras; i++)
+                    {
+                        var camgo = new GameObject($"cam{i}");
+                        camgo.transform.SetParent(carriagego.transform, worldPositionStays: false);
+                        camgo.transform.localRotation = Quaternion.Euler(new Vector3(0, ang, 0));
+                        var cam = camgo.AddComponent<Camera>();
+                        cam.targetDisplay = 2 + i;
+                        carriageCams.Add(cam);
+                        ang += angdelt;
+                    }
+                }
+                carriagego.transform.SetParent(moveplane.transform, worldPositionStays: false);
             }
             rodgo.transform.SetParent(transform, worldPositionStays: false);
             Debug.Log($"MakeAvatar - Viewer rotation after  {transform.localRotation.eulerAngles}");
@@ -453,7 +515,7 @@ namespace Aiskwk.Map
             //Debug.Log("BuildViewer");
             //Debug.Log($"BuildViewer - Viewer rotation before  {transform.localRotation.eulerAngles}");
 
-            DeleteGos();
+            DestroyAvatar();
             var shift = Vector3.zero;
             var scale = 1.0f;
             var angle = 0;
@@ -619,12 +681,14 @@ namespace Aiskwk.Map
         void RotateViewerToYangle(float yangle)
         {
             Debug.Log($"RotateViewerToYangle - Viewer rotation before  {transform.localRotation.eulerAngles}");
+            Debug.Log($"RotateViewerToYangle - Moveplane rotation before  {moveplane.transform.localRotation.eulerAngles}");
 
             bodyPlaneRotation = Quaternion.Euler(new Vector3(0, yangle, 0));
             moveplane.transform.localRotation = bodyPlaneRotation;
             bodyPrefabRotation = Quaternion.Euler(new Vector3(0, yangle, 0));
             body.transform.localRotation = Quaternion.FromToRotation(Vector3.up, lstnrm) * bodyPrefabRotation;
 
+            Debug.Log($"RotateViewerToYangle - Moveplane rotation after  {moveplane.transform.localRotation.eulerAngles}");
             Debug.Log($"RotateViewerToYangle - Viewer rotation after   {transform.localRotation.eulerAngles}");
         }
 
@@ -640,7 +704,7 @@ namespace Aiskwk.Map
             Debug.Log($"RotateViewerNoTimeFak - Viewer rotation after   {transform.localRotation.eulerAngles}");
         }
 
-        public delegate (bool ok, Vector3 pos) FindClosestPointDelegate(Vector3 pos);
+        public delegate (bool ok, Vector3 pos, Vector3 rot) FindClosestPointDelegate(Vector3 pos0,Vector3 rot0);
         FindClosestPointDelegate findclosepointer = null;
 
         public void SetFindClosestPointDelegate(FindClosestPointDelegate fcpd)
@@ -763,7 +827,26 @@ namespace Aiskwk.Map
                 SetViewerInState(vst);
             }
         }
-
+        void ToggleCarriageCamera()
+        {
+            Debug.Log("ToggleCarriageCamera");
+            if (!carriageCameraExists)
+            {
+                carriageCameraExists = true;
+                carriageCameras = 3;
+                carriageAngleStart = -60;
+                carriageAngleEnd = 60;
+                carriageOn = true;
+                BuildViewer();
+            }
+            else
+            {
+                foreach(var cam in carriageCams)
+                {
+                    cam.enabled = carriageOn;
+                }
+            }
+        }
         void MoveViewerToClosePoint()
         {
             if (findclosepointer == null)
@@ -773,11 +856,13 @@ namespace Aiskwk.Map
             }
             Debug.Log("MoveViewerToClosePoint");
             var curpos = transform.position;
-            var (ok,newpt) = findclosepointer(curpos);
+            var currot = transform.localRotation.eulerAngles;
+            var (ok,newpt,newrot) = findclosepointer(curpos,currot);
             if (ok)
             {
-                var movetopt = new Vector3(newpt.x, curpos.y, newpt.z);
-                MoveToPosition(newpt);
+                //var movetopt = new Vector3(newpt.x, curpos.y, newpt.z);
+                MoveToPosition(newpt);// uses altitude for height anyway
+                RotateViewerToYangle(newrot.y);
             }
             else
             {
@@ -977,6 +1062,7 @@ namespace Aiskwk.Map
 #endif
         }
         float f2Hit = float.MinValue;
+        float f8Hit = float.MinValue;
         float ctrlAhit = float.MinValue;
         float ctrlHhit = float.MinValue;
         float ctrlVhit = float.MinValue;
@@ -1149,6 +1235,11 @@ namespace Aiskwk.Map
             {
                 MoveViewerToClosePoint();
                 f2Hit = Time.time;
+            }
+            if (Input.GetKey(KeyCode.F8) && Time.time - f8Hit > hitgap3)
+            {
+                ToggleCarriageCamera();
+                f8Hit = Time.time;
             }
             if (Input.GetKey(KeyCode.Alpha0))
             {

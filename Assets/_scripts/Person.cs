@@ -285,33 +285,35 @@ namespace CampusSimulator
 
         public void AddCamera(GameObject pergo,string caller)
         {
+            // Not using these at the moment so turned off
+
             //Debug.Log("Entered AddCamera ");
-            if (pergo)
-            {
+            //if (pergo)
+            // {
 
-               // Debug.Log("AddCamera adding camera for " + pergo.name+" caller:"+caller);
-                followCamGo = new GameObject(name + "-cam");
-                var offset = new Vector3(0, 1.9f, -0.5f);
-                var quatrot = pergo.transform.localRotation;
-                followCamGo.transform.localRotation = pergo.transform.localRotation;
-                followCamGo.transform.position = pergo.transform.position + quatrot*offset;// have to rotate offset as the pergo is already rotated
-                followCamGo.transform.parent = pergo.transform;
+            //   // Debug.Log("AddCamera adding camera for " + pergo.name+" caller:"+caller);
+            //    followCamGo = new GameObject(name + "-cam");
+            //    var offset = new Vector3(0, 1.9f, -0.5f);
+            //    var quatrot = pergo.transform.localRotation;
+            //    followCamGo.transform.localRotation = pergo.transform.localRotation;
+            //    followCamGo.transform.position = pergo.transform.position + quatrot*offset;// have to rotate offset as the pergo is already rotated
+            //    followCamGo.transform.parent = pergo.transform;
 
-                //Debug.Log("pergo pos:" + pergo.transform.position.ToString("f3") + " offset:" + offset.ToString("f3"));
-                var fcamcomp = followCamGo.AddComponent<Camera>();
-                fcamcomp.targetDisplay = 2;
-                hasCamera = true;
-                if (grabbedMainCamera)
-                {
-                    var vcman = pm.sman.vcman;
-                    vcman.SetMainCameraToCam(fcamcomp);
-                    Camera.main.transform.parent = pergo.transform;
-                }
-            }
-            else
-            {
-                Debug.Log("AddCamera called with null GameObject - caller:"+caller);
-            }
+            //    //Debug.Log("pergo pos:" + pergo.transform.position.ToString("f3") + " offset:" + offset.ToString("f3"));
+            //    var fcamcomp = followCamGo.AddComponent<Camera>();
+            //    fcamcomp.targetDisplay = 8;
+            //    hasCamera = true;
+            //    if (grabbedMainCamera)
+            //    {
+            //        var vcman = pm.sman.vcman;
+            //        vcman.SetMainCameraToCam(fcamcomp);
+            //        Camera.main.transform.parent = pergo.transform;
+            //    }
+            //}
+            //else
+            //{
+            //    Debug.Log("AddCamera called with null GameObject - caller:"+caller);
+            //}
         }
         public void DelCamera()
         {

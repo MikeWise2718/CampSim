@@ -143,20 +143,24 @@ public class InfoPanel : MonoBehaviour
         if (trackedObject!=null)
         {
             var pos = Vector3.zero;
+            var rot = Vector3.zero;
             if (trackedObject!=null)
             {
                 pos = trackedObject.transform.position;
             }
             var fwd = Vector3.zero;
+            var yang = 0f;
             if (Camera.main != null)
             {
-                fwd = Camera.main.transform.forward;
+//                fwd = Camera.main.transform.TransformDirection(newPos);
+                fwd = curcam.transform.forward;
+                yang = 180 * Mathf.Atan2(fwd.x, fwd.z)/Mathf.PI;
             }
             string txt = "";
             //txt += "Pos:" + pos.x.ToString("f2") + " " + pos.y.ToString("f2") + " " + pos.z.ToString("f2")+"\n";
-            txt += $"Pos:{pos.x,4:f2} {pos.y,4:f2} {pos.z,4:f2}  vt2d:{sman.frman.visibilityTiedToDetectability.Get()}\n";
+            txt += $"Pos:{pos.x,4:f2} {pos.y,4:f2} {pos.z,4:f2}\n";
             //txt += "Fwd:" + fwd.x.ToString("f2") + " " + fwd.y.ToString("f2") + " " + fwd.z.ToString("f2");
-            txt += $"Fwd:{fwd.x,4:f2} {fwd.y,4:f2} {fwd.z,4:f2}\n";
+            txt += $"Fwd:{fwd.x,4:f2} {fwd.y,4:f2} {fwd.z,4:f2}   yang:{yang:f1}\n";
             sysText.text = txt;
         }
         if (locman!=null)

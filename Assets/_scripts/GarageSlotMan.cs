@@ -161,7 +161,7 @@ namespace CampusSimulator
                 var clrdr = raspibox.GetComponent<Collider>();
                 clrdr.enabled = false;
             }
-            if (createcam)
+            if (createcam) // usually off
             {
                 // this is wrong
                 // see this: https://gamedev.stackexchange.com/questions/57841/creating-multiple-instances-of-a-camera-at-run-time
@@ -173,14 +173,15 @@ namespace CampusSimulator
                 //    Quaternion.FromToRotation(Vector3.forward, Vector3.left));
                 //cam.name = "raspicam";
 
-                var camgo = new GameObject("raspicam");
-                var cam = camgo.AddComponent<Camera>();
-                cam.transform.position = raspibox.transform.position;
-                cam.transform.rotation = Quaternion.FromToRotation(Vector3.forward, Vector3.left);
-                cam.transform.parent = raspibox.transform;
-                cam.fieldOfView = 30f;
-                cam.nearClipPlane = 0.1f; // 10 cm
-                cam.targetDisplay = 8;
+                //// double commented out to make sure it doesn't come on by accident
+                ////var camgo = new GameObject("raspicam");
+                ////var cam = camgo.AddComponent<Camera>();
+                ////cam.transform.position = raspibox.transform.position;
+                ////cam.transform.rotation = Quaternion.FromToRotation(Vector3.forward, Vector3.left);
+                ////cam.transform.parent = raspibox.transform;
+                ////cam.fieldOfView = 30f;
+                ////cam.nearClipPlane = 0.1f; // 10 cm
+                ////cam.targetDisplay = 8;
             }
             if (createnode)
             {
