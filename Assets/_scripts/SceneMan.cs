@@ -1497,7 +1497,7 @@ namespace CampusSimulator
 #endregion
 
 
-        public enum RmColorModeE { nodepathstart, nodepathend, nodecloud, nodecloudx,  linkcloud,linkhighway,linkroad,linkslowroad,linkdriveway, linkwalk,linkwalknoshow, linkexcavate, linksurvey,linkwater,linkreclaimwater,linksewer, linkelec,linkcomms,linkoilgas, pathnode, pathlink, pathlookat, bldwall, 
+        public enum RmColorModeE { nodepathstart, nodepathend, nodecloud, nodecloudx,  linkcloud,linkhighway,linkroad,linkslowroad,linkdriveway, linkstairs, linkwalk,linkwalknoshow, linkexcavate, linksurvey,linkwater,linkreclaimwater,linksewer, linkelec,linkcomms,linkoilgas, pathnode, pathlink, pathlookat, bldwall, 
                                    trackperson,trackheli,trackdrone,droneway }
 
 
@@ -1515,6 +1515,7 @@ namespace CampusSimulator
             { RmColorModeE.linkslowroad, ("gray",0.2f,RmLinkFormE.pipe)},
             { RmColorModeE.linkdriveway, ("lightgray",0.2f,RmLinkFormE.pipe)},
             { RmColorModeE.linkwalk, ("pink",0.1f,RmLinkFormE.pipe)},
+            { RmColorModeE.linkstairs, ("orange",0.1f,RmLinkFormE.pipe)},
             { RmColorModeE.linkwalknoshow, ("darkgray",0.01f,RmLinkFormE.pipe)},
 
             { RmColorModeE.linkexcavate, ("white",0.1f,RmLinkFormE.pipe)},

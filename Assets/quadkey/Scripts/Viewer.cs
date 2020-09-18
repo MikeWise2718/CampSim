@@ -172,7 +172,8 @@ namespace Aiskwk.Map
             var (vo, _, istat) = qmm.GetWcMeshPosProjectedAlongYnew(home.pos);
             transform.position = vo;
             //Debug.Log($"Initviwer initial position {vo}");
-            transform.localRotation = Quaternion.Euler(home.rot);
+            //RotateViewerToYangle(home.rot.y);
+            //transform.localRotation = Quaternion.Euler(home.rot);
             qcmdescriptor = qmm.descriptor;
             BuildViewer();
             InitTeleporter();
@@ -203,7 +204,8 @@ namespace Aiskwk.Map
             var parent = transform.parent;
             transform.SetParent(null, worldPositionStays: false);// disconnect
             transform.position = home.pos;
-            transform.localRotation = Quaternion.Euler(home.rot);
+            //transform.localRotation = Quaternion.Euler(home.rot);
+            RotateViewerToYangle(home.rot.y);
             //Debug.Log($"ReAdjustViewerInitialPosition - viewerDefaultRotation:{viewerDefaultRotation}");
             var t = GetRootTransform(parent.transform);
             var s = t.localScale.x;
@@ -218,7 +220,7 @@ namespace Aiskwk.Map
                 Debug.LogError($"{t.name} s == 0");
             }
             transform.SetParent(parent.transform, worldPositionStays: true);// reconnect
-            transform.localRotation = Quaternion.Euler(home.rot); // Think this has to match the rotation it was built with
+            //transform.localRotation = Quaternion.Euler(home.rot); // Think this has to match the rotation it was built with
                                                                   // or we get problems when we follownormal along the mesh
             TranslateViewer(0, 0);
             RotateViewer(0);
@@ -621,6 +623,9 @@ namespace Aiskwk.Map
             {
                 default:
                 case ViewerAvatar.QuadCopter:
+                    rv = ViewerAvatar.QuadCopter2;
+                    break;
+                case ViewerAvatar.QuadCopter2:
                     rv = ViewerAvatar.Rover;
                     break;
                 case ViewerAvatar.Rover:
@@ -759,7 +764,7 @@ namespace Aiskwk.Map
                 { "t5",new ViewerState()
                     {
                         pos = new Vector3(-850.70f, 73.05f, -487.70f), // "b121-f01-1071"
-                        rot = new Vector3(0, 37.8f, 0),
+                        rot = new Vector3(0, 340f, 0),
                         avatar = ViewerAvatar.QuadCopter,
                         camconfig = ViewerCamConfig.FloatBehind,
                         vctrl = ViewerControl.Position
@@ -768,7 +773,7 @@ namespace Aiskwk.Map
                 { "t1", new ViewerState()
                     {
                         pos = new Vector3(-850.70f, 73.05f, -487.70f), // "b121-f01-1071"
-                        rot = new Vector3(0, 37.8f, 0),
+                        rot = new Vector3(0, 340f, 0),
                         avatar = ViewerAvatar.QuadCopter2,
                         camconfig = ViewerCamConfig.FloatBehind,
                         vctrl = ViewerControl.Position
@@ -777,7 +782,7 @@ namespace Aiskwk.Map
                 { "t2", new ViewerState()
                     {
                         pos = new Vector3(-862.3f, 77.05f, -506.2f),// "b121-f02-2060-2"
-                        rot = new Vector3(0, 41.1f, 0),
+                        rot = new Vector3(0, 340f, 0),
                         avatar = ViewerAvatar.QuadCopter2,
                         camconfig = ViewerCamConfig.FloatBehind,
                         vctrl = ViewerControl.Position
@@ -786,7 +791,7 @@ namespace Aiskwk.Map
                 { "t3",new ViewerState()
                     {
                         pos = new Vector3(-828.12f, 81.25f, -467.71f),// "b121-f03-31-2"
-                        rot = new Vector3(0, 48.31f, 0),
+                        rot = new Vector3(0, 340f, 0),
                         avatar = ViewerAvatar.QuadCopter2,
                         camconfig = ViewerCamConfig.FloatBehind,
                         vctrl = ViewerControl.Position
@@ -795,7 +800,7 @@ namespace Aiskwk.Map
                 { "t4", new ViewerState()
                     {
                         pos = new Vector3(-821.76f, 81.25f, -480.29f),// "b121-f03-3100-2"
-                        rot = new Vector3(0, 48.31f, 0),
+                        rot = new Vector3(0, 345f, 0),
                         avatar = ViewerAvatar.QuadCopter2,
                         camconfig = ViewerCamConfig.FloatBehind,
                         vctrl = ViewerControl.Position
@@ -854,9 +859,9 @@ namespace Aiskwk.Map
                 Debug.Log("MoveViewerToClosePoint - findclosepointer is null - exiting");
                 return;
             }
-            Debug.Log("MoveViewerToClosePoint");
+            //Debug.Log("MoveViewerToClosePoint");
             var curpos = transform.position;
-            var currot = transform.localRotation.eulerAngles;
+            var currot = moveplane.transform.localRotation.eulerAngles;
             var (ok,newpt,newrot) = findclosepointer(curpos,currot);
             if (ok)
             {
@@ -869,6 +874,16 @@ namespace Aiskwk.Map
                 Debug.LogError($"findclosepointer error");
             }
         }
+        void ReverseDirection()
+        {
+            Debug.Log("ReverseDirection");
+            var curroty = moveplane.transform.localRotation.eulerAngles.y;
+            var newroty = curroty - 180;
+            if (newroty < 0) newroty += 360;
+            Debug.Log($"ReverseDirection from {curroty} to {newroty}");
+            RotateViewerToYangle(newroty);
+        }
+
 
 
         void SetViewerInState(ViewerState vst)
@@ -1062,6 +1077,7 @@ namespace Aiskwk.Map
 #endif
         }
         float f2Hit = float.MinValue;
+        float f4Hit = float.MinValue;
         float f8Hit = float.MinValue;
         float ctrlAhit = float.MinValue;
         float ctrlHhit = float.MinValue;
@@ -1235,6 +1251,11 @@ namespace Aiskwk.Map
             {
                 MoveViewerToClosePoint();
                 f2Hit = Time.time;
+            }
+            if (Input.GetKey(KeyCode.F4) && Time.time - f4Hit > hitgap3)
+            {
+                ReverseDirection();
+                f4Hit = Time.time;
             }
             if (Input.GetKey(KeyCode.F8) && Time.time - f8Hit > hitgap3)
             {

@@ -171,7 +171,7 @@ namespace GraphAlgos
     }
 
     public enum LcCapType { walk, drive, waterflow, elecflow, anything, fly }
-    public enum LinkUse { legacy, highway, road, slowroad, driveway, walkway, walkwaynoshow, marker, excavation, waterpipe, recwaterpipe,sewerpipe, elecpipe,commspipe,oilgaspipe, bldwall, trackperson,trackheli,trackdrone, droneway }
+    public enum LinkUse { legacy, highway, road, slowroad, driveway, walkway, walkwaynoshow, stairs, marker, excavation, waterpipe, recwaterpipe,sewerpipe, elecpipe,commspipe,oilgaspipe, bldwall, trackperson,trackheli,trackdrone, droneway }
 
     [Serializable]
     public class LcLink
@@ -193,6 +193,7 @@ namespace GraphAlgos
             {LinkUse.legacy,1.0f },
             {LinkUse.walkwaynoshow,1.0f },
             {LinkUse.walkway,1.0f },
+            {LinkUse.stairs,2.0f },
             {LinkUse.driveway,10.0f },
             {LinkUse.trackperson,1.0f },
         };

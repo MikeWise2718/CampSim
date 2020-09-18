@@ -198,12 +198,12 @@ namespace CampusSimulator
                 {
                     if (bs.osmname.StartsWith(namestart))
                     {
-                        Debug.Log($"Found \"{bs.osmname}\" starts with \"{namestart}\"");
+                        //Debug.Log($"Found \"{bs.osmname}\" starts with \"{namestart}\"");
                         return bs;
                     }
                 }
             }
-            Debug.Log($"Found nothing that starts with \"{namestart}\"");
+            Debug.LogWarning($"Found nothing that starts with \"{namestart}\"");
             return null;
         }
 
@@ -623,7 +623,7 @@ namespace CampusSimulator
                 RegisterBsBld(bldspec, bld);
             }
             bld.AddOsmBldDetails(this, bldspec);
-            AddBuildingToCollection(bld);
+            AddBuildingToCollection(bld,mightAlreadyExist:true);
 
             //bld.llm = bgo.AddComponent<LatLongMap>(); // todo uncomment
             //var origin = $"BuildingMan.MakeOsmBuilding(\"{mbname}\")";
@@ -703,11 +703,14 @@ namespace CampusSimulator
             }
             return bldlookup[bname];
         }
-        public void AddBuildingToCollection(Building building)
+        public void AddBuildingToCollection(Building building,bool mightAlreadyExist=false)
         {
             if (bldlookup.ContainsKey(building.name))
             {
-                Debug.Log("Tried to add duplicate building:" + building.name); // this can happen with osmbuildings
+                if (!mightAlreadyExist)
+                {
+                    Debug.Log("Tried to add duplicate building:" + building.name); // this can happen with osmbuildings
+                }
                 return;
             }
             var ndests = building.GetRoomListFromNodes().Count;

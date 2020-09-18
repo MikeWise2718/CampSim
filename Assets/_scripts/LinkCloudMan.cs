@@ -468,7 +468,7 @@ namespace CampusSimulator
                 grclinks = new GameObject("links");
                 grclinks.transform.parent = grcgos.transform;
                 var (gogen, nn, nl) = GetNodeLinkCounts();
-                Debug.Log($"CreateGrcGos - gogen:{gogen} nodes:{nn} links:{nl}");
+                //Debug.Log($"CreateGrcGos - gogen:{gogen} nodes:{nn} links:{nl}");
                 gogencount++;
             }
             if (linksvisible)
@@ -489,7 +489,7 @@ namespace CampusSimulator
                 }
                 swlk.Stop();
                 var nisects = sman.mpman.nTotIsects;
-                Debug.Log($"CreateGrcGos - linknamelist size:{grc.linknamelist.Count}/{links.Count} took:{swlk.ElapSecs()} secs  -  isects:{nisects}");
+                //Debug.Log($"CreateGrcGos - linknamelist size:{grc.linknamelist.Count}/{links.Count} took:{swlk.ElapSecs()} secs  -  isects:{nisects}");
             }
             if (nodesvisible)
             {
@@ -504,14 +504,14 @@ namespace CampusSimulator
                     CreateNodeGo(node);
                 }
                 swnd.Stop();
-                Debug.Log($"CreateGrcGos - nodenamelist size:{grc.nodenamelist.Count}/{nodes.Count} took:{swnd.ElapSecs()} secs");
+                //Debug.Log($"CreateGrcGos - nodenamelist size:{grc.nodenamelist.Count}/{nodes.Count} took:{swnd.ElapSecs()} secs");
 
 
             }
             stats_nodes_links.x = grc.GetNodeCount();
             stats_nodes_links.y = grc.GetLinkCount();
             sw.Stop();
-            Debug.Log($"CreateGrcGos {gogencount} took {sw.ElapSecs()} secs");
+            //Debug.Log($"CreateGrcGos {gogencount} took {sw.ElapSecs()} secs");
         }
         public void DeleteGrcGos()
         {
@@ -643,6 +643,7 @@ namespace CampusSimulator
             { LinkUse.slowroad,SceneMan.RmColorModeE.linkslowroad },
             { LinkUse.driveway,SceneMan.RmColorModeE.linkdriveway },
             { LinkUse.walkway,SceneMan.RmColorModeE.linkwalk },
+            { LinkUse.stairs,SceneMan.RmColorModeE.linkstairs },
             { LinkUse.walkwaynoshow,SceneMan.RmColorModeE.linkwalknoshow },
             { LinkUse.excavation,SceneMan.RmColorModeE.linkexcavate},
             { LinkUse.marker,SceneMan.RmColorModeE.linksurvey},
@@ -746,9 +747,9 @@ namespace CampusSimulator
                 var lpt2 = gcr.GetNode(nodename2);
                 gcr.AddLink(linkname,lpt1,lpt2);
                 RefreshGos();
-                var clipstring = "lc.AddLinkByNodeName( " + q(nodename1) + "," + q(nodename2) + ");";
+                var clipstring = $"lc.AddLinkByNodeName( {q(nodename1)},{q(nodename2)} );";
                 GraphUtil.AddToClipboard( clipstring );
-                Debug.Log("Wrote "+clipstring+" to clipboard");
+                Debug.Log($"Wrote {clipstring} to clipboard");
             }
         }
         public void DeleteNode(string name)

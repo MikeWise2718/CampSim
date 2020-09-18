@@ -118,7 +118,7 @@ namespace CampusSimulator
             }
             if (destnodelst.Count > 0)
             {
-                Debug.Log("Found " + destnodelst.Count + " dests for " + name);
+                //Debug.Log("Found " + destnodelst.Count + " dests for " + name);
                 destnodes = destnodelst;// in ReinitDests
             }
         }

@@ -19,6 +19,7 @@ public class InfoPanel : MonoBehaviour
     Text mscText;
 
     GameObject trackedObject = null;
+    Aiskwk.Map.Viewer viewer = null;
 
     public void Init0()
     {
@@ -103,6 +104,10 @@ public class InfoPanel : MonoBehaviour
         {
             trackedObject = curcam.gameObject;
         }
+        if (viewer==null)
+        {
+            viewer = FindObjectOfType<Aiskwk.Map.Viewer>();
+        }
 
         var msg = $"{vman.lastcamset}\nJny:{jman.njnys} Sspn:{jman.nspawned} Fspn:{jman.nspawnfails}\n";
 
@@ -149,18 +154,21 @@ public class InfoPanel : MonoBehaviour
                 pos = trackedObject.transform.position;
             }
             var fwd = Vector3.zero;
-            var yang = 0f;
-            if (Camera.main != null)
+            var txtyang = "";;
+            if (viewer!=null)
             {
-//                fwd = Camera.main.transform.TransformDirection(newPos);
-                fwd = curcam.transform.forward;
-                yang = 180 * Mathf.Atan2(fwd.x, fwd.z)/Mathf.PI;
+                txtyang = $" yang:{viewer.bodyPlaneRotation.eulerAngles.y:f1}";
             }
             string txt = "";
+            string txtalt = "";
+            if (viewer!=null)
+            {
+                txtalt = $" A:{viewer.altitude:f1}";
+            }
             //txt += "Pos:" + pos.x.ToString("f2") + " " + pos.y.ToString("f2") + " " + pos.z.ToString("f2")+"\n";
-            txt += $"Pos:{pos.x,4:f2} {pos.y,4:f2} {pos.z,4:f2}\n";
+            txt += $"Pos:{pos.x,4:f2} {pos.y,4:f2} {pos.z,4:f2}{txtalt}\n";
             //txt += "Fwd:" + fwd.x.ToString("f2") + " " + fwd.y.ToString("f2") + " " + fwd.z.ToString("f2");
-            txt += $"Fwd:{fwd.x,4:f2} {fwd.y,4:f2} {fwd.z,4:f2}   yang:{yang:f1}\n";
+            txt += $"Fwd:{fwd.x,4:f2} {fwd.y,4:f2} {fwd.z,4:f2}{txtyang}\n";
             sysText.text = txt;
         }
         if (locman!=null)

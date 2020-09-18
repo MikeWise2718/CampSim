@@ -182,7 +182,7 @@ public class B121Willow : MonoBehaviour
         if (loadmodel.Get() && !_b121_WillowModelLoaded)
         {
             b121go = new GameObject("B121-Willow");
-            bpos = new Vector3(-789, 0, -436);
+            bpos = new Vector3(-789, 0.01f, -436);// 1 cm raised to eliminate z fighting
             if (sman != null)
             {
                 ymapheit = sman.mpman.GetHeight(bpos.x, bpos.z);
@@ -604,7 +604,7 @@ public class B121Willow : MonoBehaviour
         }
     }
 
-    public void ActuateMaterialMode(bool writepartlisttofile=true)
+    public void ActuateMaterialMode(bool writepartlisttofile=false)
     {
         lastMaterialMode = b121_materialMode.Get();
         InitMonitorMaterials();

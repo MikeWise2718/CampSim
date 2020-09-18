@@ -679,7 +679,7 @@ namespace CampusSimulator
                     {
                         //pos = GetNodePt(new Vector3(-850.70f, 73.05f, -487.70f), "b121-f01-1071"),
                         pos = GetNodePt("b121-f01-1071"),
-                        rot = new Vector3(0, 37.8f, 0),
+                        rot = new Vector3(0, 340f, 0),
                         avatar = ViewerAvatar.QuadCopter,
                         camconfig = ViewerCamConfig.FloatBehind,
                         vctrl = ViewerControl.Position
@@ -689,7 +689,7 @@ namespace CampusSimulator
                     {
                         //pos = GetNodePt(new Vector3(-850.70f, 73.05f, -487.70f), "b121-f01-1071"),
                         pos = GetNodePt("b121-f01-1071"),
-                        rot = new Vector3(0, 37.8f, 0),
+                        rot = new Vector3(0, 340f, 0),
                         avatar = ViewerAvatar.QuadCopter2,
                         camconfig = ViewerCamConfig.FloatBehind,
                         vctrl = ViewerControl.Position
@@ -699,7 +699,7 @@ namespace CampusSimulator
                     {
                         //pos = GetNodePt(new Vector3(-862.3f, 77.05f, -506.2f), "b121-f02-2060-2"),
                         pos = GetNodePt("b121-f02-2060-2"),
-                        rot = new Vector3(0, 41.1f, 0),
+                        rot = new Vector3(0, 340f, 0),
                         avatar = ViewerAvatar.QuadCopter2,
                         camconfig = ViewerCamConfig.FloatBehind,
                         vctrl = ViewerControl.Position
@@ -719,7 +719,7 @@ namespace CampusSimulator
                     {
                         //pos = GetNodePt(new Vector3(-821.76f, 81.25f, -480.29f), "b121-f03-3100-2"),
                         pos = GetNodePt("b121-f03-3100-2"),
-                        rot = new Vector3(0, 48.31f, 0),
+                        rot = new Vector3(0, 345f, 0),
                         avatar = ViewerAvatar.QuadCopter2,
                         camconfig = ViewerCamConfig.FloatBehind,
                         vctrl = ViewerControl.Position
@@ -765,9 +765,11 @@ namespace CampusSimulator
             //public delegate (bool ok, Vector3 pos) FindClosestPointDelegate(Vector3 pos);
             viewer.SetFindClosestPointDelegate(FindClosestPoint);
         }
-        public float FindClosestOfThree(float c1,float c2,float c3, float org)
+        public float FindClosestOfFive(float c1,float c2,float c3,float c4, float c5, float org)
         {
-            var gap = Mathf.Abs(c1 - org);
+            // find org that is the closest of these 5
+            var gap1 = Mathf.Abs(c1 - org);
+            var gap = gap1;
             var rv = c1;
             var gap2 = Mathf.Abs(c2 - org);
             if (gap2<gap)
@@ -781,6 +783,19 @@ namespace CampusSimulator
                 gap = gap3;
                 rv = c3;
             }
+            var gap4 = Mathf.Abs(c4 - org);
+            if (gap4 < gap)
+            {
+                gap = gap4;
+                rv = c4;
+            }
+            var gap5 = Mathf.Abs(c5 - org);
+            if (gap5 < gap)
+            {
+                gap = gap5;
+                rv = c5;
+            }
+            sman.Lgg($"c1:{c1:f1} {gap1:f1}    c2:{c2:f1} {gap2:f1}    c3:{c3:f1} {gap3:f1}    c4:{c4:f1} {gap4:f1}    c5:{c5:f1} {gap5:f1}", "cyan");
             return rv;
         }
         public (bool ok, Vector3 pos, Vector3 rot) FindClosestPoint(Vector3 pos0,Vector3 rot0)
@@ -789,16 +804,17 @@ namespace CampusSimulator
             var nrot = rot0;
             if (link!=null)
             {
+                // now find directiion it is pointing
                 var pt1 = link.node1.pt;
                 var pt2 = link.node2.pt;
                 var dx = pt1.x - pt2.x;
                 var dz = pt1.z - pt2.z;
                 var at2 = Mathf.Atan2(dx, dz);
                 var newang = 180*at2/Mathf.PI;
-                var newangadj = FindClosestOfThree(newang - 180, newang, newang + 180, rot0.y);
+                var newangadj = FindClosestOfFive(newang-360, newang - 180, newang, newang + 180, newang+360, rot0.y);
                 var dang = rot0.y - newang;
                 nrot = new Vector3(rot0.x, newangadj, rot0.z);
-                Debug.Log($"FCP dx:{dx:f1} dz:{dz:f1} at2:{at2:f3} newang:{newang:f1} newangadj:{newangadj:f1} dang:{dang:f1}    rot0:{rot0:f1} nrot:{nrot:f1}");
+                sman.Lgg($"FCP |dx:{dx:f1} dz:{dz:f1} at2:{at2:f3} newang:{newang:f1} newangadj:{newangadj:f1} dang:{dang:f1}    rot0:{rot0:f1} nrot:{nrot:f1}","white");
             }
             if (link == null)
             {
