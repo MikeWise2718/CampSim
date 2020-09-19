@@ -43,6 +43,9 @@ namespace CampusSimulator
         Button showTracksButton;
        // Canvas canvas;
         GameObject freeFlyPanel;
+
+
+        List<Button> butList; 
         // Start is called before the first frame update
 
         void LinkObjectsAndComponents()
@@ -74,6 +77,9 @@ namespace CampusSimulator
             quitButton = transform.Find("QuitButton").gameObject.GetComponent<Button>();
             hideUiButton = transform.Find("HideUiButton").gameObject.GetComponent<Button>();
             freeFlyPanel = transform.Find("FreeFlyHelpPanel").gameObject;
+
+
+
             fteButton = transform.Find("FteButton").gameObject.GetComponent<Button>();
             conButton = transform.Find("ConButton").gameObject.GetComponent<Button>();
             secButton = transform.Find("SecButton").gameObject.GetComponent<Button>();

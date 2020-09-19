@@ -24,10 +24,16 @@ namespace CampusSimulator
         public HelpPanel helpan;
         public AboutPanel abtpan;
 
+        public int ui_w;
+        public int ui_h;
+
         public bool listenForKeys = false;
 
         public void InitPhase0()
         {
+            ui_w = Screen.width;
+            ui_h = Screen.height;
+
             uigo = GameObject.Find("SimParkUICanvas");
             optpan = FindObjectOfType<OptionsPanel>();
             stapan = FindObjectOfType<StatusPanel>();

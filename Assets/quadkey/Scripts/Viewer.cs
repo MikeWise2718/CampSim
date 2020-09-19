@@ -356,7 +356,7 @@ namespace Aiskwk.Map
             visor = GameObject.CreatePrimitive(PrimitiveType.Cube);
             visor.name = "Visor";
             visor.transform.localScale = new Vector3(0.95f, 0.25f, 0.5f);
-            //Debug.Log($"{name} height {height}");
+            Debug.Log($"{avaname} angle:{ angle}  height:{height}");
             var vv = new Vector3(0, height, 0.25f);
 
             visor.transform.position = vv;
@@ -709,7 +709,7 @@ namespace Aiskwk.Map
             Debug.Log($"RotateViewerNoTimeFak - Viewer rotation after   {transform.localRotation.eulerAngles}");
         }
 
-        public delegate (bool ok, Vector3 pos, Vector3 rot) FindClosestPointDelegate(Vector3 pos0,Vector3 rot0);
+        public delegate (bool ok, Vector3 pos,float altitude, Vector3 rot) FindClosestPointDelegate(Vector3 pos0,float altitude,Vector3 rot0);
         FindClosestPointDelegate findclosepointer = null;
 
         public void SetFindClosestPointDelegate(FindClosestPointDelegate fcpd)
@@ -862,12 +862,13 @@ namespace Aiskwk.Map
             //Debug.Log("MoveViewerToClosePoint");
             var curpos = transform.position;
             var currot = moveplane.transform.localRotation.eulerAngles;
-            var (ok,newpt,newrot) = findclosepointer(curpos,currot);
+            var (ok,newpt,newalt,newrot) = findclosepointer(curpos,altitude,currot);
             if (ok)
             {
                 //var movetopt = new Vector3(newpt.x, curpos.y, newpt.z);
                 MoveToPosition(newpt);// uses altitude for height anyway
                 RotateViewerToYangle(newrot.y);
+                altitude = newalt;
             }
             else
             {
