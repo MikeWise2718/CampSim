@@ -35,7 +35,12 @@ public class OptionsPanel : MonoBehaviour
     Button helpTabButton;
     Button aboutTabButton;
 
+    public delegate void Initer();
+    public delegate void SetAndSaver(bool closing=true);
+
     Dictionary<TabState,(Button but,string tit,GameObject gob)> butDict = null;
+    Dictionary<TabState, Initer> initDict = null;
+    Dictionary<TabState, SetAndSaver> setAndSaveDict = null;
 
     public string enableString = "Visuals,MapSet,FireFly,Frames,Buildings,General,Help,About";
 
@@ -45,6 +50,11 @@ public class OptionsPanel : MonoBehaviour
     public void Init0()
     {
         uiman = sman.uiman;
+
+        butDict = new Dictionary<TabState, (Button, string, GameObject)>();
+        initDict = new Dictionary<TabState, Initer>();
+        setAndSaveDict = new Dictionary<TabState, SetAndSaver>();
+
         //Debug.Log("Options Panel Start:"+name);
         visualPanelGo = transform.Find("VisualsPanel").gameObject;
         visualsPanel = visualPanelGo.GetComponent<VisualsPanel>();
@@ -63,8 +73,6 @@ public class OptionsPanel : MonoBehaviour
         aboutPanelGo = transform.Find("AboutPanel").gameObject;
         aboutPanel = aboutPanelGo.GetComponent<AboutPanel>();
 
-
-
         visualsTabButton = transform.Find("VisualsTabButton").GetComponent<Button>();
         mapsetTabButton = transform.Find("MapSetTabButton").GetComponent<Button>();
         frameTabButton = transform.Find("FrameTabButton").GetComponent<Button>();
@@ -74,7 +82,6 @@ public class OptionsPanel : MonoBehaviour
         aboutTabButton = transform.Find("AboutTabButton").GetComponent<Button>();
         helpTabButton = transform.Find("HelpTabButton").GetComponent<Button>();
 
-        butDict = new Dictionary<TabState, (Button,string,GameObject)>();
         butDict[TabState.Visuals] = (visualsTabButton,"Visuals", visualPanelGo);
         butDict[TabState.MapSet] = (mapsetTabButton,"MapSet", mapSetGo);
         butDict[TabState.Frames] = (frameTabButton, "Frames", framePanelGo);
@@ -90,19 +97,29 @@ public class OptionsPanel : MonoBehaviour
             but.onClick.AddListener(delegate { SetTabState(ts); });
         }
 
-        //visualsTabButton.onClick.AddListener(delegate { SetTabState(TabState.Visuals); });
-        //mapsetTabButton.onClick.AddListener(delegate { SetTabState(TabState.MapSet); });
-        //frameTabButton.onClick.AddListener(delegate { SetTabState(TabState.Frames); });
-        //fireflyTabButton.onClick.AddListener(delegate { SetTabState(TabState.FireFly); });
-        //buildingsTabButton.onClick.AddListener(delegate { SetTabState(TabState.Buildings); });
-        //generalTabButton.onClick.AddListener(delegate { SetTabState(TabState.General); });
-        //aboutTabButton.onClick.AddListener(delegate { SetTabState(TabState.About); });
-        //helpTabButton.onClick.AddListener(delegate { SetTabState(TabState.Help); });
+        initDict[TabState.Visuals] = delegate { visualsPanel.InitVals(); };
+        initDict[TabState.MapSet] = delegate { mapSetPanel.InitVals(); };
+        initDict[TabState.Frames] = delegate { framePanel.InitVals(); };
+        initDict[TabState.FireFly] = delegate { fireFlyPanel.InitVals(); };
+        initDict[TabState.Buildings] = delegate { buildingsPanel.InitVals(); };
+        initDict[TabState.General] = delegate { generalPanel.InitVals(); };
+        initDict[TabState.Help] = delegate { helpPanel.FillHelpPanel(); };
+        initDict[TabState.About] = delegate { aboutPanel.FillAboutPanel(); };
 
-
-        //SyncOptionsTabState();
+        setAndSaveDict[TabState.Visuals] = delegate { visualsPanel.SetVals(true); };
+        setAndSaveDict[TabState.MapSet] = delegate { mapSetPanel.SetVals(true); };
+        setAndSaveDict[TabState.Frames] = delegate { framePanel.SetVals(true); };
+        setAndSaveDict[TabState.FireFly] = delegate { fireFlyPanel.SetVals(true); };
+        setAndSaveDict[TabState.Buildings] = delegate { buildingsPanel.SetVals(true); };
+        setAndSaveDict[TabState.General] = delegate { generalPanel.SetVals(true); };
     }
-    
+
+    public void SetProcs(TabState ts,Initer initer,SetAndSaver setAndSaver)
+    {
+        initDict[ts] = initer;
+        setAndSaveDict[ts] = setAndSaver;
+    }
+
     public void SetTabState(TabState newstate)
     {
         tabstate = newstate;
@@ -111,102 +128,29 @@ public class OptionsPanel : MonoBehaviour
     public void SyncOptionsTabState()
     {
         if (!visualPanelGo) return; // not initialized yet
-
-        //visualPanelGo.SetActive(tabstate == TabState.Visuals);
-        //mapSetGo.SetActive(tabstate == TabState.MapSet);
-        //framePanelGo.SetActive(tabstate == TabState.Frames);
-        //fireFlyPanelGo.SetActive(tabstate == TabState.FireFly);
-        //buildingsPanelGo.SetActive(tabstate == TabState.Buildings);
-        //generalPanelGo.SetActive(tabstate == TabState.General);
-        //helpPanelGo.SetActive(tabstate == TabState.Help);
-        //aboutPanelGo.SetActive(tabstate == TabState.About);
-
-        var activeButtonClr = "lightgray";
         foreach (var ts in butDict.Keys)
         {
-            var but = butDict[ts].but;
-            var tit = butDict[ts].tit;
-            var gob = butDict[ts].gob;
+            var (but, tit, gob) = butDict[ts];
             gob.SetActive(tabstate == ts);
-            uiman.stapan.SetButtonColor(but, activeButtonClr, tabstate == ts, tit);
+            uiman.stapan.SetButtonColor(but, "lightgray", tabstate == ts, tit);
         }
 
-        //uiman.stapan.SetButtonColor(visualsTabButton, activeButtonClr, tabstate == TabState.Visuals, "Visuals");
-        //uiman.stapan.SetButtonColor(mapsetTabButton, activeButtonClr, tabstate == TabState.MapSet, "MapSet");
-        //uiman.stapan.SetButtonColor(frameTabButton, activeButtonClr, tabstate == TabState.Frames, "Frames");
-        //uiman.stapan.SetButtonColor(fireflyTabButton, activeButtonClr, tabstate == TabState.FireFly, "Firefly");
-        //uiman.stapan.SetButtonColor(generalTabButton, activeButtonClr, tabstate == TabState.General, "General");
-        //uiman.stapan.SetButtonColor(buildingsTabButton, activeButtonClr, tabstate == TabState.Buildings, "Buildings");
-        //uiman.stapan.SetButtonColor(helpTabButton, activeButtonClr, tabstate == TabState.Help, "Help");
-        //uiman.stapan.SetButtonColor(aboutTabButton, activeButtonClr, tabstate == TabState.About, "About");
-
-        if (visualPanelGo.activeSelf)
+        if (initDict.ContainsKey(tabstate))
         {
-            visualsPanel.InitVals();
-        }
-        if (mapSetGo.activeSelf)
-        {
-            mapSetPanel.InitVals();
-        }
-        if (framePanelGo.activeSelf)
-        {
-            framePanel.InitVals();
-        }
-        if (fireFlyPanelGo.activeSelf)
-        {
-            fireFlyPanel.InitVals();
-        }
-        if (buildingsPanelGo.activeSelf)
-        {
-            buildingsPanel.InitVals();
-        }
-        if (generalPanelGo.activeSelf)
-        {
-            generalPanel.InitVals();
-        }
-        if (helpPanelGo.activeSelf)
-        {
-            helpPanel.FillHelpPanel();
-        }
-        if (aboutPanelGo.activeSelf)
-        {
-            aboutPanel.FillAboutPanel();
+            initDict[tabstate]();
         }
     }
     public void ChangingOptionsDialog(bool isOpening)
     {
-        //Debug.Log($"ChangingOptionsDialog - isOpening:{isOpening}");
-
         if (isOpening)
         {
             SyncOptionsTabState();
         }
         else
         {
-            // if we are not opening then we must be closing
-            if (visualPanelGo.activeSelf)
+            if (setAndSaveDict.ContainsKey(tabstate))
             {
-                visualsPanel.SetVals(closing: true);
-            }
-            if (mapSetGo.activeSelf)
-            {
-                mapSetPanel.SetVals(closing:true);
-            }
-            if (framePanelGo.activeSelf)
-            {
-                framePanel.SetVals(closing: true);
-            }
-            if (fireFlyPanelGo.activeSelf)
-            {
-                fireFlyPanel.SetVals(closing: true);
-            }
-            if (buildingsPanelGo.activeSelf)
-            {
-                buildingsPanel.SetVals(closing: true);
-            }
-            if (generalPanelGo.activeSelf)
-            {
-                generalPanel.SetVals(closing: true);
+                setAndSaveDict[tabstate](closing:true);
             }
         }
     }
