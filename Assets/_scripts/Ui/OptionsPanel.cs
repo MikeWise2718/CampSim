@@ -1,11 +1,8 @@
 ﻿using CampusSimulator;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Security.Permissions;
 using UnityEngine;
-using UnityEngine.Assertions.Must;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class OptionsPanel : MonoBehaviour
 {
@@ -143,7 +140,7 @@ public class OptionsPanel : MonoBehaviour
         var ok = System.Enum.TryParse<TabState>(txt,out var te);
         if (!ok)
         {
-            UnityEngine.Debug.LogError($"Could not parse {txt} as TabState enum");
+            Debug.LogError($"Could not parse {txt} as TabState enum");
             return;
         }
         var bgo = DefaultControls.CreateButton(new DefaultControls.Resources());
@@ -162,8 +159,26 @@ public class OptionsPanel : MonoBehaviour
         //recttrans.anchorMin = new Vector2(x-w/2, x-h/2);
         //recttrans.anchorMax = new Vector2(x+w/2, y+h/2);
         bgo.transform.SetParent(this.transform,worldPositionStays:false);
+        var evttrig = bgo.AddComponent<EventTrigger>();
+        var pentry = new EventTrigger.Entry();
+        pentry.eventID = EventTriggerType.PointerEnter;
+        pentry.callback.AddListener((data) => { OnPointerEnter((PointerEventData)data,txt); });
+        evttrig.triggers.Add(pentry);
+        var pexit = new EventTrigger.Entry();
+        pexit.eventID = EventTriggerType.PointerExit;
+        pexit.callback.AddListener((data) => { OnPointerExit((PointerEventData)data,txt); });
+        evttrig.triggers.Add(pexit);
+
         butDict[te] = (butt, txt);
 
+    }
+    public void OnPointerEnter(PointerEventData eventData,string txt)
+    {
+        Debug.Log($"OnPointerEnter {txt}");
+    }
+    public void OnPointerExit(PointerEventData eventData, string txt)
+    {
+        Debug.Log($"OnPointerExit {txt}");
     }
 
     public void MakeNewButtons()
