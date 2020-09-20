@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System.Collections;
 
 public class OptionsPanel : MonoBehaviour
 {
-    public CampusSimulator.SceneMan sman;
+    public SceneMan sman;
     UiMan uiman;
 
     GameObject visualPanelGo;
@@ -26,15 +27,6 @@ public class OptionsPanel : MonoBehaviour
     GameObject aboutPanelGo;
     AboutPanel aboutPanel;
 
-    Button visualsTabButton;
-    Button mapsetTabButton;
-    Button framesTabButton;
-    Button fireflyTabButton;
-    Button generalTabButton;
-    Button buildingsTabButton;
-    Button helpTabButton;
-    Button aboutTabButton;
-
     public delegate void Initer();
     public delegate void SetAndSaver(bool closing=true);
 
@@ -43,8 +35,18 @@ public class OptionsPanel : MonoBehaviour
     Dictionary<TabState, Initer> initDict = null;
     Dictionary<TabState, SetAndSaver> setAndSaveDict = null;
 
-    //public string enableString0 = "Visuals,MapSet,FireFly,Frames,Buildings,General,Help,About";
-    string enableString = "Visuals,MapSet,Frames,Buildings,General,Help,About";
+    public string enableString = "Visuals,MapSet,Frames,FireFly,Buildings,General,Help,About";
+
+    Dictionary<string, string> tooltip = new Dictionary<string, string> {
+        {"Visuals","Visual Base Settings" },
+        {"MapSet","Map Settings\nThere are a lot of them" },
+        {"Frames","Frame parameters for image recognition labeling" },
+        {"FireFly","FireFly related parameters" },
+        {"Buildings","Building related parameters" },
+        {"General","General parameters" },
+        {"Help","Help information\nincluding command line parameters" },
+        {"About","Version and System Information" },
+    };
 
     public enum TabState { Visuals,MapSet,FireFly,Frames,Buildings,General,Help,About }
     TabState tabstate;
@@ -53,6 +55,7 @@ public class OptionsPanel : MonoBehaviour
     {
         uiman = sman.uiman;
 
+        //ttDict = new Dictionary<string, GameObject>();
         panDict = new Dictionary<TabState, GameObject>();
         butDict = new Dictionary<TabState, (Button, string)>();
         initDict = new Dictionary<TabState, Initer>();
@@ -75,8 +78,6 @@ public class OptionsPanel : MonoBehaviour
         helpPanel = helpPanelGo.GetComponent<HelpPanel>();
         aboutPanelGo = transform.Find("AboutPanel").gameObject;
         aboutPanel = aboutPanelGo.GetComponent<AboutPanel>();
-
-
 
         panDict[TabState.Visuals] = visualPanelGo;
         panDict[TabState.MapSet] = mapSetGo;
@@ -107,42 +108,33 @@ public class OptionsPanel : MonoBehaviour
         DestroyFixedButtons();
         MakeNewButtons();
 
-        foreach (var ts in butDict.Keys)
+
+    }
+    public void FindAndDestroy(string targetname)
+    {
+        var tran = transform.Find(targetname);
+        if (tran!=null)
         {
-            var but = butDict[ts].but;
-            but.onClick.AddListener(delegate { SetTabState(ts); });
+            var butcomp = tran.GetComponent<Button>();
+            Destroy(butcomp.gameObject);
+            Debug.Log($"Destroyed {targetname}");
         }
     }
-
     public void DestroyFixedButtons()
     {
-        visualsTabButton = transform.Find("VisualsTabButton").GetComponent<Button>();
-        mapsetTabButton = transform.Find("MapSetTabButton").GetComponent<Button>();
-        framesTabButton = transform.Find("FramesTabButton").GetComponent<Button>();
-        fireflyTabButton = transform.Find("FireFlyTabButton").GetComponent<Button>();
-        buildingsTabButton = transform.Find("BuildingsTabButton").GetComponent<Button>();
-        generalTabButton = transform.Find("GeneralTabButton").GetComponent<Button>();
-        helpTabButton = transform.Find("HelpTabButton").GetComponent<Button>();
-        aboutTabButton = transform.Find("AboutTabButton").GetComponent<Button>();
-
-        Destroy(visualsTabButton.gameObject);
-        Destroy(mapsetTabButton.gameObject);
-        Destroy(framesTabButton.gameObject);
-        Destroy(fireflyTabButton.gameObject);
-        Destroy(buildingsTabButton.gameObject);
-        Destroy(generalTabButton.gameObject);
-        Destroy(helpTabButton.gameObject);
-        Destroy(aboutTabButton.gameObject);
+        FindAndDestroy("VisualsTabButton");
+        FindAndDestroy("MapSetTabButton");
+        FindAndDestroy("FramesTabButton");
+        FindAndDestroy("FireFlyTabButton");
+        FindAndDestroy("BuildingsTabButton");
+        FindAndDestroy("GeneralTabButton");
+        FindAndDestroy("HelpTabButton");
+        FindAndDestroy("AboutTabButton");
     }
 
-    public void MakeOneButton(string bname,int x,int y,int w,int h,string txt)
+    public Button MakeOneButton(string bname,int x,int y,int w,int h,string txt,string tip="")
     {
-        var ok = System.Enum.TryParse<TabState>(txt,out var te);
-        if (!ok)
-        {
-            Debug.LogError($"Could not parse {txt} as TabState enum");
-            return;
-        }
+
         var bgo = DefaultControls.CreateButton(new DefaultControls.Resources());
         bgo.name = bname;
         var butt = bgo.GetComponentInChildren<Button>();
@@ -154,36 +146,29 @@ public class OptionsPanel : MonoBehaviour
         recttrans.SetPositionAndRotation(pos, Quaternion.identity);
         recttrans.sizeDelta = new Vector2(w, h);
 
-        //recttrans.sizeDelta.Set(w, h);
-
-        //recttrans.anchorMin = new Vector2(x-w/2, x-h/2);
-        //recttrans.anchorMax = new Vector2(x+w/2, y+h/2);
         bgo.transform.SetParent(this.transform,worldPositionStays:false);
-        var evttrig = bgo.AddComponent<EventTrigger>();
-        var pentry = new EventTrigger.Entry();
-        pentry.eventID = EventTriggerType.PointerEnter;
-        pentry.callback.AddListener((data) => { OnPointerEnter((PointerEventData)data,txt); });
-        evttrig.triggers.Add(pentry);
-        var pexit = new EventTrigger.Entry();
-        pexit.eventID = EventTriggerType.PointerExit;
-        pexit.callback.AddListener((data) => { OnPointerExit((PointerEventData)data,txt); });
-        evttrig.triggers.Add(pexit);
 
-        butDict[te] = (butt, txt);
-
+        if (tip != "")
+        {
+            uiman.ttman.WireUpToolTip(bgo, txt, tip);
+        }
+        return butt;          
     }
-    public void OnPointerEnter(PointerEventData eventData,string txt)
+    public void DestroyButtons()
     {
-        Debug.Log($"OnPointerEnter {txt}");
+        foreach (var (but, tit) in butDict.Values)
+        {
+            if (but != null)
+            {
+                Destroy(but);
+            }
+        }
+        butDict = new Dictionary<TabState, (Button but, string tit)>();
     }
-    public void OnPointerExit(PointerEventData eventData, string txt)
-    {
-        Debug.Log($"OnPointerExit {txt}");
-    }
-
     public void MakeNewButtons()
     {
-        butDict = new Dictionary<TabState, (Button but, string tit)>();
+        DestroyButtons();
+
         var buttxtarr = enableString.Split(',');
 
         var nbut = buttxtarr.Length;
@@ -201,7 +186,20 @@ public class OptionsPanel : MonoBehaviour
         foreach (var buttxt in buttxtarr)
         {
             var bname = buttxt + "Button";
-            MakeOneButton(bname, x, y, w, h, buttxt);
+            var buttip = "";
+            if (tooltip.ContainsKey(buttxt))
+            {
+                buttip = tooltip[buttxt];
+            }
+            var butt = MakeOneButton(bname, x, y, w, h, buttxt,buttip);
+            var ok = System.Enum.TryParse<TabState>(buttxt, out var te);
+            if (!ok)
+            {
+                Debug.LogError($"Could not parse {buttxt} as TabState enum");
+                continue;
+            }
+            butDict[te] = (butt, buttxt);
+            butt.onClick.AddListener(delegate { SetTabState(te); });
             x += w + gap;
         }
     }
@@ -253,6 +251,17 @@ public class OptionsPanel : MonoBehaviour
 
     public void SetScene(CampusSimulator.SceneSelE curscene)
     {
+        enableString = "Visuals,MapSet,FireFly,Frames,Buildings,General,Help,About";
+        switch (curscene)
+        {
+            case SceneSelE.TeneriffeMtn:
+                {
+                    enableString = "FireFly,Visuals,MapSet,Frames,Buildings,General,Help,About";
+                    break;
+                }
+
+        }
+
         SyncOptionsTabState();
     }
     public void OptionsTabToggle()

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditorInternal;
 using UnityEngine;
 
 namespace CampusSimulator
@@ -24,6 +25,8 @@ namespace CampusSimulator
         public HelpPanel helpan;
         public AboutPanel abtpan;
 
+        public ToolTipMan ttman;
+
         public int ui_w;
         public int ui_h;
 
@@ -33,6 +36,9 @@ namespace CampusSimulator
         {
             ui_w = Screen.width;
             ui_h = Screen.height;
+
+            var ttgo = new GameObject("tooltipman");
+            ttman = ttgo.AddComponent<ToolTipMan>();
 
             uigo = GameObject.Find("SimParkUICanvas");
             optpan = FindObjectOfType<OptionsPanel>();
@@ -48,6 +54,7 @@ namespace CampusSimulator
             helpan = Resources.FindObjectsOfTypeAll<HelpPanel>()[0];
             abtpan = Resources.FindObjectsOfTypeAll<AboutPanel>()[0];
 
+            ttman.sman = sman;
             optpan.sman = sman;
             stapan.sman = sman;
             infpan.sman = sman;
@@ -62,6 +69,7 @@ namespace CampusSimulator
             flypan.sman = sman;
 
 
+            ttman.Init0();
             optpan.Init0();
             stapan.Init0();
             infpan.Init0();

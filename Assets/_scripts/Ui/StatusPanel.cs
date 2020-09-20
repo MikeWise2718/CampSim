@@ -86,6 +86,7 @@ namespace CampusSimulator
             visButton = transform.Find("VisButton").gameObject.GetComponent<Button>();
             unkButton = transform.Find("UnkButton").gameObject.GetComponent<Button>();
             vt2dButton = transform.Find("Vt2DButton").gameObject.GetComponent<Button>();
+
             tranButton = transform.Find("TranButton").gameObject.GetComponent<Button>();
             hvacButton = transform.Find("HvacButton").gameObject.GetComponent<Button>();
             elecButton = transform.Find("ElecButton").gameObject.GetComponent<Button>();
@@ -114,6 +115,35 @@ namespace CampusSimulator
             elecButton.onClick.AddListener(delegate { DetectElecButton(); });
             plumButton.onClick.AddListener(delegate { DetectPlumButton(); });
             pipeButton.onClick.AddListener(delegate { DetectPipButton(); });
+
+            uiman.ttman.WireUpToolTip(hideUiButton.gameObject, "HideUI", "Hide the User Interface");
+            uiman.ttman.WireUpToolTip(runButton.gameObject, "Run", "Start ground based journeys");
+            uiman.ttman.WireUpToolTip(flyButton.gameObject, "Fly", "Start flying journeys");
+            uiman.ttman.WireUpToolTip(frameButton.gameObject, "Frame", "Draw labels on people, cars, etc");
+            uiman.ttman.WireUpToolTip(evacButton.gameObject, "Evac", "Start an evacuation simulation");
+            uiman.ttman.WireUpToolTip(unevacButton.gameObject, "Unevac", "After an evacuation, go back to starting positions");
+            uiman.ttman.WireUpToolTip(fteButton.gameObject, "Fte", "Detect people with FTE status");
+            uiman.ttman.WireUpToolTip(conButton.gameObject, "Con", "Detect people with contractor status");
+            uiman.ttman.WireUpToolTip(secButton.gameObject, "Sec", "Detect people with security status");
+            uiman.ttman.WireUpToolTip(secButton.gameObject, "Vis", "Detect people with visor status");
+            uiman.ttman.WireUpToolTip(unkButton.gameObject, "Unk", "Detect unknown people");
+            uiman.ttman.WireUpToolTip(vt2dButton.gameObject, "vt2d", "Tie Visibility to Detectability");
+
+            uiman.ttman.WireUpToolTip(tranButton.gameObject, "trans", "Switch Bld121 walls to being transparent");
+            uiman.ttman.WireUpToolTip(hvacButton.gameObject, "hvac", "Show Bld121 HVAC structures");
+            uiman.ttman.WireUpToolTip(elecButton.gameObject, "elec", "Show Bld121 electric structures");
+            uiman.ttman.WireUpToolTip(plumButton.gameObject, "plum", "Show Bld121 plumbing structures");
+
+            uiman.ttman.WireUpToolTip(showTracksButton.gameObject, "trax", "Show GPX Tracks");
+
+
+            uiman.ttman.WireUpToolTip(pipeButton.gameObject, "Pi", "Show journey path links and nodes");
+
+
+            uiman.ttman.WireUpToolTip(freeFlyButton.gameObject, "freefly", "Fly around in scene freely");
+            uiman.ttman.WireUpToolTip(quitButton.gameObject, "quit", "Quit to OS");
+            uiman.ttman.WireUpToolTip(goButton.gameObject, "go", "Kick off a preprogramed scenario dependent journey script");
+            uiman.ttman.WireUpToolTip(optionsButton.gameObject, "opts", "Bring up detailed configuration tabs");
         }
         public void SetScene(CampusSimulator.SceneSelE curscene)
         {
