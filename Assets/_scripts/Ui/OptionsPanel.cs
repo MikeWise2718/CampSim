@@ -106,7 +106,6 @@ public class OptionsPanel : MonoBehaviour
         setAndSaveDict[TabState.General] = delegate { generalPanel.SetVals(true); };
 
         DestroyFixedButtons();
-        MakeNewButtons();
 
 
     }
@@ -254,6 +253,11 @@ public class OptionsPanel : MonoBehaviour
         enableString = "Visuals,MapSet,FireFly,Frames,Buildings,General,Help,About";
         switch (curscene)
         {
+            case SceneSelE.MsftB19focused:
+                {
+                    enableString = "Visuals,MapSet,Frames,Buildings,General,Help,About";
+                    break;
+                }
             case SceneSelE.TeneriffeMtn:
                 {
                     enableString = "FireFly,Visuals,MapSet,Frames,Buildings,General,Help,About";
@@ -261,6 +265,7 @@ public class OptionsPanel : MonoBehaviour
                 }
 
         }
+        MakeNewButtons();
 
         SyncOptionsTabState();
     }
