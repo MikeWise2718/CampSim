@@ -13,7 +13,7 @@ namespace GraphAlgos
 {
     public class GraphUtil
     {
-        static string _verstring = "2020.09.18.1 - Scenario 121";
+        static string _verstring = "2020.09.20.1 - Scenario 121";
         static DateTime _buildDate = DateTime.UtcNow;
 
         private static void getsysdata()
