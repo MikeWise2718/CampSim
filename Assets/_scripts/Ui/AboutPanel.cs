@@ -191,6 +191,7 @@ public class AboutPanel : MonoBehaviour
         try
         {
             msg += "\n\nTime Now: " + utc.ToString("yyyy-MM-dd HH:mm:ss UTC");
+            msg += "\n\nVersion: "+GraphUtil.GetVersionString();
 
             //            aboutText.text += "\n\nDevice Name:" + Util.GetDeviceName();
             msg += "\nOS Family:" + SystemInfo.operatingSystemFamily;

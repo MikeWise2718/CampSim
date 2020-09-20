@@ -86,12 +86,12 @@ public class ToolTipMan : MonoBehaviour
 
     public void OnPointerEnter(PointerEventData eventData, string txt, string tip)
     {
-        Debug.Log($"OnPointerEnter {txt}");
+        //Debug.Log($"OnPointerEnter {txt}");
         CountDownToPopup(popupDelay,eventData.position, txt, tip);
     }
     public void OnPointerExit(PointerEventData eventData, string txt)
     {
-        Debug.Log($"OnPointerExit {txt}");
+        //Debug.Log($"OnPointerExit {txt}");
         if (needPopup)
         {
             CancelPopup();

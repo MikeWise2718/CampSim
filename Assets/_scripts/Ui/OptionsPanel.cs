@@ -180,8 +180,8 @@ public class OptionsPanel : MonoBehaviour
         var x = -twid/2;
         var y = 680;
 
-        sman.Lgg(enableString,"yellow");
-        sman.Lgg($"butt: nbut:{nbut} twid:{twid} x:{x} y:{y}", "cyan");
+        //sman.Lgg(enableString,"yellow");
+        //sman.Lgg($"butt: nbut:{nbut} twid:{twid} x:{x} y:{y}", "cyan");
         foreach (var buttxt in buttxtarr)
         {
             var bname = buttxt + "Button";
