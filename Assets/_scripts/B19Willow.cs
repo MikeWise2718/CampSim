@@ -266,7 +266,23 @@ public class B19Willow : MonoBehaviour
             }
         }
     }
-
+    public float GetFloorHeight(int floor)
+    {
+        var rv = 0.01f;
+        if (floor < 0) floor = 0;
+        if (floor > 2) floor = 2;
+        switch (floor)
+        {
+            case 0:
+            case 1:
+                rv = 0.01f;
+                break;
+            case 2:
+                rv = 2.11f;
+                break;
+        }
+        return rv;
+    }
 
 
     List<string> B19_parts = new List<string>

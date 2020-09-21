@@ -58,15 +58,20 @@ public class HelpPanel : MonoBehaviour
             msg += "\n\n" + "Ctrl-Q Ctrl-Q       - Quit Application (hit ctrl-q twice)";
             msg += "\n\n" + "Bugs/Requests/Info  - Contact: mwise@microsoft.com (Mike Wise)";
             msg += "\n" + "                               brujo@microsoft.com (Bruce E. Johnson)";
-
             var args = GraphAlgos.GraphUtil.GetArgs();
+
+            msg += $"\n\nCommand line argument help:";
+            msg += "\n" + "     -monitor n - Select Monitor n for display - see sysinfo for recognized displays";
+            msg += "\n" + "     -scene scenespec - Select scene and run (scenespec list is in first visuals tab dropdown)";
+            msg += "\n" + "     -run - Start the scene-wide people journey simulation";
+            msg += "\n" + "     -fly - Start the scene-wide drone journey simulation";
+            msg += "\n" + "     -nopipes- Don't show the pipe-like travel path markers";
+            msg += "\n" + "     -help - Write this help text and sysinfo to text (help.txt) file and exit";
             msg += $"\n\nCurrent Command line arguments:{args.Count}";
             for (int i = 0; i < args.Count; i++)
             {
                 msg += $"\n   {i}:{args[i]}";
             }
-            msg += $"\n\nPossible Command line arguments:{args.Count}";
-            msg += "\n" + "     -monitor n - Select Monitor n for display";
         }
         catch (Exception ex)
         {

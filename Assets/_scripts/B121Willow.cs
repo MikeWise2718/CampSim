@@ -2,6 +2,7 @@
 using System.Security.Cryptography;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Assertions.Must;
 using UxUtils;
 
 public class B121Willow : MonoBehaviour
@@ -174,6 +175,27 @@ public class B121Willow : MonoBehaviour
     public void LoadPlumbing()
     {
         b121pgo = LoadObjFile(b121go, "Willow/B121/1716045-BH-PLUMBING-B121_2020", "plumbing", xrot: bangle, zoff: zhlp_boff, xoff: xhlp_boff);
+    }
+
+    public float GetFloorHeight(int floor)
+    {
+        var rv = 0.01f;
+        if (floor < 0) floor = 0;
+        if (floor > 3) floor = 3;
+        switch(floor)
+        {
+            case 0:
+            case 1:
+                rv = 0.01f;
+                break;
+            case 2:
+                rv = 2.11f;
+                break;
+            case 3:
+                rv = 4.21f;
+                break;
+        }
+        return rv;
     }
     public void MakeItSo()
     {

@@ -30,6 +30,9 @@ namespace CampusSimulator
         public float journeyChoiceWeight = 1;
         public string osmnamestart = "";
 
+        B121Willow b121comp = null;
+        B19Willow b19comp = null;
+
         //System.Random ranman = new System.Random();
         public Person GetRandomFreeToTravelPerson(string ranset="")
         {
@@ -79,6 +82,8 @@ namespace CampusSimulator
             var i = GraphAlgos.GraphUtil.GetRanInt(pads.Count, ranset);
             return pads[i];
         }
+
+
 
         public string GetRandomDest(string ranset="")
         {

@@ -76,6 +76,17 @@ public class OsmBldSpec
         var rv = new List<Vector3>(boutline);
         return rv;
     }
+    public float GetLevelHeight(int level)
+    {
+        if (level<0 || levels<level )
+        {
+            Debug.LogError($"BldPolyGen.OsmBldSPec.GetLevelHeight has bad level:{level} building levels:{levels}");
+            level = levels;
+        }
+        var y = height * level;
+        return y;
+    }
+
     public Vector3 GetCenterTop()
     {
         var rv = Vector3.zero;
