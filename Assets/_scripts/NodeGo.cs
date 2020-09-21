@@ -45,15 +45,15 @@ namespace CampusSimulator
                 if (node.transform != null)
                 {
                     nodePtWc = node.transform.TransformPoint(node.pt);
-                    var m = node.transform.worldToLocalMatrix;
-                    var trans0 = m.GetRow(0);
-                    var trans1 = m.GetRow(1);
-                    var trans2 = m.GetRow(2);
-                    var trans3 = m.GetRow(3);
-                    strans0 = trans0.ToString("F2");
-                    strans1 = trans1.ToString("F2");
-                    strans2 = trans2.ToString("F2");
-                    strans3 = trans3.ToString("F2");
+                    //var m = node.transform.worldToLocalMatrix;
+                    //var trans0 = m.GetRow(0);
+                    //var trans1 = m.GetRow(1);
+                    //var trans2 = m.GetRow(2);
+                    //var trans3 = m.GetRow(3);
+                    //strans0 = trans0.ToString("F2");
+                    //strans1 = trans1.ToString("F2");
+                    //strans2 = trans2.ToString("F2");
+                    //strans3 = trans3.ToString("F2");
                 }
             }
         }

@@ -752,7 +752,7 @@ namespace Aiskwk.Map
                         var llbox = new LatLngBox(llmid, 110, 170, lod: 12);
                         useElevationDataStart = true;
                         useFlatTrisStart = false;
-                        dfv = new ViewerState(zvek, rrot, ViewerAvatar.QuadCopter,ViewerCamPosition.FloatBehind);
+                        dfv = new ViewerState(zvek, rrot, ViewerAvatar.QuadCopter,ViewerCamConfig.FloatBehind);
 
                         (qmm, _, _) = await MakeMeshFromLlbox("cyclades", llbox, tpqk: 16, hmult: 3, mapprov: mapprov, limitQuadkeys: false);
                         var vtm = gameObject.AddComponent<VehicleTrackMan>();
@@ -776,7 +776,7 @@ namespace Aiskwk.Map
                         useFlatTrisStart = false;
 
 
-                        dfv = new ViewerState(zvek, rrot, ViewerAvatar.Rover, ViewerCamPosition.FloatBehind);
+                        dfv = new ViewerState(zvek, rrot, ViewerAvatar.Rover, ViewerCamConfig.FloatBehind);
 
 
 
@@ -804,7 +804,7 @@ namespace Aiskwk.Map
                 case QmapModeE.Seattle3:
                     {
 
-                        dfv = new ViewerState(zvek, rrot, ViewerAvatar.QuadCopter, ViewerCamPosition.FloatBehind);
+                        dfv = new ViewerState(zvek, rrot, ViewerAvatar.QuadCopter, ViewerCamConfig.FloatBehind);
 
                         var llmid = new LatLng(47.619992, -122.3373495, "Seattle mid");
                         var llbox = new LatLngBox(llmid, 3, 3, lod: 18);
@@ -834,7 +834,7 @@ namespace Aiskwk.Map
                         Debug.Log("dozers-llbox llmid:" + llbox.midll.ToString());
 
 
-                        dfv = new ViewerState(zvek, rrot, ViewerAvatar.QuadCopter, ViewerCamPosition.FloatBehind);
+                        dfv = new ViewerState(zvek, rrot, ViewerAvatar.QuadCopter, ViewerCamConfig.FloatBehind);
 
 
                         //(qmm,_,_) = await MakeMeshFromLlbox("dozers", llbox, tpqk: 16, hmult: 5, mapprov: mapprov, heitType: HeightTypeE.FetchedAndOriginZeroed, heitSource: HeightSource.Fetched, heitAdjust: HeightAdjust.OriginZeroed);
@@ -858,7 +858,7 @@ namespace Aiskwk.Map
                         //Debug.Log("dozers-med-llbox llmid:" + llbox.midll.ToString());
 
 
-                        dfv = new ViewerState(zvek, rrot, ViewerAvatar.QuadCopter, ViewerCamPosition.FloatBehind);
+                        dfv = new ViewerState(zvek, rrot, ViewerAvatar.QuadCopter, ViewerCamConfig.FloatBehind);
 
 
                         var geoman = gameObject.AddComponent<GeotiffMan>();
@@ -884,7 +884,7 @@ namespace Aiskwk.Map
                         var llbox = new LatLngBox(llmid, 0.5, 0.5, "dozersmallbox", lod: 19);
                         Debug.Log("dozers-small-llbox llmid:" + llbox.midll.ToString());
 
-                        dfv = new ViewerState(zvek, rrot, ViewerAvatar.QuadCopter, ViewerCamPosition.FloatBehind);
+                        dfv = new ViewerState(zvek, rrot, ViewerAvatar.QuadCopter, ViewerCamConfig.FloatBehind);
 
                         var geoman = gameObject.AddComponent<GeotiffMan>();
                         var trkman = gameObject.AddComponent<VehicleTrackMan>();
@@ -904,7 +904,7 @@ namespace Aiskwk.Map
                         var llbox = new LatLngBox(llmid, 4.0, 4.0, "horizonbox", lod: 17);
                         Debug.Log("Horizon-llbox llmid:" + llbox.midll.ToString());
 
-                        dfv = new ViewerState(zvek, rrot, ViewerAvatar.QuadCopter, ViewerCamPosition.FloatBehind);
+                        dfv = new ViewerState(zvek, rrot, ViewerAvatar.QuadCopter, ViewerCamConfig.FloatBehind);
 
 
                         (qmm, _, _) = await MakeMeshFromLlbox("horizon", llbox, tpqk: 16, hmult: 1, mapprov: mapprov, limitQuadkeys: false);
@@ -921,7 +921,7 @@ namespace Aiskwk.Map
                         Debug.Log("Horizon-llbox llmid:" + llbox.midll.ToString());
 
                         var pos = new Vector3(155.30f, 64.06f, -9.77f); ;
-                        dfv = new ViewerState(pos, rrot, ViewerAvatar.Minehaul1, ViewerCamPosition.FloatBehind, ViewerControl.Velocity);
+                        dfv = new ViewerState(pos, rrot, ViewerAvatar.Minehaul1, ViewerCamConfig.FloatBehind, ViewerControl.Velocity);
 
 
 
@@ -939,7 +939,7 @@ namespace Aiskwk.Map
                         Debug.Log("MtStHellens16-llbox llmid:" + llbox.midll.ToString());
 
 
-                        dfv = new ViewerState(zvek, rrot, ViewerAvatar.Rover, ViewerCamPosition.FloatBehind, ViewerControl.Velocity);
+                        dfv = new ViewerState(zvek, rrot, ViewerAvatar.Rover, ViewerCamConfig.FloatBehind, ViewerControl.Velocity);
 
 
                         (qmm, _, _) = await MakeMeshFromLlbox("mtsthelens", llbox, tpqk: 16, hmult: 1, mapextent: MapExtentTypeE.AsSpecified, mapprov: mapprov, limitQuadkeys: false);
@@ -954,7 +954,7 @@ namespace Aiskwk.Map
                         var llbox = new LatLngBox(llmid, 12.0, 12.0, "MtStHellens box", lod: 16);
                         Debug.Log("MtStHellens-llbox llmid:" + llbox.midll.ToString());
 
-                        dfv = new ViewerState(zvek, rrot, ViewerAvatar.Rover, ViewerCamPosition.FloatBehind, ViewerControl.Velocity);
+                        dfv = new ViewerState(zvek, rrot, ViewerAvatar.Rover, ViewerCamConfig.FloatBehind, ViewerControl.Velocity);
 
 
                         (qmm, _, _) = await MakeMeshFromLlbox("mtsthelens", llbox, tpqk: 16, hmult: 1, mapextent: MapExtentTypeE.AsSpecified, mapprov: mapprov, limitQuadkeys: false);
@@ -969,7 +969,7 @@ namespace Aiskwk.Map
                         var llbox = new LatLngBox(llmid, 3.0, 3.0, "MtStHellens3 box", lod: 17);
                         Debug.Log("MtStHellens3-llbox llmid:" + llbox.midll.ToString());
 
-                        dfv = new ViewerState(zvek, rrot, ViewerAvatar.Rover, ViewerCamPosition.FloatBehind, ViewerControl.Velocity);
+                        dfv = new ViewerState(zvek, rrot, ViewerAvatar.Rover, ViewerCamConfig.FloatBehind, ViewerControl.Velocity);
 
                         (qmm, _, _) = await MakeMeshFromLlbox("mtsthelens", llbox, tpqk: 16, hmult: 1, mapextent: MapExtentTypeE.AsSpecified, mapprov: mapprov, limitQuadkeys: false);
                         qmm.nodefak = 0.2f;
@@ -988,7 +988,7 @@ namespace Aiskwk.Map
                         var llbox = new LatLngBox(llmid, 3.0, 3.0, "MtStHellens3 box", lod: 19);
                         Debug.Log("MtStHellens3-llbox llmid:" + llbox.midll.ToString());
 
-                        dfv = new ViewerState(zvek, rrot, ViewerAvatar.Rover, ViewerCamPosition.FloatBehind, ViewerControl.Velocity);
+                        dfv = new ViewerState(zvek, rrot, ViewerAvatar.Rover, ViewerCamConfig.FloatBehind, ViewerControl.Velocity);
 
 
                         (qmm, _, _) = await MakeMeshFromLlbox("mtsthelens", llbox, tpqk: 16, hmult: 1, mapextent: MapExtentTypeE.AsSpecified, mapprov: mapprov, limitQuadkeys: false);

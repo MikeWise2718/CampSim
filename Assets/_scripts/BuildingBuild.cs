@@ -64,6 +64,8 @@ namespace CampusSimulator
             "b19-dronepad:6:0:4:4:T",
             //"b19-dronepad-centertop:6:0:4:4:T",
             "Bld122-dronepad-centertop:6:0:4:4:T",
+            "Bld123-dronepad-centertop:6:0:4:4:T",
+            "Bld99-dronepad-centertop:6:0:4:4:T",
         };
 
 
@@ -176,7 +178,7 @@ namespace CampusSimulator
                         defRoomArea = 16;
                         defAngAlign = 24.0f;
 
-                        var b19comp = this.transform.gameObject.AddComponent<B19Willow>();
+                        b19comp = this.transform.gameObject.AddComponent<B19Willow>();
                         b19comp.InitializeValues(bm.sman, this);
                         b19comp.MakeItSo();
 
@@ -199,7 +201,7 @@ namespace CampusSimulator
                         defRoomArea = 16;
                         defAngAlign = 24.0f;
 
-                        var b121comp = this.transform.gameObject.AddComponent<B121Willow>();
+                        b121comp = this.transform.gameObject.AddComponent<B121Willow>();
                         b121comp.InitializeValues(bm.sman, this);
                         b121comp.MakeItSo();
 
@@ -437,7 +439,23 @@ namespace CampusSimulator
                 bldpadspecs = bm.GetFilteredPadSpecs(shortname);
             }
         }
-
+        public float GetFloorAltitude(int floornum)
+        {
+            var rv = 0f;
+            if (b121comp!=null)
+            {
+                rv = b121comp.GetFloorHeight(floornum);
+            }
+            else if (b19comp != null)
+            {
+                rv = b19comp.GetFloorHeight(floornum);
+            }
+            else if (isOsmBld)
+            {
+                rv = bldspec.GetLevelHeight(floornum);
+            }
+            return rv;
+        }
 
 
         void AddQuadGos(GameObject pgo, string name, Vector3 bscale, Vector3 brot, Vector3 bpos, string cname = "")
@@ -714,7 +732,12 @@ namespace CampusSimulator
                 var pgvd = new PolyGenVekMapDel(bm.sman.mpman.GetHeightVector3);
                 if (bldspec.isVisible)
                 {
-                    var bgo = bm.bpg.GenBldFromOsmBldSpec(this.gameObject, bldspec, pgvd: pgvd);
+                    var alf = 1f;
+                    if (bm.osmbldstrans.Get())
+                    {
+                        alf = 0.5f;
+                    }
+                    var bgo = bm.bpg.GenBldFromOsmBldSpec(this.gameObject, bldspec, pgvd: pgvd,alf:alf);
                     bldgos.Add(bgo);
                     EchOsmOutline(this.gameObject, bldspec,pgvd:pgvd);
                 }

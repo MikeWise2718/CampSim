@@ -30,8 +30,12 @@ namespace CampusSimulator
         Button unkButton;
         Button vt2dButton;
 
-        Button traButton;
-        Button pipButton;
+        Button pipeButton;
+
+        Button tranButton;
+        Button hvacButton;
+        Button elecButton;
+        Button plumButton;
 
 
         Button goButton;
@@ -39,6 +43,9 @@ namespace CampusSimulator
         Button showTracksButton;
        // Canvas canvas;
         GameObject freeFlyPanel;
+
+
+        List<Button> butList; 
         // Start is called before the first frame update
 
         void LinkObjectsAndComponents()
@@ -62,6 +69,7 @@ namespace CampusSimulator
             frameButton = transform.Find("FrameButton").gameObject.GetComponent<Button>();
             evacButton = transform.Find("EvacButton").gameObject.GetComponent<Button>();
             unevacButton = transform.Find("UnEvacButton").gameObject.GetComponent<Button>();
+            pipeButton = transform.Find("PipeButton").gameObject.GetComponent<Button>();
             goButton = transform.Find("GoButton").gameObject.GetComponent<Button>();
             optionsButton = transform.Find("OptionsButton").gameObject.GetComponent<Button>();
             showTracksButton = transform.Find("ShowTracksButton").gameObject.GetComponent<Button>();
@@ -69,14 +77,21 @@ namespace CampusSimulator
             quitButton = transform.Find("QuitButton").gameObject.GetComponent<Button>();
             hideUiButton = transform.Find("HideUiButton").gameObject.GetComponent<Button>();
             freeFlyPanel = transform.Find("FreeFlyHelpPanel").gameObject;
+
+
+
             fteButton = transform.Find("FteButton").gameObject.GetComponent<Button>();
             conButton = transform.Find("ConButton").gameObject.GetComponent<Button>();
             secButton = transform.Find("SecButton").gameObject.GetComponent<Button>();
             visButton = transform.Find("VisButton").gameObject.GetComponent<Button>();
             unkButton = transform.Find("UnkButton").gameObject.GetComponent<Button>();
             vt2dButton = transform.Find("Vt2DButton").gameObject.GetComponent<Button>();
-            traButton = transform.Find("TraButton").gameObject.GetComponent<Button>();
-            pipButton = transform.Find("PipButton").gameObject.GetComponent<Button>();
+
+            tranButton = transform.Find("TranButton").gameObject.GetComponent<Button>();
+            hvacButton = transform.Find("HvacButton").gameObject.GetComponent<Button>();
+            elecButton = transform.Find("ElecButton").gameObject.GetComponent<Button>();
+            plumButton = transform.Find("PlumButton").gameObject.GetComponent<Button>();
+
 
             runButton.onClick.AddListener(delegate { RunButton(); });
             flyButton.onClick.AddListener(delegate { FlyButton(); });
@@ -95,8 +110,40 @@ namespace CampusSimulator
             unkButton.onClick.AddListener(delegate { DetectUnkButton(); });
             goButton.onClick.AddListener(delegate { GoButton(); });
             optionsButton.onClick.AddListener(delegate { OptionsButton(); });
-            traButton.onClick.AddListener(delegate { DetectTraButton(); });
-            pipButton.onClick.AddListener(delegate { DetectPipButton(); });
+            tranButton.onClick.AddListener(delegate { DetectTranButton(); });
+            hvacButton.onClick.AddListener(delegate { DetectHvacButton(); });
+            elecButton.onClick.AddListener(delegate { DetectElecButton(); });
+            plumButton.onClick.AddListener(delegate { DetectPlumButton(); });
+            pipeButton.onClick.AddListener(delegate { DetectPipButton(); });
+
+            uiman.ttman.WireUpToolTip(hideUiButton.gameObject, "HideUI", "Hide the User Interface\nEsc brings it back afterwards");
+            uiman.ttman.WireUpToolTip(runButton.gameObject, "Run", "Start ground based journeys");
+            uiman.ttman.WireUpToolTip(flyButton.gameObject, "Fly", "Start flying journeys");
+            uiman.ttman.WireUpToolTip(frameButton.gameObject, "Frame", "Draw labels on people, cars, etc");
+            uiman.ttman.WireUpToolTip(evacButton.gameObject, "Evac", "Start an evacuation simulation");
+            uiman.ttman.WireUpToolTip(unevacButton.gameObject, "Unevac", "After an evacuation, go back to starting positions");
+            uiman.ttman.WireUpToolTip(fteButton.gameObject, "Fte", "Detect people with FTE status");
+            uiman.ttman.WireUpToolTip(conButton.gameObject, "Con", "Detect people with contractor status");
+            uiman.ttman.WireUpToolTip(secButton.gameObject, "Sec", "Detect people with security status");
+            uiman.ttman.WireUpToolTip(secButton.gameObject, "Vis", "Detect people with visor status");
+            uiman.ttman.WireUpToolTip(unkButton.gameObject, "Unk", "Detect unknown people");
+            uiman.ttman.WireUpToolTip(vt2dButton.gameObject, "vt2d", "Tie Visibility to Detectability");
+
+            uiman.ttman.WireUpToolTip(tranButton.gameObject, "trans", "Switch Bld121 walls to being transparent");
+            uiman.ttman.WireUpToolTip(hvacButton.gameObject, "hvac", "Show Bld121 HVAC structures");
+            uiman.ttman.WireUpToolTip(elecButton.gameObject, "elec", "Show Bld121 electric structures");
+            uiman.ttman.WireUpToolTip(plumButton.gameObject, "plum", "Show Bld121 plumbing structures");
+
+            uiman.ttman.WireUpToolTip(showTracksButton.gameObject, "trax", "Show GPX Tracks");
+
+
+            uiman.ttman.WireUpToolTip(pipeButton.gameObject, "Pi", "Show journey path links and nodes");
+
+
+            uiman.ttman.WireUpToolTip(freeFlyButton.gameObject, "freefly", "Fly around in scene freely");
+            uiman.ttman.WireUpToolTip(quitButton.gameObject, "quit", "Quit to OS");
+            uiman.ttman.WireUpToolTip(goButton.gameObject, "go", "Kick off a preprogramed scenario dependent journey script");
+            uiman.ttman.WireUpToolTip(optionsButton.gameObject, "opts", "Bring up detailed configuration tabs");
         }
         public void SetScene(CampusSimulator.SceneSelE curscene)
         {
@@ -110,7 +157,7 @@ namespace CampusSimulator
         {
             if (butt == null)
             {
-                Debug.Log($"SetButton color button {txt} is null");
+                //Debug.LogWarning($"SetButton color button {txt} is null"); // this can happen, don't make a fuss
                 return;
             }
             var colors = butt.colors;
@@ -290,14 +337,17 @@ namespace CampusSimulator
 
         public void ColorizeButtonStates()
         {
+            SetButtonColor(pipeButton, "pink", sman.lcman.pipevis, "Pi");
             SetButtonColor(fteButton, "lightblue", sman.frman.detectFte.Get(), "F");
             SetButtonColor(conButton, "lightblue", sman.frman.detectContractor.Get(), "C");
             SetButtonColor(secButton, "lightblue", sman.frman.detectSecurity.Get(), "S");
             SetButtonColor(visButton, "lightblue", sman.frman.detectVisitor.Get(), "V");
             SetButtonColor(unkButton, "lightblue", sman.frman.detectUnknown.Get(), "U");
             SetButtonColor(showTracksButton, "lightblue", sman.trman.showtracks.Get(), "Tracks");
-            SetButtonColor(traButton, "lightblue", sman.bdman.transwalls, "Tr");
-            SetButtonColor(pipButton, "lightblue", sman.lcman.pipevis, "Pi");
+            SetButtonColor(tranButton, "lightblue", sman.bdman.transwalls, "Tr");
+            SetButtonColor(hvacButton, "yellow", sman.bdman.showhvac, "Hv");
+            SetButtonColor(elecButton, "yellow", sman.bdman.showelec, "El");
+            SetButtonColor(plumButton, "yellow", sman.bdman.showplum, "Pb");
             //Debug.LogWarning($"ColorizeButtonStates Vt2D:{sman.frman.visibilityTiedToDetectability.Get()}");
             SetButtonColor(vt2dButton, "lightblue", sman.frman.visibilityTiedToDetectability.Get(), "Vt2D");
             SetButtonColor(frameButton, "pink", sman.frman.frameJourneys.Get(), "Frame");
@@ -336,13 +386,37 @@ namespace CampusSimulator
             //SetButtonColor(unkButton, "lightblue", sman.frman.detectUnknown.Get(), "U");
         }
 
-        public void DetectTraButton()
+        public void DetectTranButton()
         {
             sman.bdman.transwalls = !sman.bdman.transwalls;
             sman.bdman.TransBld121Button();
             ColorizeButtonStates();
             //SetButtonColor(unkButton, "lightblue", sman.frman.detectUnknown.Get(), "U");
         }
+        public void DetectHvacButton()
+        {
+            sman.bdman.showhvac = !sman.bdman.showhvac;
+            sman.bdman.ShowHvacBld121Button();
+            ColorizeButtonStates();
+            //SetButtonColor(unkButton, "lightblue", sman.frman.detectUnknown.Get(), "U");
+        }
+        public void DetectElecButton()
+        {
+            sman.bdman.showelec = !sman.bdman.showelec;
+            sman.bdman.ShowElecBld121Button();
+            ColorizeButtonStates();
+            //SetButtonColor(unkButton, "lightblue", sman.frman.detectUnknown.Get(), "U");
+        }
+
+        public void DetectPlumButton()
+        {
+            sman.bdman.showplum = !sman.bdman.showplum;
+            sman.bdman.ShowPlumBld121Button();
+            ColorizeButtonStates();
+            //SetButtonColor(unkButton, "lightblue", sman.frman.detectUnknown.Get(), "U");
+        }
+
+
         public void DetectPipButton()
         {
             sman.lcman.pipevis = !sman.lcman.pipevis;

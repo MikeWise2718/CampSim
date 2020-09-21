@@ -453,7 +453,44 @@ namespace Aiskwk.Map
             }
             return (ok, newlod);
         }
+        public void DeleteCachedData()
+        {
+            Debug.LogWarning("Really deleting a lot of things here");
+//            Debug.Log($"DeleteBitmapData for scenename:{scenename} mapprove:{mapprov.ToString()}");
+//            if (qrf == null) return;
 
+//            //var mprov = GetMapProvSubdirName(mapprov);
+//            //var ppath = $"{Application.persistentDataPath}/qkmaps/scenemaps/{mapprov}/{scenename}";
+//            //Directory.Delete(ppath, true);
+//            var ppath = qrf.GetPersistentPathName();
+//            var tpath = qrf.GetTempPathName();
+//            qut.CopyTextToClipboard($"persistent:\n{ppath}\ntemp:\n{tpath}");
+//#if UNITY_EDITOR_WIN
+//            var msg = $"Delete Bitmap persistent and temp paths:\n\"{ppath}\"\n\"{tpath}\"\nPaths copied to clipboard";
+//            var ok1 = UnityEditor.EditorUtility.DisplayDialog("Deleting Persistent Path Data", msg, "Ok to delete", "Cancel");
+//            if (!ok1) return;
+//#endif
+//            if (Directory.Exists(ppath))
+//            {
+//                Directory.Delete(ppath, true);
+//                Debug.LogWarning($"Deleted {scenename} data stored in persistent path {ppath}");
+//            }
+//            else
+//            {
+//                Debug.LogWarning($"Persistent path {ppath} does not exist");
+//            }
+
+
+//            if (Directory.Exists(tpath))
+//            {
+//                Directory.Delete(tpath, true);
+//                Debug.LogWarning($"Deleted {scenename} data stored in temp path {tpath}");
+//            }
+//            else
+//            {
+//                Debug.LogWarning($"Temp path {tpath} does not exist");
+//            }
+        }
         public void DeleteBitmapData(string scenename, MapProvider mapprov)
         {
 

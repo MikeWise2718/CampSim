@@ -1,0 +1,63 @@
+Time Now: 2020-09-14 15:22:23 UTC
+
+Ctrl-M Ctrl-M       - Copy scene camera to main camera (in Unity Editor only)
+Ctrl-M Ctrl-S       - Copy main camera to scene camera (in Unity Editor only)
+F5                  - Total Refresh of Scene
+F10                 - Options Panel
+Ctrl-E              - Shift Camera position on viewer
+Ctrl-A              - Shift Camera position on viewer
+Ctrl-W              - Force Viewer to respond to keys
+Ctrl-C              - Interrupt bitmap loading
+
+Ctrl-Q Ctrl-Q       - Quit Application (hit ctrl-q twice)
+
+Bugs/Requests/Info  - Contact: mwise@microsoft.com (Mike Wise)
+                               brujo@microsoft.com (Bruce E. Johnson)
+
+Command line arguments:11
+   0:C:\Program Files\Unity\Hub\Editor\2019.3.7f1\Editor\Unity.exe
+   1:-projectpath
+   2:D:/unity/CampSim-Mapmerge
+   3:-useHub
+   4:-hubIPC
+   5:-cloudEnvironment
+   6:production
+   7:-hubSessionId
+   8:61a2e130-f65c-11ea-be65-d1002cba305b
+   9:-accessToken
+   10:XBov7_vDAvUiyvpTGyWLdeUec07DJ86zVZZGNWNqJfw008f
+System Info
+
+Time Now: 2020-09-14 15:22:23 UTC
+OS Family:Windows
+OS:Windows 10  (10.0.0) 64bit
+.NET Version: 4.0.30319.42000
+OS description: Microsoft Windows NT 10.0.18363.0 framework-ver:
+
+Processor count:48 type:AMD Ryzen Threadripper 3960X 24-Core Processor  freq:3793
+Device name:ABSOL type:Desktop model:System Product Name (System manufacturer)
+Perfcount - Mem Used MB:0  CPU Used:0
+GC MB used:42.2  Private MB Used:0.0
+
+GPU name:NVIDIA GeForce RTX 2070 SUPER
+GPU type:Direct3D11
+GPU vendorID:4318 (0x10de) NVIDIA Corporation
+GPU version:Direct3D 11.0 [level 11.1]
+GPU mem:8011 shaderlev:50
+Battery status:Charging level:-1
+Gyroscope available:False
+
+Displays:1 
+  0  native: 2048,1536       rendering: 2048,1536
+
+Scene Cam Pos:(0.000, 0.000, 0.000) Rot:(0.0, 0.0, 0.0) FOV:60.0
+
+Unity Version: 2019.3.7f1
+Unity Platform:WindowsEditor
+
+Build Version :2020.09.13.1 - Droning at 121
+Assembly Date:2020-09-14 15:22:16
+
+SystemInfo.maxTextureSize:16384
+\nnWindows Identity:ABSOL\mike
+Environment.UserName:mike DomainName:ABSOL

@@ -278,6 +278,7 @@ namespace CampusSimulator
         #endregion
 
         // Update is called once per frame
+        GameObject npsph = null;
         void Update()
         {
             if (path != null)
@@ -297,6 +298,14 @@ namespace CampusSimulator
             {
                 nearestPointRef = Camera.main.transform.position;
                 var npsph = GameObject.Find("nearpathsph-go");
+                //if (npsph==null)
+                //{ 
+                //    var nname = "nearpathsph";
+                //    var go = new GameObject();
+                //    go.name = nname + "-go";
+                //    var cname = "lilac";
+                //    npsph = GraphUtil.CreateMarkerSphere(nname, Vector3.zero, size: 1.1f * pathNodeSize, clr: cname);
+                //}
                 var pathdst = -1f;
                 PathPos pp = null;
                 var npt = Vector3.zero;

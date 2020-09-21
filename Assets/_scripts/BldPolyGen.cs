@@ -76,6 +76,17 @@ public class OsmBldSpec
         var rv = new List<Vector3>(boutline);
         return rv;
     }
+    public float GetLevelHeight(int level)
+    {
+        if (level<0 || levels<level )
+        {
+            Debug.LogError($"BldPolyGen.OsmBldSPec.GetLevelHeight has bad level:{level} building levels:{levels}");
+            level = levels;
+        }
+        var y = height * level;
+        return y;
+    }
+
     public Vector3 GetCenterTop()
     {
         var rv = Vector3.zero;
@@ -480,7 +491,7 @@ public class BldPolyGen
         var rv = pg.GenBld(parent, bldname, height, levels, clr, alf: 0.5f,dowalls:dowalls,dofloors: dofloors,doroof:doroof, ptscale: ptscale, pgvd:pgvd);
         return rv;
     }
-    public GameObject GenBldFromOsmBldSpec(GameObject parent, OsmBldSpec bs, bool plotTesselation = false, float ptscale = 1, PolyGenVekMapDel pgvd = null)
+    public GameObject GenBldFromOsmBldSpec(GameObject parent, OsmBldSpec bs, bool plotTesselation = false, float ptscale = 1, PolyGenVekMapDel pgvd = null,float alf=0.5f)
     {
         pg.SetOutline(bs.GetOutline());
         var clr = bs.GetColor();
@@ -493,7 +504,7 @@ public class BldPolyGen
             dowalls = false;
             dofloors = false;
         }
-        var rv = pg.GenBld(parent, bldname, bs.height, bs.levels, clr, alf: 0.5f, dowalls: dowalls, dofloors: dofloors, doroof: doroof, plotTesselation: plotTesselation, ptscale: ptscale, pgvd: pgvd);
+        var rv = pg.GenBld(parent, bldname, bs.height, bs.levels, clr, alf: alf, dowalls: dowalls, dofloors: dofloors, doroof: doroof, plotTesselation: plotTesselation, ptscale: ptscale, pgvd: pgvd);
         return rv;
     }
 

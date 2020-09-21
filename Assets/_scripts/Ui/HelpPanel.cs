@@ -11,7 +11,7 @@ public class HelpPanel : MonoBehaviour
     public CampusSimulator.SceneMan sman;
     UiMan uiman;
 
-    Text helpText;
+    Text helpTabText;
     Button copyClipboardButton;
 
     Button closeButton;
@@ -26,7 +26,7 @@ public class HelpPanel : MonoBehaviour
     void LinkObjectsAndComponents()
     {
         uiman = sman.uiman;
-        helpText = transform.Find("HelpText").GetComponent<Text>();
+        //helpText = transform.Find("HelpText").GetComponent<Text>();
         copyClipboardButton = transform.Find("ClipboardCopyButton").gameObject.GetComponent<Button>();
         closeButton = transform.Find("CloseButton").gameObject.GetComponent<Button>();
 
@@ -36,47 +36,38 @@ public class HelpPanel : MonoBehaviour
     }
     public void SetScene(CampusSimulator.SceneSelE curscene)
     {
-        FillHelpPanel();
+        //FillHelpPanel();
     }
 
-
-    public void FillHelpPanel()
+    public string GetHelpText()
     {
-
-        var sysver = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
         var utc = System.DateTime.UtcNow;
-        var arial = (Font)Resources.GetBuiltinResource(typeof(Font), "Arial.ttf");
-        var consolas = Font.CreateDynamicFontFromOSFont("Consolas", 24);
-
-        var font = arial;
-        if (consolas!=null)
-        {
-            font = consolas;
-        }
-
-        helpText.font = font;
-        helpText.fontSize = 24;
-        helpText.alignment = TextAnchor.UpperLeft;
-        helpText.verticalOverflow = VerticalWrapMode.Overflow;
         string msg = "Time Now: " + utc.ToString("yyyy-MM-dd HH:mm:ss UTC") + "\n";
         try
         {
 #if UNITY_EDITOR
-            msg += "\n"   + "Ctrl-M Ctrl-M       - Copy scene camera to main camera (in Unity Editor only)";
-            msg += "\n"   + "Ctrl-M Ctrl-S       - Copy main camera to scene camera (in Unity Editor only)";
+            msg += "\n" + "Ctrl-M Ctrl-M       - Copy scene camera to main camera (in Unity Editor only)";
+            msg += "\n" + "Ctrl-M Ctrl-S       - Copy main camera to scene camera (in Unity Editor only)";
 #endif
-            msg += "\n"   + "F5                  - Total Refresh of Scene";
-            msg += "\n"   + "F10                 - Options Panel";
-            msg += "\n"   + "Ctrl-E              - Shift Camera position on viewer";
-            msg += "\n"   + "Ctrl-A              - Shift Camera position on viewer";
-            msg += "\n"   + "Ctrl-W              - Force Viewer to respond to keys";
-            msg += "\n"   + "Ctrl-C              - Interrupt bitmap loading";
+            msg += "\n" + "F5                  - Total Refresh of Scene";
+            msg += "\n" + "F10                 - Options Panel";
+            msg += "\n" + "Ctrl-E              - Shift Camera position on viewer";
+            msg += "\n" + "Ctrl-A              - Shift Camera position on viewer";
+            msg += "\n" + "Ctrl-W              - Force Viewer to respond to keys";
+            msg += "\n" + "Ctrl-C              - Interrupt bitmap loading";
             msg += "\n\n" + "Ctrl-Q Ctrl-Q       - Quit Application (hit ctrl-q twice)";
             msg += "\n\n" + "Bugs/Requests/Info  - Contact: mwise@microsoft.com (Mike Wise)";
             msg += "\n" + "                               brujo@microsoft.com (Bruce E. Johnson)";
+            var args = GraphAlgos.GraphUtil.GetArgs();
 
-            var  args = GraphAlgos.GraphUtil.GetArgs();
-            msg += $"\n\nCommand line arguments:{args.Count}";
+            msg += $"\n\nCommand line argument help:";
+            msg += "\n" + "     -monitor n - Select Monitor n for display - see sysinfo for recognized displays";
+            msg += "\n" + "     -scene scenespec - Select scene and run (scenespec list is in first visuals tab dropdown)";
+            msg += "\n" + "     -run - Start the scene-wide people journey simulation";
+            msg += "\n" + "     -fly - Start the scene-wide drone journey simulation";
+            msg += "\n" + "     -nopipes- Don't show the pipe-like travel path markers";
+            msg += "\n" + "     -help - Write this help text and sysinfo to text (help.txt) file and exit";
+            msg += $"\n\nCurrent Command line arguments:{args.Count}";
             for (int i = 0; i < args.Count; i++)
             {
                 msg += $"\n   {i}:{args[i]}";
@@ -88,7 +79,35 @@ public class HelpPanel : MonoBehaviour
             Debug.LogError("Error filling help text");
             Debug.LogError(ex.ToString());
         }
-        helpText.text = msg;
+        return msg;
+    }
+
+    public List<string> GetHelpTextAsList()
+    {
+        var msg = GetHelpText();
+        var rv = new List<string>(msg.Split('\n'));
+        return rv;
+    }
+
+    public void FillHelpPanel()
+    {
+        var arial = (Font)Resources.GetBuiltinResource(typeof(Font), "Arial.ttf");
+        var consolas = Font.CreateDynamicFontFromOSFont("Consolas", 24);
+
+        var font = arial;
+        if (consolas!=null)
+        {
+            font = consolas;
+        }
+
+        var go = GameObject.Find("HelpTabText");
+        helpTabText = go.GetComponent<Text>();
+        helpTabText.font = font;
+        helpTabText.fontSize = 24;
+        helpTabText.alignment = TextAnchor.UpperLeft;
+        helpTabText.verticalOverflow = VerticalWrapMode.Overflow;
+        var msg = GetHelpText();
+        helpTabText.text = msg;
     }
     void ButtonClick(string buttonname)
     {
@@ -97,8 +116,8 @@ public class HelpPanel : MonoBehaviour
         {
             case "ClipboardCopyButton":
                 {
-                    Debug.Log($"CopyText {helpText.text.Length} chars");
-                    Aiskwk.Map.qut.CopyTextToClipboard(helpText.text);
+                    Debug.Log($"CopyText {helpTabText.text.Length} chars");
+                    Aiskwk.Map.qut.CopyTextToClipboard(helpTabText.text);
                     break;
                 }
         }

@@ -44,8 +44,12 @@ namespace CampusSimulator
 
         public UxSettingBool walllinks = new UxSettingBool("walllinks", false);
         public UxSettingBool osmblds = new UxSettingBool("osmblds", true);
+        public UxSettingBool osmbldstrans = new UxSettingBool("osmbldstrans", true);
         public UxSettingBool fixedblds = new UxSettingBool("fixedblds", false);
         public bool transwalls = false;
+        public bool showhvac = false;
+        public bool showelec = false;
+        public bool showplum = false;
 
 
         // To do - get rid of bldmode and treemode regions in BuildingMan
@@ -194,12 +198,12 @@ namespace CampusSimulator
                 {
                     if (bs.osmname.StartsWith(namestart))
                     {
-                        Debug.Log($"Found \"{bs.osmname}\" starts with \"{namestart}\"");
+                        //Debug.Log($"Found \"{bs.osmname}\" starts with \"{namestart}\"");
                         return bs;
                     }
                 }
             }
-            Debug.Log($"Found nothing that starts with \"{namestart}\"");
+            Debug.LogWarning($"Found nothing that starts with \"{namestart}\"");
             return null;
         }
 
@@ -228,10 +232,11 @@ namespace CampusSimulator
             bldMode.GetInitial(BldModeE.full);
             walllinks.GetInitial(false);
             osmblds.GetInitial(true);
+            osmbldstrans.GetInitial(true);
             fixedblds.GetInitial(false);
             transwalls = false;
             scene_padspecs = new List<string>();
-            Debug.Log($"BuildingMan.InitializeValues walllinks:{walllinks.Get()} osmblds:{osmblds.Get()}   fixedblds:{fixedblds.Get()}");
+            Debug.Log($"BuildingMan.InitializeValues walllinks:{walllinks.Get()} osmblds:{osmblds.Get()} osmbldstrans:{osmbldstrans.Get()}   fixedblds:{fixedblds.Get()}");
         }
 
         public List<string> GetFilteredPadNames(string prefix)
@@ -259,8 +264,7 @@ namespace CampusSimulator
             }
             return rv;
         }
-
-        public void InitTransvis()
+        public void InitTranswalls()
         {
             var bld121 = GetBuilding("Bld121", couldFail: true);
             if (bld121 == null)
@@ -275,20 +279,23 @@ namespace CampusSimulator
                 return;
             }
             transwalls = b121comp.b121_materialMode.Get() == B121Willow.b121_MaterialMode.glasswalls;
+            showhvac = b121comp.hvac.Get();
+            showelec = b121comp.lighting.Get();
+            sman.uiman.SyncState();
         }
 
         public void TransBld121Button()
         {
             var bld121 = GetBuilding("Bld121", couldFail: true);
-            if (bld121==null)
+            if (bld121 == null)
             {
-                Debug.LogError($"No Bld121 in scene");
+                Debug.LogError($"BuildingMan.TransBld121Button - No Bld121 in scene");
                 return;
             }
-            var b121comp= bld121.GetComponent<B121Willow>();
+            var b121comp = bld121.GetComponent<B121Willow>();
             if (b121comp == null)
             {
-                Debug.LogError($"No B121 Component attached to Bld121 in scene");
+                Debug.LogError($"BuildingMan.TransBld121Button - No B121 Component attached to Bld121 in scene");
                 return;
             }
             var needtrans = transwalls;
@@ -302,7 +309,7 @@ namespace CampusSimulator
                 b121comp.b121_materialMode.SetAndSave(B121Willow.b121_MaterialMode.materialed);
             }
             var curstate = b121comp.b121_materialMode.Get();
-            if (oristate!=curstate)
+            if (oristate != curstate)
             {
                 Debug.Log($"Bld121 {oristate} changed to {curstate} - refresh required");
                 b121comp.ActuateMaterialMode();
@@ -312,6 +319,56 @@ namespace CampusSimulator
             {
                 Debug.Log($"Bld121 {oristate} unchanged to {curstate} - no refresh required");
             }
+        }
+
+        public void ShowHvacBld121Button()
+        {
+            var bld121 = GetBuilding("Bld121", couldFail: true);
+            if (bld121==null)
+            {
+                Debug.LogError($"BuildingMan.ShowHvacBld121Button - No Bld121 in scene");
+                return;
+            }
+            var b121comp= bld121.GetComponent<B121Willow>();
+            if (b121comp == null)
+            {
+                Debug.LogError($"BuildingMan.ShowHvacBld121Button - No B121 Component attached to Bld121 in scene");
+                return;
+            }
+            b121comp.ActuateShowHvac(showhvac);
+        }
+        public void ShowElecBld121Button()
+        {
+            var bld121 = GetBuilding("Bld121", couldFail: true);
+            if (bld121 == null)
+            {
+                Debug.LogError($"BuildingMan.ShowElecBld121Button - No Bld121 in scene");
+                return;
+            }
+            var b121comp = bld121.GetComponent<B121Willow>();
+            if (b121comp == null)
+            {
+                Debug.LogError($"BuildingMan.ShowElecBld121Button - No B121 Component attached to Bld121 in scene");
+                return;
+            }
+            b121comp.ActuateShowLighting(showelec);
+        }
+
+        public void ShowPlumBld121Button()
+        {
+            var bld121 = GetBuilding("Bld121", couldFail: true);
+            if (bld121 == null)
+            {
+                Debug.LogError($"BuildingMan.ShowPlumBld121Button - No Bld121 in scene");
+                return;
+            }
+            var b121comp = bld121.GetComponent<B121Willow>();
+            if (b121comp == null)
+            {
+                Debug.LogError($"BuildingMan.ShowPlumBld121Button - No B121 Component attached to Bld121 in scene");
+                return;
+            }
+            b121comp.ActuateShowPlumbing(showplum);
         }
 
         public BldPolyGen bpg = null;
@@ -367,6 +424,7 @@ namespace CampusSimulator
         }
         public void ModelBuildPostLinkCloud()
         {
+            InitTranswalls();// this can only be done after b121 is initialized
             ReinitDests();
             AddRoomsToBuildings();
             PopulateBuildings();
@@ -565,7 +623,7 @@ namespace CampusSimulator
                 RegisterBsBld(bldspec, bld);
             }
             bld.AddOsmBldDetails(this, bldspec);
-            AddBuildingToCollection(bld);
+            AddBuildingToCollection(bld,mightAlreadyExist:true);
 
             //bld.llm = bgo.AddComponent<LatLongMap>(); // todo uncomment
             //var origin = $"BuildingMan.MakeOsmBuilding(\"{mbname}\")";
@@ -645,11 +703,14 @@ namespace CampusSimulator
             }
             return bldlookup[bname];
         }
-        public void AddBuildingToCollection(Building building)
+        public void AddBuildingToCollection(Building building,bool mightAlreadyExist=false)
         {
             if (bldlookup.ContainsKey(building.name))
             {
-                Debug.Log("Tried to add duplicate building:" + building.name); // this can happen with osmbuildings
+                if (!mightAlreadyExist)
+                {
+                    Debug.Log("Tried to add duplicate building:" + building.name); // this can happen with osmbuildings
+                }
                 return;
             }
             var ndests = building.GetRoomListFromNodes().Count;

@@ -13,13 +13,14 @@ namespace GraphAlgos
 {
     public class GraphUtil
     {
-        static string _verstring = "2020.09.10.1 - Droning at 121";
+        static string _verstring = "2020.09.21.1 - Scenario 121";
+        static string _sysver = "";
         static DateTime _buildDate = DateTime.UtcNow;
 
         private static void getsysdata()
         {
-            string sysver = "";
-            if (_verstring == "")
+            string sysver;
+            if (_sysver == "")
             {
                 try
                 {
@@ -30,9 +31,13 @@ namespace GraphAlgos
                 {
                     sysver = ex.Message;
                 }
-                //_buildDate = BuildtimeInfo.DateTimeString();
-                _verstring = sysver.ToString();
+                //_buildDate = BuildtimeInfo.DateTimeString(); // useless
+                _sysver = sysver.ToString();
             }
+        }
+        private static string getverstring()
+        {
+            return _verstring;
         }
 
         static List<string> cookedArgs = null;
@@ -878,7 +883,7 @@ namespace GraphAlgos
 
         public static string GetVersionString()
         {
-            getsysdata();
+            getverstring();
             return (_verstring);
         }
         public static bool CheckVersionString()
@@ -924,6 +929,7 @@ namespace GraphAlgos
         }
         public static string GetBuildDate()
         {
+            getverstring();
             getsysdata();
             return (_buildDate.ToString("yyyy-MM-dd HH:mm:ss"));
         }

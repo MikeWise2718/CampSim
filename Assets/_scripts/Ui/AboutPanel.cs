@@ -6,17 +6,20 @@ using UnityEngine;
 using UnityEngine.UI;
 using GraphAlgos;
 using CampusSimulator;
+using UnityEngine.UIElements;
 
 public class AboutPanel : MonoBehaviour
 {
     public SceneMan sman;
     UiMan uiman;
 
-    Text aboutText;
+    Text aboutTabText;
+    Canvas aboutTextCanvas;
 
-    Button closeButton;
-    Button copyClipboardButton;
-    Button deleteSettingsButton;
+    UnityEngine.UI.Button closeButton;
+    UnityEngine.UI.Button copyClipboardButton;
+    UnityEngine.UI.Button deleteSettingsButton;
+    UnityEngine.UI.Button deleteCachedMapsButton;
 
     System.Diagnostics.PerformanceCounter cpuCounter;
     System.Diagnostics.PerformanceCounter ramCounter;
@@ -28,14 +31,16 @@ public class AboutPanel : MonoBehaviour
     void LinkObjectsAndComponents()
     {
         uiman = sman.uiman;
-        aboutText = transform.Find("AboutText").GetComponent<Text>();
-        closeButton = transform.Find("CloseButton").gameObject.GetComponent<Button>();
-        copyClipboardButton = transform.Find("CopyClipboardButton").gameObject.GetComponent<Button>();
-        deleteSettingsButton = transform.Find("DeleteSettingsButton").gameObject.GetComponent<Button>();
+        aboutTextCanvas = transform.Find("AboutTextCanvas").GetComponent<Canvas>();
+        closeButton = transform.Find("CloseButton").gameObject.GetComponent<UnityEngine.UI.Button>();
+        copyClipboardButton = transform.Find("CopyClipboardButton").gameObject.GetComponent<UnityEngine.UI.Button>();
+        deleteSettingsButton = transform.Find("DeleteSettingsButton").gameObject.GetComponent<UnityEngine.UI.Button>();
+        deleteCachedMapsButton = transform.Find("DeleteCachedMapsButton").gameObject.GetComponent<UnityEngine.UI.Button>();
 
         closeButton.onClick.AddListener(delegate { uiman.ClosePanel(); });
         copyClipboardButton.onClick.AddListener(delegate { ButtonClick(copyClipboardButton.name); });
         deleteSettingsButton.onClick.AddListener(delegate { ButtonClick(deleteSettingsButton.name); });
+        deleteCachedMapsButton.onClick.AddListener(delegate { ButtonClick(deleteCachedMapsButton.name); });
     }
 
     public void Init0()
@@ -90,6 +95,18 @@ public class AboutPanel : MonoBehaviour
         Debug.Log($"{buttonname} clicked:" + Time.time);
         switch (buttonname)
         {
+            case "DeleteSettingsButton":
+                {
+                    Debug.LogWarning("PlayerPref Settings Deleted");
+                    PlayerPrefs.DeleteAll();
+                    break;
+                }
+            case "DeleteCachedMapsButton":
+                {
+                    Debug.LogWarning("Deleteing Cached Maps");
+                    sman.mpman.DeleteCachedMaps();
+                    break;
+                }
             case "CloseButton":
                 {
                     var spcomp = FindObjectOfType<StatusPanel>();
@@ -98,13 +115,7 @@ public class AboutPanel : MonoBehaviour
                 }
             case "CopyClipboardButton":
                 {
-                    Aiskwk.Map.qut.CopyTextToClipboard(aboutText.text);
-                    break;
-                }
-            case "DeleteSettingsButton":
-                {
-                    Debug.LogWarning("PlayerPref Settings Deleted");
-                    PlayerPrefs.DeleteAll();
+                    Aiskwk.Map.qut.CopyTextToClipboard(aboutTabText.text);
                     break;
                 }
         }
@@ -172,27 +183,15 @@ public class AboutPanel : MonoBehaviour
         }
         return sid;
     }
-
-    public void FillAboutPanel()
+    public string GetAboutText()
     {
-        if (aboutText == null)
-        {
-            Init();
-        }
-
         var sysver = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
         var utc = System.DateTime.UtcNow;
-        Font arial;
-        arial = (Font)Resources.GetBuiltinResource(typeof(Font), "Arial.ttf");
-
-        aboutText.font = arial;
-        aboutText.fontSize = 24;
-        aboutText.alignment = TextAnchor.UpperLeft;
-        aboutText.verticalOverflow = VerticalWrapMode.Overflow;
         string msg = "System Info";
         try
         {
             msg += "\n\nTime Now: " + utc.ToString("yyyy-MM-dd HH:mm:ss UTC");
+            msg += "\n\nVersion: "+GraphUtil.GetVersionString();
 
             //            aboutText.text += "\n\nDevice Name:" + Util.GetDeviceName();
             msg += "\nOS Family:" + SystemInfo.operatingSystemFamily;
@@ -225,12 +224,21 @@ public class AboutPanel : MonoBehaviour
                 msg += "  enabled:" + Input.gyro.enabled;
             }
 
+            msg += $"\n\nDisplays:{Display.displays.Length}";
+            for (int i = 0; i < Display.displays.Length; i++)
+            {
+                var dd = Display.displays[i];
+                msg += $" \n  {i}  native: {dd.systemWidth},{dd.systemHeight}";
+                msg += $"       rendering: {dd.renderingWidth},{dd.renderingHeight}";
+            }
+            msg += $"\nPlayerPrefs - UnitySelectMonitor:{PlayerPrefs.GetInt("UnitySelectMonitor")}";
+
 #if UNITY_EDITOR
             var svc = UnityEditor.SceneView.lastActiveSceneView.camera;
             if (svc != null)
             {
                 var t = svc.transform;
-                msg += "\nScene Cam Pos:" + t.position.ToString("F3");
+                msg += "\n\nScene Cam Pos:" + t.position.ToString("F3");
                 msg += " Rot:" + t.rotation.eulerAngles.ToString("F1");
                 msg += " FOV:" + svc.fieldOfView.ToString("F1");
             }
@@ -248,7 +256,7 @@ public class AboutPanel : MonoBehaviour
             msg += $"\n\nSystemInfo.maxTextureSize:{SystemInfo.maxTextureSize}";
 
             var (winname, username, userdomname) = GetSecurityPrincipalNames();
-            msg += $"\n\nWindows Identity:{winname}";
+            msg += $"\n\\nnWindows Identity:{winname}";
             msg += $"\nEnvironment.UserName:{username} DomainName:{userdomname}";
 
 
@@ -259,7 +267,39 @@ public class AboutPanel : MonoBehaviour
             Debug.LogError("Error filling about box text");
             Debug.LogError(ex.ToString());
         }
-        aboutText.text = msg;
+        return msg;
+    }
+
+
+    public List<string> GetAboutTextAsList()
+    {
+        var msg = GetAboutText();
+        var rv = new List<string>(msg.Split('\n'));
+        return rv;
+    }
+    public void FillAboutPanel()
+    {
+        if (aboutTabText == null)
+        {
+            Init();
+        }
+
+        var sysver = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+        var utc = System.DateTime.UtcNow;
+        Font arial;
+        arial = (Font)Resources.GetBuiltinResource(typeof(Font), "Arial.ttf");
+
+        var go = GameObject.Find("AboutTabText");
+        aboutTabText = go.GetComponent<Text>();
+        aboutTabText.font = arial;
+        aboutTabText.fontSize = 24;
+        aboutTabText.alignment = TextAnchor.UpperLeft;
+        aboutTabText.verticalOverflow = VerticalWrapMode.Truncate;
+        //var sv = aboutTextCanvas.GetComponent<ScrollView>();
+        //var label = new UnityEngine.UIElements.TextField();
+        //label.value = msg;
+        //sv.contentContainer.Add(label);
+        aboutTabText.text = GetAboutText();
         //Debug.Log("msg:" + msg);
     }
 

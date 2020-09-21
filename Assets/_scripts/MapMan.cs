@@ -4,6 +4,7 @@ using UnityEngine;
 using UxUtils;
 using Aiskwk.Map;
 using System.Runtime.InteropServices;
+using Boo.Lang.Runtime.DynamicDispatching;
 
 namespace CampusSimulator
 {
@@ -13,7 +14,7 @@ namespace CampusSimulator
 
         GameObject qmapgo;
         QmapMan qmapman;
- 
+
         public double xdistkm = 1;
         public double zdistkm = 3;
         public double xoffkm = 0;
@@ -35,8 +36,8 @@ namespace CampusSimulator
         public string address = "";
 
 
-        public enum MapVisualsE {  MapOn, MapOff }
-        public UxEnumSetting<MapVisualsE> mapVisiblity = new UxEnumSetting<MapVisualsE>("MapVisuals",MapVisualsE.MapOn);
+        public enum MapVisualsE { MapOn, MapOff }
+        public UxEnumSetting<MapVisualsE> mapVisiblity = new UxEnumSetting<MapVisualsE>("MapVisuals", MapVisualsE.MapOn);
         #region Map Visuals
         public void RealizeMapVisuals()
         {
@@ -149,7 +150,7 @@ namespace CampusSimulator
         public UxSetting<double> custom_lngkm = new UxSetting<double>("custom_lngkm", 1);
 
         public UxSetting<float> mapScale = new UxSetting<float>("mapScale", 1);
-        public UxSettingVector3 mapRot= new UxSettingVector3("mapRot", Vector3.zero);
+        public UxSettingVector3 mapRot = new UxSettingVector3("mapRot", Vector3.zero);
         public UxSettingVector3 mapTrans = new UxSettingVector3("mapTrans", Vector3.zero);
 
         //public UxSettingBool HasLLmap = new UxSettingBool("hasLLmap", false);
@@ -164,12 +165,12 @@ namespace CampusSimulator
         public UxSettingVector3 viewerPosition = new UxSettingVector3("viewerPosition", Vector3.zero);
         public UxSettingVector3 viewerRotation = new UxSettingVector3("viewerRotation", Vector3.zero);
         public UxEnumSetting<ViewerAvatar> viewerAvatar = new UxEnumSetting<ViewerAvatar>("viewerAvatar", ViewerAvatar.QuadCopter);
-        public UxEnumSetting<ViewerCamPosition> viewerCamPosition = new UxEnumSetting<ViewerCamPosition>("viewerCamPosition", ViewerCamPosition.FloatBehind);
+        public UxEnumSetting<ViewerCamConfig> viewerCamPosition = new UxEnumSetting<ViewerCamConfig>("viewerCamPosition", ViewerCamConfig.FloatBehind);
         public UxEnumSetting<ViewerControl> viewerControl = new UxEnumSetting<ViewerControl>("viewerControl", ViewerControl.Velocity);
 
-        public UxSetting<float> hmult = new UxSetting<float>("Hmult", 1f );
+        public UxSetting<float> hmult = new UxSetting<float>("Hmult", 1f);
 
-        public BespokeSpec bespokespec=null;
+        public BespokeSpec bespokespec = null;
 
         public void InitPhase0()
         {
@@ -178,9 +179,9 @@ namespace CampusSimulator
 
         // Use this for initialization
 
-        public float GetHeight(float x,float z)
+        public float GetHeight(float x, float z)
         {
-            if (qmapman == null || qmapman.qmm==null) return 0;
+            if (qmapman == null || qmapman.qmm == null) return 0;
             var p = new Vector3(x, 0, z);
             var (v, _, _) = qmapman.qmm.GetWcMeshPosProjectedAlongYnew(p);
             return v.y;
@@ -190,12 +191,12 @@ namespace CampusSimulator
         {
             return GetHeightVector3(p, 0);
         }
-        public Vector3 GetHeightVector3(Vector3 p,float yoff)
+        public Vector3 GetHeightVector3(Vector3 p, float yoff)
         {
             if (qmapman == null || qmapman.qmm == null) return Vector3.zero;
             var oy = p.y;
             var np = new Vector3(p.x, 0, p.z);
-            var (v, _, _) = qmapman.qmm.GetWcMeshPosProjectedAlongYnew(np,cliptocorners:true);
+            var (v, _, _) = qmapman.qmm.GetWcMeshPosProjectedAlongYnew(np, cliptocorners: true);
             var nv = new Vector3(v.x, v.y + oy + yoff, v.z);
             return nv;
         }
@@ -203,20 +204,22 @@ namespace CampusSimulator
 
         public void DeleteQmap()
         {
-            if (qmapman!=null)
+            if (qmapman != null)
             {
                 qmapman.DeleteQmm();
             }
         }
-        //void CreateQmap()
-        //{
-        //    qmapgo = new GameObject("QmapMan");
-        //    qmapman = qmapgo.AddComponent<QmapMan>();
-        //    qmapman.qmapMode = QmapMan.QmapModeE.Bespoke;
-        //    qmapman.bespoke = bspko;
 
-        //    RealizeQmap();
-        //}
+
+        public void DeleteCachedMaps()
+        {
+            if (qmapman != null)
+            {
+                qmapman.qmm.DeleteCachedMapsAndElevations();
+            }
+        }
+
+
 
         void AssignBespoke()
         {
@@ -281,11 +284,11 @@ namespace CampusSimulator
             }
 
             //================================================================
-            var (nbm,nel) = await qmapman.SetModeAndMakeMesh(qmapman.qmapMode);
+            var (nbm, nel) = await qmapman.SetModeAndMakeMesh(qmapman.qmapMode);
             //================================================================
 
             sman.PostMapAsyncLoadSetScene(); // this has to go after the await
-            if (nbm>0 || nel>0)
+            if (nbm > 0 || nel > 0)
             {
                 // if we loaded bitmaps we need to redraw everything from scratch
                 sman.RequestRefresh("RealizeQmap", totalrefresh: true);
@@ -295,7 +298,7 @@ namespace CampusSimulator
             //Debug.Log($"bespoke ptcnt:{qmapman.bespoke.mappoints.Count}");
         }
 
-         public (int,int) EstimateNumFilesInFetch(string scenename,MapProvider mapprov, ElevProvider elprov, LatLng ll,float latkm,float lngkm,int lod,int ntpq)
+        public (int, int) EstimateNumFilesInFetch(string scenename, MapProvider mapprov, ElevProvider elprov, LatLng ll, float latkm, float lngkm, int lod, int ntpq)
         {
             var llbox = new LatLngBox(ll, latkm, lngkm, lod: lod);
             var (nqkx, nqky) = llbox.GetTileSize();
@@ -304,7 +307,7 @@ namespace CampusSimulator
             //(var _, var nbm, var nel) = await qmapman.MakeMeshFromLlbox(scenename, llbox, mapprov: mapprov, elevprov:elprov, execute: false, forceload: false, limitQuadkeys: false);
             return (nbm, nel);
         }
-        QmapMesh GetQmm(string caller="",bool complain=true)
+        QmapMesh GetQmm(string caller = "", bool complain = true)
         {
             if (qmapman != null)
             {
@@ -322,7 +325,7 @@ namespace CampusSimulator
         public LatLongMap GetLatLongMapQk(QkCoordSys coordsys)
         {
             var qmm = GetQmm();
-            if (qmm!=null)
+            if (qmm != null)
             {
                 var llm = qmm.GetLatLongMap(coordsys);
                 return llm;
@@ -370,7 +373,7 @@ namespace CampusSimulator
                 qmm.useElevationData = neweleval;
             }
         }
-        public void SetLatLngAndExtent(string lookupaddress,double lat,double lng,double latkm,double lngkm)
+        public void SetLatLngAndExtent(string lookupaddress, double lat, double lng, double latkm, double lngkm)
         {
             inputAddress.SetAndSave(lookupaddress);
             custom_maplat.SetAndSave(lat);
@@ -383,7 +386,7 @@ namespace CampusSimulator
             xdistkm = lngkm;
             zdistkm = latkm;
             var ll = new LatLng(lat, lng);
-            var llbox = new LatLngBox(ll, latkm, lngkm, lod:lod);
+            var llbox = new LatLngBox(ll, latkm, lngkm, lod: lod);
             qmapman.bespoke.llbox = llbox;
             //Debug.LogWarning($"mman.SetLatLngAndExtent SetAndSave: lookupaddress:{lookupaddress}");
             //Debug.Log($"mman.SetLatLngAndExtent: lat:{lat} lng:{lng} latkm:{latkm} lngkm:{lngkm}");
@@ -521,7 +524,7 @@ namespace CampusSimulator
         }
 
         public int nTotIsects = 0;
-        public GameObject AddLine(string lname, Vector3 pt1, Vector3 pt2,RmLinkFormE lnform=RmLinkFormE.pipe, float lska = 1.0f, float nska = 1.0f, string lclr = "red", string nclr = "", int omit = -1, float widratio = 1, bool wps = true, bool frag=false)
+        public GameObject AddLine(string lname, Vector3 pt1, Vector3 pt2, RmLinkFormE lnform = RmLinkFormE.pipe, float lska = 1.0f, float nska = 1.0f, string lclr = "red", string nclr = "", int omit = -1, float widratio = 1, bool wps = true, bool frag = false)
         {
             if (qmapman == null || qmapman.qmm == null) return null;
             var frm = lnform.ToString();
@@ -529,7 +532,7 @@ namespace CampusSimulator
             if (frag)
             {
                 qmapman.qmm.qtt.ntotIsects = 0;
-                lgo = qmapman.qmm.qtt.AddFragLine(lname, pt1, pt2,frm, lska, nska, lclr, nclr, omit, widratio, wps);
+                lgo = qmapman.qmm.qtt.AddFragLine(lname, pt1, pt2, frm, lska, nska, lclr, nclr, omit, widratio, wps);
                 nTotIsects += qmapman.qmm.qtt.ntotIsects;
             }
             else
@@ -538,7 +541,7 @@ namespace CampusSimulator
             }
             return lgo;
         }
-        public GameObject AddLine(GameObject parent,string lname, Vector3 pt1, Vector3 pt2, RmLinkFormE lnform=RmLinkFormE.pipe, float lska = 1.0f, float nska = 1.0f, string lclr = "red", string nclr = "", int omit = -1, float widratio = 1, bool wps = true, bool frag = false)
+        public GameObject AddLine(GameObject parent, string lname, Vector3 pt1, Vector3 pt2, RmLinkFormE lnform = RmLinkFormE.pipe, float lska = 1.0f, float nska = 1.0f, string lclr = "red", string nclr = "", int omit = -1, float widratio = 1, bool wps = true, bool frag = false)
         {
             if (qmapman == null || qmapman.qmm == null) return null;
             var frm = lnform.ToString();
@@ -568,9 +571,9 @@ namespace CampusSimulator
             qmapman.bespoke.lod = lod;
             qmapman.bespoke.llbox.lod = lod;
             qmapman.bespoke.nodesPerQuadKey = npqk;
-            await qmapman.SetModeAndMakeMesh(qmapman.qmapMode,forceload:forceload);
+            await qmapman.SetModeAndMakeMesh(qmapman.qmapMode, forceload: forceload);
         }
-        public (bool isLoading,bool irupt,int lodLoading,int nbmLoaded,int nbmToLoad,int nelevBatchesLoaded, int nelevBatchsToLoad) GetLoadingStatus()
+        public (bool isLoading, bool irupt, int lodLoading, int nbmLoaded, int nbmToLoad, int nelevBatchesLoaded, int nelevBatchsToLoad) GetLoadingStatus()
         {
             var isLoading = qmapman.qmm == null;
             var irupt = Aiskwk.Map.QkMan.interruptLoading;
@@ -579,10 +582,10 @@ namespace CampusSimulator
             var lodLoading = QkMan.lodLoading;
             var nelevBatchesLoaded = QmapElevation.nblkdone;
             var nelevBatchsToLoad = QmapElevation.nblktodo;
-            return (isLoading, irupt,lodLoading, nbmLoaded, nbmToLoad, nelevBatchesLoaded, nelevBatchsToLoad);
+            return (isLoading, irupt, lodLoading, nbmLoaded, nbmToLoad, nelevBatchesLoaded, nelevBatchsToLoad);
         }
 
-        public (string, string,string, string, string, string,string,string) GetGeoDataStoragePaths()
+        public (string, string, string, string, string, string, string, string) GetGeoDataStoragePaths()
         {
             var s1 = "pers path";
             var s2 = "pers info";
@@ -595,11 +598,11 @@ namespace CampusSimulator
             var qmm = qmapman.qmm;
             if (qmm != null)
             {
-                var qrfbitm = qmm.qkm.GetTexQrf(qmm.mapprov,qmm.scenename, qmm.mapExtent,qmm.levelOfDetail,loadData:false);
+                var qrfbitm = qmm.qkm.GetTexQrf(qmm.mapprov, qmm.scenename, qmm.mapExtent, qmm.levelOfDetail, loadData: false);
                 var efname = "eledata.csv";
                 var efpath = "qkmaps/" + qmapman.qmm.qmapElev.GetEleCsvSubDir(qmm.scenename, qmm.mapprov);
                 var (nrowx, ncolz) = qmm.qmapElev.GetGridSize();
-                var qrfelev = new QresFinder(qmm.elevprov, qmm.scenename,nrowx,ncolz,efpath,efname, loadData: false);
+                var qrfelev = new QresFinder(qmm.elevprov, qmm.scenename, nrowx, ncolz, efpath, efname, loadData: false);
                 s1 = qrfbitm.GetPersistentPathName();
                 s2 = qrfbitm.GetPersistentFileData();
                 s3 = qrfelev.GetPersistentPathName();
@@ -619,12 +622,12 @@ namespace CampusSimulator
                 //Debug.Log($"s5:{s5}");
                 //Debug.Log($"s6:{s6}");
             }
-            return (s1,s2,s3,s4,s5,s6,s7,s8);
+            return (s1, s2, s3, s4, s5, s6, s7, s8);
         }
         public int GetLod()
         {
             var rv = 0;
-            if (qmapman!=null && qmapman.qmm!=null)
+            if (qmapman != null && qmapman.qmm != null)
             {
                 rv = qmapman.qmm.levelOfDetail;
             }
@@ -632,9 +635,207 @@ namespace CampusSimulator
         }
         public void ModelBuild()
         {
-            Debug.Log($"MapMan.SetScene: {sman.curscene}");
+            Debug.Log($"MapMan.ModelBuild: {sman.curscene}");
             RealizeQmapAndMakeMesh();
         }
+        Vector3 GetNodePt(Vector3 exppt, string nodename)
+        {
+            var node = sman.lcman.GetNode(nodename);
+            if (node == null)
+            {
+                sman.Lgg($"MapMan.AddB121Telelocs Cound not find {nodename}", "red");
+                return exppt;
+            }
+            var pt = node.pt;
+            var dist = Vector3.Distance(exppt, pt);
+            if (dist > 1)
+            {
+                sman.Lgg($"MapMan.AddB121Telelocs node:{nodename} pts too far apart {dist:f1} pt:{pt:f1} exppt:{exppt:f1}", "red");
+                //return exppt;
+            }
+            else
+            {
+                sman.Lgg($"MapMan.AddB121Telelocs node:{nodename} pts ok {dist:f1} pt:{pt:f1} exppt:{exppt:f1}", "green");
+            }
+            return pt;
+        }
+        Vector3 GetNodePt(string nodename)
+        {
+            var node = sman.lcman.GetNode(nodename);
+            if (node == null)
+            {
+                sman.Lgg($"MapMan.AddB121Telelocs Cound not find {nodename}", "red");
+                return Vector3.zero;
+            }
+            return node.pt;
+        }
+        Dictionary<string, (string nodename, ViewerState viewerState)> teleportLocs = null;
+
+        public void AddB121Telelocs()
+        {
+            teleportLocs = new Dictionary<string, (string, ViewerState)>()
+            {
+                { "t1",("b121-f01-1071", new ViewerState()
+                    {
+                        pos = GetNodePt("b121-f01-1071"),
+                        rot = new Vector3(0, 340f, 0),
+                        avatar = ViewerAvatar.QuadCopter2,
+                        camconfig = ViewerCamConfig.FloatBehind,
+                        vctrl = ViewerControl.Position
+                    })
+                },
+                { "t2", ("b121-f02-2060-2",new ViewerState()
+                    {
+                        pos = GetNodePt("b121-f02-2060-2"),
+                        rot = new Vector3(0, 340f, 0),
+                        avatar = ViewerAvatar.QuadCopter2,
+                        camconfig = ViewerCamConfig.FloatBehind,
+                        vctrl = ViewerControl.Position
+                    })
+                },
+                { "t3",("b121-f03-31-2",new ViewerState()
+                    {
+                        pos = GetNodePt("b121-f03-31-2"),
+                        rot = new Vector3(0, 48.31f, 0),
+                        avatar = ViewerAvatar.QuadCopter2,
+                        camconfig = ViewerCamConfig.FloatBehindDiv2,
+                        vctrl = ViewerControl.Position
+                    })
+                },
+                { "t4", ("b121-f03-3100-2",new ViewerState()
+                    {
+                        pos = GetNodePt("b121-f03-3100-2"),
+                        rot = new Vector3(0, 345f, 0),
+                        avatar = ViewerAvatar.QuadCopter2,
+                        camconfig = ViewerCamConfig.FloatBehind,
+                        vctrl = ViewerControl.Position
+                    })
+                },
+                { "t5",("b121-f01-1531-0", new ViewerState()
+                    {
+                        pos = GetNodePt("b121-f01-1531-0"),
+                        rot = new Vector3(0, 67f, 0),
+                        avatar = ViewerAvatar.QuadCopter2,
+                        camconfig = ViewerCamConfig.FloatBehindDiv4,
+                        vctrl = ViewerControl.Position
+                    })
+                },
+            };
+            var viewer = GameObject.FindObjectOfType<Viewer>();
+            if (viewer == null)
+            {
+                Debug.LogError($"MapMan.AddB121telelocs could not find Viewer");
+                return;
+            }
+            //viewer.InitTelelocsToEmpty();
+            //viewer.AddTelelLoc(teleportLocs);
+
+            viewer.SetTeleporter(MapManTeleporterDelegate);
+        }
+        (bool ok, ViewerState vst) MapManTeleporterDelegate(string trigger)
+        {
+            if (teleportLocs.ContainsKey(trigger))
+            {
+                var nodename = teleportLocs[trigger].nodename;
+                var vst = teleportLocs[trigger].viewerState;
+                var pt = GetNodePt(nodename);
+                vst.pos = pt;
+                sman.Lgg($"Node |{nodename}| mapped to |{pt:f1}", new string[] { "red", "cyan" });
+                return (true, teleportLocs[trigger].viewerState);
+            }
+            return (false, null);
+        }
+
+        public void AddViewSnapToClosestPoint()
+        {
+            var viewer = GameObject.FindObjectOfType<Viewer>();
+            if (viewer == null)
+            {
+                Debug.LogError($"MapMan.AddViewSnapToClosestPoint could not find Viewer");
+                return;
+            }
+            //viewer.InitTelelocsToEmpty();
+            //viewer.AddTelelLoc(teleportLocs);
+
+            //public delegate (bool ok, Vector3 pos) FindClosestPointDelegate(Vector3 pos);
+            viewer.SetFindClosestPointDelegate(FindClosestPoint);
+        }
+        public float FindClosestOfFive(float c1,float c2,float c3,float c4, float c5, float org)
+        {
+            // find org that is the closest of these 5
+            var gap1 = Mathf.Abs(c1 - org);
+            var gap = gap1;
+            var rv = c1;
+            var gap2 = Mathf.Abs(c2 - org);
+            if (gap2<gap)
+            {
+                gap = gap2;
+                rv = c2;
+            }
+            var gap3 = Mathf.Abs(c3 - org);
+            if (gap3 < gap)
+            {
+                gap = gap3;
+                rv = c3;
+            }
+            var gap4 = Mathf.Abs(c4 - org);
+            if (gap4 < gap)
+            {
+                gap = gap4;
+                rv = c4;
+            }
+            var gap5 = Mathf.Abs(c5 - org);
+            if (gap5 < gap)
+            {
+                gap = gap5;
+                rv = c5;
+            }
+            sman.Lgg($"c1:{c1:f1} {gap1:f1}    c2:{c2:f1} {gap2:f1}    c3:{c3:f1} {gap3:f1}    c4:{c4:f1} {gap4:f1}    c5:{c5:f1} {gap5:f1}", "cyan");
+            return rv;
+        }
+        public (bool ok, Vector3 pos, string altbase, float alt, Vector3 rot) FindClosestPoint(Vector3 pos0, string altbase0, float alt0, Vector3 rot0)
+        {
+            var (link, newpos) = sman.lcman.FindClosestPointOnLineCloud(pos0);
+            if (link == null)
+            {
+                return (false, pos0, altbase0, alt0, rot0);
+            }
+            var (vn, _, _) = qmapman.qmm.GetWcMeshPosProjectedAlongYnew(newpos);
+            var newalt = alt0;
+            var newaltbase = altbase0;
+            // now find directiion it is pointing
+            var pt1 = link.node1.pt;
+            var pt2 = link.node2.pt;
+            var dx = pt1.x - pt2.x;
+            var dz = pt1.z - pt2.z;
+            var at2 = Mathf.Atan2(dx, dz);
+            var newang = 180 * at2 / Mathf.PI;
+            var newangadj = FindClosestOfFive(newang - 360, newang - 180, newang, newang + 180, newang + 360, rot0.y);
+            var newrot = new Vector3(rot0.x, newangadj, rot0.z);
+            sman.Lgg($"FCP |    newpos:{newpos:f1} newaltbase:{newaltbase} newalt:{newalt:f1}",  "white", "lightblue" );
+            return (true, newpos, newaltbase, newalt, newrot);
+        }
+
+
+        public void ModelBuildFinal()
+        {
+            Debug.Log($"MapMan.ModelBuildFinal: {sman.curscene}");
+            switch(sman.curscene)
+            {
+                case SceneSelE.MsftB121focused:
+                    {
+                        AddB121Telelocs();
+                        AddViewSnapToClosestPoint();
+                        break;
+                    }
+                default:
+                    {
+                        AddViewSnapToClosestPoint();
+                        break;
+                    }
+            }
+        }
+
         void SetMeshCollider(bool enable)
         {
             Debug.Log("Qmap funciton SetMeshCollider - Not implemented yet");
@@ -670,7 +871,7 @@ namespace CampusSimulator
             xdistkm = 1;
             zdistkm = 1;
  
-            viewHome = new ViewerState(Vector3.zero, Vector3.zero, ViewerAvatar.QuadCopter, ViewerCamPosition.FloatBehind, ViewerControl.Velocity);
+            viewHome = new ViewerState(Vector3.zero, Vector3.zero, ViewerAvatar.QuadCopter, ViewerCamConfig.FloatBehind, ViewerControl.Velocity);
 
             switch (newscene)
             {
@@ -687,9 +888,9 @@ namespace CampusSimulator
                     hasLLmap = true;
                     isCustomizable = false;
 
-                    viewHome.viewerAvatarValue = ViewerAvatar.QuadCopter;
-                    viewHome.viewerPosition = new Vector3(-451.5f, 3f, 98.3f);
-                    viewHome.viewerRotation = new Vector3(0, -60, 0);
+                    viewHome.avatar = ViewerAvatar.QuadCopter2;
+                    viewHome.pos = new Vector3(-451.5f, 3f, 98.3f);
+                    viewHome.rot = new Vector3(0, -60, 0);
                     break;
                 case SceneSelE.MsftB121focused:
                     //maplat = 47.639217;
@@ -707,9 +908,9 @@ namespace CampusSimulator
                     lod = 16;
                     hasLLmap = true;
 
-                    viewHome.viewerAvatarValue = ViewerAvatar.QuadCopter;
-                    viewHome.viewerPosition = new Vector3(-778, 10f, -524);
-                    viewHome.viewerRotation = new Vector3(0, -40, 0);
+                    viewHome.avatar = ViewerAvatar.QuadCopter2;
+                    viewHome.pos = new Vector3(-778, 10f, -524);
+                    viewHome.rot = new Vector3(0, -40, 0);
                     isCustomizable = false;
                     break;
                 case SceneSelE.MsftB19focused:
@@ -728,9 +929,9 @@ namespace CampusSimulator
                     lod = 16;
                     hasLLmap = true;
 
-                    viewHome.viewerAvatarValue = ViewerAvatar.QuadCopter;
-                    viewHome.viewerPosition = new Vector3(-451.5f, 3f, 98.3f);
-                    viewHome.viewerRotation = new Vector3(0, -60, 0);
+                    viewHome.avatar = ViewerAvatar.QuadCopter;
+                    viewHome.pos = new Vector3(-451.5f, 3f, 98.3f);
+                    viewHome.rot = new Vector3(0, -60, 0);
 
                     isCustomizable = false;
                     break;
@@ -743,9 +944,9 @@ namespace CampusSimulator
                     xdistkm = 1;
                     zdistkm = 1;
 
-                    viewHome.viewerAvatarValue = ViewerAvatar.QuadCopter;
-                    viewHome.viewerPosition = new Vector3(-2035.2f, 3.8f, -1173.5f);
-                    viewHome.viewerRotation = new Vector3(0, 163.310f, 0);
+                    viewHome.avatar = ViewerAvatar.QuadCopter2;
+                    viewHome.pos = new Vector3(-2035.2f, 3.8f, -1173.5f);
+                    viewHome.rot = new Vector3(0, 163.310f, 0);
 
                     isCustomizable = false;
                     hasLLmap = true;
@@ -761,7 +962,7 @@ namespace CampusSimulator
                     hasLLmap = false;
                     isCustomizable = false;
 
-                    viewHome.viewerAvatarValue = ViewerAvatar.QuadCopter;
+                    viewHome.avatar = ViewerAvatar.QuadCopter;
 
                     break;
                 case SceneSelE.Eb12small:
@@ -777,7 +978,7 @@ namespace CampusSimulator
                     hasLLmap = true;
                     isCustomizable = false;
 
-                    viewHome.viewerAvatarValue = ViewerAvatar.QuadCopter;
+                    viewHome.avatar = ViewerAvatar.QuadCopter;
 
 
                     break;
@@ -792,8 +993,8 @@ namespace CampusSimulator
                     roty2 = -90; // this value aligns pipes to map (uses x-z coords)
                     hasLLmap = true;
                     isCustomizable = false;
-                    viewHome.viewerAvatarValue = ViewerAvatar.QuadCopter;
-                    viewHome.viewerRotation = new Vector3(0, -90, 0);
+                    viewHome.avatar = ViewerAvatar.QuadCopter;
+                    viewHome.rot = new Vector3(0, -90, 0);
 
 
                     break;
@@ -815,7 +1016,7 @@ namespace CampusSimulator
                     roty2 = 0;
                     //nodesPerQuadKey = 8;
                     //vviewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
-                    viewHome.viewerAvatarValue = ViewerAvatar.QuadCopter;
+                    viewHome.avatar = ViewerAvatar.QuadCopter;
 
                     hasLLmap = false;
                     isCustomizable = false;
@@ -831,7 +1032,7 @@ namespace CampusSimulator
                     hasLLmap = false;
                     isCustomizable = false;
 
-                    viewHome.viewerAvatarValue = ViewerAvatar.QuadCopter;
+                    viewHome.avatar = ViewerAvatar.QuadCopter;
 
                     break;
                 case SceneSelE.Frankfurt:
@@ -846,7 +1047,7 @@ namespace CampusSimulator
                     isCustomizable = false;
                     //vviewerDefaultRotation = new Vector3(0, 0, 0);
                     //vviewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
-                    viewHome.viewerAvatarValue = ViewerAvatar.QuadCopter;
+                    viewHome.avatar = ViewerAvatar.QuadCopter;
 
                     break;
                 case SceneSelE.MsftDublin:
@@ -859,7 +1060,7 @@ namespace CampusSimulator
                     hasLLmap = true;
                     isCustomizable = false;
                     //vviewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
-                    viewHome.viewerAvatarValue = ViewerAvatar.QuadCopter;
+                    viewHome.avatar = ViewerAvatar.QuadCopter;
                     break;
 
 
@@ -876,8 +1077,8 @@ namespace CampusSimulator
                     useViewer = true;
                     roty2 = 0;
 
-                    viewHome.viewerAvatarValue = ViewerAvatar.Rover;
-                    viewHome.viewerPosition = new Vector3(0, -60, 0);
+                    viewHome.avatar = ViewerAvatar.Rover;
+                    viewHome.pos = new Vector3(0, -60, 0);
 
                     mapscale = 1f;
                     isCustomizable = false;
@@ -897,7 +1098,7 @@ namespace CampusSimulator
                     roty2 = 0;
                     mapscale = 1f;
                     isCustomizable = true;
-                    viewHome.viewerAvatarValue = ViewerAvatar.QuadCopter;
+                    viewHome.avatar = ViewerAvatar.QuadCopter;
                     hasLLmap = false;
                     break;
                 case SceneSelE.HiddenLakeLookout:
@@ -912,7 +1113,7 @@ namespace CampusSimulator
                     useViewer = true;
                     roty2 = 0;
                     mapscale = 1f;
-                    viewHome.viewerAvatarValue = ViewerAvatar.QuadCopter;
+                    viewHome.avatar = ViewerAvatar.QuadCopter;
                     hasLLmap = false;
                     isCustomizable = false;
                     break;
@@ -928,7 +1129,7 @@ namespace CampusSimulator
                     useViewer = true;
                     roty2 = 0;
                     mapscale = 1f;
-                    viewHome.viewerAvatarValue = ViewerAvatar.QuadCopter;
+                    viewHome.avatar = ViewerAvatar.QuadCopter;
                     hasLLmap = false;
                     isCustomizable = false;
                     break;
@@ -944,7 +1145,7 @@ namespace CampusSimulator
                     useViewer = true;
                     roty2 = 0;
                     mapscale = 1f;
-                    viewHome.viewerAvatarValue = ViewerAvatar.QuadCopter;
+                    viewHome.avatar = ViewerAvatar.QuadCopter;
                     hasLLmap = false;
                     isCustomizable = false;
                     break;

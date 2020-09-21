@@ -30,6 +30,9 @@ namespace CampusSimulator
         public float journeyChoiceWeight = 1;
         public string osmnamestart = "";
 
+        B121Willow b121comp = null;
+        B19Willow b19comp = null;
+
         //System.Random ranman = new System.Random();
         public Person GetRandomFreeToTravelPerson(string ranset="")
         {
@@ -80,6 +83,8 @@ namespace CampusSimulator
             return pads[i];
         }
 
+
+
         public string GetRandomDest(string ranset="")
         {
             var i = GraphAlgos.GraphUtil.GetRanInt(destnodes.Count,ranset:"jnygen");
@@ -118,7 +123,7 @@ namespace CampusSimulator
             }
             if (destnodelst.Count > 0)
             {
-                Debug.Log("Found " + destnodelst.Count + " dests for " + name);
+                //Debug.Log("Found " + destnodelst.Count + " dests for " + name);
                 destnodes = destnodelst;// in ReinitDests
             }
         }

@@ -34,7 +34,7 @@ namespace CampusSimulator
         public GraphAlgos.GraphCtrl grctrl = null;
         public LatLongMap longlatmap = null;
 
-        public bool showNearestPoint = false;
+        public bool showNearestPoint = true;
         public Vector3 nearestPointRef = new Vector3(5, 0, 5);
         public int maxVoiceKeywords = 100;
         public int nVoiceKeywords = 0;
@@ -175,6 +175,7 @@ namespace CampusSimulator
 
         void Start()
         {
+            Debug.Log("start LinkCloudMan");
             //initVals();
         }
 
@@ -290,18 +291,6 @@ namespace CampusSimulator
             return chg;
         }
 
-        // Update is called once per frame
-        void Update()
-        {
-            updateCount += 1;
-
-            //if (needRefreshUpdateCount > 0 && ((updateCount - needRefreshUpdateCount) > 15))
-            //{
-            //    sman.RequestRefresh("LinkCloudMan-Update on needRefreshUpdateCount>0");
-            //    needRefreshUpdateCount = 0;
-            //}
-            //CheckForVisibiltyChanges();
-        }
 
         bool CheckCapUseVisibility(LcLink link)
         {
@@ -388,11 +377,11 @@ namespace CampusSimulator
                 if (calcHeights)
                 {
                     var yoff = GetHeight(node.pto.x, node.pto.z);
-                    //if (node.pto.y>5)
-                    //{
-                    //    Debug.Log("Here is one");
-                    //}
                     node.pt = new Vector3(node.pto.x, node.pto.y + yoff, node.pto.z);
+                    if (node.name == "b121-f01-1071")
+                    {
+                        Debug.Log($"{node.name} pt:{node.pt:f1} pto:{node.pto:f1}");
+                    }
                 }
             }
             var cam = Camera.current;
@@ -412,7 +401,7 @@ namespace CampusSimulator
                 {
                     return null;
                 }
-                grctrl = new GraphCtrl(sman.graphsdir)
+                grctrl = new GraphCtrl(sman.rgo, sman.graphsdir)
                 {
                     lltoxz = new GraphCtrl.LtoXZfunction(sman.coman.lltoxz)
                 };
@@ -457,6 +446,8 @@ namespace CampusSimulator
             var node = gcr.GetNode(lptname);
             CreateNodeGo(node);
         }
+        GameObject pnsph = null;
+
         int gogencount = 0;
         void CreateGrcGos()
         {
@@ -477,7 +468,7 @@ namespace CampusSimulator
                 grclinks = new GameObject("links");
                 grclinks.transform.parent = grcgos.transform;
                 var (gogen, nn, nl) = GetNodeLinkCounts();
-                Debug.Log($"CreateGrcGos - gogen:{gogen} nodes:{nn} links:{nl}");
+                //Debug.Log($"CreateGrcGos - gogen:{gogen} nodes:{nn} links:{nl}");
                 gogencount++;
             }
             if (linksvisible)
@@ -498,7 +489,7 @@ namespace CampusSimulator
                 }
                 swlk.Stop();
                 var nisects = sman.mpman.nTotIsects;
-                Debug.Log($"CreateGrcGos - linknamelist size:{grc.linknamelist.Count}/{links.Count} took:{swlk.ElapSecs()} secs  -  isects:{nisects}");
+                //Debug.Log($"CreateGrcGos - linknamelist size:{grc.linknamelist.Count}/{links.Count} took:{swlk.ElapSecs()} secs  -  isects:{nisects}");
             }
             if (nodesvisible)
             {
@@ -513,23 +504,14 @@ namespace CampusSimulator
                     CreateNodeGo(node);
                 }
                 swnd.Stop();
-                Debug.Log($"CreateGrcGos - nodenamelist size:{grc.nodenamelist.Count}/{nodes.Count} took:{swnd.ElapSecs()} secs");
+                //Debug.Log($"CreateGrcGos - nodenamelist size:{grc.nodenamelist.Count}/{nodes.Count} took:{swnd.ElapSecs()} secs");
 
 
-                if (showNearestPoint)
-                {
-                    var tup = FindClosestPointOnLineCloud(nearestPointRef);
-                    var npt = tup.Item2;
-                    var nname = "linknearsph-";
-
-                    var pnsph = GraphUtil.CreateMarkerSphere(nname, npt, size: 2.5f *sman.linknodescale*markerNodeSize, clr: "red",alf:1-linkTrans);
-                    pnsph.transform.parent = grcgos.transform;
-                }
             }
             stats_nodes_links.x = grc.GetNodeCount();
             stats_nodes_links.y = grc.GetLinkCount();
             sw.Stop();
-            Debug.Log($"CreateGrcGos {gogencount} took {sw.ElapSecs()} secs");
+            //Debug.Log($"CreateGrcGos {gogencount} took {sw.ElapSecs()} secs");
         }
         public void DeleteGrcGos()
         {
@@ -593,7 +575,7 @@ namespace CampusSimulator
 
             LcMapMaker.Reset();
             initVals();
-
+            //showNearestPoint = true;
         }
         public void DelLcGos()
         {
@@ -661,6 +643,7 @@ namespace CampusSimulator
             { LinkUse.slowroad,SceneMan.RmColorModeE.linkslowroad },
             { LinkUse.driveway,SceneMan.RmColorModeE.linkdriveway },
             { LinkUse.walkway,SceneMan.RmColorModeE.linkwalk },
+            { LinkUse.stairs,SceneMan.RmColorModeE.linkstairs },
             { LinkUse.walkwaynoshow,SceneMan.RmColorModeE.linkwalknoshow },
             { LinkUse.excavation,SceneMan.RmColorModeE.linkexcavate},
             { LinkUse.marker,SceneMan.RmColorModeE.linksurvey},
@@ -764,9 +747,9 @@ namespace CampusSimulator
                 var lpt2 = gcr.GetNode(nodename2);
                 gcr.AddLink(linkname,lpt1,lpt2);
                 RefreshGos();
-                var clipstring = "lc.AddLinkByNodeName( " + q(nodename1) + "," + q(nodename2) + ");";
+                var clipstring = $"lc.AddLinkByNodeName( {q(nodename1)},{q(nodename2)} );";
                 GraphUtil.AddToClipboard( clipstring );
-                Debug.Log("Wrote "+clipstring+" to clipboard");
+                Debug.Log($"Wrote {clipstring} to clipboard");
             }
         }
         public void DeleteNode(string name)
@@ -858,10 +841,10 @@ namespace CampusSimulator
             var gcr = GetGraphCtrl();
             return (gcr.IsNodeName(pname));
         }
-        public Tuple<LcLink, Vector3> FindClosestPointOnLineCloud(Vector3 pt)
+        public (LcLink link, Vector3 pos) FindClosestPointOnLineCloud(Vector3 pt)
         {
             var gcr = GetGraphCtrl();
-            return (gcr.FindClosestPointOnLineCloudTuple(pt));
+            return gcr.FindClosestPointOnLineCloudTuple(pt);
         }
         public LcLink FindClosestLinkOnLineCloudFiltered(string filter, Vector3 pt)
         {
@@ -873,5 +856,42 @@ namespace CampusSimulator
             gcr.noiseUpNodes(maxdist, maxdist, maxdist);
         }
         #endregion
+
+        GameObject vgo = null;
+        // Update is called once per frame
+        void Update()
+        {
+            updateCount += 1;
+
+
+            if (showNearestPoint)
+            {
+                if (vgo == null)
+                {
+                    vgo = GameObject.Find("Viewer");
+                }
+                if (vgo != null)
+                {
+                    nearestPointRef = vgo.transform.position;
+                    var tup = FindClosestPointOnLineCloud(nearestPointRef);
+                    var nname = "linknearsphere";
+                    if (pnsph == null)
+                    {
+                        pnsph = GraphUtil.CreateMarkerSphere(nname, tup.pos, size: 1.5f * sman.linknodescale * markerNodeSize, clr: "deeppurple");
+                        pnsph.transform.parent = grcgos.transform;
+                    }
+                    pnsph.transform.position = tup.pos;
+                }
+            }
+
+
+            //if (needRefreshUpdateCount > 0 && ((updateCount - needRefreshUpdateCount) > 15))
+            //{
+            //    sman.RequestRefresh("LinkCloudMan-Update on needRefreshUpdateCount>0");
+            //    needRefreshUpdateCount = 0;
+            //}
+            //CheckForVisibiltyChanges();
+        }
+
     }
 }

@@ -43,13 +43,46 @@ namespace CampusSimulator
         {
             var grc = sman.lcman.GetGraphCtrl();
             grc.regman.NewNodeRegion("msft-drones", "purple", saveToFile: true);
+
+            var flyheight = 10f;
+
+            var bmaxheight = 0f;
+            foreach (var bs in sman.bdman.bldspecs)
+            {
+                var bcen = bs.GetCenterTop();
+                var mapheight = sman.mpman.GetHeight(bcen.x,bcen.z);
+                var bheight = mapheight + bcen.y;
+                if (bmaxheight < bheight)
+                {
+                    bmaxheight = bheight;
+                }
+            }
+            //if (flyheight<bmaxheight) somehow the buildings are too high....
+            //{
+            //    flyheight = bmaxheight;
+            //}
+
+            var padmax = 0f;
+            foreach (var pad in pads)
+            {
+                var padnode = grc.GetNode(pad.padNodeName);
+                if (padmax < padnode.pt.y)
+                {
+                    padmax = padnode.pt.y;
+                }
+            }
+            if (flyheight < padmax)
+            {
+                flyheight = padmax;
+            }
+            flyheight = flyheight + 16;
+            sman.Lgg($"Drone Flightheight:{flyheight} bldmax:{bmaxheight} padmax:{padmax}","green");
             foreach (var pad in pads)
             {
                 // this should really be a pad method - adding a high node
                 var padnode = grc.GetNode(pad.padNodeName);
                 pad.padHighName = $"{pad.padNodeName}-high";
-                var highpt = padnode.pt + 16*Vector3.up;
-                grc.AddNodePtxyz(pad.padHighName, highpt.x, highpt.y, highpt.z);
+                grc.AddNodePtxyz(pad.padHighName, padnode.pt.x, flyheight, padnode.pt.z);
                 grc.AddLinkByNodeName(pad.padNodeName, pad.padHighName,GraphAlgos.LinkUse.droneway);
             }
 

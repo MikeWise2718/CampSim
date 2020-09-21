@@ -171,12 +171,12 @@ namespace GraphAlgos
     }
 
     public enum LcCapType { walk, drive, waterflow, elecflow, anything, fly }
-    public enum LinkUse { legacy, highway, road, slowroad, driveway, walkway, walkwaynoshow, marker, excavation, waterpipe, recwaterpipe,sewerpipe, elecpipe,commspipe,oilgaspipe, bldwall, trackperson,trackheli,trackdrone, droneway }
+    public enum LinkUse { legacy, highway, road, slowroad, driveway, walkway, walkwaynoshow, stairs, marker, excavation, waterpipe, recwaterpipe,sewerpipe, elecpipe,commspipe,oilgaspipe, bldwall, trackperson,trackheli,trackdrone, droneway }
 
     [Serializable]
     public class LcLink
     {
-        public GraphCtrl grc;
+        // public GraphCtrl grc;  //  commented out - this leads to an object composition cycle I think....
         public GameObject lgo;
 
         public static bool CanDoCapFromUse(LcCapType cap,LinkUse use)
@@ -193,6 +193,7 @@ namespace GraphAlgos
             {LinkUse.legacy,1.0f },
             {LinkUse.walkwaynoshow,1.0f },
             {LinkUse.walkway,1.0f },
+            {LinkUse.stairs,2.0f },
             {LinkUse.driveway,10.0f },
             {LinkUse.trackperson,1.0f },
         };
@@ -257,7 +258,7 @@ namespace GraphAlgos
 
         public LcLink(GraphCtrl grc, string name, LcNode node1, LcNode node2, LinkUse usetype=LinkUse.legacy,string comment="")
         {
-            this.grc = grc;
+            //this.grc = grc;
             this.usetype = usetype;
             this.name = name;
             this.node1 = node1;

@@ -1313,6 +1313,11 @@ namespace Aiskwk.Map
             deleteSceneData = false;
         }
 
+        public void DeleteCachedMapsAndElevations()
+        {
+            qkm.DeleteCachedData();
+        }
+
         void Update()
         {
             if (initializationComplete)

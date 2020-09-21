@@ -46,23 +46,23 @@ namespace CampusSimulator
         //{
 
         //}
-        public void ChangeLinkName()
-        {
-            var lcld = link.grc;
-            var stat = lcld.ChangeLinkName(link.name, linkName);
-            lastmsg = stat.fullstatus();
-            if (stat.ok)
-            {
-                SceneMan.Log(lastmsg);
-                sman.RequestHighObjRefresh(linkName,"ChangeLinkName");
-            }
-            else
-            {
-                SceneMan.Log(lastmsg);
-                linkName = link.name; // change the go name back to avoid confusion
-            }
+        //public void ChangeLinkName() - this is a bad place to do it. 
+        //{
+        //    var lcld = link.grc;
+        //    var stat = lcld.ChangeLinkName(link.name, linkName);
+        //    lastmsg = stat.fullstatus();
+        //    if (stat.ok)
+        //    {
+        //        SceneMan.Log(lastmsg);
+        //        sman.RequestHighObjRefresh(linkName,"ChangeLinkName");
+        //    }
+        //    else
+        //    {
+        //        SceneMan.Log(lastmsg);
+        //        linkName = link.name; // change the go name back to avoid confusion
+        //    }
 
-        }
+        //}
         public static bool usemman = true;
 
         public static GameObject MakeLinkGo(SceneMan sman, LcLink link, RmLinkFormE linkForm, float linkRadius, string clrname,float alf,bool flatlink=false,bool dofrag=true)
@@ -127,7 +127,7 @@ namespace CampusSimulator
             if (GUILayout.Button("Change Link Name"))    // If the button is clicked
             {
                 LinkGo linkgo = (LinkGo)target;    //The target script
-                linkgo.ChangeLinkName();
+                // linkgo.ChangeLinkName(); this needs to be moved to grc, maybe using findobject
             }
         }
     }

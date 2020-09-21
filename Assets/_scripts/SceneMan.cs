@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
+
 #if USE_KEYWORDRECOGNIZER
 using UnityEngine.Windows.Speech;
 #endif
 using System.Linq;
 using GraphAlgos;
 using UnityEngine.Analytics;
+using TMPro;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -332,7 +335,7 @@ namespace CampusSimulator
                 var initsw = new StopWatch(start: false);
                 var setsw = new StopWatch(start: false);
                 var finsw = new StopWatch(start: false);
-                Debug.LogWarning($"SceneMan-Setting scenario to {newscene} - curscene:{curscene} - force:{force}");
+                Lgg($"SceneMan-Setting scenario to {newscene} - curscene:{curscene} - force:{force}","cyan");
                 try
                 {
                     ceasesw.Start();
@@ -378,6 +381,7 @@ namespace CampusSimulator
 
                     SetInitState(InitState.modelInit);
 
+                    Lgg($"ModelInitialize start", "cyan");
                     vcman.ModelInitialize(newscene);
                     bdman.ModelInitialize(newscene);
                     stman.ModelInitiailze(newscene);
@@ -395,6 +399,9 @@ namespace CampusSimulator
                     setsw.Start();
 
                     SetInitState(InitState.modelBuild);
+
+                    Lgg($"ModelBuild start", "cyan");
+
 
                     mpman.ModelBuild();// Note this has an await buried in it and afterwards a call to smam.PostMapLoadSetScene below 
                     gaman.ModelBuild();
@@ -424,7 +431,10 @@ namespace CampusSimulator
 
                     SetInitState(InitState.modelBuildPost);
 
+                    this.Lgg("lcman.ModelBuildFinal", "yellow");
                     lcman.ModelBuildFinal();  // realize latelinks and heights
+                    mpman.ModelBuildFinal();
+
                     bdman.ModelBuildPostLinkCloud();// building details that need nodes and links - i.e destrooms are derived from nodes
                     gaman.ModelBuildPostLinkCloud();// garage details that need nodes and links
                     drman.ModelBuildPostLinkCloud();// dronman details that need nodes and links
@@ -456,6 +466,59 @@ namespace CampusSimulator
             }
             requestScene = SceneSelE.None;
         }
+
+        public void Lgg(string msg,string color)
+        {
+            Lgg(msg, new string[] { color });
+            //var nmsg = $"<color={color}>{msg}</color>";
+            //Debug.Log(nmsg);
+        }
+        public string ColorCode(string msg, string[] color, string delim = "|")
+        {
+            if (color.Length == 0)
+            {
+                return msg;
+            }
+            var delimIdxes = new List<int>();
+            {
+                var idx = msg.IndexOf(delim);
+                while (idx >= 0)
+                {
+                    delimIdxes.Add(idx);
+                    idx = msg.IndexOf(delim, idx+1);
+                }
+            }
+            var iclr = 0;
+            var nmsg = $"<color={color[0]}>";
+            var sidx = nmsg.Length;
+            nmsg += msg;
+            var lidx = 0;
+            foreach (var idx in delimIdxes)
+            {
+                iclr = (iclr + 1) % color.Length;
+                var isrt = $"</color><color={color[iclr]}>";
+                sidx += idx-lidx;
+                nmsg = nmsg.Remove(sidx, delim.Length);// remove the delim
+                nmsg = nmsg.Insert(sidx, isrt);
+                sidx += isrt.Length - delim.Length;
+                lidx = idx;
+            }
+            nmsg += "</color>";
+            return nmsg;
+        }
+        public void Lgg(string msg, string[] color, string delim = "|")
+        {
+            var nmsg = ColorCode(msg, color, delim);
+            Debug.Log(nmsg);
+        }
+
+        public void Lgg(string msg, string clr1, string clr2, string delim = "|")
+        {
+            var color = new string[] { clr1, clr2 };
+            var nmsg = ColorCode(msg, color, delim);
+            Debug.Log(nmsg);
+        }
+
 
         public void PostMapAsyncLoadSetScene()
         {
@@ -1441,7 +1504,7 @@ namespace CampusSimulator
 #endregion
 
 
-        public enum RmColorModeE { nodepathstart, nodepathend, nodecloud, nodecloudx,  linkcloud,linkhighway,linkroad,linkslowroad,linkdriveway, linkwalk,linkwalknoshow, linkexcavate, linksurvey,linkwater,linkreclaimwater,linksewer, linkelec,linkcomms,linkoilgas, pathnode, pathlink, pathlookat, bldwall, 
+        public enum RmColorModeE { nodepathstart, nodepathend, nodecloud, nodecloudx,  linkcloud,linkhighway,linkroad,linkslowroad,linkdriveway, linkstairs, linkwalk,linkwalknoshow, linkexcavate, linksurvey,linkwater,linkreclaimwater,linksewer, linkelec,linkcomms,linkoilgas, pathnode, pathlink, pathlookat, bldwall, 
                                    trackperson,trackheli,trackdrone,droneway }
 
 
@@ -1459,6 +1522,7 @@ namespace CampusSimulator
             { RmColorModeE.linkslowroad, ("gray",0.2f,RmLinkFormE.pipe)},
             { RmColorModeE.linkdriveway, ("lightgray",0.2f,RmLinkFormE.pipe)},
             { RmColorModeE.linkwalk, ("pink",0.1f,RmLinkFormE.pipe)},
+            { RmColorModeE.linkstairs, ("orange",0.1f,RmLinkFormE.pipe)},
             { RmColorModeE.linkwalknoshow, ("darkgray",0.01f,RmLinkFormE.pipe)},
 
             { RmColorModeE.linkexcavate, ("white",0.1f,RmLinkFormE.pipe)},
@@ -1533,6 +1597,7 @@ namespace CampusSimulator
             kickOffRun = GraphUtil.ParmBool("-run");
             kickOffEvac = GraphUtil.ParmBool("-evac");
             showNoPipes = GraphUtil.ParmBool("-nopipes");
+
             var (cmdlineScene, clscenename) = GraphUtil.ParmString("-scene", "");
             if (cmdlineScene)
             {
@@ -1552,7 +1617,7 @@ namespace CampusSimulator
         #endregion SceneOptions
         void Awake()
         {
-            Debug.Log("SceneMan.Awake called");
+            Lgg("SceneMan.|Awake| called", new string[] { "red","white"} );
             Debug.Log($"Monitors connected:{Display.displays.Length}");
             IdentitySystemAndUser();
             InitPhase0();
@@ -1565,6 +1630,20 @@ namespace CampusSimulator
             var esi = SceneMan.GetInitialSceneOption();
             curscene = SceneSelE.None; // force it to execute by specifying something it should never be - kind of a kludge
             SetScenario(esi);
+            var dohelp = GraphUtil.ParmBool("-help");
+            if (dohelp)
+            {
+                var flines = new List<string>();
+                flines.AddRange(uiman.helpan.GetHelpTextAsList());
+                flines.AddRange(uiman.abtpan.GetAboutTextAsList());
+                File.WriteAllLines("help.txt", flines);
+
+                uiman.stapan.OptionsButton(true);
+                uiman.optpan.SetTabState(OptionsPanel.TabState.Help);
+
+                //System.Console.WriteLine("*** Dohelp  ***");
+                //Application.Quit();
+            }
         }
         public void ToggleAutoErrorCorrect()
         {
