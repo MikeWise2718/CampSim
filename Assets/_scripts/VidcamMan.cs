@@ -18,6 +18,9 @@ namespace CampusSimulator
 
         public UxSetting<string> mainCamName = new UxSetting<string>("MainCamName","NoCameraChosen");
 
+        public UxSetting<string> panCamOrientation = new UxSetting<string>("PanCamOrientation", "-40:40");
+        public UxSetting<string> panCamMonitors = new UxSetting<string>("PanCamMonitors", "2:3:4");
+
         Dictionary<string, Vidcam> vidcam = new Dictionary<string, Vidcam>();
         List<string> vidcamnames = new List<string>(); // maintain a sorted list 
 
@@ -46,6 +49,8 @@ namespace CampusSimulator
             backType.GetInitial();
             RealizeBackground();
             mainCamName.GetInitial();
+            panCamOrientation.GetInitial();
+            panCamMonitors.GetInitial();
             //string mcamvcam = "";
             switch (newscene)
             {

@@ -558,7 +558,7 @@ namespace CampusSimulator
         }
 
 
-        public void EraseSceneDataFromDisk()
+        public void EraseMapsFromDisk()
         {
             Debug.Log("Erasing Scene Maps from disk");
             qmapman.qmm.EraseSceneDataFromDisk();
@@ -746,7 +746,7 @@ namespace CampusSimulator
             return (false, null);
         }
 
-        public void AddViewSnapToClosestPoint()
+        public void AddViewerSnapAndPanCamDelegate()
         {
             var viewer = GameObject.FindObjectOfType<Viewer>();
             if (viewer == null)
@@ -754,11 +754,15 @@ namespace CampusSimulator
                 Debug.LogError($"MapMan.AddViewSnapToClosestPoint could not find Viewer");
                 return;
             }
-            //viewer.InitTelelocsToEmpty();
-            //viewer.AddTelelLoc(teleportLocs);
-
-            //public delegate (bool ok, Vector3 pos) FindClosestPointDelegate(Vector3 pos);
             viewer.SetFindClosestPointDelegate(FindClosestPoint);
+            viewer.SetPanCamParameterDelegate(GetPanCamParameters);
+        }
+
+        public (string,string) GetPanCamParameters()
+        {
+            var s1 = sman.vcman.panCamOrientation.Get();
+            var s2 = sman.vcman.panCamMonitors.Get();
+            return (s1, s2);
         }
         public float FindClosestOfFive(float c1,float c2,float c3,float c4, float c5, float org)
         {
@@ -825,12 +829,12 @@ namespace CampusSimulator
                 case SceneSelE.MsftB121focused:
                     {
                         AddB121Telelocs();
-                        AddViewSnapToClosestPoint();
+                        AddViewerSnapAndPanCamDelegate();
                         break;
                     }
                 default:
                     {
-                        AddViewSnapToClosestPoint();
+                        AddViewerSnapAndPanCamDelegate();
                         break;
                     }
             }
