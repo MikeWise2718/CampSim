@@ -103,6 +103,7 @@ namespace Aiskwk.Map
         public LatLngVek offsetToOrigin;
         public Vector2d offsetToOriginMeter;
         public float altitude = 0;
+        public string altbase = "map";
         public bool followGround;
 
         private static ViewerState defViewer = new ViewerState();
@@ -171,6 +172,8 @@ namespace Aiskwk.Map
             //var (vo,_, istat) = qmm.GetWcMeshPosFromLambda(0.5f, 0.5f);
             var (vo, _, istat) = qmm.GetWcMeshPosProjectedAlongYnew(home.pos);
             transform.position = vo;
+            altitude = 0;
+            altbase = "map";
             //Debug.Log($"Initviwer initial position {vo}");
             //RotateViewerToYangle(home.rot.y);
             //transform.localRotation = Quaternion.Euler(home.rot);
@@ -199,7 +202,6 @@ namespace Aiskwk.Map
             //Debug.Log($"ReAdjustViewerInitialPosition - before scale:{transform.localScale} rotation:{transform.localRotation.eulerAngles}");
             bodyPrefabRotation = Quaternion.identity;
             bodyPlaneRotation = Quaternion.identity;
-            var scale = transform.localScale;
 
             var parent = transform.parent;
             transform.SetParent(null, worldPositionStays: false);// disconnect
@@ -709,7 +711,7 @@ namespace Aiskwk.Map
             Debug.Log($"RotateViewerNoTimeFak - Viewer rotation after   {transform.localRotation.eulerAngles}");
         }
 
-        public delegate (bool ok, Vector3 pos,float altitude, Vector3 rot) FindClosestPointDelegate(Vector3 pos0,float altitude,Vector3 rot0);
+        public delegate (bool ok, Vector3 newpos,string newaltbase, float newalt, Vector3 newrot) FindClosestPointDelegate(Vector3 pos,string altbase,float alt,Vector3 rot);
         FindClosestPointDelegate findclosepointer = null;
 
         public void SetFindClosestPointDelegate(FindClosestPointDelegate fcpd)
@@ -862,13 +864,14 @@ namespace Aiskwk.Map
             //Debug.Log("MoveViewerToClosePoint");
             var curpos = transform.position;
             var currot = moveplane.transform.localRotation.eulerAngles;
-            var (ok,newpt,newalt,newrot) = findclosepointer(curpos,altitude,currot);
+            var (ok,newpt,newaltbase,newalt,newrot) = findclosepointer(curpos,altbase,altitude,currot);
             if (ok)
             {
                 //var movetopt = new Vector3(newpt.x, curpos.y, newpt.z);
                 MoveToPosition(newpt);// uses altitude for height anyway
                 RotateViewerToYangle(newrot.y);
                 altitude = newalt;
+                altbase = newaltbase;
             }
             else
             {
@@ -903,6 +906,7 @@ namespace Aiskwk.Map
             var (vn, _, _) = qmm.GetWcMeshPosProjectedAlongYnew(vst.pos);
             transform.position = vst.pos;
             altitude = vst.pos.y-vn.y;
+            altbase = "map";
         }
         void MoveViewerToHomeOld()
         {

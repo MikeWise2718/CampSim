@@ -793,33 +793,27 @@ namespace CampusSimulator
             sman.Lgg($"c1:{c1:f1} {gap1:f1}    c2:{c2:f1} {gap2:f1}    c3:{c3:f1} {gap3:f1}    c4:{c4:f1} {gap4:f1}    c5:{c5:f1} {gap5:f1}", "cyan");
             return rv;
         }
-        public (bool ok, Vector3 pos, float alt, Vector3 rot) FindClosestPoint(Vector3 pos0, float alt0,Vector3 rot0)
+        public (bool ok, Vector3 pos, string altbase, float alt, Vector3 rot) FindClosestPoint(Vector3 pos0, string altbase0, float alt0, Vector3 rot0)
         {
-            var (link,newpos) = sman.lcman.FindClosestPointOnLineCloud(pos0);
-            var newrot = rot0;
-            var newalt = alt0;
-            if (link!=null)
-            {
-                // now find directiion it is pointing
-                var pt1 = link.node1.pt;
-                var pt2 = link.node2.pt;
-                var dx = pt1.x - pt2.x;
-                var dz = pt1.z - pt2.z;
-                var at2 = Mathf.Atan2(dx, dz);
-                var newang = 180*at2/Mathf.PI;
-                var newangadj = FindClosestOfFive(newang-360, newang - 180, newang, newang + 180, newang+360, rot0.y);
-                var dang = rot0.y - newang;
-                newrot = new Vector3(rot0.x, newangadj, rot0.z);
-                sman.Lgg($"FCP |dx:{dx:f1} dz:{dz:f1} at2:{at2:f3} newang:{newang:f1} newangadj:{newangadj:f1} dang:{dang:f1}    rot0:{rot0:f1} nrot:{newrot:f1}","white");
-            }
+            var (link, newpos) = sman.lcman.FindClosestPointOnLineCloud(pos0);
             if (link == null)
             {
-                return (false, pos0,alt0, rot0);
+                return (false, pos0, altbase0, alt0, rot0);
             }
-            else
-            {
-                return (true, newpos, newalt, newrot);
-            }
+            var (vn, _, _) = qmapman.qmm.GetWcMeshPosProjectedAlongYnew(newpos);
+            var newalt = alt0;
+            var newaltbase = altbase0;
+            // now find directiion it is pointing
+            var pt1 = link.node1.pt;
+            var pt2 = link.node2.pt;
+            var dx = pt1.x - pt2.x;
+            var dz = pt1.z - pt2.z;
+            var at2 = Mathf.Atan2(dx, dz);
+            var newang = 180 * at2 / Mathf.PI;
+            var newangadj = FindClosestOfFive(newang - 360, newang - 180, newang, newang + 180, newang + 360, rot0.y);
+            var newrot = new Vector3(rot0.x, newangadj, rot0.z);
+            sman.Lgg($"FCP |    newpos:{newpos:f1} newaltbase:{newaltbase} newalt:{newalt:f1}",  "white", "lightblue" );
+            return (true, newpos, newaltbase, newalt, newrot);
         }
 
 

@@ -512,6 +512,13 @@ namespace CampusSimulator
             Debug.Log(nmsg);
         }
 
+        public void Lgg(string msg, string clr1, string clr2, string delim = "|")
+        {
+            var color = new string[] { clr1, clr2 };
+            var nmsg = ColorCode(msg, color, delim);
+            Debug.Log(nmsg);
+        }
+
 
         public void PostMapAsyncLoadSetScene()
         {

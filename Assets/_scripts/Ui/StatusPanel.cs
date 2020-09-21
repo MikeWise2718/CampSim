@@ -116,7 +116,7 @@ namespace CampusSimulator
             plumButton.onClick.AddListener(delegate { DetectPlumButton(); });
             pipeButton.onClick.AddListener(delegate { DetectPipButton(); });
 
-            uiman.ttman.WireUpToolTip(hideUiButton.gameObject, "HideUI", "Hide the User Interface");
+            uiman.ttman.WireUpToolTip(hideUiButton.gameObject, "HideUI", "Hide the User Interface\nEsc brings it back afterwards");
             uiman.ttman.WireUpToolTip(runButton.gameObject, "Run", "Start ground based journeys");
             uiman.ttman.WireUpToolTip(flyButton.gameObject, "Fly", "Start flying journeys");
             uiman.ttman.WireUpToolTip(frameButton.gameObject, "Frame", "Draw labels on people, cars, etc");
@@ -157,7 +157,7 @@ namespace CampusSimulator
         {
             if (butt == null)
             {
-                Debug.Log($"SetButton color button {txt} is null");
+                //Debug.LogWarning($"SetButton color button {txt} is null"); // this can happen, don't make a fuss
                 return;
             }
             var colors = butt.colors;

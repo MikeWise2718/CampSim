@@ -163,7 +163,7 @@ public class InfoPanel : MonoBehaviour
             string txtalt = "";
             if (viewer!=null)
             {
-                txtalt = $" A:{viewer.altitude:f1}";
+                txtalt = $" AB:{viewer.altbase} A:{viewer.altitude:f1}";
             }
             //txt += "Pos:" + pos.x.ToString("f2") + " " + pos.y.ToString("f2") + " " + pos.z.ToString("f2")+"\n";
             txt += $"Pos:{pos.x,4:f2} {pos.y,4:f2} {pos.z,4:f2}{txtalt}\n";
