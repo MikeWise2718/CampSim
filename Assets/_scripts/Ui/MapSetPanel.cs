@@ -62,7 +62,7 @@ public class MapSetPanel : MonoBehaviour
 
     Button closeButton;
     Button copyClipboardButton;
-    Button deleteSettingsButton;
+    Button doesNothingButton;
 
     Text latLngText;
     Text latKmText;
@@ -130,7 +130,7 @@ public class MapSetPanel : MonoBehaviour
         deleteMapsButton = transform.Find("DeleteMapsButton").gameObject.GetComponent<Button>();
         closeButton = transform.Find("CloseButton").gameObject.GetComponent<Button>();
         copyClipboardButton = transform.Find("ClipboardCopyButton").gameObject.GetComponent<Button>();
-        deleteSettingsButton = transform.Find("DeleteSettingsButton").gameObject.GetComponent<Button>();
+        doesNothingButton = transform.Find("DoesNothingButton").gameObject.GetComponent<Button>();
         var igo = transform.Find("MapInfoText").gameObject;
         persMapsPathText = igo.transform.Find("PersMapsPathText").gameObject.GetComponent<Text>();
         persMapsDataText = igo.transform.Find("PersMapsDataText").gameObject.GetComponent<Text>();
@@ -169,6 +169,11 @@ public class MapSetPanel : MonoBehaviour
     public void Init0()
     {
         LinkObjectsAndComponents();
+        sman.uiman.ttman.WireUpToolTip(closeButton.gameObject, "mapsetpanel-closepanel", "Close Panel");
+        sman.uiman.ttman.WireUpToolTip(copyClipboardButton.gameObject, "mapsetpanel-copyclipboard", "Copy bitmap information to clipboard");
+        sman.uiman.ttman.WireUpToolTip(doesNothingButton.gameObject, "mapsetpanel-doesnothing", "Currently does nothing");
+        sman.uiman.ttman.WireUpToolTip(loadMapsButton.gameObject, "mapsetpanel-loadmaps", "Reload maps\nmight take awhile - get some coffee",danger:true);
+        sman.uiman.ttman.WireUpToolTip(deleteMapsButton.gameObject, "mapsetpanel-deletemaps", "Delete scenario maps\ncareful reloading them might take awhile",danger:true);
     }
     public void SetScene(CampusSimulator.SceneSelE curscene)
     {
@@ -549,7 +554,7 @@ public class MapSetPanel : MonoBehaviour
                 }
             case "DeleteMapsButton":
                 {
-                    mman.EraseMapsFromDisk();
+                    mman.EraseSceneDataFromDisk();
                     break;
                 }
             case "LookupAddressButton":

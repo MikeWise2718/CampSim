@@ -558,7 +558,7 @@ namespace CampusSimulator
         }
 
 
-        public void EraseMapsFromDisk()
+        public void EraseSceneDataFromDisk()
         {
             Debug.Log("Erasing Scene Maps from disk");
             qmapman.qmm.EraseSceneDataFromDisk();
@@ -603,14 +603,14 @@ namespace CampusSimulator
                 var efpath = "qkmaps/" + qmapman.qmm.qmapElev.GetEleCsvSubDir(qmm.scenename, qmm.mapprov);
                 var (nrowx, ncolz) = qmm.qmapElev.GetGridSize();
                 var qrfelev = new QresFinder(qmm.elevprov, qmm.scenename, nrowx, ncolz, efpath, efname, loadData: false);
-                s1 = qrfbitm.GetPersistentPathName();
+                s1 = qrfbitm.GetSceneDependentPersistentPathName();
                 s2 = qrfbitm.GetPersistentFileData();
-                s3 = qrfelev.GetPersistentPathName();
+                s3 = qrfelev.GetSceneDependentPersistentPathName();
                 s4 = qrfelev.GetPersistentFileData();
 
-                s5 = qrfbitm.GetTempPathName();
+                s5 = qrfbitm.GetSceneDependentTempPathName();
                 s6 = qrfbitm.GetTempFileData();
-                s7 = qrfelev.GetTempPathName();
+                s7 = qrfelev.GetSceneDependentTempPathName();
                 s8 = qrfelev.GetTempFileData();
 
                 var qkk = qmapman.qmm.qkm;

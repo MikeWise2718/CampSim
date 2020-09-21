@@ -140,7 +140,7 @@ namespace CampusSimulator
             uiman.ttman.WireUpToolTip(pipeButton.gameObject, "Pi", "Show journey path links and nodes");
 
 
-            uiman.ttman.WireUpToolTip(freeFlyButton.gameObject, "freefly", "Fly around in scene freely");
+            uiman.ttman.WireUpToolTip(freeFlyButton.gameObject, "freefly", "Fly around in scene freely\nEsc exits this state");
             uiman.ttman.WireUpToolTip(quitButton.gameObject, "quit", "Quit to OS");
             uiman.ttman.WireUpToolTip(goButton.gameObject, "go", "Kick off a preprogramed scenario dependent journey script");
             uiman.ttman.WireUpToolTip(optionsButton.gameObject, "opts", "Bring up detailed configuration tabs");

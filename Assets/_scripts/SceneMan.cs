@@ -1627,10 +1627,9 @@ namespace CampusSimulator
         {
             Debug.Log("SceneMan.Start called");
 
-            var esi = SceneMan.GetInitialSceneOption();
-            curscene = SceneSelE.None; // force it to execute by specifying something it should never be - kind of a kludge
-            SetScenario(esi);
             var dohelp = GraphUtil.ParmBool("-help");
+            var dodelsettings = GraphUtil.ParmBool("-delsettings");
+            var dodelmaps = GraphUtil.ParmBool("-delmaps");
             if (dohelp)
             {
                 var flines = new List<string>();
@@ -1640,9 +1639,24 @@ namespace CampusSimulator
 
                 uiman.stapan.OptionsButton(true);
                 uiman.optpan.SetTabState(OptionsPanel.TabState.Help);
-
-                //System.Console.WriteLine("*** Dohelp  ***");
-                //Application.Quit();
+            }
+            if (dodelsettings)
+            {
+                PlayerPrefs.DeleteAll();
+            }
+            if (dodelmaps)
+            {
+                mpman.DeleteCachedMaps();
+            }
+            if (dohelp || dodelsettings || dodelmaps)
+            {
+                Quit();
+            }
+            else
+            {
+                var esi = SceneMan.GetInitialSceneOption();
+                curscene = SceneSelE.None; // force it to execute by specifying something it should never be - kind of a kludge
+                SetScenario(esi);
             }
         }
         public void ToggleAutoErrorCorrect()

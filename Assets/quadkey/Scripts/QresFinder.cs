@@ -18,7 +18,7 @@ namespace Aiskwk.Map
         int ncol_z;
         string scenename;
         string fileName;
-        string pathName;
+        string scenePathName;
         //string oldfileName;
         //string oldpathName;
         string fullName;
@@ -51,9 +51,9 @@ namespace Aiskwk.Map
             this.nrow_x = nrow_x;
             this.ncol_z = ncol_z;
 
-            Init(oldpathname, scenename, loadData: loadData);
+            Init(scenename, loadData: loadData);
         }
-        public QresFinder(MapProvider mapprov, string scenename, int lod, string oldpathname, string oldfilename, MapExtentTypeE mapextent,bool loadData = true)
+        public QresFinder(MapProvider mapprov, string scenename, int lod,  MapExtentTypeE mapextent,bool loadData = true)
         {
             this.qresType = QresType.TextureFile;
             this.mapprov = mapprov;
@@ -61,7 +61,7 @@ namespace Aiskwk.Map
             this.lod = lod;
             //this.oldfileName = oldfilename;
             //this.oldpathName = oldpathname;
-            Init(oldpathname, scenename, loadData: loadData);
+            Init(scenename, loadData: loadData);
         }
         public string GetTextureFullName(MapExtentTypeE mapextent)
         {
@@ -93,17 +93,17 @@ namespace Aiskwk.Map
                     }
             }
         }
-        void Init(string oldpathname,string scenename, bool loadData = true)
+        void Init(string scenename, bool loadData = true)
         {
             this.scenename = scenename;
-            this.pathName = GetSubDir();
-            if (pathName.Length > 0 && !this.pathName.EndsWith("/"))
+            this.scenePathName = GetSubDir();
+            if (scenePathName.Length > 0 && !this.scenePathName.EndsWith("/"))
             {
-                pathName += "/";
+                scenePathName += "/";
             }
             SetFilename();
-            this.fullName = pathName + fileName;
-            this.resFullName = StripExtension(pathName + fileName);
+            this.fullName = scenePathName + fileName;
+            this.resFullName = StripExtension(scenePathName + fileName);
             loaded = false;
             if (loadData)
             {
@@ -118,6 +118,12 @@ namespace Aiskwk.Map
             var dirname = $"scenemaps/{mapsubdir}/{scenename}/texmap/lod{levelOfDetail}/";
 
             return dirname;
+        }
+
+        public static string GetTextureRoot()
+        {
+            var rv = $"scenemaps/";
+            return rv;
         }
 
         public static string GetElevationSubDir(ElevProvider eleprov, string scenename, int nrowx, int ncolz)
@@ -153,13 +159,13 @@ namespace Aiskwk.Map
 
         public FileInfo GetTexFileInfo(MapExtentTypeE mapextent)
         {
-            var fname = GetPersistentPathName() + GetTextureFullName(mapextent);
+            var fname = GetSceneDependentPersistentPathName() + GetTextureFullName(mapextent);
             var fi = new FileInfo(fname);
             return fi;
         }
         public FileInfo GetElevFileInfo()
         {
-            var fname = GetPersistentPathName() +   GetElevFullName();
+            var fname = GetSceneDependentPersistentPathName() +   GetElevFullName();
             var fi = new FileInfo(fname);
             return fi;
         }
@@ -192,9 +198,17 @@ namespace Aiskwk.Map
             }
             return sout;
         }
-        public string GetTempPathName()
+
+        public string GetTempPathSceneRoot()
         {
-            var tpn = Application.temporaryCachePath + "/" + pathName;
+            //  tpath = "C:/Users/mike/AppData/Local/Temp/DefaultCompany/campusim/scenemaps/bing/satlabels/MsftB121focused/texmap/lod18/"
+            var tpn = Application.temporaryCachePath + "/scenemaps";
+            return tpn;
+        }
+        public string GetSceneDependentTempPathName()
+        {
+            //  tpath = "C:/Users/mike/AppData/Local/Temp/DefaultCompany/campusim/scenemaps/bing/satlabels/MsftB121focused/texmap/lod18/"
+            var tpn = Application.temporaryCachePath + "/" + scenePathName;
             return tpn;
         }
 
@@ -251,7 +265,7 @@ namespace Aiskwk.Map
         }
         public string GetTempFileData(string name,string mask)
         {
-            var dname = GetTempPathName();
+            var dname = GetSceneDependentTempPathName();
             var pnglist = new string[0];
             var di = new DirectoryInfo(dname);
             var smintime = "";
@@ -298,10 +312,15 @@ namespace Aiskwk.Map
             }
             return rv;
         }
-
-        public string GetPersistentPathName()
+        public string GetPersistentPathNameSceneRoot()
         {
-            var ppn = Application.persistentDataPath + "/" + pathName;
+            var ppn = Application.persistentDataPath + "/scenemaps/";
+            return ppn;
+        }
+        public string GetSceneDependentPersistentPathName()
+        {
+            // ppath = "C:/Users/mike/AppData/LocalLow/DefaultCompany/campusim/scenemaps/bing/satlabels/MsftB121focused/texmap/lod18/"
+            var ppn = Application.persistentDataPath + "/" + scenePathName;
             return ppn;
         }
         public string GetPersistentPathNameWide()
@@ -385,7 +404,7 @@ namespace Aiskwk.Map
                 exists = true;
                 return;
             }
-            var ppFllName = GetPersistentPathName() + fileName;
+            var ppFllName = GetSceneDependentPersistentPathName() + fileName;
             if (File.Exists(ppFllName))
             {
                 tex = LoadBitmap(ppFllName);
@@ -398,7 +417,7 @@ namespace Aiskwk.Map
         }
         public bool CheckCsvExistence()
         {
-            var ppFllName = GetPersistentPathName() + fileName;
+            var ppFllName = GetSceneDependentPersistentPathName() + fileName;
             return File.Exists(ppFllName);
         }
 
@@ -418,7 +437,7 @@ namespace Aiskwk.Map
                 text = textasset.text;
                 return;
             }
-            var ppFllName = GetPersistentPathName() + fileName;
+            var ppFllName = GetSceneDependentPersistentPathName() + fileName;
             //Debug.LogWarning($"Loading csv from {ppFllName}");
             if (File.Exists(ppFllName))
             {

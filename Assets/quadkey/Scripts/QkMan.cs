@@ -456,40 +456,40 @@ namespace Aiskwk.Map
         public void DeleteCachedData()
         {
             Debug.LogWarning("Really deleting a lot of things here");
-//            Debug.Log($"DeleteBitmapData for scenename:{scenename} mapprove:{mapprov.ToString()}");
-//            if (qrf == null) return;
+            Debug.Log($"DeleteBitmapData");
+            if (qrf == null) return;
 
-//            //var mprov = GetMapProvSubdirName(mapprov);
-//            //var ppath = $"{Application.persistentDataPath}/qkmaps/scenemaps/{mapprov}/{scenename}";
-//            //Directory.Delete(ppath, true);
-//            var ppath = qrf.GetPersistentPathName();
-//            var tpath = qrf.GetTempPathName();
-//            qut.CopyTextToClipboard($"persistent:\n{ppath}\ntemp:\n{tpath}");
-//#if UNITY_EDITOR_WIN
-//            var msg = $"Delete Bitmap persistent and temp paths:\n\"{ppath}\"\n\"{tpath}\"\nPaths copied to clipboard";
-//            var ok1 = UnityEditor.EditorUtility.DisplayDialog("Deleting Persistent Path Data", msg, "Ok to delete", "Cancel");
-//            if (!ok1) return;
-//#endif
-//            if (Directory.Exists(ppath))
-//            {
-//                Directory.Delete(ppath, true);
-//                Debug.LogWarning($"Deleted {scenename} data stored in persistent path {ppath}");
-//            }
-//            else
-//            {
-//                Debug.LogWarning($"Persistent path {ppath} does not exist");
-//            }
+            //var mprov = GetMapProvSubdirName(mapprov);
+            //var ppath = $"{Application.persistentDataPath}/qkmaps/scenemaps/{mapprov}/{scenename}";
+            //Directory.Delete(ppath, true);
+
+            var ppath = qrf.GetPersistentPathNameSceneRoot(); // ppath = "C:/Users/mike/AppData/LocalLow/DefaultCompany/campusim/scenemaps/bing/satlabels/MsftB121focused/texmap/lod18/"
+            var tpath = qrf.GetTempPathSceneRoot(); // tpath = "C:/Users/mike/AppData/Local/Temp/DefaultCompany/campusim/scenemaps/bing/satlabels/MsftB121focused/texmap/lod18/"
+#if UNITY_EDITOR_WIN
+            var msg = $"Delete Bitmap persistent and temp paths:\n\"{ppath}\"\n\"{tpath}\"\nPaths copied to clipboard";
+            var ok1 = UnityEditor.EditorUtility.DisplayDialog("Deleting Persistent Path Data", msg, "Ok to delete", "Cancel");
+            if (!ok1) return;
+#endif
+            if (Directory.Exists(ppath))
+            {
+                Directory.Delete(ppath, true);
+                Debug.LogWarning($"Deleted data stored in persistent path {ppath}");
+            }
+            else
+            {
+                Debug.LogWarning($"Persistent path {ppath} does not exist");
+            }
 
 
-//            if (Directory.Exists(tpath))
-//            {
-//                Directory.Delete(tpath, true);
-//                Debug.LogWarning($"Deleted {scenename} data stored in temp path {tpath}");
-//            }
-//            else
-//            {
-//                Debug.LogWarning($"Temp path {tpath} does not exist");
-//            }
+            if (Directory.Exists(tpath))
+            {
+                Directory.Delete(tpath, true);
+                Debug.LogWarning($"Deleted data stored in temp path {tpath}");
+            }
+            else
+            {
+                Debug.LogWarning($"Temp path {tpath} does not exist");
+            }
         }
         public void DeleteBitmapData(string scenename, MapProvider mapprov)
         {
@@ -500,8 +500,8 @@ namespace Aiskwk.Map
             //var mprov = GetMapProvSubdirName(mapprov);
             //var ppath = $"{Application.persistentDataPath}/qkmaps/scenemaps/{mapprov}/{scenename}";
             //Directory.Delete(ppath, true);
-            var ppath = qrf.GetPersistentPathName();
-            var tpath = qrf.GetTempPathName();
+            var ppath = qrf.GetSceneDependentPersistentPathName();
+            var tpath = qrf.GetSceneDependentTempPathName();
             qut.CopyTextToClipboard($"persistent:\n{ppath}\ntemp:\n{tpath}");
 #if UNITY_EDITOR_WIN
             var msg = $"Delete Bitmap persistent and temp paths:\n\"{ppath}\"\n\"{tpath}\"\nPaths copied to clipboard";
@@ -731,8 +731,7 @@ namespace Aiskwk.Map
         public QresFinder GetTexQrf(MapProvider mapprov, string scenename, MapExtentTypeE mapextent,int lod,bool loadData=true)
         {
             // sometimes we don't want to use this to load the bitmaps immediately, but just to gather information
-            var tfpath = "qkmaps/" + QresFinder.GetTextureSubDir(mapprov,   scenename,levelOfDetail);
-            qrf = new QresFinder(mapprov, scenename, lod, tfpath,"", mapextent, loadData: loadData);
+            qrf = new QresFinder(mapprov, scenename, lod,  mapextent, loadData: loadData);
             return qrf;
         }
 
@@ -745,8 +744,8 @@ namespace Aiskwk.Map
             //var tfpath = "qkmaps/" + GetTexSubDir(scenename);
             //qrf = new QresFinder(tfpath, tfname);
             var exists = qrf.Exists();
-            var temppath = qrf.GetTempPathName();
-            var perspath = qrf.GetPersistentPathName();
+            var temppath = qrf.GetSceneDependentTempPathName();
+            var perspath = qrf.GetSceneDependentPersistentPathName();
             //Debug.Log($"GetTexAsy forceload:{forceload} exists:{exists}");
             if (forceload || !exists)
             {
