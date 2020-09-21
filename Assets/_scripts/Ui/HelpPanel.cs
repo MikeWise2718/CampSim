@@ -66,6 +66,8 @@ public class HelpPanel : MonoBehaviour
             msg += "\n" + "     -run - Start the scene-wide people journey simulation";
             msg += "\n" + "     -fly - Start the scene-wide drone journey simulation";
             msg += "\n" + "     -nopipes- Don't show the pipe-like travel path markers";
+            msg += "\n" + "     -delsettings - Delete all saved application seettings and exit";
+            msg += "\n" + "     -delmaps - Delete all saved map and elevation data and exit";
             msg += "\n" + "     -help - Write this help text and sysinfo to text (help.txt) file and exit";
             msg += $"\n\nCurrent Command line arguments:{args.Count}";
             for (int i = 0; i < args.Count; i++)

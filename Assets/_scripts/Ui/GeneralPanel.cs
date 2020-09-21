@@ -16,6 +16,10 @@ public class GeneralPanel : MonoBehaviour
 
     Text SimpleDfIndexCountText;
 
+    InputField panCamOrientationInputField;
+    InputField panCamMonitorsInputField;
+    Text availableMonitorsText;
+
     Button closeButton;
 
     public void Init0()
@@ -33,6 +37,9 @@ public class GeneralPanel : MonoBehaviour
         useDfInexesToggle = transform.Find("UseDataFileIndexesToggle").gameObject.GetComponent<Toggle>();
         useDfLlCoordsToggle = transform.Find("UseDataFileLlCoordsToggle").gameObject.GetComponent<Toggle>();
         SimpleDfIndexCountText = transform.Find("SimpleDfIndexCountText").gameObject.GetComponent<Text>();
+        panCamOrientationInputField = transform.Find("PanCamOrientationInputField").gameObject.GetComponent<InputField>();
+        panCamMonitorsInputField = transform.Find("PanCamMonitorsInputField").gameObject.GetComponent<InputField>();
+        availableMonitorsText = transform.Find("AvailableMonitorsText").gameObject.GetComponent<Text>();
 
         closeButton = transform.Find("CloseButton").gameObject.GetComponent<Button>();
         closeButton.onClick.AddListener(delegate { uiman.ClosePanel();  });
@@ -44,6 +51,9 @@ public class GeneralPanel : MonoBehaviour
         fastModeToggle.isOn = sman.fastMode;
         useDfInexesToggle.isOn = sman.dfman.useDfIndexes.Get();
         useDfLlCoordsToggle.isOn = sman.dfman.useDfLlCoords.Get();
+
+        panCamOrientationInputField.text = sman.vcman.panCamOrientation.Get();
+        panCamMonitorsInputField.text = sman.vcman.panCamMonitors.Get();
     }
 
     public void SetScene(CampusSimulator.SceneSelE curscene)
@@ -64,6 +74,9 @@ public class GeneralPanel : MonoBehaviour
         sman.fastMode = fastModeToggle.isOn;
         sman.dfman.useDfIndexes.SetAndSave(useDfInexesToggle.isOn);
         sman.dfman.useDfLlCoords.SetAndSave(useDfLlCoordsToggle.isOn);
+
+        sman.vcman.panCamOrientation.SetAndSave(panCamOrientationInputField.text);
+        sman.vcman.panCamMonitors.SetAndSave(panCamMonitorsInputField.text);
 
         sman.RequestRefresh("GeneralPanel-SetVals");
     }

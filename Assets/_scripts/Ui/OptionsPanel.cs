@@ -114,9 +114,10 @@ public class OptionsPanel : MonoBehaviour
         var tran = transform.Find(targetname);
         if (tran!=null)
         {
-            var butcomp = tran.GetComponent<Button>();
-            Destroy(butcomp.gameObject);
-            Debug.Log($"Destroyed {targetname}");
+            Destroy(tran.gameObject);
+            //var butcomp = tran.GetComponent<Button>();
+            //Destroy(butcomp.gameObject);
+            //Debug.Log($"Destroyed {targetname}");
         }
     }
     public void DestroyFixedButtons()

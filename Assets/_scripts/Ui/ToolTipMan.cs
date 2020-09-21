@@ -13,6 +13,7 @@ public class ToolTipMan : MonoBehaviour
     Vector2 popupPos;
     string popupTxt;
     string popupTip;
+    bool popupDanger;
     float popupTime;
 
     Dictionary<string, GameObject> ttDict;
@@ -25,20 +26,20 @@ public class ToolTipMan : MonoBehaviour
         ttDict = new Dictionary<string, GameObject>();
     }
 
-    public void WireUpToolTip(GameObject bgo, string txt, string tip)
+    public void WireUpToolTip(GameObject bgo, string txt, string tip,bool danger=false)
     {
         // WireUp tooltip listener
         var evttrig = bgo.AddComponent<EventTrigger>();
         var pentry = new EventTrigger.Entry();
         pentry.eventID = EventTriggerType.PointerEnter;
-        pentry.callback.AddListener((data) => { OnPointerEnter((PointerEventData)data, txt, tip); });
+        pentry.callback.AddListener((data) => { OnPointerEnter((PointerEventData)data, txt, tip, danger:danger); });
         evttrig.triggers.Add(pentry);
         var pexit = new EventTrigger.Entry();
         pexit.eventID = EventTriggerType.PointerExit;
         pexit.callback.AddListener((data) => { OnPointerExit((PointerEventData)data, txt); });
         evttrig.triggers.Add(pexit);
     }
-    public void BringUpToolTip(Vector2 pos, string txt, string tip)
+    public void BringUpToolTip(Vector2 pos, string txt, string tip, bool danger=false)
     {
         if (!ttDict.ContainsKey(txt))
         {
@@ -46,7 +47,14 @@ public class ToolTipMan : MonoBehaviour
             var imgo = new GameObject($"background");
             imgo.transform.parent = go.transform;
             var imgcomp = imgo.AddComponent<Image>();
-            imgcomp.color = Color.gray;
+            if (danger)
+            {
+                imgcomp.color = new Color(0.5f, 0, 0);
+            }
+            else
+            {
+                imgcomp.color = Color.gray;
+            }
             imgcomp.raycastTarget = false;
 
             var txgo = new GameObject($"text");
@@ -84,10 +92,10 @@ public class ToolTipMan : MonoBehaviour
         }
     }
 
-    public void OnPointerEnter(PointerEventData eventData, string txt, string tip)
+    public void OnPointerEnter(PointerEventData eventData, string txt, string tip, bool danger=false)
     {
         //Debug.Log($"OnPointerEnter {txt}");
-        CountDownToPopup(popupDelay,eventData.position, txt, tip);
+        CountDownToPopup(popupDelay,eventData.position, txt, tip, danger:danger);
     }
     public void OnPointerExit(PointerEventData eventData, string txt)
     {
@@ -102,12 +110,13 @@ public class ToolTipMan : MonoBehaviour
         }
     }
 
-    void CountDownToPopup(float secs,Vector2 pos,string txt,string tip)
+    void CountDownToPopup(float secs,Vector2 pos,string txt,string tip,bool danger=false)
     {
         popupTime = Time.time + secs;
         popupPos = pos;
         popupTxt = txt;
         popupTip = tip;
+        popupDanger = danger;
         needPopup = true;
     }
     void CancelPopup()
@@ -122,7 +131,7 @@ public class ToolTipMan : MonoBehaviour
         {
             needPopup = false;
             popupTime = float.MaxValue;
-            BringUpToolTip(popupPos,popupTxt,popupTip);
+            BringUpToolTip(popupPos,popupTxt,popupTip,danger:popupDanger);
         }
     }
 }

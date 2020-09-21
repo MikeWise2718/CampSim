@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq.Expressions;
 using System.Runtime.InteropServices;
 using UnityEngine;
@@ -87,11 +88,12 @@ namespace Aiskwk.Map
         public ViewerControl viewerControl = ViewerControl.Position;
 
         bool carriageCameraExists = true;
-        int carriageCameras = 3;
+        int carriageCamNumber = 3;
         float carriageAngleStart = -20;
         float carriageAngleEnd = 20;
         bool carriageOn = false;
         List<Camera> carriageCams = null;
+        List<int> carriageMons = null;
 
         public Quaternion bodyPrefabRotation = Quaternion.identity;
         public Quaternion bodyPlaneRotation = Quaternion.identity;
@@ -143,7 +145,7 @@ namespace Aiskwk.Map
             vn.camconfig = viewerCamPosition;
             vn.vctrl = viewerControl;
             vn.hasCameraCarriage = carriageCameraExists;
-            vn.nCameras = carriageCameras;
+            vn.nCameras = carriageCamNumber;
             vn.angstart = carriageAngleStart;
             vn.angend = carriageAngleEnd;
             vn.carriageOn = carriageOn;
@@ -165,7 +167,7 @@ namespace Aiskwk.Map
             viewerCamPosition = home.camconfig;
             viewerControl = home.vctrl;
             carriageCameraExists = home.hasCameraCarriage;
-            carriageCameras = home.nCameras;
+            carriageCamNumber = home.nCameras;
             carriageOn = home.carriageOn;
             carriageAngleStart = home.angstart;
             carriageAngleEnd = home.angend;
@@ -404,18 +406,22 @@ namespace Aiskwk.Map
             {
                 carriagego = new GameObject("carriagego");
                 carriageCams = new List<Camera>();
-                if (carriageCameras > 0)
+ 
+                if (carriageCamNumber > 0)
                 {
+                    Debug.Log($"Adding panCams - ncams:{carriageCamNumber} star:{carriageAngleStart:f1} end:{carriageAngleEnd:f1}");
                     var ang = carriageAngleStart;
-                    var angdelt = (carriageAngleEnd - carriageAngleStart) / (carriageCameras-1);
-                    for (int i = 0; i < carriageCameras; i++)
+                    var angdelt = (carriageAngleEnd - carriageAngleStart) / (carriageCamNumber-1);
+                    for (int i = 0; i < carriageCamNumber; i++)
                     {
-                        var camgo = new GameObject($"cam{i}");
+                        var camname = $"pancam{i}";
+                        var camgo = new GameObject(camname);
                         camgo.transform.SetParent(carriagego.transform, worldPositionStays: false);
                         camgo.transform.localRotation = Quaternion.Euler(new Vector3(0, ang, 0));
                         var cam = camgo.AddComponent<Camera>();
-                        cam.targetDisplay = 2 + i;
+                        cam.targetDisplay = carriageMons[i];
                         carriageCams.Add(cam);
+                        Debug.Log($"   adding {camname} to monitor:{cam.targetDisplay}");
                         ang += angdelt;
                     }
                 }
@@ -711,6 +717,15 @@ namespace Aiskwk.Map
             Debug.Log($"RotateViewerNoTimeFak - Viewer rotation after   {transform.localRotation.eulerAngles}");
         }
 
+        public delegate (string panCamOrietation, string panCamMonitors) GetPanCamParametersDelegate();
+        GetPanCamParametersDelegate getpancamparameters = null;
+
+        public void SetPanCamParameterDelegate(GetPanCamParametersDelegate fcpd)
+        {
+            getpancamparameters = fcpd;
+        }
+
+
         public delegate (bool ok, Vector3 newpos,string newaltbase, float newalt, Vector3 newrot) FindClosestPointDelegate(Vector3 pos,string altbase,float alt,Vector3 rot);
         FindClosestPointDelegate findclosepointer = null;
 
@@ -834,15 +849,57 @@ namespace Aiskwk.Map
                 SetViewerInState(vst);
             }
         }
+        void GetAndParsePanCamParms()
+        {
+            carriageMons = new List<int>();
+            if (getpancamparameters != null)
+            {
+                var (panCamOrient, panCamMonitors) = getpancamparameters();
+                var pcmarr = panCamMonitors.Split(':');
+                carriageCamNumber = pcmarr.Length;
+                foreach (var pcm in pcmarr)
+                {
+                    var ok1 = int.TryParse(pcm, out var pcmval);
+                    if (ok1)
+                    {
+                        carriageMons.Add(pcmval);
+                    }
+                    else
+                    {
+                        carriageMons.Add(-1);
+                    }
+                }
+                var pcoarr = panCamOrient.Split(':');
+                var ok20 = float.TryParse(pcoarr[0], out var pcostar);
+                if (ok20)
+                {
+                    carriageAngleStart = pcostar;
+                }
+                var ok21 = float.TryParse(pcoarr[0], out var pcoend);
+                if (ok21)
+                {
+                    carriageAngleEnd = pcoend;
+                }
+            }
+            else
+            {
+                carriageCamNumber = 3;
+                carriageAngleStart = -60;
+                carriageAngleEnd = 60;
+                for (int i=0; i<carriageCamNumber; i++)
+                {
+                    carriageMons.Add(2 + i);
+                }
+            }
+        }
         void ToggleCarriageCamera()
         {
+            carriageOn = !carriageOn;
             Debug.Log("ToggleCarriageCamera");
             if (!carriageCameraExists)
             {
+                GetAndParsePanCamParms();
                 carriageCameraExists = true;
-                carriageCameras = 3;
-                carriageAngleStart = -60;
-                carriageAngleEnd = 60;
                 carriageOn = true;
                 BuildViewer();
             }

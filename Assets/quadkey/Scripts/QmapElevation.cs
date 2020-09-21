@@ -325,8 +325,8 @@ namespace Aiskwk.Map
             var efpath = "qkmaps/" + GetEleCsvSubDir(scenename, mapprov);
             qrf = new QresFinder(elevprov, scenename, nrow,ncol, efpath, efname, loadData:false);
             (ok, errmsg) = GetElevdataFromQresFinder(qrf);
-            var ppath = qrf.GetPersistentPathName();
-            var tpath = qrf.GetTempPathName();
+            var ppath = qrf.GetSceneDependentPersistentPathName();
+            var tpath = qrf.GetSceneDependentTempPathName();
             if (forceload || !ok)
             {
                 Debug.LogWarning(errmsg);
@@ -403,8 +403,8 @@ namespace Aiskwk.Map
             //var mprov = GetMapProvSubdirName(mapprov);
             //var ppath = $"{Application.persistentDataPath}/qkmaps/scenemaps/{mapprov}/{scenename}";
             //Directory.Delete(ppath, true);
-            var ppath = qrf.GetPersistentPathName();
-            var tpath = qrf.GetTempPathName();
+            var ppath = qrf.GetSceneDependentPersistentPathName();
+            var tpath = qrf.GetSceneDependentTempPathName();
 
 #if UNITY_EDITOR_WIN
             var msg = $"Delete Elevation persistent and temp paths:\n\"{ppath}\"\n\"{tpath}\"\nPaths copied to clipboard";
