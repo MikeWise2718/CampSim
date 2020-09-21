@@ -29787,7 +29787,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1114513947
 RectTransform:
   m_ObjectHideFlags: 0
@@ -48041,7 +48041,7 @@ GameObject:
   - component: {fileID: 1878938195}
   - component: {fileID: 1878938194}
   m_Layer: 5
-  m_Name: DeleteSettingsButton
+  m_Name: DoesNothingButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
