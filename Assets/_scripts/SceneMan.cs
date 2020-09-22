@@ -1598,8 +1598,8 @@ namespace CampusSimulator
             kickOffEvac = GraphUtil.ParmBool("-evac");
             showNoPipes = GraphUtil.ParmBool("-nopipes");
 
-            var (cmdlineScene, clscenename) = GraphUtil.ParmString("-scene", "");
-            if (cmdlineScene)
+            var (cmdlineSceneSpecified, clscenename) = GraphUtil.ParmString("-scene", "");
+            if (cmdlineSceneSpecified)
             {
                 einival = GetSceneOptionsEnum(clscenename,"command line");
             }
@@ -1657,6 +1657,16 @@ namespace CampusSimulator
                 var esi = SceneMan.GetInitialSceneOption();
                 curscene = SceneSelE.None; // force it to execute by specifying something it should never be - kind of a kludge
                 SetScenario(esi);
+            }
+            var (pcoriSpecified, pcori) = GraphUtil.ParmString("-pcori", "");
+            if (pcoriSpecified)
+            {
+                vcman.panCamOrientation.SetAndSave(pcori);
+            }
+            var (pcmonSpecified, pcmon) = GraphUtil.ParmString("-pcmon", "");
+            if (pcmonSpecified)
+            {
+                vcman.panCamMonitors.SetAndSave(pcori);
             }
         }
         public void ToggleAutoErrorCorrect()
