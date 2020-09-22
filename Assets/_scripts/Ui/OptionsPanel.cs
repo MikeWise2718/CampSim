@@ -22,6 +22,8 @@ public class OptionsPanel : MonoBehaviour
     BuildingsPanel buildingsPanel;
     GameObject generalPanelGo;
     GeneralPanel generalPanel;
+    GameObject logPanelGo;
+    LogPanel logPanel;
     GameObject helpPanelGo;
     HelpPanel helpPanel;
     GameObject aboutPanelGo;
@@ -35,7 +37,7 @@ public class OptionsPanel : MonoBehaviour
     Dictionary<TabState, Initer> initDict = null;
     Dictionary<TabState, SetAndSaver> setAndSaveDict = null;
 
-    public string enableString = "Visuals,MapSet,Frames,FireFly,Buildings,General,Help,About";
+    public string enableString = "Visuals,MapSet,Frames,FireFly,Buildings,General,Log,Help,About";
 
     Dictionary<string, string> tooltip = new Dictionary<string, string> {
         {"Visuals","Visual Base Settings" },
@@ -44,11 +46,12 @@ public class OptionsPanel : MonoBehaviour
         {"FireFly","FireFly related parameters" },
         {"Buildings","Building related parameters" },
         {"General","General parameters" },
+        {"Log","Log messages (i.e. errors, warnings, timings, etc)" },
         {"Help","Help information\nincluding command line parameters" },
         {"About","Version and System Information" },
     };
 
-    public enum TabState { Visuals,MapSet,FireFly,Frames,Buildings,General,Help,About }
+    public enum TabState { Visuals,MapSet,FireFly,Frames,Buildings,General,Log,Help,About }
     TabState tabstate;
     // Start is called before the first frame update
     public void Init0()
@@ -74,6 +77,8 @@ public class OptionsPanel : MonoBehaviour
         buildingsPanel = buildingsPanelGo.GetComponent<BuildingsPanel>();
         generalPanelGo = transform.Find("GeneralPanel").gameObject;
         generalPanel = generalPanelGo.GetComponent<GeneralPanel>();
+        logPanelGo = transform.Find("LogPanel").gameObject;
+        logPanel = logPanelGo.GetComponent<LogPanel>();
         helpPanelGo = transform.Find("HelpPanel").gameObject;
         helpPanel = helpPanelGo.GetComponent<HelpPanel>();
         aboutPanelGo = transform.Find("AboutPanel").gameObject;
@@ -85,6 +90,7 @@ public class OptionsPanel : MonoBehaviour
         panDict[TabState.FireFly] = fireFlyPanelGo;
         panDict[TabState.Buildings] = buildingsPanelGo;
         panDict[TabState.General] = generalPanelGo;
+        panDict[TabState.Log] = logPanelGo;
         panDict[TabState.Help] = helpPanelGo;
         panDict[TabState.About] = aboutPanelGo;
 
@@ -95,6 +101,7 @@ public class OptionsPanel : MonoBehaviour
         initDict[TabState.FireFly] = delegate { fireFlyPanel.InitVals(); };
         initDict[TabState.Buildings] = delegate { buildingsPanel.InitVals(); };
         initDict[TabState.General] = delegate { generalPanel.InitVals(); };
+        initDict[TabState.Log] = delegate { logPanel.FillLogPanel(); };
         initDict[TabState.Help] = delegate { helpPanel.FillHelpPanel(); };
         initDict[TabState.About] = delegate { aboutPanel.FillAboutPanel(); };
 
@@ -251,17 +258,17 @@ public class OptionsPanel : MonoBehaviour
 
     public void SetScene(CampusSimulator.SceneSelE curscene)
     {
-        enableString = "Visuals,MapSet,FireFly,Frames,Buildings,General,Help,About";
+        enableString = "Visuals,MapSet,FireFly,Frames,Buildings,General,Log,Help,About";
         switch (curscene)
         {
             case SceneSelE.MsftB19focused:
                 {
-                    enableString = "Visuals,MapSet,Frames,Buildings,General,Help,About";
+                    enableString = "Visuals,MapSet,Frames,Buildings,General,Log,Help,About";
                     break;
                 }
             case SceneSelE.TeneriffeMtn:
                 {
-                    enableString = "FireFly,Visuals,MapSet,Frames,Buildings,General,Help,About";
+                    enableString = "FireFly,Visuals,MapSet,Frames,Buildings,General,Log,Help,About";
                     break;
                 }
 
