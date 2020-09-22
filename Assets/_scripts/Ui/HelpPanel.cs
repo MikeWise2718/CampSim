@@ -49,7 +49,10 @@ public class HelpPanel : MonoBehaviour
             msg += "\n" + "Ctrl-M Ctrl-M       - Copy scene camera to main camera (in Unity Editor only)";
             msg += "\n" + "Ctrl-M Ctrl-S       - Copy main camera to scene camera (in Unity Editor only)";
 #endif
-            msg += "\n" + "F5                  - Total Refresh of Scene";
+            msg += "\n" + "F2                  - Snap Viewer to nearest pipe-like path guide";
+            msg += "\n" + "F4                  - Reverse Viewer Orientation";
+            msg += "\n" + "F5                  - Total Refresh of Scene (can take ~10 secs)";
+            msg += "\n" + "F8                  - Toggle Viewer panoramic camera";
             msg += "\n" + "F10                 - Options Panel";
             msg += "\n" + "Ctrl-E              - Shift Camera position on viewer";
             msg += "\n" + "Ctrl-A              - Shift Camera position on viewer";
@@ -66,6 +69,9 @@ public class HelpPanel : MonoBehaviour
             msg += "\n" + "     -run - Start the scene-wide people journey simulation";
             msg += "\n" + "     -fly - Start the scene-wide drone journey simulation";
             msg += "\n" + "     -nopipes- Don't show the pipe-like travel path markers";
+            msg += "\n" + "     -pcori - Panoramic camera orientation in the form minang:maxangle like -45:45";
+            msg += "\n" + "     -pcmon - Panoramic camera monitor usage - colon delimited monitor numbers like 1:2:3";
+            msg += "\n" + "              Also implicitly determines number of panoramic cameras";
             msg += "\n" + "     -delsettings - Delete all saved application seettings and exit";
             msg += "\n" + "     -delmaps - Delete all saved map and elevation data and exit";
             msg += "\n" + "     -help - Write this help text and sysinfo to text (help.txt) file and exit";

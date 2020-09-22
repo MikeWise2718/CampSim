@@ -87,13 +87,13 @@ namespace Aiskwk.Map
         public ViewerCamConfig viewerCamPosition = ViewerCamConfig.Eyes;
         public ViewerControl viewerControl = ViewerControl.Position;
 
-        bool carriageCameraExists = true;
-        int carriageCamNumber = 3;
-        float carriageAngleStart = -20;
-        float carriageAngleEnd = 20;
-        bool carriageOn = false;
-        List<Camera> carriageCams = null;
-        List<int> carriageMons = null;
+        public bool carriageCameraExists = true;
+        public int carriageCamNumber = 3;
+        public float carriageAngleStart = -20;
+        public float carriageAngleEnd = 20;
+        public bool carriageOn = false;
+        public List<Camera> carriageCams = null;
+        public List<int> carriageMons = null;
 
         public Quaternion bodyPrefabRotation = Quaternion.identity;
         public Quaternion bodyPlaneRotation = Quaternion.identity;
@@ -171,6 +171,8 @@ namespace Aiskwk.Map
             carriageOn = home.carriageOn;
             carriageAngleStart = home.angstart;
             carriageAngleEnd = home.angend;
+            carriageCams = new List<Camera>();
+            carriageMons = new List<int>();
             //var (vo,_, istat) = qmm.GetWcMeshPosFromLambda(0.5f, 0.5f);
             var (vo, _, istat) = qmm.GetWcMeshPosProjectedAlongYnew(home.pos);
             transform.position = vo;
@@ -411,7 +413,9 @@ namespace Aiskwk.Map
                 {
                     Debug.Log($"Adding panCams - ncams:{carriageCamNumber} star:{carriageAngleStart:f1} end:{carriageAngleEnd:f1}");
                     var ang = carriageAngleStart;
-                    var angdelt = (carriageAngleEnd - carriageAngleStart) / (carriageCamNumber-1);
+                    var divor = carriageCamNumber - 1;
+                    if (divor == 0) divor = 1;
+                    var angdelt = (carriageAngleEnd - carriageAngleStart) / divor;
                     for (int i = 0; i < carriageCamNumber; i++)
                     {
                         var camname = $"pancam{i}";
@@ -419,9 +423,9 @@ namespace Aiskwk.Map
                         camgo.transform.SetParent(carriagego.transform, worldPositionStays: false);
                         camgo.transform.localRotation = Quaternion.Euler(new Vector3(0, ang, 0));
                         var cam = camgo.AddComponent<Camera>();
-                        cam.targetDisplay = carriageMons[i];
+                        cam.targetDisplay = carriageMons[i]-1;
                         carriageCams.Add(cam);
-                        Debug.Log($"   adding {camname} to monitor:{cam.targetDisplay}");
+                        Debug.Log($"   adding {camname} to monitor:{cam.targetDisplay} ang:{ang:f1}");
                         ang += angdelt;
                     }
                 }
@@ -855,6 +859,19 @@ namespace Aiskwk.Map
             if (getpancamparameters != null)
             {
                 var (panCamOrient, panCamMonitors) = getpancamparameters();
+
+                var pcoarr = panCamOrient.Split(':');
+                var ok20 = float.TryParse(pcoarr[0], out var pcostar);
+                if (ok20)
+                {
+                    carriageAngleStart = pcostar;
+                }
+                var ok21 = float.TryParse(pcoarr[1], out var pcoend);
+                if (ok21)
+                {
+                    carriageAngleEnd = pcoend;
+                }
+
                 var pcmarr = panCamMonitors.Split(':');
                 carriageCamNumber = pcmarr.Length;
                 foreach (var pcm in pcmarr)
@@ -869,17 +886,7 @@ namespace Aiskwk.Map
                         carriageMons.Add(-1);
                     }
                 }
-                var pcoarr = panCamOrient.Split(':');
-                var ok20 = float.TryParse(pcoarr[0], out var pcostar);
-                if (ok20)
-                {
-                    carriageAngleStart = pcostar;
-                }
-                var ok21 = float.TryParse(pcoarr[0], out var pcoend);
-                if (ok21)
-                {
-                    carriageAngleEnd = pcoend;
-                }
+
             }
             else
             {
@@ -905,9 +912,21 @@ namespace Aiskwk.Map
             }
             else
             {
-                foreach(var cam in carriageCams)
+                GetAndParsePanCamParms();
+                BuildViewer();
+                var i = 0;
+                foreach (var cam in carriageCams)
                 {
                     cam.enabled = carriageOn;
+                    if (carriageOn)
+                    {
+                        var display = Display.displays[cam.targetDisplay];
+                        if (!display.active)
+                        {
+                            display.Activate();
+                        }
+                    }
+                    i++;
                 }
             }
         }

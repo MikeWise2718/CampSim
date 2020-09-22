@@ -161,12 +161,29 @@ public class InfoPanel : MonoBehaviour
             }
             string txt = "";
             string txtalt = "";
+            string txtpancam = "";
             if (viewer!=null)
             {
                 txtalt = $" AB:{viewer.altbase} A:{viewer.altitude:f1}";
+                var npcams = viewer.carriageMons.Count;
+                txtpancam = $"ncam:{npcams} - ";
+                for(int i=0; i<npcams; i++)
+                {
+                    var mon = viewer.carriageMons[i];
+                    var activecode = "?";
+                    try
+                    {
+                        var disp = Display.displays[mon-1];
+                        activecode = disp.active ? "A" : "D";
+                    }
+                    catch (System.Exception) { }
+                    txtpancam += $" {mon}:{activecode}";
+                }
+                txtpancam += "\n";
             }
             //txt += "Pos:" + pos.x.ToString("f2") + " " + pos.y.ToString("f2") + " " + pos.z.ToString("f2")+"\n";
             txt += $"Pos:{pos.x,4:f2} {pos.y,4:f2} {pos.z,4:f2}{txtalt}\n";
+            txt += txtpancam;
             //txt += "Fwd:" + fwd.x.ToString("f2") + " " + fwd.y.ToString("f2") + " " + fwd.z.ToString("f2");
             txt += $"Fwd:{fwd.x,4:f2} {fwd.y,4:f2} {fwd.z,4:f2}{txtyang}\n";
             sysText.text = txt;

@@ -184,6 +184,83 @@ namespace CampusSimulator
             }
             vmcam.gameObject.name = "vc-" + mcamvcam;
         }
+        public (bool,string errmsg,float angstart, float angend) ParseAndVeriyPanCamOrientationString(string oristr)
+        {
+            var allok = true;
+            var errmsg = "";
+            var pcoarr = oristr.Split(':');
+            var (angstart, angend) = (0f, 0f);
+            if (pcoarr.Length!=2)
+            {
+                errmsg = $"Bad PamCam orientation string must be of form angmin:angmax (wrong number of colons {pcoarr.Length-1})";
+                allok = false;
+            }
+            var ok20 = float.TryParse(pcoarr[0], out var pcostar);
+            if (ok20)
+            {
+                angstart = pcostar;
+            }
+            else
+            {
+                errmsg = $"Bad PamCam orientation string must be of form angmin:angmax (bad float format for first parameter)";
+                allok = false;
+            }
+            var ok21 = float.TryParse(pcoarr[1], out var pcoend);
+            if (ok21)
+            {
+                angend = pcoend;
+            }
+            else
+            {
+                errmsg = $"Bad PamCam orientation string must be of form angmin:angmax (bad float format for first parameter)";
+                allok = false;
+            }
+            return (allok, errmsg, angstart, angend);
+        }
+        public (bool, string errmsg, List<int> mons) ParseAndVeriyPanCamMonitorString(string monstr)
+        {
+            var allok = true;
+            var errmsg = "";
+            var pcmstr = monstr.Split(':');
+            var mons = new List<int>();
+            if (pcmstr.Length<1 || 8<pcmstr.Length)
+            {
+                errmsg = $"Bad PamCam monitor string - must specify between 1 and 8 integers";
+                allok = false;
+            }
+            int enumb = 1;
+            foreach(var pcm in pcmstr)
+            {
+                var ok1 = int.TryParse(pcm, out var pcmval);
+                if (ok1)
+                {
+                    if (pcmval < 1 || 8 < pcmval)
+                    {
+                        if (errmsg == "")// keep first message
+                        {
+                            errmsg = $"Bad PamCam monitor string - entry number {enumb} is out of range (0-8)";
+                        }
+                        mons.Add(-1);
+                        allok = false;
+                    }
+                    else
+                    {
+                        mons.Add(pcmval);
+                    }
+                }
+                else
+                {
+                    if (errmsg == "")// keep first message
+                    {
+                        errmsg = $"Bad PamCam monitor string - entry number {enumb} is a bad integer";
+                    }
+                    mons.Add(-1);
+                    allok = false;
+                }
+                enumb++;
+            }
+            return (allok, errmsg, mons);
+        }
         public void SetMainCameraToCam(Camera cam)
         {
             vmcam.transform.position = cam.transform.position;

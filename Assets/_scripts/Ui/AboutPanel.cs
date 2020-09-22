@@ -233,7 +233,8 @@ public class AboutPanel : MonoBehaviour
             {
                 var dd = Display.displays[i];
                 msg += $" \n  {i+1}  native: {dd.systemWidth},{dd.systemHeight}";
-                msg += $"       rendering: {dd.renderingWidth},{dd.renderingHeight}";
+                msg += $"   render: {dd.renderingWidth},{dd.renderingHeight}";
+                msg += $"   active: {dd.active}";
             }
             var usm = PlayerPrefs.GetInt("UnitySelectMonitor");
             msg += $"\nPlayerPrefs - Current monitor:{usm+1} (zero-based UnitySelectMonitor:{usm})";
