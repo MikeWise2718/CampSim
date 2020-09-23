@@ -459,43 +459,77 @@ namespace CampusSimulator
                 }
                 catch (Exception ex)
                 {
-                    Debug.LogError("Scene "+newscene.ToString()+" not initialized successfully Exception:"+ex.ToString());
+                   LggError("Scene "+newscene.ToString()+" not initialized successfully Exception:"+ex.ToString());
                 }
                 CancelRefreshes();
-                Debug.Log($"SceneMan.SetScene completed scenario initialization for {curscene}");
+                Lgg($"SceneMan.SetScene completed scenario initialization for {curscene}");
             }
             else
             {
-                Debug.Log("Scene already set to " + newscene + " so this is a noop");
+                Lgg("Scene already set to " + newscene + " so this is a noop");
             }
             requestScene = SceneSelE.None;
         }
 
-        public void Lgg(string msg,string color)
+
+
+
+        public void LggWarn(string msg)
         {
-            Lgg(msg, new string[] { color });
+            Lgglong(msg, LogSeverity.Error, LogTyp.General, color: new string[] { "yellow", "white" });
             //var nmsg = $"<color={color}>{msg}</color>";
             //Debug.Log(nmsg);
         }
- 
-        public void Lgg(string msg, string[] color, string delim = "|")
+
+        public void UnityLog(string nmsg,LogSeverity severity)
+        {
+            switch (severity)
+            {
+                case LogSeverity.Error:
+                    Debug.LogError(nmsg);
+                    break;
+                case LogSeverity.Warning:
+                    Debug.LogWarning(nmsg);
+                    break;
+                default:
+                    Debug.Log(nmsg);
+                    break;
+            }
+        }
+        public void Lgglong(string msg, LogSeverity severity = LogSeverity.Info, LogTyp typ = LogTyp.General, string[] color = null, string delim = "|", bool unitylog = true)
         {
             if (lgman != null)
             {
-                lgman.AddMessage(msg, LogSeverity.Info, LogTyp.General, color);
+                lgman.AddMessage(msg, severity, typ, color);
             }
             var nmsg = LogMan.ColorCode(msg, color, delim);
-            Debug.Log(nmsg);
+            if (unitylog)
+            {
+                UnityLog(nmsg, severity);
+            }
         }
-
-        public void Lgg(string msg, string clr1, string clr2, string delim = "|")
+        public void Lgg(string msg, string clr1, string clr2, string delim = "|", bool unitylog = true)
         {
             var color = new string[] { clr1, clr2 };
             var nmsg = LogMan.ColorCode(msg, color, delim);
-            Debug.Log(nmsg);
+            if (unitylog)
+            {
+                UnityLog(nmsg, LogSeverity.Info);
+            }
+
+        }
+        public void Lgg(string msg, string color="gray")
+        {
+            Lgglong(msg, LogSeverity.Info,LogTyp.General, color:new string[] { color });
+            //var nmsg = $"<color={color}>{msg}</color>";
+            //Debug.Log(nmsg);
         }
 
-
+        public void LggError(string msg)
+        {
+            Lgglong(msg, LogSeverity.Error, LogTyp.General, color: new string[] { "red", "white" });
+            Debug.LogError(msg);
+        }
         public void PostMapAsyncLoadSetScene()
         {
             vcman.PostMapLoadAdjustments();
@@ -1593,7 +1627,7 @@ namespace CampusSimulator
         #endregion SceneOptions
         void Awake()
         {
-            Lgg("SceneMan.|Awake| called", new string[] { "red","white"} );
+            Lgg("SceneMan.|Awake| called", "darkblue","white" );
             Debug.Log($"Monitors connected:{Display.displays.Length}");
             IdentitySystemAndUser();
             InitPhase0();

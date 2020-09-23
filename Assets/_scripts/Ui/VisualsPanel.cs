@@ -88,7 +88,7 @@ public class VisualsPanel : MonoBehaviour
         }
         catch (Exception ex)
         {
-            Debug.LogError($"{errmsg}1:{ex.Message}");
+            sman.LggError($"{errmsg}1:{ex.Message}");
         }
 
         try
@@ -106,7 +106,7 @@ public class VisualsPanel : MonoBehaviour
         }
         catch (Exception ex)
         {
-            Debug.LogError($"{errmsg}1:{ex.Message}");
+            sman.LggError($"{errmsg}1:{ex.Message}");
         }
 
         try
@@ -124,7 +124,7 @@ public class VisualsPanel : MonoBehaviour
         }
         catch (Exception ex)
         {
-            Debug.LogError($"{errmsg}2:{ex.Message}");
+            sman.LggError($"{errmsg}2:{ex.Message}");
         }
         try
         {
@@ -141,7 +141,7 @@ public class VisualsPanel : MonoBehaviour
         }
         catch (Exception ex)
         {
-            Debug.LogError($"{errmsg}3:{ex.Message}");
+            sman.LggError($"{errmsg}3:{ex.Message}");
         }
         try
         {
@@ -152,7 +152,7 @@ public class VisualsPanel : MonoBehaviour
         }
         catch (Exception ex)
         {
-            Debug.LogError($"{errmsg}4:{ex.Message}");
+            sman.LggError($"{errmsg}4:{ex.Message}");
         }
         try
         {
@@ -167,7 +167,7 @@ public class VisualsPanel : MonoBehaviour
         }
         catch (Exception ex)
         {
-            Debug.LogError($"{errmsg}5:{ex.Message}");
+            sman.LggError($"{errmsg}5:{ex.Message}");
         }
         try
         {
@@ -182,7 +182,7 @@ public class VisualsPanel : MonoBehaviour
         }
         catch (Exception ex)
         {
-            Debug.LogError($"{errmsg}6:{ex.Message}");
+            sman.LggError($"{errmsg}6:{ex.Message}");
         }
         try
         {
@@ -197,7 +197,7 @@ public class VisualsPanel : MonoBehaviour
         }
         catch (Exception ex)
         {
-            Debug.LogError($"{errmsg}7:{ex.Message}");
+            sman.LggError($"{errmsg}7:{ex.Message}");
         }
         try
         {
@@ -212,7 +212,7 @@ public class VisualsPanel : MonoBehaviour
         }
         catch (Exception ex)
         {
-            Debug.LogError($"{errmsg}8:{ex.Message}");
+            sman.LggError($"{errmsg}8:{ex.Message}");
         }
         try
         {
@@ -229,7 +229,7 @@ public class VisualsPanel : MonoBehaviour
         }
         catch (Exception ex)
         {
-            Debug.LogError($"{errmsg}9:{ex.Message}");
+            sman.LggError($"{errmsg}9:{ex.Message}");
         }
         panelActive = true;
     }
@@ -263,7 +263,7 @@ public class VisualsPanel : MonoBehaviour
         }
         catch (Exception ex)
         {
-            Debug.LogError($"{errmsg}1:{ex.Message}");
+            sman.LggError($"{errmsg}1:{ex.Message}");
         }
         try
         {
@@ -273,7 +273,7 @@ public class VisualsPanel : MonoBehaviour
         }
         catch (Exception ex)
         {
-            Debug.LogError($"{errmsg}2:{ex.Message}");
+            sman.LggError($"{errmsg}2:{ex.Message}");
         }
         try
         {
@@ -283,7 +283,7 @@ public class VisualsPanel : MonoBehaviour
         }
         catch (Exception ex)
         {
-            Debug.LogError($"{errmsg}3:{ex.Message}");
+            sman.LggError($"{errmsg}3:{ex.Message}");
         }
         try
         {
@@ -298,7 +298,7 @@ public class VisualsPanel : MonoBehaviour
         }
         catch (Exception ex)
         {
-            Debug.LogError($"{errmsg}4:{ex.Message}");
+            sman.LggError($"{errmsg}4:{ex.Message}");
         }
         try
         {
@@ -311,7 +311,7 @@ public class VisualsPanel : MonoBehaviour
         }
         catch (Exception ex)
         {
-            Debug.LogError($"{errmsg}5:{ex.Message}");
+            sman.LggError($"{errmsg}5:{ex.Message}");
         }
         try
         {
@@ -326,7 +326,7 @@ public class VisualsPanel : MonoBehaviour
         }
         catch (Exception ex)
         {
-            Debug.LogError($"{errmsg}6:{ex.Message}");
+            sman.LggError($"{errmsg}6:{ex.Message}");
         }
         try
         {
@@ -341,7 +341,7 @@ public class VisualsPanel : MonoBehaviour
         }
         catch (Exception ex)
         {
-            Debug.LogError($"{errmsg}7:{ex.Message}");
+            sman.LggError($"{errmsg}7:{ex.Message}");
         }
         try
         {
@@ -356,7 +356,7 @@ public class VisualsPanel : MonoBehaviour
         }
         catch (Exception ex)
         {
-            Debug.LogError($"{errmsg}8:{ex.Message}");
+            sman.LggError($"{errmsg}8:{ex.Message}");
         }
         try
         {
@@ -371,11 +371,11 @@ public class VisualsPanel : MonoBehaviour
         }
         catch (Exception ex)
         {
-            Debug.LogError($"{errmsg}9 - CameraOptions:{ex.Message}");
-            Debug.LogError($"   CameraOptions");
-            Debug.LogError($"   value: {camSelection.value}");
-            Debug.LogError($"   opt count:{vman.GetCameraOptions().Count}");
-            Debug.LogError($"   mainCamName:{vman.mainCamName.Get()}");
+            sman.LggError($"{errmsg}9 - CameraOptions:{ex.Message}");
+            sman.LggError($"   CameraOptions");
+            sman.LggError($"   value: {camSelection.value}");
+            sman.LggError($"   opt count:{vman.GetCameraOptions().Count}");
+            sman.LggError($"   mainCamName:{vman.mainCamName.Get()}");
         }
         try
         {
@@ -385,7 +385,7 @@ public class VisualsPanel : MonoBehaviour
         }
         catch (Exception ex)
         {
-            Debug.LogError($"{errmsg}10:{ex.Message}");
+            sman.LggError($"{errmsg}10:{ex.Message}");
         }
         panelActive = false;
         if (chg)

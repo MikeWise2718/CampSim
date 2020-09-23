@@ -740,7 +740,7 @@ namespace CampusSimulator
                 var vst = teleportLocs[trigger].viewerState;
                 var pt = GetNodePt(nodename);
                 vst.pos = pt;
-                sman.Lgg($"Node |{nodename}| mapped to |{pt:f1}", new string[] { "red", "cyan" });
+                sman.Lgg($"Node |{nodename}| mapped to |{pt:f1}",  "darkblue", "cyan" );
                 return (true, teleportLocs[trigger].viewerState);
             }
             return (false, null);
