@@ -29,6 +29,8 @@ public class OptionsPanel : MonoBehaviour
     GameObject aboutPanelGo;
     AboutPanel aboutPanel;
 
+    bool inited = false;
+
     public delegate void Initer();
     public delegate void SetAndSaver(bool closing=true);
 
@@ -84,15 +86,15 @@ public class OptionsPanel : MonoBehaviour
         aboutPanelGo = transform.Find("AboutPanel").gameObject;
         aboutPanel = aboutPanelGo.GetComponent<AboutPanel>();
 
-        panDict[TabState.Visuals] = visualPanelGo;
-        panDict[TabState.MapSet] = mapSetGo;
-        panDict[TabState.Frames] = framePanelGo;
-        panDict[TabState.FireFly] = fireFlyPanelGo;
-        panDict[TabState.Buildings] = buildingsPanelGo;
-        panDict[TabState.General] = generalPanelGo;
-        panDict[TabState.Log] = logPanelGo;
-        panDict[TabState.Help] = helpPanelGo;
-        panDict[TabState.About] = aboutPanelGo;
+        panDict[TabState.Visuals] = visualsPanel.gameObject;
+        panDict[TabState.MapSet] = mapSetPanel.gameObject;
+        panDict[TabState.Frames] = framePanel.gameObject;
+        panDict[TabState.FireFly] = fireFlyPanel.gameObject;
+        panDict[TabState.Buildings] = buildingsPanel.gameObject;
+        panDict[TabState.General] = generalPanel.gameObject;
+        panDict[TabState.Log] = logPanel.gameObject;
+        panDict[TabState.Help] = helpPanel.gameObject;
+        panDict[TabState.About] = aboutPanel.gameObject;
 
 
         initDict[TabState.Visuals] = delegate { visualsPanel.InitVals(); };
@@ -114,7 +116,7 @@ public class OptionsPanel : MonoBehaviour
 
         DestroyFixedButtons();
 
-
+        inited = true;
     }
     public void FindAndDestroy(string targetname)
     {
@@ -224,7 +226,8 @@ public class OptionsPanel : MonoBehaviour
     }
     public void SyncOptionsTabState()
     {
-        if (!visualPanelGo) return; // not initialized yet
+        if (!inited) return; // not initialized yet
+
         foreach (var ts in panDict.Keys)
         {
             var gob = panDict[ts];

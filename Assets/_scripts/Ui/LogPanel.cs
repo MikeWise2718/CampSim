@@ -39,7 +39,7 @@ public class LogPanel : MonoBehaviour
         //FillHelpPanel();
     }
 
-    public string GetLogText()
+    public string GetLogTextOld()
     {
         var utc = System.DateTime.UtcNow;
         string msg = "Time Now: " + utc.ToString("yyyy-MM-dd HH:mm:ss UTC") + "\n";
@@ -58,6 +58,19 @@ public class LogPanel : MonoBehaviour
         }
         return msg;
     }
+
+    public string GetLogText()
+    {
+        var utc = System.DateTime.UtcNow;
+        string msg = "Time Now: " + utc.ToString("yyyy-MM-dd HH:mm:ss UTC") + "\n";
+        var ccmsgs = sman.lgman.GetCodedLogMessages();
+        foreach(var cmsg in ccmsgs)
+        {
+            msg += $"{cmsg}\n";
+        }
+        return msg;
+    }
+
 
     public List<string> GetLogTextAsList()
     {

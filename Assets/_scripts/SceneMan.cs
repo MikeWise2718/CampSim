@@ -103,6 +103,10 @@ namespace CampusSimulator
         public int rgoTransformSetCount = 0;
         public int lastRgoTransformSetCount = -1;
 
+        public LogMan lgman;
+        public UiMan uiman;
+        public DataFileMan dfman;
+
         public GarageMan gaman;
         public BuildingMan bdman;
         public StreetMan stman;
@@ -117,9 +121,8 @@ namespace CampusSimulator
         public ZoneMan znman;
         public FrameMan frman;
         public CalibMan cbman;
-        public DataFileMan dfman;
         public CoordMapMan coman;
-        public UiMan uiman;
+
         public string runtimestamp = DateTime.UtcNow.ToString("yyyyMMdd-HHmmss");
         public string simrundir;
         public LinkEditor leditor;
@@ -195,6 +198,7 @@ namespace CampusSimulator
             // these object don't need to be in the scene view as we don't really inspect them or change their parameters
             coman = (new GameObject("CoordMapMan")).AddComponent<CoordMapMan>();
             dfman = (new GameObject("DataFileMan")).AddComponent<DataFileMan>();
+            lgman = (new GameObject("LogMan")).AddComponent<LogMan>();
 
             // these object need to be in the scene we are starting because we might inspect them
             uiman = FindObjectOfType<UiMan>();
@@ -215,6 +219,7 @@ namespace CampusSimulator
 
             dfman.sman = this;
             coman.sman = this;
+            lgman.sman = this;
 
             uiman.sman = this;
             mpman.sman = this;
@@ -250,7 +255,7 @@ namespace CampusSimulator
                 frman.transform.parent = rgo.transform;
                 dfman.transform.parent = rgo.transform;
             }
-
+            lgman.InitPhase0();
             mpman.InitPhase0();
             bdman.InitPhase0();
             stman.InitPhase0();
@@ -260,7 +265,6 @@ namespace CampusSimulator
             dfman.InitPhase0();
             veman.InitPhase0();
             drman.InitPhase0();
-
         }
 
         //private T CreateObjectAddComp<T>(string cname) 
@@ -473,49 +477,21 @@ namespace CampusSimulator
             //var nmsg = $"<color={color}>{msg}</color>";
             //Debug.Log(nmsg);
         }
-        public string ColorCode(string msg, string[] color, string delim = "|")
-        {
-            if (color.Length == 0)
-            {
-                return msg;
-            }
-            var delimIdxes = new List<int>();
-            {
-                var idx = msg.IndexOf(delim);
-                while (idx >= 0)
-                {
-                    delimIdxes.Add(idx);
-                    idx = msg.IndexOf(delim, idx+1);
-                }
-            }
-            var iclr = 0;
-            var nmsg = $"<color={color[0]}>";
-            var sidx = nmsg.Length;
-            nmsg += msg;
-            var lidx = 0;
-            foreach (var idx in delimIdxes)
-            {
-                iclr = (iclr + 1) % color.Length;
-                var isrt = $"</color><color={color[iclr]}>";
-                sidx += idx-lidx;
-                nmsg = nmsg.Remove(sidx, delim.Length);// remove the delim
-                nmsg = nmsg.Insert(sidx, isrt);
-                sidx += isrt.Length - delim.Length;
-                lidx = idx;
-            }
-            nmsg += "</color>";
-            return nmsg;
-        }
+ 
         public void Lgg(string msg, string[] color, string delim = "|")
         {
-            var nmsg = ColorCode(msg, color, delim);
+            if (lgman != null)
+            {
+                lgman.AddMessage(msg, LogSeverity.Info, LogTyp.General, color);
+            }
+            var nmsg = LogMan.ColorCode(msg, color, delim);
             Debug.Log(nmsg);
         }
 
         public void Lgg(string msg, string clr1, string clr2, string delim = "|")
         {
             var color = new string[] { clr1, clr2 };
-            var nmsg = ColorCode(msg, color, delim);
+            var nmsg = LogMan.ColorCode(msg, color, delim);
             Debug.Log(nmsg);
         }
 
