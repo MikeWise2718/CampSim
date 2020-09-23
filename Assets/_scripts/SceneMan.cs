@@ -474,7 +474,7 @@ namespace CampusSimulator
 
 
 
-        public void LggWarn(string msg)
+        public void LggWarning(string msg)
         {
             Lgglong(msg, LogSeverity.Error, LogTyp.General, color: new string[] { "yellow", "white" });
             //var nmsg = $"<color={color}>{msg}</color>";
@@ -573,7 +573,7 @@ namespace CampusSimulator
         }
         public void RequestRefresh(string requester,bool totalrefresh=false, SceneSelE requestedScene = SceneSelE.None)
         {
-            Debug.LogWarning($"RefreshRequested by {requester} total:{totalrefresh}");    
+            Lgg($"RefreshRequested by {requester} total:{totalrefresh}","purple");    
             needsrefresh = true;
             if (totalrefresh)
             {

@@ -359,7 +359,7 @@ public class B121Willow : MonoBehaviour
         }
         if (this.b121sgo == null)
         {
-            Debug.LogWarning("Cound not find B19-Willow");
+            sman.LggWarning("Cound not find B19-Willow");
             return;
         }
         var lst = GraphAlgos.GraphUtil.HierarchyDescToText(this.b121sgo, "");
@@ -381,7 +381,7 @@ public class B121Willow : MonoBehaviour
             {
                 if (!canfail)
                 {
-                    Debug.LogWarning("GetPart failed to find " + partname + "-  failed name part:" + part);
+                    sman.LggWarning("GetPart failed to find " + partname + "-  failed name part:" + part);
                 }
                 return null;
             }
@@ -477,7 +477,7 @@ public class B121Willow : MonoBehaviour
             newMat = Resources.Load<Material>(fullmatname);
             if (!newMat)
             {
-                Debug.LogWarning("Material " + fullmatname + " not found in Resources");
+                sman.LggWarning("Material " + fullmatname + " not found in Resources");
                 return;
             }
         }
@@ -650,7 +650,7 @@ public class B121Willow : MonoBehaviour
                         {
                             if (!bldmatmap.ContainsKey(partmat))
                             {
-                                Debug.LogWarning($"Missing material:{partmat}");
+                                sman.LggWarning($"Missing material:{partmat}");
                             }
                             else
                             {

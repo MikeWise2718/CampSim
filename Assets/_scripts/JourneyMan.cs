@@ -142,7 +142,7 @@ namespace CampusSimulator
                 diceroll = ranman.Next(0, 128);
                 gidx = (ranman.Next(0, 128) % maxgirl) + 1;
                 midx = (ranman.Next(0, 128) % maxman) + 1;
-                // Debug.Log("personform dice:" + diceroll + " gidx:" + gidx + " midx:" + midx);
+                // sman.Lgg("personform dice:" + diceroll + " gidx:" + gidx + " midx:" + midx);
             }
             if (diceroll % 4 == 0)
             {
@@ -166,26 +166,26 @@ namespace CampusSimulator
 
         public Journey AddInterBuildingJourney(Person pers, BldRoom broom, int roomslot)
         {
-            //Debug.Log("Adding Interbuilding Journey for " + pers.personName + " to " + broom.name);
+            //sman.Lgg("Adding Interbuilding Journey for " + pers.personName + " to " + broom.name);
             CheckFastMode();
             var frbroom = pers.GetCurrentRoom();
             if (!frbroom)
             {
-                Debug.LogWarning(pers.personName + " is not in a room so can't do interbuilding journey - placeRoom:" + pers.placeRoom);
+                sman.LggWarning(pers.personName + " is not in a room so can't do interbuilding journey - placeRoom:" + pers.placeRoom);
                 return null;
             }
             if (broom == frbroom)
             {
                 if (journeyMessages)
                 {
-                    Debug.LogWarning(pers.personName + " starting journey to same room - no journey - room:" + broom.roomFullName);
+                    sman.LggWarning(pers.personName + " starting journey to same room - no journey - room:" + broom.roomFullName);
                 }
                 broom.UnReserveRoomSlot(roomslot); // same room - no journey
                 return null;
             }
             //else
             //{
-            //    Debug.Log("Clearly room " + broom.name + " is not the same as " + frbroom.name);
+            //    sman.Lgg("Clearly room " + broom.name + " is not the same as " + frbroom.name);
             //}
 
 
@@ -193,7 +193,7 @@ namespace CampusSimulator
             var bld2 = broom.bld;
             if (!(bld1.name == bld2.name))
             {
-                Debug.LogWarning("Not the same building - no journey frbroom:" + frbroom.roomFullName + "  broom:" + broom.roomFullName);
+                sman.LggWarning("Not the same building - no journey frbroom:" + frbroom.roomFullName + "  broom:" + broom.roomFullName);
                 broom.UnReserveRoomSlot(roomslot);// not in same building
                 return null;
             }
@@ -221,7 +221,7 @@ namespace CampusSimulator
                 var msg = (pers.personName + " interbuiding leg.snode:" + leg.snode + " enode:" + leg.enode);
                 if (journeyMessages)
                 {
-                    Debug.Log(msg);
+                    sman.Lgg(msg);
                 }
                 var stardelay = GraphAlgos.GraphUtil.GetRanFloat(0.5f, 5f);
                 var jgo = new GameObject();
@@ -235,7 +235,7 @@ namespace CampusSimulator
             }
             catch (UnityException ex)
             {
-                Debug.LogWarning("Could not add interbuilding journey for " + pers.personName + " from" + frbroom.name + " to " + broom.name + " " + ex.Message);
+                sman.LggWarning("Could not add interbuilding journey for " + pers.personName + " from" + frbroom.name + " to " + broom.name + " " + ex.Message);
                 broom.UnReserveRoomSlot(roomslot);
                 return null;
             }
@@ -272,7 +272,7 @@ namespace CampusSimulator
                 {
                     if (journeyMessages)
                     {
-                        Debug.LogWarning("Could not create journey from " + pathname + "- no free cars at start point");
+                        sman.LggWarning("Could not create journey from " + pathname + "- no free cars at start point");
                     }
                     return null;
                 }
@@ -280,7 +280,7 @@ namespace CampusSimulator
                 reservedCar = true;
                 leg1.enode = sm1.nodename;
                 if (!NodeExists(leg1.enode)) return null;
-                //Debug.Log("leg1.enode:" + leg1.enode + " pername:" + perform + " carname:" + sm1.carname);
+                //sman.Lgg("leg1.enode:" + leg1.enode + " pername:" + perform + " carname:" + sm1.carname);
 
                 var carform = BirdFormE.car;
                 if (gm.slotform.Get() == SlotFormE.Node)
@@ -307,14 +307,14 @@ namespace CampusSimulator
                         {
                             sm1.UnReserveCar();
                         }
-                        Debug.LogWarning("Could not create journey from " + pathname + " - no parking slots available at destination");
+                        sman.LggWarning("Could not create journey from " + pathname + " - no parking slots available at destination");
                     }
                     return null;
                 }
                 leg2.enode = sm2.nodename;
                 if (!NodeExists(leg2.enode)) return null;
 
-                //Debug.Log("leg2.enode:" + leg2.enode);
+                //sman.Lgg("leg2.enode:" + leg2.enode);
                 sm2.ReserveSlot();
                 reservedSlot = true;
 
@@ -339,7 +339,7 @@ namespace CampusSimulator
             }
             catch (UnityException ex)
             {
-                Debug.LogWarning("Could not add journey from " + fr_node + " to " + tu_node + " " + ex.Message);
+                sman.LggWarning("Could not add journey from " + fr_node + " to " + tu_node + " " + ex.Message);
                 if (reservedCar)
                 {
                     sm1.UnReserveCar();
@@ -413,7 +413,7 @@ namespace CampusSimulator
             }
             catch (UnityException ex)
             {
-                Debug.LogWarning("Could not add journey from " + fr_node + " to " + tu_node + " " + ex.Message);
+                sman.LggWarning("Could not add journey from " + fr_node + " to " + tu_node + " " + ex.Message);
                 return null;
             }
         }
@@ -422,7 +422,7 @@ namespace CampusSimulator
         {
             if (!person)
             {
-                Debug.LogWarning("Null person in AddPersonBldroomJourney");
+                sman.LggWarning("Null person in AddPersonBldroomJourney");
                 return null;
             }
             var fr_node = person.placeNode;
@@ -455,7 +455,7 @@ namespace CampusSimulator
                 {
                     if (journeyMessages)
                     {
-                        Debug.LogWarning("Could not create journey for " + person.personName + "- no free cars at start point");
+                        sman.LggWarning("Could not create journey for " + person.personName + "- no free cars at start point");
                     }
                     broom.UnReserveRoomSlot(roomslot);
                     return null;
@@ -463,7 +463,7 @@ namespace CampusSimulator
                 sm1.ReserveCar();
                 leg1.enode = sm1.nodename;
                 if (!NodeExists(leg1.enode)) return null;
-                //Debug.Log("leg1.enode:" + leg1.enode + " pername:" + perform + " carname:" + sm1.carname);
+                //sman.Lgg("leg1.enode:" + leg1.enode + " pername:" + perform + " carname:" + sm1.carname);
 
                 var carform = BirdFormE.car;
                 if (gm.slotform.Get() == SlotFormE.Node)
@@ -487,7 +487,7 @@ namespace CampusSimulator
                 {
                     if (journeyMessages)
                     {
-                        Debug.LogWarning("Could not create journey for " + person.personName + "  to  " + broom.name + " - no parking slots at dest");
+                        sman.LggWarning("Could not create journey for " + person.personName + "  to  " + broom.name + " - no parking slots at dest");
                     }
                     if (sm1)
                     {
@@ -499,13 +499,13 @@ namespace CampusSimulator
                 leg2.enode = sm2.nodename;
                 if (!NodeExists(leg2.enode)) return null;
 
-                //Debug.Log("leg2.enode:" + leg2.enode);
+                //sman.Lgg("leg2.enode:" + leg2.enode);
                 var gslotAvail = sm2.ReserveSlot();
                 if (!gslotAvail)
                 {
                     if (journeyMessages)
                     {
-                        Debug.LogWarning("Could not create journey for " + person.personName + "  to  " + broom.name + " - cound not reserve parking slot at dest");
+                        sman.LggWarning("Could not create journey for " + person.personName + "  to  " + broom.name + " - cound not reserve parking slot at dest");
                     }
                     broom.UnReserveRoomSlot(roomslot);
                     if (sm1)
@@ -543,7 +543,7 @@ namespace CampusSimulator
             }
             catch (UnityException ex)
             {
-                Debug.LogWarning("Could not add journey for " + person.personName + " from " + fr_node + " to " + tu_node + " " + ex.Message);
+                sman.LggWarning("Could not add journey for " + person.personName + " from " + fr_node + " to " + tu_node + " " + ex.Message);
                 return null;
             }
         }
@@ -552,7 +552,7 @@ namespace CampusSimulator
         {
             if (!person)
             {
-                Debug.LogWarning("Null person in AddDroneJourney");
+                sman.LggWarning("Null person in AddDroneJourney");
                 return null;
             }
             var fr_node = person.placeNode;
@@ -594,7 +594,7 @@ namespace CampusSimulator
             }
             catch (UnityException ex)
             {
-                Debug.LogWarning("Could not add journey for " + person.personName + " from " + fr_node + " to " + tu_node + " " + ex.Message);
+                sman.LggWarning("Could not add journey for " + person.personName + " from " + fr_node + " to " + tu_node + " " + ex.Message);
                 return null;
             }
         }
@@ -623,19 +623,19 @@ namespace CampusSimulator
                 {
                     if (journeyMessages)
                     {
-                        Debug.LogWarning("Could not create evac journey for " + person.personName + " at " + person.placeNode + "- no available slot in an evac zone");
+                        sman.LggWarning("Could not create evac journey for " + person.personName + " at " + person.placeNode + "- no available slot in an evac zone");
                     }
                     return null;
                 }
                 zslt.Reserve();
-                //Debug.Log("Reserved slot " + sm1.name + " for " + pers.personName);
+                //sman.Lgg("Reserved slot " + sm1.name + " for " + pers.personName);
                 leg.enode = zslt.nodename;
                 if (!NodeExists(leg.enode)) return null;
                 person.PersonStateStartWaitingToTravel();
                 var msg = ("Evac leg.snode:" + leg.snode + " enode:" + leg.enode + " pername:" + person.personName);
                 if (journeyMessages)
                 {
-                    Debug.Log(msg);
+                    sman.Lgg(msg);
                 }
                 var stardelay = GraphAlgos.GraphUtil.GetRanFloat(0.5f, 5f);
                 var jgo = new GameObject();
@@ -648,7 +648,7 @@ namespace CampusSimulator
             }
             catch (UnityException ex)
             {
-                Debug.LogWarning("Could not add journey from " + fr_node + " to evac zone " + ex.Message);
+                sman.LggWarning("Could not add journey from " + fr_node + " to evac zone " + ex.Message);
                 return null;
             }
         }
@@ -685,7 +685,7 @@ namespace CampusSimulator
                 var msg = ("Perstorom leg.snode:" + leg.snode + " enode:" + leg.enode + " pername:" + pers.personName);
                 if (journeyMessages)
                 {
-                    Debug.Log(msg);
+                    sman.Lgg(msg);
                 }
                 var jgo = new GameObject();
                 var jny = jgo.AddComponent<Journey>();
@@ -701,7 +701,7 @@ namespace CampusSimulator
             }
             catch (UnityException ex)
             {
-                Debug.LogWarning("Could not add journey from " + fr_node + " to evac zone " + ex.Message);
+                sman.LggWarning("Could not add journey from " + fr_node + " to evac zone " + ex.Message);
                 return null;
             }
         }
@@ -734,7 +734,7 @@ namespace CampusSimulator
                 var msg = ("Evac leg.snode:" + leg.snode + " enode:" + leg.enode + " pername:" + pers.personName);
                 if (journeyMessages)
                 {
-                    Debug.Log(msg);
+                    sman.Lgg(msg);
                 }
                 var stardelay = GraphAlgos.GraphUtil.GetRanFloat(0.5f, 5f, "jnygen");
                 var jgo = new GameObject();
@@ -753,7 +753,7 @@ namespace CampusSimulator
             }
             catch (UnityException ex)
             {
-                Debug.LogWarning("Could not add journey from " + fr_node + " to evac zone " + ex.Message);
+                sman.LggWarning("Could not add journey from " + fr_node + " to evac zone " + ex.Message);
                 return null;
             }
         }
@@ -785,7 +785,7 @@ namespace CampusSimulator
             var pathname = $"{b1} to {b2}";
             if (journeyMessages)
             {
-                Debug.Log($"Spawning ABNBJWEP journey {pathname}");
+                sman.Lgg($"Spawning ABNBJWEP journey {pathname}");
             }
             var bdest1 = bar1[1];
             var bdest2 = bar2[1];
@@ -816,7 +816,7 @@ namespace CampusSimulator
             var pathname = bc1.shortname + " to " + bc2.shortname;
             if (journeyMessages)
             {
-                Debug.Log("Spawning ABBJWEP journey " + pathname);
+                sman.Lgg("Spawning ABBJWEP journey " + pathname);
             }
             var bdest1 = bc1.GetRandomDest("jnygen");
             var bdest2 = bc2.GetRandomDest("jnygen");
@@ -845,7 +845,7 @@ namespace CampusSimulator
             var roomslot = room.ReserveRoomSlot();
             if (journeyMessages)
             {
-                Debug.Log("Spawning APJ journey for " + person.personName + "from " + person.placeRoom + " to " + room.roomFullName);
+                sman.Lgg("Spawning APJ journey for " + person.personName + "from " + person.placeRoom + " to " + room.roomFullName);
             }
             return AddPersonBldroomJourney(person, room, roomslot);
         }
@@ -855,13 +855,13 @@ namespace CampusSimulator
             var bc1 = bm.GetBuilding(b1);
             if (bc1 == null)
             {
-                Debug.LogWarning("AddPersonBldRoomJourney failed building b1:" + b1 + " does not exist");
+                sman.LggWarning("AddPersonBldRoomJourney failed building b1:" + b1 + " does not exist");
                 return null;
             }
             var person = bc1.GetRandomFreeToTravelPerson("jnygen");
             if (person == null)
             {
-                //Debug.LogWarning("AddPersonBldRoomJourney failed building b1:" + b1 + " GetRandomFreeToTravel Person returned null"); this is not actually an error
+                //sman.LggWarning("AddPersonBldRoomJourney failed building b1:" + b1 + " GetRandomFreeToTravel Person returned null"); this is not actually an error
                 return null;
             }
             bool interBuilding = GraphAlgos.GraphUtil.FlipBiasedCoin(pctInterBuildingJourneys);
@@ -872,20 +872,20 @@ namespace CampusSimulator
             }
             if (bc2 == null)
             {
-                Debug.LogWarning("AddPersonBldRoomJourney failed building b2:" + b2 + " does not exist");
+                sman.LggWarning("AddPersonBldRoomJourney failed building b2:" + b2 + " does not exist");
                 return null;
             }
             var room = bc2.GetRandomRoom("jnygen");
             if (room == null)
             {
-                Debug.LogWarning($"AddPersonBldRoomJourney failed as b2:{b2} has no rooms");
+                sman.LggWarning($"AddPersonBldRoomJourney failed as b2:{b2} has no rooms");
                 return null;
             }
 
             var roomslot = room.ReserveRoomSlot();
             if (journeyMessages)
             {
-                Debug.Log("Spawning APBRJ journey for " + person.personName + " from " + person.placeRoom + " to " + room.roomFullName);
+                sman.Lgg("Spawning APBRJ journey for " + person.personName + " from " + person.placeRoom + " to " + room.roomFullName);
             }
             Journey jny;
             if (interBuilding || bc1 == bc2) // 2nd clause might be true by accident
@@ -905,13 +905,13 @@ namespace CampusSimulator
             var bc1 = bm.GetBuilding(b1);
             if (bc1 == null)
             {
-                Debug.LogWarning($"AddDroneJourney failed building b1:{b1} does not exist");
+                sman.LggWarning($"AddDroneJourney failed building b1:{b1} does not exist");
                 return null;
             }
             var person = bc1.GetRandomFreeToTravelDrone("jnygen");
             if (person == null)
             {
-                //Debug.LogWarning("AddPersonBldRoomJourney failed building b1:" + b1 + " GetRandomFreeToTravel Person returned null"); this is not actually an error
+                //sman.LggWarning("AddPersonBldRoomJourney failed building b1:" + b1 + " GetRandomFreeToTravel Person returned null"); this is not actually an error
                 return null;
             }
             bool interBuilding = GraphAlgos.GraphUtil.FlipBiasedCoin(pctInterBuildingJourneys);
@@ -922,19 +922,19 @@ namespace CampusSimulator
             }
             if (bc2 == null)
             {
-                Debug.LogWarning($"AddDroneJourney failed building b2:{b2} does not exist");
+                sman.LggWarning($"AddDroneJourney failed building b2:{b2} does not exist");
                 return null;
             }
             var pad = bc2.GetRandomPad("jnygen");
             if (pad == null)
             {
-                Debug.LogWarning($"AddDroneJourney failed as b2:{b2} has no drone pads");
+                sman.LggWarning($"AddDroneJourney failed as b2:{b2} has no drone pads");
                 return null;
             }
             var padslot = pad.ReserveRoomSlot();
             if (journeyMessages)
             {
-                Debug.Log($"Spawning ADJ journey for {person.personName} from {person.placeRoom} to {pad.padFullName}");
+                sman.Lgg($"Spawning ADJ journey for {person.personName} from {person.placeRoom} to {pad.padFullName}");
             }
             Journey jny;
             if (interBuilding || bc1 == bc2) // 2nd clause might be true by accident
@@ -969,7 +969,7 @@ namespace CampusSimulator
                 msg = "get back to work Arnie";
                 AddJourneyBackHome(pers, msg, startdelaysecs: 2);
             }
-            Debug.Log("Arnie Launched to " + room + " - " + msg);
+            sman.Lgg("Arnie Launched to " + room + " - " + msg);
         }
 
         string[] rescues = new string[] {
@@ -1040,7 +1040,7 @@ namespace CampusSimulator
                     LaunchRescue();
                     break;
                 default:
-                    Debug.LogWarning($"No journeys defined for this scene:{sman.curscene}");
+                    sman.LggWarning($"No journeys defined for this scene:{sman.curscene}");
                     break;
             }
         }
@@ -1061,7 +1061,7 @@ namespace CampusSimulator
                 var pathname = "Spawning evacuation of " + pers.personName + " from building " + bld.shortname + " to an evacuation zone";
                 if (journeyMessages)
                 {
-                    Debug.Log(pathname);
+                    sman.Lgg(pathname);
                 }
                 AddEvacJourney(pers, pathname);
             }
@@ -1083,7 +1083,7 @@ namespace CampusSimulator
                 var pathname = "Spawning unevacuation of " + pers.personName + " from zone " + zone.name + " to homeroom:" + pers.homeNode;
                 if (journeyMessages)
                 {
-                    Debug.Log(pathname);
+                    sman.Lgg(pathname);
                 }
                 AddJourneyBackHome(pers, pathname, startdelaymax: sdm);
             }
@@ -1098,11 +1098,11 @@ namespace CampusSimulator
         int nstreamers = 0;
         public void CreateStreamJourneys(string zonename, Building bld)
         {
-            Debug.Log("CreateStreamJourneys for " + zonename + " Bld:" + bld.name);
+            sman.Lgg("CreateStreamJourneys for " + zonename + " Bld:" + bld.name);
             var zone = zm.GetZone(zonename);
             if (!zone)
             {
-                Debug.LogWarning("Zone " + zonename + " not found");
+                sman.LggWarning("Zone " + zonename + " not found");
                 return;
             }
             var pers = pm.MakeRandomPerson(1)[0];
@@ -1135,11 +1135,11 @@ namespace CampusSimulator
             pers.placeBld = zone.name;
             pers.placeNode = zslt.nodename;
             var pathname = "Spawning streamjourney of " + pers.empStatus + " from zone " + zone.name + " to homeroom:" + pers.homeNode;
-            Debug.Log(pathname);
-            Debug.Log("journeymessages:" + journeyMessages);
+            sman.Lgg(pathname);
+            sman.Lgg("journeymessages:" + journeyMessages);
             if (journeyMessages)
             {
-                Debug.Log(pathname);
+                sman.Lgg(pathname);
             }
             AddJourneyBackHome(pers, pathname);
             nstreamers++;
@@ -1160,7 +1160,7 @@ namespace CampusSimulator
         public void StartStreamingJourneys(string zonename, Building bld)
         {
             doStreamJourneys = !doStreamJourneys;
-            Debug.Log("doStreamJourneys:" + doStreamJourneys);
+            sman.Lgg("doStreamJourneys:" + doStreamJourneys);
             streamZone = zonename;
             streamBld = bld;
             streamLastTime = Time.time;
@@ -1229,7 +1229,7 @@ namespace CampusSimulator
             var grc = lc.GetGraphCtrl();
             if (!grc.nodeExists(jnode))
             {
-                Debug.LogWarning($"JourneyMan.AddViewerJourneyNode({jnode}) - node does not exist in linkcloud");
+                sman.LggWarning($"JourneyMan.AddViewerJourneyNode({jnode}) - node does not exist in linkcloud");
                 // still might work because it might get added later
             }
             viewerJourneyNodes.Add(jnode);
@@ -1298,7 +1298,7 @@ namespace CampusSimulator
             {
                 rv = "person";
             }
-            //Debug.Log(resname + " classified as " + rv);
+            //sman.Lgg(resname + " classified as " + rv);
             return rv;
         }
         void SpawnJourneysByBuilding()
@@ -1307,7 +1307,7 @@ namespace CampusSimulator
             if (nbldcnt == 0)
             {
                 nspawnfails++;
-                Debug.LogWarning("Cannot spawn jouneys without buildings nbldcnt:" + nbldcnt + " tries:" + nspawntries + " fails:" + nspawnfails);
+                sman.LggWarning("Cannot spawn jouneys without buildings nbldcnt:" + nbldcnt + " tries:" + nspawntries + " fails:" + nspawnfails);
                 return; // no buildings so no journeys
             }
             if (nspawntries == 0 || (Time.time - lastspawn) > spawninterval)
@@ -1319,7 +1319,7 @@ namespace CampusSimulator
                     {
                         lvelfak = 2.5f;
                     }
-                    Debug.Log($"SJBB {i} spawning nbldcnt:{nbldcnt} tries:{nspawntries} fails:{nspawnfails}");
+                    sman.Lgg($"SJBB {i} spawning nbldcnt:{nbldcnt} tries:{nspawntries} fails:{nspawnfails}");
                     Journey jny;
                     var b1 = bm.GetRandomBldName("");
                     if (preferedJourneyBuildingName != "")
@@ -1367,7 +1367,7 @@ namespace CampusSimulator
             if (nbldcnt == 0)
             {
                 nspawnfails++;
-                Debug.LogWarning("Cannot spawn drone jouneys without buildings nbldcnt:" + nbldcnt + " tries:" + nspawntries + " fails:" + nspawnfails);
+                sman.LggWarning("Cannot spawn drone jouneys without buildings nbldcnt:" + nbldcnt + " tries:" + nspawntries + " fails:" + nspawnfails);
                 return; // no buildings so no journeys
             }
             if (nspawntries == 0 || (Time.time - lastspawn) > spawninterval)
@@ -1379,7 +1379,7 @@ namespace CampusSimulator
                     {
                         lvelfak = 2.5f;
                     }
-                    //Debug.Log("spawning nbldcnt:" + nbldcnt + " tries:" + nspawntries + " fails:" + nspawnfails);
+                    //sman.Lgg("spawning nbldcnt:" + nbldcnt + " tries:" + nspawntries + " fails:" + nspawnfails);
                     Journey jny = null;
                     var b1 = bm.GetRandomDroneBldName("");
                     if (preferedJourneyBuildingName != "")
@@ -1446,7 +1446,7 @@ namespace CampusSimulator
                             setit = true;
                         }
                     }
-                    //Debug.Log(jny.person.personName+" frontdist preinited to " + dist);
+                    //sman.Lgg(jny.person.personName+" frontdist preinited to " + dist);
                 }
                 if (!setit)
                 {
@@ -1477,7 +1477,7 @@ namespace CampusSimulator
                         //var pctdif = (dist - dist2) / Mathf.Max(0.001f, dist + dist2);
                         //if (pctdif>=0.0f)
                         //{
-                        //    Debug.Log("Pctdif:" + pctdif);
+                        //    sman.Lgg("Pctdif:" + pctdif);
                         //}
 
                         var jf = jny1;
@@ -1603,7 +1603,7 @@ namespace CampusSimulator
                     break;
             }
             ModifyJourneySpeeds();
-            //Debug.Log("Updatecount:" + updateCount + " started:" + nstarted + " deleted:" + ndeleted);
+            //sman.Lgg("Updatecount:" + updateCount + " started:" + nstarted + " deleted:" + ndeleted);
         }
         void Update()
         {

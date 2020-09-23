@@ -203,7 +203,7 @@ namespace CampusSimulator
                     }
                 }
             }
-            Debug.LogWarning($"Found nothing that starts with \"{namestart}\"");
+            sman.LggWarning($"Found nothing that starts with \"{namestart}\"");
             return null;
         }
 
@@ -850,7 +850,7 @@ namespace CampusSimulator
                 var bpad = GetAssociatedPad(vacnode);
                 if (!bpad)
                 {
-                    Debug.LogWarning($"BuildingMan cannot find vacnode as room or pad - can not vacate slot:{vacnode}");
+                    sman.LggWarning($"BuildingMan cannot find vacnode as room or pad - can not vacate slot:{vacnode}");
                     return;
                 }
                 bpad.Vacate(person);

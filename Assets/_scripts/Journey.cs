@@ -95,7 +95,7 @@ namespace CampusSimulator
 
         public void StartLeg(int legidx)
         {
-            //Debug.Log("StartLeg legidx:" + legidx);
+            //jman.sman.Log("StartLeg legidx:" + legidx);
             if (legidx >= nlegs)
             {
                 if (journeyEnd == JourneyEnd.disappear)
@@ -143,7 +143,7 @@ namespace CampusSimulator
             //pathctrl.GenAstarPath(currentleg.snode, currentleg.enode, LcCapType.anything);
             if (pathctrl.status != PathCtrl.PathStatusE.AstarOk)
             {
-                Debug.LogWarning("Path status:"+pathctrl.status+" looking for path from "+currentleg.snode+" to "+currentleg.enode);
+                jman.sman.LggWarning("Path status:"+pathctrl.status+" looking for path from "+currentleg.snode+" to "+currentleg.enode);
                 return;
             }
             currentleg.dist = pathctrl.PathLength;
@@ -194,7 +194,7 @@ namespace CampusSimulator
             }
             if (pathctrl.status != PathCtrl.PathStatusE.AstarOk)
             {
-                Debug.LogWarning("Failed to find path from start to dest for starting leg");
+                jman.sman.LggWarning("Failed to find path from start to dest for starting leg");
                 status = JourneyStatE.Failed;
                 failedtime = Time.time;
             }
@@ -232,7 +232,7 @@ namespace CampusSimulator
                 }
             }
             status = JourneyStatE.Finished;
-            // Debug.Log("--Journey "+jgo.name+" took " + journeyelap + " secs");
+            // sman.Lgg("--Journey "+jgo.name+" took " + journeyelap + " secs");
         }
         public void AddLeg(Leg leg)
         {
@@ -250,7 +250,7 @@ namespace CampusSimulator
             PathPos pos = birdctrl.GetBirdPos();
             if (IsRunning() && (Time.time-lastUpdatedLoggedTime)>updateLogInterval)
             {
-                Debug.Log($"Jny:{name} position:{pos.pt:f1}");
+                jman.sman.Lgg($"Jny:{name} position:{pos.pt:f1}");
                 lastUpdatedLoggedTime = Time.time;
             }
         }
