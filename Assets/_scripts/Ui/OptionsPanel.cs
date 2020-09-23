@@ -204,7 +204,7 @@ public class OptionsPanel : MonoBehaviour
             var ok = System.Enum.TryParse<TabState>(buttxt, out var te);
             if (!ok)
             {
-                Debug.LogError($"Could not parse {buttxt} as TabState enum");
+                sman.LggError($"Could not parse {buttxt} as TabState enum");
                 continue;
             }
             butDict[te] = (butt, buttxt);

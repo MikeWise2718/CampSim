@@ -83,7 +83,7 @@ public class FireFlyPanel : MonoBehaviour
         }
         catch (Exception ex)
         {
-            Debug.LogError($"{errmsg}1:{ex.Message}");
+            sman.LggError($"{errmsg}1:{ex.Message}");
         }
 
         try
@@ -98,7 +98,7 @@ public class FireFlyPanel : MonoBehaviour
         }
         catch (Exception ex)
         {
-            Debug.LogError($"{errmsg}1:{ex.Message}");
+            sman.LggError($"{errmsg}1:{ex.Message}");
         }
 
         var dscaleval = sman.trman.dronescalemodelnumber.Get();
@@ -128,7 +128,7 @@ public class FireFlyPanel : MonoBehaviour
         }
         else
         {
-            Debug.LogError($"Cound not find street");
+            sman.LggError($"Cound not find street");
         }
         //jman.StartViewerJourney(snode, enode);
     }
@@ -154,12 +154,12 @@ public class FireFlyPanel : MonoBehaviour
             chg = (val != scalemodelnumber.Get());
             scalemodelnumber.SetAndSave(val);
             var msg = $"FireFlyPanel.SetVal set {fieldname}scalemodelnumber to {val}";
-            Debug.Log(msg);
+            sman.Lgg(msg);
         }
         else
         {
             var msg = $"FireFlyPanel.SetVal {fieldname}scalemodelnumber format error scalevaltxt:{stxt}";
-            Debug.LogError(msg);
+            sman.LggError(msg);
         }
         return chg;
     }

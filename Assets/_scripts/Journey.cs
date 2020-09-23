@@ -112,12 +112,12 @@ namespace CampusSimulator
                 {
                     if (legidx != 0)
                     {
-                        Debug.Log($"Jouney {name} restarting");
+                        jman.sman.Lgg($"Jouney {name} restarting");
                         StartLeg(0);
                     }
                     else
                     {
-                        Debug.LogError("No legs in journey");
+                        jman.sman.LggError("No legs in journey");
                     }    
                 }
                 return;

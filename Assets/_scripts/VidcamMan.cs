@@ -386,7 +386,7 @@ namespace CampusSimulator
         {
             if (!vidcam.ContainsKey(vcname))
             {
-                Debug.LogError($"Bad Vidcam lookup:{vcname}");
+                sman.LggError($"Bad Vidcam lookup:{vcname}");
                 return null;
             }
             return vidcam[vcname];
@@ -401,7 +401,7 @@ namespace CampusSimulator
         {
             if (vidcam.ContainsKey(Vidcam.name))
             {
-                Debug.LogError($"Tried to add duplicate Vidcam:{Vidcam.name}");
+                sman.LggError($"Tried to add duplicate Vidcam:{Vidcam.name}");
                 return;
             }
             vidcamnames.Add(Vidcam.name);

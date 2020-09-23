@@ -349,7 +349,7 @@ namespace CampusSimulator
             {
                 if (!isOsmBld)
                 {
-                    Debug.LogError($"Building.AddOnePadFromStringPadspec - cannot compute center of building without OsmBldSpec");
+                    bm.sman.LggError($"Building.AddOnePadFromStringPadspec - cannot compute center of building without OsmBldSpec");
                     return;
                 }
                 var bs = bm.GetBldBs(this);
@@ -360,7 +360,7 @@ namespace CampusSimulator
             }
             else if (!lc.IsNodeName(padnodename))
             { 
-                Debug.LogError($"Building.AddOnePadFromStringPadspec - bad padspec{padspec}");
+                bm.sman.LggError($"Building.AddOnePadFromStringPadspec - bad padspec{padspec}");
                 return;
             }
             var lpt = lc.GetNode(padnodename);

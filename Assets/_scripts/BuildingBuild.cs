@@ -371,7 +371,7 @@ namespace CampusSimulator
                     }
                 default:
                     {
-                        Debug.LogError("AddBldDetails bad building name:" + name);
+                        bm.sman.LggError("AddBldDetails bad building name:" + name);
                         break;
                     }
             }

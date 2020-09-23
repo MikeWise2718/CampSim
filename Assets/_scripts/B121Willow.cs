@@ -434,7 +434,7 @@ public class B121Willow : MonoBehaviour
             }
             else
             {
-                Debug.LogError($"Could not load material{fullmatname}");
+                sman.LggError($"Could not load material{fullmatname}");
             }
         }
     }

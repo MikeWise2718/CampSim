@@ -103,7 +103,7 @@ namespace CampusSimulator
             {
                 if (!expectFailure)
                 {
-                    Debug.LogError($"Bad roomname lookup {roomname}");
+                    sman.LggError($"Bad roomname lookup {roomname}");
                 }
                 return null;
             }
@@ -120,7 +120,7 @@ namespace CampusSimulator
             {
                 if (!expectFailure)
                 {
-                    Debug.LogError($"Bad padname lookup {padname}");
+                    sman.LggError($"Bad padname lookup {padname}");
                 }
                 return null;
             }
@@ -269,13 +269,13 @@ namespace CampusSimulator
             var bld121 = GetBuilding("Bld121", couldFail: true);
             if (bld121 == null)
             {
-                Debug.LogError($"No Bld121 in scene");
+                sman.LggError($"No Bld121 in scene");
                 return;
             }
             var b121comp = bld121.GetComponent<B121Willow>();
             if (b121comp == null)
             {
-                Debug.LogError($"No B121 Component attached to Bld121 in scene");
+                sman.LggError($"No B121 Component attached to Bld121 in scene");
                 return;
             }
             transwalls = b121comp.b121_materialMode.Get() == B121Willow.b121_MaterialMode.glasswalls;
@@ -289,13 +289,13 @@ namespace CampusSimulator
             var bld121 = GetBuilding("Bld121", couldFail: true);
             if (bld121 == null)
             {
-                Debug.LogError($"BuildingMan.TransBld121Button - No Bld121 in scene");
+                sman.LggError($"BuildingMan.TransBld121Button - No Bld121 in scene");
                 return;
             }
             var b121comp = bld121.GetComponent<B121Willow>();
             if (b121comp == null)
             {
-                Debug.LogError($"BuildingMan.TransBld121Button - No B121 Component attached to Bld121 in scene");
+                sman.LggError($"BuildingMan.TransBld121Button - No B121 Component attached to Bld121 in scene");
                 return;
             }
             var needtrans = transwalls;
@@ -326,13 +326,13 @@ namespace CampusSimulator
             var bld121 = GetBuilding("Bld121", couldFail: true);
             if (bld121==null)
             {
-                Debug.LogError($"BuildingMan.ShowHvacBld121Button - No Bld121 in scene");
+                sman.LggError($"BuildingMan.ShowHvacBld121Button - No Bld121 in scene");
                 return;
             }
             var b121comp= bld121.GetComponent<B121Willow>();
             if (b121comp == null)
             {
-                Debug.LogError($"BuildingMan.ShowHvacBld121Button - No B121 Component attached to Bld121 in scene");
+                sman.LggError($"BuildingMan.ShowHvacBld121Button - No B121 Component attached to Bld121 in scene");
                 return;
             }
             b121comp.ActuateShowHvac(showhvac);
@@ -342,13 +342,13 @@ namespace CampusSimulator
             var bld121 = GetBuilding("Bld121", couldFail: true);
             if (bld121 == null)
             {
-                Debug.LogError($"BuildingMan.ShowElecBld121Button - No Bld121 in scene");
+                sman.LggError($"BuildingMan.ShowElecBld121Button - No Bld121 in scene");
                 return;
             }
             var b121comp = bld121.GetComponent<B121Willow>();
             if (b121comp == null)
             {
-                Debug.LogError($"BuildingMan.ShowElecBld121Button - No B121 Component attached to Bld121 in scene");
+                sman.LggError($"BuildingMan.ShowElecBld121Button - No B121 Component attached to Bld121 in scene");
                 return;
             }
             b121comp.ActuateShowLighting(showelec);
@@ -359,13 +359,13 @@ namespace CampusSimulator
             var bld121 = GetBuilding("Bld121", couldFail: true);
             if (bld121 == null)
             {
-                Debug.LogError($"BuildingMan.ShowPlumBld121Button - No Bld121 in scene");
+                sman.LggError($"BuildingMan.ShowPlumBld121Button - No Bld121 in scene");
                 return;
             }
             var b121comp = bld121.GetComponent<B121Willow>();
             if (b121comp == null)
             {
-                Debug.LogError($"BuildingMan.ShowPlumBld121Button - No B121 Component attached to Bld121 in scene");
+                sman.LggError($"BuildingMan.ShowPlumBld121Button - No B121 Component attached to Bld121 in scene");
                 return;
             }
             b121comp.ActuateShowPlumbing(showplum);
@@ -753,7 +753,7 @@ namespace CampusSimulator
         {
             if (roomlookup.ContainsKey(roomname))
             {
-                Debug.LogError($"In BuildingMan - Room being registered twice:{roomname}");
+                sman.LggError($"In BuildingMan - Room being registered twice:{roomname}");
             }
             roomlookup[roomname] = bldRoom;
         }
@@ -761,7 +761,7 @@ namespace CampusSimulator
         {
             if (!roomlookup.ContainsKey(roomname))
             {
-                Debug.LogError($"In BuildingMan - Room being unregistered that was not registered:{roomname}");
+                sman.LggError($"In BuildingMan - Room being unregistered that was not registered:{roomname}");
             }
             roomlookup.Remove(roomname);
         }
@@ -783,7 +783,7 @@ namespace CampusSimulator
         {
             if (padlookup.ContainsKey(padname))
             {
-                Debug.LogError($"In BuildingMan - Pad being registered twice:{padname}");
+                sman.LggError($"In BuildingMan - Pad being registered twice:{padname}");
             }
             padlookup[padname] = pad;
         }
@@ -791,7 +791,7 @@ namespace CampusSimulator
         {
             if (!padlookup.ContainsKey(padname))
             {
-                Debug.LogError($"In BuildingMan - Pad being unregistered that was not registered:{padname}");
+                sman.LggError($"In BuildingMan - Pad being unregistered that was not registered:{padname}");
             }
             padlookup.Remove(padname);
         }

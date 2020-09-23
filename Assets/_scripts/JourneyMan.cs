@@ -84,7 +84,7 @@ namespace CampusSimulator
             {
                 logJourneys = false;
                 var msg = "Error creating journey log directory";
-                Debug.LogError(msg + ex.ToString());
+                sman.LggError(msg + ex.ToString());
             }
         }
 
@@ -114,7 +114,7 @@ namespace CampusSimulator
             {
                 logJourneys = false;
                 var msg = "Error logging journey";
-                Debug.LogError(msg + ex.ToString());
+                sman.LggError(msg + ex.ToString());
             }
         }
 
@@ -368,12 +368,12 @@ namespace CampusSimulator
         {
             if (!NodeExists(fr_node))
             {
-                Debug.LogError($"JouneyMan.AddNodeNodeJourneyEphemeral fr_node:{fr_node} does not exist");
+                sman.LggError($"JouneyMan.AddNodeNodeJourneyEphemeral fr_node:{fr_node} does not exist");
                 return null;
             }
             if (!NodeExists(tu_node))
             {
-                Debug.LogError($"JouneyMan.AddNodeNodeJourneyEphemeral tu_node:{tu_node} does not exist");
+                sman.LggError($"JouneyMan.AddNodeNodeJourneyEphemeral tu_node:{tu_node} does not exist");
                 return null;
             }
 
@@ -763,7 +763,7 @@ namespace CampusSimulator
             var bar1 = b1.Split('/');
             if (bar1.Length != 2)
             {
-                Debug.LogError($"Bad building1/node1 in AddBldNodeBldNodeJourneyWithEphemeralPeople:{b1}");
+                sman.LggError($"Bad building1/node1 in AddBldNodeBldNodeJourneyWithEphemeralPeople:{b1}");
                 return null;
             }
             var bc1 = bm.GetBuilding(bar1[0]);
@@ -774,7 +774,7 @@ namespace CampusSimulator
             var bar2 = b2.Split('/');
             if (bar2.Length != 2)
             {
-                Debug.LogError($"Bad building2/node2 in AddBldNodeBldNodeJourneyWithEphemeralPeople:{b2}");
+                sman.LggError($"Bad building2/node2 in AddBldNodeBldNodeJourneyWithEphemeralPeople:{b2}");
                 return null;
             }
             var bc2 = bm.GetBuilding(bar2[0]);
@@ -1013,7 +1013,7 @@ namespace CampusSimulator
                 var sar = s.Split('|');
                 if (sar.Length < 5)
                 {
-                    Debug.LogError($"Bad rescue string - needs more fields:{s}");
+                    sman.LggError($"Bad rescue string - needs more fields:{s}");
                     continue;
                 }
                 var sname = sar[0];

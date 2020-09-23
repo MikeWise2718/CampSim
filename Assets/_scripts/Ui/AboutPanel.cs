@@ -202,8 +202,8 @@ public class AboutPanel : MonoBehaviour
         }
         catch(Exception ex)
         {
-            Debug.LogError($"Could Not init perf counters");
-            Debug.LogError(ex.ToString());
+            sman.LggError($"Could Not init perf counters");
+            sman.LggError(ex.ToString());
             cpuCounter = null;
             ramCounter = null;
         }
@@ -389,8 +389,8 @@ public class AboutPanel : MonoBehaviour
         catch (Exception ex)
         {
             msg += "\n" + ex.Message;
-            Debug.LogError("Error filling about box text");
-            Debug.LogError(ex.ToString());
+            sman.LggError("Error filling about box text");
+            sman.LggError(ex.ToString());
         }
         return msg;
     }
