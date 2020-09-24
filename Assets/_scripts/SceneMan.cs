@@ -412,7 +412,7 @@ namespace CampusSimulator
                     bdman.ModelBuild();// building details, but no nodes and links
 
 
-                    lcman.ModelBuild(); // create or read in many nodes and links
+                    lcman.ModelBuild(); // create or read in many nodes and links - including building floor plans att the moment
 
                     trman.ModelBuild();
                     stman.ModelBuild();

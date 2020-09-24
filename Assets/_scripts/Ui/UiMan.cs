@@ -10,6 +10,7 @@ namespace CampusSimulator
 
         public GameObject uigo;
         public OptionsPanel optpan;
+        public OptionsTabPanel ottpan;
         public InfoPanel infpan;
         public StatusPanel stapan;
 
@@ -39,9 +40,10 @@ namespace CampusSimulator
             ttman = ttgo.AddComponent<ToolTipMan>();
 
             uigo = GameObject.Find("SimParkUICanvas");
-            optpan = FindObjectOfType<OptionsPanel>();
-            stapan = FindObjectOfType<StatusPanel>();
-            infpan = FindObjectOfType<InfoPanel>();
+            optpan = Resources.FindObjectsOfTypeAll<OptionsPanel>()[0];
+            ottpan = Resources.FindObjectsOfTypeAll<OptionsTabPanel>()[0];
+            stapan = Resources.FindObjectsOfTypeAll<StatusPanel>()[0];
+            infpan = Resources.FindObjectsOfTypeAll<InfoPanel>()[0];
 
             vispan = Resources.FindObjectsOfTypeAll<VisualsPanel>()[0];
             mappan = Resources.FindObjectsOfTypeAll<MapSetPanel>()[0];
@@ -55,6 +57,7 @@ namespace CampusSimulator
 
             ttman.sman = sman;
             optpan.sman = sman;
+            ottpan.sman = sman;
             stapan.sman = sman;
             infpan.sman = sman;
             logpan.sman = sman;
@@ -71,6 +74,7 @@ namespace CampusSimulator
 
             ttman.Init0();
             optpan.Init0();
+            ottpan.Init0();
             stapan.Init0();
             infpan.Init0();
             logpan.Init0();
@@ -97,6 +101,7 @@ namespace CampusSimulator
             var newscene = sman.curscene;
             //Debug.Log($"UiMan.SetScene: {newscene}");
             optpan.SetScene(newscene);
+            ottpan.SetScene(newscene);
             stapan.SetScene(newscene);
             infpan.SetScene(newscene);
 

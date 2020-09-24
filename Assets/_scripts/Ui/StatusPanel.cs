@@ -57,7 +57,7 @@ namespace CampusSimulator
             //canvas = cango.GetComponent<Canvas>();
             //canvas = cango.GetComponent<Canvas>();
 
-            optionsPanelGo = transform.Find("OptionsPanel").gameObject;
+            optionsPanelGo = uiman.optpan.gameObject;
             optionsPanel = optionsPanelGo.GetComponent<OptionsPanel>();
             if (optionsPanelGo.activeSelf)
             {

@@ -114,31 +114,7 @@ public class OptionsPanel : MonoBehaviour
         setAndSaveDict[TabState.Buildings] = delegate { buildingsPanel.SetVals(true); };
         setAndSaveDict[TabState.General] = delegate { generalPanel.SetVals(true); };
 
-        DestroyFixedButtons();
-
         inited = true;
-    }
-    public void FindAndDestroy(string targetname)
-    {
-        var tran = transform.Find(targetname);
-        if (tran!=null)
-        {
-            Destroy(tran.gameObject);
-            //var butcomp = tran.GetComponent<Button>();
-            //Destroy(butcomp.gameObject);
-            //Debug.Log($"Destroyed {targetname}");
-        }
-    }
-    public void DestroyFixedButtons()
-    {
-        FindAndDestroy("VisualsTabButton");
-        FindAndDestroy("MapSetTabButton");
-        FindAndDestroy("FramesTabButton");
-        FindAndDestroy("FireFlyTabButton");
-        FindAndDestroy("BuildingsTabButton");
-        FindAndDestroy("GeneralTabButton");
-        FindAndDestroy("HelpTabButton");
-        FindAndDestroy("AboutTabButton");
     }
 
     public Button MakeOneButton(string bname,int x,int y,int w,int h,string txt,string tip="")
@@ -151,11 +127,12 @@ public class OptionsPanel : MonoBehaviour
         btxt.text = txt;
         btxt.fontSize = 18;
         var recttrans = butt.GetComponent<RectTransform>();
-        var pos = new Vector3(x, y, 0);
+        var pos = new Vector3(x, 0, 0);
         recttrans.SetPositionAndRotation(pos, Quaternion.identity);
         recttrans.sizeDelta = new Vector2(w, h);
+        bgo.transform.SetParent(uiman.ottpan.transform, worldPositionStays: false);
 
-        bgo.transform.SetParent(this.transform,worldPositionStays:false);
+        //bgo.transform.SetParent(this.transform,worldPositionStays:false);
 
         if (tip != "")
         {
@@ -188,7 +165,8 @@ public class OptionsPanel : MonoBehaviour
 
         //var x = -460;
         var x = -twid/2;
-        var y = 680;
+        var y = 662;
+        var recttrans = uiman.ottpan.GetComponent<RectTransform>();
 
         //sman.Lgg(enableString,"yellow");
         //sman.Lgg($"butt: nbut:{nbut} twid:{twid} x:{x} y:{y}", "cyan");
