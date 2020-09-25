@@ -30,6 +30,9 @@ public class OptionsTabPanel : MonoBehaviour
         FindAndDestroy("AboutTabButton");
     }
 
+    public void DeleteStuff()
+    {
+    }
     public void Init0()
     {
         uiman = sman.uiman;

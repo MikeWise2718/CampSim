@@ -24,6 +24,7 @@ public class VisualsPanel : MonoBehaviour
     Dropdown mapVisuals;
     Dropdown backVisuals;
     Dropdown camSelection;
+    InputField scenarioSeedInputField;
     TMP_Dropdown graphGenMode;
 
     Button closeButton;
@@ -62,6 +63,7 @@ public class VisualsPanel : MonoBehaviour
         backVisuals = transform.Find("BackVisualsDropdown").gameObject.GetComponent<Dropdown>();
         camSelection = transform.Find("CameraSelectionDropdown").gameObject.GetComponent<Dropdown>();
         graphGenMode = transform.Find("GraphGenModeDropdown").gameObject.GetComponent<TMP_Dropdown>();
+        scenarioSeedInputField = transform.Find("ScenarioSeedInputField").gameObject.GetComponent<InputField>();
 
         var linkTransTextGo = linkTrans.transform.Find("LinkVisualsTransparencyText").gameObject;
         linkTransText = linkTransTextGo.GetComponent<Text>();
@@ -231,6 +233,8 @@ public class VisualsPanel : MonoBehaviour
         {
             sman.LggError($"{errmsg}9:{ex.Message}");
         }
+
+        scenarioSeedInputField.text = sman.scenarioSeed.Get().ToString();
         panelActive = true;
     }
     private void SetLinkTransText()
@@ -387,11 +391,22 @@ public class VisualsPanel : MonoBehaviour
         {
             sman.LggError($"{errmsg}10:{ex.Message}");
         }
+        var ok = int.TryParse(scenarioSeedInputField.text, out var ival);
+        if (ok)
+        {
+            var oval = sman.scenarioSeed.Get();
+            if (ival!=oval)
+            {
+                sman.scenarioSeed.SetAndSave(ival);
+                chg = true;
+            }
+        }
         panelActive = false;
         if (chg)
         {
             sman.RequestRefresh("VisualPanel-SetVals");
         }
+
         //Debug.Log("Setvals done");
     }
 

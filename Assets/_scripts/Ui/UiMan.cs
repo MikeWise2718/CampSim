@@ -99,7 +99,11 @@ namespace CampusSimulator
 
             listenForKeys = false;
         }
-
+        public void DeleteStuff()
+        {
+            optpan.DeleteStuff();
+            ottpan.DeleteStuff();
+        }
         public void ModelInitialize(SceneSelE newscene)
         {
             // most initialization has to happen after the scenes have set their variables, so there is not much here to do

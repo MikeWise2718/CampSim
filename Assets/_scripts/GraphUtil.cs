@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using System.IO;
 using System.Reflection;
+using System.Security.Cryptography;
 
 /// <summary>
 /// GraphAlgos.cs  - This file contains static algoritms that we need in various places. 
@@ -216,6 +217,18 @@ namespace GraphAlgos
             { "jnygen",1234 },
         };
         static Dictionary<string, System.Random> ransetdict = new Dictionary<string, System.Random>();
+        public static void InitializeRansets()
+        {
+            var keys = new List<string>(ranseedset.Keys);
+            foreach (var k in keys)
+            {
+                ransetdict[k] = new System.Random(ranseedset[k]);
+            }
+        }
+        public static void SetRanSeed(string sname,int seed)
+        {
+            ranseedset[sname] = seed;
+        }
         static System.Random GetRanMan(string ranset)
         {
             if (!ransetdict.ContainsKey(ranset))

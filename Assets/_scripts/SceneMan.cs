@@ -10,6 +10,7 @@ using System.Linq;
 using GraphAlgos;
 using UnityEngine.Analytics;
 using TMPro;
+using UxUtils;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -93,6 +94,7 @@ namespace CampusSimulator
         public string graphsdir = "graphs/";
         public string hostname = "";
         public bool bemike = false;
+        public UxSetting<int> scenarioSeed = new UxSetting<int>("scenarioSeed",1234);
 
 
 #if USE_SPATIALMAPPPER
@@ -211,7 +213,7 @@ namespace CampusSimulator
             znman = FindObjectOfType<ZoneMan>();
             jnman = FindObjectOfType<JourneyMan>();
             //loman = FindObjectOfType<LocationMan>(); // Only for handhelds (Android, iPhone, etc)
-                                                       // causes lots of error messages
+            // causes lots of error messages
             psman = FindObjectOfType<PersonMan>();
             veman = FindObjectOfType<VehicleMan>();
             drman = FindObjectOfType<DroneMan>();
@@ -266,7 +268,11 @@ namespace CampusSimulator
             veman.InitPhase0();
             drman.InitPhase0();
         }
-
+        public void InitializeValues()
+        {
+            scenarioSeed.GetInitial();
+            Lgg($"Read initialscenario seed:{scenarioSeed.Get()}","green");
+        }
         //private T CreateObjectAddComp<T>(string cname) 
         //{
         //    var go = new GameObject(cname);
@@ -285,8 +291,15 @@ namespace CampusSimulator
             }
             simrundir = "./simrun/" + newscene + "_" + runtimestamp + "/";
             UxUtils.UxSettingsMan.SetScenario(newscene.ToString());
-
             curscene = newscene;
+            InitializeValues();
+
+            var curseed = scenarioSeed.Get();
+            GraphAlgos.GraphUtil.SetRanSeed("popbld",curseed );
+            GraphAlgos.GraphUtil.SetRanSeed("jnygen", curseed);
+            GraphAlgos.GraphUtil.SetRanSeed("journeyspawn", curseed);
+            GraphAlgos.GraphUtil.SetRanSeed("spawnstreaming", curseed);
+            GraphAlgos.GraphUtil.InitializeRansets();
         }
         //public void InitializeGlbLlMap()
         //{
@@ -361,6 +374,7 @@ namespace CampusSimulator
                     veman.DelVehicles();
                     lcman.DeleteGrcGos();
                     lcman.DeleteAllNodes();
+                    uiman.DeleteStuff();
 
 
                     mpman.DeleteQmap();
@@ -377,6 +391,7 @@ namespace CampusSimulator
                     // Low level
 
                     this.BaseInitialize(newscene);// start with setting the scene - curscene set here
+
                     dfman.BaseInitialize(newscene);
                     mpman.BaseInitialize(newscene); // lnglat constants and bspokespec set here
                     coman.BaseInitialize(newscene); // must happen after mpman.InitializeScene - should pull longlat code out of there and make coman the first component sman call (i.e. before dfman)

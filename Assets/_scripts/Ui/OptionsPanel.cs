@@ -144,6 +144,11 @@ public class OptionsPanel : MonoBehaviour
 
     }
 
+    public void DeleteStuff()
+    {
+        DestroyButtons();
+    }
+
     public Button MakeOneButton(string bname, int x, int y, int w, int h, string txt, string tip = "")
     {
 
@@ -173,15 +178,13 @@ public class OptionsPanel : MonoBehaviour
         {
             if (but != null)
             {
-                Destroy(but);
+                Destroy(but.gameObject);
             }
         }
         butDict = new Dictionary<TabState, (Button but, string tit)>();
     }
     public void MakeNewButtons()
     {
-        DestroyButtons();
-
         var buttxtarr = enableString.Split(',');
 
         var nbut = buttxtarr.Length;
@@ -301,7 +304,7 @@ public class OptionsPanel : MonoBehaviour
         {
             case SceneSelE.MsftB19focused:
                 {
-                    enableString = "Visuals,MapSet,Frames,Buildings,Osm,General,Log,Help,About";
+                    enableString = "Visuals,MapSet,Frames,Buildings,Osm,General,Log,Help,About";// no firefly
                     break;
                 }
             case SceneSelE.TeneriffeMtn:
