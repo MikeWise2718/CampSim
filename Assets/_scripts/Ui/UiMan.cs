@@ -20,6 +20,7 @@ namespace CampusSimulator
         public FireFlyPanel flypan;
         public FramePanel frapan;
         public BuildingsPanel bldpan;
+        public OsmPanel osmpan;
         public LogPanel logpan;
         public HelpPanel helpan;
         public AboutPanel abtpan;
@@ -56,6 +57,7 @@ namespace CampusSimulator
             frapan = Resources.FindObjectsOfTypeAll<FramePanel>()[0];
             flypan = Resources.FindObjectsOfTypeAll<FireFlyPanel>()[0];
             bldpan = Resources.FindObjectsOfTypeAll<BuildingsPanel>()[0];
+            osmpan = Resources.FindObjectsOfTypeAll<OsmPanel>()[0];
             logpan = Resources.FindObjectsOfTypeAll<LogPanel>()[0];
             helpan = Resources.FindObjectsOfTypeAll<HelpPanel>()[0];
             abtpan = Resources.FindObjectsOfTypeAll<AboutPanel>()[0];
@@ -72,6 +74,7 @@ namespace CampusSimulator
             genpan.sman = sman;
             frapan.sman = sman;
             bldpan.sman = sman;
+            osmpan.sman = sman;
             helpan.sman = sman;
             abtpan.sman = sman;
             flypan.sman = sman;
@@ -89,6 +92,7 @@ namespace CampusSimulator
             genpan.Init0();
             frapan.Init0();
             bldpan.Init0();
+            osmpan.Init0();
             helpan.Init0();
             abtpan.Init0();
             flypan.Init0();
@@ -115,6 +119,7 @@ namespace CampusSimulator
             genpan.SetScene(newscene);
             frapan.SetScene(newscene);
             bldpan.SetScene(newscene);
+            osmpan.SetScene(newscene);
             helpan.SetScene(newscene);
             abtpan.SetScene(newscene);
             logpan.SetScene(newscene);

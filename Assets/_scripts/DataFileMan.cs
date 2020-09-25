@@ -201,7 +201,7 @@ namespace CampusSimulator
                 {
                     dfways.ReadCsv(wayslist);
                 }
-                //Debug.Log($"Read {dfways.Nrow()} ways from {fnameways}");
+                sman.Lgg($"Read {dfways.Nrow()} ways from {fnameways}","yellow");
             }
 
             dflinks = null;
@@ -219,7 +219,7 @@ namespace CampusSimulator
                     dflinks.AddIndex("osm_wid");
                     dflinks.AddIndex("osm_nid_1");
                 }
-                //Debug.Log($"Read {dflinks.Nrow()} links from {fnamelinks}");
+                sman.Lgg($"Read {dflinks.Nrow()} links from {fnamelinks}","yellow");
             }
 
             dfnodes = null;
@@ -236,11 +236,11 @@ namespace CampusSimulator
                     //Debug.Log($"Using indexes on {fnamenodes}");
                     dfnodes.AddIndex("osm_nid");
                 }
-                //Debug.Log($"Read {dfnodes.Nrow()} links from {fnamenodes}");
+                sman.Lgg($"Read {dfnodes.Nrow()} links from {fnamenodes}","yellow");
             }
             if (llm != null)
             {
-                //Debug.Log($"Converting coords with llm {llm.origin} - {llm.initmethod}");
+                sman.Lgg($"Converting coords with llm {llm.origin} - {llm.initmethod}","yellow");
                 ConvertNodeCoords(dfnodes, llm);
             }
             var okways = dfways.CheckConsistency("DataFileMan.GetDfsFromResources", quiet:true);

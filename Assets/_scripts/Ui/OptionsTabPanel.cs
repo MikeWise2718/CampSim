@@ -4,14 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public delegate void OnUiButtonClickDelegate();
-public class UiButtonSpec
-{
-    string name;
-    string tooltip;
-    OnUiButtonClickDelegate OnClickAction;
-}
-
 public class OptionsTabPanel : MonoBehaviour
 {
 

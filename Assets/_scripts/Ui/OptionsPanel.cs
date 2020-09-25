@@ -17,6 +17,7 @@ public class OptionsPanel : MonoBehaviour
     FireFlyPanel fireFlyPanel;
     BuildingsPanel buildingsPanel;
     GeneralPanel generalPanel;
+    OsmPanel osmPanel;
     LogPanel logPanel;
     HelpPanel helpPanel;
     AboutPanel aboutPanel;
@@ -33,21 +34,50 @@ public class OptionsPanel : MonoBehaviour
 
     public UxEnumSetting<TabState> initialSceneTabState = new UxEnumSetting<TabState>("OptionsLastTabUsed", TabState.Visuals);
 
-    public string enableString = "Visuals,MapSet,Frames,FireFly,Buildings,General,Log,Help,About";
+    public string enableString = "Visuals,MapSet,Frames,FireFly,Buildings,Osm,General,Log,Help,About";
 
-    Dictionary<string, string> tooltip = new Dictionary<string, string> {
-        {"Visuals","Visual Base Settings" },
-        {"MapSet","Map Settings\nThere are a lot of them" },
-        {"Frames","Frame parameters for image recognition labeling" },
-        {"FireFly","FireFly related parameters" },
-        {"Buildings","Building related parameters" },
-        {"General","General parameters" },
-        {"Log","Log messages (i.e. errors, warnings, timings, etc)" },
-        {"Help","Help information\nincluding command line parameters" },
-        {"About","Version and System Information" },
+    public delegate void OnUiButtonClickDelegate();
+    public class UiButtonSpec
+    {
+        public string name;
+        public string tooltip;
+        public OnUiButtonClickDelegate onClickAction;
+        public UiButtonSpec(string bname,string btooltip,OnUiButtonClickDelegate bOnClickAction)
+        {
+            name = bname;
+            tooltip = btooltip;
+            onClickAction = bOnClickAction;
+        }
+    }
+
+    Dictionary<string, UiButtonSpec> butspec = new Dictionary<string,UiButtonSpec>()
+    {
+        {"Visuals",new UiButtonSpec("Visuals","Visual Base Settings",null) },
+        {"MapSet",new UiButtonSpec("MapSet","Map Settings\nThere are a lot of them",null) },
+        {"Frames",new UiButtonSpec("Frames","Frame parameters for image recognition labeling",null) },
+        {"FireFly",new UiButtonSpec("FireFly","FireFly related parameters",null) },
+        {"Buildings",new UiButtonSpec("Buildings","Building related parameters",null) },
+        {"Osm",new UiButtonSpec("Osm","Open Street Map Import",null) },
+        {"General",new UiButtonSpec("General","General parameters",null) },
+        {"Log",new UiButtonSpec("Log","Log messages (i.e. errors, warnings, timings, etc)",null) },
+        {"Help",new UiButtonSpec("Help","Help information\nincluding command line parameters",null) },
+        {"About",new UiButtonSpec("About","Version and System Information",null) },
     };
 
-    public enum TabState { Visuals, MapSet, FireFly, Frames, Buildings, General, Log, Help, About }
+
+    //Dictionary<string, string> tooltip = new Dictionary<string, string> {
+    //    {"Visuals","Visual Base Settings" },
+    //    {"MapSet","Map Settings\nThere are a lot of them" },
+    //    {"Frames","Frame parameters for image recognition labeling" },
+    //    {"FireFly","FireFly related parameters" },
+    //    {"Buildings","Building related parameters" },
+    //    {"General","General parameters" },
+    //    {"Log","Log messages (i.e. errors, warnings, timings, etc)" },
+    //    {"Help","Help information\nincluding command line parameters" },
+    //    {"About","Version and System Information" },
+    //};
+
+    public enum TabState { Visuals, MapSet, FireFly, Frames, Buildings, Osm, General, Log, Help, About }
     TabState tabstate;
     // Start is called before the first frame update
     public void Init0()
@@ -66,6 +96,7 @@ public class OptionsPanel : MonoBehaviour
         framePanel = transform.Find("FramePanel").GetComponent<FramePanel>();
         fireFlyPanel = transform.Find("FireFlyPanel").GetComponent<FireFlyPanel>();
         buildingsPanel = transform.Find("BuildingsPanel").GetComponent<BuildingsPanel>();
+        osmPanel = transform.Find("OsmPanel").GetComponent<OsmPanel>();
         generalPanel = transform.Find("GeneralPanel").GetComponent<GeneralPanel>();
         logPanel = transform.Find("LogPanel").GetComponent<LogPanel>();
         helpPanel = transform.Find("HelpPanel").GetComponent<HelpPanel>();
@@ -76,6 +107,7 @@ public class OptionsPanel : MonoBehaviour
         panDict[TabState.Frames] = framePanel.gameObject;
         panDict[TabState.FireFly] = fireFlyPanel.gameObject;
         panDict[TabState.Buildings] = buildingsPanel.gameObject;
+        panDict[TabState.Osm] = osmPanel.gameObject;
         panDict[TabState.General] = generalPanel.gameObject;
         panDict[TabState.Log] = logPanel.gameObject;
         panDict[TabState.Help] = helpPanel.gameObject;
@@ -87,6 +119,7 @@ public class OptionsPanel : MonoBehaviour
         initDict[TabState.Frames] = delegate { framePanel.InitVals(); };
         initDict[TabState.FireFly] = delegate { fireFlyPanel.InitVals(); };
         initDict[TabState.Buildings] = delegate { buildingsPanel.InitVals(); };
+        initDict[TabState.Osm] = delegate { osmPanel.InitVals(); };
         initDict[TabState.General] = delegate { generalPanel.InitVals(); };
         initDict[TabState.Log] = delegate { logPanel.FillLogPanel(); };
         initDict[TabState.Help] = delegate { helpPanel.FillHelpPanel(); };
@@ -97,6 +130,7 @@ public class OptionsPanel : MonoBehaviour
         setAndSaveDict[TabState.Frames] = delegate { framePanel.SetVals(true); };
         setAndSaveDict[TabState.FireFly] = delegate { fireFlyPanel.SetVals(true); };
         setAndSaveDict[TabState.Buildings] = delegate { buildingsPanel.SetVals(true); };
+        setAndSaveDict[TabState.Osm] = delegate { osmPanel.SetVals(true); };
         setAndSaveDict[TabState.General] = delegate { generalPanel.SetVals(true); };
 
         // start inactive
@@ -167,9 +201,9 @@ public class OptionsPanel : MonoBehaviour
         {
             var bname = buttxt + "Button";
             var buttip = "";
-            if (tooltip.ContainsKey(buttxt))
+            if (butspec.ContainsKey(buttxt))
             {
-                buttip = tooltip[buttxt];
+                buttip = butspec[buttxt].tooltip;
             }
             var butt = MakeOneButton(bname, x, y, w, h, buttxt, buttip);
             var ok = System.Enum.TryParse<TabState>(buttxt, out var te);
@@ -262,19 +296,17 @@ public class OptionsPanel : MonoBehaviour
     {
         InitializeValues();
 
-
-
-        enableString = "Visuals,MapSet,FireFly,Frames,Buildings,General,Log,Help,About";
+        enableString = "Visuals,MapSet,FireFly,Frames,Buildings,Osm,General,Log,Help,About";
         switch (curscene)
         {
             case SceneSelE.MsftB19focused:
                 {
-                    enableString = "Visuals,MapSet,Frames,Buildings,General,Log,Help,About";
+                    enableString = "Visuals,MapSet,Frames,Buildings,Osm,General,Log,Help,About";
                     break;
                 }
             case SceneSelE.TeneriffeMtn:
                 {
-                    enableString = "FireFly,Visuals,MapSet,Frames,Buildings,General,Log,Help,About";
+                    enableString = "FireFly,Visuals,MapSet,Frames,Buildings,Osm,General,Log,Help,About";
                     break;
                 }
 
