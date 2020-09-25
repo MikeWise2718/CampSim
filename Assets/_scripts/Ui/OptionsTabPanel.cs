@@ -3,6 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+public delegate void OnUiButtonClickDelegate();
+public class UiButtonSpec
+{
+    string name;
+    string tooltip;
+    OnUiButtonClickDelegate OnClickAction;
+}
+
 public class OptionsTabPanel : MonoBehaviour
 {
 
@@ -15,9 +24,6 @@ public class OptionsTabPanel : MonoBehaviour
         if (tran != null)
         {
             Destroy(tran.gameObject);
-            //var butcomp = tran.GetComponent<Button>();
-            //Destroy(butcomp.gameObject);
-            //Debug.Log($"Destroyed {targetname}");
         }
     }
     public void DestroyFixedButtons()
@@ -34,6 +40,7 @@ public class OptionsTabPanel : MonoBehaviour
 
     public void Init0()
     {
+        uiman = sman.uiman;
         DestroyFixedButtons();
     }
     public void SetScene(CampusSimulator.SceneSelE curscene)

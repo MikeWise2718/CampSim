@@ -230,8 +230,8 @@ public class AboutPanel : MonoBehaviour
                 }
             case "CloseButton":
                 {
-                    var spcomp = FindObjectOfType<StatusPanel>();
-                    spcomp.OptionsButton();
+                    var tbpcomp = FindObjectOfType<TopButtonPanel>();
+                    tbpcomp.CloseButton();
                     break;
                 }
             case "CopyClipboardButton":

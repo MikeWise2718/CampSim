@@ -1647,8 +1647,7 @@ namespace CampusSimulator
                 flines.AddRange(uiman.abtpan.GetAboutTextAsList());
                 File.WriteAllLines("help.txt", flines);
 
-                uiman.stapan.OptionsButton(true);
-                uiman.optpan.SetTabState(OptionsPanel.TabState.Help);
+                uiman.optpan.OptionsSubMenuButtonPushed(OptionsPanel.TabState.Help);
             }
             if (dodelsettings)
             {
@@ -1786,7 +1785,7 @@ namespace CampusSimulator
             if (((Time.time - F10hitTime) > 1) && Input.GetKeyDown(KeyCode.F10))
             {
                 Debug.Log("F10 - Options");
-                uiman.stapan.OptionsButton(toggleState:true);
+                uiman.optpan.TogglePanelState();
                 //this.RequestRefresh("F5 hit", totalrefresh: true);
             }
             if (ctrlhit && Input.GetKeyDown(KeyCode.C))

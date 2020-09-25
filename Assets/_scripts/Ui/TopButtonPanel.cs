@@ -6,15 +6,11 @@ using UnityEngine.UI;
 
 namespace CampusSimulator
 {
-    public class StatusPanel : MonoBehaviour
+    public class TopButtonPanel : MonoBehaviour
     {
         public SceneMan sman;
         UiMan uiman;
-        JourneyMan jman;
-        GarageMan gman;
         public int btnclk;
-        GameObject optionsPanelGo;
-        OptionsPanel optionsPanel;
         Button runButton;
         Button flyButton;
         Button frameButton;
@@ -51,18 +47,6 @@ namespace CampusSimulator
         void LinkObjectsAndComponents()
         {
             uiman = sman.uiman;
-            jman = sman.jnman;
-            gman = sman.gaman;
-            //var cango = GameObject.Find("SimParkUICanvas");
-            //canvas = cango.GetComponent<Canvas>();
-            //canvas = cango.GetComponent<Canvas>();
-
-            optionsPanelGo = uiman.optpan.gameObject;
-            optionsPanel = optionsPanelGo.GetComponent<OptionsPanel>();
-            if (optionsPanelGo.activeSelf)
-            {
-                optionsPanelGo.SetActive(false);
-            }
 
             runButton = transform.Find("RunButton").gameObject.GetComponent<Button>();
             flyButton = transform.Find("FlyButton").gameObject.GetComponent<Button>();
@@ -109,7 +93,7 @@ namespace CampusSimulator
             visButton.onClick.AddListener(delegate { DetectVisButton(); });
             unkButton.onClick.AddListener(delegate { DetectUnkButton(); });
             goButton.onClick.AddListener(delegate { GoButton(); });
-            optionsButton.onClick.AddListener(delegate { OptionsButton(); });
+            optionsButton.onClick.AddListener(delegate { OptionsButtonPushed(); });
             tranButton.onClick.AddListener(delegate { DetectTranButton(); });
             hvacButton.onClick.AddListener(delegate { DetectHvacButton(); });
             elecButton.onClick.AddListener(delegate { DetectElecButton(); });
@@ -277,22 +261,13 @@ namespace CampusSimulator
         {
             sman.jnman.LaunchJourneys();
         }
-        public void OptionsButton(bool toggleState=true)
+        public void OptionsButtonPushed()
         {
-            var newstate = true;
-            if (toggleState)
-            {
-                newstate = !optionsPanelGo.activeSelf;
-            }
-            //Debug.Log($"Options Button Pushed optionsPanelGo.activeSelf:{optionsPanelGo.activeSelf} -> newstate:{newstate}");
-            optionsPanelGo.SetActive(newstate);// this does immediately take effect
-            optionsPanel.ChangingOptionsDialog(newstate);
+            uiman.optpan.TogglePanelState();
         }
         public void CloseButton()
         {
-            //Debug.Log($"Options Button Pushed optionsPanelGo.activeSelf:{optionsPanelGo.activeSelf} -> newstate:{newstate}");
-            optionsPanelGo.SetActive(false);// this does immediately take effect
-            optionsPanel.ChangingOptionsDialog(false);
+            uiman.optpan.ClosePanel();
         }
         bool ffpanstat = false;
         public void ToggleFreeFlyPanel()
@@ -359,31 +334,26 @@ namespace CampusSimulator
         {
             sman.frman.detectFte.SetAndSave(!sman.frman.detectFte.Get());
             ColorizeButtonStates();
-            //SetButtonColor(fteButton, "lightblue", sman.frman.detectFte.Get(), "F");
         }
         public void DetectConButton()
         {
             sman.frman.detectContractor.SetAndSave(!sman.frman.detectContractor.Get());
             ColorizeButtonStates();
-            //SetButtonColor(conButton, "lightblue", sman.frman.detectContractor.Get(), "C");
         }
         public void DetectSecButton()
         {
             sman.frman.detectSecurity.SetAndSave(!sman.frman.detectSecurity.Get());
             ColorizeButtonStates();
-            //SetButtonColor(secButton, "lightblue", sman.frman.detectSecurity.Get(), "S");
         }
         public void DetectVisButton()
         {
             sman.frman.detectVisitor.SetAndSave(!sman.frman.detectVisitor.Get());
             ColorizeButtonStates();
-            //SetButtonColor(visButton, "lightblue", sman.frman.detectVisitor.Get(), "V");
         }
         public void DetectUnkButton()
         {
             sman.frman.detectUnknown.SetAndSave(!sman.frman.detectUnknown.Get());
             ColorizeButtonStates();
-            //SetButtonColor(unkButton, "lightblue", sman.frman.detectUnknown.Get(), "U");
         }
 
         public void DetectTranButton()
@@ -391,21 +361,18 @@ namespace CampusSimulator
             sman.bdman.transwalls = !sman.bdman.transwalls;
             sman.bdman.TransBld121Button();
             ColorizeButtonStates();
-            //SetButtonColor(unkButton, "lightblue", sman.frman.detectUnknown.Get(), "U");
         }
         public void DetectHvacButton()
         {
             sman.bdman.showhvac = !sman.bdman.showhvac;
             sman.bdman.ShowHvacBld121Button();
             ColorizeButtonStates();
-            //SetButtonColor(unkButton, "lightblue", sman.frman.detectUnknown.Get(), "U");
         }
         public void DetectElecButton()
         {
             sman.bdman.showelec = !sman.bdman.showelec;
             sman.bdman.ShowElecBld121Button();
             ColorizeButtonStates();
-            //SetButtonColor(unkButton, "lightblue", sman.frman.detectUnknown.Get(), "U");
         }
 
         public void DetectPlumButton()
@@ -413,7 +380,6 @@ namespace CampusSimulator
             sman.bdman.showplum = !sman.bdman.showplum;
             sman.bdman.ShowPlumBld121Button();
             ColorizeButtonStates();
-            //SetButtonColor(unkButton, "lightblue", sman.frman.detectUnknown.Get(), "U");
         }
 
 
@@ -422,13 +388,11 @@ namespace CampusSimulator
             sman.lcman.pipevis = !sman.lcman.pipevis;
             sman.lcman.PipeVisButton();
             ColorizeButtonStates();
-            //SetButtonColor(unkButton, "lightblue", sman.frman.detectUnknown.Get(), "U");
         }
         public void Vt2DButton()
         {
             sman.frman.visibilityTiedToDetectability.SetAndSave(!sman.frman.visibilityTiedToDetectability.Get());
             ColorizeButtonStates();
-            //SetButtonColor(vt2dButton, "lightblue", sman.frman.visibilityTiedToDetectability.Get(), "Vt2D");
         }
         // Update is called once per frame
 

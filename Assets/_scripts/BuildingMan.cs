@@ -225,7 +225,7 @@ namespace CampusSimulator
             InitializeValues();
         }
 
-         void InitializeValues()
+        void InitializeValues()
         {
             //treeMode = GetInitialTreeMode();
             treeMode.GetInitial(TreeModeE.full);

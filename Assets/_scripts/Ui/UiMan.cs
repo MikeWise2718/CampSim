@@ -12,7 +12,7 @@ namespace CampusSimulator
         public OptionsPanel optpan;
         public OptionsTabPanel ottpan;
         public InfoPanel infpan;
-        public StatusPanel stapan;
+        public TopButtonPanel tbtpan;
 
         public VisualsPanel vispan;
         public MapSetPanel mappan;
@@ -39,10 +39,15 @@ namespace CampusSimulator
             var ttgo = new GameObject("tooltipman");
             ttman = ttgo.AddComponent<ToolTipMan>();
 
-            uigo = GameObject.Find("SimParkUICanvas");
+            uigo = GameObject.Find("UiRootCanvas");
+            // not strictly necessary but keeps things sane
+            var tr = uigo.GetComponent<RectTransform>();
+            tr.position = new Vector3(ui_w / 2, ui_h / 2, 0);
+            tr.sizeDelta = new Vector2(ui_w, ui_h);
+
             optpan = Resources.FindObjectsOfTypeAll<OptionsPanel>()[0];
             ottpan = Resources.FindObjectsOfTypeAll<OptionsTabPanel>()[0];
-            stapan = Resources.FindObjectsOfTypeAll<StatusPanel>()[0];
+            tbtpan = Resources.FindObjectsOfTypeAll<TopButtonPanel>()[0];
             infpan = Resources.FindObjectsOfTypeAll<InfoPanel>()[0];
 
             vispan = Resources.FindObjectsOfTypeAll<VisualsPanel>()[0];
@@ -58,7 +63,7 @@ namespace CampusSimulator
             ttman.sman = sman;
             optpan.sman = sman;
             ottpan.sman = sman;
-            stapan.sman = sman;
+            tbtpan.sman = sman;
             infpan.sman = sman;
             logpan.sman = sman;
 
@@ -75,7 +80,7 @@ namespace CampusSimulator
             ttman.Init0();
             optpan.Init0();
             ottpan.Init0();
-            stapan.Init0();
+            tbtpan.Init0();
             infpan.Init0();
             logpan.Init0();
 
@@ -102,7 +107,7 @@ namespace CampusSimulator
             //Debug.Log($"UiMan.SetScene: {newscene}");
             optpan.SetScene(newscene);
             ottpan.SetScene(newscene);
-            stapan.SetScene(newscene);
+            tbtpan.SetScene(newscene);
             infpan.SetScene(newscene);
 
             // selectble tabs
@@ -119,12 +124,12 @@ namespace CampusSimulator
 
         public void SyncState()
         {
-            stapan.ColorizeButtonStates();
+            tbtpan.ColorizeButtonStates();
         }
         public void ClosePanel()
         {
             Debug.Log($"UiMan.ClosePanel");
-            stapan.CloseButton();
+            tbtpan.CloseButton();
         }
         public void HideUi()
         {

@@ -73,7 +73,7 @@ public class ToolTipMan : MonoBehaviour
             var padding = 4f;
             var bgsize = new Vector2(txtcomp.preferredWidth + padding * 2, txtcomp.preferredHeight + padding * 2);
             imgcomp.rectTransform.sizeDelta = bgsize;
-            go.transform.SetParent(sman.uiman.stapan.transform, worldPositionStays: true);
+            go.transform.SetParent(sman.uiman.tbtpan.transform, worldPositionStays: true);
         }
         var ttgo = ttDict[txt];
         ttgo.transform.position = pos + new Vector2(0, -20);
