@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections;
 using UxUtils;
+using TMPro.EditorUtilities;
 
 public class OptionsPanel : MonoBehaviour
 {
@@ -29,7 +30,8 @@ public class OptionsPanel : MonoBehaviour
     public delegate void SetTabStater(TabState te);
 
     Dictionary<TabState, GameObject> panDict = null;
-    Dictionary<TabState, (Button but, string tit)> butDict = null;
+    Dictionary<TabState, (Button but, string tit)> scenarioButDict = null;
+    List<(Button,string)> scenarioButList = null;
     Dictionary<TabState, Initer> initDict = null;
     Dictionary<TabState, SetAndSaver> setAndSaveDict = null;
 
@@ -38,45 +40,41 @@ public class OptionsPanel : MonoBehaviour
     public string enableString = "Visuals,MapSet,Frames,FireFly,Buildings,Osm,General,Log,Help,About";
 
     public delegate void OnUiButtonClickDelegate();
-    public class UiButtonSpec
+    public class OptButtSpec
     {
-        public string name;
+        public string idname;
+        public TabState tabstate;
         public string tooltip;
-        public OnUiButtonClickDelegate onClickAction;
-        public UiButtonSpec(string bname, string btooltip, OnUiButtonClickDelegate bOnClickAction)
+        public UnityEngine.Events.UnityAction onClickAction;
+        public OptButtSpec(string bname, string btooltip)
         {
-            name = bname;
+            idname = bname;
+            var ok = System.Enum.TryParse<TabState>(bname, out var te);
+            if (!ok)
+            {
+                Debug.LogError($"Could not parse {bname} as TabState enum");
+                te = TabState.Visuals;
+            }
+            tabstate = te;
             tooltip = btooltip;
-            onClickAction = bOnClickAction;
+            onClickAction = null;
         }
     }
 
-    Dictionary<string, UiButtonSpec> butspec = new Dictionary<string, UiButtonSpec>()
+    Dictionary<string, OptButtSpec> butspec = new Dictionary<string, OptButtSpec>()
     {
-        {"Visuals",new UiButtonSpec("Visuals","Visual Base Settings",null)},
-        {"MapSet",new UiButtonSpec("MapSet","Map Settings\nThere are a lot of them",null) },
-        {"Frames",new UiButtonSpec("Frames","Frame parameters for image recognition labeling",null) },
-        {"FireFly",new UiButtonSpec("FireFly","FireFly related parameters",null) },
-        {"Buildings",new UiButtonSpec("Buildings","Building related parameters",null) },
-        {"Osm",new UiButtonSpec("Osm","Open Street Map Import",null) },
-        {"General",new UiButtonSpec("General","General parameters",null) },
-        {"Log",new UiButtonSpec("Log","Log messages (i.e. errors, warnings, timings, etc)",null) },
-        {"Help",new UiButtonSpec("Help","Help information\nincluding command line parameters",null) },
-        {"About",new UiButtonSpec("About","Version and System Information",null) },
+        {"Visuals",new OptButtSpec("Visuals","Visual Base Settings")},
+        {"MapSet",new OptButtSpec("MapSet","Map Settings\nThere are a lot of them") },
+        {"Frames",new OptButtSpec("Frames","Frame parameters for image recognition labeling") },
+        {"FireFly",new OptButtSpec("FireFly","FireFly related parameters") },
+        {"Buildings",new OptButtSpec("Buildings","Building related parameters") },
+        {"Osm",new OptButtSpec("Osm","Open Street Map Import") },
+        {"General",new OptButtSpec("General","General parameters") },
+        {"Log",new OptButtSpec("Log","Log messages (i.e. errors, warnings, timings, etc)") },
+        {"Help",new OptButtSpec("Help","Help information\nincluding command line parameters") },
+        {"About",new OptButtSpec("About","Version and System Information") },
     };
 
-
-    //Dictionary<string, string> tooltip = new Dictionary<string, string> {
-    //    {"Visuals","Visual Base Settings" },
-    //    {"MapSet","Map Settings\nThere are a lot of them" },
-    //    {"Frames","Frame parameters for image recognition labeling" },
-    //    {"FireFly","FireFly related parameters" },
-    //    {"Buildings","Building related parameters" },
-    //    {"General","General parameters" },
-    //    {"Log","Log messages (i.e. errors, warnings, timings, etc)" },
-    //    {"Help","Help information\nincluding command line parameters" },
-    //    {"About","Version and System Information" },
-    //};
 
     public enum TabState { Visuals, MapSet, FireFly, Frames, Buildings, Osm, General, Log, Help, About }
     TabState tabstate;
@@ -87,7 +85,8 @@ public class OptionsPanel : MonoBehaviour
 
         //ttDict = new Dictionary<string, GameObject>();
         panDict = new Dictionary<TabState, GameObject>();
-        butDict = new Dictionary<TabState, (Button, string)>();
+        scenarioButList = new List<(Button,string)>();
+        scenarioButDict = new Dictionary<TabState, (Button, string)>();
         initDict = new Dictionary<TabState, Initer>();
         setAndSaveDict = new Dictionary<TabState, SetAndSaver>();
 
@@ -140,7 +139,7 @@ public class OptionsPanel : MonoBehaviour
             gameObject.SetActive(false);
         }
 
-
+        AddActions();
         inited = true;
 
     }
@@ -207,66 +206,47 @@ public class OptionsPanel : MonoBehaviour
     }
     public void DestroyButtons()
     {
-        foreach (var (but, tit) in butDict.Values)
+        foreach (var (but,_) in  scenarioButList)
         {
-            if (but != null)
-            {
-                Destroy(but.gameObject);
-            }
+             Destroy(but.gameObject);
         }
-        butDict = new Dictionary<TabState, (Button but, string tit)>();
+        scenarioButList = new List<(Button,string)>();
+        scenarioButDict = new Dictionary<TabState, (Button but, string tit)>();
+    }
+    public void AddActions()
+    {
+        foreach (var key in butspec.Keys)
+        {
+            var butsp = butspec[key];
+            butsp.onClickAction = delegate{ OptionsSubMenuButtonPushed(butsp.tabstate); };
+        }
     }
     public void MakeOptionsButtons()
     {
         var buttxtarr = enableString.Split(',');
 
         var nbut = buttxtarr.Length;
+        var gap = 10;
         var w = 110;
         var h = 48;
-        var gap = 10;
-        var twid = nbut * w + (nbut - 1) * gap;
+        var twid = nbut*w + (nbut-1)*gap;
 
-        //var x = -460;
         var x = -twid / 2;
         var y = 662;
-        var recttrans = uiman.ottpan.GetComponent<RectTransform>();
 
-        //sman.Lgg(enableString,"yellow");
-        //sman.Lgg($"butt: nbut:{nbut} twid:{twid} x:{x} y:{y}", "cyan");
-        foreach (var buttxt in buttxtarr)
-        {
-            if (butspec.ContainsKey(buttxt))
-            {
-                var ok = System.Enum.TryParse<TabState>(buttxt, out var te);
-                if (ok)
-                {
-                    butspec[buttxt].onClickAction = delegate
-                    {
-                        OptionsSubMenuButtonPushed(te);
-                    };
-                }
-                else
-                {
-                    sman.LggError($"Could not parse {buttxt} as TabState enum");
-                }
-            }
-        }
+
         foreach (var buttxt in buttxtarr)
         {
             var bname = buttxt + "Button";
-            var buttip = "";
-            if (butspec.ContainsKey(buttxt))
+            if (!butspec.ContainsKey(buttxt))
             {
-                buttip = butspec[buttxt].tooltip;
-            }
-            var ok = System.Enum.TryParse<TabState>(buttxt, out var te);
-            if (!ok)
-            {
-                sman.LggError($"Could not parse {buttxt} as TabState enum");
+                sman.LggError("OptionsPanel butspec error");
                 continue;
             }
-            var butt = MakeOneButtonStretchY(bname, x, w, buttxt, buttip, delegate { OptionsSubMenuButtonPushed(te); });
-            butDict[te] = (butt, buttxt);
+            var bs = butspec[buttxt];
+            var butt = MakeOneButtonStretchY(bname, x, w, buttxt, bs.tooltip, bs.onClickAction );
+            scenarioButDict[bs.tabstate] = (butt, buttxt);
+            scenarioButList.Add((butt,buttxt));
             x += w + gap;
         }
     }
@@ -305,10 +285,10 @@ public class OptionsPanel : MonoBehaviour
                 initDict[tabstate]();
             }
         }
-        foreach (var ts in butDict.Keys)
+        foreach (var (but,idname) in scenarioButList)
         {
-            var (but, tit) = butDict[ts];
-            uiman.tbtpan.SetButtonColor(but, "lightgray", tabstate == ts, tit);
+            var bs = butspec[idname];
+            uiman.tbtpan.SetButtonColor(but, "lightgray", tabstate == bs.tabstate, bs.idname);
         }
 
     }
@@ -364,6 +344,7 @@ public class OptionsPanel : MonoBehaviour
                 }
 
         }
+
         MakeOptionsButtons();
 
         tabstate = initialSceneTabState.Get();
