@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
-using System.Collections;
 using UxUtils;
-using TMPro.EditorUtilities;
 
 public class OptionsPanel : MonoBehaviour
 {
@@ -30,7 +27,6 @@ public class OptionsPanel : MonoBehaviour
     public delegate void SetTabStater(TabState te);
 
     Dictionary<TabState, GameObject> panDict = null;
-    Dictionary<TabState, (Button but, string tit)> scenarioButDict = null;
     List<(Button,string)> scenarioButList = null;
     Dictionary<TabState, Initer> initDict = null;
     Dictionary<TabState, SetAndSaver> setAndSaveDict = null;
@@ -86,7 +82,6 @@ public class OptionsPanel : MonoBehaviour
         //ttDict = new Dictionary<string, GameObject>();
         panDict = new Dictionary<TabState, GameObject>();
         scenarioButList = new List<(Button,string)>();
-        scenarioButDict = new Dictionary<TabState, (Button, string)>();
         initDict = new Dictionary<TabState, Initer>();
         setAndSaveDict = new Dictionary<TabState, SetAndSaver>();
 
@@ -211,7 +206,6 @@ public class OptionsPanel : MonoBehaviour
              Destroy(but.gameObject);
         }
         scenarioButList = new List<(Button,string)>();
-        scenarioButDict = new Dictionary<TabState, (Button but, string tit)>();
     }
     public void AddActions()
     {
@@ -245,7 +239,6 @@ public class OptionsPanel : MonoBehaviour
             }
             var bs = butspec[buttxt];
             var butt = MakeOneButtonStretchY(bname, x, w, buttxt, bs.tooltip, bs.onClickAction );
-            scenarioButDict[bs.tabstate] = (butt, buttxt);
             scenarioButList.Add((butt,buttxt));
             x += w + gap;
         }
@@ -318,7 +311,6 @@ public class OptionsPanel : MonoBehaviour
             }
         }
     }
-
 
     void InitializeValues()
     {
