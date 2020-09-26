@@ -26,6 +26,7 @@ public class OptionsPanel : MonoBehaviour
 
     public delegate void Initer();
     public delegate void SetAndSaver(bool closing = true);
+    public delegate void SetTabStater(TabState te);
 
     Dictionary<TabState, GameObject> panDict = null;
     Dictionary<TabState, (Button but, string tit)> butDict = null;
@@ -42,7 +43,7 @@ public class OptionsPanel : MonoBehaviour
         public string name;
         public string tooltip;
         public OnUiButtonClickDelegate onClickAction;
-        public UiButtonSpec(string bname,string btooltip,OnUiButtonClickDelegate bOnClickAction)
+        public UiButtonSpec(string bname, string btooltip, OnUiButtonClickDelegate bOnClickAction)
         {
             name = bname;
             tooltip = btooltip;
@@ -50,9 +51,9 @@ public class OptionsPanel : MonoBehaviour
         }
     }
 
-    Dictionary<string, UiButtonSpec> butspec = new Dictionary<string,UiButtonSpec>()
+    Dictionary<string, UiButtonSpec> butspec = new Dictionary<string, UiButtonSpec>()
     {
-        {"Visuals",new UiButtonSpec("Visuals","Visual Base Settings",null) },
+        {"Visuals",new UiButtonSpec("Visuals","Visual Base Settings",null)},
         {"MapSet",new UiButtonSpec("MapSet","Map Settings\nThere are a lot of them",null) },
         {"Frames",new UiButtonSpec("Frames","Frame parameters for image recognition labeling",null) },
         {"FireFly",new UiButtonSpec("FireFly","FireFly related parameters",null) },
@@ -149,7 +150,38 @@ public class OptionsPanel : MonoBehaviour
         DestroyButtons();
     }
 
-    public Button MakeOneButton(string bname, int x, int y, int w, int h, string txt, string tip = "")
+    public Button MakeOneButtonStretchY(string bname, int x,int w, string txt, string tip = "", UnityEngine.Events.UnityAction action= null)
+    {
+
+        var bgo = DefaultControls.CreateButton(new DefaultControls.Resources());
+        bgo.name = bname;
+        var butt = bgo.GetComponentInChildren<Button>();
+        var btxt = bgo.GetComponentInChildren<Text>();
+        btxt.text = txt;
+        btxt.fontSize = 18;
+        var recttrans = butt.GetComponent<RectTransform>();
+        var pos = new Vector3(x, 0, 0);
+        recttrans.SetPositionAndRotation(pos, Quaternion.identity);
+        recttrans.anchorMin = new Vector2(0.5f, 0);
+        recttrans.anchorMax = new Vector2(0.5f, 1);
+        recttrans.pivot = new Vector2(0.5f, 0.5f);
+        recttrans.sizeDelta = new Vector2(w, 0);
+        bgo.transform.SetParent(uiman.ottpan.transform, worldPositionStays: false);
+
+        //bgo.transform.SetParent(this.transform,worldPositionStays:false);
+
+        if (tip != "")
+        {
+            uiman.ttman.WireUpToolTip(bgo, txt, tip);
+        }
+        if (action != null)
+        {
+            butt.onClick.AddListener(action);
+        }
+        return butt;
+    }
+
+    public Button MakeOneButton(string bname, int x, int y, int w, int h, string txt, string tip = "", UnityEngine.Events.UnityAction action = null)
     {
 
         var bgo = DefaultControls.CreateButton(new DefaultControls.Resources());
@@ -163,12 +195,13 @@ public class OptionsPanel : MonoBehaviour
         recttrans.SetPositionAndRotation(pos, Quaternion.identity);
         recttrans.sizeDelta = new Vector2(w, h);
         bgo.transform.SetParent(uiman.ottpan.transform, worldPositionStays: false);
-
-        //bgo.transform.SetParent(this.transform,worldPositionStays:false);
-
         if (tip != "")
         {
             uiman.ttman.WireUpToolTip(bgo, txt, tip);
+        }
+        if (action != null)
+        {
+            butt.onClick.AddListener(action);
         }
         return butt;
     }
@@ -183,13 +216,13 @@ public class OptionsPanel : MonoBehaviour
         }
         butDict = new Dictionary<TabState, (Button but, string tit)>();
     }
-    public void MakeNewButtons()
+    public void MakeOptionsButtons()
     {
         var buttxtarr = enableString.Split(',');
 
         var nbut = buttxtarr.Length;
-        var h = 48;
         var w = 110;
+        var h = 48;
         var gap = 10;
         var twid = nbut * w + (nbut - 1) * gap;
 
@@ -202,21 +235,38 @@ public class OptionsPanel : MonoBehaviour
         //sman.Lgg($"butt: nbut:{nbut} twid:{twid} x:{x} y:{y}", "cyan");
         foreach (var buttxt in buttxtarr)
         {
+            if (butspec.ContainsKey(buttxt))
+            {
+                var ok = System.Enum.TryParse<TabState>(buttxt, out var te);
+                if (ok)
+                {
+                    butspec[buttxt].onClickAction = delegate
+                    {
+                        OptionsSubMenuButtonPushed(te);
+                    };
+                }
+                else
+                {
+                    sman.LggError($"Could not parse {buttxt} as TabState enum");
+                }
+            }
+        }
+        foreach (var buttxt in buttxtarr)
+        {
             var bname = buttxt + "Button";
             var buttip = "";
             if (butspec.ContainsKey(buttxt))
             {
                 buttip = butspec[buttxt].tooltip;
             }
-            var butt = MakeOneButton(bname, x, y, w, h, buttxt, buttip);
             var ok = System.Enum.TryParse<TabState>(buttxt, out var te);
             if (!ok)
             {
                 sman.LggError($"Could not parse {buttxt} as TabState enum");
                 continue;
             }
+            var butt = MakeOneButtonStretchY(bname, x, w, buttxt, buttip, delegate { OptionsSubMenuButtonPushed(te); });
             butDict[te] = (butt, buttxt);
-            butt.onClick.AddListener(delegate { OptionsSubMenuButtonPushed(te); });
             x += w + gap;
         }
     }
@@ -314,7 +364,7 @@ public class OptionsPanel : MonoBehaviour
                 }
 
         }
-        MakeNewButtons();
+        MakeOptionsButtons();
 
         tabstate = initialSceneTabState.Get();
 

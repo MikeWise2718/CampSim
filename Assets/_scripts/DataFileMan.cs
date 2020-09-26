@@ -89,6 +89,7 @@ namespace CampusSimulator
             osmloadspec = "";
             switch (newregion)
             {
+                case SceneSelE.MsftSmall:
                 case SceneSelE.MsftRedwest:
                 case SceneSelE.MsftCoreCampus:
                 case SceneSelE.MsftB19focused:
@@ -138,7 +139,6 @@ namespace CampusSimulator
                     break;
                 default:
                 case SceneSelE.None:
-                    // DelBuildings called above already
                     break;
             }
             if (osmloadspec != "")

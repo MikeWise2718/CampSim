@@ -268,7 +268,7 @@ namespace Aiskwk.Map
             colorTable["phlox"] = rgbbyte(223, 0, 255);
             colorTable["mauve"] = rgbbyte(224, 176, 255);
             colorTable["fuchsia"] = rgbbyte(255, 0, 255);
-            colorTable["lilac"] = new Color(0.86f, 0.8130f, 1.0f);
+            colorTable["lilac"] = rgbbyte(200, 162, 200);
             // whites and grays
             colorTable["w"] = 
             colorTable["white"] = new Color(1, 1, 1);

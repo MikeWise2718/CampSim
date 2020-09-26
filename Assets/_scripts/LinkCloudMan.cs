@@ -186,6 +186,7 @@ namespace CampusSimulator
             var rv = graphSceneE.gen_none;
             switch (ss)
             {
+                case SceneSelE.MsftSmall:
                 case SceneSelE.MsftCoreCampus:
                 case SceneSelE.MsftB19focused:
                 case SceneSelE.MsftB121focused:
@@ -313,10 +314,10 @@ namespace CampusSimulator
             {
                 rv = false;
             }
-            if (link.node1.pt.y>0 || link.node2.pt.y>0)
-            {
-                rv = false;
-            }    
+            //if (link.node1.pt.y > 0 || link.node2.pt.y > 0)
+            //{
+            //    rv = false;
+            //}
             return rv;
         }
 

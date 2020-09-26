@@ -4,6 +4,7 @@ using UnityEngine;
 using UxUtils;
 using Aiskwk.Map;
 using System.Data.Common;
+using UnityEngine.Rendering;
 
 namespace CampusSimulator
 {
@@ -11,7 +12,8 @@ namespace CampusSimulator
     public class BuildingMan : MonoBehaviour
     {
 
-        Dictionary<string, Building> bldlookup = new Dictionary<string, Building>();
+        Dictionary<string, Building> bldalias = new Dictionary<string, Building>();
+        Dictionary<string, Building> bldmasterlist = new Dictionary<string, Building>();
         List<string> bldnames = new List<string>(); // maintain a sorted list of buildings with destinations
         List<string> wtdbldnames = new List<string>(); // maintain a sorted weighted list of buildings with destinations
         List<string> dronebldnames = new List<string>(); // maintain a  weighted list of buildings with drone destinations
@@ -209,7 +211,8 @@ namespace CampusSimulator
 
         public void ModelInitialize(SceneSelE newregion)
         {
-            bldlookup = new Dictionary<string, Building>();
+            bldmasterlist = new Dictionary<string, Building>();
+            bldalias = new Dictionary<string, Building>();
             bldnames = new List<string>(); // maintain a sorted list of buildings with destinations
             wtdbldnames = new List<string>(); // maintain a sorted weighted list of buildings with destinations
             dronebldnames = new List<string>(); // maintain a  weighted list of buildings with drone destinations
@@ -236,7 +239,7 @@ namespace CampusSimulator
             fixedblds.GetInitial(false);
             transwalls = false;
             scene_padspecs = new List<string>();
-            Debug.Log($"BuildingMan.InitializeValues walllinks:{walllinks.Get()} osmblds:{osmblds.Get()} osmbldstrans:{osmbldstrans.Get()}   fixedblds:{fixedblds.Get()}");
+            sman.Lgg($"BuildingMan.InitializeValues walllinks:{walllinks.Get()} osmblds:{osmblds.Get()} osmbldstrans:{osmbldstrans.Get()}   fixedblds:{fixedblds.Get()}","pink");
         }
 
         public List<string> GetFilteredPadNames(string prefix)
@@ -311,13 +314,13 @@ namespace CampusSimulator
             var curstate = b121comp.b121_materialMode.Get();
             if (oristate != curstate)
             {
-                Debug.Log($"Bld121 {oristate} changed to {curstate} - refresh required");
+                sman.Lgg($"Bld121 {oristate} changed to {curstate} - refresh required","pink");
                 b121comp.ActuateMaterialMode();
                 //sman.RequestRefresh("TransBld121Button", totalrefresh: false);
             }
             else
             {
-                Debug.Log($"Bld121 {oristate} unchanged to {curstate} - no refresh required");
+                sman.Lgg($"Bld121 {oristate} unchanged to {curstate} - no refresh required", "pink");
             }
         }
 
@@ -414,6 +417,7 @@ namespace CampusSimulator
                 case SceneSelE.TeneriffeMtn:
                     MakeBuildings("MtTen");
                     break;
+                case SceneSelE.MsftSmall:
                 default:
                     MakeBuildings("");
                     break;
@@ -422,6 +426,80 @@ namespace CampusSimulator
                     break;
             }
         }
+        Dictionary<string, int> floordict = new Dictionary<string, int>()
+        {
+            { "f00",0 },
+            { "f01",1 },
+            { "f02",2 },
+            { "f03",3 },
+            { "f04",4 },
+            { "f06",6 },
+            { "f07",7 },
+            { "f08",8 },
+            { "f09",9 },
+        };
+        public void UpdateFloorHeights()
+        {
+            var sw = new Aiskwk.Map.StopWatch();
+            var grc = sman.lcman.GetGraphCtrl();
+            var nnlst = grc.nodenamelist;
+            var nnodes = nnlst.Count;
+            var updnodes = 0;
+            var bldcache = new Dictionary<string, Building>();
+            var bbadnamedict = new Dictionary<string, bool>();
+            foreach (var nname in nnlst)
+            {
+                var node = grc.GetNode(nname);
+                var nnamear = nname.Split('-');
+                if (nnamear.Length>2)
+                {
+                    var bname = nnamear[0];
+                    var fname = nnamear[1];
+                    Building bd;
+                    if (bldcache.ContainsKey(bname))
+                    {
+                        bd = bldcache[bname];
+                    }
+                    else
+                    {
+                        bd = sman.bdman.GetBuildingFromAlias(bname, couldFail: true);
+                        if (bd != null)
+                        {
+                            bldcache[bname] = bd;
+                        }
+                        else
+                        {
+                            bbadnamedict[bname] = true;
+                        }
+                    }
+                    if (bd != null)
+                    {
+                        if (floordict.ContainsKey(fname))
+                        {
+                            var iflr = floordict[fname];
+                            var h = bd.GetFloorAltitude(iflr);
+                            var x = node.pt.x;
+                            var z = node.pt.z;
+                            //var y = sman.lcman.GetHeight(x,z);
+                            var pt = new Vector3(x, h, z);
+                            var nmsg = $"{nname} bld:{bname}  flr:{fname}  node.pt:{pt}";
+                            node.pt = pt;
+                            sman.Lgg(nmsg, "orange");
+                            updnodes++;
+                        }
+                   }
+                }
+            }
+            sw.Stop();
+            var nbadnames = bbadnamedict.Count;
+            var msg = $"nodes: {nnodes}  blds:{bldcache.Count} nbadnames:{nbadnames} updated floor nodes:{updnodes} secs:{sw.ElapSecs()}";
+            foreach(var bn in bbadnamedict.Keys)
+            {
+                sman.Lgg($"   {bn}","lilac");
+            }
+            sman.Lgg(msg, "pink");
+        }
+
         public void ModelBuildPostLinkCloud()
         {
             InitTranswalls();// this can only be done after b121 is initialized
@@ -430,7 +508,7 @@ namespace CampusSimulator
             PopulateBuildings();
             AddExtraPeople();
             dronebldnames = new List<string>();
-            foreach (var bld in bldlookup.Values)
+            foreach (var bld in bldmasterlist.Values)
             {
                 var npads = bld.GetPads().Count;
                 if (npads > 0)
@@ -439,11 +517,12 @@ namespace CampusSimulator
                     dronebldnames.Sort();
                 }
             }
+            UpdateFloorHeights();
             UpdateBldStats();
         }
         public void UpdateBldStats()
         {
-            nBuildings = bldlookup.Count;
+            nBuildings = bldmasterlist.Count;
             nDroneBuildings = dronebldnames.Count;
             nRooms = roomlookup.Count;
             nPads = padlookup.Count;
@@ -485,7 +564,7 @@ namespace CampusSimulator
             var zones = sman.znman.GetZones(presetEvacBldName);
             if (zones.Count==0)
             {
-                Debug.Log("No evac zones found for:" + presetEvacBldName);
+                sman.LggError("No evac zones found for:" + presetEvacBldName);
                 return;
             }
             foreach (var z in zones)
@@ -595,13 +674,13 @@ namespace CampusSimulator
         }
         public void AddRoomsToBuildings()
         {
-            var bldlst = new List<Building>(bldlookup.Values);
+            var bldlst = new List<Building>(bldmasterlist.Values);
             //bldlst.ForEach(bld => bld.DefineBuildingConstants());
             bldlst.ForEach(bld => bld.AddRoomsToBuilding());
         }
         public void PopulateBuildings()
         {
-            var bldlst = new List<Building>(bldlookup.Values);
+            var bldlst = new List<Building>(bldmasterlist.Values);
             bldlst.ForEach(bld => bld.PopulateBuilding());
         }
         public void MakeOsmBuilding(OsmBldSpec bldspec)
@@ -649,19 +728,19 @@ namespace CampusSimulator
         public void DelBuildings()
         {
             //Debug.Log("DelBuildings called");
-            if (bldlookup != null)
+            if (bldmasterlist != null)
             {
-                var namelist = new List<string>(bldlookup.Keys);
+                var namelist = new List<string>(bldmasterlist.Keys);
                 namelist.ForEach(name => DelBuilding(name));
             }
-            bldlookup = null;
+            bldmasterlist = null;
             if (bldspecs != null)
             {
                 bldspecs.ForEach(bs => Destroy(bs.bgo));
             }
             bldspecs = null;
 
-            bldlookup = null;
+            bldmasterlist = null;
             bldnames = null;
             wtdbldnames = null;
             dronebldnames = null;
@@ -677,11 +756,11 @@ namespace CampusSimulator
         {
             //Debug.Log($"Deleting building {name} nbld:{bldlookup.Count}");
             //var go = GameObject.Find(name);
-            if (!bldlookup.ContainsKey(name)) return;
+            if (!bldmasterlist.ContainsKey(name)) return;
 
-            var bld = bldlookup[name];
+            var bld = bldmasterlist[name];
             bld.Empty(); // destroys game object as well
-            bldlookup.Remove(name);
+            bldmasterlist.Remove(name);
             UpdateBldStats();
             Destroy(bld.gameObject);
             //Debug.Log($"After deleting building {name} nbld:{bldlookup.Count}");
@@ -693,23 +772,50 @@ namespace CampusSimulator
                 var sar = bname.Split('/');
                 bname = sar[0];
             }
-            if (!bldlookup.ContainsKey(bname))
+            if (!bldmasterlist.ContainsKey(bname))
             {
                 if (!couldFail)
                 {
-                    Debug.Log("Bad building lookup:" + bname);
+                    sman.LggError("Bad building lookup:" + bname);
                 }
                 return null;
             }
-            return bldlookup[bname];
+            return bldmasterlist[bname];
+        }
+        public Building GetBuildingFromAlias(string bname,bool couldFail=false)
+        {
+            if (!bldalias.ContainsKey(bname))
+            {
+                if (!couldFail)
+                {
+                    sman.LggError("Bad building lookup:" + bname);
+                }
+                return null;
+            }
+            return bldalias[bname];
+        }
+
+        public void AddBuildingAlias(string alias,Building building)
+        {
+            if (bldmasterlist.ContainsKey(alias))
+            {
+                sman.LggError("AddBUildingAlisas - Tried to add duplicate alias to bldmasterlist:" + building.name); 
+                return;
+            }
+            if (bldalias.ContainsKey(alias))
+            {
+                sman.LggError("AddBUildingAlisas - Tried to add duplicate alias to bldalias:" + building.name); 
+                return;
+            }
+            bldalias[alias] = building;
         }
         public void AddBuildingToCollection(Building building,bool mightAlreadyExist=false)
         {
-            if (bldlookup.ContainsKey(building.name))
+            if (bldmasterlist.ContainsKey(building.name))
             {
                 if (!mightAlreadyExist)
                 {
-                    Debug.Log("Tried to add duplicate building:" + building.name); // this can happen with osmbuildings
+                    sman.LggError("AddBuildingToCollection - tried to add duplicate building:" + building.name); // this can happen with osmbuildings
                 }
                 return;
             }
@@ -720,11 +826,11 @@ namespace CampusSimulator
                 bldnames.Sort();
                 for (int i=0; i < building.selectionweight; i++ )
                 {
-                    wtdbldnames.Add(building.name);
+                    wtdbldnames.Add(building.name);// duplicate name selectionweight times (not vey elegant)
                 }
                 wtdbldnames.Sort();
             }
-            bldlookup[building.name] = building;
+            bldmasterlist[building.name] = building;
             //Debug.Log("Added bld " + building.name);
         }
 
@@ -744,7 +850,7 @@ namespace CampusSimulator
         }
         public void ReinitDests()
         {
-            foreach( var bld in bldlookup.Values)
+            foreach( var bld in bldmasterlist.Values)
             {
                 bld.ReinitDests();
             }
@@ -862,16 +968,16 @@ namespace CampusSimulator
 
         public void DeleteGos()
         {
-            foreach (var bname in bldlookup.Keys)
+            foreach (var bname in bldmasterlist.Keys)
             {
-                bldlookup[bname].DeleteGos();
+                bldmasterlist[bname].DeleteGos();
             }
         }
         public void CreateGos()
         {
-            foreach (var bname in bldlookup.Keys)
+            foreach (var bname in bldmasterlist.Keys)
             {
-                bldlookup[bname].CreateGos();
+                bldmasterlist[bname].CreateGos();
             }
         }
         public void RefreshGos()
@@ -879,10 +985,5 @@ namespace CampusSimulator
             DeleteGos();
             CreateGos();
         }
-
-
-
-
-
     }
 }

@@ -75,6 +75,7 @@ namespace CampusSimulator
                     //mcamvcam = "Eb_vc_frontdoor";
                     break;
                 default:
+                case SceneSelE.MsftSmall:
                 case SceneSelE.None:
                     break;
             }

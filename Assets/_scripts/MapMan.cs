@@ -541,21 +541,21 @@ namespace CampusSimulator
             }
             return lgo;
         }
-        public GameObject AddLine(GameObject parent, string lname, Vector3 pt1, Vector3 pt2, RmLinkFormE lnform = RmLinkFormE.pipe, float lska = 1.0f, float nska = 1.0f, string lclr = "red", string nclr = "", int omit = -1, float widratio = 1, bool wps = true, bool frag = false)
-        {
-            if (qmapman == null || qmapman.qmm == null) return null;
-            var frm = lnform.ToString();
-            GameObject lgo;
-            if (frag)
-            {
-                lgo = qmapman.qmm.qtt.AddFragLine(parent, lname, pt1, pt2, frm, lska, nska, lclr, nclr, omit, widratio, wps);
-            }
-            else
-            {
-                lgo = qmapman.qmm.qtt.AddStraightLine(parent, lname, pt1, pt2, frm, lska, nska, lclr, nclr, omit, widratio, wps);
-            }
-            return lgo;
-        }
+        //public GameObject AddLine(GameObject parent, string lname, Vector3 pt1, Vector3 pt2, RmLinkFormE lnform = RmLinkFormE.pipe, float lska = 1.0f, float nska = 1.0f, string lclr = "red", string nclr = "", int omit = -1, float widratio = 1, bool wps = true, bool frag = false)
+        //{
+        //    if (qmapman == null || qmapman.qmm == null) return null;
+        //    var frm = lnform.ToString();
+        //    GameObject lgo;
+        //    if (frag)
+        //    {
+        //        lgo = qmapman.qmm.qtt.AddFragLine(parent, lname, pt1, pt2, frm, lska, nska, lclr, nclr, omit, widratio, wps);
+        //    }
+        //    else
+        //    {
+        //        lgo = qmapman.qmm.qtt.AddStraightLine(parent, lname, pt1, pt2, frm, lska, nska, lclr, nclr, omit, widratio, wps);
+        //    }
+        //    return lgo;
+        //}
 
 
         public void EraseMapsFromDisk()
@@ -897,18 +897,13 @@ namespace CampusSimulator
                     viewHome.rot = new Vector3(0, -60, 0);
                     break;
                 case SceneSelE.MsftB121focused:
-                    //maplat = 47.639217;
-                    //maplng = -122.134216;
                     maplat = 47.639217;
                     maplng = -122.134216;
                     mapscale = 3.2f;
                     maprot = new Vector3(0, 71.1f, 0);
                     maptrans = new Vector3(-6, 0, 17);
-                    //xdistkm = 1;
-                    //zdistkm = 2;
                     xdistkm = 2;
                     zdistkm = 3;
-                    //nodesPerQuadKey = 4;
                     lod = 16;
                     hasLLmap = true;
 
@@ -917,19 +912,31 @@ namespace CampusSimulator
                     viewHome.rot = new Vector3(0, -40, 0);
                     isCustomizable = false;
                     break;
-                case SceneSelE.MsftB19focused:
-                    //maplat = 47.639217;
-                    //maplng = -122.134216;
+                case SceneSelE.MsftSmall:
                     maplat = 47.639217;
                     maplng = -122.134216;
                     mapscale = 3.2f;
                     maprot = new Vector3(0, 71.1f, 0);
                     maptrans = new Vector3(-6, 0, 17);
-                    //xdistkm = 1;
-                    //zdistkm = 2;
+                    xdistkm = 1;
+                    zdistkm = 2;
+                    lod = 14;
+                    hasLLmap = true;
+
+                    viewHome.avatar = ViewerAvatar.QuadCopter;
+                    viewHome.pos = new Vector3(-451.5f, 3f, 98.3f);
+                    viewHome.rot = new Vector3(0, -60, 0);
+
+                    isCustomizable = false;
+                    break;
+                case SceneSelE.MsftB19focused:
+                    maplat = 47.639217;
+                    maplng = -122.134216;
+                    mapscale = 3.2f;
+                    maprot = new Vector3(0, 71.1f, 0);
+                    maptrans = new Vector3(-6, 0, 17);
                     xdistkm = 2;
                     zdistkm = 3;
-                    //nodesPerQuadKey = 4;
                     lod = 16;
                     hasLLmap = true;
 

@@ -99,6 +99,7 @@ namespace CampusSimulator
                     //presetPeople = mtten_presets;
                     break;
                 default:
+                case SceneSelE.MsftSmall:
                 case SceneSelE.None:
                     break;
             }

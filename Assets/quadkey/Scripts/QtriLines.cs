@@ -204,13 +204,13 @@ namespace Aiskwk.Map
                 var (pit1, d1) = ptlist[i];
                 var (pit2, d2) = ptlist[i+1];
                 var pit1s = pit1.ToString("f3");
-                //if (db)
-                //{
-                //    var d1s = d1.ToString("f3");
-                //    var pit2s = pit2.ToString("f3");
-                //    var d2s = d2.ToString("f3");
-                //    Debug.Log($"{i}  - pt1:{pit1s} l1:{d1s}   pt2:{pit2s} l2:{d2s}");
-                //}
+                if (i>=1)
+                {
+                    var d1s = d1.ToString("f3");
+                    var pit2s = pit2.ToString("f3");
+                    var d2s = d2.ToString("f3");
+                    Debug.Log($"{lname} - {i}  - pt1:{pit1s} l1:{d1s}   pt2:{pit2s} l2:{d2s}");
+                }
                 var llname = $"{lname}_{i}";
                 if (nclr != "" && i == 0)
                 {

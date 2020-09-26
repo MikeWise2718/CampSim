@@ -181,7 +181,7 @@ namespace CampusSimulator
                         b19comp = this.transform.gameObject.AddComponent<B19Willow>();
                         b19comp.InitializeValues(bm.sman, this);
                         b19comp.MakeItSo();
-
+                        bm.AddBuildingAlias("b19", this);
                         break;
                     }
                 case "Bld121":
@@ -204,7 +204,7 @@ namespace CampusSimulator
                         b121comp = this.transform.gameObject.AddComponent<B121Willow>();
                         b121comp.InitializeValues(bm.sman, this);
                         b121comp.MakeItSo();
-
+                        bm.AddBuildingAlias("b121",this);
                         break;
                     }
                 case "Bld40":
@@ -439,20 +439,23 @@ namespace CampusSimulator
                 bldpadspecs = bm.GetFilteredPadSpecs(shortname);
             }
         }
-        public float GetFloorAltitude(int floornum)
+        public float GetFloorAltitude(int floornum,bool includeAltitude=true)
         {
             var rv = 0f;
             if (b121comp!=null)
             {
-                rv = b121comp.GetFloorHeight(floornum);
+                rv = b121comp.GetFloorHeight(floornum,includeAltitude:true);
             }
             else if (b19comp != null)
             {
-                rv = b19comp.GetFloorHeight(floornum);
+                rv = b19comp.GetFloorHeight(floornum,includeAltitude:true);
             }
             else if (isOsmBld)
             {
                 rv = bldspec.GetLevelHeight(floornum);
+                var ptcen = bldspec.GetCenterTop();
+                var alt = bm.sman.mpman.GetHeight(ptcen.x,ptcen.z);
+                rv += alt;
             }
             return rv;
         }

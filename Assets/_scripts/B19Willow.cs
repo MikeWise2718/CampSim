@@ -138,7 +138,7 @@ public class B19Willow : MonoBehaviour
     {
         DestroyOneGo(ref b19go);
     }
-
+    float ymapheight = 0.01f;
     public void MakeItSo()
     {
         bool loadedThisTime  = false;
@@ -148,13 +148,9 @@ public class B19Willow : MonoBehaviour
             var xoff = -3;
             var zoff = -3;
             Vector3 defpos = new Vector3(-474.3f+xoff, 4.72f, 87.6f+zoff);
-            var yoff = 0f;
-            if (sman!=null)
-            {
-                yoff = sman.mpman.GetHeight(defpos.x, defpos.z);
-                //Debug.Log($"B19 yoff:{yoff}");
-                defpos = new Vector3(defpos.x, yoff+defpos.y, defpos.z);
-            }
+            ymapheight = sman.mpman.GetHeight(defpos.x, defpos.z);
+            sman.Lgg($"B19 ymapheight:{ymapheight:f3}","orange");
+            defpos = new Vector3(defpos.x, ymapheight+defpos.y, defpos.z);
             var obprefab = Resources.Load<GameObject>("Willow/B19/B19-Willow");
             if (obprefab != null)
             {
@@ -266,7 +262,7 @@ public class B19Willow : MonoBehaviour
             }
         }
     }
-    public float GetFloorHeight(int floor)
+    public float GetFloorHeight(int floor, bool includeAltitude = true)
     {
         var rv = 0.01f;
         if (floor < 0) floor = 0;
@@ -280,6 +276,10 @@ public class B19Willow : MonoBehaviour
             case 2:
                 rv = 2.11f;
                 break;
+        }
+        if (includeAltitude)
+        {
+            rv += ymapheight;
         }
         return rv;
     }

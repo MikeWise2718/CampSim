@@ -17,7 +17,7 @@ public class B121Willow : MonoBehaviour
     public UxSetting<bool> plumbing = new UxSetting<bool>("B121_plumbing", true);
     public UxSetting<bool> osmbld = new UxSetting<bool>("B121_osmbld", false);
 
-    public CampusSimulator.SceneMan sman;
+    public CampusSimulator.SceneMan sman=null;
 
     public UxEnumSetting<b121_MaterialMode> b121_materialMode = new UxEnumSetting<b121_MaterialMode>("B121_MaterialMode", b121_MaterialMode.glass);
     //   public UxSetting<bool> visibilityTiedToDetectability = new UxSetting<bool>("FrameVisibilityTiedToDetectability", true);
@@ -152,7 +152,7 @@ public class B121Willow : MonoBehaviour
     public float bshellska = 0.025f;
     public float bangle = -90;
     public Vector3 bpos;
-    public float ymapheit;
+    public float ymapheit = 0.20f;// 1 cm eliminates z-fighting
     public float xhlp_boff = 1.6f;
     public float zhlp_boff = 1.3f;
 
@@ -177,23 +177,28 @@ public class B121Willow : MonoBehaviour
         b121pgo = LoadObjFile(b121go, "Willow/B121/1716045-BH-PLUMBING-B121_2020", "plumbing", xrot: bangle, zoff: zhlp_boff, xoff: xhlp_boff);
     }
 
-    public float GetFloorHeight(int floor)
+    public float GetFloorHeight(int floor, bool includeAltitude = true)
     {
-        var rv = 0.01f;
+        float rv;
         if (floor < 0) floor = 0;
         if (floor > 3) floor = 3;
         switch(floor)
         {
+            default:
             case 0:
             case 1:
-                rv = 0.01f;
+                rv = 0.21f;
                 break;
             case 2:
-                rv = 2.11f;
+                rv = 4.30f;
                 break;
             case 3:
-                rv = 4.21f;
+                rv = 8.40f;
                 break;
+        }
+        if (includeAltitude)
+        {
+            rv += ymapheit;
         }
         return rv;
     }
@@ -204,17 +209,15 @@ public class B121Willow : MonoBehaviour
         if (loadmodel.Get() && !_b121_WillowModelLoaded)
         {
             b121go = new GameObject("B121-Willow");
-            bpos = new Vector3(-789, 0.01f, -436);// 1 cm raised to eliminate z fighting
-            if (sman != null)
+            bpos = new Vector3(-789, ymapheit, -436);// 1 cm raised to eliminate z fighting
+            ymapheit = sman.mpman.GetHeight(bpos.x, bpos.z);
+            if (sman.mpman.useElevations.Get())
             {
-                ymapheit = sman.mpman.GetHeight(bpos.x, bpos.z);
-                if (sman.mpman.useElevations.Get())
-                {
-                    ymapheit -= 1.0f; // adjust for map irrgularities - doesn't work well
-                }
-                Debug.Log($"Loading B121 - height - bpos:{bpos:f1} yheit(from map):{ymapheit} total:{ymapheit+bpos.y}");
-                bpos = new Vector3(bpos.x, ymapheit + bpos.y, bpos.z);
+                ymapheit -= 1.0f; // adjust for map irrgularities - doesn't work well
             }
+            var bps = bpos.ToString("f3");
+            sman.Lgg($"Loading B121 -- height - bpos:{bps} yheit(from map):{ymapheit:f2} total:{ymapheit+bpos.y:f2}","orange");
+            bpos = new Vector3(bpos.x, ymapheit + bpos.y, bpos.z);
             b121go.transform.Rotate(new Vector3(0, -20.15f, 0));
             b121go.transform.position = bpos;
             b121go.transform.SetParent(this.transform,worldPositionStays:false);

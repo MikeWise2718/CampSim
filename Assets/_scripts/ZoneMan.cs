@@ -145,6 +145,8 @@ namespace CampusSimulator
                 case SceneSelE.Eb12:
                     MakeZones("Eb12");
                     break;
+                default:
+                    break;
             }
         }
 

@@ -150,6 +150,7 @@ namespace CampusSimulator
                     MakeGarages("Eb12");
                     break;
                 default:
+                case SceneSelE.MsftSmall:
                 case SceneSelE.None:
                     break;
             }

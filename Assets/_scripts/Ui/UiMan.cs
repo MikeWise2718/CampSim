@@ -40,7 +40,8 @@ namespace CampusSimulator
             var ttgo = new GameObject("tooltipman");
             ttman = ttgo.AddComponent<ToolTipMan>();
 
-            uigo = GameObject.Find("UiRootCanvas");
+            uigo = transform.Find("UiRootCanvas").gameObject;// works even for non-active children
+            uigo.SetActive(true);
             // not strictly necessary but keeps things sane
             var tr = uigo.GetComponent<RectTransform>();
             tr.position = new Vector3(ui_w / 2, ui_h / 2, 0);
