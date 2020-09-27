@@ -44,56 +44,38 @@ namespace CampusSimulator
         TopButtonMan topButMan;
 
 
-        public class TbpButtSpec
-        {
-            public string idname;
-            public string displayName;
-            public string tooltip;
-            public string scenariofilter;
-            public string xposstr;
-            public UnityEngine.Events.UnityAction onClickAction;
-            public TbpButtSpec(string bidname, string bdispname, string btooltip,int xpos,string bxposstr,string bscenfilt,UnityAction action=null)
-            {
-                idname = bidname;
-                displayName = bdispname;
-                tooltip = btooltip;
-                scenariofilter = bscenfilt;
-                xposstr = bxposstr;
-                onClickAction = null;
-            }
-        }
 
-        Dictionary<string, TbpButtSpec> butspec = new Dictionary<string, TbpButtSpec>()
+        Dictionary<string, TopButtonMan.TopButSpec> butspec = new Dictionary<string, TopButtonMan.TopButSpec>()
         {
-            {"HideUiButton",new TbpButtSpec("HideUiButton","HideUI", "Hide the User Interface\nEsc brings it back afterwards",0,"left","All")},
-            {"RunButton",new TbpButtSpec("RunButton","Run", "Start ground based journeys",-739,"cen","Sim")},
-            {"FlyButton",new TbpButtSpec("FlyButton","Fly", "Start flying journeys",-667,"cen","Sim")},
-            {"FrameButton",new TbpButtSpec("FrameButton","Frame", "Draw labels on people, cars, etc",-573,"cen","Frame")},
-            {"EvacButton",new TbpButtSpec("EvacButton", "Evac", "Start an evacuation simulation",-467,"cen","Evac")},
-            {"UnEvacButton",new TbpButtSpec("UnEvacButton", "Unevac", "After an evacuation, go back to starting positions",-382,"cen","Evac")},
-            {"PipeButton",new TbpButtSpec("PipeButton","Pi", "Show journey path links and nodes",-287,"cen","All")},
-            {"GoButton",new TbpButtSpec("GoButton","go", "Kick off a preprogramed scenario dependent journey script",335,"cen","Sim")},
-            {"ShowTracksButton",new TbpButtSpec("ShowTracksButton","trax", "Show GPX Tracks",422,"cen","Trx")},
-            {"OptionsButton",new TbpButtSpec("OptionsButton","opts", "Bring up detailed configuration tabs",549,"cen","All")},
-            {"FreeFlyButton",new TbpButtSpec("FreeFlyButton","freefly", "Fly around in scene freely\nEsc exits this state",693,"cen","All")},
-            {"QuitButton" ,new TbpButtSpec("QuitButton","quit", "Quit to OS",-70,"right","All")},
+            {"HideUiButton",new TopButtonMan.TopButSpec("HideUiButton","HideUI", "Hide the User Interface\nEsc brings it back afterwards","left",70,"stretch",0,null,"All")},
+            {"RunButton",new TopButtonMan.TopButSpec("RunButton","Run", "Start ground based journeys","cen",-739,"stretch",0,null,"Sim")},
+            {"FlyButton",new TopButtonMan.TopButSpec("FlyButton","Fly", "Start flying journeys","cen",-667,"stretch",0,null,"Sim")},
+            {"FrameButton",new TopButtonMan.TopButSpec("FrameButton","Frame", "Draw labels on people, cars, etc","cen",-573,"stretch",0,null,"Frame")},
+            {"EvacButton",new TopButtonMan.TopButSpec("EvacButton", "Evac", "Start an evacuation simulation","cen",-467,"stretch",0,null,"Evac")},
+            {"UnEvacButton",new TopButtonMan.TopButSpec("UnEvacButton", "Unevac", "After an evacuation, go back to starting positions","cen",-382,"stretch",0,null,"Evac")},
+            {"PipeButton",new TopButtonMan.TopButSpec("PipeButton","Pipes", "Show journey path links and nodes","cen",-287,"stretch",0,null,"All")},
+            {"GoButton",new TopButtonMan.TopButSpec("GoButton","Go", "Kick off a preprogramed scenario dependent journey script","cen",335,"stretch",0,null,"Sim")},
+            {"ShowTracksButton",new TopButtonMan.TopButSpec("ShowTracksButton","Tracks", "Show GPX Tracks","cen",422,"stretch",0,null,"Trx")},
+            {"OptionsButton",new TopButtonMan.TopButSpec("OptionsButton","Options", "Bring up detailed configuration tabs","cen",549,"stretch",0,null,"All")},
+            {"FreeFlyButton",new TopButtonMan.TopButSpec("FreeFlyButton","FreeFly", "Fly around in scene freely\nEsc exits this state","cen",693,"stretch",0,null,"All")},
+            {"QuitButton" ,new TopButtonMan.TopButSpec("QuitButton","Quit", "Quit to OS","right",-70,"stretch",0,null,"All")},
         };
 
         public void AddActionsToButspecs()
         {
             // this is easier than initializing it inline
-            butspec["HideUiButton"].onClickAction = delegate { uiman.HideUi(); };
-            butspec["RunButton"].onClickAction = delegate { RunButton(); };
-            butspec["FlyButton"].onClickAction = delegate { FlyButton(); };
-            butspec["FrameButton"].onClickAction = delegate { FrameButton(); };
-            butspec["EvacButton"].onClickAction = delegate { EvacButton(); };
-            butspec["UnEvacButton"].onClickAction = delegate { UnevacButton(); };
-            butspec["PipeButton"].onClickAction = delegate { DetectPipButton(); };
-            butspec["GoButton"].onClickAction = delegate { GoButton(); };
-            butspec["ShowTracksButton"].onClickAction = delegate { ShowTracksButton(); };
-            butspec["OptionsButton"].onClickAction = delegate { OptionsButtonPushed(); };
-            butspec["FreeFlyButton"].onClickAction = delegate { FreeFlyButton(); };
-            butspec["QuitButton"].onClickAction = delegate { QuitButton(); };
+            butspec["HideUiButton"].action = delegate { uiman.HideUi(); };
+            butspec["RunButton"].action = delegate { RunButton(); };
+            butspec["FlyButton"].action = delegate { FlyButton(); };
+            butspec["FrameButton"].action = delegate { FrameButton(); };
+            butspec["EvacButton"].action = delegate { EvacButton(); };
+            butspec["UnEvacButton"].action = delegate { UnevacButton(); };
+            butspec["PipeButton"].action = delegate { DetectPipButton(); };
+            butspec["GoButton"].action = delegate { GoButton(); };
+            butspec["ShowTracksButton"].action = delegate { ShowTracksButton(); };
+            butspec["OptionsButton"].action = delegate { OptionsButtonPushed(); };
+            butspec["FreeFlyButton"].action = delegate { FreeFlyButton(); };
+            butspec["QuitButton"].action = delegate { QuitButton(); };
         }
 
         void LinkObjectsAndComponents()
@@ -240,7 +222,7 @@ namespace CampusSimulator
                     continue;
                 }
                 var bs = butspec[k];
-                topButMan.SpecOneButton(bs.idname, bs.displayName, bs.tooltip, bs.onClickAction);
+                topButMan.SpecOneButton(bs);
             }
             topButMan.CreateButtons();
         }

@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 using System.Linq;
+using System.ComponentModel;
+using System.Xml.Schema;
 
 namespace CampusSimulator
 {
@@ -14,8 +16,33 @@ namespace CampusSimulator
         UiMan uiman;
         List<(Button, string, string)> createdButList = null;
         List<string> orderedButIdnames = null;
-        Dictionary<string, (string, string, UnityAction)> butSpecList = null;
+        Dictionary<string,TopButSpec> butSpecList = null;
 
+
+        public class TopButSpec
+        {
+            public string idname;
+            public string dispname;
+            public string ttname;
+            public string xspec;
+            public int xpos;
+            public string yspec;
+            public int ypos;
+            public UnityAction action;
+            public string filter;
+            public TopButSpec(string idname,string dispname,string ttname,string xspec,int xpos,string yspec,int ypos, UnityAction action,string filter)
+            {
+                this.idname = idname;
+                this.dispname = dispname;
+                this.ttname = ttname;
+                this.xspec = xspec;
+                this.xpos = xpos;
+                this.yspec = yspec;
+                this.ypos = ypos;
+                this.action = action;
+                this.filter = filter;
+            }
+        }
 
         public void Init(SceneMan sman)
         {
@@ -24,7 +51,7 @@ namespace CampusSimulator
 
             createdButList = new List<(Button, string, string)>();
             orderedButIdnames = new List<string>();
-            butSpecList = new Dictionary<string, (string, string, UnityAction)>();
+            butSpecList = new Dictionary<string, TopButSpec>();
         }
 
 
@@ -43,8 +70,8 @@ namespace CampusSimulator
             lay_nbut = buttxtarr.Length;
             lay_but_gap_x = 10;
             lay_but_gap_y = 0;
-            lay_but_w = 110;
-            lay_but_h = 40;
+            lay_but_w = 80;
+            lay_but_h = 60;
             lay_totalwid = lay_nbut * lay_but_w + (lay_nbut - 1) * lay_but_gap_x;
 
             lay_but_x = -lay_totalwid / 2;
@@ -52,55 +79,103 @@ namespace CampusSimulator
         }
 
 
-        public void MakeOneButton(Transform parent, OttLayout ottlayout, string idname, string displayname, string tooltiptext = "", UnityAction action = null)
+        public void MakeOneButton(Transform parent, TopButSpec tbs)
         {
             var bgo = DefaultControls.CreateButton(new DefaultControls.Resources());
-            bgo.name = idname + "Button";
+            bgo.name = tbs.idname + "Button";
             var butt = bgo.GetComponentInChildren<Button>();
             var btxt = bgo.GetComponentInChildren<Text>();
-            btxt.text = displayname;
-            btxt.fontSize = 18;
+            btxt.text = tbs.dispname;
+            btxt.fontSize = 28;
             var recttrans = butt.GetComponent<RectTransform>();
             var pos = new Vector3(lay_but_x, lay_but_y, 0);
             recttrans.SetPositionAndRotation(pos, Quaternion.identity);
-            switch (ottlayout)
+            var txwneed = 12 * (tbs.dispname.Length+2);
+            var (a_xmin, a_xmax) = (0.5f, 0.5f);
+            var (a_ymin, a_ymax) = (0.5f, 0.5f);
+            var (s_x, s_y) = (lay_but_w, lay_but_h);
+            var (p_x, p_y) = (tbs.xpos, tbs.ypos);
+            switch (tbs.yspec)
             {
-                default:
-                case OttLayout.stretchy:
-                    recttrans.anchorMin = new Vector2(0.5f, 0);
-                    recttrans.anchorMax = new Vector2(0.5f, 1);
-                    recttrans.pivot = new Vector2(0.5f, 0.5f);
-                    recttrans.sizeDelta = new Vector2(lay_but_w, 0);
+                case "stretch":
+                    a_ymin = 0;
+                    a_ymax = 1;
+                    s_y = 0;
                     break;
-                case OttLayout.fixedheight:
-                    recttrans.sizeDelta = new Vector2(lay_but_w, lay_but_h);
+                case "cen":
+                    a_ymin = 0.5f;
+                    a_ymax = 0.5f; 
+                    s_y = lay_but_h;
+                    p_y = tbs.ypos;
+                    break;
+                case "top":
+                    a_ymin = 0f;
+                    a_ymax = 0f;
+                    s_y = lay_but_h;
+                    p_y = tbs.ypos;
+                    break;
+                case "bot":
+                    a_ymin = 1f;
+                    a_ymax = 1f;
+                    s_y = lay_but_h;
+                    p_y = tbs.xpos;
                     break;
             }
+            switch (tbs.xspec)
+            {
+                case "stretch":
+                    a_xmin = 0;
+                    a_xmax = 1;
+                    s_x = 0;
+                    break;
+                case "cen":
+                    a_xmin = 0.5f;
+                    a_xmax = 0.5f; ;
+                    s_x = txwneed;
+                    p_x = tbs.xpos;
+                    break;
+                case "left":
+                    a_xmin = 0f;
+                    a_xmax = 0f;
+                    s_x = txwneed;
+                    p_x = tbs.xpos;
+                    break;
+                case "right":
+                    a_xmin = 1f;
+                    a_xmax = 1f;
+                    s_x = txwneed;
+                    p_x = tbs.xpos;
+                    break;
+            }
+            recttrans.anchorMin = new Vector2(a_xmin, a_ymin);
+            recttrans.anchorMax = new Vector2(a_xmax, a_ymax);
+            recttrans.sizeDelta = new Vector2(s_x, s_y);
+            recttrans.position = new Vector3(p_x, p_y, 0);
             bgo.transform.SetParent(parent, worldPositionStays: false);
-            if (tooltiptext != "")
+            if (tbs.ttname != "")
             {
-                uiman.ttman.WireUpToolTip(bgo, displayname, tooltiptext);
+                uiman.ttman.WireUpToolTip(bgo, tbs.dispname, tbs.ttname);
             }
-            if (action != null)
+            if (tbs.action != null)
             {
-                butt.onClick.AddListener(action);
+                butt.onClick.AddListener(tbs.action);
             }
-            createdButList.Add((butt, idname, displayname));
+            createdButList.Add((butt, tbs.idname, tbs.dispname));
             lay_but_x += lay_but_w + lay_but_gap_x;
             lay_but_y += lay_but_gap_y;
         }
 
-        public void SpecOneButton(string idname, string displayname, string tooltiptext, UnityAction action)
+        public void SpecOneButton(TopButSpec tbs)
         {
-            if (!butSpecList.ContainsKey(idname))
+            if (!butSpecList.ContainsKey(tbs.idname))
             {
-                orderedButIdnames.Add(idname);
+                orderedButIdnames.Add(tbs.idname);
             }
             else
             {
-                sman.LggWarning($"OptionsTabPanel.SpecOneButton - duplicate button spec:{idname}");
+                sman.LggWarning($"OptionsTabPanel.SpecOneButton - duplicate button spec:{tbs.idname}");
             }
-            butSpecList[idname] = (displayname, tooltiptext, action);
+            butSpecList[tbs.idname] = tbs;
         }
 
         public enum OttLayout { fixedheight, stretchy }
@@ -110,8 +185,8 @@ namespace CampusSimulator
             InitializeLayout(butSpecList.Keys.ToArray());
             foreach (var idname in orderedButIdnames)
             {
-                var (dname, ttname, action) = butSpecList[idname];
-                MakeOneButton(transform, ottlayout, idname, dname, ttname, action);
+                var tbs = butSpecList[idname];
+                MakeOneButton(transform,  tbs );
             }
         }
 
@@ -128,7 +203,7 @@ namespace CampusSimulator
             }
             createdButList = new List<(Button, string, string)>();
             orderedButIdnames = new List<string>();
-            butSpecList = new Dictionary<string, (string, string, UnityAction)>();
+            butSpecList = new Dictionary<string,TopButSpec>();
         }
 
         //// Start is called before the first frame update
