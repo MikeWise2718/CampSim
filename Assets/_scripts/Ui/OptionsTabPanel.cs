@@ -24,16 +24,14 @@ public class OptionsTabPanel : MonoBehaviour
         }
     }
 
+    string fixedButtonList = "VisualsTabButton,MapSetTabButton,FramesTabButton,FireFlyTabButton,BuildingsTabButton,GeneralTabButton,HelpTabButton,AboutTabButton";
     public void DestroyFixedButtons()
     {
-        FindAndDestroy("VisualsTabButton");
-        FindAndDestroy("MapSetTabButton");
-        FindAndDestroy("FramesTabButton");
-        FindAndDestroy("FireFlyTabButton");
-        FindAndDestroy("BuildingsTabButton");
-        FindAndDestroy("GeneralTabButton");
-        FindAndDestroy("HelpTabButton");
-        FindAndDestroy("AboutTabButton");
+        var farr = fixedButtonList.Split(',');
+        foreach (var f in farr)
+        {
+            FindAndDestroy(f);
+        }
     }
 
     public void DeleteStuff()
@@ -114,6 +112,7 @@ public class OptionsTabPanel : MonoBehaviour
         }
         optionsButList.Add((butt, idname,displayname));
         lay_but_x += lay_but_w + lay_but_gap_x;
+        lay_but_y += lay_but_gap_y;
     }
 
     public void MakeOneButton(OttLayout ottlayout, string idname, string displayname, string tooltiptext = "", UnityAction action = null)

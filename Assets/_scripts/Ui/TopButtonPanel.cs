@@ -41,13 +41,11 @@ namespace CampusSimulator
         GameObject freeFlyPanel;
 
 
-        List<Button> butList; 
-        // Start is called before the first frame update
-
         void LinkObjectsAndComponents()
         {
             uiman = sman.uiman;
 
+            hideUiButton = transform.Find("HideUiButton").gameObject.GetComponent<Button>();
             runButton = transform.Find("RunButton").gameObject.GetComponent<Button>();
             flyButton = transform.Find("FlyButton").gameObject.GetComponent<Button>();
             frameButton = transform.Find("FrameButton").gameObject.GetComponent<Button>();
@@ -59,7 +57,6 @@ namespace CampusSimulator
             showTracksButton = transform.Find("ShowTracksButton").gameObject.GetComponent<Button>();
             freeFlyButton = transform.Find("FreeFlyButton").gameObject.GetComponent<Button>();
             quitButton = transform.Find("QuitButton").gameObject.GetComponent<Button>();
-            hideUiButton = transform.Find("HideUiButton").gameObject.GetComponent<Button>();
             freeFlyPanel = transform.Find("FreeFlyHelpPanel").gameObject;
 
 
@@ -129,6 +126,26 @@ namespace CampusSimulator
             uiman.ttman.WireUpToolTip(goButton.gameObject, "go", "Kick off a preprogramed scenario dependent journey script");
             uiman.ttman.WireUpToolTip(optionsButton.gameObject, "opts", "Bring up detailed configuration tabs");
         }
+
+        public void FindAndDestroy(string targetname)
+        {
+            var tran = transform.Find(targetname);
+            if (tran != null)
+            {
+                Destroy(tran.gameObject);
+            }
+        }
+
+        string fixedButtonList = "HideUiButton,RunButton,FlyButton,FrameButton,EvacButton,UnEvacButton,PipeButton,GoButton,OptionsButton,ShowTracksButton,FreeFlyButton,QuitButton";
+        public void DestroyFixedButtons()
+        {
+            var farr = fixedButtonList.Split( ',');
+            foreach( var f in farr)
+            {
+                FindAndDestroy(f);
+            }
+        }
+
         public void SetScene(CampusSimulator.SceneSelE curscene)
         {
         }

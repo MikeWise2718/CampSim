@@ -33,7 +33,8 @@ public class OptionsPanel : MonoBehaviour
 
     public UxEnumSetting<TabState> initialSceneTabState = new UxEnumSetting<TabState>("OptionsLastTabUsed", TabState.Visuals);
 
-    public string enableString = "Visuals,MapSet,Frames,FireFly,Buildings,Osm,General,Log,Help,About";
+    public const string enableStringRoot = "Visuals,MapSet,Frames,FireFly,Buildings,Osm,General,Log,Help,About";
+    public string enableString;
 
     public delegate void OnUiButtonClickDelegate();
     public class OptButtSpec
@@ -84,7 +85,6 @@ public class OptionsPanel : MonoBehaviour
         uiman = sman.uiman;
 
         AddActionsToButspecs();
-
 
         panDict = new Dictionary<TabState, GameObject>();
 
@@ -142,7 +142,6 @@ public class OptionsPanel : MonoBehaviour
         }
 
         inited = true;
-
     }
 
     public void SetProcs(TabState ts, Initer initer, SetAndSaver setAndSaver)
@@ -154,19 +153,6 @@ public class OptionsPanel : MonoBehaviour
     public void DeleteStuff()
     {
     }
-
-    // public void MakeOptionsButtonsOld()
-    //{
-    //    var buttxtarr = enableString.Split(',');
-
-    //    uiman.ottpan.InitializeLayout(buttxtarr);
-
-    //    foreach (var idname in buttxtarr)
-    //    {
-    //        var bs = butspec[idname];
-    //        uiman.ottpan.MakeOneButtonStretchY(bs.idname,bs.displayName, bs.tooltip, bs.onClickAction );
-    //    }
-    //}
 
     public void MakeOptionsButtons()
     {
@@ -222,7 +208,7 @@ public class OptionsPanel : MonoBehaviour
         {
             foreach (var ts in panDict.Keys)
             {
-                  panDict[ts].SetActive(currentTabState == ts);
+                panDict[ts].SetActive(currentTabState == ts);
             }
             if (initDict.ContainsKey(currentTabState))
             {
@@ -268,12 +254,28 @@ public class OptionsPanel : MonoBehaviour
     {
         InitializeValues();
 
-        enableString = "Visuals,MapSet,FireFly,Frames,Buildings,Osm,General,Log,Help,About";
+        enableString = enableStringRoot;
         switch (curscene)
         {
+            case SceneSelE.Eb12:
+            case SceneSelE.Eb12small:
+                {
+                    enableString = "Visuals,MapSet,Buildings,Osm,Log,Help,About";
+                    break;
+                }
+            case SceneSelE.MsftSmall:
+                {
+                    enableString = "Visuals,MapSet,Log,Help,About";
+                    break;
+                }
             case SceneSelE.MsftB19focused:
                 {
-                    enableString = "Visuals,MapSet,Frames,Buildings,Osm,General,Log,Help,About";// no firefly
+                    enableString = "Visuals,MapSet,Frames,Buildings,Osm,General,Log,Help,About";
+                    break;
+                }
+            case SceneSelE.MsftB121focused:
+                {
+                    enableString = "Visuals,MapSet,Buildings,Osm,General,Log,Help,About";
                     break;
                 }
             case SceneSelE.TeneriffeMtn:
@@ -281,7 +283,6 @@ public class OptionsPanel : MonoBehaviour
                     enableString = "FireFly,Visuals,MapSet,Frames,Buildings,Osm,General,Log,Help,About";
                     break;
                 }
-
         }
         MakeOptionsButtons();
         currentTabState = initialSceneTabState.Get();
