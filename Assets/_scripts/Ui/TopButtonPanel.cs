@@ -47,18 +47,18 @@ namespace CampusSimulator
 
         Dictionary<string, TopButtonMan.TopButSpec> butspec = new Dictionary<string, TopButtonMan.TopButSpec>()
         {
-            {"HideUiButton",new TopButtonMan.TopButSpec("HideUiButton","HideUI", "Hide the User Interface\nEsc brings it back afterwards","left",70,"stretch",0,null,"All")},
-            {"RunButton",new TopButtonMan.TopButSpec("RunButton","Run", "Start ground based journeys","cen",-739,"stretch",0,null,"Sim")},
-            {"FlyButton",new TopButtonMan.TopButSpec("FlyButton","Fly", "Start flying journeys","cen",-667,"stretch",0,null,"Sim")},
-            {"FrameButton",new TopButtonMan.TopButSpec("FrameButton","Frame", "Draw labels on people, cars, etc","cen",-573,"stretch",0,null,"Frame")},
-            {"EvacButton",new TopButtonMan.TopButSpec("EvacButton", "Evac", "Start an evacuation simulation","cen",-467,"stretch",0,null,"Evac")},
-            {"UnEvacButton",new TopButtonMan.TopButSpec("UnEvacButton", "Unevac", "After an evacuation, go back to starting positions","cen",-382,"stretch",0,null,"Evac")},
-            {"PipeButton",new TopButtonMan.TopButSpec("PipeButton","Pipes", "Show journey path links and nodes","cen",-287,"stretch",0,null,"All")},
-            {"GoButton",new TopButtonMan.TopButSpec("GoButton","Go", "Kick off a preprogramed scenario dependent journey script","cen",335,"stretch",0,null,"Sim")},
-            {"ShowTracksButton",new TopButtonMan.TopButSpec("ShowTracksButton","Tracks", "Show GPX Tracks","cen",422,"stretch",0,null,"Trx")},
-            {"OptionsButton",new TopButtonMan.TopButSpec("OptionsButton","Options", "Bring up detailed configuration tabs","cen",549,"stretch",0,null,"All")},
-            {"FreeFlyButton",new TopButtonMan.TopButSpec("FreeFlyButton","FreeFly", "Fly around in scene freely\nEsc exits this state","cen",693,"stretch",0,null,"All")},
-            {"QuitButton" ,new TopButtonMan.TopButSpec("QuitButton","Quit", "Quit to OS","right",-70,"stretch",0,null,"All")},
+            {"HideUiButton",new TopButtonMan.TopButSpec("HideUiButton","HideUI", "Hide the User Interface\nEsc brings it back afterwards","left",70,"stretch",0,"All")},
+            {"RunButton",new TopButtonMan.TopButSpec("RunButton","Run", "Start ground based journeys","cen",-739,"stretch",0,"Sim")},
+            {"FlyButton",new TopButtonMan.TopButSpec("FlyButton","Fly", "Start flying journeys","cen",-667,"stretch",0,"Sim")},
+            {"FrameButton",new TopButtonMan.TopButSpec("FrameButton","Frame", "Draw labels on people, cars, etc","cen",-573,"stretch",0,"Frame")},
+            {"EvacButton",new TopButtonMan.TopButSpec("EvacButton", "Evac", "Start an evacuation simulation","cen",-467,"stretch",0,"Evac")},
+            {"UnEvacButton",new TopButtonMan.TopButSpec("UnEvacButton", "Unevac", "After an evacuation, go back to starting positions","cen",-382,"stretch",0,"Evac")},
+            {"PipeButton",new TopButtonMan.TopButSpec("PipeButton","Pipes", "Show journey path links and nodes","cen",-287,"stretch",0,"All")},
+            {"GoButton",new TopButtonMan.TopButSpec("GoButton","Go", "Kick off a preprogramed scenario dependent journey script","cen",335,"stretch",0,"Sim")},
+            {"ShowTracksButton",new TopButtonMan.TopButSpec("ShowTracksButton","Tracks", "Show GPX Tracks","cen",422,"stretch",0,"Trx")},
+            {"OptionsButton",new TopButtonMan.TopButSpec("OptionsButton","Options", "Bring up detailed configuration tabs","cen",549,"stretch",0,"All")},
+            {"FreeFlyButton",new TopButtonMan.TopButSpec("FreeFlyButton","FreeFly", "Fly around in scene freely\nEsc exits this state","cen",693,"stretch",0,"All")},
+            {"QuitButton" ,new TopButtonMan.TopButSpec("QuitButton","Quit", "Quit to OS","right",-70,"stretch",0,"All")},
         };
 
         public void AddActionsToButspecs()
@@ -170,7 +170,7 @@ namespace CampusSimulator
             uiman.ttman.WireUpToolTip(optionsButton.gameObject, "opts", "Bring up detailed configuration tabs");
         }
 
-        void DeleteStuff()
+        public void DeleteStuff()
         {
             if (topButMan != null)
             {
@@ -199,7 +199,14 @@ namespace CampusSimulator
 
         public void SetScene(CampusSimulator.SceneSelE curscene)
         {
-            CreateButtonsAnew();
+            string tbpfiltlist = "All,Frame,Sim,Trx,Evac";
+            switch(curscene)
+            {
+                case SceneSelE.MsftSmall:
+                    tbpfiltlist = "All";
+                    break;
+            }
+            CreateButtonsAnew(tbpfiltlist);
         }
         public void Init0()
         {
@@ -211,8 +218,9 @@ namespace CampusSimulator
 
 
 
-        public void CreateButtonsAnew()
+        public void CreateButtonsAnew(string tbtfiltlist)
         {
+            topButMan.SetTbtFilter(tbtfiltlist);
             var buttxtarr = fixedDummyButtonList.Split(',');
             foreach (var k in buttxtarr)
             {

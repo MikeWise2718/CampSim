@@ -450,7 +450,7 @@ namespace CampusSimulator
 
                     SetInitState(InitState.modelBuildPost);
 
-                    this.Lgg("lcman.ModelBuildFinal", "yellow");
+                    //this.Lgg("lcman.ModelBuildFinal", "yellow");
                     lcman.ModelBuildFinal();  // realize latelinks and heights
                     mpman.ModelBuildFinal();
 

@@ -674,7 +674,7 @@ namespace GraphAlgos
             var garage = gm.GetGarage(gname);
             if (garage == null)
             {
-                Debug.Log("Garage " + gname + " not found in CreateGarageLinks");
+                gm.sman.LggWarning("Garage " + gname + " not found in CreateGarageLinks");
                 return;
             }
             int nslots = garage.slotnames.Count;

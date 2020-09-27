@@ -206,18 +206,20 @@ namespace Aiskwk.Map
                 var pit1s = pit1.ToString("f3");
                 if (i>=1)
                 {
-                    var d1s = d1.ToString("f3");
-                    var pit2s = pit2.ToString("f3");
-                    var d2s = d2.ToString("f3");
-                    Debug.Log($"{lname} - {i}  - pt1:{pit1s} l1:{d1s}   pt2:{pit2s} l2:{d2s}");
+                    //var d1s = d1.ToString("f3");
+                    //var pit2s = pit2.ToString("f3");
+                    //var d2s = d2.ToString("f3");
+                    //Debug.Log($"AddFragLine {lname} - {i}  - pt1:{pit1s} l1:{d1s}   pt2:{pit2s} l2:{d2s}");
                 }
                 var llname = $"{lname}_{i}";
-                if (nclr != "" && i == 0)
-                {
-                    sname = $"{llname}_pt1_{d1.ToString("f4")}";
-                    sphgo = qut.CreateMarkerSphere(sname, pit1, lska * nska, nclr);
-                    sphgo.transform.SetParent(lgo.transform, worldPositionStays: wps);
-                }
+                //if (nclr != "" && i == 0)
+                //if (0<i)
+                //{
+                //    sname = $"marker-{llname}_pt1_{d1.ToString("f4")}";
+                //    Debug.Log($"AFL:{sname}");
+                //    sphgo = qut.CreateMarkerSphere(sname, pit1, 200*lska * nska, "lightgreen");
+                //    sphgo.transform.SetParent(lgo.transform, worldPositionStays: wps);
+                //}
                 GameObject cylgo;
                 if (dowall)
                 {

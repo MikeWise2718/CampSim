@@ -17,6 +17,7 @@ namespace CampusSimulator
         List<(Button, string, string)> createdButList = null;
         List<string> orderedButIdnames = null;
         Dictionary<string,TopButSpec> butSpecList = null;
+        List<string> filterList = null;
 
 
         public class TopButSpec
@@ -30,7 +31,7 @@ namespace CampusSimulator
             public int ypos;
             public UnityAction action;
             public string filter;
-            public TopButSpec(string idname,string dispname,string ttname,string xspec,int xpos,string yspec,int ypos, UnityAction action,string filter)
+            public TopButSpec(string idname,string dispname,string ttname,string xspec,int xpos,string yspec,int ypos,string filter)
             {
                 this.idname = idname;
                 this.dispname = dispname;
@@ -39,7 +40,6 @@ namespace CampusSimulator
                 this.xpos = xpos;
                 this.yspec = yspec;
                 this.ypos = ypos;
-                this.action = action;
                 this.filter = filter;
             }
         }
@@ -52,6 +52,7 @@ namespace CampusSimulator
             createdButList = new List<(Button, string, string)>();
             orderedButIdnames = new List<string>();
             butSpecList = new Dictionary<string, TopButSpec>();
+            filterList = new List<string>();
         }
 
 
@@ -78,10 +79,28 @@ namespace CampusSimulator
             lay_but_y = 0;
         }
 
+        public bool IsInFilter(string fex)
+        {
+            foreach(var fentry in filterList)
+            {
+                if (fentry.Contains(fex))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
 
         public void MakeOneButton(Transform parent, TopButSpec tbs)
         {
             var bgo = DefaultControls.CreateButton(new DefaultControls.Resources());
+            if (filterList.Count > 0)
+            {
+                if (!IsInFilter(tbs.filter))
+                {
+                    return;
+                }
+            }
             bgo.name = tbs.idname + "Button";
             var butt = bgo.GetComponentInChildren<Button>();
             var btxt = bgo.GetComponentInChildren<Text>();
@@ -193,6 +212,7 @@ namespace CampusSimulator
         public void DeleteStuff()
         {
             DestroyButtons();
+            filterList = new List<string>();
         }
 
         public void DestroyButtons()
@@ -204,6 +224,10 @@ namespace CampusSimulator
             createdButList = new List<(Button, string, string)>();
             orderedButIdnames = new List<string>();
             butSpecList = new Dictionary<string,TopButSpec>();
+        }
+        public void SetTbtFilter(string tbtfilter)
+        {
+            filterList = new List<string>(tbtfilter.Split(','));
         }
 
         //// Start is called before the first frame update
