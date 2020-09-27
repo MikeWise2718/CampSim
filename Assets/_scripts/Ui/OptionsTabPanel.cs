@@ -78,7 +78,7 @@ public class OptionsTabPanel : MonoBehaviour
         lay_totalwid = lay_nbut * lay_but_w + (lay_nbut - 1) * lay_but_gap_x;
 
         lay_but_x = -lay_totalwid / 2;
-        lay_but_y = 662;
+        lay_but_y = 0;
     }
 
     public void MakeOneButtonStretchY(string idname, string displayname, string tooltiptext = "", UnityAction action = null)
@@ -124,7 +124,7 @@ public class OptionsTabPanel : MonoBehaviour
         btxt.text = displayname;
         btxt.fontSize = 18;
         var recttrans = butt.GetComponent<RectTransform>();
-        var pos = new Vector3(lay_but_x, 0, 0);
+        var pos = new Vector3(lay_but_x, lay_but_y, 0);
         recttrans.SetPositionAndRotation(pos, Quaternion.identity);
         switch (ottlayout)
         {

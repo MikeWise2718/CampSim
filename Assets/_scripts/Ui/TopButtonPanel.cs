@@ -152,6 +152,7 @@ namespace CampusSimulator
         public void Init0()
         {
             LinkObjectsAndComponents();
+            // DestroyFixedButtons();
         }
 
  
