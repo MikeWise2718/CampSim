@@ -39,19 +39,13 @@ public class OptionsPanel : MonoBehaviour
     public class OptButtSpec
     {
         public string idname;
-        public TabState tabstate;
+        public string displayName;
         public string tooltip;
         public UnityEngine.Events.UnityAction onClickAction;
-        public OptButtSpec(string bname, string btooltip)
+        public OptButtSpec(string bidname,string bdispname, string btooltip)
         {
-            idname = bname;
-            var ok = System.Enum.TryParse<TabState>(bname, out var te);
-            if (!ok)
-            {
-                Debug.LogError($"Could not parse {bname} as TabState enum");
-                te = TabState.Visuals;
-            }
-            tabstate = te;
+            idname = bidname;
+            displayName = bdispname;
             tooltip = btooltip;
             onClickAction = null;
         }
@@ -59,33 +53,32 @@ public class OptionsPanel : MonoBehaviour
 
     Dictionary<string, OptButtSpec> butspec = new Dictionary<string, OptButtSpec>()
     {
-        {"Visuals",new OptButtSpec("Visuals","Visual Base Settings")},
-        {"MapSet",new OptButtSpec("MapSet","Map Settings\nThere are a lot of them") },
-        {"Frames",new OptButtSpec("Frames","Frame parameters for image recognition labeling") },
-        {"FireFly",new OptButtSpec("FireFly","FireFly related parameters") },
-        {"Buildings",new OptButtSpec("Buildings","Building related parameters") },
-        {"Osm",new OptButtSpec("Osm","Open Street Map Import") },
-        {"General",new OptButtSpec("General","General parameters") },
-        {"Log",new OptButtSpec("Log","Log messages (i.e. errors, warnings, timings, etc)") },
-        {"Help",new OptButtSpec("Help","Help information\nincluding command line parameters") },
-        {"About",new OptButtSpec("About","Version and System Information") },
+        {"Visuals",new OptButtSpec(TabState.Visuals.ToString(),"Visuals","Visual Base Settings")},
+        {"MapSet",new OptButtSpec(TabState.MapSet.ToString(),"MapSet","Map Settings\nThere are a lot of them") },
+        {"Frames",new OptButtSpec(TabState.Frames.ToString(),"Frames","Frame parameters for image recognition labeling") },
+        {"FireFly",new OptButtSpec(TabState.FireFly.ToString(),"FireFly","FireFly related parameters") },
+        {"Buildings",new OptButtSpec(TabState.Buildings.ToString(),"Buildings","Building related parameters") },
+        {"Osm",new OptButtSpec(TabState.Osm.ToString(),"Osm","Open Street Map Import") },
+        {"General",new OptButtSpec(TabState.General.ToString(),"General","General parameters") },
+        {"Log",new OptButtSpec(TabState.Log.ToString(),"Log","Log messages (i.e. errors, warnings, timings, etc)") },
+        {"Help",new OptButtSpec(TabState.Help.ToString(),"Help","Help information\nincluding command line parameters") },
+        {"About",new OptButtSpec(TabState.About.ToString(),"About","Version and System Information") },
     };
 
-
     public enum TabState { Visuals, MapSet, FireFly, Frames, Buildings, Osm, General, Log, Help, About }
-    TabState tabstate;
-    // Start is called before the first frame update
+    TabState currentTabState;
+
     public void Init0()
     {
+        //Debug.Log("Options Panel Init0:"+name);
         uiman = sman.uiman;
 
-        //ttDict = new Dictionary<string, GameObject>();
         panDict = new Dictionary<TabState, GameObject>();
         scenarioButList = new List<(Button,string)>();
         initDict = new Dictionary<TabState, Initer>();
         setAndSaveDict = new Dictionary<TabState, SetAndSaver>();
 
-        //Debug.Log("Options Panel Start:"+name);
+        // Panels are predefined so we can layout things on them
         visualsPanel = transform.Find("VisualsPanel").GetComponent<VisualsPanel>();
         mapSetPanel = transform.Find("MapSetPanel").GetComponent<MapSetPanel>();
         framePanel = transform.Find("FramePanel").GetComponent<FramePanel>();
@@ -97,6 +90,7 @@ public class OptionsPanel : MonoBehaviour
         helpPanel = transform.Find("HelpPanel").GetComponent<HelpPanel>();
         aboutPanel = transform.Find("AboutPanel").GetComponent<AboutPanel>();
 
+        // Connecting them up
         panDict[TabState.Visuals] = visualsPanel.gameObject;
         panDict[TabState.MapSet] = mapSetPanel.gameObject;
         panDict[TabState.Frames] = framePanel.gameObject;
@@ -212,7 +206,7 @@ public class OptionsPanel : MonoBehaviour
         foreach (var key in butspec.Keys)
         {
             var butsp = butspec[key];
-            butsp.onClickAction = delegate{ OptionsSubMenuButtonPushed(butsp.tabstate); };
+            butsp.onClickAction = delegate{ OptionsSubMenuButtonPushed(butsp.idname); };
         }
     }
     public void MakeOptionsButtons()
@@ -252,13 +246,31 @@ public class OptionsPanel : MonoBehaviour
 
     public void OptionsSubMenuButtonPushed(TabState newstate)
     {
-        gameObject.SetActive(true);
+        if (!gameObject.activeSelf)
+        {
+            gameObject.SetActive(true);
+        }
         SetTabState(newstate);
     }
 
-    public void SetTabState(TabState newstate)
+    public void OptionsSubMenuButtonPushed(string newstate)
     {
-        tabstate = newstate;
+        var ok = System.Enum.TryParse<TabState>(newstate, out var tabstate);
+        if (!ok)
+        {
+            Debug.LogError($"Could not parse {newstate} as TabState enum");
+            tabstate = TabState.Visuals;
+        }
+        SetTabState(tabstate);
+    }
+
+    public void SetTabState(TabState newstate,bool ensureActive=true)
+    {
+        if (ensureActive)
+        {
+            gameObject.SetActive(true);
+        }
+        currentTabState = newstate;
         initialSceneTabState.SetAndSave(newstate);
         SyncOptionsTabState();
     }
@@ -270,20 +282,19 @@ public class OptionsPanel : MonoBehaviour
         {
             foreach (var ts in panDict.Keys)
             {
-                var gob = panDict[ts];
-                gob.SetActive(tabstate == ts);
+                  panDict[ts].SetActive(currentTabState == ts);
             }
-            if (initDict.ContainsKey(tabstate))
+            if (initDict.ContainsKey(currentTabState))
             {
-                initDict[tabstate]();
+                initDict[currentTabState]();
             }
         }
+        var curts = currentTabState.ToString();
         foreach (var (but,idname) in scenarioButList)
         {
             var bs = butspec[idname];
-            uiman.tbtpan.SetButtonColor(but, "lightgray", tabstate == bs.tabstate, bs.idname);
+            uiman.tbtpan.SetButtonColor(but, "lightgray", "white", curts == bs.idname, bs.displayName);
         }
-
     }
     public void TogglePanelState()
     {
@@ -305,9 +316,9 @@ public class OptionsPanel : MonoBehaviour
         }
         else
         {
-            if (setAndSaveDict.ContainsKey(tabstate))
+            if (setAndSaveDict.ContainsKey(currentTabState))
             {
-                setAndSaveDict[tabstate](closing: true);
+                setAndSaveDict[currentTabState](closing: true);
             }
         }
     }
@@ -336,11 +347,8 @@ public class OptionsPanel : MonoBehaviour
                 }
 
         }
-
         MakeOptionsButtons();
-
-        tabstate = initialSceneTabState.Get();
-
+        currentTabState = initialSceneTabState.Get();
         SyncOptionsTabState();
     }
     public void OptionsTabToggle()

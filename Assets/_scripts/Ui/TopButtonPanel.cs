@@ -137,7 +137,7 @@ namespace CampusSimulator
             LinkObjectsAndComponents();
         }
 
-        public void SetButtonColor(Button butt,string hicolor,bool status,string txt,bool force=false)
+        public void SetButtonColor(Button butt,string activeColor,string idleColor,bool status,string txt,bool force=false)
         {
             if (butt == null)
             {
@@ -150,11 +150,11 @@ namespace CampusSimulator
             var textcomp = textgo.GetComponent<Text>();
             if (status)
             {
-                var clr = GraphAlgos.GraphUtil.GetColorByName(hicolor);
+                var hiclr = GraphAlgos.GraphUtil.GetColorByName(activeColor);
                 //Debug.Log("Setting button color to:"+clr.ToString());
-                colors.normalColor = clr;
-                colors.highlightedColor = clr;
-                colors.selectedColor = clr;
+                colors.normalColor = hiclr;
+                colors.highlightedColor = hiclr;
+                colors.selectedColor = hiclr;
                 if (force)
                 {
                     textcomp.text = txt + "**";
@@ -166,9 +166,10 @@ namespace CampusSimulator
             }
             else
             {
-                colors.normalColor = Color.white;
-                colors.highlightedColor = Color.white;
-                colors.selectedColor = Color.white;
+                var loclr = GraphAlgos.GraphUtil.GetColorByName(idleColor);
+                colors.normalColor = loclr;
+                colors.highlightedColor = loclr;
+                colors.selectedColor = loclr;
                 textcomp.text = txt;
             }
             butt.colors = colors;
@@ -312,23 +313,24 @@ namespace CampusSimulator
 
         public void ColorizeButtonStates()
         {
-            SetButtonColor(pipeButton, "pink", sman.lcman.pipevis, "Pi");
-            SetButtonColor(fteButton, "lightblue", sman.frman.detectFte.Get(), "F");
-            SetButtonColor(conButton, "lightblue", sman.frman.detectContractor.Get(), "C");
-            SetButtonColor(secButton, "lightblue", sman.frman.detectSecurity.Get(), "S");
-            SetButtonColor(visButton, "lightblue", sman.frman.detectVisitor.Get(), "V");
-            SetButtonColor(unkButton, "lightblue", sman.frman.detectUnknown.Get(), "U");
-            SetButtonColor(showTracksButton, "lightblue", sman.trman.showtracks.Get(), "Tracks");
-            SetButtonColor(tranButton, "lightblue", sman.bdman.transwalls, "Tr");
-            SetButtonColor(hvacButton, "yellow", sman.bdman.showhvac, "Hv");
-            SetButtonColor(elecButton, "yellow", sman.bdman.showelec, "El");
-            SetButtonColor(plumButton, "yellow", sman.bdman.showplum, "Pb");
+            var loc = "white";
+            SetButtonColor(pipeButton, "pink",loc, sman.lcman.pipevis, "Pi");
+            SetButtonColor(fteButton, "lightblue", loc, sman.frman.detectFte.Get(), "F");
+            SetButtonColor(conButton, "lightblue", loc, sman.frman.detectContractor.Get(), "C");
+            SetButtonColor(secButton, "lightblue", loc, sman.frman.detectSecurity.Get(), "S");
+            SetButtonColor(visButton, "lightblue", loc, sman.frman.detectVisitor.Get(), "V");
+            SetButtonColor(unkButton, "lightblue", loc, sman.frman.detectUnknown.Get(), "U");
+            SetButtonColor(showTracksButton, "lightblue", loc, sman.trman.showtracks.Get(), "Tracks");
+            SetButtonColor(tranButton, "lightblue", loc, sman.bdman.transwalls, "Tr");
+            SetButtonColor(hvacButton, "yellow", loc, sman.bdman.showhvac, "Hv");
+            SetButtonColor(elecButton, "yellow", loc, sman.bdman.showelec, "El");
+            SetButtonColor(plumButton, "yellow", loc, sman.bdman.showplum, "Pb");
             //Debug.LogWarning($"ColorizeButtonStates Vt2D:{sman.frman.visibilityTiedToDetectability.Get()}");
-            SetButtonColor(vt2dButton, "lightblue", sman.frman.visibilityTiedToDetectability.Get(), "Vt2D");
-            SetButtonColor(frameButton, "pink", sman.frman.frameJourneys.Get(), "Frame");
-            SetButtonColor(freeFlyButton, "pink", sman.vcman.InFreeFly(), "FreeFly");
-            SetButtonColor(runButton, "pink", sman.jnman.spawnrunjourneys, "Run");
-            SetButtonColor(flyButton, "lightblue", sman.jnman.spawnflyjourneys, "Fly");
+            SetButtonColor(vt2dButton, "lightblue", loc, sman.frman.visibilityTiedToDetectability.Get(), "Vt2D");
+            SetButtonColor(frameButton, "pink", loc, sman.frman.frameJourneys.Get(), "Frame");
+            SetButtonColor(freeFlyButton, "pink", loc, sman.vcman.InFreeFly(), "FreeFly");
+            SetButtonColor(runButton, "pink", loc, sman.jnman.spawnrunjourneys, "Run");
+            SetButtonColor(flyButton, "lightblue", loc, sman.jnman.spawnflyjourneys, "Fly");
         }
         public void DetectFteButton()
         {
