@@ -1662,7 +1662,7 @@ namespace CampusSimulator
                 flines.AddRange(uiman.abtpan.GetAboutTextAsList());
                 File.WriteAllLines("help.txt", flines);
 
-                uiman.optpan.OptionsSubMenuButtonPushed(OptionsPanel.TabState.Help);
+                uiman.optpan.SetTabState(OptionsPanel.TabState.Help);
             }
             if (dodelsettings)
             {

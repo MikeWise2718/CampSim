@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 namespace CampusSimulator
 {
@@ -150,6 +151,45 @@ namespace CampusSimulator
         {
             uigo.SetActive(true);
             listenForKeys = false;
+        }
+
+        public void SetButtonColor(Button butt, string activeColor, string idleColor, bool status, string txt, bool force = false)
+        {
+            if (butt == null)
+            {
+                //Debug.LogWarning($"SetButton color button {txt} is null"); // this can happen, don't make a fuss
+                return;
+            }
+            var colors = butt.colors;
+            //Debug.Log("Set button color:"+hicolor+" status:"+status+" butt.name:"+butt.name);
+            var textgo = butt.transform.Find("Text");
+            var textcomp = textgo.GetComponent<Text>();
+            if (status)
+            {
+                var hiclr = GraphAlgos.GraphUtil.GetColorByName(activeColor);
+                //Debug.Log("Setting button color to:"+clr.ToString());
+                colors.normalColor = hiclr;
+                colors.highlightedColor = hiclr;
+                colors.selectedColor = hiclr;
+                if (force)
+                {
+                    textcomp.text = txt + "**";
+                }
+                else
+                {
+                    textcomp.text = txt + "*";
+                }
+            }
+            else
+            {
+                var loclr = GraphAlgos.GraphUtil.GetColorByName(idleColor);
+                colors.normalColor = loclr;
+                colors.highlightedColor = loclr;
+                colors.selectedColor = loclr;
+                textcomp.text = txt;
+            }
+            butt.colors = colors;
+            Canvas.ForceUpdateCanvases();
         }
 
         public void DoKeys()
