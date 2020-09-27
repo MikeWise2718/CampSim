@@ -36,7 +36,6 @@ public class OptionsPanel : MonoBehaviour
     public const string enableStringRoot = "Visuals,MapSet,Frames,FireFly,Buildings,Osm,General,Log,Help,About";
     public string enableString;
 
-    public delegate void OnUiButtonClickDelegate();
     public class OptButtSpec
     {
         public string idname;

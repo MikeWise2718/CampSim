@@ -11,7 +11,7 @@ public class OptionsTabPanel : MonoBehaviour
 
     public SceneMan sman;
     UiMan uiman;
-    List<(Button, string, string )> optionsButList = null;
+    List<(Button, string, string )> createdOptionsButList = null;
     List<string> orderedButIdnames = null;
     Dictionary<string,(string, string, UnityAction)> butSpecList = null;
 
@@ -24,10 +24,10 @@ public class OptionsTabPanel : MonoBehaviour
         }
     }
 
-    string fixedButtonList = "VisualsTabButton,MapSetTabButton,FramesTabButton,FireFlyTabButton,BuildingsTabButton,GeneralTabButton,HelpTabButton,AboutTabButton";
-    public void DestroyFixedButtons()
+    string fixedDummyButtonList = "VisualsTabButton,MapSetTabButton,FramesTabButton,FireFlyTabButton,BuildingsTabButton,GeneralTabButton,HelpTabButton,AboutTabButton";
+    public void DestroyFixedDummyButtons()
     {
-        var farr = fixedButtonList.Split(',');
+        var farr = fixedDummyButtonList.Split(',');
         foreach (var f in farr)
         {
             FindAndDestroy(f);
@@ -41,19 +41,19 @@ public class OptionsTabPanel : MonoBehaviour
 
     public void DestroyButtons()
     {
-        foreach (var (but, _,_) in optionsButList)
+        foreach (var (but, _,_) in createdOptionsButList)
         {
             Destroy(but.gameObject);
         }
-        optionsButList = new List<(Button, string,string)>();
+        createdOptionsButList = new List<(Button, string,string)>();
         orderedButIdnames = new List<string>();
         butSpecList = new Dictionary<string, (string, string, UnityAction)>();
     }
     public void Init0()
     {
         uiman = sman.uiman;
-        DestroyFixedButtons();
-        optionsButList = new List<(Button, string,string)>();
+        DestroyFixedDummyButtons();
+        createdOptionsButList = new List<(Button, string,string)>();
         orderedButIdnames = new List<string>();
         butSpecList = new Dictionary<string, (string, string, UnityAction)>();
     }
@@ -81,41 +81,8 @@ public class OptionsTabPanel : MonoBehaviour
         lay_but_y = 0;
     }
 
-    public void MakeOneButtonStretchY(string idname, string displayname, string tooltiptext = "", UnityAction action = null)
-    {
-        var bgo = DefaultControls.CreateButton(new DefaultControls.Resources());
-        bgo.name = idname+"Button";
-        var butt = bgo.GetComponentInChildren<Button>();
-        var btxt = bgo.GetComponentInChildren<Text>();
-        btxt.text = displayname;
-        btxt.fontSize = 18;
-        var recttrans = butt.GetComponent<RectTransform>();
-        var pos = new Vector3(lay_but_x, 0, 0);
-        recttrans.SetPositionAndRotation(pos, Quaternion.identity);
-        // min as 0 and max as 1 with size delta 0 makes it strech
-        // min as 0.5 and max as 0.5 with size delta w makes it behave as positioned
-        recttrans.anchorMin = new Vector2(0.5f, 0);
-        recttrans.anchorMax = new Vector2(0.5f, 1);
-        recttrans.pivot = new Vector2(0.5f, 0.5f);
-        recttrans.sizeDelta = new Vector2(lay_but_w, 0);
-        bgo.transform.SetParent(uiman.ottpan.transform, worldPositionStays: false);
 
-        //bgo.transform.SetParent(this.transform,worldPositionStays:false);
-
-        if (tooltiptext != "")
-        {
-            uiman.ttman.WireUpToolTip(bgo, displayname, tooltiptext);
-        }
-        if (action != null)
-        {
-            butt.onClick.AddListener(action);
-        }
-        optionsButList.Add((butt, idname,displayname));
-        lay_but_x += lay_but_w + lay_but_gap_x;
-        lay_but_y += lay_but_gap_y;
-    }
-
-    public void MakeOneButton(OttLayout ottlayout, string idname, string displayname, string tooltiptext = "", UnityAction action = null)
+    public void MakeOneButton(Transform parent,OttLayout ottlayout, string idname, string displayname, string tooltiptext = "", UnityAction action = null)
     {
         var bgo = DefaultControls.CreateButton(new DefaultControls.Resources());
         bgo.name = idname + "Button";
@@ -139,7 +106,7 @@ public class OptionsTabPanel : MonoBehaviour
                 recttrans.sizeDelta = new Vector2(lay_but_w, lay_but_h);
                 break;
         }
-        bgo.transform.SetParent(uiman.ottpan.transform, worldPositionStays: false);
+        bgo.transform.SetParent(parent, worldPositionStays: false);
         if (tooltiptext != "")
         {
             uiman.ttman.WireUpToolTip(bgo, displayname, tooltiptext);
@@ -148,7 +115,7 @@ public class OptionsTabPanel : MonoBehaviour
         {
             butt.onClick.AddListener(action);
         }
-        optionsButList.Add((butt, idname,displayname));
+        createdOptionsButList.Add((butt, idname,displayname));
         lay_but_x += lay_but_w + lay_but_gap_x;
         lay_but_y += lay_but_gap_y;
     }
@@ -173,13 +140,13 @@ public class OptionsTabPanel : MonoBehaviour
         foreach(var idname in orderedButIdnames)
         {
             var (dname, ttname, action) = butSpecList[idname];
-            MakeOneButton(ottlayout,idname, dname, ttname, action);
+            MakeOneButton(transform,ottlayout,idname, dname, ttname, action);
         }
     }
 
     public void SyncOptionsTabState(string curts)
     {
-        foreach (var (but, idname,displayname) in optionsButList)
+        foreach (var (but, idname,displayname) in createdOptionsButList)
         {
             uiman.SetButtonColor(but, "lightgray", "white", curts == idname, displayname);
         }

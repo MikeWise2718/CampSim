@@ -105,6 +105,7 @@ namespace CampusSimulator
         {
             optpan.DeleteStuff();
             ottpan.DeleteStuff();
+
         }
         public void ModelInitialize(SceneSelE newscene)
         {
