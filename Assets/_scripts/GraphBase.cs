@@ -58,6 +58,7 @@ namespace GraphAlgos
         public LinkUse usetype;
         public string comment;
         public int regionStepIdx;
+        public bool indoor;
         
 
         public LcNode cameFrom;
@@ -98,6 +99,7 @@ namespace GraphAlgos
             this.usetype = usetype;
             this.regid = nodeRegion.regid;
             this.comment = comment;
+            this.indoor = name.Contains("-f"); // floor nodes of form "b121-f01-xxx"
             regionStepIdx = nodeRegion.GetCurStepIdx();
             wegtos = null;
             AstarInit();

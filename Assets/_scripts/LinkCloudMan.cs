@@ -314,10 +314,14 @@ namespace CampusSimulator
             {
                 rv = false;
             }
-            //if (link.node1.pt.y > 0 || link.node2.pt.y > 0)
-            //{
-            //    rv = false;
-            //}
+            else if (link.usetype == LinkUse.stairs)
+            {
+                rv = false;
+            }
+            else if (link.node1.indoor && link.node2.indoor)
+            {
+                rv = false;
+            }
             return rv;
         }
 

@@ -226,7 +226,7 @@ namespace CampusSimulator
             {
                 if (!expectfailure)
                 {
-                    Debug.Log("Bad garage lookup - not found:" + name);
+                    sman.LggError("Bad garage lookup - not found:" + name);
                 }
                 return null;
             }
