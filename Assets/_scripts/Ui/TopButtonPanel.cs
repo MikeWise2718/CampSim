@@ -59,6 +59,18 @@ namespace CampusSimulator
             {"OptionsButton",new TopButtonMan.TopButSpec("OptionsButton","Options", "Bring up detailed configuration tabs","cen",549,"stretch",0,"All")},
             {"FreeFlyButton",new TopButtonMan.TopButSpec("FreeFlyButton","FreeFly", "Fly around in scene freely\nEsc exits this state","cen",693,"stretch",0,"All")},
             {"QuitButton" ,new TopButtonMan.TopButSpec("QuitButton","Quit", "Quit to OS","right",-70,"stretch",0,"All")},
+
+            {"FteButton" ,new TopButtonMan.TopButSpec("FteButton","F", "Detect FTEs","cen",-194,"stretch",10,"Frame")},
+            {"ConButton" ,new TopButtonMan.TopButSpec("ConButton","C", "Detect Contractors","cen",-154,"stretch",10,"Frame")},
+            {"VisButton" ,new TopButtonMan.TopButSpec("VisButton","V", "Detect Visitors","cen",-114,"stretch",10,"Frame")},
+            {"SecButton" ,new TopButtonMan.TopButSpec("SecButton","S", "Detect Security","cen",-74,"stretch",10,"Frame")},
+            {"UnkButton" ,new TopButtonMan.TopButSpec("UnkButton","U", "Detect Unknowns","cen",-34,"stretch",10,"Frame")},
+            {"Vt2DButton" ,new TopButtonMan.TopButSpec("Vt2DButton","Vt2D", "Tie Visibility to Detectability","cen",32,"stretch",10,"Frame")},
+
+            {"TranButton" ,new TopButtonMan.TopButSpec("TranButton","Tran", "Make Walls Transparent","cen",120,"stretch",10,"B121")},
+            {"HvacButton" ,new TopButtonMan.TopButSpec("HvacButton","Tran", "Show HVAC System","cen",170,"stretch",10,"B121")},
+            {"ElecButton" ,new TopButtonMan.TopButSpec("ElecButton","Tran", "Show Electrical System","cen",212,"stretch",10,"B121")},
+            {"PlumButton" ,new TopButtonMan.TopButSpec("PlumButton","Tran", "Show Plumbing System","cen",254,"stretch",10,"B121")},
         };
 
         public void AddActionsToButspecs()
@@ -76,6 +88,19 @@ namespace CampusSimulator
             butspec["OptionsButton"].action = delegate { OptionsButtonPushed(); };
             butspec["FreeFlyButton"].action = delegate { FreeFlyButton(); };
             butspec["QuitButton"].action = delegate { QuitButton(); };
+
+            butspec["FteButton"].action = delegate { DetectFteButton(); };
+            butspec["ConButton"].action = delegate { DetectConButton(); };
+            butspec["VisButton"].action = delegate { DetectSecButton(); };
+            butspec["SecButton"].action = delegate { DetectVisButton(); };
+            butspec["UnkButton"].action = delegate { DetectUnkButton(); };
+            butspec["Vt2DButton"].action = delegate { Vt2DButton(); };
+
+            butspec["TranButton"].action = delegate { DetectTranButton(); };
+            butspec["HvacButton"].action = delegate { DetectFteButton(); };
+            butspec["ElecButton"].action = delegate { DetectElecButton(); };
+            butspec["PlumButton"].action = delegate { DetectPlumButton(); };
+
         }
 
         void LinkObjectsAndComponents()
@@ -99,8 +124,6 @@ namespace CampusSimulator
             quitButton = transform.Find("QuitButton").gameObject.GetComponent<Button>();
             freeFlyPanel = transform.Find("FreeFlyHelpPanel").gameObject;
 
-
-
             fteButton = transform.Find("FteButton").gameObject.GetComponent<Button>();
             conButton = transform.Find("ConButton").gameObject.GetComponent<Button>();
             secButton = transform.Find("SecButton").gameObject.GetComponent<Button>();
@@ -112,7 +135,6 @@ namespace CampusSimulator
             hvacButton = transform.Find("HvacButton").gameObject.GetComponent<Button>();
             elecButton = transform.Find("ElecButton").gameObject.GetComponent<Button>();
             plumButton = transform.Find("PlumButton").gameObject.GetComponent<Button>();
-
 
             hideUiButton.onClick.AddListener(delegate { uiman.HideUi(); });
             runButton.onClick.AddListener(delegate { RunButton(); });
@@ -154,9 +176,9 @@ namespace CampusSimulator
             uiman.ttman.WireUpToolTip(vt2dButton.gameObject, "vt2d", "Tie Visibility to Detectability");
 
             uiman.ttman.WireUpToolTip(tranButton.gameObject, "trans", "Switch Bld121 walls to being transparent");
-            uiman.ttman.WireUpToolTip(hvacButton.gameObject, "hvac", "Show Bld121 HVAC structures");
-            uiman.ttman.WireUpToolTip(elecButton.gameObject, "elec", "Show Bld121 electric structures");
-            uiman.ttman.WireUpToolTip(plumButton.gameObject, "plum", "Show Bld121 plumbing structures");
+            uiman.ttman.WireUpToolTip(hvacButton.gameObject, "hvac", "Show Bld121 HVAC system");
+            uiman.ttman.WireUpToolTip(elecButton.gameObject, "elec", "Show Bld121 electric system");
+            uiman.ttman.WireUpToolTip(plumButton.gameObject, "plum", "Show Bld121 plumbing system");
 
             uiman.ttman.WireUpToolTip(showTracksButton.gameObject, "trax", "Show GPX Tracks");
 
@@ -178,32 +200,28 @@ namespace CampusSimulator
             }
         }
 
-        public void FindAndDestroy(string targetname)
-        {
-            var tran = transform.Find(targetname);
-            if (tran != null)
-            {
-                Destroy(tran.gameObject);
-            }
-        }
 
-        string fixedDummyButtonList = "HideUiButton,RunButton,FlyButton,FrameButton,EvacButton,UnEvacButton,PipeButton,GoButton,OptionsButton,ShowTracksButton,FreeFlyButton,QuitButton";
-        public void DestroyFixedDummyButtons()
-        {
-            var farr = fixedDummyButtonList.Split( ',');
-            foreach( var f in farr)
-            {
-                FindAndDestroy(f);
-            }
-        }
 
         public void SetScene(CampusSimulator.SceneSelE curscene)
         {
-            string tbpfiltlist = "All,Frame,Sim,Trx,Evac";
+            string tbpfiltlist = "All,Sim,Trx";
             switch(curscene)
             {
                 case SceneSelE.MsftSmall:
                     tbpfiltlist = "All";
+                    break;
+                case SceneSelE.MsftB121focused:
+                    tbpfiltlist += ",B121,Frame";
+                    break;
+                case SceneSelE.MsftB19focused:
+                    tbpfiltlist += ",Evac,Frame";
+                    break;
+                case SceneSelE.Eb12:
+                case SceneSelE.Eb12small:
+                    tbpfiltlist += ",Evac";
+                    break;
+                case SceneSelE.MsftRedwest:
+                    tbpfiltlist += ",Evac,Frame";
                     break;
             }
             CreateButtonsAnew(tbpfiltlist);
@@ -211,18 +229,21 @@ namespace CampusSimulator
         public void Init0()
         {
             LinkObjectsAndComponents();
-            DestroyFixedDummyButtons();
+            topButMan.DestroyFixedDummyButtons();
         }
 
 
-
-
+        string orderedFixedButtonList = "HideUiButton,RunButton,FlyButton,FrameButton,EvacButton,UnEvacButton,PipeButton,GoButton,OptionsButton,ShowTracksButton,FreeFlyButton,QuitButton";
+        string orderedScenarioButtonList1 = "FteButton,ConButton,VisButton,SecButton,UnkButton,Vt2DButton,TranButton,HvacButton,ElecButton,PlumButton,";
 
         public void CreateButtonsAnew(string tbtfiltlist)
         {
             topButMan.SetTbtFilter(tbtfiltlist);
-            var buttxtarr = fixedDummyButtonList.Split(',');
-            foreach (var k in buttxtarr)
+            var butfixtxtarr = orderedFixedButtonList.Split(',');
+            var butsentxtarr = orderedScenarioButtonList1.Split(',');
+            var buttxtarra = new List<string>(butfixtxtarr);
+            buttxtarra.AddRange(butsentxtarr);
+            foreach (var k in buttxtarra)
             {
                 if (!butspec.ContainsKey(k))
                 {
@@ -370,8 +391,39 @@ namespace CampusSimulator
             Debug.Log($"Activating QuitButton");
             sman.Quit();
         }
-
+        public void clrbut(string bname,string activecolor,string idlecolor,bool status,string displaytxt)
+        {
+            if (bname=="FrameButton")
+            {
+                Debug.Log("Here I am");
+            }
+            var but = topButMan.GetButton(bname);
+            if (but != null)
+            {
+                uiman.SetButtonColor(but, activecolor, idlecolor, status,displaytxt);
+            }
+        }
         public void ColorizeButtonStates()
+        {
+            var loc = "white";
+            clrbut("PipeButton", "pink", loc, sman.lcman.pipevis, "Pi");
+            clrbut("FteButton", "lightblue", loc, sman.frman.detectFte.Get(), "F");
+            clrbut("ConButton", "lightblue", loc, sman.frman.detectContractor.Get(), "C");
+            clrbut("SecButton", "lightblue", loc, sman.frman.detectSecurity.Get(), "S");
+            clrbut("VisButton", "lightblue", loc, sman.frman.detectVisitor.Get(), "V");
+            clrbut("UnkButton", "lightblue", loc, sman.frman.detectUnknown.Get(), "U");
+            clrbut("ShowTracksButton", "lightblue", loc, sman.trman.showtracks.Get(), "Tracks");
+            clrbut("TranButton", "lightblue", loc, sman.bdman.transwalls, "Tr");
+            clrbut("HvacButton", "yellow", loc, sman.bdman.showhvac, "Hv");
+            clrbut("ElecButton", "yellow", loc, sman.bdman.showelec, "El");
+            clrbut("PlumButton", "yellow", loc, sman.bdman.showplum, "Pb");
+            clrbut("Vt2dButton", "lightblue", loc, sman.frman.visibilityTiedToDetectability.Get(), "Vt2D");
+            clrbut("FrameButton", "pink", loc, sman.frman.frameJourneys.Get(), "Frame");
+            clrbut("FreeFlyButton", "pink", loc, sman.vcman.InFreeFly(), "FreeFly");
+            clrbut("RunButton", "pink", loc, sman.jnman.spawnrunjourneys, "Run");
+            clrbut("FlyButton", "lightblue", loc, sman.jnman.spawnflyjourneys, "Fly");
+        }
+        public void ColorizeButtonStatesOld()
         {
             var loc = "white";
             uiman.SetButtonColor(pipeButton, "pink",loc, sman.lcman.pipevis, "Pi");
@@ -457,11 +509,14 @@ namespace CampusSimulator
             ColorizeButtonStates();
         }
         // Update is called once per frame
+    //    private void Start()
+    //    {
+    //    }
 
-        int updcount = 0;
-        void Update()
-        {
-            updcount++;
-        }
+    //    int updcount = 0;
+    //    void Update()
+    //    {
+    //        updcount++;
+    //    }
     }
 }

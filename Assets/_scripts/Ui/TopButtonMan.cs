@@ -55,6 +55,42 @@ namespace CampusSimulator
             filterList = new List<string>();
         }
 
+        public Button GetButton(string bname)
+        {
+            foreach(var (but,idname,_) in createdButList)
+            {
+                if (idname==bname)
+                {
+                    return but;
+                }
+            }
+            return null;
+        }
+
+        public void FindAndDestroy(string targetname)
+        {
+            var trargo = transform.Find(targetname);
+            if (trargo != null)
+            {
+               Destroy(trargo.gameObject);
+            }
+            else
+            {
+                sman.LggError($"FindAndDestroy Cannot find button {targetname}");
+            }
+        }
+
+        string fixedDummyButtonList = "HideUiButton,RunButton,FlyButton,FrameButton,EvacButton,UnEvacButton,PipeButton,GoButton,OptionsButton,ShowTracksButton,FreeFlyButton,QuitButton," +
+                                       "FteButton,ConButton,VisButton,SecButton,UnkButton,Vt2DButton,TranButton,HvacButton,ElecButton,PlumButton";
+
+        public void DestroyFixedDummyButtons()
+        {
+            var farr = fixedDummyButtonList.Split(',');
+            foreach (var f in farr)
+            {
+                FindAndDestroy(f);
+            }
+        }
 
         int lay_nbut;
         int lay_but_gap_x;
@@ -64,7 +100,6 @@ namespace CampusSimulator
         int lay_totalwid;
         int lay_but_x;
         int lay_but_y;
-
 
         public void InitializeLayout(string[] buttxtarr)
         {
@@ -101,7 +136,7 @@ namespace CampusSimulator
                     return;
                 }
             }
-            bgo.name = tbs.idname + "Button";
+            bgo.name = tbs.idname;
             var butt = bgo.GetComponentInChildren<Button>();
             var btxt = bgo.GetComponentInChildren<Text>();
             btxt.text = tbs.dispname;
