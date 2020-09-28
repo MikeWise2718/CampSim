@@ -34,6 +34,9 @@ namespace CampusSimulator
         public float mapscale = 1;
         public float roty2 = 0;
         public string address = "";
+        public float fragang = 0;
+        public float fragxoff = 0;
+        public float fragzoff = 0;
 
 
         public enum MapVisualsE { MapOn, MapOff }
@@ -524,7 +527,8 @@ namespace CampusSimulator
         }
 
         public int nTotIsects = 0;
-        public GameObject AddLine(string lname, Vector3 pt1, Vector3 pt2, RmLinkFormE lnform = RmLinkFormE.pipe, float lska = 1.0f, float nska = 1.0f, string lclr = "red", string nclr = "", int omit = -1, float widratio = 1, bool wps = true, bool frag = false)
+        public GameObject AddLine(string lname, Vector3 pt1, Vector3 pt2, RmLinkFormE lnform = RmLinkFormE.pipe, float lska = 1.0f, float nska = 1.0f, string lclr = "red", string nclr = "", int omit = -1, float widratio = 1, bool wps = true, 
+                                                               bool frag = false, float fragang = 0, float fragxoff = 0, float fragzoff = 0)
         {
             if (qmapman == null || qmapman.qmm == null) return null;
             var frm = lnform.ToString();
@@ -532,7 +536,7 @@ namespace CampusSimulator
             if (frag)
             {
                 qmapman.qmm.qtt.ntotIsects = 0;
-                lgo = qmapman.qmm.qtt.AddFragLine(lname, pt1, pt2, frm, lska, nska, lclr, nclr, omit, widratio, wps);
+                lgo = qmapman.qmm.qtt.AddFragLine(lname, pt1, pt2, frm, lska, nska, lclr, nclr, omit, widratio, wps,fragang:fragang, fragxoff: fragxoff, fragzoff: fragzoff);
                 nTotIsects += qmapman.qmm.qtt.ntotIsects;
             }
             else
@@ -874,7 +878,10 @@ namespace CampusSimulator
             isCustomizable = false;
             xdistkm = 1;
             zdistkm = 1;
- 
+            fragang = 0;
+            fragxoff = 0;
+            fragzoff = 0;
+
             viewHome = new ViewerState(Vector3.zero, Vector3.zero, ViewerAvatar.QuadCopter, ViewerCamConfig.FloatBehind, ViewerControl.Velocity);
 
             switch (newscene)
@@ -892,6 +899,10 @@ namespace CampusSimulator
                     hasLLmap = true;
                     isCustomizable = false;
 
+                    fragang = maprot.y-90;
+                    fragxoff = maptrans.x;
+                    fragzoff = maptrans.z;
+
                     viewHome.avatar = ViewerAvatar.QuadCopter2;
                     viewHome.pos = new Vector3(-451.5f, 3f, 98.3f);
                     viewHome.rot = new Vector3(0, -60, 0);
@@ -906,6 +917,11 @@ namespace CampusSimulator
                     zdistkm = 3;
                     lod = 16;
                     hasLLmap = true;
+
+                    fragang = maprot.y-90;
+                    fragxoff = maptrans.x;
+                    fragzoff = maptrans.z;
+
 
                     viewHome.avatar = ViewerAvatar.QuadCopter2;
                     viewHome.pos = new Vector3(-778, 10f, -524);
@@ -922,6 +938,10 @@ namespace CampusSimulator
                     zdistkm = 2;
                     lod = 14;
                     hasLLmap = true;
+
+                    fragang = maprot.y-90;
+                    fragxoff = maptrans.x;
+                    fragzoff = maptrans.z;
 
                     viewHome.avatar = ViewerAvatar.QuadCopter;
                     viewHome.pos = new Vector3(-451.5f, 3f, 98.3f);
@@ -940,6 +960,10 @@ namespace CampusSimulator
                     lod = 16;
                     hasLLmap = true;
 
+                    fragang = maprot.y-90;
+                    fragxoff = maptrans.x;
+                    fragzoff = maptrans.z;
+
                     viewHome.avatar = ViewerAvatar.QuadCopter;
                     viewHome.pos = new Vector3(-451.5f, 3f, 98.3f);
                     viewHome.rot = new Vector3(0, -60, 0);
@@ -954,6 +978,10 @@ namespace CampusSimulator
                     maptrans = new Vector3(-6 - 1970.0f + 4, 0, 17 - 1122.0f - 16);
                     xdistkm = 1;
                     zdistkm = 1;
+
+                    fragang = maprot.y-90;
+                    fragxoff = maptrans.x;
+                    fragzoff = maptrans.z;
 
                     viewHome.avatar = ViewerAvatar.QuadCopter2;
                     viewHome.pos = new Vector3(-2035.2f, 3.8f, -1173.5f);

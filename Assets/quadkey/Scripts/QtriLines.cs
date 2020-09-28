@@ -203,7 +203,7 @@ namespace Aiskwk.Map
             frago.transform.SetParent(parent.transform, worldPositionStays:wps);
             return frago;
         }
-        public GameObject AddFragLine(string lname, Vector3 pt1, Vector3 pt2,string form="pipe", float lska = 1.0f, float nska = 1.0f, string lclr = "red", string nclr = "", int omit = -1, float widratio = 1, bool wps = true, QkCoordSys coordsys = QkCoordSys.UserWc)
+        public GameObject AddFragLine(string lname, Vector3 pt1, Vector3 pt2,string form="pipe", float lska = 1.0f, float nska = 1.0f, string lclr = "red", string nclr = "", int omit = -1, float widratio = 1, bool wps = true, QkCoordSys coordsys = QkCoordSys.UserWc, float fragang = 0, float fragxoff = 0, float fragzoff = 0)
         {
             var dowall = false;
             //var db = lname == "1202033022121033-b";
@@ -213,12 +213,11 @@ namespace Aiskwk.Map
             //    var pt2s = pt2.ToString("f3");
             //    Debug.Log($"AFL p1:{pt1s} p2:{pt2s}");
             //}
-            //var ang = 18.9f;
-            var ang = 71.1f-90;
-            var xoff = -6;
-            var zoff = 17;
+            //var ang = 71.1f-90;
+            //var xoff = -6;
+            //var zoff = 17;
             //var ang = 0f;
-            var ptlist = GetIsectList(lname, pt1, pt2, omit: omit, db: false,coordsys:coordsys,ang:ang,xoff:xoff,zoff:zoff);
+            var ptlist = GetIsectList(lname, pt1, pt2, omit: omit, db: false,coordsys:coordsys,ang:fragang,xoff:fragxoff,zoff:fragzoff);
             ntotIsects += ptlist.Count;
             nFragLines++;
             //Debug.Log($"AddFragLine found {ptlist.Count} intersections");

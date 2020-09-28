@@ -454,6 +454,7 @@ namespace CampusSimulator
         GameObject pnsph = null;
 
         int gogencount = 0;
+
         void CreateGrcGos()
         {
             Debug.Log($"CreateGrcGos-{gogencount} scene:{sman.curscene} isnull:{grcgos==null}");
@@ -489,7 +490,8 @@ namespace CampusSimulator
                     var clrname = linkcolor(lnk);
                     var linkrad = linkradius(lnk);
                     var linkfrm = linkform(lnk);
-                    var go = LinkGo.MakeLinkGo(sman, lnk, linkfrm, linkrad, clrname,1-linkTrans,this.flatlinks,dofrag:dofrag);
+                    var go = LinkGo.MakeLinkGo(sman, lnk, linkfrm, linkrad, clrname,1-linkTrans,this.flatlinks,
+                                                    dofrag:dofrag, fragang:sman.mpman.fragang, fragxoff:sman.mpman.fragxoff, fragzoff:sman.mpman.fragzoff);
                     go.transform.parent = grclinks.transform;
                 }
                 swlk.Stop();
