@@ -791,6 +791,7 @@ namespace GraphAlgos
                         {
                             case GraphGenerationModeE.GenFromCode:
                                 lmd.createPointsFor_msft_b19();
+                                lmd.createPointsFor_msft_b33();
                                 lmd.createPointsFor_msft_drones();
                                 lmd.createPointsFor_msft_b121();
                                 lmd.createPointsFor_msft_b40();

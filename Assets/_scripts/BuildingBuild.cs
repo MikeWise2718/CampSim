@@ -28,6 +28,8 @@ namespace CampusSimulator
             {
                 //"Bld11",
                 "Bld19",
+                "Bld33",
+                "Bld34",
                 "Bld121",
                 "Bld40",
                 "Bld43",
@@ -114,6 +116,7 @@ namespace CampusSimulator
 
         List<string> B33roomspec = new List<string>()
         {
+          "b33-f01-lobby:6:-18.5:4:4:T",
         };
 
         List<string> B34roomspec = new List<string>()
@@ -220,7 +223,7 @@ namespace CampusSimulator
                     {
                         osmnamestart = "Microsoft Building 34";
                         //maingaragename = "Garage19_1";
-                        roomspecs = B33roomspec;
+                        roomspecs = B34roomspec;
                         destnodes = SplitRoomNameOutOfRoomspecs(roomspecs);
                         shortname = "b34";
                         journeyChoiceWeight = 20;
