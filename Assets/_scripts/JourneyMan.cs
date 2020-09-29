@@ -1033,6 +1033,9 @@ namespace CampusSimulator
         {
             switch (sman.curscene)
             {
+                case SceneSelE.MsftB33focused:
+                    LaunchArnie();
+                    break;
                 case SceneSelE.MsftB19focused:
                     LaunchArnie();
                     break;
@@ -1114,7 +1117,7 @@ namespace CampusSimulator
             if (nstreamers % 6 == 3) // every 6 times a new one comes, but the first one comes after 3
             {
                 pers.empStatus = PersonMan.empStatusE.Unknown;
-                if (bm.sman.curscene == SceneSelE.MsftB19focused || bm.sman.curscene == SceneSelE.MsftB121focused)
+                if (gm.sman.curscene == SceneSelE.MsftB19focused || gm.sman.curscene == SceneSelE.MsftB121focused || gm.sman.curscene == SceneSelE.MsftB33focused)
                 {
                     if (bld.name == "Bld19")
                     {

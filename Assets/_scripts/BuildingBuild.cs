@@ -68,7 +68,6 @@ namespace CampusSimulator
             "Bld99-dronepad-centertop:6:0:4:4:T",
         };
 
-
         List<string> B19roomspec = new List<string>()
         {
             // room name,pcap,alignang,length,width,frameit - see AddOneRoomSpec for code
@@ -112,6 +111,16 @@ namespace CampusSimulator
             "b19-f01-rm1038:5:-18.5:2.6:2.6:T",
             "b19-f01-rm1039:3:-18.5:2.6:2.6:T",
         };
+
+        List<string> B33roomspec = new List<string>()
+        {
+        };
+
+        List<string> B34roomspec = new List<string>()
+        {
+        };
+
+
 
         List<string> Eb12roomspec = new List<string>()
         {
@@ -182,6 +191,52 @@ namespace CampusSimulator
                         b19comp.InitializeValues(bm.sman, this);
                         b19comp.MakeItSo();
                         bm.AddBuildingAlias("b19", this);
+                        break;
+                    }
+                case "Bld33":
+                    {
+                        osmnamestart = "Microsoft Building 33";
+                        //maingaragename = "Garage19_1";
+                        roomspecs = B33roomspec;
+                        destnodes = SplitRoomNameOutOfRoomspecs(roomspecs);
+                        shortname = "b33";
+                        journeyChoiceWeight = 20;
+                        if (bm.sman.curscene == SceneSelE.MsftB33focused)
+                        {
+                            //bm.sman.jnman.preferedJourneyBuildingName = name;
+                        }
+                        defPeoplePerRoom = 8;
+                        defPercentFull = 0.80f;
+                        defRoomArea = 16;
+                        defAngAlign = 24.0f;
+
+                        //b19comp = this.transform.gameObject.AddComponent<B19Willow>();
+                        //b19comp.InitializeValues(bm.sman, this);
+                        //b19comp.MakeItSo();
+                        //bm.AddBuildingAlias("b19", this);
+                        break;
+                    }
+                case "Bld34":
+                    {
+                        osmnamestart = "Microsoft Building 34";
+                        //maingaragename = "Garage19_1";
+                        roomspecs = B33roomspec;
+                        destnodes = SplitRoomNameOutOfRoomspecs(roomspecs);
+                        shortname = "b34";
+                        journeyChoiceWeight = 20;
+                        //if (bm.sman.curscene == SceneSelE.MsftB33focused)
+                        //{
+                        //    bm.sman.jnman.preferedJourneyBuildingName = name;
+                        //}
+                        defPeoplePerRoom = 8;
+                        defPercentFull = 0.80f;
+                        defRoomArea = 16;
+                        defAngAlign = 24.0f;
+
+                        //b19comp = this.transform.gameObject.AddComponent<B19Willow>();
+                        //b19comp.InitializeValues(bm.sman, this);
+                        //b19comp.MakeItSo();
+                        //bm.AddBuildingAlias("b19", this);
                         break;
                     }
                 case "Bld121":
@@ -260,7 +315,7 @@ namespace CampusSimulator
                         
                         shortname = "bRWB";
                         defPeoplePerRoom = 2;
-                        if (bm.sman.curscene == SceneSelE.MsftB19focused || bm.sman.curscene == SceneSelE.MsftB121focused)
+                        if (bm.sman.curscene == SceneSelE.MsftB19focused || bm.sman.curscene == SceneSelE.MsftB121focused || bm.sman.curscene == SceneSelE.MsftB33focused)
                         {
                             defPercentFull = 0.05f;
                         }
@@ -884,7 +939,8 @@ namespace CampusSimulator
                     }
                 case "BldRWB":
                     {
-                        if (bm.sman.curscene == SceneSelE.MsftB19focused || bm.sman.curscene == SceneSelE.MsftB121focused)
+                        if (bm.sman.curscene == SceneSelE.MsftB19focused || bm.sman.curscene == SceneSelE.MsftB121focused || bm.sman.curscene == SceneSelE.MsftB33focused)
+
                         {
                             defPercentFull = 0.05f;
                         }

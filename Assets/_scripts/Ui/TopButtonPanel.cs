@@ -12,32 +12,32 @@ namespace CampusSimulator
         public SceneMan sman;
         UiMan uiman;
         public int btnclk;
-        Button runButton;
-        Button flyButton;
-        Button frameButton;
-        Button evacButton;
-        Button unevacButton;
-        Button freeFlyButton;
-        Button quitButton;
-        Button hideUiButton;
-        Button fteButton;
-        Button conButton;
-        Button secButton;
-        Button visButton;
-        Button unkButton;
-        Button vt2dButton;
+        //Button runButton;
+        //Button flyButton;
+        //Button frameButton;
+        //Button evacButton;
+        //Button unevacButton;
+        //Button freeFlyButton;
+        //Button quitButton;
+        //Button hideUiButton;
+        //Button fteButton;
+        //Button conButton;
+        //Button secButton;
+        //Button visButton;
+        //Button unkButton;
+        //Button vt2dButton;
 
-        Button pipeButton;
+        //Button pipeButton;
 
-        Button tranButton;
-        Button hvacButton;
-        Button elecButton;
-        Button plumButton;
+        //Button tranButton;
+        //Button hvacButton;
+        //Button elecButton;
+        //Button plumButton;
 
 
-        Button goButton;
-        Button optionsButton;
-        Button showTracksButton;
+        //Button goButton;
+        //Button optionsButton;
+        //Button showTracksButton;
        // Canvas canvas;
         GameObject freeFlyPanel;
 
@@ -48,18 +48,18 @@ namespace CampusSimulator
         Dictionary<string, TopButtonMan.TopButSpec> butspec = new Dictionary<string, TopButtonMan.TopButSpec>()
         {
             {"HideUiButton",new TopButtonMan.TopButSpec("HideUiButton","HideUI", "Hide the User Interface\nEsc brings it back afterwards","left",70,"stretch",0,"All")},
-            {"RunButton",new TopButtonMan.TopButSpec("RunButton","Run", "Start ground based journeys","cen",-739,"stretch",0,"Sim")},
-            {"FlyButton",new TopButtonMan.TopButSpec("FlyButton","Fly", "Start flying journeys","cen",-667,"stretch",0,"Sim")},
-            {"FrameButton",new TopButtonMan.TopButSpec("FrameButton","Frame", "Draw labels on people, cars, etc","cen",-573,"stretch",0,"Frame")},
-            {"EvacButton",new TopButtonMan.TopButSpec("EvacButton", "Evac", "Start an evacuation simulation","cen",-467,"stretch",0,"Evac")},
-            {"UnEvacButton",new TopButtonMan.TopButSpec("UnEvacButton", "Unevac", "After an evacuation, go back to starting positions","cen",-382,"stretch",0,"Evac")},
-            {"PipeButton",new TopButtonMan.TopButSpec("PipeButton","Pipes", "Show journey path links and nodes","cen",-287,"stretch",0,"All")},
+            {"PipeButton",new TopButtonMan.TopButSpec("PipeButton","Pipes", "Show journey path links and nodes","cen",-742,"stretch",0,"All")},
+            {"RunButton",new TopButtonMan.TopButSpec("RunButton","Run", "Start ground based journeys","cen",-648,"stretch",0,"Sim")},
+            {"FlyButton",new TopButtonMan.TopButSpec("FlyButton","Fly", "Start flying journeys","cen",-578,"stretch",0,"Sim")},
+            {"EvacButton",new TopButtonMan.TopButSpec("EvacButton", "Evac", "Start an evacuation simulation","cen",-490,"stretch",0,"Evac")},
+            {"UnEvacButton",new TopButtonMan.TopButSpec("UnEvacButton", "Unevac", "After an evacuation, go back to starting positions","cen",-409,"stretch",0,"Evac")},
             {"GoButton",new TopButtonMan.TopButSpec("GoButton","Go", "Kick off a preprogramed scenario dependent journey script","cen",335,"stretch",0,"Sim")},
-            {"ShowTracksButton",new TopButtonMan.TopButSpec("ShowTracksButton","Tracks", "Show GPX Tracks","cen",422,"stretch",0,"Trx")},
-            {"OptionsButton",new TopButtonMan.TopButSpec("OptionsButton","Options", "Bring up detailed configuration tabs","cen",549,"stretch",0,"All")},
-            {"FreeFlyButton",new TopButtonMan.TopButSpec("FreeFlyButton","FreeFly", "Fly around in scene freely\nEsc exits this state","cen",693,"stretch",0,"All")},
+            {"ShowTracksButton",new TopButtonMan.TopButSpec("ShowTracksButton","Tracks", "Show GPX Tracks","cen",429,"stretch",0,"Trx")},
+            {"OptionsButton",new TopButtonMan.TopButSpec("OptionsButton","Options", "Bring up detailed configuration tabs","cen",558,"stretch",0,"All")},
+            {"FreeFlyButton",new TopButtonMan.TopButSpec("FreeFlyButton","FreeFly", "Fly around in scene freely\nEsc exits this state","cen",707,"stretch",0,"All")},
             {"QuitButton" ,new TopButtonMan.TopButSpec("QuitButton","Quit", "Quit to OS","right",-70,"stretch",0,"All")},
 
+            {"FrameButton",new TopButtonMan.TopButSpec("FrameButton","Frame", "Draw labels on people, cars, etc","cen",-275,"stretch",10,"Frame")},
             {"FteButton" ,new TopButtonMan.TopButSpec("FteButton","F", "Detect FTEs","cen",-194,"stretch",10,"Frame")},
             {"ConButton" ,new TopButtonMan.TopButSpec("ConButton","C", "Detect Contractors","cen",-154,"stretch",10,"Frame")},
             {"VisButton" ,new TopButtonMan.TopButSpec("VisButton","V", "Detect Visitors","cen",-114,"stretch",10,"Frame")},
@@ -110,86 +110,86 @@ namespace CampusSimulator
             topButMan.Init(sman);
             AddActionsToButspecs();
 
-            hideUiButton = transform.Find("HideUiButton").gameObject.GetComponent<Button>();
-            runButton = transform.Find("RunButton").gameObject.GetComponent<Button>();
-            flyButton = transform.Find("FlyButton").gameObject.GetComponent<Button>();
-            frameButton = transform.Find("FrameButton").gameObject.GetComponent<Button>();
-            evacButton = transform.Find("EvacButton").gameObject.GetComponent<Button>();
-            unevacButton = transform.Find("UnEvacButton").gameObject.GetComponent<Button>();
-            pipeButton = transform.Find("PipeButton").gameObject.GetComponent<Button>();
-            goButton = transform.Find("GoButton").gameObject.GetComponent<Button>();
-            optionsButton = transform.Find("OptionsButton").gameObject.GetComponent<Button>();
-            showTracksButton = transform.Find("ShowTracksButton").gameObject.GetComponent<Button>();
-            freeFlyButton = transform.Find("FreeFlyButton").gameObject.GetComponent<Button>();
-            quitButton = transform.Find("QuitButton").gameObject.GetComponent<Button>();
-            freeFlyPanel = transform.Find("FreeFlyHelpPanel").gameObject;
+            //hideUiButton = transform.Find("HideUiButton").gameObject.GetComponent<Button>();
+            //runButton = transform.Find("RunButton").gameObject.GetComponent<Button>();
+            //flyButton = transform.Find("FlyButton").gameObject.GetComponent<Button>();
+            //frameButton = transform.Find("FrameButton").gameObject.GetComponent<Button>();
+            //evacButton = transform.Find("EvacButton").gameObject.GetComponent<Button>();
+            //unevacButton = transform.Find("UnEvacButton").gameObject.GetComponent<Button>();
+            //pipeButton = transform.Find("PipeButton").gameObject.GetComponent<Button>();
+            //goButton = transform.Find("GoButton").gameObject.GetComponent<Button>();
+            //optionsButton = transform.Find("OptionsButton").gameObject.GetComponent<Button>();
+            //showTracksButton = transform.Find("ShowTracksButton").gameObject.GetComponent<Button>();
+            //freeFlyButton = transform.Find("FreeFlyButton").gameObject.GetComponent<Button>();
+            //quitButton = transform.Find("QuitButton").gameObject.GetComponent<Button>();
+            //freeFlyPanel = transform.Find("FreeFlyHelpPanel").gameObject;
 
-            fteButton = transform.Find("FteButton").gameObject.GetComponent<Button>();
-            conButton = transform.Find("ConButton").gameObject.GetComponent<Button>();
-            secButton = transform.Find("SecButton").gameObject.GetComponent<Button>();
-            visButton = transform.Find("VisButton").gameObject.GetComponent<Button>();
-            unkButton = transform.Find("UnkButton").gameObject.GetComponent<Button>();
-            vt2dButton = transform.Find("Vt2DButton").gameObject.GetComponent<Button>();
+            //fteButton = transform.Find("FteButton").gameObject.GetComponent<Button>();
+            //conButton = transform.Find("ConButton").gameObject.GetComponent<Button>();
+            //secButton = transform.Find("SecButton").gameObject.GetComponent<Button>();
+            //visButton = transform.Find("VisButton").gameObject.GetComponent<Button>();
+            //unkButton = transform.Find("UnkButton").gameObject.GetComponent<Button>();
+            //vt2dButton = transform.Find("Vt2DButton").gameObject.GetComponent<Button>();
 
-            tranButton = transform.Find("TranButton").gameObject.GetComponent<Button>();
-            hvacButton = transform.Find("HvacButton").gameObject.GetComponent<Button>();
-            elecButton = transform.Find("ElecButton").gameObject.GetComponent<Button>();
-            plumButton = transform.Find("PlumButton").gameObject.GetComponent<Button>();
+            //tranButton = transform.Find("TranButton").gameObject.GetComponent<Button>();
+            //hvacButton = transform.Find("HvacButton").gameObject.GetComponent<Button>();
+            //elecButton = transform.Find("ElecButton").gameObject.GetComponent<Button>();
+            //plumButton = transform.Find("PlumButton").gameObject.GetComponent<Button>();
 
-            hideUiButton.onClick.AddListener(delegate { uiman.HideUi(); });
-            runButton.onClick.AddListener(delegate { RunButton(); });
-            flyButton.onClick.AddListener(delegate { FlyButton(); });
-            frameButton.onClick.AddListener(delegate { FrameButton(); });
-            evacButton.onClick.AddListener(delegate { EvacButton(); });
-            unevacButton.onClick.AddListener(delegate { UnevacButton(); });
-            pipeButton.onClick.AddListener(delegate { DetectPipButton(); });
-            goButton.onClick.AddListener(delegate { GoButton(); });
-            showTracksButton.onClick.AddListener(delegate { ShowTracksButton(); });
-            optionsButton.onClick.AddListener(delegate { OptionsButtonPushed(); });
+            //hideUiButton.onClick.AddListener(delegate { uiman.HideUi(); });
+            //runButton.onClick.AddListener(delegate { RunButton(); });
+            //flyButton.onClick.AddListener(delegate { FlyButton(); });
+            //frameButton.onClick.AddListener(delegate { FrameButton(); });
+            //evacButton.onClick.AddListener(delegate { EvacButton(); });
+            //unevacButton.onClick.AddListener(delegate { UnevacButton(); });
+            //pipeButton.onClick.AddListener(delegate { DetectPipButton(); });
+            //goButton.onClick.AddListener(delegate { GoButton(); });
+            //showTracksButton.onClick.AddListener(delegate { ShowTracksButton(); });
+            //optionsButton.onClick.AddListener(delegate { OptionsButtonPushed(); });
 
-            freeFlyButton.onClick.AddListener(delegate { FreeFlyButton(); });
-            quitButton.onClick.AddListener(delegate { QuitButton(); });
+            //freeFlyButton.onClick.AddListener(delegate { FreeFlyButton(); });
+            //quitButton.onClick.AddListener(delegate { QuitButton(); });
 
-            vt2dButton.onClick.AddListener(delegate { Vt2DButton(); });
-            fteButton.onClick.AddListener(delegate { DetectFteButton(); });
-            conButton.onClick.AddListener(delegate { DetectConButton(); });
-            secButton.onClick.AddListener(delegate { DetectSecButton(); });
-            visButton.onClick.AddListener(delegate { DetectVisButton(); });
-            unkButton.onClick.AddListener(delegate { DetectUnkButton(); });
-            tranButton.onClick.AddListener(delegate { DetectTranButton(); });
-            hvacButton.onClick.AddListener(delegate { DetectHvacButton(); });
-            elecButton.onClick.AddListener(delegate { DetectElecButton(); });
-            plumButton.onClick.AddListener(delegate { DetectPlumButton(); });
+            //vt2dButton.onClick.AddListener(delegate { Vt2DButton(); });
+            //fteButton.onClick.AddListener(delegate { DetectFteButton(); });
+            //conButton.onClick.AddListener(delegate { DetectConButton(); });
+            //secButton.onClick.AddListener(delegate { DetectSecButton(); });
+            //visButton.onClick.AddListener(delegate { DetectVisButton(); });
+            //unkButton.onClick.AddListener(delegate { DetectUnkButton(); });
+            //tranButton.onClick.AddListener(delegate { DetectTranButton(); });
+            //hvacButton.onClick.AddListener(delegate { DetectHvacButton(); });
+            //elecButton.onClick.AddListener(delegate { DetectElecButton(); });
+            //plumButton.onClick.AddListener(delegate { DetectPlumButton(); });
 
-            uiman.ttman.WireUpToolTip(hideUiButton.gameObject, "HideUI", "Hide the User Interface\nEsc brings it back afterwards");
-            uiman.ttman.WireUpToolTip(runButton.gameObject, "Run", "Start ground based journeys");
-            uiman.ttman.WireUpToolTip(flyButton.gameObject, "Fly", "Start flying journeys");
-            uiman.ttman.WireUpToolTip(frameButton.gameObject, "Frame", "Draw labels on people, cars, etc");
-            uiman.ttman.WireUpToolTip(evacButton.gameObject, "Evac", "Start an evacuation simulation");
-            uiman.ttman.WireUpToolTip(unevacButton.gameObject, "Unevac", "After an evacuation, go back to starting positions");
+            //uiman.ttman.WireUpToolTip(hideUiButton.gameObject, "HideUI", "Hide the User Interface\nEsc brings it back afterwards");
+            //uiman.ttman.WireUpToolTip(runButton.gameObject, "Run", "Start ground based journeys");
+            //uiman.ttman.WireUpToolTip(flyButton.gameObject, "Fly", "Start flying journeys");
+            //uiman.ttman.WireUpToolTip(frameButton.gameObject, "Frame", "Draw labels on people, cars, etc");
+            //uiman.ttman.WireUpToolTip(evacButton.gameObject, "Evac", "Start an evacuation simulation");
+            //uiman.ttman.WireUpToolTip(unevacButton.gameObject, "Unevac", "After an evacuation, go back to starting positions");
 
-            uiman.ttman.WireUpToolTip(fteButton.gameObject, "Fte", "Detect people with FTE status");
-            uiman.ttman.WireUpToolTip(conButton.gameObject, "Con", "Detect people with contractor status");
-            uiman.ttman.WireUpToolTip(secButton.gameObject, "Sec", "Detect people with security status");
-            uiman.ttman.WireUpToolTip(secButton.gameObject, "Vis", "Detect people with visor status");
-            uiman.ttman.WireUpToolTip(unkButton.gameObject, "Unk", "Detect unknown people");
-            uiman.ttman.WireUpToolTip(vt2dButton.gameObject, "vt2d", "Tie Visibility to Detectability");
+            //uiman.ttman.WireUpToolTip(fteButton.gameObject, "Fte", "Detect people with FTE status");
+            //uiman.ttman.WireUpToolTip(conButton.gameObject, "Con", "Detect people with contractor status");
+            //uiman.ttman.WireUpToolTip(secButton.gameObject, "Sec", "Detect people with security status");
+            //uiman.ttman.WireUpToolTip(secButton.gameObject, "Vis", "Detect people with visor status");
+            //uiman.ttman.WireUpToolTip(unkButton.gameObject, "Unk", "Detect unknown people");
+            //uiman.ttman.WireUpToolTip(vt2dButton.gameObject, "vt2d", "Tie Visibility to Detectability");
 
-            uiman.ttman.WireUpToolTip(tranButton.gameObject, "trans", "Switch Bld121 walls to being transparent");
-            uiman.ttman.WireUpToolTip(hvacButton.gameObject, "hvac", "Show Bld121 HVAC system");
-            uiman.ttman.WireUpToolTip(elecButton.gameObject, "elec", "Show Bld121 electric system");
-            uiman.ttman.WireUpToolTip(plumButton.gameObject, "plum", "Show Bld121 plumbing system");
+            //uiman.ttman.WireUpToolTip(tranButton.gameObject, "trans", "Switch Bld121 walls to being transparent");
+            //uiman.ttman.WireUpToolTip(hvacButton.gameObject, "hvac", "Show Bld121 HVAC system");
+            //uiman.ttman.WireUpToolTip(elecButton.gameObject, "elec", "Show Bld121 electric system");
+            //uiman.ttman.WireUpToolTip(plumButton.gameObject, "plum", "Show Bld121 plumbing system");
 
-            uiman.ttman.WireUpToolTip(showTracksButton.gameObject, "trax", "Show GPX Tracks");
-
-
-            uiman.ttman.WireUpToolTip(pipeButton.gameObject, "Pi", "Show journey path links and nodes");
+            //uiman.ttman.WireUpToolTip(showTracksButton.gameObject, "trax", "Show GPX Tracks");
 
 
-            uiman.ttman.WireUpToolTip(freeFlyButton.gameObject, "freefly", "Fly around in scene freely\nEsc exits this state");
-            uiman.ttman.WireUpToolTip(quitButton.gameObject, "quit", "Quit to OS");
-            uiman.ttman.WireUpToolTip(goButton.gameObject, "go", "Kick off a preprogramed scenario dependent journey script");
-            uiman.ttman.WireUpToolTip(optionsButton.gameObject, "opts", "Bring up detailed configuration tabs");
+            //uiman.ttman.WireUpToolTip(pipeButton.gameObject, "Pipes", "Show journey path links and nodes");
+
+
+            //uiman.ttman.WireUpToolTip(freeFlyButton.gameObject, "freefly", "Fly around in scene freely\nEsc exits this state");
+            //uiman.ttman.WireUpToolTip(quitButton.gameObject, "quit", "Quit to OS");
+            //uiman.ttman.WireUpToolTip(goButton.gameObject, "go", "Kick off a preprogramed scenario dependent journey script");
+            //uiman.ttman.WireUpToolTip(optionsButton.gameObject, "opts", "Bring up detailed configuration tabs");
         }
 
         public void DeleteStuff()
@@ -216,6 +216,9 @@ namespace CampusSimulator
                 case SceneSelE.MsftB19focused:
                     tbpfiltlist += ",Evac,Frame";
                     break;
+                case SceneSelE.MsftB33focused:
+                    tbpfiltlist += ",Evac,Frame";
+                    break;
                 case SceneSelE.Eb12:
                 case SceneSelE.Eb12small:
                     tbpfiltlist += ",Evac";
@@ -234,7 +237,7 @@ namespace CampusSimulator
 
 
         string orderedFixedButtonList = "HideUiButton,RunButton,FlyButton,FrameButton,EvacButton,UnEvacButton,PipeButton,GoButton,OptionsButton,ShowTracksButton,FreeFlyButton,QuitButton";
-        string orderedScenarioButtonList1 = "FteButton,ConButton,VisButton,SecButton,UnkButton,Vt2DButton,TranButton,HvacButton,ElecButton,PlumButton,";
+        string orderedScenarioButtonList1 = "FteButton,ConButton,VisButton,SecButton,UnkButton,Vt2DButton,TranButton,HvacButton,ElecButton,PlumButton";
 
         public void CreateButtonsAnew(string tbtfiltlist)
         {
@@ -406,7 +409,7 @@ namespace CampusSimulator
         public void ColorizeButtonStates()
         {
             var loc = "white";
-            clrbut("PipeButton", "pink", loc, sman.lcman.pipevis, "Pi");
+            clrbut("PipeButton", "pink", loc, sman.lcman.pipevis, "Pipes");
             clrbut("FteButton", "lightblue", loc, sman.frman.detectFte.Get(), "F");
             clrbut("ConButton", "lightblue", loc, sman.frman.detectContractor.Get(), "C");
             clrbut("SecButton", "lightblue", loc, sman.frman.detectSecurity.Get(), "S");
@@ -423,27 +426,27 @@ namespace CampusSimulator
             clrbut("RunButton", "pink", loc, sman.jnman.spawnrunjourneys, "Run");
             clrbut("FlyButton", "lightblue", loc, sman.jnman.spawnflyjourneys, "Fly");
         }
-        public void ColorizeButtonStatesOld()
-        {
-            var loc = "white";
-            uiman.SetButtonColor(pipeButton, "pink",loc, sman.lcman.pipevis, "Pi");
-            uiman.SetButtonColor(fteButton, "lightblue", loc, sman.frman.detectFte.Get(), "F");
-            uiman.SetButtonColor(conButton, "lightblue", loc, sman.frman.detectContractor.Get(), "C");
-            uiman.SetButtonColor(secButton, "lightblue", loc, sman.frman.detectSecurity.Get(), "S");
-            uiman.SetButtonColor(visButton, "lightblue", loc, sman.frman.detectVisitor.Get(), "V");
-            uiman.SetButtonColor(unkButton, "lightblue", loc, sman.frman.detectUnknown.Get(), "U");
-            uiman.SetButtonColor(showTracksButton, "lightblue", loc, sman.trman.showtracks.Get(), "Tracks");
-            uiman.SetButtonColor(tranButton, "lightblue", loc, sman.bdman.transwalls, "Tr");
-            uiman.SetButtonColor(hvacButton, "yellow", loc, sman.bdman.showhvac, "Hv");
-            uiman.SetButtonColor(elecButton, "yellow", loc, sman.bdman.showelec, "El");
-            uiman.SetButtonColor(plumButton, "yellow", loc, sman.bdman.showplum, "Pb");
-            //Debug.LogWarning($"ColorizeButtonStates Vt2D:{sman.frman.visibilityTiedToDetectability.Get()}");
-            uiman.SetButtonColor(vt2dButton, "lightblue", loc, sman.frman.visibilityTiedToDetectability.Get(), "Vt2D");
-            uiman.SetButtonColor(frameButton, "pink", loc, sman.frman.frameJourneys.Get(), "Frame");
-            uiman.SetButtonColor(freeFlyButton, "pink", loc, sman.vcman.InFreeFly(), "FreeFly");
-            uiman.SetButtonColor(runButton, "pink", loc, sman.jnman.spawnrunjourneys, "Run");
-            uiman.SetButtonColor(flyButton, "lightblue", loc, sman.jnman.spawnflyjourneys, "Fly");
-        }
+        //public void ColorizeButtonStatesOld()
+        //{
+        //    var loc = "white";
+        //    uiman.SetButtonColor(pipeButton, "pink",loc, sman.lcman.pipevis, "Pi");
+        //    uiman.SetButtonColor(fteButton, "lightblue", loc, sman.frman.detectFte.Get(), "F");
+        //    uiman.SetButtonColor(conButton, "lightblue", loc, sman.frman.detectContractor.Get(), "C");
+        //    uiman.SetButtonColor(secButton, "lightblue", loc, sman.frman.detectSecurity.Get(), "S");
+        //    uiman.SetButtonColor(visButton, "lightblue", loc, sman.frman.detectVisitor.Get(), "V");
+        //    uiman.SetButtonColor(unkButton, "lightblue", loc, sman.frman.detectUnknown.Get(), "U");
+        //    uiman.SetButtonColor(showTracksButton, "lightblue", loc, sman.trman.showtracks.Get(), "Tracks");
+        //    uiman.SetButtonColor(tranButton, "lightblue", loc, sman.bdman.transwalls, "Tr");
+        //    uiman.SetButtonColor(hvacButton, "yellow", loc, sman.bdman.showhvac, "Hv");
+        //    uiman.SetButtonColor(elecButton, "yellow", loc, sman.bdman.showelec, "El");
+        //    uiman.SetButtonColor(plumButton, "yellow", loc, sman.bdman.showplum, "Pb");
+        //    //Debug.LogWarning($"ColorizeButtonStates Vt2D:{sman.frman.visibilityTiedToDetectability.Get()}");
+        //    uiman.SetButtonColor(vt2dButton, "lightblue", loc, sman.frman.visibilityTiedToDetectability.Get(), "Vt2D");
+        //    uiman.SetButtonColor(frameButton, "pink", loc, sman.frman.frameJourneys.Get(), "Frame");
+        //    uiman.SetButtonColor(freeFlyButton, "pink", loc, sman.vcman.InFreeFly(), "FreeFly");
+        //    uiman.SetButtonColor(runButton, "pink", loc, sman.jnman.spawnrunjourneys, "Run");
+        //    uiman.SetButtonColor(flyButton, "lightblue", loc, sman.jnman.spawnflyjourneys, "Fly");
+        //}
         public void DetectFteButton()
         {
             sman.frman.detectFte.SetAndSave(!sman.frman.detectFte.Get());

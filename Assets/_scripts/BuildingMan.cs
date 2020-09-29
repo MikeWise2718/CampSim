@@ -402,6 +402,7 @@ namespace CampusSimulator
             {
                 case SceneSelE.MsftRedwest:
                 case SceneSelE.MsftCoreCampus:
+                case SceneSelE.MsftB33focused:
                 case SceneSelE.MsftB19focused:
                 case SceneSelE.MsftB121focused:
                     scene_padspecs = Building.MsftDronePadspec;
@@ -482,9 +483,9 @@ namespace CampusSimulator
                             var z = node.pt.z;
                             //var y = sman.lcman.GetHeight(x,z);
                             var pt = new Vector3(x, h, z);
-                            var nmsg = $"{nname} bld:{bname}  flr:{fname}  node.pt:{pt}";
                             node.pt = pt;
-                            sman.Lgg(nmsg, "orange");
+                            //var nmsg = $"{nname} bld:{bname}  flr:{fname}  node.pt:{pt}";
+                            //sman.Lgg(nmsg, "orange");
                             updnodes++;
                         }
                    }
@@ -493,11 +494,11 @@ namespace CampusSimulator
             sw.Stop();
             var nbadnames = bbadnamedict.Count;
             var msg = $"nodes: {nnodes}  blds:{bldcache.Count} nbadnames:{nbadnames} updated floor nodes:{updnodes} secs:{sw.ElapSecs()}";
-            foreach(var bn in bbadnamedict.Keys)
-            {
-                sman.Lgg($"   {bn}","lilac");
-            }
-            sman.Lgg(msg, "pink");
+            //foreach(var bn in bbadnamedict.Keys)
+            //{
+            //    sman.Lgg($"   {bn}","lilac");
+            //}
+            //sman.Lgg(msg, "pink");
         }
 
         public void ModelBuildPostLinkCloud()
@@ -579,6 +580,7 @@ namespace CampusSimulator
             {
                 case SceneSelE.MsftRedwest:
                 case SceneSelE.MsftCoreCampus:
+                case SceneSelE.MsftB33focused:
                 case SceneSelE.MsftB19focused:
                 case SceneSelE.MsftB121focused:
                     presetEvacBldName = "Bld19";

@@ -863,9 +863,11 @@ namespace Aiskwk.Map
             bool ok = false;
             switch (regsel)
             {
+                case "MsftSmall":
                 case "MsftRedwest":
                 case "MsftCoreCampus":
                 case "MsftB19focused":
+                case "MsftB33focused":
                 case "MsftB121focused":
                     // current calibration points
 

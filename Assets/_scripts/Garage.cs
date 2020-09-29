@@ -628,7 +628,7 @@ namespace CampusSimulator
             string gname = this.fullname;
             if (gname.StartsWith("MsGarageRWB"))
             {
-                if (gm.sman.curscene == SceneSelE.MsftB19focused || gm.sman.curscene == SceneSelE.MsftB121focused)
+                if (gm.sman.curscene == SceneSelE.MsftB19focused || gm.sman.curscene == SceneSelE.MsftB121focused || gm.sman.curscene == SceneSelE.MsftB33focused)
                 {
                     defPercentFull = 0.05f;
                 }

@@ -970,6 +970,27 @@ namespace CampusSimulator
 
                     isCustomizable = false;
                     break;
+                case SceneSelE.MsftB33focused:
+                    maplat = 47.639217;
+                    maplng = -122.134216;
+                    mapscale = 3.2f;
+                    maprot = new Vector3(0, 71.1f, 0);
+                    maptrans = new Vector3(-6, 0, 17);
+                    xdistkm = 2;
+                    zdistkm = 3;
+                    lod = 16;
+                    hasLLmap = true;
+
+                    fragang = maprot.y - 90;
+                    fragxoff = maptrans.x;
+                    fragzoff = maptrans.z;
+
+                    viewHome.avatar = ViewerAvatar.QuadCopter;
+                    viewHome.pos = new Vector3(-567.2f, 3f, 427.7f);
+                    viewHome.rot = new Vector3(0, -60, 0);
+
+                    isCustomizable = false;
+                    break;
                 case SceneSelE.MsftRedwest:
                     maplat = 47.659377;
                     maplng = -122.140189;

@@ -272,6 +272,11 @@ public class OptionsPanel : MonoBehaviour
                     enableString = "Visuals,MapSet,Frames,Buildings,Osm,General,Log,Help,About";
                     break;
                 }
+            case SceneSelE.MsftB33focused:
+                {
+                    enableString = "Visuals,MapSet,Frames,Buildings,Osm,General,Log,Help,About";
+                    break;
+                }
             case SceneSelE.MsftB121focused:
                 {
                     enableString = "Visuals,MapSet,Buildings,Osm,General,Log,Help,About";

@@ -189,6 +189,7 @@ namespace CampusSimulator
                 case SceneSelE.MsftSmall:
                 case SceneSelE.MsftCoreCampus:
                 case SceneSelE.MsftB19focused:
+                case SceneSelE.MsftB33focused:
                 case SceneSelE.MsftB121focused:
                 case SceneSelE.MsftRedwest:
                     rv = graphSceneE.gen_campus;

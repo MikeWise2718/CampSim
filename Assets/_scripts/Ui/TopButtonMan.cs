@@ -128,7 +128,6 @@ namespace CampusSimulator
 
         public void MakeOneButton(Transform parent, TopButSpec tbs)
         {
-            var bgo = DefaultControls.CreateButton(new DefaultControls.Resources());
             if (filterList.Count > 0)
             {
                 if (!IsInFilter(tbs.filter))
@@ -136,12 +135,14 @@ namespace CampusSimulator
                     return;
                 }
             }
+            var bgo = DefaultControls.CreateButton(new DefaultControls.Resources());
             bgo.name = tbs.idname;
             var butt = bgo.GetComponentInChildren<Button>();
             var btxt = bgo.GetComponentInChildren<Text>();
             btxt.text = tbs.dispname;
             btxt.fontSize = 28;
             var recttrans = butt.GetComponent<RectTransform>();
+            lay_but_y = 30;
             var pos = new Vector3(lay_but_x, lay_but_y, 0);
             recttrans.SetPositionAndRotation(pos, Quaternion.identity);
             var txwneed = 12 * (tbs.dispname.Length+2);
@@ -149,12 +150,19 @@ namespace CampusSimulator
             var (a_ymin, a_ymax) = (0.5f, 0.5f);
             var (s_x, s_y) = (lay_but_w, lay_but_h);
             var (p_x, p_y) = (tbs.xpos, tbs.ypos);
+            var (szd_x, szd_y) = (recttrans.sizeDelta.x, recttrans.sizeDelta.y);
             switch (tbs.yspec)
             {
                 case "stretch":
                     a_ymin = 0;
                     a_ymax = 1;
+                    if (tbs.ypos > 0)
+                    {
+                        recttrans.offsetMin = new Vector2(recttrans.offsetMin.x, -8);
+                        recttrans.offsetMax = new Vector2(recttrans.offsetMax.x, -8);
+                    }
                     s_y = 0;
+                    p_y = tbs.ypos;
                     break;
                 case "cen":
                     a_ymin = 0.5f;
@@ -184,7 +192,7 @@ namespace CampusSimulator
                     break;
                 case "cen":
                     a_xmin = 0.5f;
-                    a_xmax = 0.5f; ;
+                    a_xmax = 0.5f; 
                     s_x = txwneed;
                     p_x = tbs.xpos;
                     break;
@@ -205,6 +213,16 @@ namespace CampusSimulator
             recttrans.anchorMax = new Vector2(a_xmax, a_ymax);
             recttrans.sizeDelta = new Vector2(s_x, s_y);
             recttrans.position = new Vector3(p_x, p_y, 0);
+            if (tbs.ypos > 0)
+            {
+                recttrans.offsetMin = new Vector2(recttrans.offsetMin.x, tbs.ypos);
+                recttrans.offsetMax = new Vector2(recttrans.offsetMax.x, -tbs.ypos);
+            }
+            else
+            {
+                recttrans.offsetMin = new Vector2(recttrans.offsetMin.x, 2);
+                recttrans.offsetMax = new Vector2(recttrans.offsetMax.x, -2);
+            }
             bgo.transform.SetParent(parent, worldPositionStays: false);
             if (tbs.ttname != "")
             {
