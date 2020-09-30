@@ -2252,7 +2252,15 @@ namespace GraphAlgos
 
 
 
-
+        public void createPointsFor_msft_b34()  // machine generated - do not edit
+        {
+            grc.regman.NewNodeRegion("msft-b34", "purple", saveToFile: true);
+            var xs = 0;
+            var zs = 0;
+            grc.AddNodePtxyz("b34-f01-lobby", -702.300 + xs, 0.000, 431.400 + zs, comment: "");
+            grc.LinkToPtxyz("b34-o01-001", -697.700 + xs, 0.000, 415.700 + zs, comment: "");
+            grc.regman.SetRegion("default");
+        }
 
 
 

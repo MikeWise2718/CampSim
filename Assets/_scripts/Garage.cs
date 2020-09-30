@@ -442,6 +442,7 @@ namespace CampusSimulator
 
                 "MsGarage121_1",
                 "MsGarage33_1",
+                "MsGarage34_1",
                 "MsGarage19_1",
                 "MsGarage11_1",
                 "MsGarage40_1",
@@ -687,6 +688,10 @@ namespace CampusSimulator
                 case "MsGarage33_1":
                     defPercentFull = 0.9f;
                     GenSlots("g_33_1", 8, -558.3f, 412.40f, -2.55f,-0.48f, -20);
+                    break;
+                case "MsGarage34_1":
+                    defPercentFull = 0.9f;
+                    GenSlots("g_34_1", 5, -694.5f, 402.7f,  2.85f,  0.8f, -20);
                     break;
                 case "MsGarage11_1":
                     GenSlots("g_11_1", 22, -102.35f, 247.10f, 3.00f, 1.0f,160);

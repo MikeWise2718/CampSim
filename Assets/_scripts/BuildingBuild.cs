@@ -121,6 +121,7 @@ namespace CampusSimulator
 
         List<string> B34roomspec = new List<string>()
         {
+          "b34-f01-lobby:6:-18.5:4:4:T",
         };
 
 
