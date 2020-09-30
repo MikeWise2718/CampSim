@@ -38,6 +38,8 @@ namespace CampusSimulator
 
         public Garage parentGarage;
         public List<Garage> childGarages;
+        public GraphAlgos.LcNode dnode;
+        public GraphAlgos.LcNode wnode;
 
         public void Initialize(GarageMan gm)
         {
@@ -90,13 +92,21 @@ namespace CampusSimulator
             return SlotNameNodeAuxPrefix(auxname) + (i+1).ToString(slotnumformat);
         }
 
-        public void SetWalkAndDriveNodes(string walknode,string drivenode)
+        public void SetWalkAndDriveNodes(string walknode, string drivenode)
         {
             this.walknode = walknode;
             this.drivenode = drivenode;
             var lclc = gm.sman.lcman.GetGraphCtrl();
-            this.wlkpt = lclc.GetNode(walknode).pt;
-            this.drvpt = lclc.GetNode(drivenode).pt;
+            wnode = lclc.GetNode(walknode);
+            dnode = lclc.GetNode(drivenode);
+            if (wnode != null)
+            {
+                this.wlkpt = wnode.pt;
+            }
+            if (dnode != null)
+            {
+                this.drvpt = dnode.pt;
+            }
         }
         //bool slotpopulate = false;
         //int ticktock = 0;
@@ -431,6 +441,7 @@ namespace CampusSimulator
                 "MsGarageRWB/csees", // CW_MWrow - csees
 
                 "MsGarage121_1",
+                "MsGarage33_1",
                 "MsGarage19_1",
                 "MsGarage11_1",
                 "MsGarage40_1",
@@ -672,6 +683,10 @@ namespace CampusSimulator
                 case "MsGarage121_1":
                     defPercentFull = 0.9f;
                     GenSlots("g_121_1", 16, -836f, -542.00f, 1.12f, -3.0f, 70);
+                    break;
+                case "MsGarage33_1":
+                    defPercentFull = 0.9f;
+                    GenSlots("g_33_1", 8, -558.3f, 412.40f, -2.55f,-0.48f, -20);
                     break;
                 case "MsGarage11_1":
                     GenSlots("g_11_1", 22, -102.35f, 247.10f, 3.00f, 1.0f,160);

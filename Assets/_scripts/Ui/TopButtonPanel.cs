@@ -396,10 +396,6 @@ namespace CampusSimulator
         }
         public void clrbut(string bname,string activecolor,string idlecolor,bool status,string displaytxt)
         {
-            if (bname=="FrameButton")
-            {
-                Debug.Log("Here I am");
-            }
             var but = topButMan.GetButton(bname);
             if (but != null)
             {

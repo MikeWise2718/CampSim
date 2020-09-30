@@ -1199,7 +1199,7 @@ namespace CampusSimulator
 #region birdcommands
         public void StartBird()
         {
-            if (firstPersonBirdCtrl.isAtGoal())
+            if (firstPersonBirdCtrl.IsAtGoal())
             {
                 ReversePath();
             }
@@ -1243,7 +1243,7 @@ namespace CampusSimulator
         }
         public void SetSpeed(float newvel)
         {
-            if (firstPersonBirdCtrl.isAtStart())
+            if (firstPersonBirdCtrl.IsAtStart())
             {
                 StartBird();
             }
@@ -1297,7 +1297,7 @@ namespace CampusSimulator
         }
         public void SetStartNode(string newenodename)
         {
-            if (firstPersonBirdCtrl.isRunning())
+            if (firstPersonBirdCtrl.IsRunning())
             {
                 StopBird();  // If we reset the endnode during running we need to stop and set a new node there
             }
@@ -1373,7 +1373,7 @@ namespace CampusSimulator
         {
             bool restartbird = false;
             if (!lcman.IsNodeName(newenodename)) return;
-            if (firstPersonBirdCtrl.isAtGoal())
+            if (firstPersonBirdCtrl.IsAtGoal())
             {
                 //var tmp = pathctrl.startnodename;
                 firstPersonPathCtrl.startnodename = firstPersonPathCtrl.endnodename;
@@ -1381,7 +1381,7 @@ namespace CampusSimulator
                 // when we change the end node when we are finished and want to go somewhere else
                 // note that calling ReversePath leads to a stackoverflow
             }
-            if (firstPersonBirdCtrl.isRunning())
+            if (firstPersonBirdCtrl.IsRunning())
             {
                 StopBird();  // If we reset the endnode during running we need to stop and set a new node there
                 restartbird = true;

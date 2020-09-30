@@ -54,9 +54,9 @@ namespace CampusSimulator
 
         Path path = null;
 
-        public bool isRunning() { return (BirdState == BirdStateE.running); }
-        public bool isAtStart() { return (BirdState == BirdStateE.atstart); }
-        public bool isAtGoal() { return (BirdState == BirdStateE.atgoal); }
+        public bool IsRunning() { return (BirdState == BirdStateE.running); }
+        public bool IsAtStart() { return (BirdState == BirdStateE.atstart); }
+        public bool IsAtGoal() { return (BirdState == BirdStateE.atgoal); }
 
         public BirdFormE BirdForm
         {
@@ -375,7 +375,7 @@ namespace CampusSimulator
                     break;
             }
         }
-        public void startAnimation()
+        public void StartAnimation()
         {
 
         }
@@ -558,7 +558,7 @@ namespace CampusSimulator
                 Destroy(birdgo);
                 birdgo = null;
             }
-            initValues();
+            InitValues();
         }
         public PathPos GetBirdPos()
         {
@@ -566,7 +566,7 @@ namespace CampusSimulator
         }
         #endregion
 
-        void initValues()
+        void InitValues()
         {
             BirdSpeed = 0;
             BirdFlyHeight = 1.5f;
@@ -581,7 +581,7 @@ namespace CampusSimulator
         }
         void Start()
         {
-            initValues();
+            InitValues();
             //Debug.Log("birdctrl starts called");
         }
         // Update is called once per frame

@@ -476,6 +476,11 @@ namespace GraphAlgos
                           d_order: connectOrderE.dec, d_exit: exitDirE.front, d_len: 5f,
                           w_order: connectOrderE.inc, w_exit: exitDirE.back, w_len: 7f);
 
+            // Garage 33
+            CreateGarageLinks("MsGarage33_1", "b33-o01-001", "osm4751758029",
+                          d_order: connectOrderE.dec, d_exit: exitDirE.back, d_len: 5f,
+                          w_order: connectOrderE.inc, w_exit: exitDirE.back, w_len: 7f);
+
             // Garage 19
             CreateGarageLinks("MsGarage19_1", "b19-os1-o03", "dw-B19-c02",
                           d_order: connectOrderE.inc, d_exit: exitDirE.back, d_len: 5f,
@@ -697,6 +702,7 @@ namespace GraphAlgos
             }
 
             // do drive paths
+
             grc.SetCurUseType(LinkUse.driveway);
             var d_nodeprev = (d_order == connectOrderE.dec ? "" : drivenode);
             var d_ang = (d_exit == exitDirE.front ? 0 : 180);
@@ -708,7 +714,14 @@ namespace GraphAlgos
                 //AddLink(pslotnodename[i], d_pslotnodename);
                 if (d_nodeprev != "")
                 {
-                    grc.AddLinkByNodeName(d_pslotnodename, d_nodeprev);
+                    if (d_nodeprev.StartsWith("osm")|| d_pslotnodename.StartsWith("osm"))
+                    {
+                        grc.AddLateLink(d_pslotnodename, d_nodeprev, LinkUse.driveway);
+                    }
+                    else
+                    {
+                        grc.AddLinkByNodeName(d_pslotnodename, d_nodeprev);
+                    }
                 }
                 d_nodeprev = d_pslotnodename;
             }
@@ -718,27 +731,30 @@ namespace GraphAlgos
             }
 
             // do walk paths
-            grc.SetCurUseType(LinkUse.walkway);
-            var w_nodeprev = (w_order == connectOrderE.dec ? "" : walknode);
-            var w_ang = (w_exit == exitDirE.front ? 0 : 180);
-            for (int i = 0; i < nslots; i++)
+            if (garage.wnode != null)
             {
-                var w_pslotnodename_door = garage.SlotAxuxNodeName("wpsdoor", i);
-                var w_slotpos_door = garage.GetSlotPosition1(i, -90, 1.0f);
-                grc.NewAnchorLinkToxz(pslotnodename[i], w_pslotnodename_door, w_slotpos_door.x, w_slotpos_door.z);
-
-                var w_pslotnodename = garage.SlotAxuxNodeName("wps", i);
-                var w_slotpos = garage.GetSlotPosition2(i, w_ang, w_len, -90, 1.0f);
-                grc.LinkToPtxz(w_pslotnodename, w_slotpos.x, w_slotpos.z);
-                if (w_nodeprev != "")
+                grc.SetCurUseType(LinkUse.walkway);
+                var w_nodeprev = (w_order == connectOrderE.dec ? "" : walknode);
+                var w_ang = (w_exit == exitDirE.front ? 0 : 180);
+                for (int i = 0; i < nslots; i++)
                 {
-                    grc.AddLinkByNodeName(w_pslotnodename, w_nodeprev);
+                    var w_pslotnodename_door = garage.SlotAxuxNodeName("wpsdoor", i);
+                    var w_slotpos_door = garage.GetSlotPosition1(i, -90, 1.0f);
+                    grc.NewAnchorLinkToxz(pslotnodename[i], w_pslotnodename_door, w_slotpos_door.x, w_slotpos_door.z);
+
+                    var w_pslotnodename = garage.SlotAxuxNodeName("wps", i);
+                    var w_slotpos = garage.GetSlotPosition2(i, w_ang, w_len, -90, 1.0f);
+                    grc.LinkToPtxz(w_pslotnodename, w_slotpos.x, w_slotpos.z);
+                    if (w_nodeprev != "")
+                    {
+                        grc.AddLinkByNodeName(w_pslotnodename, w_nodeprev);
+                    }
+                    w_nodeprev = w_pslotnodename;
                 }
-                w_nodeprev = w_pslotnodename;
-            }
-            if (w_order == connectOrderE.dec)
-            {
-                grc.AddLinkByNodeName(w_nodeprev, walknode);
+                if (w_order == connectOrderE.dec)
+                {
+                    grc.AddLinkByNodeName(w_nodeprev, walknode);
+                }
             }
         }
         public void CreatePointsSmall()
