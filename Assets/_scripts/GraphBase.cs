@@ -44,7 +44,7 @@ namespace GraphAlgos
 
     #region basics - Weg,LcNode,LcLink
 
-    [Serializable]
+    //[Serializable] // leads to circular inspector loop warnings that trigger at depth 7
     public class LcNode
     {
         public GraphCtrl grc;

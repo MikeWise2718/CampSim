@@ -211,13 +211,13 @@ public class GrafPolyGen
         }
         if (dofloors)
         {
-            for (int i=0; i<levels; i++)
+            for (int i=0; i<=levels; i++)
             {
                 //Debug.Log($"GenPolyGen.GenBld doing floor {i} for {bldname}");
                 StartAccumulatingSegments();
                 SetGenForm(PolyGenForm.tesselate);
                 var fname = $"{bldname}-level-{i}";
-                var fheit = levels<2 ? 0 : (i*height / (levels-1));
+                var fheit = levels<2 ? 0 : (i*height / (levels));
                 var flrgo = GenMesh(fname, height: fheit, clr: clr, alf: alf, plotTesselation: plotTesselation, onesided: onesided, pgvd: pgvd);
                 flrgo.transform.localScale = new Vector3(ska, ska, ska);
                 flrgo.transform.SetParent(bldgo.transform, worldPositionStays: wps);
