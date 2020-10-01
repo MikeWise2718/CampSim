@@ -347,7 +347,7 @@ namespace CampusSimulator
             var padnodename = padname;
             if (padname.EndsWith("centertop"))
             {
-                if (!isOsmBld)
+                if (!isOsmGenerated)
                 {
                     bm.sman.LggError($"Building.AddOnePadFromStringPadspec - cannot compute center of building without OsmBldSpec");
                     return;
@@ -421,8 +421,17 @@ namespace CampusSimulator
             padlist.ForEach(pad => pad.CreateGos());
         }
         // Update is called once per frame
+        //float lasttime = 0;
         //void Update()
         //{
+        //    //if (name == "Bld34")
+        //    //{
+        //    //    if (Time.time - lasttime > 1)
+        //    //    {
+        //    //        Debug.Log($"{name} isAnOsmBld:{isAnOsmBld}");
+        //    //        lasttime = Time.time;
+        //    //    }
+        //    //}
         //}
     }
 }

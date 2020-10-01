@@ -703,6 +703,11 @@ namespace CampusSimulator
                 bld = bgo.AddComponent<Building>();
                 RegisterBsBld(bldspec, bld);
             }
+            if (bldspec.shortname == "Bld34")
+            {
+                Debug.Log("Bld34");
+            }
+            sman.Lgg($"MakeOsmBuilding name:{name} bs.shortname:{bldspec.shortname} bs.osmname:{bldspec.osmname}","lilac");
             bld.AddOsmBldDetails(this, bldspec);
             AddBuildingToCollection(bld,mightAlreadyExist:true);
 

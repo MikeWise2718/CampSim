@@ -8,8 +8,8 @@ namespace CampusSimulator
     {
         List<GameObject> bldgos;
         List<BldEvacAlarm> bldalarms;
-        public bool isOsmBld = false;
-        OsmBldSpec bldspec = null;
+        public bool isOsmGenerated = false;
+        public OsmBldSpec bldspec = null;
 
         void ActuallyDestroyObjects()
         {
@@ -213,6 +213,12 @@ namespace CampusSimulator
                         defPercentFull = 0.80f;
                         defRoomArea = 16;
                         defAngAlign = 24.0f;
+
+                        var bspec = bm.FindBldSpecByNameStart(osmnamestart);
+                        if (bspec != null)
+                        {
+                            bm.RegisterBsBld(bspec, this);
+                        }
 
                         //b19comp = this.transform.gameObject.AddComponent<B19Willow>();
                         //b19comp.InitializeValues(bm.sman, this);
@@ -475,10 +481,12 @@ namespace CampusSimulator
         {
             this.bm = bm;
             bldgos = new List<GameObject>();
-            maingaragename = "";
+            maingaragename = "blurb";
             selectionweight = 1;
             destnodes = new List<string>();
-            isOsmBld = true;
+            isOsmGenerated = true;
+            var parentname = this.transform.parent.gameObject.name;
+            Debug.Log($"Building {name}  {bs.shortname} isAnOsmBld:{isOsmGenerated} parentname:{parentname}");
             //if (bs.osmname.Contains("122"))
             //{
             //    Debug.Log("b122");
@@ -509,7 +517,7 @@ namespace CampusSimulator
             {
                 rv = b19comp.GetFloorHeight(floornum,includeAltitude:true);
             }
-            else if (isOsmBld)
+            else if (isOsmGenerated)
             {
                 rv = bldspec.GetLevelHeight(floornum);
                 var ptcen = bldspec.GetCenterTop();
@@ -789,7 +797,7 @@ namespace CampusSimulator
             bldgos = new List<GameObject>();
             var bmode = bm.bldMode.Get();
             var tmode = bm.treeMode.Get();
-            if (isOsmBld)
+            if (isOsmGenerated)
             {
                 var pgvd = new PolyGenVekMapDel(bm.sman.mpman.GetHeightVector3);
                 if (bldspec.isVisible)
@@ -1057,4 +1065,5 @@ namespace CampusSimulator
             }
         }
     }
+
 }

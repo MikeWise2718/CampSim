@@ -10,6 +10,7 @@ using UnityEngine.AI;
 using System.Data.Common;
 using System;
 
+[Serializable]
 public class OsmBldSpec
 {
     public string osmname;
