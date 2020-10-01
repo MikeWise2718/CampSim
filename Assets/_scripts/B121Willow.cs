@@ -1,8 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Security.Cryptography;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.Assertions.Must;
 using UxUtils;
 
 public class B121Willow : MonoBehaviour
@@ -264,7 +261,7 @@ public class B121Willow : MonoBehaviour
                 
                 if (bspec != null)
                 {
-                    sman.bdman.RegisterBsBld(bspec, bld);
+                    // sman.bdman.RegisterBsBld(bspec, bld); // done at build registration time now
                     bspec.isVisible = stat;
                     if (bspec.bgo != null)
                     {

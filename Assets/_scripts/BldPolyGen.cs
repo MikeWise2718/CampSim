@@ -494,6 +494,10 @@ public class BldPolyGen
     }
     public GameObject GenBldFromOsmBldSpec(GameObject parent, OsmBldSpec bs, bool plotTesselation = false, float ptscale = 1, PolyGenVekMapDel pgvd = null,float alf=0.5f)
     {
+        if (bs.shortname=="Bld34")
+        {
+            Debug.Log("Bld34");
+        }
         pg.SetOutline(bs.GetOutline());
         var clr = bs.GetColor();
         var bldname = $"{bs.osmname} ({bs.wid} {bs.bldtyp})";

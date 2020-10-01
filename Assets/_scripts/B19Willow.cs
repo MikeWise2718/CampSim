@@ -194,7 +194,7 @@ public class B19Willow : MonoBehaviour
                 var bspec = sman.bdman.FindBldSpecByNameStart(bld.osmnamestart);
                 if (bspec != null)
                 {
-                    sman.bdman.RegisterBsBld(bspec, bld);
+                    //sman.bdman.RegisterBsBld(bspec, bld); we do this somewhere else now
                     bspec.isVisible = stat;
                     if (bspec.bgo != null)
                     {

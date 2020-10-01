@@ -171,6 +171,9 @@ namespace CampusSimulator
             defPercentFull = 1.0f;
             defRoomArea = 10;
             osmnamestart = "";
+            var newosmlevels = 0;
+            var newosmheight = 0;
+
 
             switch (name)
             {
@@ -213,12 +216,10 @@ namespace CampusSimulator
                         defPercentFull = 0.80f;
                         defRoomArea = 16;
                         defAngAlign = 24.0f;
+                        newosmlevels = 2;
+                        newosmheight = 8;
 
-                        var bspec = bm.FindBldSpecByNameStart(osmnamestart);
-                        if (bspec != null)
-                        {
-                            bm.RegisterBsBld(bspec, this);
-                        }
+
 
                         //b19comp = this.transform.gameObject.AddComponent<B19Willow>();
                         //b19comp.InitializeValues(bm.sman, this);
@@ -242,6 +243,9 @@ namespace CampusSimulator
                         defPercentFull = 0.80f;
                         defRoomArea = 16;
                         defAngAlign = 24.0f;
+                        newosmlevels = 5;
+                        newosmheight = 20;
+
 
                         //b19comp = this.transform.gameObject.AddComponent<B19Willow>();
                         //b19comp.InitializeValues(bm.sman, this);
@@ -274,6 +278,7 @@ namespace CampusSimulator
                     }
                 case "Bld40":
                     {
+                        osmnamestart = "Microsoft Building 40";
                         maingaragename = "Garage40_1";
                         destnodes = new List<string> { "b40-f01-lobby" };
                         shortname = "b40";
@@ -285,6 +290,7 @@ namespace CampusSimulator
                     }
                 case "Bld43":
                     {
+                        osmnamestart = "Microsoft Building 43";
                         maingaragename = "Garage43_1";
                         destnodes = new List<string> { "b43-f01-rm1001", "b43-f01-rm1002", "b43-f01-rm1003" };
                         shortname = "b43";
@@ -307,6 +313,7 @@ namespace CampusSimulator
                     }
                 case "Bld99":
                     {
+                        osmnamestart = "Microsoft Building 99";
                         maingaragename = "Garage99_1";
                         destnodes = new List<string> { "b99-f01-lobby" };
                         shortname = "b99";
@@ -439,6 +446,23 @@ namespace CampusSimulator
                         bm.sman.LggError("AddBldDetails bad building name:" + name);
                         break;
                     }
+            }
+            if (osmnamestart != "")
+            {
+                var bspec = bm.FindBldSpecByNameStart(osmnamestart);
+                if (bspec != null)
+                {
+                    bm.RegisterBsBld(bspec, this);
+                    if (newosmlevels>0)
+                    {
+                        bspec.levels = newosmlevels;
+                        bspec.height = newosmheight;
+                    }
+                }
+                else
+                {
+                    bm.sman.LggError($"Could not find osmbld from name start:{osmnamestart}");
+                }
             }
             if (shortname != "")
             {
