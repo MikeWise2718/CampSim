@@ -7694,6 +7694,7 @@ namespace GraphAlgos
         public void createPointsFor_msft_bredwb()  // machine generated - do not edit
         {
             grc.regman.NewNodeRegion("msft-bredwb", "purple", saveToFile: true);
+            grc.gm.setmodxyz_off(grc.redwestNewMapXoffset, 0, grc.redwestNewMapZoffset);
             grc.AddNodePtxyz("bRWB-f01-lobby", -2044.300, 0.000, -1119.600, comment: ""); //  1 nn:1 nl:0
             grc.LinkToPtxyz("bRWB-f01-lobby", "bRWB-os1-o00", -2059.240, 0.000, -1124.150, LinkUse.walkway, comment: ""); //  2 nn:1 nl:1
             grc.LinkToPtxyz("bRWB-os1-o00", "bRWB-os1-o01", -2063.060, 0.000, -1138.260, LinkUse.walkway, comment: ""); //  3 nn:1 nl:1
@@ -7736,6 +7737,7 @@ namespace GraphAlgos
             grc.LinkToPtxyz("dw-RWB-c34", "dw-RWB-c36", -2021.000, 0.000, -1219.000, LinkUse.driveway, comment: ""); //  40 nn:1 nl:1
             grc.LinkToPtxyz("dw-RWB-c36", "dw-RWB-c38", -2030.300, 0.000, -1190.700, LinkUse.driveway, comment: ""); //  41 nn:1 nl:1
             grc.AddLinkByNodeName("dw-RWB-c00", "reg:msft-campus", LinkUse.driveway); //  42 nn:0 nl:1
+            grc.gm.setmodxyz_off(0,0,0);
             grc.regman.SetRegion("default");
         }
 
@@ -7743,6 +7745,7 @@ namespace GraphAlgos
         public void createPointsFor_msft_bredwb_f3()    // machine generated - do not edit
         {
             grc.regman.NewNodeRegion("msft-bredwb-f3", "purple", saveToFile: true);
+            grc.gm.setmodxyz_off(grc.redwestNewMapXoffset, 0, grc.redwestNewMapZoffset);
             grc.AddNodePtxyz("rwb-f03-cv0-s", -1971.357, 9.000, -1118.202, comment: ""); //  1 nn:1 nl:0
             grc.AddNodePtxyz("rwb-f03-cv0-e", -2048.843, 9.000, -1143.539, comment: ""); //  2 nn:1 nl:0
             grc.AddNodePtxyz("rwb-f03-cv1-s", -1975.537, 9.000, -1106.327, comment: ""); //  3 nn:1 nl:0
@@ -9121,6 +9124,7 @@ namespace GraphAlgos
             grc.AddLinkByNodeName("rwb-f03-cor3049", "rwb-f03-cor3381", LinkUse.legacy); //  1115 nn:0 nl:1
             grc.AddLinkByNodeName("rwb-f03-cor3049", "rwb-f03-ch12-1", LinkUse.legacy); //  1116 nn:0 nl:1
             grc.regman.SetRegion("default");
+            grc.gm.setmodxyz_off(0,0,0);
         }
 
         public void createPointsFor_msft_bsx()  // machine generated - do not edit

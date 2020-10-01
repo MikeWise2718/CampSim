@@ -456,8 +456,14 @@ namespace CampusSimulator
         }
         public void AddSlotsRedwB(string subgname)
         {
-            float xoff = 0;
-            float zoff = 0;
+
+            //grc.gm.setmodxyz_off(16.69f - 0.40f, 0, 12.95f + 0.70f);
+
+            var gxoff = gm.sman.lcman.grctrl.redwestNewMapXoffset;
+            var gzoff = gm.sman.lcman.grctrl.redwestNewMapZoffset;
+            var gvekoff = new Vector3(-gxoff, 0, -gzoff);
+            var xoff = 0f;
+            var zoff = 0f;
             pctfullonstart = 0.9f;
             if (subgname.StartsWith("cs"))
             {
@@ -470,22 +476,22 @@ namespace CampusSimulator
             {
                 case "nnw":
                     {
-                        var v1 = new Vector3(-2013.3f, 0, -1263.0f);
-                        var v2 = new Vector3(-2010.8f, 0, -1269.9f);
+                        var v1 = new Vector3(-2013.3f, 0, -1263.0f) + gvekoff;
+                        var v2 = new Vector3(-2010.8f, 0, -1269.9f) + gvekoff;
                         GenSlots(slotnameprefix,  4, v1, v2, resetSlotStartNumber: rssn, group: subgname, revOrd: true);
                         break;
                     }
                 case "nnn":
                     {
-                        var v1 = new Vector3(-2041.3f, 0, -1180.2f);
-                        var v2 = new Vector3(-2014.2f, 0, -1260.7f);
+                        var v1 = new Vector3(-2041.3f, 0, -1180.2f) + gvekoff;
+                        var v2 = new Vector3(-2014.2f, 0, -1260.7f) + gvekoff;
                         GenSlots(slotnameprefix, 34, v1, v2, resetSlotStartNumber: rssn, group: subgname, revOrd:true);
                         break;
                     }
                 case "eee":
                     {
-                        var v1 = new Vector3(-2000.2f, 0, -1162.7f);
-                        var v2 = new Vector3(-2034.1f, 0, -1173.1f);
+                        var v1 = new Vector3(-2000.2f, 0, -1162.7f) + gvekoff;
+                        var v2 = new Vector3(-2034.1f, 0, -1173.1f) + gvekoff;
                         GenSlots(slotnameprefix, 14, v1, v2, resetSlotStartNumber: rssn, group:subgname, revOrd: true);
                         break;
                     }
@@ -493,141 +499,141 @@ namespace CampusSimulator
                 case "sss":
                     {
                         //var v1 = new Vector3(-1968.5f, 0, -1243.0f);
-                        var v1 = new Vector3(-1967.8f, 0, -1245.2f);
-                        var v2 = new Vector3(-1995.4f, 0, -1164.6f);
+                        var v1 = new Vector3(-1967.8f, 0, -1245.2f) + gvekoff;
+                        var v2 = new Vector3(-1995.4f, 0, -1164.6f) + gvekoff;
                         GenSlots(slotnameprefix, 34, v1, v2, resetSlotStartNumber: rssn, group: subgname, revOrd: true);
                         break;
                     }
                 case "ssw":
                     {
-                        var v1 = new Vector3(-1964.8f, 0, -1254.0f);
-                        var v2 = new Vector3(-1967.0f, 0, -1247.3f);
+                        var v1 = new Vector3(-1964.8f, 0, -1254.0f) + gvekoff;
+                        var v2 = new Vector3(-1967.0f, 0, -1247.3f) + gvekoff;
                         GenSlots(slotnameprefix,  4, v1, v2, resetSlotStartNumber: rssn, group: subgname, revOrd: true);
                         break;
                     }
 
                 case "wsw":
                     {
-                        var v1 = new Vector3(-1981.4f, 0, -1263.8f);
-                        var v2 = new Vector3(-1972.5f, 0, -1261.0f);
+                        var v1 = new Vector3(-1981.4f, 0, -1263.8f) + gvekoff;
+                        var v2 = new Vector3(-1972.5f, 0, -1261.0f) + gvekoff;
                         GenSlots(slotnameprefix, 5, v1, v2, resetSlotStartNumber: rssn, group: subgname, revOrd: true);
                         break;
                     }
                 case "wnw":
                     {
-                        var v1 = new Vector3(-2006.0f, 0, -1272.5f);
-                        var v2 = new Vector3(-1994.9f, 0, -1269.0f);
+                        var v1 = new Vector3(-2006.0f, 0, -1272.5f) + gvekoff;
+                        var v2 = new Vector3(-1994.9f, 0, -1269.0f) + gvekoff;
                         GenSlots(slotnameprefix, 6, v1, v2, resetSlotStartNumber: rssn, group: subgname, revOrd: true);
                         break;
                     }
 
                 case "cnwwn": // CE_TErow - cnwwn
                     {
-                        var v1 = new Vector3(-2002.33f + xoff, 0, -1257.9f + zoff);
-                        var v2 = new Vector3(-2003.4f + xoff, 0,  -1254.9f + zoff);
+                        var v1 = new Vector3(-2002.33f + xoff, 0, -1257.9f + zoff) + gvekoff;
+                        var v2 = new Vector3(-2003.4f + xoff, 0,  -1254.9f + zoff) + gvekoff;
                         GenSlots(slotnameprefix, 2, v1, v2, resetSlotStartNumber: rssn, group: subgname);
                         break;
                     }
                 case "cswwn": // CW_TErow - cswwn
                     {
-                        var v1 = new Vector3(-1985.3f, 0, -1251.8f);
-                        var v2 = new Vector3(-1986.0f, 0, -1249.9f);// eyeballed
+                        var v1 = new Vector3(-1985.3f, 0, -1251.8f) + gvekoff;
+                        var v2 = new Vector3(-1986.0f, 0, -1249.9f) + gvekoff;// eyeballed
                         GenSlots(slotnameprefix, 1, v1, v2, resetSlotStartNumber: rssn, group: subgname);
                         break;
                     }
                 case "cncwn": // CE_SErow - cncwn
                     {
-                        var v1 = new Vector3(-2005.1f + xoff, 0, -1246.5f + zoff);
-                        var v2 = new Vector3(-2013.0f + xoff, 0, -1224.8f + zoff);
+                        var v1 = new Vector3(-2005.1f + xoff, 0, -1246.5f + zoff) + gvekoff;
+                        var v2 = new Vector3(-2013.0f + xoff, 0, -1224.8f + zoff) + gvekoff;
                         GenSlots(slotnameprefix, 11, v1, v2, resetSlotStartNumber: rssn, group: subgname);
                         break;
                     }
                 case "csccn": // CW_SErow - csccn
                     {
-                        var v1 = new Vector3(-2005.1f + xoff, 0, -1246.5f + zoff);
-                        var v2 = new Vector3(-1989.9f , 0, -1236.0f );// no offset because I eyeballed them
+                        var v1 = new Vector3(-2005.1f + xoff, 0, -1246.5f + zoff) + gvekoff;
+                        var v2 = new Vector3(-1989.9f , 0, -1236.0f) + gvekoff;// no offset because I eyeballed them
                         GenSlots(slotnameprefix, 3, v1, v2, resetSlotStartNumber: rssn, group: subgname);
                         break;
                     }
                 case "cscwn": // CW_SErow - cscwn
                     {
-                        var v1 = new Vector3(-1990.4f , 0, -1234.1f );// no offset because I eyeballed them
-                        var v2 = new Vector3(-2013.0f + xoff, 0, -1224.8f + zoff);
+                        var v1 = new Vector3(-1990.4f , 0, -1234.1f) + gvekoff;// no offset because I eyeballed them
+                        var v2 = new Vector3(-2013.0f + xoff, 0, -1224.8f + zoff) + gvekoff;
                         GenSlots(slotnameprefix,7, v1, v2, resetSlotStartNumber: rssn, group: subgname);
                         break;
                     }
 
                 case "cncen": // CE_NErow - cncen
                     {
-                        var v1 = new Vector3(-2015.6f + xoff, 0, -1216.2f + zoff);
-                        var v2 = new Vector3(-2022.86f + xoff, 0, -1194.7f + zoff);
+                        var v1 = new Vector3(-2015.6f + xoff, 0, -1216.2f + zoff) + gvekoff;
+                        var v2 = new Vector3(-2022.86f + xoff, 0, -1194.7f + zoff) + gvekoff;
                         GenSlots(slotnameprefix, 11, v1, v2, resetSlotStartNumber: rssn, group: subgname);
                         break;
                     }
                 case "cscen": // CW_NErow - cscen
                     {
-                        var v1 = new Vector3(-2015.6f + xoff, 0, -1216.2f + zoff);
-                        var v2 = new Vector3(-2003.4f , 0, -1196.2f);// no offset because I eyeballed them
+                        var v1 = new Vector3(-2015.6f + xoff, 0, -1216.2f + zoff) + gvekoff;
+                        var v2 = new Vector3(-2003.4f , 0, -1196.2f) + gvekoff;// no offset because I eyeballed them
                         GenSlots(slotnameprefix, 7, v1, v2, resetSlotStartNumber: rssn, group: subgname);
                         break;
                     }
                 case "cscdn": // CW_NErow - cscdn
                     {
-                        var v1 = new Vector3(-2004.2f, 0, -1193.8f );
-                        var v2 = new Vector3(-2005.85f, 0, -1189.1f);// no offset because I eyeballed them
+                        var v1 = new Vector3(-2004.2f, 0, -1193.8f) + gvekoff;
+                        var v2 = new Vector3(-2005.85f, 0, -1189.1f) + gvekoff;// no offset because I eyeballed them
                         GenSlots(slotnameprefix, 3, v1, v2, resetSlotStartNumber: rssn, group: subgname);
                         break;
                     }
                 case "cneen": // CE_MErow - cneen
                     {
-                        var v1 = new Vector3(-2025.2f + xoff, 0, -1186.5f + zoff);
-                        var v2 = new Vector3(-2026.0f + xoff, 0, -1184.3f + zoff);
+                        var v1 = new Vector3(-2025.2f + xoff, 0, -1186.5f + zoff) + gvekoff;
+                        var v2 = new Vector3(-2026.0f + xoff, 0, -1184.3f + zoff) + gvekoff;
                         GenSlots(slotnameprefix, 2, v1, v2, resetSlotStartNumber: rssn, group: subgname);
                         break;
                     }
                 case "cseen": // CW_MErow - cseen
                     {
-                        var v1 = new Vector3(-2025.4f + xoff, 0, -1185.9f + zoff);
-                        var v2 = new Vector3(-2026.3f + xoff, 0, -1183.2f + zoff);
+                        var v1 = new Vector3(-2025.4f + xoff, 0, -1185.9f + zoff) + gvekoff;
+                        var v2 = new Vector3(-2026.3f + xoff, 0, -1183.2f + zoff) + gvekoff;
                         GenSlots(slotnameprefix, 1, v1, v2, resetSlotStartNumber: rssn, group: subgname);
                         break;
                     }
                 case "cnwws": // CE_TWrow - cnwws
                 case "cswws": // CW_TWrow - cswws
                     {
-                        var v1 = new Vector3(-1997.97f+xoff, 0, -1253.1f +zoff );
-                        var v2 = new Vector3(-1996.8f+xoff, 0, -1256.1f +zoff );
+                        var v1 = new Vector3(-1997.97f+xoff, 0, -1253.1f +zoff) + gvekoff;
+                        var v2 = new Vector3(-1996.8f+xoff, 0, -1256.1f +zoff) + gvekoff;
                         GenSlots(slotnameprefix, 2, v1, v2, resetSlotStartNumber: rssn, group: subgname,revPos:true);
                         break;
                     }
                 case "cncws": // CE_SWrow - cncws
                 case "cscws": // CW_SWrow - cscws
                     {
-                        var v1 = new Vector3(-2008.1f + xoff, 0, -1222.9f + zoff);
-                        var v2 = new Vector3(-2000.06f + xoff, 0, -1244.78f + zoff);
+                        var v1 = new Vector3(-2008.1f + xoff, 0, -1222.9f + zoff) + gvekoff;
+                        var v2 = new Vector3(-2000.06f + xoff, 0, -1244.78f + zoff) + gvekoff;
                         GenSlots(slotnameprefix, 11, v1, v2, resetSlotStartNumber: rssn, group: subgname, revPos: true);
                         break;
                     }
                 case "cnces": // CE_NWrow - cnces
                 case "csces": // CW_NWrow - csces
                     {
-                        var v1 = new Vector3(-2018.0f + xoff, 0, -1193.1f + zoff);
-                        var v2 = new Vector3(-2010.8f + xoff, 0, -1214.7f + zoff);
+                        var v1 = new Vector3(-2018.0f + xoff, 0, -1193.1f + zoff) + gvekoff;
+                        var v2 = new Vector3(-2010.8f + xoff, 0, -1214.7f + zoff) + gvekoff;
                         GenSlots(slotnameprefix, 11, v1, v2, resetSlotStartNumber: rssn, group: subgname, revPos: true);
                         break;
                     }
                 case "cnees": // CE_MWrow - cnees
                     {
-                        var v1 = new Vector3(-2021.3f + xoff, 0, -1182.6f + zoff);
-                        var v2 = new Vector3(-2020.6f + xoff, 0, -1184.9f + zoff);
+                        var v1 = new Vector3(-2021.3f + xoff, 0, -1182.6f + zoff) + gvekoff;
+                        var v2 = new Vector3(-2020.6f + xoff, 0, -1184.9f + zoff) + gvekoff;
                         GenSlots(slotnameprefix, 2, v1, v2, resetSlotStartNumber: rssn, group: subgname, revPos: true);
                         break;
                     }
                 case "csees": // CW_MWrow - csees
                     {
                         var rev = subgname == "cnees";
-                        var v1 = new Vector3(-2021.4f + xoff, 0, -1181.8f + zoff);
-                        var v2 = new Vector3(-2020.6f + xoff, 0, -1184.2f + zoff);
+                        var v1 = new Vector3(-2021.4f + xoff, 0, -1181.8f + zoff) + gvekoff;
+                        var v2 = new Vector3(-2020.6f + xoff, 0, -1184.2f + zoff) + gvekoff;
                         GenSlots(slotnameprefix, 1, v1, v2, resetSlotStartNumber: rssn, group: subgname, revPos: true);
                         break;
                     }

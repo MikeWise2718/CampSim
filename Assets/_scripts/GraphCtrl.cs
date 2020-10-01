@@ -101,6 +101,12 @@ namespace GraphAlgos
             mod_z_off = 0.0f;
             this.llm = null;
         }
+        public void setmodxyz_off(float xoff,float yoff,float zoff)
+        {
+            mod_x_off = xoff;
+            mod_y_off = yoff;
+            mod_z_off = zoff;
+        }
         public void setmapper(LatLongMap llm)
         {
             this.llm = llm;
@@ -171,6 +177,8 @@ namespace GraphAlgos
         public string uniqueLinkPrefix = "link";
         public string graphdir = "";
 
+        public float redwestNewMapXoffset = 16.69f - 0.40f;
+        public float redwestNewMapZoffset = 12.95f + 0.70f;
 
         public void SetCurUseType(LinkUse usetype)
         {

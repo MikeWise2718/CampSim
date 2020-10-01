@@ -302,6 +302,7 @@ namespace CampusSimulator
                     }
                 case "BldSX":
                     {
+                        osmnamestart = "Microsoft Studio X";
                         maingaragename = "GarageX_1";
                         destnodes = new List<string> { "bSX-f01-lobby" };
                         shortname = "bSX";
@@ -313,7 +314,7 @@ namespace CampusSimulator
                     }
                 case "Bld99":
                     {
-                        osmnamestart = "Microsoft Building 99";
+                        osmnamestart = "Building 99";
                         maingaragename = "Garage99_1";
                         destnodes = new List<string> { "b99-f01-lobby" };
                         shortname = "b99";
@@ -326,6 +327,7 @@ namespace CampusSimulator
                     }
                 case "BldRWB":
                     {
+                        osmnamestart = "RedWest-B";
                         maingaragename = "GarageRWB_1";
                         selectionweight = 10;
                         destnodes = new List<string> { "bRWB-f01-lobby", "rwb-f03-rm3999" }; // reset in reinitdests
@@ -505,7 +507,7 @@ namespace CampusSimulator
         {
             this.bm = bm;
             bldgos = new List<GameObject>();
-            maingaragename = "blurb";
+            //maingaragename = "blurb";
             selectionweight = 1;
             destnodes = new List<string>();
             isOsmGenerated = true;
