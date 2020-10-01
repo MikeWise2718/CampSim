@@ -18,6 +18,7 @@ public class OsmBldSpec
     public string bldtyp;
     public string wid;
     public float height;
+    public float levelheight;
     public int levels;
     public double lat;
     public double lng;
@@ -50,6 +51,7 @@ public class OsmBldSpec
         this.wid = wid;
         this.height = height;
         this.levels = levels;
+        this.levelheight = height / levels;
         this.bgo = null;
         this.isVisible = true;
         this.shortname = osmname.Replace("Microsoft Building ","Bld");
@@ -84,14 +86,14 @@ public class OsmBldSpec
             Debug.LogError($"BldPolyGen.OsmBldSPec.GetLevelHeight has bad level:{level} building levels:{levels}");
             level = levels;
         }
-        var y = height * level;
+        var y = level * levelheight;
         return y;
     }
 
     public Vector3 GetCenterTop()
     {
         var rv = Vector3.zero;
-        var y = height * levels;
+        var y = height;
         if (boutline.Count > 0)
         {
             var vsum = Vector3.zero;

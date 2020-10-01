@@ -475,6 +475,10 @@ namespace CampusSimulator
                     }
                     if (bd != null)
                     {
+                        if (bd.name=="BldRWB")
+                        {
+                            Debug.Log("Here I am again");
+                        }
                         if (floordict.ContainsKey(fname))
                         {
                             var iflr = floordict[fname];

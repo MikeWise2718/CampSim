@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Analytics;
 
 namespace CampusSimulator
 {
@@ -348,6 +349,9 @@ namespace CampusSimulator
                         {
                             bm.sman.jnman.preferedJourneyBuildingName = name;
                         }
+                        bm.AddBuildingAlias("rwb", this);
+                        bm.AddBuildingAlias("bRWB", this);
+
                         //var lcman = bm.sman.lcman;
                         //var grctrl = lcman.GetGraphCtrl();
                         //var mm = new GraphAlgos.LcMapMaker(grctrl, lcman.mappars);
@@ -459,6 +463,11 @@ namespace CampusSimulator
                     {
                         bspec.levels = newosmlevels;
                         bspec.height = newosmheight;
+                        if (bspec.levels == 0)
+                        {
+                            bspec.levels = 1;
+                        }
+                        bspec.levelheight = bspec.height / bspec.levels;
                     }
                 }
                 else
@@ -792,11 +801,7 @@ namespace CampusSimulator
             
            return;
         }
-        void AddBld43Ref()
-        {
-            // add a empty game obect at 0,0.5,0
-            // Load in Models/B4model prefab underneath it
-        }
+
         void AddAlarmToNode(GameObject parentnode,string alarmname,string nodename,float almheight=2)
         {
             var lc = bm.sman.lcman;
