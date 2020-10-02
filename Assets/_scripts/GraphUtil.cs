@@ -199,6 +199,13 @@ namespace GraphAlgos
                 {
                     clder.enabled = false;
                 }
+                if (dirname=="People/")
+                {
+                    var cc = go.AddComponent<CapsuleCollider>();
+                    cc.center = new Vector3(0, 0.9f, 0);
+                    cc.radius = 0.25f;
+                    cc.height = 1.8f;
+                }
                 var rigid = go.GetComponent<Rigidbody>();
                 if (rigid != null)
                 {

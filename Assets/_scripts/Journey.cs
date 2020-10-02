@@ -247,11 +247,14 @@ namespace CampusSimulator
         float updateLogInterval = 1;
         public void UpdatePosition()
         {
-            PathPos pos = birdctrl.GetBirdPos();
-            if (IsRunning() && (Time.time-lastUpdatedLoggedTime)>updateLogInterval)
+            if (jman.logJourneys)
             {
-                jman.sman.Lgg($"Jny:{name} position:{pos.pt:f1}");
-                lastUpdatedLoggedTime = Time.time;
+                PathPos pos = birdctrl.GetBirdPos();
+                if (IsRunning() && (Time.time - lastUpdatedLoggedTime) > updateLogInterval)
+                {
+                    jman.sman.Lgg($"Jny:{name} position:{pos.pt:f1}");
+                    lastUpdatedLoggedTime = Time.time;
+                }
             }
         }
         //// Update is called once per frame

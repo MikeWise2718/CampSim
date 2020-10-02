@@ -3,11 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Aiskwk.Dataframe;
 using Aiskwk.Map;
-using UnityEngine.UIElements;
-using System.Text;
-using System.Linq;
-using UnityEngine.AI;
-using System.Data.Common;
 using System;
 
 [Serializable]
@@ -70,8 +65,8 @@ public class OsmBldSpec
         boutline = new List<Vector3>();
         foreach (var pt in outline)
         {
-            var npt = new Vector3(pt.x * bscale, pt.y * bscale, pt.z * bscale);
-            boutline.Add(npt);
+            var newpt = new Vector3(pt.x * bscale, pt.y * bscale, pt.z * bscale);
+            boutline.Add(newpt);
         }
     }
     public List<Vector3> GetOutline()
@@ -269,31 +264,6 @@ public class BldPolyGen
         return listToReturn;
     }
 
-
-    //(SimpleDf ways, SimpleDf links, SimpleDf nodes) GetDfsFromFiles(string areaprefix, string dname = "")
-    //{
-    //    if (dname == "")
-    //    {
-    //        dname = "d:/pyprj/overpy/output/";
-    //    }
-    //    var fnameways = $"{dname}{areaprefix}_ways.csv";
-    //    var fnamenodes = $"{dname}{areaprefix}_nodes.csv";
-    //    var fnamelinks = $"{dname}{areaprefix}_links.csv";
-
-    //    var dfways = new SimpleDf(areaprefix + "_ways");
-    //    dfways.ReadCsv(fnameways);
-    //    Debug.Log($"Read {dfways.Nrow()} ways from {fnameways}");
-
-    //    var dflinks = new SimpleDf(areaprefix + "links");
-    //    dflinks.ReadCsv(fnamelinks);
-    //    Debug.Log($"Read {dflinks.Nrow()} links from {fnamelinks}");
-
-    //    var dfnodes = new SimpleDf(areaprefix + "nodes");
-    //    dfnodes.ReadCsv(fnamenodes);
-    //    Debug.Log($"Read {dfnodes.Nrow()} links from {fnamenodes}");
-
-    //    return (dfways, dflinks, dfnodes);
-    //}
 
     public (SimpleDf dfways1, SimpleDf dflinks1, SimpleDf dfnodes1) GetDfsFromResources(string areaprefix, string dname = "", LatLongMap llm = null)
     {

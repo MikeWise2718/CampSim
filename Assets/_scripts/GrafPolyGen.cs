@@ -218,6 +218,12 @@ public class GrafPolyGen
                 SetGenForm(PolyGenForm.tesselate);
                 var fname = $"{bldname}-level-{i}";
                 var fheit = levels<2 ? 0 : (i*height / (levels));
+                //var npgvd = pgvd;
+                //if (i>=0)
+                //{
+                //    OsmBldSpec osmbs = null;
+                //    pgvd = new delegate { FloorHeight(v, osmbs, i);  };
+                //}
                 var flrgo = GenMesh(fname, height: fheit, clr: clr, alf: alf, plotTesselation: plotTesselation, onesided: onesided, pgvd: pgvd);
                 flrgo.transform.localScale = new Vector3(ska, ska, ska);
                 flrgo.transform.SetParent(bldgo.transform, worldPositionStays: wps);
@@ -228,6 +234,15 @@ public class GrafPolyGen
         bldgo.transform.SetParent(parent.transform, worldPositionStays: true);
         return bldgo;
     }
+    //public delegate Vector3 PolyGenVekMapDel(Vector3 v);
+    public Vector3 FloorHeight(Vector3 v,OsmBldSpec osmbs,int floor)
+    {
+        var y = osmbs.GetLevelHeight(floor);
+        var cen = osmbs.GetCenterTop();
+        var rv = new Vector3(v.x, y, v.z);
+        return rv;
+    }
+
 
     public Vector3 GetCenter()
     {
@@ -265,7 +280,7 @@ public class GrafPolyGen
         {
             foreach (var p in ptsbuf)
             {
-                rv[i++] = pgvd(p.pt);
+                rv[i++] = pgvd(p.pt);// mapman heights added to points
             }
         }
         return rv;

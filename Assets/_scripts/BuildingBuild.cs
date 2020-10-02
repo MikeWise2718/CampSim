@@ -491,7 +491,7 @@ namespace CampusSimulator
             for (int i = 0; i < oline.Count; i++)
             {
                 var sph = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                sph.name = "Marker " + i;
+                sph.name = $"{bs.shortname}-Marker-{i}";
                 sph.transform.localScale = new Vector3(ska, ska, ska);
                 var z = oline[i].z;
                 var x = oline[i].x;
@@ -499,7 +499,7 @@ namespace CampusSimulator
                 var pos = new Vector3(x, 0, z);
                 if (pgvd!=null)
                 {
-                    pos = pgvd(pos);
+                    pos = pgvd(pos);// mapman heights added to point
                 }
                 sph.transform.position = pos;
                 sph.transform.SetParent(pgo.transform, worldPositionStays: true);

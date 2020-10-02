@@ -513,7 +513,6 @@ namespace GraphAlgos
                           w_order: connectOrderE.inc, w_exit: exitDirE.front, w_len: 5f);
 
             // Redwest B
-            //grc.gm.setmodxyz_off(16.69f - 0.40f, 0, 12.95f + 0.70f);
             CreateGarageLinks("MsGarageRWB/eee", "bRWB-os1-o05", "dw-RWB-c18",
                           d_order: connectOrderE.dec, d_exit: exitDirE.back, d_len: 7f,
                           w_order: connectOrderE.inc, w_exit: exitDirE.back, w_len: 4f);

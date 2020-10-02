@@ -1322,7 +1322,7 @@ namespace CampusSimulator
                     {
                         lvelfak = 2.5f;
                     }
-                    sman.Lgg($"SJBB {i} spawning nbldcnt:{nbldcnt} tries:{nspawntries} fails:{nspawnfails}");
+                    //sman.Lgg($"SJBB {i} spawning nbldcnt:{nbldcnt} tries:{nspawntries} fails:{nspawnfails}");
                     Journey jny;
                     var b1 = bm.GetRandomBldName("");
                     if (preferedJourneyBuildingName != "")

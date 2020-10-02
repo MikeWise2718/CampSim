@@ -1824,6 +1824,8 @@ namespace CampusSimulator
         public float lastRefreshTime = 0;
 
         int updateCount = 0;
+        public bool canClickOnObjects = true;
+        public string lasthitname = "";
         private void Update()
         {
             //Debug.Log($"SceneMan.Update called {updateCount}");
@@ -1903,6 +1905,37 @@ namespace CampusSimulator
             }
             KeyProcessing();
             updateCount++;
+
+            if (canClickOnObjects)
+            {
+                var vcam = Viewer.GetViewerCamera();
+                if (vcam!=null && Input.GetMouseButtonDown(0))
+                {
+                    Debug.Log("Left Mouse was pressed");
+
+
+                    Ray ray = vcam.ScreenPointToRay(Input.mousePosition);
+                    RaycastHit hit;
+                    if (Physics.Raycast(ray, out hit))
+                    {
+                        var go = hit.collider.gameObject;
+                        var hitname = go.name;
+                        if (go.transform.parent != null)
+                        {
+                            var pname = go.transform.parent.gameObject.name;
+                            hitname = $"{pname}/{hitname}";
+                        }
+                        lasthitname = hitname;
+                        Debug.Log($"Left mouse button hit {hitname}");
+                        //var hitname = go.name.ToLower();
+                    }
+                    else
+                    {
+                        Debug.Log("Nothing was hit");
+                    }
+                }
+
+            }
         }
 
         public void IdentitySystemAndUser()
@@ -1946,7 +1979,7 @@ namespace CampusSimulator
 
             if (e.type == EventType.MouseDown && e.button == 2 )
             {
-                //Debug.Log("Middle Mouse was pressed");
+                Debug.Log("Middle Mouse was pressed");
 
                 Vector3 mousePos = e.mousePosition;
                 float ppp = EditorGUIUtility.pixelsPerPoint;
@@ -1959,8 +1992,13 @@ namespace CampusSimulator
                 if (Physics.Raycast(ray, out hit))
                 {
                     var go = hit.collider.gameObject;
-                    //Debug.Log("Middle mouse button hit " + go.name);
                     var hitname = go.name.ToLower();
+                    if (go.transform.parent!=null)
+                    {
+                        var pname = go.transform.parent.gameObject.name;
+                        hitname = $"{pname}/{hitname}";
+                    }
+                    Debug.Log("Middle mouse button hit " + go.name);
                     if (hitname.StartsWith("bldevacalarm"))
                     {
                         var alarm = go.GetComponent<BldEvacAlarm>();
@@ -1980,7 +2018,7 @@ namespace CampusSimulator
             }
             if (e.type == EventType.MouseDown && e.button == 0)
             {
-                //Debug.Log("Left Mouse was pressed");
+                Debug.Log("Left Mouse was pressed");
 
                 Vector3 mousePos = e.mousePosition;
                 float ppp = EditorGUIUtility.pixelsPerPoint;
@@ -2002,7 +2040,7 @@ namespace CampusSimulator
                 }
                 else
                 {
-                    //Debug.Log("Left Mouse button missed everything");
+                    Debug.Log("Left Mouse button missed everything");
                 }
               
             }
