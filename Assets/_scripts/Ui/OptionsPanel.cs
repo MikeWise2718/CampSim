@@ -17,6 +17,7 @@ public class OptionsPanel : MonoBehaviour
     BuildingsPanel buildingsPanel;
     GeneralPanel generalPanel;
     OsmPanel osmPanel;
+    UiConfigPanel uiConfigPanel;
     LogPanel logPanel;
     HelpPanel helpPanel;
     AboutPanel aboutPanel;
@@ -32,8 +33,9 @@ public class OptionsPanel : MonoBehaviour
     Dictionary<TabState, SetAndSaver> setAndSaveDict = null;
 
     public UxEnumSetting<TabState> initialSceneTabState = new UxEnumSetting<TabState>("OptionsLastTabUsed", TabState.Visuals);
+    public UxSetting<string> enableStringSetting = new UxSetting<string>("OptionsEnableString", enableStringRoot);
 
-    public const string enableStringRoot = "Visuals,MapSet,Frames,FireFly,Buildings,Osm,General,Log,Help,About";
+    public const string enableStringRoot = "Visuals,MapSet,Frames,FireFly,Buildings,Osm,General,Ui,Log,Help,About";
     public string enableString;
 
     public class OptButtSpec
@@ -60,6 +62,7 @@ public class OptionsPanel : MonoBehaviour
         {"Buildings",new OptButtSpec(TabState.Buildings.ToString(),"Buildings","Building related parameters") },
         {"Osm",new OptButtSpec(TabState.Osm.ToString(),"Osm","Open Street Map Import") },
         {"General",new OptButtSpec(TabState.General.ToString(),"General","General parameters") },
+        {"Ui",new OptButtSpec(TabState.Ui.ToString(),"Ui","UI Configuration") },
         {"Log",new OptButtSpec(TabState.Log.ToString(),"Log","Log messages (i.e. errors, warnings, timings, etc)") },
         {"Help",new OptButtSpec(TabState.Help.ToString(),"Help","Help information\nincluding command line parameters") },
         {"About",new OptButtSpec(TabState.About.ToString(),"About","Version and System Information") },
@@ -75,7 +78,7 @@ public class OptionsPanel : MonoBehaviour
         }
     }
 
-    public enum TabState { Visuals, MapSet, FireFly, Frames, Buildings, Osm, General, Log, Help, About }
+    public enum TabState { Visuals, MapSet, FireFly, Frames, Buildings, Osm, General, Ui, Log, Help, About }
     TabState currentTabState;
 
     public void Init0()
@@ -97,6 +100,7 @@ public class OptionsPanel : MonoBehaviour
         fireFlyPanel = transform.Find("FireFlyPanel").GetComponent<FireFlyPanel>();
         buildingsPanel = transform.Find("BuildingsPanel").GetComponent<BuildingsPanel>();
         osmPanel = transform.Find("OsmPanel").GetComponent<OsmPanel>();
+        uiConfigPanel = transform.Find("UiConfigPanel").GetComponent<UiConfigPanel>();
         generalPanel = transform.Find("GeneralPanel").GetComponent<GeneralPanel>();
         logPanel = transform.Find("LogPanel").GetComponent<LogPanel>();
         helpPanel = transform.Find("HelpPanel").GetComponent<HelpPanel>();
@@ -109,6 +113,7 @@ public class OptionsPanel : MonoBehaviour
         panDict[TabState.FireFly] = fireFlyPanel.gameObject;
         panDict[TabState.Buildings] = buildingsPanel.gameObject;
         panDict[TabState.Osm] = osmPanel.gameObject;
+        panDict[TabState.Ui] = uiConfigPanel.gameObject;
         panDict[TabState.General] = generalPanel.gameObject;
         panDict[TabState.Log] = logPanel.gameObject;
         panDict[TabState.Help] = helpPanel.gameObject;
@@ -122,6 +127,7 @@ public class OptionsPanel : MonoBehaviour
         initDict[TabState.Buildings] = delegate { buildingsPanel.InitVals(); };
         initDict[TabState.Osm] = delegate { osmPanel.InitVals(); };
         initDict[TabState.General] = delegate { generalPanel.InitVals(); };
+        initDict[TabState.Ui] = delegate { uiConfigPanel.InitVals(); };
         initDict[TabState.Log] = delegate { logPanel.FillLogPanel(); };
         initDict[TabState.Help] = delegate { helpPanel.FillHelpPanel(); };
         initDict[TabState.About] = delegate { aboutPanel.FillAboutPanel(); };
@@ -132,6 +138,7 @@ public class OptionsPanel : MonoBehaviour
         setAndSaveDict[TabState.FireFly] = delegate { fireFlyPanel.SetVals(true); };
         setAndSaveDict[TabState.Buildings] = delegate { buildingsPanel.SetVals(true); };
         setAndSaveDict[TabState.Osm] = delegate { osmPanel.SetVals(true); };
+        setAndSaveDict[TabState.Ui] = delegate { uiConfigPanel.SetVals(true); };
         setAndSaveDict[TabState.General] = delegate { generalPanel.SetVals(true); };
 
         // start inactive
@@ -247,47 +254,56 @@ public class OptionsPanel : MonoBehaviour
     void InitializeValues()
     {
         initialSceneTabState.GetInitial();
+        enableStringSetting.GetInitial();
     }
 
     public void SetScene(CampusSimulator.SceneSelE curscene)
     {
-        InitializeValues();
 
-        enableString = enableStringRoot;
+        var enableStringSceneDefault = enableStringRoot;
         switch (curscene)
         {
             case SceneSelE.Eb12:
             case SceneSelE.Eb12small:
                 {
-                    enableString = "Visuals,MapSet,Buildings,Osm,Log,Help,About";
+                    enableStringSceneDefault = "Visuals,MapSet,Buildings,Osm,Ui,Log,Help,About";
                     break;
                 }
             case SceneSelE.MsftSmall:
                 {
-                    enableString = "Visuals,MapSet,Log,Help,About";
+                    enableStringSceneDefault = "Visuals,MapSet,Ui,Log,Help,About";
                     break;
                 }
             case SceneSelE.MsftB19focused:
                 {
-                    enableString = "Visuals,MapSet,Frames,Buildings,Osm,General,Log,Help,About";
+                    enableStringSceneDefault = "Visuals,MapSet,Frames,Buildings,Osm,General,Ui,Log,Help,About";
                     break;
                 }
             case SceneSelE.MsftB33focused:
                 {
-                    enableString = "Visuals,MapSet,Frames,Buildings,Osm,General,Log,Help,About";
+                    enableStringSceneDefault = "Visuals,MapSet,Frames,Buildings,Osm,General,Ui,Log,Help,About";
                     break;
                 }
             case SceneSelE.MsftB121focused:
                 {
-                    enableString = "Visuals,MapSet,Buildings,Osm,General,Log,Help,About";
+                    enableStringSceneDefault = "Visuals,MapSet,Buildings,Osm,General,Ui,Log,Help,About";
                     break;
                 }
             case SceneSelE.TeneriffeMtn:
                 {
-                    enableString = "FireFly,Visuals,MapSet,Frames,Buildings,Osm,General,Log,Help,About";
+                    enableStringSceneDefault = "FireFly,Visuals,MapSet,Frames,Buildings,Osm,General,Ui,Log,Help,About";
                     break;
                 }
         }
+
+        InitializeValues();
+        //if (!enableStringSetting.ValueRetrievedFromPersistentStore())
+        //{
+            enableStringSetting.SetAndSave(enableStringSceneDefault);
+        //}
+        //enableString = enableStringSetting.Get();
+        enableString = enableStringSceneDefault;
+
         MakeOptionsButtons();
         currentTabState = initialSceneTabState.Get();
         SyncOptionsTabState();

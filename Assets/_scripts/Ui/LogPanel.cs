@@ -12,7 +12,7 @@ public class LogPanel : MonoBehaviour
     public CampusSimulator.SceneMan sman;
     UiMan uiman;
 
-    Text logTabText;
+    GameObject content;   Text logTabText;
     Button copyClipboardButton;
 
     Button closeButton;
@@ -32,6 +32,7 @@ public class LogPanel : MonoBehaviour
 
         closeButton.onClick.AddListener(delegate { uiman.ClosePanel(); });
         copyClipboardButton.onClick.AddListener(delegate { ButtonClick(copyClipboardButton.name); });
+
 
     }
     public void SetScene(CampusSimulator.SceneSelE curscene)
@@ -92,7 +93,7 @@ public class LogPanel : MonoBehaviour
 
         var go = GameObject.Find("LogTabText");
         logTabText = go.GetComponent<Text>();
-        logTabText.font = font;
+        logTabText.font = uiman.GetFont();
         logTabText.fontSize = 24;
         logTabText.alignment = TextAnchor.UpperLeft;
         logTabText.verticalOverflow = VerticalWrapMode.Overflow;

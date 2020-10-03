@@ -30,7 +30,7 @@ public class OptionsTabPanel : MonoBehaviour
         var farr = fixedDummyButtonList.Split(',');
         foreach (var f in farr)
         {
-            FindAndDestroy(f);
+            FindAndDestroy("Dummy"+f);
         }
     }
 
@@ -71,9 +71,9 @@ public class OptionsTabPanel : MonoBehaviour
     public void InitializeLayout(string [] buttxtarr)
     {
         lay_nbut = buttxtarr.Length;
-        lay_but_gap_x = 10;
+        lay_but_gap_x =  6;
         lay_but_gap_y =  0;
-        lay_but_w = 110;
+        lay_but_w = 80;
         lay_but_h = 40;
         lay_totalwid = lay_nbut * lay_but_w + (lay_nbut - 1) * lay_but_gap_x;
 

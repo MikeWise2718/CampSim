@@ -1,10 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using CampusSimulator;
-using UnityEditor;
-using System.Diagnostics.Eventing.Reader;
 
 public class OsmPanel : MonoBehaviour
 {

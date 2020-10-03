@@ -102,7 +102,7 @@ public class ToolTipMan : MonoBehaviour
     }
     public void OnPointerExit(PointerEventData eventData, string txt)
     {
-        Debug.Log($"OnPointerExit {txt}");
+        //Debug.Log($"OnPointerExit {txt}");
         if (needPopup)
         {
             CancelPopup();

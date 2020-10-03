@@ -22,6 +22,7 @@ namespace CampusSimulator
         public FramePanel frapan;
         public BuildingsPanel bldpan;
         public OsmPanel osmpan;
+        public UiConfigPanel uiconpan;
         public LogPanel logpan;
         public HelpPanel helpan;
         public AboutPanel abtpan;
@@ -60,6 +61,7 @@ namespace CampusSimulator
             flypan = Resources.FindObjectsOfTypeAll<FireFlyPanel>()[0];
             bldpan = Resources.FindObjectsOfTypeAll<BuildingsPanel>()[0];
             osmpan = Resources.FindObjectsOfTypeAll<OsmPanel>()[0];
+            uiconpan = Resources.FindObjectsOfTypeAll<UiConfigPanel>()[0];
             logpan = Resources.FindObjectsOfTypeAll<LogPanel>()[0];
             helpan = Resources.FindObjectsOfTypeAll<HelpPanel>()[0];
             abtpan = Resources.FindObjectsOfTypeAll<AboutPanel>()[0];
@@ -77,6 +79,7 @@ namespace CampusSimulator
             frapan.sman = sman;
             bldpan.sman = sman;
             osmpan.sman = sman;
+            uiconpan.sman = sman;
             helpan.sman = sman;
             abtpan.sman = sman;
             flypan.sman = sman;
@@ -95,6 +98,7 @@ namespace CampusSimulator
             frapan.Init0();
             bldpan.Init0();
             osmpan.Init0();
+            uiconpan.Init0();
             helpan.Init0();
             abtpan.Init0();
             flypan.Init0();
@@ -127,6 +131,7 @@ namespace CampusSimulator
             frapan.SetScene(newscene);
             bldpan.SetScene(newscene);
             osmpan.SetScene(newscene);
+            uiconpan.SetScene(newscene);
             helpan.SetScene(newscene);
             abtpan.SetScene(newscene);
             logpan.SetScene(newscene);
@@ -191,6 +196,19 @@ namespace CampusSimulator
             }
             butt.colors = colors;
             Canvas.ForceUpdateCanvases();
+        }
+
+        public Font GetFont()
+        {
+            var arial = (Font)Resources.GetBuiltinResource(typeof(Font), "Arial.ttf");
+            var consolas = Font.CreateDynamicFontFromOSFont("Consolas", 24);
+
+            var font = arial;
+            if (consolas != null)
+            {
+                font = consolas;
+            }
+            return font;
         }
 
         public void DoKeys()
