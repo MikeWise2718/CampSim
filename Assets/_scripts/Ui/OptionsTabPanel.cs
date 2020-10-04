@@ -138,7 +138,12 @@ public class OptionsTabPanel : MonoBehaviour
     {
         foreach (var (but, idname,displayname) in createdOptionsButList)
         {
-            uiman.SetButtonColor(but, "lightgray", "white", curts == idname, displayname);
+            var activecolor = "lightgray";
+            if (!uiman.optpan.gameObject.activeSelf)
+            {
+                activecolor = "white";
+            }
+            uiman.SetButtonColor(but, activecolor, "white", curts == idname, displayname);
         }
     }
 

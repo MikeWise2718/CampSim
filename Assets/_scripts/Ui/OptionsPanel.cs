@@ -133,7 +133,7 @@ public class OptionsPanel : MonoBehaviour
         initDict[TabState.About] = delegate { aboutPanel.FillAboutPanel(); };
 
         setAndSaveDict[TabState.Visuals] = delegate { visualsPanel.SetVals(true); };
-        setAndSaveDict[TabState.MapSet] = delegate { mapSetPanel.SetVals(true); };
+        setAndSaveDict[TabState.MapSet] = delegate { mapSetPanel.SetVals(true);  };
         setAndSaveDict[TabState.Frames] = delegate { framePanel.SetVals(true); };
         setAndSaveDict[TabState.FireFly] = delegate { fireFlyPanel.SetVals(true); };
         setAndSaveDict[TabState.Buildings] = delegate { buildingsPanel.SetVals(true); };
@@ -190,10 +190,17 @@ public class OptionsPanel : MonoBehaviour
         var ok = System.Enum.TryParse<TabState>(newstate, out var tabstate);
         if (!ok)
         {
-            Debug.LogError($"Could not parse {newstate} as TabState enum");
+            sman.LggError($"OptionsPanel.OptionsSubMenuButtonPushed Could not parse {newstate} as TabState enum");
             tabstate = TabState.Visuals;
         }
-        SetTabState(tabstate);
+        if (gameObject.activeSelf && tabstate==currentTabState)
+        {
+            ClosePanel();
+        }
+        else
+        {
+            SetTabState(tabstate);
+        }
     }
 
     public void SetTabState(TabState newstate,bool ensureActive=true)
@@ -235,6 +242,7 @@ public class OptionsPanel : MonoBehaviour
     {
         gameObject.SetActive(false);// this does immediately take effect
         SwitchOptionsSubPanel(isOpening: false);
+        SyncOptionsTabState();
     }
     public void SwitchOptionsSubPanel(bool isOpening)
     {
