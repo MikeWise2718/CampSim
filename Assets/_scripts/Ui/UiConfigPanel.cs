@@ -179,6 +179,11 @@ public class UiConfigPanel : MonoBehaviour
             otttogdict[curRootOpt] = togcomp;
             togcomp.isOn = ison;
             toggo.transform.SetParent(ottcontent.transform, worldPositionStays: false);
+            var tt = uiman.optpan.GetToolTip(curRootOpt);
+            if (tt != "")
+            {
+                uiman.ttman.WireUpToolTip(toggo, curRootOpt, tt);
+            }
         }
     }
 
@@ -210,6 +215,11 @@ public class UiConfigPanel : MonoBehaviour
             tbttogdict[curRootOpt] = togcomp;
             togcomp.isOn = ison;
             toggo.transform.SetParent(tbtcontent.transform, worldPositionStays: false);
+            var tt = uiman.tbtpan.GetTbtClassToolTip(curRootOpt);
+            if (tt != "")
+            {
+                uiman.ttman.WireUpToolTip(toggo, curRootOpt, tt);
+            }
         }
     }
 

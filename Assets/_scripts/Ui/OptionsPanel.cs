@@ -160,6 +160,16 @@ public class OptionsPanel : MonoBehaviour
     {
     }
 
+    public string GetToolTip(string option)
+    {
+        if (!butspec.ContainsKey(option))
+        {
+            return "";
+        }
+        var rv = butspec[option].tooltip;
+        return rv;
+    }
+
     public void MakeOptionsButtons()
     {
         var buttxtarr = enableString.Split(',');

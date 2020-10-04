@@ -92,6 +92,26 @@ namespace CampusSimulator
             }
         }
 
+        Dictionary<string, string> tbtclasses = new Dictionary<string, string>()
+        {
+            { "All","Buttons used in every scenario" },
+            { "Sim","Buttons used to start simulations" },
+            { "Trx","Buttons used to start track simulations" },
+            { "B121","Buttons used to toggle B121 options" },
+            { "Evac","Buttons used to start evacuation" },
+            { "Frame","Buttons used to simulation object detection" },
+
+        };
+        public string GetTbtClassToolTip(string option)
+        {
+            if (!tbtclasses.ContainsKey(option))
+            {
+                return "";
+            }
+            var rv = tbtclasses[option];
+            return rv;
+        }
+
         public const string tbprootfiltlist = "All,Sim,Trx,B121,Evac,Frame";
 
         public string tbpfiltlist;

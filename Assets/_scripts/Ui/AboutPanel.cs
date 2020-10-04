@@ -49,8 +49,8 @@ public class AboutPanel : MonoBehaviour
         LinkObjectsAndComponents();
         sman.uiman.ttman.WireUpToolTip(closeButton.gameObject, "aboutpanel-closepanel", "Close Panel");
         sman.uiman.ttman.WireUpToolTip(copyClipboardButton.gameObject, "aboutpanel-copyclipboard", "Copy text to clipboard");
-        sman.uiman.ttman.WireUpToolTip(deleteSettingsButton.gameObject, "aboutpanel-deletesettings", "Delete all saved settings for this app\nDangerous - can lose work!!",danger:true);
-        sman.uiman.ttman.WireUpToolTip(deleteCachedMapsButton.gameObject, "aboutpanel-deletecachedmaps", "Delete all saved maps and elevations for this app\nDangerous - it takes time to load these!!", danger: true);
+        sman.uiman.ttman.WireUpToolTip(deleteSettingsButton.gameObject, "aboutpanel-deletesettings", "Delete all saved settings for this app\nDangerous - can lose work!!",isDangerous:true);
+        sman.uiman.ttman.WireUpToolTip(deleteCachedMapsButton.gameObject, "aboutpanel-deletecachedmaps", "Delete all saved maps and elevations for this app\nDangerous - it takes time to load these!!", isDangerous: true);
     }
 
     public void SetScene(CampusSimulator.SceneSelE curscene)

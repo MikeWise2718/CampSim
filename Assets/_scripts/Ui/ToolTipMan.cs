@@ -27,13 +27,13 @@ public class ToolTipMan : MonoBehaviour
         ttDict = new Dictionary<string, (GameObject,GameObject)>();
     }
 
-    public void WireUpToolTip(GameObject bgo, string txt, string tip,bool danger=false)
+    public void WireUpToolTip(GameObject bgo, string txt, string tip,bool isDangerous=false)
     {
         // WireUp tooltip listener
         var evttrig = bgo.AddComponent<EventTrigger>();
         var pentry = new EventTrigger.Entry();
         pentry.eventID = EventTriggerType.PointerEnter;
-        pentry.callback.AddListener((data) => { OnPointerEnter((PointerEventData)data, bgo,txt, tip, danger:danger); });
+        pentry.callback.AddListener((data) => { OnPointerEnter((PointerEventData)data, bgo,txt, tip, isDangerous:isDangerous); });
         evttrig.triggers.Add(pentry);
         var pexit = new EventTrigger.Entry();
         pexit.eventID = EventTriggerType.PointerExit;
@@ -95,10 +95,10 @@ public class ToolTipMan : MonoBehaviour
         }
     }
 
-    public void OnPointerEnter(PointerEventData eventData, GameObject butgo, string txt, string tip, bool danger=false)
+    public void OnPointerEnter(PointerEventData eventData, GameObject butgo, string txt, string tip, bool isDangerous=false)
     {
         //Debug.Log($"OnPointerEnter {txt}");
-        CountDownToPopup(popupDelay,butgo,eventData.position, txt, tip, danger:danger);
+        CountDownToPopup(popupDelay,butgo,eventData.position, txt, tip, danger:isDangerous);
     }
     public void OnPointerExit(PointerEventData eventData, string txt)
     {
