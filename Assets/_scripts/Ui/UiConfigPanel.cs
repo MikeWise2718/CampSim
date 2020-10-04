@@ -61,9 +61,9 @@ public class UiConfigPanel : MonoBehaviour
             }
         }
         sman.Lgg($"newTbtEnableString:{newTbtEnableString}", "orange");
-        //uiman.optpan.enableString = newTbtEnableString;
-        //uiman.ottpan.DestroyButtons();
-        //uiman.optpan.MakeOptionsButtons();
+        uiman.tbtpan.tbpfiltlist = newTbtEnableString;
+        uiman.tbtpan.DestroyButtons();
+        uiman.tbtpan.CreateButtonsAnew(newTbtEnableString);
     }
 
     Dictionary<string, Toggle> otttogdict = null;
@@ -82,7 +82,7 @@ public class UiConfigPanel : MonoBehaviour
                 newOttEnableString += kname;
             }
         }
-        sman.Lgg($"newOttEnableString:{newOttEnableString}", "orange");
+        sman.Lgg($"newOttEnableString:{newOttEnableString}", "purple");
         uiman.optpan.enableString = newOttEnableString;
         uiman.ottpan.DestroyButtons();
         uiman.optpan.MakeOptionsButtons();
@@ -120,14 +120,42 @@ public class UiConfigPanel : MonoBehaviour
         tbttogdict = new Dictionary<string, Toggle>();
     }
 
-    public void InitVals()
+    public void SetupLayout(GameObject content)
     {
+        var layout = content.GetComponent<VerticalLayoutGroup>();
+        if (layout==null)
+        {
+            sman.LggError($"UiConfigPanel could not find VerticalLayoutGroup");
+            return;
+        }
+        layout.childControlHeight = false;
+        layout.childControlWidth = false;
+        layout.childForceExpandHeight = true;
+        layout.childForceExpandWidth = true;
+        layout.childScaleHeight = false;
+        layout.childScaleWidth = false;
+        layout.childAlignment = TextAnchor.UpperLeft;
+        layout.padding.left = 0;
+        layout.padding.right = 0;
+        layout.padding.top = 0;
+        layout.padding.bottom = 0;
+        layout.spacing = 8; 
 
 
+        var contentsizefitter = content.GetComponent<ContentSizeFitter>();
+        if (contentsizefitter == null)
+        {
+            sman.LggError($"UiConfigPanel could not find ContentSizeFitter");
+            return;
+        }
+        contentsizefitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+        contentsizefitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+    }
+
+    public void InitOttVals()
+    {
+        SetupLayout(ottcontent);
         DeleteOttTogs();
-        DeleteTbtTogs();
-
-        scenarioNameText.text = $"Current Scene:{sman.curscene}";
         var rootOptions = OptionsPanel.enableStringRoot;
         var curOptions = uiman.optpan.enableString;
         var togopts = rootOptions.Split(',');
@@ -144,11 +172,53 @@ public class UiConfigPanel : MonoBehaviour
             if (togtext != null)
             {
                 togtext.text = curRootOpt;
+                togtext.fontSize = 18;// default 14 
+                togtext.horizontalOverflow = HorizontalWrapMode.Overflow;
+                togtext.verticalOverflow = VerticalWrapMode.Overflow;
             }
             otttogdict[curRootOpt] = togcomp;
             togcomp.isOn = ison;
             toggo.transform.SetParent(ottcontent.transform, worldPositionStays: false);
         }
+    }
+
+
+    public void InitTbtVals()
+    {
+        SetupLayout(tbtcontent);
+        DeleteTbtTogs();
+        var rootOptions = TopButtonPanel.tbprootfiltlist;
+        var curOptions = uiman.tbtpan.tbpfiltlist;
+        var togopts = rootOptions.Split(',');
+
+        for (int i = 0; i < togopts.Length; i++)
+        {
+            var curRootOpt = togopts[i];
+            var ison = curOptions.Contains(curRootOpt);
+            var toggo = DefaultControls.CreateToggle(uiResources);
+            var togcomp = toggo.GetComponentInChildren<Toggle>();
+            togcomp.interactable = true;
+            toggo.name = $"Toggle{i} {curRootOpt} initially on:{ison}";
+            var togtext = toggo.GetComponentInChildren<Text>();
+            if (togtext != null)
+            {
+                togtext.text = curRootOpt;
+                togtext.fontSize = 18;// default 14 
+                togtext.horizontalOverflow = HorizontalWrapMode.Overflow;
+                togtext.verticalOverflow = VerticalWrapMode.Overflow;
+            }
+            tbttogdict[curRootOpt] = togcomp;
+            togcomp.isOn = ison;
+            toggo.transform.SetParent(tbtcontent.transform, worldPositionStays: false);
+        }
+    }
+
+
+    public void InitVals()
+    {
+        scenarioNameText.text = $"Current Scene:{sman.curscene}";
+        InitOttVals();
+        InitTbtVals();
     }
 
     public void SetScene(CampusSimulator.SceneSelE curscene)

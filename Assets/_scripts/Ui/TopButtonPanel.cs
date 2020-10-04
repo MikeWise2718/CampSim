@@ -39,10 +39,10 @@ namespace CampusSimulator
             {"UnkButton" ,new TopButtonMan.TopButSpec("UnkButton","U", "Detect Unknowns","cen",-34,"stretch",10,"Frame")},
             {"Vt2DButton" ,new TopButtonMan.TopButSpec("Vt2DButton","Vt2D", "Tie Visibility to Detectability","cen",32,"stretch",10,"Frame")},
 
-            {"TranButton" ,new TopButtonMan.TopButSpec("TranButton","Tran", "Make Walls Transparent","cen",120,"stretch",10,"B121")},
-            {"HvacButton" ,new TopButtonMan.TopButSpec("HvacButton","Tran", "Show HVAC System","cen",170,"stretch",10,"B121")},
-            {"ElecButton" ,new TopButtonMan.TopButSpec("ElecButton","Tran", "Show Electrical System","cen",212,"stretch",10,"B121")},
-            {"PlumButton" ,new TopButtonMan.TopButSpec("PlumButton","Tran", "Show Plumbing System","cen",254,"stretch",10,"B121")},
+            {"TranButton" ,new TopButtonMan.TopButSpec("TranButton","Tr", "Make Walls Transparent","cen",120,"stretch",10,"B121")},
+            {"HvacButton" ,new TopButtonMan.TopButSpec("HvacButton","Hv", "Show HVAC System","cen",170,"stretch",10,"B121")},
+            {"ElecButton" ,new TopButtonMan.TopButSpec("ElecButton","El", "Show Electrical System","cen",212,"stretch",10,"B121")},
+            {"PlumButton" ,new TopButtonMan.TopButSpec("PlumButton","Pb", "Show Plumbing System","cen",254,"stretch",10,"B121")},
         };
 
         public void AddActionsToButspecs()
@@ -92,11 +92,13 @@ namespace CampusSimulator
             }
         }
 
+        public const string tbprootfiltlist = "All,Sim,Trx,B121,Evac,Frame";
 
+        public string tbpfiltlist;
 
         public void SetScene(CampusSimulator.SceneSelE curscene)
         {
-            string tbpfiltlist = "All,Sim,Trx";
+            tbpfiltlist = "All,Sim,Trx";
             switch(curscene)
             {
                 case SceneSelE.MsftSmall:
@@ -149,6 +151,11 @@ namespace CampusSimulator
                 topButMan.SpecOneButton(bs);
             }
             topButMan.CreateButtons();
+        }
+
+        public void DestroyButtons()
+        {
+            topButMan.DestroyButtons();
         }
 
 
@@ -253,14 +260,14 @@ namespace CampusSimulator
             freeFlyPanel.SetActive(ffpanstat);
             //Debug.Log("Turned FreeFlyPanel " + ffpanstat);
         }
-        //bool ffstat=false;
+        bool ffstat = false;
         public void FreeFlyButton()
         {
             //Debug.Log("FreeFlyButton Pushed");
             var ffstat = sman.vcman.ToggleFreeFly();
             if (freeFlyPanel)
             {
-                if (ffstat!=ffpanstat)
+                if (ffstat != ffpanstat)
                 {
                     ToggleFreeFlyPanel();
                 }
