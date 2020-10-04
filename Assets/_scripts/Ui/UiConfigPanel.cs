@@ -20,6 +20,11 @@ public class UiConfigPanel : MonoBehaviour
     public void Init0()
     {
         LinkObjectsAndComponents();
+
+        uiResources = new DefaultControls.Resources();
+        uiResources.background = uiman.GetSprite("Background");
+        uiResources.checkmark = uiman.GetSprite("Checkmark");
+        uiResourcesInited = true;
     }
 
     public void LinkObjectsAndComponents()
@@ -39,37 +44,88 @@ public class UiConfigPanel : MonoBehaviour
 
 
     }
-    public bool ApplySettings()
+    Dictionary<string, Toggle> tbttogdict = null;
+    public void ApplyTbtSettings()
     {
+        var newTbtEnableString = "";
+        foreach (var kname in tbttogdict.Keys)
+        {
+            var tog = tbttogdict[kname];
+            if (tog.isOn)
+            {
+                if (newTbtEnableString != "")
+                {
+                    newTbtEnableString += ",";
+                }
+                newTbtEnableString += kname;
+            }
+        }
+        sman.Lgg($"newTbtEnableString:{newTbtEnableString}", "orange");
+        //uiman.optpan.enableString = newTbtEnableString;
+        //uiman.ottpan.DestroyButtons();
+        //uiman.optpan.MakeOptionsButtons();
+    }
+
+    Dictionary<string, Toggle> otttogdict = null;
+    public bool ApplyOttSettings()
+    {
+        var newOttEnableString = "";
+        foreach (var kname in otttogdict.Keys)
+        {
+            var tog = otttogdict[kname];
+            if (tog.isOn)
+            {
+                if (newOttEnableString != "")
+                {
+                    newOttEnableString += ",";
+                }
+                newOttEnableString += kname;
+            }
+        }
+        sman.Lgg($"newOttEnableString:{newOttEnableString}", "orange");
+        uiman.optpan.enableString = newOttEnableString;
+        uiman.ottpan.DestroyButtons();
+        uiman.optpan.MakeOptionsButtons();
         return true;
     }
 
 
-    Dictionary<string, Toggle> togdict =null;
-
-    public void DeleteTogs()
+    public void ApplySettings()
     {
-        if (togdict != null)
+        ApplyOttSettings();
+        ApplyTbtSettings();
+    }
+
+
+    public void DeleteOttTogs()
+    {
+        if (otttogdict != null)
         {
-            foreach (var tog in togdict.Values)
+            foreach (var tog in otttogdict.Values)
             {
                 Destroy(tog.gameObject);
             }
         }
-        togdict = new Dictionary<string,Toggle>();
+        otttogdict = new Dictionary<string,Toggle>();
+    }
+    public void DeleteTbtTogs()
+    {
+        if (tbttogdict != null)
+        {
+            foreach (var tog in tbttogdict.Values)
+            {
+                Destroy(tog.gameObject);
+            }
+        }
+        tbttogdict = new Dictionary<string, Toggle>();
     }
 
     public void InitVals()
     {
-        if (!uiResourcesInited)
-        {
-            uiResources = new DefaultControls.Resources();
-            uiResources.background = uiman.GetSprite("Background");
-            uiResources.checkmark = uiman.GetSprite("Checkmark");
-            uiResourcesInited = true;
-        }
 
-        DeleteTogs();
+
+        DeleteOttTogs();
+        DeleteTbtTogs();
 
         scenarioNameText.text = $"Current Scene:{sman.curscene}";
         var rootOptions = OptionsPanel.enableStringRoot;
@@ -89,7 +145,7 @@ public class UiConfigPanel : MonoBehaviour
             {
                 togtext.text = curRootOpt;
             }
-            togdict[curRootOpt] = togcomp;
+            otttogdict[curRootOpt] = togcomp;
             togcomp.isOn = ison;
             toggo.transform.SetParent(ottcontent.transform, worldPositionStays: false);
         }

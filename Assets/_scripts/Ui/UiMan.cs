@@ -87,6 +87,7 @@ namespace CampusSimulator
             abtpan.sman = sman;
             flypan.sman = sman;
 
+            CreateSpriteDict();
 
             ttman.Init0();
             optpan.Init0();
@@ -106,7 +107,6 @@ namespace CampusSimulator
             abtpan.Init0();
             flypan.Init0();
             listenForKeys = false;
-            CreateSpriteDict();
         }
         public void CreateSpriteDict()
         {
