@@ -19,7 +19,6 @@ namespace CampusSimulator
         Dictionary<string,TopButSpec> butSpecList = null;
         List<string> filterList = null;
 
-
         public class TopButSpec
         {
             public string idname;
@@ -67,31 +66,6 @@ namespace CampusSimulator
             return null;
         }
 
-        //public void FindAndDestroy(string targetname)
-        //{
-        //    var trargo = transform.Find(targetname);
-        //    if (trargo != null)
-        //    {
-        //       Destroy(trargo.gameObject);
-        //    }
-        //    else
-        //    {
-        //        sman.LggError($"FindAndDestroy Cannot find button {targetname}");
-        //    }
-        //}
-
-        //string fixedDummyButtonList = "HideUiButton,RunButton,FlyButton,FrameButton,EvacButton,UnEvacButton,PipeButton,GoButton,OptionsButton,ShowTracksButton,FreeFlyButton,QuitButton," +
-        //                               "FteButton,ConButton,VisButton,SecButton,UnkButton,Vt2DButton,TranButton,HvacButton,ElecButton,PlumButton";
-
-        //public void DestroyFixedDummyButtonsOld()
-        //{
-        //    var farr = fixedDummyButtonList.Split(',');
-        //    foreach (var f in farr)
-        //    {
-        //        FindAndDestroy(f);
-        //    }
-        //}
-
         public void DestroyFixedDummyButtons()
         {
             var butcoll = transform.GetComponentsInChildren<Button>();
@@ -109,6 +83,9 @@ namespace CampusSimulator
         int lay_totalwid;
         int lay_but_x;
         int lay_but_y;
+        int lay_left_stop;
+        int lay_cen_stop;
+        int lay_right_stop;
 
         public void InitializeLayout(string[] buttxtarr)
         {
@@ -121,6 +98,10 @@ namespace CampusSimulator
 
             lay_but_x = -lay_totalwid / 2;
             lay_but_y = 0;
+
+            lay_left_stop = 0;
+            lay_cen_stop = 0;
+            lay_right_stop = 0;
         }
 
         public bool IsInFilter(string fex)
@@ -156,8 +137,7 @@ namespace CampusSimulator
             lay_but_y = 30;
             var pos = new Vector3(lay_but_x, lay_but_y, 0);
             recttrans.SetPositionAndRotation(pos, Quaternion.identity);
-            var txlen = tbs.dispname.Length;
-            //if (txlen < 5) txlen = 5;
+            sman.Lgg($"{tbs.idname} btxt.text:{btxt.text+"*"} preflen:{preflen}", "cyan");
             var txwneed = (int) (preflen+1);
             var (a_xmin, a_xmax) = (0.5f, 0.5f);
             var (a_ymin, a_ymax) = (0.5f, 0.5f);
@@ -213,7 +193,21 @@ namespace CampusSimulator
                     a_xmin = 0f;
                     a_xmax = 0f;
                     s_x = txwneed;
-                    p_x = tbs.xpos;
+                    var olls = lay_left_stop;
+                    if (tbs.xpos == 0)
+                    {
+                        p_x = lay_left_stop + (txwneed+2)/2;
+                        lay_left_stop += (txwneed+2);
+                    }
+                    else
+                    {
+                        p_x = tbs.xpos;
+                        if (lay_left_stop < p_x+txwneed)
+                        {
+                            lay_left_stop = p_x+txwneed;
+                        }
+                    }
+                    sman.Lgg($"{tbs.idname} lay_left_stop:{olls} txwneed:{txwneed} tbs.xpos:{tbs.xpos}  new:lay_left_stop:{lay_left_stop}","orange");
                     break;
                 case "right":
                     a_xmin = 1f;

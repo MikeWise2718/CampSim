@@ -19,10 +19,13 @@ namespace CampusSimulator
 
         Dictionary<string, TopButtonMan.TopButSpec> butspec = new Dictionary<string, TopButtonMan.TopButSpec>()
         {
-            {"HideUiButton",new TopButtonMan.TopButSpec("HideUiButton","HideUI", "Hide the User Interface\nEsc brings it back afterwards","left",70,"stretch",0,"All")},
-            {"PipeButton",new TopButtonMan.TopButSpec("PipeButton","Pipes", "Show journey path links and nodes","cen",-742,"stretch",0,"All")},
-            {"RunButton",new TopButtonMan.TopButSpec("RunButton","Run", "Start ground based journeys","cen",-648,"stretch",0,"Sim")},
-            {"FlyButton",new TopButtonMan.TopButSpec("FlyButton","Fly", "Start flying journeys","cen",-578,"stretch",0,"Sim")},
+            {"HideUiButton",new TopButtonMan.TopButSpec("HideUiButton","HideUI", "Hide the User Interface\nEsc brings it back afterwards","left",0,"stretch",0,"All")},
+            //{"PipeButton",new TopButtonMan.TopButSpec("PipeButton","Pipes", "Show journey path links and nodes","cen",-742,"stretch",0,"All")},
+            //{"RunButton",new TopButtonMan.TopButSpec("RunButton","Run", "Start ground based journeys","cen",-648,"stretch",0,"Sim")},
+            //{"FlyButton",new TopButtonMan.TopButSpec("FlyButton","Fly", "Start flying journeys","cen",-578,"stretch",0,"Sim")},
+            {"PipeButton",new TopButtonMan.TopButSpec("PipeButton","Pipes", "Show journey path links and nodes","left",0,"stretch",0,"All")},
+            {"RunButton",new TopButtonMan.TopButSpec("RunButton","Run", "Start ground based journeys","left",0,"stretch",0,"Sim")},
+            {"FlyButton",new TopButtonMan.TopButSpec("FlyButton","Fly", "Start flying journeys","left",0,"stretch",0,"Sim")},
             {"EvacButton",new TopButtonMan.TopButSpec("EvacButton", "Evac", "Start an evacuation simulation","cen",-500,"stretch",0,"Evac")},
             {"UnEvacButton",new TopButtonMan.TopButSpec("UnEvacButton", "Unevac", "After an evacuation, go back to starting positions","cen",-405,"stretch",0,"Evac")},
             {"GoButton",new TopButtonMan.TopButSpec("GoButton","Go", "Kick off a preprogramed scenario dependent journey script","cen",335,"stretch",0,"Sim")},
@@ -150,11 +153,12 @@ namespace CampusSimulator
         }
 
 
-        string orderedFixedButtonList = "HideUiButton,RunButton,FlyButton,FrameButton,EvacButton,UnEvacButton,PipeButton,GoButton,OptionsButton,ShowTracksButton,FreeFlyButton,QuitButton";
+        string orderedFixedButtonList = "HideUiButton,PipeButton,RunButton,FlyButton,FrameButton,EvacButton,UnEvacButton,GoButton,OptionsButton,ShowTracksButton,FreeFlyButton,QuitButton";
         string orderedScenarioButtonList1 = "FteButton,ConButton,VisButton,SecButton,UnkButton,Vt2DButton,TranButton,HvacButton,ElecButton,PlumButton";
 
         public void CreateButtonsAnew(string tbtfiltlist)
         {
+            sman.Lgg($"CreateButtonsAnew tbtfiltlist:{tbtfiltlist}");
             topButMan.SetTbtFilter(tbtfiltlist);
             var butfixtxtarr = orderedFixedButtonList.Split(',');
             var butsentxtarr = orderedScenarioButtonList1.Split(',');
@@ -171,6 +175,7 @@ namespace CampusSimulator
                 topButMan.SpecOneButton(bs);
             }
             topButMan.CreateButtons();
+            ColorizeButtonStates();
         }
 
         public void DestroyButtons()
@@ -276,14 +281,15 @@ namespace CampusSimulator
         bool ffpanstat = false;
         public void ToggleFreeFlyPanel()
         {
+            sman.Lgg($"TopButtonPanel.ToggleFreeFlyPanel ffpanstat:" + ffpanstat, "green");
             ffpanstat = !ffpanstat;
             freeFlyPanel.SetActive(ffpanstat);
-            //Debug.Log("Turned FreeFlyPanel " + ffpanstat);
         }
         bool ffstat = false;
         public void FreeFlyButton()
         {
-            //Debug.Log("FreeFlyButton Pushed");
+            var ffpanisnull = freeFlyPanel == null;
+            sman.Lgg($"TopButtonPanel.FreeFlyButton Pushed - ffpanisnull:{ffpanisnull}", "green");
             var ffstat = sman.vcman.ToggleFreeFly();
             if (freeFlyPanel)
             {
@@ -341,27 +347,7 @@ namespace CampusSimulator
             clrbut("RunButton", "pink", loc, sman.jnman.spawnrunjourneys, "Run");
             clrbut("FlyButton", "lightblue", loc, sman.jnman.spawnflyjourneys, "Fly");
         }
-        //public void ColorizeButtonStatesOld()
-        //{
-        //    var loc = "white";
-        //    uiman.SetButtonColor(pipeButton, "pink",loc, sman.lcman.pipevis, "Pi");
-        //    uiman.SetButtonColor(fteButton, "lightblue", loc, sman.frman.detectFte.Get(), "F");
-        //    uiman.SetButtonColor(conButton, "lightblue", loc, sman.frman.detectContractor.Get(), "C");
-        //    uiman.SetButtonColor(secButton, "lightblue", loc, sman.frman.detectSecurity.Get(), "S");
-        //    uiman.SetButtonColor(visButton, "lightblue", loc, sman.frman.detectVisitor.Get(), "V");
-        //    uiman.SetButtonColor(unkButton, "lightblue", loc, sman.frman.detectUnknown.Get(), "U");
-        //    uiman.SetButtonColor(showTracksButton, "lightblue", loc, sman.trman.showtracks.Get(), "Tracks");
-        //    uiman.SetButtonColor(tranButton, "lightblue", loc, sman.bdman.transwalls, "Tr");
-        //    uiman.SetButtonColor(hvacButton, "yellow", loc, sman.bdman.showhvac, "Hv");
-        //    uiman.SetButtonColor(elecButton, "yellow", loc, sman.bdman.showelec, "El");
-        //    uiman.SetButtonColor(plumButton, "yellow", loc, sman.bdman.showplum, "Pb");
-        //    //Debug.LogWarning($"ColorizeButtonStates Vt2D:{sman.frman.visibilityTiedToDetectability.Get()}");
-        //    uiman.SetButtonColor(vt2dButton, "lightblue", loc, sman.frman.visibilityTiedToDetectability.Get(), "Vt2D");
-        //    uiman.SetButtonColor(frameButton, "pink", loc, sman.frman.frameJourneys.Get(), "Frame");
-        //    uiman.SetButtonColor(freeFlyButton, "pink", loc, sman.vcman.InFreeFly(), "FreeFly");
-        //    uiman.SetButtonColor(runButton, "pink", loc, sman.jnman.spawnrunjourneys, "Run");
-        //    uiman.SetButtonColor(flyButton, "lightblue", loc, sman.jnman.spawnflyjourneys, "Fly");
-        //}
+
         public void DetectFteButton()
         {
             sman.frman.detectFte.SetAndSave(!sman.frman.detectFte.Get());

@@ -184,6 +184,7 @@ public class OptionsPanel : MonoBehaviour
             uiman.ottpan.SpecOneButton(bs.idname, bs.displayName, bs.tooltip, bs.onClickAction);
         }
         uiman.ottpan.CreateButtons();
+        uiman.optpan.SyncOptionsTabState();
     }
 
     public void OptionsSubMenuButtonPushed(TabState newstate)

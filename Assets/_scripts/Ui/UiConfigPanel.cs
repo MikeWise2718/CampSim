@@ -44,6 +44,7 @@ public class UiConfigPanel : MonoBehaviour
 
 
     }
+    int togalloc = 0;
     Dictionary<string, Toggle> tbttogdict = null;
     public void ApplyTbtSettings()
     {
@@ -51,6 +52,7 @@ public class UiConfigPanel : MonoBehaviour
         foreach (var kname in tbttogdict.Keys)
         {
             var tog = tbttogdict[kname];
+            sman.Lgg($"     {kname} {tog.name} isOn:{tog.isOn}", "orange");
             if (tog.isOn)
             {
                 if (newTbtEnableString != "")
@@ -89,13 +91,11 @@ public class UiConfigPanel : MonoBehaviour
         return true;
     }
 
-
     public void ApplySettings()
     {
-        ApplyOttSettings();
         ApplyTbtSettings();
+        ApplyOttSettings();// has to happen after ApplyTbtSettings since newOttEnableString needs to be set
     }
-
 
     public void DeleteOttTogs()
     {
@@ -167,7 +167,7 @@ public class UiConfigPanel : MonoBehaviour
             var toggo = DefaultControls.CreateToggle(uiResources);
             var togcomp = toggo.GetComponentInChildren<Toggle>();
             togcomp.interactable = true;
-            toggo.name = $"Toggle{i} {curRootOpt} initially on:{ison}";
+            toggo.name = $"Toggle{togalloc++} {curRootOpt} initially on:{ison}";
             var togtext = toggo.GetComponentInChildren<Text>();
             if (togtext != null)
             {
@@ -203,7 +203,7 @@ public class UiConfigPanel : MonoBehaviour
             var toggo = DefaultControls.CreateToggle(uiResources);
             var togcomp = toggo.GetComponentInChildren<Toggle>();
             togcomp.interactable = true;
-            toggo.name = $"Toggle{i} {curRootOpt} initially on:{ison}";
+            toggo.name = $"Toggle{togalloc++} {curRootOpt} initially on:{ison}";
             var togtext = toggo.GetComponentInChildren<Text>();
             if (togtext != null)
             {
