@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace CampusSimulator
@@ -31,6 +32,8 @@ namespace CampusSimulator
 
         public int ui_w;
         public int ui_h;
+
+        public Dictionary<string, Sprite> spriteDict = new Dictionary<string, Sprite>(); 
 
         public bool listenForKeys = false;
 
@@ -102,8 +105,28 @@ namespace CampusSimulator
             helpan.Init0();
             abtpan.Init0();
             flypan.Init0();
-
             listenForKeys = false;
+            CreateSpriteDict();
+        }
+        public void CreateSpriteDict()
+        {
+            spriteDict = new Dictionary<string, Sprite>();
+            var scoll = Resources.FindObjectsOfTypeAll<Sprite>();
+            //sman.Lgg($"uiman found {scoll.Length} sprites", "yellow");
+            foreach (var sprite in scoll)
+            {
+                //sman.Lgg($"Sprite name:{sprite.name}","orange");
+                spriteDict[sprite.name] = sprite;
+            }
+        }
+        public Sprite GetSprite(string sname)
+        {
+            if (!spriteDict.ContainsKey(sname))
+            {
+                sman.LggError($"sman.GetSprite - can't find sprite with name:{sname} returning null");
+                return null;
+            }
+            return spriteDict[sname];
         }
         public void DeleteStuff()
         {
@@ -114,6 +137,7 @@ namespace CampusSimulator
         public void ModelInitialize(SceneSelE newscene)
         {
             // most initialization has to happen after the scenes have set their variables, so there is not much here to do
+            listenForKeys = false;
         }
 
         public void ModelBuild()

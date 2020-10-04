@@ -272,7 +272,7 @@ namespace CampusSimulator
             var bld121 = GetBuilding("Bld121", couldFail: true);
             if (bld121 == null)
             {
-                sman.LggError($"No Bld121 in scene");
+                //sman.LggError($"No Bld121 in scene"); // not all scenes even have 121
                 return;
             }
             var b121comp = bld121.GetComponent<B121Willow>();
@@ -550,8 +550,8 @@ namespace CampusSimulator
             {
                 var bldlst = Building.GetPredefinedBuildingNames(filtername);
                 bldlst.ForEach(mbname => MakeBuilding(mbname));
+                bldspecs.ForEach(osmbs => MakeOsmBuilding(osmbs));
             }
-            bldspecs.ForEach(osmbs => MakeOsmBuilding(osmbs));
         }
         public string presetEvacBldName = "";
         public void EvacPresetBld()
@@ -711,7 +711,7 @@ namespace CampusSimulator
             {
                 Debug.Log("Bld34");
             }
-            sman.Lgg($"MakeOsmBuilding name:{name} bs.shortname:{bldspec.shortname} bs.osmname:{bldspec.osmname}","lilac");
+            //sman.Lgg($"MakeOsmBuilding name:{name} bs.shortname:{bldspec.shortname} bs.osmname:{bldspec.osmname}","lilac");
             bld.AddOsmBldDetails(this, bldspec);
             AddBuildingToCollection(bld,mightAlreadyExist:true);
 

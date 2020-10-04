@@ -521,7 +521,7 @@ namespace CampusSimulator
             destnodes = new List<string>();
             isOsmGenerated = true;
             var parentname = this.transform.parent.gameObject.name;
-            Debug.Log($"Building {name}  {bs.shortname} isAnOsmBld:{isOsmGenerated} parentname:{parentname}");
+            //Debug.Log($"Building {name}  {bs.shortname} isOsmGenerated:{isOsmGenerated} parentname:{parentname}");
             //if (bs.osmname.Contains("122"))
             //{
             //    Debug.Log("b122");

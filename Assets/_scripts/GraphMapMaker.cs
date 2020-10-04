@@ -9,7 +9,7 @@ namespace GraphAlgos
     public enum graphSceneE
     {
         gen_none, gen_circ, gen_sphere, gen_b43_1, gen_b43_2, gen_b43_3, gen_b43_4, gen_b43_1p2,
-        gen_bho, gen_small, gen_redwb_3, gen_json_file, gen_campus, gen_eb12, gen_eb12_json, gen_eb12_small,
+        gen_bho, gen_small, gen_redwb_3, gen_json_file, gen_campus, gen_campus_small, gen_eb12, gen_eb12_json, gen_eb12_small,
         gen_dublin,gen_tukwila,gen_tenmtn
     };
 
@@ -806,6 +806,7 @@ namespace GraphAlgos
                         CreateSpherePoints(nlng: globpar.nlat, nlat: globpar.nlng, rad: globpar.height, heit: globpar.height);
                         break;
                     }
+                case graphSceneE.gen_campus_small:
                 case graphSceneE.gen_campus:
                     {
                         switch (genMode)
@@ -839,8 +840,11 @@ namespace GraphAlgos
                                 CreateLinksFromRegionFiles("msft");
                                 break;
                         }
-                        GenCampusGarageLinks();
-                        grc.AddLinkByNodeName("bRWB-f01-lobby", "rwb-f03-rm3999");// stairway (sort of)
+                        if (graphScene != graphSceneE.gen_campus_small)
+                        {
+                            GenCampusGarageLinks();
+                            grc.AddLinkByNodeName("bRWB-f01-lobby", "rwb-f03-rm3999");// stairway (sort of)
+                        }
                         break;
                     }
                 case graphSceneE.gen_b43_1:

@@ -15,22 +15,12 @@ public class OptionsTabPanel : MonoBehaviour
     List<string> orderedButIdnames = null;
     Dictionary<string,(string, string, UnityAction)> butSpecList = null;
 
-    public void FindAndDestroy(string targetname)
-    {
-        var tran = transform.Find(targetname);
-        if (tran != null)
-        {
-            Destroy(tran.gameObject);
-        }
-    }
-
-    string fixedDummyButtonList = "VisualsTabButton,MapSetTabButton,FramesTabButton,FireFlyTabButton,BuildingsTabButton,GeneralTabButton,HelpTabButton,AboutTabButton";
     public void DestroyFixedDummyButtons()
     {
-        var farr = fixedDummyButtonList.Split(',');
-        foreach (var f in farr)
+        var butcoll = transform.GetComponentsInChildren<Button>();
+        foreach (var but in butcoll)
         {
-            FindAndDestroy("Dummy"+f);
+            Destroy(but.gameObject);
         }
     }
 

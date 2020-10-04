@@ -67,28 +67,37 @@ namespace CampusSimulator
             return null;
         }
 
-        public void FindAndDestroy(string targetname)
-        {
-            var trargo = transform.Find(targetname);
-            if (trargo != null)
-            {
-               Destroy(trargo.gameObject);
-            }
-            else
-            {
-                sman.LggError($"FindAndDestroy Cannot find button {targetname}");
-            }
-        }
+        //public void FindAndDestroy(string targetname)
+        //{
+        //    var trargo = transform.Find(targetname);
+        //    if (trargo != null)
+        //    {
+        //       Destroy(trargo.gameObject);
+        //    }
+        //    else
+        //    {
+        //        sman.LggError($"FindAndDestroy Cannot find button {targetname}");
+        //    }
+        //}
 
-        string fixedDummyButtonList = "HideUiButton,RunButton,FlyButton,FrameButton,EvacButton,UnEvacButton,PipeButton,GoButton,OptionsButton,ShowTracksButton,FreeFlyButton,QuitButton," +
-                                       "FteButton,ConButton,VisButton,SecButton,UnkButton,Vt2DButton,TranButton,HvacButton,ElecButton,PlumButton";
+        //string fixedDummyButtonList = "HideUiButton,RunButton,FlyButton,FrameButton,EvacButton,UnEvacButton,PipeButton,GoButton,OptionsButton,ShowTracksButton,FreeFlyButton,QuitButton," +
+        //                               "FteButton,ConButton,VisButton,SecButton,UnkButton,Vt2DButton,TranButton,HvacButton,ElecButton,PlumButton";
+
+        //public void DestroyFixedDummyButtonsOld()
+        //{
+        //    var farr = fixedDummyButtonList.Split(',');
+        //    foreach (var f in farr)
+        //    {
+        //        FindAndDestroy(f);
+        //    }
+        //}
 
         public void DestroyFixedDummyButtons()
         {
-            var farr = fixedDummyButtonList.Split(',');
-            foreach (var f in farr)
+            var butcoll = transform.GetComponentsInChildren<Button>();
+            foreach (var but in butcoll)
             {
-                FindAndDestroy(f);
+                Destroy(but.gameObject);
             }
         }
 

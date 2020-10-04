@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using CampusSimulator;
-using UnityEditor.Profiling.Memory.Experimental;
+using System.Collections.Generic;
 
 public class UiConfigPanel : MonoBehaviour
 {
@@ -10,13 +10,12 @@ public class UiConfigPanel : MonoBehaviour
 
     Text scenarioNameText;
 
-    Toggle sampleToggle;
     Button closeButton;
-    Button validationButton;
-    GameObject content;
-
-    Sprite background;
-    Sprite checkmark;
+    Button applyButton;
+    GameObject ottcontent;
+    GameObject tbtcontent;
+    bool uiResourcesInited = false;
+    DefaultControls.Resources uiResources;
 
     public void Init0()
     {
@@ -29,74 +28,74 @@ public class UiConfigPanel : MonoBehaviour
         uiman = sman.uiman;
 
         scenarioNameText = transform.Find("ScenarioNameText").gameObject.GetComponent<Text>();
-        sampleToggle = transform.Find("SampleToggle").gameObject.GetComponent<Toggle>();
-        //background = Resources.Load<Sprite>("_sprites/BackgroundGreyGridSprite");
-        //checkmark = Resources.Load<Sprite>("_sprites/BackgroundGreyGridSprite");
-        background = Resources.Load<Sprite>("unity_builtin_extre/Background");
-        checkmark = Resources.Load<Sprite>("unity_builtin_extre/Checkmark");
 
-        content = transform.Find("UiConfigSettingsCanvas/Scroll View/Viewport/Content").gameObject;
+        ottcontent = transform.Find("OptionsTabConfigSettingsCanvas/Scroll View/Viewport/Content").gameObject;
+        tbtcontent = transform.Find("TopButtonConfigSettingsCanvas/Scroll View/Viewport/Content").gameObject;
 
-
-        validationButton = transform.Find("ValidationButton").gameObject.GetComponent<Button>();
-        validationButton.onClick.AddListener(delegate { VerifyValues(); });
+        applyButton = transform.Find("ApplyButton").gameObject.GetComponent<Button>();
+        applyButton.onClick.AddListener(delegate { ApplySettings(); });
         closeButton = transform.Find("CloseButton").gameObject.GetComponent<Button>();
         closeButton.onClick.AddListener(delegate { uiman.ClosePanel();  });
 
+
     }
-    public bool VerifyValues()
+    public bool ApplySettings()
     {
         return true;
     }
 
+
+    Dictionary<string, Toggle> togdict =null;
+
+    public void DeleteTogs()
+    {
+        if (togdict != null)
+        {
+            foreach (var tog in togdict.Values)
+            {
+                Destroy(tog.gameObject);
+            }
+        }
+        togdict = new Dictionary<string,Toggle>();
+    }
+
     public void InitVals()
     {
-        //content.SetActive(true);
-        Debug.Log("UiConfig InitVals called");
+        if (!uiResourcesInited)
+        {
+            uiResources = new DefaultControls.Resources();
+            uiResources.background = uiman.GetSprite("Background");
+            uiResources.checkmark = uiman.GetSprite("Checkmark");
+            uiResourcesInited = true;
+        }
+
+        DeleteTogs();
+
         scenarioNameText.text = $"Current Scene:{sman.curscene}";
         var rootOptions = OptionsPanel.enableStringRoot;
         var curOptions = uiman.optpan.enableString;
         var togopts = rootOptions.Split(',');
+
         for (int i = 0; i < togopts.Length; i++)
         {
-
-           var uiResources = new DefaultControls.Resources();
-            //Set the Toggle Background Image someBgSprite;
-            //uiResources.background = background;
-            //Set the Toggle Checkmark Image someCheckmarkSprite;
-            //uiResources.checkmark = checkmark;
-
-
-
             var curRootOpt = togopts[i];
             var ison = curOptions.Contains(curRootOpt);
             var toggo = DefaultControls.CreateToggle(uiResources);
             var togcomp = toggo.GetComponentInChildren<Toggle>();
-            //var toggo = new GameObject();
-            //var togcomp = toggo.AddComponent<Toggle>();
             togcomp.interactable = true;
-            //togcomp.targetGraphic = sampleToggle.targetGraphic;
-            toggo.name = $"Toggle{i} {curRootOpt} ison:{ison}";
+            toggo.name = $"Toggle{i} {curRootOpt} initially on:{ison}";
             var togtext = toggo.GetComponentInChildren<Text>();
             if (togtext != null)
             {
                 togtext.text = curRootOpt;
             }
+            togdict[curRootOpt] = togcomp;
             togcomp.isOn = ison;
-            //togcomp.graphic = sampleToggle.graphic;
-            toggo.transform.SetParent(content.transform, worldPositionStays: false);
-            //toggo.transform.SetParent(transform, worldPositionStays: false);
-            //var pos = new Vector3(200, 200 + i * 20, 0);
-            //toggo.transform.position = pos;
+            toggo.transform.SetParent(ottcontent.transform, worldPositionStays: false);
         }
-        //sampleToggle.gameObject.SetActive(false);
-        Debug.Log("Sampletoggle turned off");
     }
 
     public void SetScene(CampusSimulator.SceneSelE curscene)
-    {
-    }
-    public void UpdateText()
     {
     }
 
@@ -107,16 +106,9 @@ public class UiConfigPanel : MonoBehaviour
         //sman.RequestRefresh("UiConfig-SetVals");
     }
 
-    float checkInterval = 1f;
-    float lastCheck = 0;
 
-    private void Update()
-    {
-        if (Time.time-lastCheck>checkInterval)
-        {
-            UpdateText();
-            lastCheck = Time.time;
-        }
-    }
+    //private void Update()
+    //{
+    //}
 
 }

@@ -187,6 +187,8 @@ namespace CampusSimulator
             switch (ss)
             {
                 case SceneSelE.MsftSmall:
+                    rv = graphSceneE.gen_campus_small;
+                    break;
                 case SceneSelE.MsftCoreCampus:
                 case SceneSelE.MsftB19focused:
                 case SceneSelE.MsftB33focused:
