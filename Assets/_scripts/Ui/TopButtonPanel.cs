@@ -51,11 +51,13 @@ namespace CampusSimulator
             {"SecButton" ,new TopButtonMan.TopButSpec("SecButton","S", "Detect Security","cen",0,"stretch",10,"Frame")},
             {"UnkButton" ,new TopButtonMan.TopButSpec("UnkButton","U", "Detect Unknowns","cen",0,"stretch",10,"Frame")},
             {"Vt2DButton" ,new TopButtonMan.TopButSpec("Vt2DButton","Vt2D", "Tie Visibility to Detectability","cen",0,"stretch",10,"Frame")},
+            {"#FrameSpace" ,new TopButtonMan.TopButSpec("#spacer","#", "Spacerbutton","cen",0,"stretch",10,"Frame")},
 
-            {"TranButton" ,new TopButtonMan.TopButSpec("TranButton","Tr", "Make Walls Transparent","cen",120,"stretch",10,"B121")},
-            {"HvacButton" ,new TopButtonMan.TopButSpec("HvacButton","Hv", "Show HVAC System","cen",170,"stretch",10,"B121")},
-            {"ElecButton" ,new TopButtonMan.TopButSpec("ElecButton","El", "Show Electrical System","cen",212,"stretch",10,"B121")},
-            {"PlumButton" ,new TopButtonMan.TopButSpec("PlumButton","Pb", "Show Plumbing System","cen",254,"stretch",10,"B121")},
+            {"TranButton" ,new TopButtonMan.TopButSpec("TranButton","Tr", "Make Walls Transparent","cen",0,"stretch",10,"B121")},
+            {"HvacButton" ,new TopButtonMan.TopButSpec("HvacButton","Hv", "Show HVAC System","cen",0,"stretch",10,"B121")},
+            {"ElecButton" ,new TopButtonMan.TopButSpec("ElecButton","El", "Show Electrical System","cen",0,"stretch",10,"B121")},
+            {"PlumButton" ,new TopButtonMan.TopButSpec("PlumButton","Pb", "Show Plumbing System","cen",0,"stretch",10,"B121")},
+            {"#B121Space" ,new TopButtonMan.TopButSpec("#spacer","#", "Spacerbutton","cen",0,"stretch",10,"B121")},
         };
 
         public void AddActionsToButspecs()

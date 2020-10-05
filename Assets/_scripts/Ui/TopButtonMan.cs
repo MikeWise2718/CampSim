@@ -125,11 +125,13 @@ namespace CampusSimulator
                     return;
                 }
             }
+            var txttosize = tbs.dispname + "*";
+            var spacerButton = txttosize[0] == '#';
             var bgo = DefaultControls.CreateButton(new DefaultControls.Resources());
             bgo.name = tbs.idname;
             var butt = bgo.GetComponentInChildren<Button>();
             var btxt = bgo.GetComponentInChildren<Text>();
-            btxt.text = tbs.dispname+"*";
+            btxt.text = txttosize;
             btxt.fontSize = 28;
             var preflen = btxt.preferredWidth;
             btxt.text = tbs.dispname;
@@ -273,7 +275,14 @@ namespace CampusSimulator
             {
                 butt.onClick.AddListener(tbs.action);
             }
-            createdButList.Add((butt, tbs.idname, tbs.dispname));
+            if (!spacerButton)
+            {
+                createdButList.Add((butt, tbs.idname, tbs.dispname));
+            }
+            else
+            {
+                Destroy(butt);// spacer buttons don't get added
+            }
             lay_but_x += lay_but_w + lay_but_gap_x;
             lay_but_y += lay_but_gap_y;
         }
