@@ -185,8 +185,6 @@ public class BuildingsPanel : MonoBehaviour
             }
         }
 
-
-
         if (b19comp == null)
         {
             EnableB19Parts(false);

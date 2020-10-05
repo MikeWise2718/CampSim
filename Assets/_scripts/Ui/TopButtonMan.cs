@@ -100,7 +100,7 @@ namespace CampusSimulator
             lay_but_y = 0;
 
             lay_left_stop = 0;
-            lay_cen_stop = 0;
+            lay_cen_stop = -500;
             lay_right_stop = 0;
         }
 
@@ -184,37 +184,71 @@ namespace CampusSimulator
                     s_x = 0;
                     break;
                 case "cen":
-                    a_xmin = 0.5f;
-                    a_xmax = 0.5f; 
-                    s_x = txwneed;
-                    p_x = tbs.xpos;
-                    break;
-                case "left":
-                    a_xmin = 0f;
-                    a_xmax = 0f;
-                    s_x = txwneed;
-                    var olls = lay_left_stop;
-                    if (tbs.xpos == 0)
                     {
-                        p_x = lay_left_stop + (txwneed+2)/2;
-                        lay_left_stop += (txwneed+2);
-                    }
-                    else
-                    {
-                        p_x = tbs.xpos;
-                        if (lay_left_stop < p_x+txwneed)
+                        a_xmin = 0.5f;
+                        a_xmax = 0.5f;
+                        s_x = txwneed;
+                        var olcs = lay_cen_stop;
+                        if (tbs.xpos == 0)
                         {
-                            lay_left_stop = p_x+txwneed;
+                            p_x = lay_cen_stop + (txwneed + 2) / 2;
+                            lay_cen_stop += (txwneed + 2);
                         }
+                        else
+                        {
+                            p_x = tbs.xpos;
+                            if (lay_cen_stop < p_x + txwneed/2)
+                            {
+                                lay_cen_stop = p_x + txwneed/2;
+                            }
+                        }
+                        sman.Lgg($"{tbs.idname} lay_cen_stop:{olcs} txwneed:{txwneed} tbs.xpos:{tbs.xpos}  new:lay_cen_stop:{lay_cen_stop}", "lightgreen");
+                        break;
                     }
-                    sman.Lgg($"{tbs.idname} lay_left_stop:{olls} txwneed:{txwneed} tbs.xpos:{tbs.xpos}  new:lay_left_stop:{lay_left_stop}","orange");
-                    break;
+                case "left":
+                    {
+                        a_xmin = 0f;
+                        a_xmax = 0f;
+                        s_x = txwneed;
+                        var olls = lay_left_stop;
+                        if (tbs.xpos == 0)
+                        {
+                            p_x = lay_left_stop + (txwneed + 2) / 2;
+                            lay_left_stop += (txwneed + 2);
+                        }
+                        else
+                        {
+                            p_x = tbs.xpos;
+                            if (lay_left_stop < p_x + txwneed/2)
+                            {
+                                lay_left_stop = p_x + txwneed/2;
+                            }
+                        }
+                        sman.Lgg($"{tbs.idname} lay_left_stop:{olls} txwneed:{txwneed} tbs.xpos:{tbs.xpos}  new:lay_left_stop:{lay_left_stop}", "orange");
+                        break;
+                    }
                 case "right":
-                    a_xmin = 1f;
-                    a_xmax = 1f;
-                    s_x = txwneed;
-                    p_x = tbs.xpos;
-                    break;
+                    {
+                        a_xmin = 1f;
+                        a_xmax = 1f;
+                        s_x = txwneed;
+                        var olrs = lay_right_stop;
+                        if (tbs.xpos == 0)
+                        {
+                            p_x = lay_right_stop - (txwneed + 2) / 2;
+                            lay_right_stop -= (txwneed + 2);
+                        }
+                        else
+                        {
+                            p_x = tbs.xpos;
+                            if (lay_right_stop > p_x - txwneed / 2)
+                            {
+                                lay_right_stop = p_x - txwneed / 2;
+                            }
+                        }
+                        sman.Lgg($"{tbs.idname} lay_right_stop:{olrs} txwneed:{txwneed} tbs.xpos:{tbs.xpos}  new:lay_right_stop:{lay_right_stop}", "lightblue");
+                        break;
+                    }
             }
             recttrans.anchorMin = new Vector2(a_xmin, a_ymin);
             recttrans.anchorMax = new Vector2(a_xmax, a_ymax);

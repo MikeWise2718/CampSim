@@ -30,17 +30,27 @@ namespace CampusSimulator
             {"UnEvacButton",new TopButtonMan.TopButSpec("UnEvacButton", "Unevac", "After an evacuation, go back to starting positions","cen",-405,"stretch",0,"Evac")},
             {"GoButton",new TopButtonMan.TopButSpec("GoButton","Go", "Kick off a preprogramed scenario dependent journey script","cen",335,"stretch",0,"Sim")},
             {"ShowTracksButton",new TopButtonMan.TopButSpec("ShowTracksButton","Tracks", "Show GPX Tracks","cen",429,"stretch",0,"Trx")},
-            {"OptionsButton",new TopButtonMan.TopButSpec("OptionsButton","Options", "Bring up detailed configuration tabs","cen",558,"stretch",0,"All")},
-            {"FreeFlyButton",new TopButtonMan.TopButSpec("FreeFlyButton","FreeFly", "Fly around in scene freely\nEsc exits this state","cen",707,"stretch",0,"All")},
-            {"QuitButton" ,new TopButtonMan.TopButSpec("QuitButton","Quit", "Quit to OS","right",-70,"stretch",0,"All")},
+            //{"OptionsButton",new TopButtonMan.TopButSpec("OptionsButton","Options", "Bring up detailed configuration tabs","cen",558,"stretch",0,"All")},
+            //{"FreeFlyButton",new TopButtonMan.TopButSpec("FreeFlyButton","FreeFly", "Fly around in scene freely\nEsc exits this state","cen",707,"stretch",0,"All")},
+            //{"QuitButton" ,new TopButtonMan.TopButSpec("QuitButton","Quit", "Quit to OS","right",-70,"stretch",0,"All")},
+            {"QuitButton" ,new TopButtonMan.TopButSpec("QuitButton","Quit", "Quit to OS","right",0,"stretch",0,"All")},
+            {"FreeFlyButton",new TopButtonMan.TopButSpec("FreeFlyButton","FreeFly", "Fly around in scene freely\nEsc exits this state","right",0,"stretch",0,"All")},
+            {"OptionsButton",new TopButtonMan.TopButSpec("OptionsButton","Options", "Bring up detailed configuration tabs","right",0,"stretch",0,"All")},
 
-            {"FrameButton",new TopButtonMan.TopButSpec("FrameButton","Frame", "Draw labels on people, cars, etc","cen",-275,"stretch",10,"Frame")},
-            {"FteButton" ,new TopButtonMan.TopButSpec("FteButton","F", "Detect FTEs","cen",-194,"stretch",10,"Frame")},
-            {"ConButton" ,new TopButtonMan.TopButSpec("ConButton","C", "Detect Contractors","cen",-154,"stretch",10,"Frame")},
-            {"VisButton" ,new TopButtonMan.TopButSpec("VisButton","V", "Detect Visitors","cen",-114,"stretch",10,"Frame")},
-            {"SecButton" ,new TopButtonMan.TopButSpec("SecButton","S", "Detect Security","cen",-74,"stretch",10,"Frame")},
-            {"UnkButton" ,new TopButtonMan.TopButSpec("UnkButton","U", "Detect Unknowns","cen",-34,"stretch",10,"Frame")},
-            {"Vt2DButton" ,new TopButtonMan.TopButSpec("Vt2DButton","Vt2D", "Tie Visibility to Detectability","cen",32,"stretch",10,"Frame")},
+            //{"FrameButton",new TopButtonMan.TopButSpec("FrameButton","Frame", "Draw labels on people, cars, etc","cen",-275,"stretch",10,"Frame")},
+            //{"FteButton" ,new TopButtonMan.TopButSpec("FteButton","F", "Detect FTEs","cen",-194,"stretch",10,"Frame")},
+            //{"ConButton" ,new TopButtonMan.TopButSpec("ConButton","C", "Detect Contractors","cen",-154,"stretch",10,"Frame")},
+            //{"VisButton" ,new TopButtonMan.TopButSpec("VisButton","V", "Detect Visitors","cen",-114,"stretch",10,"Frame")},
+            //{"SecButton" ,new TopButtonMan.TopButSpec("SecButton","S", "Detect Security","cen",-74,"stretch",10,"Frame")},
+            //{"UnkButton" ,new TopButtonMan.TopButSpec("UnkButton","U", "Detect Unknowns","cen",-34,"stretch",10,"Frame")},
+            //{"Vt2DButton" ,new TopButtonMan.TopButSpec("Vt2DButton","Vt2D", "Tie Visibility to Detectability","cen",32,"stretch",10,"Frame")},
+            {"FrameButton",new TopButtonMan.TopButSpec("FrameButton","Frame", "Draw labels on people, cars, etc","cen",0,"stretch",10,"Frame")},
+            {"FteButton" ,new TopButtonMan.TopButSpec("FteButton","F", "Detect FTEs","cen",0,"stretch",10,"Frame")},
+            {"ConButton" ,new TopButtonMan.TopButSpec("ConButton","C", "Detect Contractors","cen",0,"stretch",10,"Frame")},
+            {"VisButton" ,new TopButtonMan.TopButSpec("VisButton","V", "Detect Visitors","cen",0,"stretch",10,"Frame")},
+            {"SecButton" ,new TopButtonMan.TopButSpec("SecButton","S", "Detect Security","cen",0,"stretch",10,"Frame")},
+            {"UnkButton" ,new TopButtonMan.TopButSpec("UnkButton","U", "Detect Unknowns","cen",0,"stretch",10,"Frame")},
+            {"Vt2DButton" ,new TopButtonMan.TopButSpec("Vt2DButton","Vt2D", "Tie Visibility to Detectability","cen",0,"stretch",10,"Frame")},
 
             {"TranButton" ,new TopButtonMan.TopButSpec("TranButton","Tr", "Make Walls Transparent","cen",120,"stretch",10,"B121")},
             {"HvacButton" ,new TopButtonMan.TopButSpec("HvacButton","Hv", "Show HVAC System","cen",170,"stretch",10,"B121")},
@@ -153,30 +163,44 @@ namespace CampusSimulator
         }
 
 
-        string orderedFixedButtonList = "HideUiButton,PipeButton,RunButton,FlyButton,FrameButton,EvacButton,UnEvacButton,GoButton,OptionsButton,ShowTracksButton,FreeFlyButton,QuitButton";
-        string orderedScenarioButtonList1 = "FteButton,ConButton,VisButton,SecButton,UnkButton,Vt2DButton,TranButton,HvacButton,ElecButton,PlumButton";
+        //string orderedFixedButtonList = "HideUiButton,PipeButton,RunButton,FlyButton,FrameButton,EvacButton,UnEvacButton,GoButton,OptionsButton,ShowTracksButton,FreeFlyButton,QuitButton";
+        //string orderedScenarioButtonList1 = "FteButton,ConButton,VisButton,SecButton,UnkButton,Vt2DButton,TranButton,HvacButton,ElecButton,PlumButton";
+
+        //public void CreateButtonsAnewOld(string tbtfiltlist)
+        //{
+        //    sman.Lgg($"CreateButtonsAnew tbtfiltlist:{tbtfiltlist}");
+        //    topButMan.SetTbtFilter(tbtfiltlist);
+        //    var butfixtxtarr = orderedFixedButtonList.Split(',');
+        //    var butsentxtarr = orderedScenarioButtonList1.Split(',');
+        //    var buttxtarra = new List<string>(butfixtxtarr);
+        //    buttxtarra.AddRange(butsentxtarr);
+        //    foreach (var k in buttxtarra)
+        //    {
+        //        if (!butspec.ContainsKey(k))
+        //        {
+        //            sman.LggError($"TopButtonPanel.CreateButtonsAnew - bad option spec:{k}");
+        //            continue;
+        //        }
+        //        var bs = butspec[k];
+        //        topButMan.SpecOneButton(bs);
+        //    }
+        //    topButMan.CreateButtons();
+        //    ColorizeButtonStates();
+        //}
 
         public void CreateButtonsAnew(string tbtfiltlist)
         {
             sman.Lgg($"CreateButtonsAnew tbtfiltlist:{tbtfiltlist}");
             topButMan.SetTbtFilter(tbtfiltlist);
-            var butfixtxtarr = orderedFixedButtonList.Split(',');
-            var butsentxtarr = orderedScenarioButtonList1.Split(',');
-            var buttxtarra = new List<string>(butfixtxtarr);
-            buttxtarra.AddRange(butsentxtarr);
-            foreach (var k in buttxtarra)
+            foreach (var k in butspec.Keys)
             {
-                if (!butspec.ContainsKey(k))
-                {
-                    sman.LggError($"TopButtonPanel.CreateButtonsAnew - bad option spec:{k}");
-                    continue;
-                }
                 var bs = butspec[k];
                 topButMan.SpecOneButton(bs);
             }
             topButMan.CreateButtons();
             ColorizeButtonStates();
         }
+
 
         public void DestroyButtons()
         {
