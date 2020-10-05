@@ -1655,6 +1655,27 @@ namespace CampusSimulator
             ModifyJourneySpeeds();
             //sman.Lgg("Updatecount:" + updateCount + " started:" + nstarted + " deleted:" + ndeleted);
         }
+
+        float lastShadowSyncTime = 0;
+        void ShadowSync()
+        {
+            if (shadowJourney)
+            {
+                if (Time.time - lastShadowSyncTime > 0.1f)
+                {
+                    var jny = FindJourney(this.journeyToShadow);
+                    if (jny!=null)
+                    {
+                        var pathpos = jny.birdctrl.GetBirdPos();
+                        Debug.Log($"ShadowSync to {pathpos.pt:f2}");
+                        var vs = sman.mpman.GetViewerState();
+                        vs.pos = pathpos.pt;
+                        sman.mpman.SetViewerState(vs);
+                    }
+                    lastShadowSyncTime = Time.time;
+                }
+            }
+        }
         void Update()
         {
             updateCount++;
@@ -1663,6 +1684,7 @@ namespace CampusSimulator
                 return;
             }
             DoJourneyHousekeeping();
+            ShadowSync();
         }
     }
 

@@ -966,7 +966,7 @@ namespace Aiskwk.Map
 
 
 
-        void SetViewerInState(ViewerState vst)
+        public void SetViewerInState(ViewerState vst)
         {
             if (vst.camconfig != viewerCamPosition)
             {

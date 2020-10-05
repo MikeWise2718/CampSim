@@ -824,6 +824,16 @@ namespace CampusSimulator
             return (true, newpos, newaltbase, newalt, newrot);
         }
 
+        public Aiskwk.Map.ViewerState GetViewerState()
+        {
+            var vs = qmapman.qmm.viewer.GetViewerState();
+            return vs;
+        }
+        public void SetViewerState(Aiskwk.Map.ViewerState vs)
+        {
+            qmapman.qmm.viewer.SetViewerInState(vs);
+        }
+
 
         public void ModelBuildFinal()
         {
