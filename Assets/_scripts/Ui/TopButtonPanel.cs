@@ -24,11 +24,8 @@ namespace CampusSimulator
             //{"RunButton",new TopButtonMan.TopButSpec("RunButton","Run", "Start ground based journeys","cen",-648,"stretch",0,"Sim")},
             //{"FlyButton",new TopButtonMan.TopButSpec("FlyButton","Fly", "Start flying journeys","cen",-578,"stretch",0,"Sim")},
             {"PipeButton",new TopButtonMan.TopButSpec("PipeButton","Pipes", "Show journey path links and nodes","left",0,"stretch",0,"All")},
-            {"RunButton",new TopButtonMan.TopButSpec("RunButton","Run", "Start ground based journeys","left",0,"stretch",0,"Sim")},
-            {"FlyButton",new TopButtonMan.TopButSpec("FlyButton","Fly", "Start flying journeys","left",0,"stretch",0,"Sim")},
             {"EvacButton",new TopButtonMan.TopButSpec("EvacButton", "Evac", "Start an evacuation simulation","cen",-500,"stretch",0,"Evac")},
             {"UnEvacButton",new TopButtonMan.TopButSpec("UnEvacButton", "Unevac", "After an evacuation, go back to starting positions","cen",-405,"stretch",0,"Evac")},
-            {"GoButton",new TopButtonMan.TopButSpec("GoButton","Go", "Kick off a preprogramed scenario dependent journey script","cen",335,"stretch",0,"Sim")},
             {"ShowTracksButton",new TopButtonMan.TopButSpec("ShowTracksButton","Tracks", "Show GPX Tracks","cen",429,"stretch",0,"Trx")},
             //{"OptionsButton",new TopButtonMan.TopButSpec("OptionsButton","Options", "Bring up detailed configuration tabs","cen",558,"stretch",0,"All")},
             //{"FreeFlyButton",new TopButtonMan.TopButSpec("FreeFlyButton","FreeFly", "Fly around in scene freely\nEsc exits this state","cen",707,"stretch",0,"All")},
@@ -58,6 +55,11 @@ namespace CampusSimulator
             {"ElecButton" ,new TopButtonMan.TopButSpec("ElecButton","El", "Show Electrical System","cen",0,"stretch",10,"B121")},
             {"PlumButton" ,new TopButtonMan.TopButSpec("PlumButton","Pb", "Show Plumbing System","cen",0,"stretch",10,"B121")},
             {"#B121Space" ,new TopButtonMan.TopButSpec("#spacer","#", "Spacerbutton","cen",0,"stretch",10,"B121")},
+
+            {"RunButton",new TopButtonMan.TopButSpec("RunButton","Run", "Start ground based journeys","cen",0,"stretch",0,"Sim")},
+            {"FlyButton",new TopButtonMan.TopButSpec("FlyButton","Fly", "Start flying journeys","cen",0,"stretch",0,"Sim")},
+            {"GoButton",new TopButtonMan.TopButSpec("GoButton","Go", "Kick off a preprogramed scenario dependent journey script","cen",0,"stretch",0,"Sim")},
+            {"#SimSpace" ,new TopButtonMan.TopButSpec("#spacer","#", "Spacerbutton","cen",0,"stretch",10,"Sim")},
         };
 
         public void AddActionsToButspecs()
