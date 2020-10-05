@@ -1661,19 +1661,31 @@ namespace CampusSimulator
         {
             if (shadowJourney)
             {
-                if (Time.time - lastShadowSyncTime > 0.1f)
+                var jny = FindJourney(this.journeyToShadow);
+                if (jny != null)
                 {
-                    var jny = FindJourney(this.journeyToShadow);
-                    if (jny!=null)
+                    var bgo = jny.birdctrl.birdformgo;
+                    if (bgo != null)
                     {
-                        var pathpos = jny.birdctrl.GetBirdPos();
-                        Debug.Log($"ShadowSync to {pathpos.pt:f2}");
+                        var pt = bgo.transform.position;
+                        var rt = bgo.transform.localRotation.eulerAngles;
+                        Debug.Log($"ShadowSync to {pt:f2} rt:{rt:f2}");
                         var vs = sman.mpman.GetViewerState();
-                        vs.pos = pathpos.pt;
+                        vs.pos = pt;
+                        vs.rot = rt;
                         sman.mpman.SetViewerState(vs);
+                        //var pathpos = jny.birdctrl.GetBirdPos();
+                        //Debug.Log($"ShadowSync to {pathpos.pt:f2}");
+                        //var vs = sman.mpman.GetViewerState();
+                        //vs.pos = pathpos.pt;
+                        //sman.mpman.SetViewerState(vs);
                     }
-                    lastShadowSyncTime = Time.time;
+                    else
+                    {
+                        Debug.Log($"ShadowSync birdgo is null");
+                    }
                 }
+                lastShadowSyncTime = Time.time;
             }
         }
         void Update()
