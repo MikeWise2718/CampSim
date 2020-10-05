@@ -267,20 +267,65 @@ namespace CampusSimulator
             }
             return rv;
         }
-        public void InitTranswalls()
+        public B19Willow GetB19()
+        {
+            var bld19 = GetBuilding("Bld19", couldFail: true);
+            if (bld19 == null)
+            {
+                //sman.LggError($"No Bld19 in scene"); // not all scenes even have B19
+                return null;
+            }
+            var b19comp = bld19.GetComponent<B19Willow>();
+            if (b19comp == null)
+            {
+                sman.LggError($"No B19 Component attached to Bld19 in scene");
+                return null;
+            }
+            return b19comp;
+        }
+
+        public void ToggleB19Level1()
+        {
+            var b19comp = GetB19();
+            var curval = b19comp.level01.Get();
+            b19comp.level01.SetAndSave(!curval);
+            b19comp.MakeItSo();
+        }
+        public void ToggleB19Level2()
+        {
+            var b19comp = GetB19();
+            var curval = b19comp.level02.Get();
+            b19comp.level02.SetAndSave(!curval);
+            b19comp.MakeItSo();
+        }
+        public void ToggleB19Level3()
+        {
+            var b19comp = GetB19();
+            var curval = b19comp.level03.Get();
+            b19comp.level03.SetAndSave(!curval);
+            b19comp.MakeItSo();
+        }
+
+
+        public B121Willow GetB121()
         {
             var bld121 = GetBuilding("Bld121", couldFail: true);
             if (bld121 == null)
             {
-                //sman.LggError($"No Bld121 in scene"); // not all scenes even have 121
-                return;
+                //sman.LggError($"No Bld121 in scene"); // not all scenes even have B121
+                return null;
             }
             var b121comp = bld121.GetComponent<B121Willow>();
             if (b121comp == null)
             {
                 sman.LggError($"No B121 Component attached to Bld121 in scene");
-                return;
+                return null;
             }
+            return b121comp;
+        }
+        public void InitTranswalls()
+        {
+            var b121comp = GetB121();
             transwalls = b121comp.b121_materialMode.Get() == B121Willow.b121_MaterialMode.glasswalls;
             showhvac = b121comp.hvac.Get();
             showelec = b121comp.lighting.Get();
@@ -289,18 +334,7 @@ namespace CampusSimulator
 
         public void TransBld121Button()
         {
-            var bld121 = GetBuilding("Bld121", couldFail: true);
-            if (bld121 == null)
-            {
-                sman.LggError($"BuildingMan.TransBld121Button - No Bld121 in scene");
-                return;
-            }
-            var b121comp = bld121.GetComponent<B121Willow>();
-            if (b121comp == null)
-            {
-                sman.LggError($"BuildingMan.TransBld121Button - No B121 Component attached to Bld121 in scene");
-                return;
-            }
+            var b121comp = GetB121();
             var needtrans = transwalls;
             var oristate = b121comp.b121_materialMode.Get();
             if (needtrans)
@@ -316,7 +350,6 @@ namespace CampusSimulator
             {
                 sman.Lgg($"Bld121 {oristate} changed to {curstate} - refresh required","pink");
                 b121comp.ActuateMaterialMode();
-                //sman.RequestRefresh("TransBld121Button", totalrefresh: false);
             }
             else
             {
@@ -326,51 +359,18 @@ namespace CampusSimulator
 
         public void ShowHvacBld121Button()
         {
-            var bld121 = GetBuilding("Bld121", couldFail: true);
-            if (bld121==null)
-            {
-                sman.LggError($"BuildingMan.ShowHvacBld121Button - No Bld121 in scene");
-                return;
-            }
-            var b121comp= bld121.GetComponent<B121Willow>();
-            if (b121comp == null)
-            {
-                sman.LggError($"BuildingMan.ShowHvacBld121Button - No B121 Component attached to Bld121 in scene");
-                return;
-            }
+            var b121comp = GetB121();
             b121comp.ActuateShowHvac(showhvac);
         }
         public void ShowElecBld121Button()
         {
-            var bld121 = GetBuilding("Bld121", couldFail: true);
-            if (bld121 == null)
-            {
-                sman.LggError($"BuildingMan.ShowElecBld121Button - No Bld121 in scene");
-                return;
-            }
-            var b121comp = bld121.GetComponent<B121Willow>();
-            if (b121comp == null)
-            {
-                sman.LggError($"BuildingMan.ShowElecBld121Button - No B121 Component attached to Bld121 in scene");
-                return;
-            }
+            var b121comp = GetB121();
             b121comp.ActuateShowLighting(showelec);
         }
 
         public void ShowPlumBld121Button()
         {
-            var bld121 = GetBuilding("Bld121", couldFail: true);
-            if (bld121 == null)
-            {
-                sman.LggError($"BuildingMan.ShowPlumBld121Button - No Bld121 in scene");
-                return;
-            }
-            var b121comp = bld121.GetComponent<B121Willow>();
-            if (b121comp == null)
-            {
-                sman.LggError($"BuildingMan.ShowPlumBld121Button - No B121 Component attached to Bld121 in scene");
-                return;
-            }
+            var b121comp = GetB121();
             b121comp.ActuateShowPlumbing(showplum);
         }
 

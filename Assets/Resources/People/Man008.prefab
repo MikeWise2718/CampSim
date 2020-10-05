@@ -2897,6 +2897,7 @@ GameObject:
   - component: {fileID: 7279587800838960389}
   - component: {fileID: -2296770125721630236}
   - component: {fileID: 2882242254145370025}
+  - component: {fileID: -6937151159305113122}
   m_Layer: 0
   m_Name: Man008
   m_TagString: Untagged
@@ -3226,6 +3227,20 @@ CapsuleCollider:
   m_Direction: 1
   m_Center: {x: 0, y: 0.9, z: 0}
 --- !u!136 &2882242254145370025
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1771353401853922}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.25
+  m_Height: 1.8
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.9, z: 0}
+--- !u!136 &-6937151159305113122
 CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

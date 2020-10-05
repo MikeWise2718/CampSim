@@ -1924,6 +1924,7 @@ namespace CampusSimulator
                         {
                             var pname = go.transform.parent.gameObject.name;
                             hitname = $"{pname}/{hitname}";
+                            jnman.SetShadowJourney(hitname);
                         }
                         lasthitname = hitname;
                         Debug.Log($"Left mouse button hit {hitname}");

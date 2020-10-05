@@ -2858,6 +2858,7 @@ GameObject:
   - component: {fileID: 536947616329270888}
   - component: {fileID: -6017559865399021500}
   - component: {fileID: -4380482209080652239}
+  - component: {fileID: -3331278490138232417}
   m_Layer: 0
   m_Name: Businesswoman009
   m_TagString: Untagged
@@ -3187,6 +3188,20 @@ CapsuleCollider:
   m_Direction: 1
   m_Center: {x: 0, y: 0.9, z: 0}
 --- !u!136 &-4380482209080652239
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000013216512794}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.25
+  m_Height: 1.8
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.9, z: 0}
+--- !u!136 &-3331278490138232417
 CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

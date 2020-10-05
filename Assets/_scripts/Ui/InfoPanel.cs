@@ -206,7 +206,7 @@ public class InfoPanel : MonoBehaviour
                 $"{GraphAlgos.GraphUtil.GetVersionString()}";
         mscText.text = mmsg;
 
-        geoText.text = sman.lasthitname;
+        geoText.text = $"{sman.lasthitname}\n{jman.journeyToShadow}";
 
     }
     private void Update()

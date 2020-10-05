@@ -2953,6 +2953,7 @@ GameObject:
   - component: {fileID: 4643592897879304140}
   - component: {fileID: 548602224910121474}
   - component: {fileID: 79883922699046189}
+  - component: {fileID: 7173130616094763091}
   m_Layer: 0
   m_Name: Girl009
   m_TagString: Untagged
@@ -3282,6 +3283,20 @@ CapsuleCollider:
   m_Direction: 1
   m_Center: {x: 0, y: 0.9, z: 0}
 --- !u!136 &79883922699046189
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1753885567344058}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.25
+  m_Height: 1.8
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.9, z: 0}
+--- !u!136 &7173130616094763091
 CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

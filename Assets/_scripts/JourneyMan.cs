@@ -38,12 +38,12 @@ namespace CampusSimulator
 
     public class JourneyMan : MonoBehaviour
     {
-
-        private List<Journey> Journeys = new List<Journey>();
-        public int njnys = 0;
-        public int nlegs = 0;
         public SceneMan sman;
         private LinkCloudMan linkctrl;
+
+        private List<Journey> journeys = new List<Journey>();
+        public int njnys = 0;
+        public int nlegs = 0;
         public int curjidx = 0;
         public float velfak = 1;
         public float pctInterBuildingJourneys = 0.5f;
@@ -59,12 +59,15 @@ namespace CampusSimulator
         public float startJnyTime = 0;
         public int journeysLogged = 0;
 
+        public bool shadowJourney = false;
+        public string journeyToShadow = "";
+
         public UxSetting<string> lastViewerStartJourney = new UxSetting<string>("lastViewerStartJourney", "");
         public UxSetting<string> lastViewerEndJourney = new UxSetting<string>("lastViewerEndJourney", "");
 
         public void AddJ(Journey jny)
         {
-            Journeys.Add(jny);
+            journeys.Add(jny);
             UpdateLegCount();
         }
 
@@ -117,11 +120,55 @@ namespace CampusSimulator
                 sman.LggError(msg + ex.ToString());
             }
         }
+        public Journey FindJourney(string jnameseek)
+        {
+            foreach (var jny in journeys)
+            {
+                if (jny.name == jnameseek)
+                {
+                    return jny;
+                }
+            }
+            return null;
+        }
 
+        public Journey FindJourneyWithBird(string birdname)
+        {
+            var bnar = birdname.Split('/');
+            foreach (var bn in bnar)
+            {
+                if (bn == "instance") continue;
+                foreach (var jny in journeys)
+                {
+                    //sman.Lgg($"FJWB looking for {birdname} in jny.birctrl:{jny.birdctrl.name} - jny - {jny.name}","orange");
+                    if (jny.birdctrl != null)
+                    {
+                        if (jny.birdctrl.birdformgo != null)
+                        {
+                            if (bn == jny.birdctrl.birdformgo.name)
+                            {
+                                return jny;
+                            }
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
+
+        public void SetShadowJourney(string hitname)
+        {
+            var jny = FindJourneyWithBird(hitname);
+            if (jny!=null)
+            {
+                journeyToShadow = jny.name;
+            }
+        }
 
         public List<Journey> GetJourneys()
         {
-            return Journeys;
+            return journeys;
         }
 
         static int personcount = 0;
@@ -1180,9 +1227,9 @@ namespace CampusSimulator
         }
         void UpdateLegCount()
         {
-            njnys = Journeys.Count;
+            njnys = journeys.Count;
             int legsum = 0;
-            foreach (Journey jny1 in Journeys) legsum += jny1.nlegs;
+            foreach (Journey jny1 in journeys) legsum += jny1.nlegs;
             nlegs = legsum;
         }
         public void DeleteJourney(Journey jny)
@@ -1195,7 +1242,7 @@ namespace CampusSimulator
             // what about the animator?
             Destroy(jny.birdctrl);
             Destroy(jny.pathctrl);
-            Journeys.Remove(jny);
+            journeys.Remove(jny);
             UpdateLegCount();
         }
         public bool spawnrunjourneys = false;
@@ -1212,13 +1259,13 @@ namespace CampusSimulator
 
         public void DeleteAllJourneys()
         {
-            foreach (var jny in Journeys)
+            foreach (var jny in journeys)
             {
                 jny.birdctrl.DeleteBirdGosAndInit();
                 // what about the animator?
                 Destroy(jny);
             }
-            Journeys = new List<Journey>();
+            journeys = new List<Journey>();
             UpdateLegCount();
             spawnrunjourneys = false;
             spawnflyjourneys = false;
@@ -1429,10 +1476,10 @@ namespace CampusSimulator
         public void ModifyJourneySpeeds()
         {
             bool frontjnyhack = true;
-            var njnys = Journeys.Count;
+            var njnys = journeys.Count;
             for (var i = 0; i < njnys; i++)
             {
-                var jny = Journeys[i];
+                var jny = journeys[i];
                 var setit = false;
                 if (frontjnyhack && jny.frontjny && jny.frontjny.birdctrl.wegguid != jny.birdctrl.wegguid)
                 {
@@ -1463,12 +1510,12 @@ namespace CampusSimulator
 
             for (var i1 = 0; i1 < njnys; i1++)
             {
-                var jny1 = Journeys[i1];
+                var jny1 = journeys[i1];
                 var bc1 = jny1.birdctrl;
                 for (var i2 = 0; i2 < njnys; i2++)
                 {
                     if (i1 == i2) continue;
-                    var jny2 = Journeys[i2];
+                    var jny2 = journeys[i2];
                     var bc2 = jny2.birdctrl;
                     if (bc1.wegguid == bc2.wegguid)
                     {
@@ -1506,7 +1553,7 @@ namespace CampusSimulator
             }
             for (var i = 0; i < njnys; i++)
             {
-                var jny = Journeys[i];
+                var jny = journeys[i];
                 var fak = 1;
                 if (jny.currentleg != null)
                 {
@@ -1541,7 +1588,7 @@ namespace CampusSimulator
             var deletelist = new List<Journey>();
             if ((Time.time - lastSpawnTime) > 0.125f)
             {
-                foreach (var jny in Journeys)
+                foreach (var jny in journeys)
                 {
                     if (nstarted > 16) break;
                     switch (jny.status)

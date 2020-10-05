@@ -3359,6 +3359,7 @@ GameObject:
   - component: {fileID: 6637565576280139580}
   - component: {fileID: 5292690920298424100}
   - component: {fileID: 4105954429509589370}
+  - component: {fileID: 8450167747689109874}
   m_Layer: 0
   m_Name: Businessman009
   m_TagString: Untagged
@@ -3688,6 +3689,20 @@ CapsuleCollider:
   m_Direction: 1
   m_Center: {x: 0, y: 0.9, z: 0}
 --- !u!136 &4105954429509589370
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000013970098510}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.25
+  m_Height: 1.8
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.9, z: 0}
+--- !u!136 &8450167747689109874
 CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

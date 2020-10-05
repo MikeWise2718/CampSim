@@ -34,12 +34,20 @@ namespace CampusSimulator
             {"RunButton",new TopButtonMan.TopButSpec("RunButton","Run", "Start ground based journeys","cen",0,"stretch",10,"Sim")},
             {"FlyButton",new TopButtonMan.TopButSpec("FlyButton","Fly", "Start flying journeys","cen",0,"stretch",10,"Sim")},
             {"GoButton",new TopButtonMan.TopButSpec("GoButton","Go", "Kick off a preprogramed scenario dependent journey script","cen",0,"stretch",10,"Sim")},
+            {"ShadowButton",new TopButtonMan.TopButSpec("ShadowButton","Shad", "Shadow stuff","cen",0,"stretch",10,"Sim")},
             {"#SimSpacer" ,new TopButtonMan.TopButSpec("#SimSpacer","#", "Spacerbutton","cen",0,"stretch",10,"Sim")},
 
 
-            {"EvacButton",new TopButtonMan.TopButSpec("EvacButton", "Evac", "Start an evacuation simulation","cen",-500,"stretch",10,"Evac")},
-            {"UnEvacButton",new TopButtonMan.TopButSpec("UnEvacButton", "Unevac", "After an evacuation, go back to starting positions","cen",-405,"stretch",10,"Evac")},
-            {"#B19Spacer" ,new TopButtonMan.TopButSpec("#B19Spacer","#", "Spacerbutton","cen",0,"stretch",10,"Evac")},
+            {"EvacButton",new TopButtonMan.TopButSpec("EvacButton", "Evac", "Start an evacuation simulation","cen",0,"stretch",10,"Evac")},
+            {"UnEvacButton",new TopButtonMan.TopButSpec("UnEvacButton", "Unevac", "After an evacuation, go back to starting positions","cen",0,"stretch",10,"Evac")},
+            {"#EvacSpacer" ,new TopButtonMan.TopButSpec("#EvacSpacer","#", "Spacerbutton","cen",0,"stretch",10,"Evac")},
+
+            {"B19Level1Button",new TopButtonMan.TopButSpec("B19Level1Button", "L1", "Show B19 Level One","cen",0,"stretch",10,"B19")},
+            {"B19Level2Button",new TopButtonMan.TopButSpec("B19Level2Button", "L2", "Show B19 Level Twoe","cen",0,"stretch",10,"B19")},
+            {"B19Level3Button",new TopButtonMan.TopButSpec("B19Level3Button", "L3", "Show B19 Level Three","cen",0,"stretch",10,"B19")},
+            {"B19HvacButton",new TopButtonMan.TopButSpec("B19HvacButton", "Hvac", "After an evacuation, go back to starting positions","cen",0,"stretch",10,"B19")},
+            {"B19GlassWallsButton",new TopButtonMan.TopButSpec("B19GlassWallsButton", "Gls", "After an evacuation, go back to starting positions","cen",0,"stretch",10,"B19")},
+            {"#B19Spacer" ,new TopButtonMan.TopButSpec("#B19Spacer","#", "Spacerbutton","cen",0,"stretch",10,"B19")},
 
             {"FrameButton",new TopButtonMan.TopButSpec("FrameButton","Frame", "Draw labels on people, cars, etc","cen",0,"stretch",10,"Frame")},
             {"FteButton" ,new TopButtonMan.TopButSpec("FteButton","F", "Detect FTEs","cen",0,"stretch",10,"Frame")},
@@ -50,10 +58,10 @@ namespace CampusSimulator
             {"Vt2DButton" ,new TopButtonMan.TopButSpec("Vt2DButton","Vt2D", "Tie Visibility to Detectability","cen",0,"stretch",10,"Frame")},
             {"#FrameSpacer" ,new TopButtonMan.TopButSpec("#FrameSpacer","#", "Spacerbutton","cen",0,"stretch",10,"Frame")},
 
-            {"TranButton" ,new TopButtonMan.TopButSpec("TranButton","Tr", "Make Walls Transparent","cen",0,"stretch",10,"B121")},
-            {"HvacButton" ,new TopButtonMan.TopButSpec("HvacButton","Hv", "Show HVAC System","cen",0,"stretch",10,"B121")},
-            {"ElecButton" ,new TopButtonMan.TopButSpec("ElecButton","El", "Show Electrical System","cen",0,"stretch",10,"B121")},
-            {"PlumButton" ,new TopButtonMan.TopButSpec("PlumButton","Pb", "Show Plumbing System","cen",0,"stretch",10,"B121")},
+            {"B121TranButton" ,new TopButtonMan.TopButSpec("B121TranButton","Tr", "Make Walls Transparent","cen",0,"stretch",10,"B121")},
+            {"B121HvacButton" ,new TopButtonMan.TopButSpec("B121HvacButton","Hv", "Show HVAC System","cen",0,"stretch",10,"B121")},
+            {"B121ElecButton" ,new TopButtonMan.TopButSpec("B121ElecButton","El", "Show Electrical System","cen",0,"stretch",10,"B121")},
+            {"B121PlumButton" ,new TopButtonMan.TopButSpec("B121PlumButton","Pb", "Show Plumbing System","cen",0,"stretch",10,"B121")},
             {"#B121Spacer" ,new TopButtonMan.TopButSpec("#B121Spacer","#", "Spacerbutton","cen",0,"stretch",10,"B121")},
 
 
@@ -71,7 +79,7 @@ namespace CampusSimulator
             butspec["FrameButton"].action = delegate { FrameButton(); };
             butspec["EvacButton"].action = delegate { EvacButton(); };
             butspec["UnEvacButton"].action = delegate { UnevacButton(); };
-            butspec["PipeButton"].action = delegate { DetectPipButton(); };
+            butspec["PipeButton"].action = delegate { B121DetectPipButton(); };
             butspec["GoButton"].action = delegate { GoButton(); };
             butspec["ShowTracksButton"].action = delegate { ShowTracksButton(); };
             butspec["OptionsButton"].action = delegate { OptionsButtonPushed(); };
@@ -85,10 +93,16 @@ namespace CampusSimulator
             butspec["UnkButton"].action = delegate { DetectUnkButton(); };
             butspec["Vt2DButton"].action = delegate { Vt2DButton(); };
 
-            butspec["TranButton"].action = delegate { DetectTranButton(); };
-            butspec["HvacButton"].action = delegate { DetectFteButton(); };
-            butspec["ElecButton"].action = delegate { DetectElecButton(); };
-            butspec["PlumButton"].action = delegate { DetectPlumButton(); };
+            butspec["B121TranButton"].action = delegate { B121DetectTranButton(); };
+            butspec["B121HvacButton"].action = delegate { B121DetectHvacButton(); };
+            butspec["B121ElecButton"].action = delegate { B121DetectElecButton(); };
+            butspec["B121PlumButton"].action = delegate { B121DetectPlumButton(); };
+
+            butspec["B19Level1Button"].action = delegate { ShowB19Level1(); };
+            butspec["B19Level2Button"].action = delegate { ShowB19Level2(); };
+            butspec["B19Level3Button"].action = delegate { ShowB19Level3(); };
+
+            butspec["ShadowButton"].action = delegate { ToggleJouneyShadow(); };
 
         }
 
@@ -136,17 +150,17 @@ namespace CampusSimulator
 
         public void SetScene(CampusSimulator.SceneSelE curscene)
         {
-            tbpfiltlist = "All,Sim,Trx";
+            tbpfiltlist = "All,Sim";
             switch(curscene)
             {
                 case SceneSelE.MsftSmall:
-                    tbpfiltlist = "All";
+                    tbpfiltlist = ",All";
                     break;
                 case SceneSelE.MsftB121focused:
                     tbpfiltlist += ",B121,Frame";
                     break;
                 case SceneSelE.MsftB19focused:
-                    tbpfiltlist += "B19,Evac,Frame";
+                    tbpfiltlist += ",B19,Evac,Frame";
                     break;
                 case SceneSelE.MsftB33focused:
                     tbpfiltlist += ",Evac,Frame";
@@ -343,6 +357,26 @@ namespace CampusSimulator
             }
         }
 
+        public void ShowB19Level1()
+        {
+            sman.bdman.ToggleB19Level1();
+        }
+        public void ShowB19Level2()
+        {
+            sman.bdman.ToggleB19Level2();
+        }
+        public void ShowB19Level3()
+        {
+            sman.bdman.ToggleB19Level3();
+        }
+
+        public void ToggleJouneyShadow()
+        {
+            sman.jnman.shadowJourney = !sman.jnman.shadowJourney;
+            ColorizeButtonStates();
+        }
+
+
         public void QuitButton()
         {
             Debug.Log($"Activating QuitButton");
@@ -366,15 +400,16 @@ namespace CampusSimulator
             clrbut("VisButton", "lightblue", loc, sman.frman.detectVisitor.Get(), "V");
             clrbut("UnkButton", "lightblue", loc, sman.frman.detectUnknown.Get(), "U");
             clrbut("ShowTracksButton", "lightblue", loc, sman.trman.showtracks.Get(), "Tracks");
-            clrbut("TranButton", "lightblue", loc, sman.bdman.transwalls, "Tr");
-            clrbut("HvacButton", "yellow", loc, sman.bdman.showhvac, "Hv");
-            clrbut("ElecButton", "yellow", loc, sman.bdman.showelec, "El");
-            clrbut("PlumButton", "yellow", loc, sman.bdman.showplum, "Pb");
+            clrbut("B121TranButton", "lightblue", loc, sman.bdman.transwalls, "Tr");
+            clrbut("B121HvacButton", "yellow", loc, sman.bdman.showhvac, "Hv");
+            clrbut("B121ElecButton", "yellow", loc, sman.bdman.showelec, "El");
+            clrbut("B121PlumButton", "yellow", loc, sman.bdman.showplum, "Pb");
             clrbut("Vt2dButton", "lightblue", loc, sman.frman.visibilityTiedToDetectability.Get(), "Vt2D");
             clrbut("FrameButton", "pink", loc, sman.frman.frameJourneys.Get(), "Frame");
             clrbut("FreeFlyButton", "pink", loc, sman.vcman.InFreeFly(), "FreeFly");
             clrbut("RunButton", "pink", loc, sman.jnman.spawnrunjourneys, "Run");
             clrbut("FlyButton", "lightblue", loc, sman.jnman.spawnflyjourneys, "Fly");
+            clrbut("ShadowButton", "lightblue", loc, sman.jnman.shadowJourney, "Shad");
         }
 
         public void DetectFteButton()
@@ -403,26 +438,26 @@ namespace CampusSimulator
             ColorizeButtonStates();
         }
 
-        public void DetectTranButton()
+        public void B121DetectTranButton()
         {
             sman.bdman.transwalls = !sman.bdman.transwalls;
             sman.bdman.TransBld121Button();
             ColorizeButtonStates();
         }
-        public void DetectHvacButton()
+        public void B121DetectHvacButton()
         {
             sman.bdman.showhvac = !sman.bdman.showhvac;
             sman.bdman.ShowHvacBld121Button();
             ColorizeButtonStates();
         }
-        public void DetectElecButton()
+        public void B121DetectElecButton()
         {
             sman.bdman.showelec = !sman.bdman.showelec;
             sman.bdman.ShowElecBld121Button();
             ColorizeButtonStates();
         }
 
-        public void DetectPlumButton()
+        public void B121DetectPlumButton()
         {
             sman.bdman.showplum = !sman.bdman.showplum;
             sman.bdman.ShowPlumBld121Button();
@@ -430,7 +465,7 @@ namespace CampusSimulator
         }
 
 
-        public void DetectPipButton()
+        public void B121DetectPipButton()
         {
             sman.lcman.pipevis = !sman.lcman.pipevis;
             sman.lcman.PipeVisButton();

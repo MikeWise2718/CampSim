@@ -45,6 +45,8 @@ namespace CampusSimulator
         public float jnyTime = 0;
         public bool pullViewer = false;
 
+
+
         public bool IsRunning()
         {
             var rv = false;
