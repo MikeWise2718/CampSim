@@ -277,11 +277,13 @@ namespace CampusSimulator
             }
             if (!spacerButton)
             {
+                sman.Lgg($"Creating {butt.name}","pink");
                 createdButList.Add((butt, tbs.idname, tbs.dispname));
             }
             else
             {
-                Destroy(butt);// spacer buttons don't get added
+                sman.Lgg($"Destroying {butt.name}", "lightblue");
+                Destroy(butt.gameObject);// spacer buttons don't get added
             }
             lay_but_x += lay_but_w + lay_but_gap_x;
             lay_but_y += lay_but_gap_y;

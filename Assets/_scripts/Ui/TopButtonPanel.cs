@@ -24,9 +24,6 @@ namespace CampusSimulator
             //{"RunButton",new TopButtonMan.TopButSpec("RunButton","Run", "Start ground based journeys","cen",-648,"stretch",0,"Sim")},
             //{"FlyButton",new TopButtonMan.TopButSpec("FlyButton","Fly", "Start flying journeys","cen",-578,"stretch",0,"Sim")},
             {"PipeButton",new TopButtonMan.TopButSpec("PipeButton","Pipes", "Show journey path links and nodes","left",0,"stretch",0,"All")},
-            {"EvacButton",new TopButtonMan.TopButSpec("EvacButton", "Evac", "Start an evacuation simulation","cen",-500,"stretch",0,"Evac")},
-            {"UnEvacButton",new TopButtonMan.TopButSpec("UnEvacButton", "Unevac", "After an evacuation, go back to starting positions","cen",-405,"stretch",0,"Evac")},
-            {"ShowTracksButton",new TopButtonMan.TopButSpec("ShowTracksButton","Tracks", "Show GPX Tracks","cen",429,"stretch",0,"Trx")},
             //{"OptionsButton",new TopButtonMan.TopButSpec("OptionsButton","Options", "Bring up detailed configuration tabs","cen",558,"stretch",0,"All")},
             //{"FreeFlyButton",new TopButtonMan.TopButSpec("FreeFlyButton","FreeFly", "Fly around in scene freely\nEsc exits this state","cen",707,"stretch",0,"All")},
             //{"QuitButton" ,new TopButtonMan.TopButSpec("QuitButton","Quit", "Quit to OS","right",-70,"stretch",0,"All")},
@@ -34,13 +31,16 @@ namespace CampusSimulator
             {"FreeFlyButton",new TopButtonMan.TopButSpec("FreeFlyButton","FreeFly", "Fly around in scene freely\nEsc exits this state","right",0,"stretch",0,"All")},
             {"OptionsButton",new TopButtonMan.TopButSpec("OptionsButton","Options", "Bring up detailed configuration tabs","right",0,"stretch",0,"All")},
 
-            //{"FrameButton",new TopButtonMan.TopButSpec("FrameButton","Frame", "Draw labels on people, cars, etc","cen",-275,"stretch",10,"Frame")},
-            //{"FteButton" ,new TopButtonMan.TopButSpec("FteButton","F", "Detect FTEs","cen",-194,"stretch",10,"Frame")},
-            //{"ConButton" ,new TopButtonMan.TopButSpec("ConButton","C", "Detect Contractors","cen",-154,"stretch",10,"Frame")},
-            //{"VisButton" ,new TopButtonMan.TopButSpec("VisButton","V", "Detect Visitors","cen",-114,"stretch",10,"Frame")},
-            //{"SecButton" ,new TopButtonMan.TopButSpec("SecButton","S", "Detect Security","cen",-74,"stretch",10,"Frame")},
-            //{"UnkButton" ,new TopButtonMan.TopButSpec("UnkButton","U", "Detect Unknowns","cen",-34,"stretch",10,"Frame")},
-            //{"Vt2DButton" ,new TopButtonMan.TopButSpec("Vt2DButton","Vt2D", "Tie Visibility to Detectability","cen",32,"stretch",10,"Frame")},
+            {"RunButton",new TopButtonMan.TopButSpec("RunButton","Run", "Start ground based journeys","cen",0,"stretch",10,"Sim")},
+            {"FlyButton",new TopButtonMan.TopButSpec("FlyButton","Fly", "Start flying journeys","cen",0,"stretch",10,"Sim")},
+            {"GoButton",new TopButtonMan.TopButSpec("GoButton","Go", "Kick off a preprogramed scenario dependent journey script","cen",0,"stretch",10,"Sim")},
+            {"#SimSpacer" ,new TopButtonMan.TopButSpec("#SimSpacer","#", "Spacerbutton","cen",0,"stretch",10,"Sim")},
+
+
+            {"EvacButton",new TopButtonMan.TopButSpec("EvacButton", "Evac", "Start an evacuation simulation","cen",-500,"stretch",10,"Evac")},
+            {"UnEvacButton",new TopButtonMan.TopButSpec("UnEvacButton", "Unevac", "After an evacuation, go back to starting positions","cen",-405,"stretch",10,"Evac")},
+            {"#B19Spacer" ,new TopButtonMan.TopButSpec("#B19Spacer","#", "Spacerbutton","cen",0,"stretch",10,"Evac")},
+
             {"FrameButton",new TopButtonMan.TopButSpec("FrameButton","Frame", "Draw labels on people, cars, etc","cen",0,"stretch",10,"Frame")},
             {"FteButton" ,new TopButtonMan.TopButSpec("FteButton","F", "Detect FTEs","cen",0,"stretch",10,"Frame")},
             {"ConButton" ,new TopButtonMan.TopButSpec("ConButton","C", "Detect Contractors","cen",0,"stretch",10,"Frame")},
@@ -48,18 +48,18 @@ namespace CampusSimulator
             {"SecButton" ,new TopButtonMan.TopButSpec("SecButton","S", "Detect Security","cen",0,"stretch",10,"Frame")},
             {"UnkButton" ,new TopButtonMan.TopButSpec("UnkButton","U", "Detect Unknowns","cen",0,"stretch",10,"Frame")},
             {"Vt2DButton" ,new TopButtonMan.TopButSpec("Vt2DButton","Vt2D", "Tie Visibility to Detectability","cen",0,"stretch",10,"Frame")},
-            {"#FrameSpace" ,new TopButtonMan.TopButSpec("#spacer","#", "Spacerbutton","cen",0,"stretch",10,"Frame")},
+            {"#FrameSpacer" ,new TopButtonMan.TopButSpec("#FrameSpacer","#", "Spacerbutton","cen",0,"stretch",10,"Frame")},
 
             {"TranButton" ,new TopButtonMan.TopButSpec("TranButton","Tr", "Make Walls Transparent","cen",0,"stretch",10,"B121")},
             {"HvacButton" ,new TopButtonMan.TopButSpec("HvacButton","Hv", "Show HVAC System","cen",0,"stretch",10,"B121")},
             {"ElecButton" ,new TopButtonMan.TopButSpec("ElecButton","El", "Show Electrical System","cen",0,"stretch",10,"B121")},
             {"PlumButton" ,new TopButtonMan.TopButSpec("PlumButton","Pb", "Show Plumbing System","cen",0,"stretch",10,"B121")},
-            {"#B121Space" ,new TopButtonMan.TopButSpec("#spacer","#", "Spacerbutton","cen",0,"stretch",10,"B121")},
+            {"#B121Spacer" ,new TopButtonMan.TopButSpec("#B121Spacer","#", "Spacerbutton","cen",0,"stretch",10,"B121")},
 
-            {"RunButton",new TopButtonMan.TopButSpec("RunButton","Run", "Start ground based journeys","cen",0,"stretch",0,"Sim")},
-            {"FlyButton",new TopButtonMan.TopButSpec("FlyButton","Fly", "Start flying journeys","cen",0,"stretch",0,"Sim")},
-            {"GoButton",new TopButtonMan.TopButSpec("GoButton","Go", "Kick off a preprogramed scenario dependent journey script","cen",0,"stretch",0,"Sim")},
-            {"#SimSpace" ,new TopButtonMan.TopButSpec("#spacer","#", "Spacerbutton","cen",0,"stretch",10,"Sim")},
+
+            {"ShowTracksButton",new TopButtonMan.TopButSpec("ShowTracksButton","Tracks", "Show GPX Tracks","cen",0,"stretch",10,"Trx")},
+            {"#TrxSpacer" ,new TopButtonMan.TopButSpec("#TrxSpacer","#", "Spacerbutton","cen",0,"stretch",10,"Trx")},
+
         };
 
         public void AddActionsToButspecs()
@@ -111,12 +111,13 @@ namespace CampusSimulator
 
         Dictionary<string, string> tbtclasses = new Dictionary<string, string>()
         {
-            { "All","Buttons used in every scenario" },
-            { "Sim","Buttons used to start simulations" },
-            { "Trx","Buttons used to start track simulations" },
-            { "B121","Buttons used to toggle B121 options" },
-            { "Evac","Buttons used to start evacuation" },
-            { "Frame","Buttons used to simulation object detection" },
+            { "All","For all scenario" },
+            { "Sim","Simulation Start (Run and Fly)" },
+            { "Trx","Track simulations (FireFly)" },
+            { "B121","B121 options" },
+            { "B19","B19 options" },
+            { "Evac","Evacuation options" },
+            { "Frame","Simulated Objectt detection" },
 
         };
         public string GetTbtClassToolTip(string option)
@@ -129,7 +130,7 @@ namespace CampusSimulator
             return rv;
         }
 
-        public const string tbprootfiltlist = "All,Sim,Trx,B121,Evac,Frame";
+        public const string tbprootfiltlist = "All,Sim,Trx,B19,B121,Evac,Frame";
 
         public string tbpfiltlist;
 
@@ -145,7 +146,7 @@ namespace CampusSimulator
                     tbpfiltlist += ",B121,Frame";
                     break;
                 case SceneSelE.MsftB19focused:
-                    tbpfiltlist += ",Evac,Frame";
+                    tbpfiltlist += "B19,Evac,Frame";
                     break;
                 case SceneSelE.MsftB33focused:
                     tbpfiltlist += ",Evac,Frame";
