@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using GraphAlgos;
 using CampusSimulator;
+using Microsoft.Win32;// for registry
 using UnityEngine.UIElements;
 using System.Runtime.InteropServices;
 
@@ -45,6 +46,37 @@ public class AboutPanel : MonoBehaviour
         settingsCopyClipboardButton.onClick.AddListener(delegate { ButtonClick(settingsCopyClipboardButton.name); });
         deleteSettingsButton.onClick.AddListener(delegate { ButtonClick(deleteSettingsButton.name); });
         deleteCachedMapsButton.onClick.AddListener(delegate { ButtonClick(deleteCachedMapsButton.name); });
+    }
+
+
+    public Dictionary<string, (object,string,string)> GetRegistrySubKeys(string keyname)
+    {
+        var values = new Dictionary<string, (object, string, string)>();
+        //const string REGISTRY_ROOT = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Run\";
+        //Here I'm looking under LocalMachine. You can replace it with Registry.CurrentUser for current user...
+        try
+        {
+            using (RegistryKey rootKey = Registry.CurrentUser.OpenSubKey(keyname))
+            {
+                if (rootKey != null)
+                {
+                    string[] valueNames = rootKey.GetValueNames();
+                    foreach (string currSubKey in valueNames)
+                    {
+                        var valuekind = rootKey.GetValueKind(currSubKey);
+                        object value = rootKey.GetValue(currSubKey);
+                        var valuestr = value.ToString();
+                        values.Add(currSubKey, (value,valuekind.ToString(),valuestr));
+                    }
+                    rootKey.Close();
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            sman.LggError($"Error reading registry key:{keyname} - ex.msg:{ex.Message}");
+        }
+        return values;
     }
 
     public void Init0()
@@ -214,6 +246,26 @@ public class AboutPanel : MonoBehaviour
         Debug.Log("Initing AboutPanel done");
     }
 
+    public List<string> GetRegistry()
+    {
+        var rv = new List<string>();
+#if UNITY_EDITOR
+        bool iseditor = true;
+#else
+        bool iseditor = false;
+#endif
+        var regkey = GraphAlgos.GraphUtil.GetUserPrefRegKey(iseditor);
+        rv.Add(regkey);
+        var dict = GetRegistrySubKeys(regkey);
+        foreach(var k in dict.Keys)
+        {
+            var (o1, s2, s3) = dict[k];
+            var s = $"{k}:{s2}:{s3}";
+            rv.Add(s);
+        }
+        return rv;
+    }
+
     void ButtonClick(string buttonname)
     {
         Debug.Log($"{buttonname} clicked:" + Time.time);
@@ -246,7 +298,8 @@ public class AboutPanel : MonoBehaviour
             case "SettingsCopyClipboardButton":
                 {
                     Debug.Log("SettingsCopyClipboard");
-                    Aiskwk.Map.qut.CopyTextToClipboard("settings");
+                    var lsl = GetRegistry();
+                    Aiskwk.Map.qut.CopyTextToClipboard(lsl);
                     break;
                 }
         }

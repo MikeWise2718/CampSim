@@ -18,6 +18,22 @@ namespace GraphAlgos
         static string _sysver = "";
         static DateTime _buildDate = DateTime.UtcNow;
 
+
+
+        public static string GetUserPrefRegKey(bool editor=false)
+        {
+            var progname = "campusim";
+            var root = "Computer\\HKEY_CURRENT_USER\\Software\\DefaultCompany";
+            if (editor)
+            {
+                root = "Computer\\HKEY_CURRENT_USER\\Software\\Unity\\UnityEditor\\DefaultCompany";
+            }
+            var rv = $"{root}\\{progname}";
+            return rv;
+        }
+        //static string sedregkey = "Computer\\HKEY_CURRENT_USER\\Software\\Unity\\UnityEditor\\DefaultCompany\\campusim";
+        //static string splregkey = "Computer\\HKEY_CURRENT_USER\\Software\\DefaultCompany\\campusim";
+
         private static void getsysdata()
         {
             string sysver;

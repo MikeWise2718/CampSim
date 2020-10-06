@@ -557,6 +557,24 @@ namespace Aiskwk.Map
                 Debug.Log($"{caller} copied {textToCopy.Length} characters to clipboard");
             }
         }
+        public static void CopyTextToClipboard(List<string> listToCopy, string caller = "", bool reportToLog = false)
+        {
+            var textToCopy = "";
+            foreach(var sss in listToCopy)
+            {
+                textToCopy += $"{sss}\n";
+            }
+            TextEditor editor = new TextEditor
+            {
+                text = textToCopy
+            };
+            editor.SelectAll();
+            editor.Copy();
+            if (reportToLog)
+            {
+                Debug.Log($"{caller} copyied {listToCopy.Count} lines and {textToCopy.Length} characters to clipboard");
+            }
+        }
     }
 
 }
