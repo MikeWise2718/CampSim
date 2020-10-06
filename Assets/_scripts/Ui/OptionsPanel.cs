@@ -56,15 +56,15 @@ public class OptionsPanel : MonoBehaviour
     Dictionary<string, OptButtSpec> butspec = new Dictionary<string, OptButtSpec>()
     {
         {"Visuals",new OptButtSpec(TabState.Visuals.ToString(),"Visuals","Visual Base Settings")},
-        {"MapSet",new OptButtSpec(TabState.MapSet.ToString(),"MapSet","Map Settings\nThere are a lot of them") },
-        {"Frames",new OptButtSpec(TabState.Frames.ToString(),"Frames","Frame parameters for image recognition labeling") },
+        {"MapSet",new OptButtSpec(TabState.MapSet.ToString(),"MapSet","Map Settings") },
+        {"Frames",new OptButtSpec(TabState.Frames.ToString(),"Frames","Frame parameters for image labeling") },
         {"FireFly",new OptButtSpec(TabState.FireFly.ToString(),"FireFly","FireFly related parameters") },
         {"Buildings",new OptButtSpec(TabState.Buildings.ToString(),"Buildings","Building related parameters") },
         {"Osm",new OptButtSpec(TabState.Osm.ToString(),"Osm","Open Street Map Import") },
         {"General",new OptButtSpec(TabState.General.ToString(),"General","General parameters") },
         {"Ui",new OptButtSpec(TabState.Ui.ToString(),"Ui","UI Configuration") },
         {"Log",new OptButtSpec(TabState.Log.ToString(),"Log","Log messages (i.e. errors, warnings, timings, etc)") },
-        {"Help",new OptButtSpec(TabState.Help.ToString(),"Help","Help information\nincluding command line parameters") },
+        {"Help",new OptButtSpec(TabState.Help.ToString(),"Help","Help information and command line") },
         {"About",new OptButtSpec(TabState.About.ToString(),"About","Version and System Information") },
     };
 

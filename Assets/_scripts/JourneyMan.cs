@@ -59,6 +59,8 @@ namespace CampusSimulator
         public float startJnyTime = 0;
         public int journeysLogged = 0;
 
+        public bool freezeJourneys = false;
+
         public bool shadowJourney = false;
         public string journeyToShadow = "";
 
@@ -169,6 +171,11 @@ namespace CampusSimulator
         public List<Journey> GetJourneys()
         {
             return journeys;
+        }
+
+        public void ToggleFreezeJourneys()
+        {
+            freezeJourneys = !freezeJourneys;
         }
 
         static int personcount = 0;
@@ -1575,6 +1582,10 @@ namespace CampusSimulator
                 {
                     jny.birdctrl.BirdSpeedFactor = 1.0f;
                 }
+                if (freezeJourneys)
+                {
+                    jny.birdctrl.BirdSpeedFactor = 0;
+                }
             }
         }
         int updateCount = 0;
@@ -1669,7 +1680,12 @@ namespace CampusSimulator
                     {
                         var pt = bgo.transform.position;
                         var rt = bgo.transform.localRotation.eulerAngles;
-                        Debug.Log($"ShadowSync to {pt:f2} rt:{rt:f2}");
+                        var par = bgo.transform.parent;
+                        if (par != null)
+                        {
+                            rt = par.transform.localRotation.eulerAngles;
+                        }
+                        //Debug.Log($"ShadowSync to {pt:f2} rt:{rt:f2}");
                         var vs = sman.mpman.GetViewerState();
                         vs.pos = pt;
                         vs.rot = rt;

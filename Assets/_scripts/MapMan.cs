@@ -1226,7 +1226,7 @@ namespace CampusSimulator
             modeSetCount.GetInitial(0);
 
             lod = levelOfDetail.GetInitial(lod);
-            Debug.Log($"mapman.GetSceneModeDependentInitialPersistentSettings levelOfDetail:{levelOfDetail.Get()}");
+            //Debug.Log($"mapman.GetSceneModeDependentInitialPersistentSettings levelOfDetail:{levelOfDetail.Get()}");
             npqk = numNodesPerQktile.GetInitial(npqk);
             address = inputAddress.GetInitial("");
             maplat = custom_maplat.GetInitial(maplat);// Greenwich

@@ -18,7 +18,8 @@ public class AboutPanel : MonoBehaviour
     Canvas aboutTextCanvas;
 
     UnityEngine.UI.Button closeButton;
-    UnityEngine.UI.Button copyClipboardButton;
+    UnityEngine.UI.Button infoCopyClipboardButton;
+    UnityEngine.UI.Button settingsCopyClipboardButton;
     UnityEngine.UI.Button deleteSettingsButton;
     UnityEngine.UI.Button deleteCachedMapsButton;
 
@@ -34,12 +35,14 @@ public class AboutPanel : MonoBehaviour
         uiman = sman.uiman;
         aboutTextCanvas = transform.Find("AboutTextCanvas").GetComponent<Canvas>();
         closeButton = transform.Find("CloseButton").gameObject.GetComponent<UnityEngine.UI.Button>();
-        copyClipboardButton = transform.Find("CopyClipboardButton").gameObject.GetComponent<UnityEngine.UI.Button>();
+        infoCopyClipboardButton = transform.Find("InfoCopyClipboardButton").gameObject.GetComponent<UnityEngine.UI.Button>();
+        settingsCopyClipboardButton = transform.Find("SettingsCopyClipboardButton").gameObject.GetComponent<UnityEngine.UI.Button>();
         deleteSettingsButton = transform.Find("DeleteSettingsButton").gameObject.GetComponent<UnityEngine.UI.Button>();
         deleteCachedMapsButton = transform.Find("DeleteCachedMapsButton").gameObject.GetComponent<UnityEngine.UI.Button>();
 
         closeButton.onClick.AddListener(delegate { uiman.ClosePanel(); });
-        copyClipboardButton.onClick.AddListener(delegate { ButtonClick(copyClipboardButton.name); });
+        infoCopyClipboardButton.onClick.AddListener(delegate { ButtonClick(infoCopyClipboardButton.name); });
+        settingsCopyClipboardButton.onClick.AddListener(delegate { ButtonClick(settingsCopyClipboardButton.name); });
         deleteSettingsButton.onClick.AddListener(delegate { ButtonClick(deleteSettingsButton.name); });
         deleteCachedMapsButton.onClick.AddListener(delegate { ButtonClick(deleteCachedMapsButton.name); });
     }
@@ -48,7 +51,7 @@ public class AboutPanel : MonoBehaviour
     {
         LinkObjectsAndComponents();
         sman.uiman.ttman.WireUpToolTip(closeButton.gameObject, "aboutpanel-closepanel", "Close Panel");
-        sman.uiman.ttman.WireUpToolTip(copyClipboardButton.gameObject, "aboutpanel-copyclipboard", "Copy text to clipboard");
+        sman.uiman.ttman.WireUpToolTip(infoCopyClipboardButton.gameObject, "aboutpanel-copyclipboard", "Copy text to clipboard");
         sman.uiman.ttman.WireUpToolTip(deleteSettingsButton.gameObject, "aboutpanel-deletesettings", "Delete all saved settings for this app\nDangerous - can lose work!!",isDangerous:true);
         sman.uiman.ttman.WireUpToolTip(deleteCachedMapsButton.gameObject, "aboutpanel-deletecachedmaps", "Delete all saved maps and elevations for this app\nDangerous - it takes time to load these!!", isDangerous: true);
     }
@@ -234,9 +237,16 @@ public class AboutPanel : MonoBehaviour
                     tbpcomp.CloseButton();
                     break;
                 }
-            case "CopyClipboardButton":
+            case "InfoCopyClipboardButton":
                 {
+                    Debug.Log("InfoCopyClipboard");
                     Aiskwk.Map.qut.CopyTextToClipboard(aboutTabText.text);
+                    break;
+                }
+            case "SettingsCopyClipboardButton":
+                {
+                    Debug.Log("SettingsCopyClipboard");
+                    Aiskwk.Map.qut.CopyTextToClipboard("settings");
                     break;
                 }
         }
@@ -346,6 +356,19 @@ public class AboutPanel : MonoBehaviour
             {
                 msg += "  enabled:" + Input.gyro.enabled;
             }
+
+            msg += $"\n\nDisplay information";
+            msg += $"\nScreen.width:{Screen.width} height:{Screen.height} dpi:{Screen.dpi} brightness:{Screen.brightness}";
+            var fsmode = Screen.fullScreenMode;
+            msg += $"\nScreen.fullScreen:{Screen.fullScreen} Screen.fullSScreenMode:{fsmode}";
+            var fsmodes = Enum.GetValues(typeof(FullScreenMode));
+            var fsmodestr = "";
+            foreach (var fs in fsmodes)
+            {
+                fsmodestr += " " + fs;
+            }
+
+            msg += $"\nThere are {fsmodes.Length} possible FullscreenModes:   {fsmodestr}";
 
             msg += $"\n\nDisplays:{Display.displays.Length}";
             for (int i = 0; i < Display.displays.Length; i++)

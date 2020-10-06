@@ -14,7 +14,6 @@ public class UiConfigPanel : MonoBehaviour
     Button applyButton;
     GameObject ottcontent;
     GameObject tbtcontent;
-    bool uiResourcesInited = false;
     DefaultControls.Resources uiResources;
 
     public void Init0()
@@ -24,7 +23,6 @@ public class UiConfigPanel : MonoBehaviour
         uiResources = new DefaultControls.Resources();
         uiResources.background = uiman.GetSprite("Background");
         uiResources.checkmark = uiman.GetSprite("Checkmark");
-        uiResourcesInited = true;
     }
 
     public void LinkObjectsAndComponents()
@@ -41,8 +39,6 @@ public class UiConfigPanel : MonoBehaviour
         applyButton.onClick.AddListener(delegate { ApplySettings(); });
         closeButton = transform.Find("CloseButton").gameObject.GetComponent<Button>();
         closeButton.onClick.AddListener(delegate { uiman.ClosePanel();  });
-
-
     }
     int togalloc = 0;
     Dictionary<string, Toggle> tbttogdict = null;
@@ -62,7 +58,7 @@ public class UiConfigPanel : MonoBehaviour
                 newTbtEnableString += kname;
             }
         }
-        sman.Lgg($"newTbtEnableString:{newTbtEnableString}", "orange");
+        //sman.Lgg($"newTbtEnableString:{newTbtEnableString}", "orange");
         uiman.tbtpan.tbpfiltlist = newTbtEnableString;
         uiman.tbtpan.DestroyButtons();
         uiman.tbtpan.CreateButtonsAnew(newTbtEnableString);
@@ -139,7 +135,7 @@ public class UiConfigPanel : MonoBehaviour
         layout.padding.right = 0;
         layout.padding.top = 0;
         layout.padding.bottom = 0;
-        layout.spacing = 8; 
+        layout.spacing = 12; 
 
 
         var contentsizefitter = content.GetComponent<ContentSizeFitter>();
@@ -169,20 +165,20 @@ public class UiConfigPanel : MonoBehaviour
             togcomp.interactable = true;
             toggo.name = $"Toggle{togalloc++} {curRootOpt} initially on:{ison}";
             var togtext = toggo.GetComponentInChildren<Text>();
+            var tooltip = uiman.optpan.GetToolTip(curRootOpt);
             if (togtext != null)
             {
-                togtext.text = curRootOpt;
-                togtext.fontSize = 18;// default 14 
+                togtext.text = $"{curRootOpt} - {tooltip}";
+                togtext.fontSize = 22;// default 14 
                 togtext.horizontalOverflow = HorizontalWrapMode.Overflow;
                 togtext.verticalOverflow = VerticalWrapMode.Overflow;
             }
             otttogdict[curRootOpt] = togcomp;
             togcomp.isOn = ison;
             toggo.transform.SetParent(ottcontent.transform, worldPositionStays: false);
-            var tt = uiman.optpan.GetToolTip(curRootOpt);
-            if (tt != "")
+            if (tooltip != "")
             {
-                uiman.ttman.WireUpToolTip(toggo, curRootOpt, tt);
+                uiman.ttman.WireUpToolTip(toggo, curRootOpt, tooltip);
             }
         }
     }
@@ -205,20 +201,20 @@ public class UiConfigPanel : MonoBehaviour
             togcomp.interactable = true;
             toggo.name = $"Toggle{togalloc++} {curRootOpt} initially on:{ison}";
             var togtext = toggo.GetComponentInChildren<Text>();
+            var tooltip = uiman.tbtpan.GetTbtClassToolTip(curRootOpt);
             if (togtext != null)
             {
-                togtext.text = curRootOpt;
-                togtext.fontSize = 18;// default 14 
+                togtext.text = $"{curRootOpt} - {tooltip}";
+                togtext.fontSize = 22;// default 14 
                 togtext.horizontalOverflow = HorizontalWrapMode.Overflow;
                 togtext.verticalOverflow = VerticalWrapMode.Overflow;
             }
             tbttogdict[curRootOpt] = togcomp;
             togcomp.isOn = ison;
             toggo.transform.SetParent(tbtcontent.transform, worldPositionStays: false);
-            var tt = uiman.tbtpan.GetTbtClassToolTip(curRootOpt);
-            if (tt != "")
+            if (tooltip != "")
             {
-                uiman.ttman.WireUpToolTip(toggo, curRootOpt, tt);
+                uiman.ttman.WireUpToolTip(toggo, curRootOpt, tooltip);
             }
         }
     }
