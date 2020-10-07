@@ -9,6 +9,7 @@ using CampusSimulator;
 using Microsoft.Win32;// for registry
 using UnityEngine.UIElements;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 
 public class AboutPanel : MonoBehaviour
 {
@@ -23,6 +24,7 @@ public class AboutPanel : MonoBehaviour
     UnityEngine.UI.Button settingsCopyClipboardButton;
     UnityEngine.UI.Button deleteSettingsButton;
     UnityEngine.UI.Button deleteCachedMapsButton;
+    UnityEngine.UI.Button deleteScenarioKeysButton;
 
     System.Diagnostics.PerformanceCounter cpuCounter;
     System.Diagnostics.PerformanceCounter ramCounter;
@@ -40,23 +42,23 @@ public class AboutPanel : MonoBehaviour
         settingsCopyClipboardButton = transform.Find("SettingsCopyClipboardButton").gameObject.GetComponent<UnityEngine.UI.Button>();
         deleteSettingsButton = transform.Find("DeleteSettingsButton").gameObject.GetComponent<UnityEngine.UI.Button>();
         deleteCachedMapsButton = transform.Find("DeleteCachedMapsButton").gameObject.GetComponent<UnityEngine.UI.Button>();
+        deleteScenarioKeysButton = transform.Find("DeleteScenarioKeysButton").gameObject.GetComponent<UnityEngine.UI.Button>();
 
         closeButton.onClick.AddListener(delegate { uiman.ClosePanel(); });
         infoCopyClipboardButton.onClick.AddListener(delegate { ButtonClick(infoCopyClipboardButton.name); });
         settingsCopyClipboardButton.onClick.AddListener(delegate { ButtonClick(settingsCopyClipboardButton.name); });
         deleteSettingsButton.onClick.AddListener(delegate { ButtonClick(deleteSettingsButton.name); });
         deleteCachedMapsButton.onClick.AddListener(delegate { ButtonClick(deleteCachedMapsButton.name); });
+        deleteScenarioKeysButton.onClick.AddListener(delegate { ButtonClick(deleteScenarioKeysButton.name); });
     }
 
 
     public Dictionary<string, (object,string,string)> GetRegistrySubKeys(string keyname)
     {
         var values = new Dictionary<string, (object, string, string)>();
-        //const string REGISTRY_ROOT = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Run\";
-        //Here I'm looking under LocalMachine. You can replace it with Registry.CurrentUser for current user...
         try
         {
-            using (RegistryKey rootKey = Registry.CurrentUser.OpenSubKey(keyname))
+            using (var rootKey = Registry.CurrentUser.OpenSubKey(keyname))
             {
                 if (rootKey != null)
                 {
@@ -70,6 +72,10 @@ public class AboutPanel : MonoBehaviour
                     }
                     rootKey.Close();
                 }
+                else
+                {
+                    Debug.LogError($"In GraphUtil Registry.CurrentUser.OpenSubKey(\"{keyname}\") returned null");
+                }
             }
         }
         catch (Exception ex)
@@ -77,6 +83,45 @@ public class AboutPanel : MonoBehaviour
             sman.LggError($"Error reading registry key:{keyname} - ex.msg:{ex.Message}");
         }
         return values;
+    }
+
+    public void DeleteKeysStartingWithFilterString(string keyname,string startStringFilter,bool actuallyDoDelete=false)
+    {
+        var values = new Dictionary<string, (object, string, string)>();
+        try
+        {
+            using (var rootKey = Registry.CurrentUser.OpenSubKey(keyname))
+            {
+                if (rootKey != null)
+                {
+                    string[] valueNames = rootKey.GetValueNames();
+                    foreach (string currSubKey in valueNames)
+                    {
+                        if (currSubKey.StartsWith(startStringFilter))
+                        {
+                            if (actuallyDoDelete)
+                            {
+                                rootKey.DeleteSubKey(currSubKey);
+                                sman.LggWarning($"Deleting subkey {currSubKey}");
+                            }
+                            else
+                            {
+                                sman.LggWarning($"Pretending to delete subkey {currSubKey}");
+                            }
+                        }
+                    }
+                    rootKey.Close();
+                }
+                else
+                {
+                    Debug.LogError($"In GraphUtil Registry.CurrentUser.OpenSubKey(\"{keyname}\") returned null");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            sman.LggError($"Error reading registry key:{keyname} - ex.msg:{ex.Message}");
+        }
     }
 
     public void Init0()
@@ -245,25 +290,93 @@ public class AboutPanel : MonoBehaviour
 
         Debug.Log("Initing AboutPanel done");
     }
-
-    public List<string> GetRegistry()
+    public bool RunningInEditor()
     {
-        var rv = new List<string>();
 #if UNITY_EDITOR
         bool iseditor = true;
 #else
         bool iseditor = false;
 #endif
-        var regkey = GraphAlgos.GraphUtil.GetUserPrefRegKey(iseditor);
-        rv.Add(regkey);
+        return iseditor;
+    }
+
+    public List<string> GetRegistryInfoAsStringList()
+    {
+        var rv = new List<string>();
+        var iseditor = RunningInEditor();
+        var fullregkey = GraphAlgos.GraphUtil.GetUserPrefRegKey(entirekey: true, editor: iseditor);
+        var regkey = GraphAlgos.GraphUtil.GetUserPrefRegKey(entirekey:false,editor:iseditor);
+        rv.Add(fullregkey);
         var dict = GetRegistrySubKeys(regkey);
-        foreach(var k in dict.Keys)
+        var s3 = "";
+        int dword;
+        foreach (var k in dict.Keys)
         {
-            var (o1, s2, s3) = dict[k];
-            var s = $"{k}:{s2}:{s3}";
+            object o1;
+            var s2 = "";
+            var s = "";
+            try
+            {
+                (o1, s2, _) = dict[k];
+                switch (s2)
+                {
+                    case "DWord":
+                        {
+                            dword = (int)o1;
+                            s3 = dword.ToString();
+                            break;
+                        }
+                    default:
+                        {
+                            var bar = o1 as byte[];
+                            var s3b = "";
+                            var s3s = "";
+                            if (bar != null)
+                            {
+                                int ngood = 0;
+                                foreach (var b in bar)
+                                {
+                                    char c = '.';
+                                    if (b >= 32)
+                                    {
+                                        c = (char)b;
+                                        ngood++;
+                                    }
+                                    s3b += $"{b:x2} ";
+                                    s3s += c;
+                                }
+                                var isProbablyString = ngood >= bar.Length - 1;
+                                if (isProbablyString)
+                                {
+                                    s3 = s3s;
+                                    s2 = "NullTerminatedString";
+                                }
+                                else
+                                {
+                                    s3 = s3b;
+                                    s2 = "ByteArray";
+                                }
+                            }
+                            break;
+                        }
+                }
+                s = $"{k}:{s2}:{s3}";
+            }
+            catch (Exception ex)
+            {
+                s = $"{k}:{s2}:{ex.Message}";
+            }
             rv.Add(s);
         }
         return rv;
+    }
+    void DeleteScenarioKeys(SceneSelE scnene)
+    {
+        var startSTringFilter = scnene.ToString();
+        var iseditor = RunningInEditor();
+        var regkey = GraphAlgos.GraphUtil.GetUserPrefRegKey(entirekey: false, editor: iseditor);
+
+        DeleteKeysStartingWithFilterString(regkey, startSTringFilter,actuallyDoDelete:true);
     }
 
     void ButtonClick(string buttonname)
@@ -273,14 +386,38 @@ public class AboutPanel : MonoBehaviour
         {
             case "DeleteSettingsButton":
                 {
-                    Debug.LogWarning("PlayerPref Settings Deleted");
-                    PlayerPrefs.DeleteAll();
+#if UNITY_EDITOR
+                    var msg = $"Delete ALL the settings for this Unity Application ?";
+                    var ok = UnityEditor.EditorUtility.DisplayDialog("Deleting PlayerPref Settings", msg, "Ok to delete", "Cancel");
+#else
+                    var ok = true;
+#endif
+                    if (ok)
+                    {
+                        PlayerPrefs.DeleteAll();
+                        sman.LggWarning($"PlayerPref Settings Deleted");
+                    }
                     break;
                 }
             case "DeleteCachedMapsButton":
                 {
-                    Debug.LogWarning("Deleteing Cached Maps");
+                    Debug.LogWarning($"Deleteing Cached Maps");
                     sman.mpman.DeleteCachedMaps();
+                    break;
+                }
+            case "DeleteScenarioKeysButton":
+                {
+#if UNITY_EDITOR
+                    var msg = $"Delete scenario keys for {sman.curscene} ?";
+                    var ok = UnityEditor.EditorUtility.DisplayDialog("Deleting scenario keys", msg, "Ok to delete", "Cancel");
+#else
+                    var ok = true;
+#endif
+                    if (ok)
+                    {
+                        DeleteScenarioKeys(sman.curscene);
+                        sman.LggWarning($"Deleteing scenario keys for {sman.curscene}");
+                    }
                     break;
                 }
             case "CloseButton":
@@ -291,14 +428,15 @@ public class AboutPanel : MonoBehaviour
                 }
             case "InfoCopyClipboardButton":
                 {
-                    Debug.Log("InfoCopyClipboard");
+                    Debug.Log($"InfoCopyClipboard");
                     Aiskwk.Map.qut.CopyTextToClipboard(aboutTabText.text);
                     break;
                 }
             case "SettingsCopyClipboardButton":
                 {
-                    Debug.Log("SettingsCopyClipboard");
-                    var lsl = GetRegistry();
+                    Debug.Log($"SettingsCopyClipboard");
+                    var lsl = GetRegistryInfoAsStringList();
+                    Debug.Log($"Registry log elements:{lsl.Count}");
                     Aiskwk.Map.qut.CopyTextToClipboard(lsl);
                     break;
                 }
@@ -457,7 +595,7 @@ public class AboutPanel : MonoBehaviour
             msg += $"\n\nSystemInfo.maxTextureSize:{SystemInfo.maxTextureSize}";
 
             var (winname, username, userdomname) = GetSecurityPrincipalNames();
-            msg += $"\n\\nnWindows Identity:{winname}";
+            msg += $"\n\nWindows Identity:{winname}";
             msg += $"\nEnvironment.UserName:{username} DomainName:{userdomname}";
 
 

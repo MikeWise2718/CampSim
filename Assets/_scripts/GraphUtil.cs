@@ -20,19 +20,22 @@ namespace GraphAlgos
 
 
 
-        public static string GetUserPrefRegKey(bool editor=false)
+        public static string GetUserPrefRegKey(bool entirekey=false,bool editor=false,string progname="campusim")
         {
-            var progname = "campusim";
-            var root = "Computer\\HKEY_CURRENT_USER\\Software\\DefaultCompany";
+            //static string sedregkey = "Computer\\HKEY_CURRENT_USER\\Software\\Unity\\UnityEditor\\DefaultCompany\\campusim";
+            //static string splregkey = "Computer\\HKEY_CURRENT_USER\\Software\\DefaultCompany\\campusim";
+            var seckeyname = "Software\\DefaultCompany";
             if (editor)
             {
-                root = "Computer\\HKEY_CURRENT_USER\\Software\\Unity\\UnityEditor\\DefaultCompany";
+                seckeyname = "Software\\Unity\\UnityEditor\\DefaultCompany";
             }
-            var rv = $"{root}\\{progname}";
+            var rv = $"{seckeyname}\\{progname}";
+            if (entirekey)
+            {
+                rv = $"Computer\\HKEY_CURRENT_USER\\{rv}";
+            }
             return rv;
         }
-        //static string sedregkey = "Computer\\HKEY_CURRENT_USER\\Software\\Unity\\UnityEditor\\DefaultCompany\\campusim";
-        //static string splregkey = "Computer\\HKEY_CURRENT_USER\\Software\\DefaultCompany\\campusim";
 
         private static void getsysdata()
         {
