@@ -1904,40 +1904,45 @@ namespace CampusSimulator
                 sw1.Stop();
                 Debug.Log($"Refresh took {sw1.ElapSecs()} secs");
             }
-            KeyProcessing();
+
+            if (!uiman.optpan.OptionsPanelOpen())
+            {
+                KeyProcessing();
+
+                if (canClickOnObjects)
+                {
+                    var vcam = Viewer.GetViewerCamera();
+                    if (vcam != null && Input.GetMouseButtonDown(0))
+                    {
+                        Debug.Log("Left Mouse was pressed");
+
+
+                        Ray ray = vcam.ScreenPointToRay(Input.mousePosition);
+                        RaycastHit hit;
+                        if (Physics.Raycast(ray, out hit))
+                        {
+                            var go = hit.collider.gameObject;
+                            var hitname = go.name;
+                            if (go.transform.parent != null)
+                            {
+                                var pname = go.transform.parent.gameObject.name;
+                                hitname = $"{pname}/{hitname}";
+                                jnman.SetShadowJourney(hitname);
+                            }
+                            lasthitname = hitname;
+                            Debug.Log($"Left mouse button hit {hitname}");
+                            //var hitname = go.name.ToLower();
+                        }
+                        else
+                        {
+                            Debug.Log("Nothing was hit");
+                        }
+                    }
+
+                }
+            }
             updateCount++;
 
-            if (canClickOnObjects)
-            {
-                var vcam = Viewer.GetViewerCamera();
-                if (vcam!=null && Input.GetMouseButtonDown(0))
-                {
-                    Debug.Log("Left Mouse was pressed");
-
-
-                    Ray ray = vcam.ScreenPointToRay(Input.mousePosition);
-                    RaycastHit hit;
-                    if (Physics.Raycast(ray, out hit))
-                    {
-                        var go = hit.collider.gameObject;
-                        var hitname = go.name;
-                        if (go.transform.parent != null)
-                        {
-                            var pname = go.transform.parent.gameObject.name;
-                            hitname = $"{pname}/{hitname}";
-                            jnman.SetShadowJourney(hitname);
-                        }
-                        lasthitname = hitname;
-                        Debug.Log($"Left mouse button hit {hitname}");
-                        //var hitname = go.name.ToLower();
-                    }
-                    else
-                    {
-                        Debug.Log("Nothing was hit");
-                    }
-                }
-
-            }
         }
 
         public void IdentitySystemAndUser()
@@ -1967,6 +1972,12 @@ namespace CampusSimulator
 
         void OnScene(SceneView scene)
         {
+            // Editor only stuff
+
+            if (uiman.optpan.OptionsPanelOpen())
+            {
+                return;
+            }
             Event e = Event.current;
             if ((e.type == EventType.KeyDown) && (e.keyCode == KeyCode.B) && Event.current.modifiers == EventModifiers.Control)
             {

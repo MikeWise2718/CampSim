@@ -10,6 +10,7 @@ using Microsoft.Win32;// for registry
 using UnityEngine.UIElements;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
+using System.CodeDom;
 
 public class AboutPanel : MonoBehaviour
 {
@@ -25,6 +26,9 @@ public class AboutPanel : MonoBehaviour
     UnityEngine.UI.Button deleteSettingsButton;
     UnityEngine.UI.Button deleteCachedMapsButton;
     UnityEngine.UI.Button deleteScenarioKeysButton;
+    UnityEngine.UI.Text statusMessageText;
+    UnityEngine.UI.Text currentScenarioText;
+    UnityEngine.UI.Toggle enableDangerToggle;
 
     System.Diagnostics.PerformanceCounter cpuCounter;
     System.Diagnostics.PerformanceCounter ramCounter;
@@ -43,6 +47,9 @@ public class AboutPanel : MonoBehaviour
         deleteSettingsButton = transform.Find("DeleteSettingsButton").gameObject.GetComponent<UnityEngine.UI.Button>();
         deleteCachedMapsButton = transform.Find("DeleteCachedMapsButton").gameObject.GetComponent<UnityEngine.UI.Button>();
         deleteScenarioKeysButton = transform.Find("DeleteScenarioKeysButton").gameObject.GetComponent<UnityEngine.UI.Button>();
+        statusMessageText = transform.Find("StatusMessageText").gameObject.GetComponent<UnityEngine.UI.Text>();
+        currentScenarioText = transform.Find("CurrentScenarioText").gameObject.GetComponent<UnityEngine.UI.Text>();
+        enableDangerToggle = transform.Find("EnableDangerToggle").gameObject.GetComponent<UnityEngine.UI.Toggle>();
 
         closeButton.onClick.AddListener(delegate { uiman.ClosePanel(); });
         infoCopyClipboardButton.onClick.AddListener(delegate { ButtonClick(infoCopyClipboardButton.name); });
@@ -85,9 +92,12 @@ public class AboutPanel : MonoBehaviour
         return values;
     }
 
-    public void DeleteKeysStartingWithFilterString(string keyname,string startStringFilter,bool actuallyDoDelete=false)
+    public (bool,string) DeleteKeysStartingWithFilterString(string keyname,string startStringFilter,bool actuallyDoDelete=false)
     {
+        var rmsg = "";
+        var emsg = "";
         var ndel = 0;
+        var error = false;
         var values = new Dictionary<string, (object, string, string)>();
         try
         {
@@ -116,15 +126,30 @@ public class AboutPanel : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogError($"In GraphUtil Registry.CurrentUser.OpenSubKey(\"{keyname}\") returned null");
+                    emsg = $"In GraphUtil Registry.CurrentUser.OpenSubKey(\"{keyname}\") returned null";
+                    error = true;
                 }
             }
         }
         catch (Exception ex)
         {
-            sman.LggError($"Error reading registry key:{keyname} - ex.msg:{ex.Message}");
+            emsg = $"Error reading registry key:{keyname} - ex.msg:{ex.Message}";
+            sman.LggError(emsg);
+            error = true;
         }
-        sman.LggWarning($"Deleted {ndel} keys for {startStringFilter}");
+        if (error)
+        {
+            rmsg = emsg;
+        }
+        else if (actuallyDoDelete)
+        {
+            rmsg = $"Deleted {ndel} values for scenariop {startStringFilter}";
+        }
+        else
+        {
+            rmsg = $"Pretended to deleted {ndel} values for scenariop {startStringFilter}";
+        }
+        return (!error,rmsg);
     }
 
     public void Init0()
@@ -158,117 +183,7 @@ public class AboutPanel : MonoBehaviour
     /// <summary>
     /// Find out about which monitors are made available by the system.
     /// </summary>
-    public abstract class WindowsMultiDisplayTools
-    {
-        #region Multi-Display Detection
-        private delegate bool MonitorEnumDelegate(IntPtr hMonitor, IntPtr hdcMonitor, ref Rect lprcMonitor, IntPtr dwData);
-
-        [DllImport("user32.dll")]
-        private static extern bool EnumDisplayMonitors(IntPtr hdc, IntPtr lprcClip, MonitorEnumDelegate lpfnEnum, IntPtr dwData);
-
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        private struct MonitorInfo
-        {
-            public uint Size;
-            public RectNative Monitor;
-            public RectNative WorkArea;
-            public uint Flags;
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
-            public string DeviceName;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        private struct RectNative
-        {
-            public int Left;
-            public int Top;
-            public int Right;
-            public int Bottom;
-        }
-
-        [System.Runtime.InteropServices.DllImport("user32.dll", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        private static extern bool GetMonitorInfo(IntPtr hmon, ref MonitorInfo monitorinfo);
-        #endregion
-
-        /// <summary>
-        /// The struct that contains the display information
-        /// </summary>
-        public class DisplayInfo
-        {
-            public string Availability { get; set; }
-            public int ScreenHeight { get; set; }
-            public int ScreenWidth { get; set; }
-            public Rect MonitorArea { get; set; }
-            public int MonitorTop { get; set; }
-            public int MonitorLeft { get; set; }
-            public string DeviceName { get; set; }
-            public string FriendlyName { get; set; }
-            public string VendorsName { get; set; }
-        }
-
-        /// <summary>
-        /// Returns the number of Displays using the Win32 functions.
-        /// </summary>
-        /// <returns>A collection of DisplayInfo with information about each monitor.</returns>
-        public static List<DisplayInfo> QueryDisplays()
-        {
-            var Monitors = new List<DisplayInfo>();
-
-            // Get the all Display Monitors.
-            EnumDisplayMonitors(IntPtr.Zero, IntPtr.Zero,
-                delegate (IntPtr hMonitor, IntPtr hdcMonitor, ref Rect lprcMonitor, IntPtr dwData)
-                {
-                    MonitorInfo monitor = new MonitorInfo();
-                    monitor.Size = (uint)Marshal.SizeOf(monitor);
-                    monitor.DeviceName = null;
-                    bool Success = GetMonitorInfo(hMonitor, ref monitor);
-                    if (Success)
-                    {
-                        DisplayInfo displayinfo = new DisplayInfo();
-                        displayinfo.ScreenWidth = monitor.Monitor.Right - monitor.Monitor.Left;
-                        displayinfo.ScreenHeight = monitor.Monitor.Bottom - monitor.Monitor.Top;
-                        displayinfo.MonitorArea = new Rect(monitor.Monitor.Left, monitor.Monitor.Top, displayinfo.ScreenWidth, displayinfo.ScreenHeight);
-                        displayinfo.MonitorTop = monitor.Monitor.Top;
-                        displayinfo.MonitorLeft = monitor.Monitor.Left;
-                        displayinfo.Availability = monitor.Flags.ToString();
-                        displayinfo.DeviceName = monitor.DeviceName;
-                        displayinfo.FriendlyName = QueryDisplaysFriendlyName(monitor.DeviceName);
-                        displayinfo.VendorsName = QueryDisplaysVendorName(monitor.DeviceName);
-                        Monitors.Add(displayinfo);
-                    }
-                    return true;
-                }, IntPtr.Zero);
-            return Monitors;
-        }
-        /// <summary>
-        /// Returns the Friendly Name of a target Display using the Win32 functions.
-        /// </summary>
-        /// <returns>A string of with FriendlyName from DeviceName.</returns>
-        private static string QueryDisplaysFriendlyName(string DeviceName)
-        {
-            string FriendlyName = null;
-
-            // Get Friendly Name for the Device code goes here.
-            FriendlyName = "Friendly Name";
-
-            return FriendlyName;
-        }
-        /// <summary>
-        /// Returns the Vendors Name of a target Display using the Win32 functions.
-        /// </summary>
-        /// <returns>A string of with VendorName from DeviceName.</returns>
-        private static string QueryDisplaysVendorName(string DeviceName)
-        {
-            string VendorName = null;
-
-            // Get Vendors Name for the Device code goes here.
-            VendorName = "Vendor Name";
-
-
-            return VendorName;
-        }
-    }
-
+  
 
     void Init()
     {
@@ -291,8 +206,28 @@ public class AboutPanel : MonoBehaviour
             ramCounter = null;
         }
 
+        currentScenarioText.text = $"{sman.curscene}";
+        enableDangerToggle.isOn = false;
+        SetStatusMessage("", error: false);
+
+
         Debug.Log("Initing AboutPanel done");
     }
+
+    public void SetStatusMessage(string message, bool error)
+    {
+        statusMessageText.text = message;
+        if (error)
+        {
+            statusMessageText.color = Color.red;
+        }
+        else
+        {
+            statusMessageText.color = Color.black;
+        }
+    }
+
+
     public bool RunningInEditor()
     {
 #if UNITY_EDITOR
@@ -303,10 +238,12 @@ public class AboutPanel : MonoBehaviour
         return iseditor;
     }
 
-    public List<string> GetRegistryInfoAsStringList()
+    public (bool,string,List<string>) GetRegistryInfoAsStringList()
     {
-        var nkeys = 0;
+        var ok = true;
+        var rmsg = "";
         var rv = new List<string>();
+        var nkeys = 0;
         var iseditor = RunningInEditor();
         var fullregkey = GraphAlgos.GraphUtil.GetUserPrefRegKey(entirekey: true, editor: iseditor);
         var regkey = GraphAlgos.GraphUtil.GetUserPrefRegKey(entirekey:false,editor:iseditor);
@@ -373,71 +310,84 @@ public class AboutPanel : MonoBehaviour
             }
             catch (Exception ex)
             {
+                ok = false;;
+                rmsg = ex.Message;
                 s = $"{nkeys}:{k}:{s2}:{ex.Message}";
             }
             rv.Add(s);
         }
-        var msg = $"Dumped {nkeys} keys";
+        var msg = $"Dumped {nkeys} registry values";
         rv.Add(msg);
-        sman.Lgg(msg, "orange");
-        return rv;
+        if (ok)
+        {
+            rmsg = $"Retrived {nkeys} registry values";
+        }
+        return (ok,rmsg,rv);
     }
-    void DeleteScenarioKeys(SceneSelE scnene)
+    (bool,string) DeleteScenarioKeys(SceneSelE scnene)
     {
         var startSTringFilter = scnene.ToString();
         var iseditor = RunningInEditor();
         var regkey = GraphAlgos.GraphUtil.GetUserPrefRegKey(entirekey: false, editor: iseditor);
 
-        DeleteKeysStartingWithFilterString(regkey, startSTringFilter,actuallyDoDelete:true);
+        var (ok,rv) = DeleteKeysStartingWithFilterString(regkey, startSTringFilter,actuallyDoDelete:true);
+        return (ok,rv);
     }
 
     void CopyRegToClipboard()
     {
-        Debug.Log($"SettingsCopyClipboard");
-        var lsl = GetRegistryInfoAsStringList();
-        Debug.Log($"Registry log elements:{lsl.Count}");
+        var (ok,rmsg,lsl) = GetRegistryInfoAsStringList();
         Aiskwk.Map.qut.CopyTextToClipboard(lsl);
+        SetStatusMessage(rmsg, !ok);
     }
 
     void ButtonClick(string buttonname)
     {
         Debug.Log($"{buttonname} clicked:" + Time.time);
+        var dangerEnabled = enableDangerToggle.isOn;
         switch (buttonname)
         {
             case "DeleteSettingsButton":
                 {
-#if UNITY_EDITOR
-                    var msg = $"Delete ALL the settings for this Unity Application ?";
-                    var ok = UnityEditor.EditorUtility.DisplayDialog("Deleting PlayerPref Settings", msg, "Ok to delete", "Cancel");
-#else
-                    var ok = true;
-#endif
-                    if (ok)
+                    if (dangerEnabled)
                     {
                         PlayerPrefs.DeleteAll();
-                        sman.LggWarning($"PlayerPref Settings Deleted");
+                        var msg = $"PlayerPref Settings Deleted";
+                        SetStatusMessage(msg, error: false);
+                    }
+                    else
+                    {
+                        var msg = $"Danger must be enabled to delete all settings";
+                        SetStatusMessage(msg, error: true);
                     }
                     break;
                 }
             case "DeleteCachedMapsButton":
                 {
-                    Debug.LogWarning($"Deleteing Cached Maps");
-                    sman.mpman.DeleteCachedMaps();
+                    if (dangerEnabled)
+                    {
+                        sman.mpman.DeleteCachedMaps();
+                        var msg = $"Cached Maps Deleted";
+                        SetStatusMessage(msg, error: false);
+                    }
+                    else
+                    {
+                        var msg = $"Danger must be enabled to delete cached maps";
+                        SetStatusMessage(msg, error: true);
+                    }
                     break;
                 }
             case "DeleteScenarioKeysButton":
                 {
-#if UNITY_EDITOR
-                    var msg = $"Delete scenario keys for {sman.curscene} ?";
-                    var ok = UnityEditor.EditorUtility.DisplayDialog("Deleting scenario keys", msg, "Ok to delete", "Cancel");
-#else
-                    var ok = true;
-#endif
-                    if (ok)
+                    if (dangerEnabled)
                     {
-                        DeleteScenarioKeys(sman.curscene);
-                        CopyRegToClipboard();
-                        sman.LggWarning($"Deleteing scenario keys for {sman.curscene}");
+                        var (ok,msg) = DeleteScenarioKeys(sman.curscene);
+                        SetStatusMessage(msg,error:!ok);
+                    }
+                    else
+                    {
+                        var msg = $"Danger must be enabled to delete scenario keys for {sman.curscene}";
+                        SetStatusMessage(msg, error:true);
                     }
                     break;
                 }
@@ -451,6 +401,8 @@ public class AboutPanel : MonoBehaviour
                 {
                     Debug.Log($"InfoCopyClipboard");
                     Aiskwk.Map.qut.CopyTextToClipboard(aboutTabText.text);
+                    var msg = $"Copyied sysinfo to clipboard (length:{aboutTabText.text.Length})";
+                    SetStatusMessage(msg, error: false);
                     break;
                 }
             case "SettingsCopyClipboardButton":

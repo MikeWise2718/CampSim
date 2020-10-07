@@ -78,6 +78,8 @@ public class OptionsPanel : MonoBehaviour
         }
     }
 
+
+
     public enum TabState { Visuals, MapSet, FireFly, Frames, Buildings, Osm, General, Ui, Log, Help, About }
     TabState currentTabState;
 
@@ -149,6 +151,22 @@ public class OptionsPanel : MonoBehaviour
 
         inited = true;
     }
+
+    public bool OptionsPanelOpen()
+    {
+        return gameObject.activeSelf;
+    }
+
+    public void OpenOptionsPanel()
+    {
+        gameObject.SetActive(true);
+    }
+
+    public void CloseOptionsPanel()
+    {
+        gameObject.SetActive(false);
+    }
+
 
     public void SetProcs(TabState ts, Initer initer, SetAndSaver setAndSaver)
     {
