@@ -1642,9 +1642,10 @@ namespace CampusSimulator
         #endregion SceneOptions
         void Awake()
         {
-            Lgg("SceneMan.|Awake| called", "darkblue","white" );
-            Debug.Log($"Monitors connected:{Display.displays.Length}");
             IdentitySystemAndUser();
+            var ndsp = Display.displays.Length;
+            var msg = $"SceneMan.|Awake| called displayed connected:{ndsp} hostname:{hostname}";
+            Lgg(msg,"darkblue","white" );
             InitPhase0();
         }
 
@@ -1941,8 +1942,8 @@ namespace CampusSimulator
 
         public void IdentitySystemAndUser()
         {
-            string hostName = System.Net.Dns.GetHostName().ToLower();
-            if (hostName == "absol")
+            hostname = System.Net.Dns.GetHostName().ToLower();
+            if (hostname == "absol")
             {
                 bemike = true;
             }

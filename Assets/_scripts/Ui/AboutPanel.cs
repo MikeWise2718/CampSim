@@ -87,26 +87,28 @@ public class AboutPanel : MonoBehaviour
 
     public void DeleteKeysStartingWithFilterString(string keyname,string startStringFilter,bool actuallyDoDelete=false)
     {
+        var ndel = 0;
         var values = new Dictionary<string, (object, string, string)>();
         try
         {
-            using (var rootKey = Registry.CurrentUser.OpenSubKey(keyname))
+            using (var rootKey = Registry.CurrentUser.OpenSubKey(keyname,writable:true))
             {
                 if (rootKey != null)
                 {
                     string[] valueNames = rootKey.GetValueNames();
-                    foreach (string currSubKey in valueNames)
+                    foreach (string curValue in valueNames)
                     {
-                        if (currSubKey.StartsWith(startStringFilter))
+                        if (curValue.StartsWith(startStringFilter))
                         {
                             if (actuallyDoDelete)
                             {
-                                rootKey.DeleteSubKey(currSubKey);
-                                sman.LggWarning($"Deleting subkey {currSubKey}");
+                                rootKey.DeleteValue(curValue);
+                                ndel++;
+                                sman.LggWarning($"{ndel} Deleting value {curValue}");
                             }
                             else
                             {
-                                sman.LggWarning($"Pretending to delete subkey {currSubKey}");
+                                sman.LggWarning($"Pretending to delete value {curValue}");
                             }
                         }
                     }
@@ -122,6 +124,7 @@ public class AboutPanel : MonoBehaviour
         {
             sman.LggError($"Error reading registry key:{keyname} - ex.msg:{ex.Message}");
         }
+        sman.LggWarning($"Deleted {ndel} keys for {startStringFilter}");
     }
 
     public void Init0()
@@ -302,16 +305,22 @@ public class AboutPanel : MonoBehaviour
 
     public List<string> GetRegistryInfoAsStringList()
     {
+        var nkeys = 0;
         var rv = new List<string>();
         var iseditor = RunningInEditor();
         var fullregkey = GraphAlgos.GraphUtil.GetUserPrefRegKey(entirekey: true, editor: iseditor);
         var regkey = GraphAlgos.GraphUtil.GetUserPrefRegKey(entirekey:false,editor:iseditor);
         rv.Add(fullregkey);
+        var nowtime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff UTC zz");
+        var sysinfo = $"system:{sman.hostname} time: {nowtime}";
+        rv.Add(sysinfo);
+        rv.Add("Application Registry Dump:");
         var dict = GetRegistrySubKeys(regkey);
         var s3 = "";
         int dword;
         foreach (var k in dict.Keys)
         {
+            nkeys++;
             object o1;
             var s2 = "";
             var s = "";
@@ -360,14 +369,17 @@ public class AboutPanel : MonoBehaviour
                             break;
                         }
                 }
-                s = $"{k}:{s2}:{s3}";
+                s = $"{nkeys}:{k}:{s2}:{s3}";
             }
             catch (Exception ex)
             {
-                s = $"{k}:{s2}:{ex.Message}";
+                s = $"{nkeys}:{k}:{s2}:{ex.Message}";
             }
             rv.Add(s);
         }
+        var msg = $"Dumped {nkeys} keys";
+        rv.Add(msg);
+        sman.Lgg(msg, "orange");
         return rv;
     }
     void DeleteScenarioKeys(SceneSelE scnene)
@@ -377,6 +389,14 @@ public class AboutPanel : MonoBehaviour
         var regkey = GraphAlgos.GraphUtil.GetUserPrefRegKey(entirekey: false, editor: iseditor);
 
         DeleteKeysStartingWithFilterString(regkey, startSTringFilter,actuallyDoDelete:true);
+    }
+
+    void CopyRegToClipboard()
+    {
+        Debug.Log($"SettingsCopyClipboard");
+        var lsl = GetRegistryInfoAsStringList();
+        Debug.Log($"Registry log elements:{lsl.Count}");
+        Aiskwk.Map.qut.CopyTextToClipboard(lsl);
     }
 
     void ButtonClick(string buttonname)
@@ -416,6 +436,7 @@ public class AboutPanel : MonoBehaviour
                     if (ok)
                     {
                         DeleteScenarioKeys(sman.curscene);
+                        CopyRegToClipboard();
                         sman.LggWarning($"Deleteing scenario keys for {sman.curscene}");
                     }
                     break;
@@ -434,10 +455,7 @@ public class AboutPanel : MonoBehaviour
                 }
             case "SettingsCopyClipboardButton":
                 {
-                    Debug.Log($"SettingsCopyClipboard");
-                    var lsl = GetRegistryInfoAsStringList();
-                    Debug.Log($"Registry log elements:{lsl.Count}");
-                    Aiskwk.Map.qut.CopyTextToClipboard(lsl);
+                    CopyRegToClipboard();
                     break;
                 }
         }
