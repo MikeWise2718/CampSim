@@ -487,7 +487,7 @@ namespace CampusSimulator
             pgo.transform.SetParent(parent.transform, worldPositionStays: false);
             var ska = 0.5f;
             var oline = bs.GetOutline();
-            var clr = "green";
+            var baseclr = "green";
             for (int i = 0; i < oline.Count; i++)
             {
                 var sph = GameObject.CreatePrimitive(PrimitiveType.Sphere);
@@ -506,7 +506,7 @@ namespace CampusSimulator
                 var spi = sph.AddComponent<Aiskwk.Map.QsphInfo>();
                 spi.latLng = new Aiskwk.Map.LatLng(lat, lng);
                 spi.mapPoint = null;
-                Aiskwk.Map.qut.SetColorOfGo(sph, clr);
+                Aiskwk.Map.qut.SetColorOfGo(sph, baseclr);
             }
         }
 
@@ -560,6 +560,19 @@ namespace CampusSimulator
                 rv += alt;
             }
             return rv;
+        }
+        int levels = 1;
+        public List<string> floorHeights = null;
+        public void UpdateFloorHeightArray()
+        {
+            floorHeights = new List<string>();
+            for(int i=0; i<levels;i++)
+            {
+                var a1 = GetFloorAltitude(i, includeAltitude: false);
+                var a2 = GetFloorAltitude(i, includeAltitude: true);
+                var flrec = $"{i}   {a1:f1}   {a2:f1}";
+                floorHeights.Add(flrec);
+            }
         }
 
 

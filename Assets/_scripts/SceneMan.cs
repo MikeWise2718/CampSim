@@ -454,7 +454,7 @@ namespace CampusSimulator
                     lcman.ModelBuildFinal();  // realize latelinks and heights
                     mpman.ModelBuildFinal();
 
-                    bdman.ModelBuildPostLinkCloud();// building details that need nodes and links - i.e destrooms are derived from nodes
+                    bdman.ModelBuildPostLinkCloud();// building details that need nodes and links - i.e destrooms are derived from nodes - floor heights are also adjusted!
                     gaman.ModelBuildPostLinkCloud();// garage details that need nodes and links
                     drman.ModelBuildPostLinkCloud();// dronman details that need nodes and links
 
@@ -1974,10 +1974,6 @@ namespace CampusSimulator
         {
             // Editor only stuff
 
-            if (uiman.optpan.OptionsPanelOpen())
-            {
-                return;
-            }
             Event e = Event.current;
             if ((e.type == EventType.KeyDown) && (e.keyCode == KeyCode.B) && Event.current.modifiers == EventModifiers.Control)
             {
@@ -2020,7 +2016,7 @@ namespace CampusSimulator
                     }
                     if (hitname.StartsWith("allfreealarm"))
                     {
-                        Debug.Log("hit:" + go.name);
+                        //Debug.Log("hit:" + go.name);
                         var alarm = go.GetComponent<BldEvacAlarm>();
                         bool justone = e.control;
                         bool startstream = e.shift;

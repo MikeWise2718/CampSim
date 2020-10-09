@@ -310,24 +310,6 @@ namespace CampusSimulator
             return rv;
         }
 
-        bool IsFragable(LcLink link)
-        {
-            var rv = true;
-            if (link.usetype== LinkUse.droneway)
-            {
-                rv = false;
-            }
-            else if (link.usetype == LinkUse.stairs)
-            {
-                rv = false;
-            }
-            else if (link.node1.indoor && link.node2.indoor)
-            {
-                rv = false;
-            }
-            return rv;
-        }
-
         bool CheckCapUseVisibility(LcNode node)
         {
             var rv = true;
@@ -341,7 +323,6 @@ namespace CampusSimulator
             }
             return rv;
         }
-
 
 
         public bool CanGetHeights()
@@ -489,7 +470,7 @@ namespace CampusSimulator
                 foreach (var lnk in links)
                 {
                     if (!CheckCapUseVisibility(lnk)) continue;
-                    var dofrag = IsFragable(lnk);
+                    var dofrag = lnk.IsFragable();
                     var clrname = linkcolor(lnk);
                     var linkrad = linkradius(lnk);
                     var linkfrm = linkform(lnk);

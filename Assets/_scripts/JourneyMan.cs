@@ -176,6 +176,10 @@ namespace CampusSimulator
         public void ToggleFreezeJourneys()
         {
             freezeJourneys = !freezeJourneys;
+            foreach(var jny in journeys)
+            {
+                jny.SetFreeze(freezeJourneys);
+            }
         }
 
         static int personcount = 0;

@@ -377,7 +377,11 @@ namespace CampusSimulator
         }
         public void StartAnimation()
         {
-
+            SetAnimationScript();
+        }
+        public void StopAnimation()
+        {
+            ClearAimationScript();
         }
         public void AdjustBirdHeight(float factor)
         {

@@ -154,17 +154,27 @@ public class OptionsPanel : MonoBehaviour
 
     public bool OptionsPanelOpen()
     {
+        if (gameObject==null)
+        {
+            return false;
+        }
         return gameObject.activeSelf;
     }
 
     public void OpenOptionsPanel()
     {
-        gameObject.SetActive(true);
+        if (gameObject != null)
+        {
+            gameObject.SetActive(true);
+        }
     }
 
     public void CloseOptionsPanel()
     {
-        gameObject.SetActive(false);
+        if (gameObject != null)
+        {
+            gameObject.SetActive(false);
+        }
     }
 
 

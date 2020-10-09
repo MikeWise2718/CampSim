@@ -172,6 +172,20 @@ namespace CampusSimulator
                 sm.Vacate();
             }
         }
+        public void SetFreeze(bool freezeValue)
+        {
+            if (birdctrl != null)
+            {
+                if (freezeValue)
+                {
+                    birdctrl.StartAnimation();
+                }
+                else
+                {
+                    birdctrl.StopAnimation();
+                }
+            }
+        }
         public void NextLeg()
         {
             StartLeg(legindex + 1);

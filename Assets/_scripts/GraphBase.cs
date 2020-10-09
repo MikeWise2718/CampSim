@@ -278,6 +278,24 @@ namespace GraphAlgos
             len = Vector3.Distance(node1.pt, node2.pt);
             LinkLink();
         }
+
+        public bool IsFragable()
+        {
+            var rv = true;
+            if (usetype == LinkUse.droneway)
+            {
+                rv = false;
+            }
+            else if (usetype == LinkUse.stairs)
+            {
+                rv = false;
+            }
+            else if (node1.indoor && node2.indoor)
+            {
+                rv = false;
+            }
+            return rv;
+        }
         public void SetNode1Spec(string spec)
         {
             this.node1spec = spec;

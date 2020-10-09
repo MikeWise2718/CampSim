@@ -442,6 +442,12 @@ namespace CampusSimulator
         public void UpdateFloorHeights()
         {
             var sw = new Aiskwk.Map.StopWatch();
+            foreach(var bldname in bldnames)
+            {
+                var bld = GetBuilding(bldname);
+                bld.UpdateFloorHeightArray();
+            }
+
             var grc = sman.lcman.GetGraphCtrl();
             var nnlst = grc.nodenamelist;
             var nnodes = nnlst.Count;

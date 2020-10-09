@@ -181,12 +181,16 @@ public class GrafPolyGen
         iseg++;
     }
 
-    public GameObject GenBld(GameObject parent,string bldname,float height, int levels, string clr,float alf=1,bool plotTesselation=false,bool dowalls=true,bool dofloors=true,bool doroof=true,float ptscale=1,PolyGenVekMapDel pgvd=null)
+    public GameObject GenBld(GameObject parent,string bldname,string shortbldname,float height, int levels, string clr,float alf=1,bool plotTesselation=false,bool dowalls=true,bool dofloors=true,bool doroof=true,float ptscale=1,PolyGenVekMapDel pgvd=null)
     {
         bool onesided = false;
         var wps = true;
         var bldgo = new GameObject(bldname);
         var ska = 1/ptscale;
+        if (shortbldname == "BldRWB")
+        {
+            Debug.Log("Here I am");
+        }
         //bldgo.transform.localScale = new Vector3(ska, ska, ska);
         if (dowalls)
         {
