@@ -3,6 +3,7 @@ using UnityEngine;
 using Aiskwk.Map;
 using System.Linq;
 using System.Security.Cryptography;
+using UnityEditorInternal;
 
 public delegate Vector3 PolyGenVekMapDel(Vector3 v);
 public enum PolyGenForm { pipes, walls, wallsmesh, tesselate }
@@ -181,13 +182,17 @@ public class GrafPolyGen
         iseg++;
     }
 
-    public GameObject GenBld(GameObject parent,string bldname,string shortbldname,float height, int levels, string clr,float alf=1,bool plotTesselation=false,bool dowalls=true,bool dofloors=true,bool doroof=true,float ptscale=1,PolyGenVekMapDel pgvd=null)
+    public GameObject GenBld(GameObject parent,OsmBldSpec bs, string clr,float alf=1,bool plotTesselation=false,bool dowalls=true,bool dofloors=true,bool doroof=true,bool dosock=true,float ptscale=1,PolyGenVekMapDel pgvd=null)
     {
         bool onesided = false;
         var wps = true;
-        var bldgo = new GameObject(bldname);
+        var bldgo = new GameObject(bs.osmname);
         var ska = 1/ptscale;
-        if (shortbldname == "BldRWB")
+        var ptcen = bs.GetCenterBottom();
+        var probept = new Vector3(ptcen.x, 0, ptcen.z);
+        var mappt = pgvd(probept);
+        var mapheit = mappt.y;
+        if (bs.shortname == "BldRWB")
         {
             Debug.Log("Here I am");
         }
@@ -198,8 +203,9 @@ public class GrafPolyGen
 
             StartAccumulatingSegments();
             SetGenForm(PolyGenForm.wallsmesh);
-            var wname = $"{bldname}-walls";
-            var walgo = GenMesh(wname, height: height, clr: clr, alf: alf, plotTesselation: false, onesided: onesided,pgvd:pgvd);
+            var wname = $"{bs.osmname}-walls";
+            PolyGenVekMapDel npgvd = delegate (Vector3 v) { return Yoffset(v, mapheit); };
+            var walgo = GenMesh(wname, height: bs.height, clr: clr, alf: alf, plotTesselation: false, onesided: onesided,pgvd: npgvd);
             walgo.transform.localScale = new Vector3(ska, ska, ska);
             walgo.transform.SetParent(bldgo.transform,worldPositionStays:wps);
         }
@@ -208,27 +214,42 @@ public class GrafPolyGen
             //Debug.Log($"GenPolyGen.GenBld doing roof for {bldname}");
             StartAccumulatingSegments();
             SetGenForm(PolyGenForm.tesselate);
-            var rname = $"{bldname}-roof";
-            var rufgo = GenMesh(rname, height: height, clr: clr, alf: alf, plotTesselation: plotTesselation, onesided: onesided,pgvd: pgvd);
+            var rname = $"{bs.osmname}-roof";
+            var rclr = "darkgreen";
+            var rufgo = GenMesh(rname, height: mapheit+bs.height, clr: rclr, alf: alf, plotTesselation: plotTesselation, onesided: onesided,pgvd: null);
             rufgo.transform.localScale = new Vector3(ska, ska, ska);
             rufgo.transform.SetParent(bldgo.transform, worldPositionStays: wps);
         }
+        //if (dosock)
+        //{
+        //    //Debug.Log($"GenPolyGen.GenBld doing roof for {bldname}");
+        //    StartAccumulatingSegments();
+        //    SetGenForm(PolyGenForm.tesselate);
+        //    var rname = $"{bs.osmname}-roof";
+        //    var rclr = "darkred";
+        //    var rufgo = GenMesh(rname, height: 0, clr: rclr, alf: alf, plotTesselation: plotTesselation, onesided: onesided, pgvd: pgvd);
+        //    rufgo.transform.localScale = new Vector3(ska, ska, ska);
+        //    rufgo.transform.SetParent(bldgo.transform, worldPositionStays: wps);
+        //}
         if (dofloors)
         {
-            for (int i=0; i<=levels; i++)
+
+
+            for (int i=0; i<bs.levels; i++)
             {
                 //Debug.Log($"GenPolyGen.GenBld doing floor {i} for {bldname}");
                 StartAccumulatingSegments();
                 SetGenForm(PolyGenForm.tesselate);
-                var fname = $"{bldname}-level-{i}";
-                var fheit = levels<2 ? 0 : (i*height / (levels));
+                var fname = $"{bs.osmname}-level-{i}";
+                //var fheit = bs.levels<2 ? 0 : (i*bs.height / bs.levels);
+                var y = bs.GetFloorHeight(i)+mapheit;
                 //var npgvd = pgvd;
-                //if (i>=0)
+                //if (i >= 0)
                 //{
-                //    OsmBldSpec osmbs = null;
-                //    pgvd = new delegate { FloorHeight(v, osmbs, i);  };
+                //    //pgvd = delegate (Vector3 v) { var y = bs.GetFloorHeight(i); var rv = new Vector3(v.x, y, v.z); return rv; };
+                //    pgvd = delegate (Vector3 v) { return FloorHeight(v, bs, i, mapheit); };
                 //}
-                var flrgo = GenMesh(fname, height: fheit, clr: clr, alf: alf, plotTesselation: plotTesselation, onesided: onesided, pgvd: pgvd);
+                var flrgo = GenMesh(fname, height: y, clr: clr, alf: alf, plotTesselation: plotTesselation, onesided: onesided, pgvd: null);
                 flrgo.transform.localScale = new Vector3(ska, ska, ska);
                 flrgo.transform.SetParent(bldgo.transform, worldPositionStays: wps);
             }
@@ -238,15 +259,18 @@ public class GrafPolyGen
         bldgo.transform.SetParent(parent.transform, worldPositionStays: true);
         return bldgo;
     }
-    //public delegate Vector3 PolyGenVekMapDel(Vector3 v);
-    //public Vector3 FloorHeight(Vector3 v,OsmBldSpec osmbs,int floor)
-    //{
-    //    var y = osmbs.GetLevelHeight(floor);
-    //    var cen = osmbs.GetCenterTop();
-    //    var rv = new Vector3(v.x, y, v.z);
-    //    return rv;
-    //}
+    public Vector3 FloorHeight(Vector3 v, OsmBldSpec osmbs, int floor, float mapheit)
+    {
+        var y = osmbs.GetFloorHeight(floor);
+        var rv = new Vector3(v.x, y+mapheit, v.z);
+        return rv;
+    }
 
+    public Vector3 Yoffset(Vector3 v, float mapheit)
+    {
+        var rv = new Vector3(v.x, v.y + mapheit, v.z);
+        return rv;
+    }
 
     public Vector3 GetCenter()
     {

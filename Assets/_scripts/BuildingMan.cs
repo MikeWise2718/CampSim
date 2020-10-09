@@ -481,10 +481,10 @@ namespace CampusSimulator
                     }
                     if (bd != null)
                     {
-                        if (bd.name == "BldRWB" && fname=="f03")
-                        {
-                            Debug.Log("Here I am again");
-                        }
+                        //if (bd.name == "BldRWB" && fname=="f03")
+                        //{
+                        //    Debug.Log("Here I am again");
+                        //}
                         if (floordict.ContainsKey(fname))
                         {
                             var iflr = floordict[fname];

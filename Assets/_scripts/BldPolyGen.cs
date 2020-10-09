@@ -459,8 +459,8 @@ public class BldPolyGen
         levs = 3;
 
         ReInit();
-        var l1 = new Vector3(v, 0, v);
-        GenFixedFormBldForTesting(parent, ObjForm.circle, "b10", l1, height, levs, "db", ptscale: ptscale, pgvd:pgvd );
+        //var l1 = new Vector3(v, 0, v);
+        //GenFixedFormBldForTesting(parent, ObjForm.circle, "b10", l1, height, levs, "db", ptscale: ptscale, pgvd:pgvd );
 
         //ReInit();
         //var l2 = new Vector3(-v, 0, v);
@@ -481,15 +481,16 @@ public class BldPolyGen
 
 
 
-    public GameObject GenFixedFormBldForTesting(GameObject parent, ObjForm objform, string bldname, Vector3 loc, float height, int levels, string clr, float ptscale = 1, PolyGenVekMapDel pgvd = null)
-    {
-        GenOutline(objform, loc);
-        var dowalls = true;
-        var dofloors = true;
-        var doroof = true;
-        var rv = pg.GenBld(parent, bldname,bldname, height, levels, clr, alf: 0.5f,dowalls:dowalls,dofloors: dofloors,doroof:doroof, ptscale: ptscale, pgvd:pgvd);
-        return rv;
-    }
+    //public GameObject GenFixedFormBldForTesting(GameObject parent, ObjForm objform, string bldname, Vector3 loc, float height, int levels, string clr, float ptscale = 1, PolyGenVekMapDel pgvd = null)
+    //{
+    //    GenOutline(objform, loc);
+    //    var dowalls = true;
+    //    var dofloors = true;
+    //    var doroof = true;
+    //    // broke it, needs a bldspec now
+    //    //var rv = pg.GenBld(parent, bldname,bldname, height, levels, clr, alf: 0.5f,dowalls:dowalls,dofloors: dofloors,doroof:doroof, ptscale: ptscale, pgvd:pgvd);
+    //    return rv;
+    //}
     public GameObject GenBldFromOsmBldSpec(GameObject parent, OsmBldSpec bs, bool plotTesselation = false, float ptscale = 1, PolyGenVekMapDel pgvd = null,float alf=0.5f)
     {
         if (bs.shortname=="Bld34")
@@ -498,16 +499,16 @@ public class BldPolyGen
         }
         pg.SetOutline(bs.GetOutline());
         var clr = bs.GetColor();
-        var bldname = $"{bs.osmname} ({bs.wid} {bs.bldtyp})";
         var dowalls = true;
         var dofloors = true;
         var doroof = true;
+        var dosock = true;
         if (plotTesselation)
         {
             dowalls = false;
             dofloors = false;
         }
-        var rv = pg.GenBld(parent, bldname, bs.shortname, bs.height, bs.levels, clr, alf: alf, dowalls: dowalls, dofloors: dofloors, doroof: doroof, plotTesselation: plotTesselation, ptscale: ptscale, pgvd: pgvd);
+        var rv = pg.GenBld(parent, bs, clr, alf: alf, dowalls: dowalls, dofloors: dofloors, doroof: doroof,dosock:dosock, plotTesselation: plotTesselation, ptscale: ptscale, pgvd: pgvd);
         return rv;
     }
 
