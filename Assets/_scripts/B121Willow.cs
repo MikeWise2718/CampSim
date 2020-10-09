@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Aiskwk.Map;
+using System.Collections.Generic;
 using UnityEngine;
 using UxUtils;
 
@@ -149,7 +150,7 @@ public class B121Willow : MonoBehaviour
     public float bshellska = 0.025f;
     public float bangle = -90;
     public Vector3 bpos;
-    public float ymapheit = 0.20f;// 1 cm eliminates z-fighting
+    public float ymapheight = 0.20f;// 1 cm eliminates z-fighting
     public float xhlp_boff = 1.6f;
     public float zhlp_boff = 1.3f;
 
@@ -173,7 +174,28 @@ public class B121Willow : MonoBehaviour
     {
         b121pgo = LoadObjFile(b121go, "Willow/B121/1716045-BH-PLUMBING-B121_2020", "plumbing", xrot: bangle, zoff: zhlp_boff, xoff: xhlp_boff);
     }
+    public Vector3 GetCenterPoint( bool includeAltitude = true)
+    {
+        var ll = GetCenterLatLng();
+        var (x,z) = sman.coman.lltoxz(ll.lat, ll.lng);
+        var y = 0f;
+        if (includeAltitude)
+        {
+            y+= ymapheight;
+        }
+        var rv = new Vector3(x, y, z);
 
+        return rv;
+    }
+    public LatLng GetCenterLatLng()
+    {
+        var rv = new LatLng(47.647827, -122.136954);// took it off the map
+        return rv;
+    }
+    public (int,float) GetFloorsAndHeight()
+    {
+        return (3, 12.6f);
+    }
     public float GetFloorHeight(int floor, bool includeAltitude = true)
     {
         float rv;
@@ -195,7 +217,7 @@ public class B121Willow : MonoBehaviour
         }
         if (includeAltitude)
         {
-            rv += ymapheit;
+            rv += ymapheight;
         }
         return rv;
     }
@@ -206,15 +228,15 @@ public class B121Willow : MonoBehaviour
         if (loadmodel.Get() && !_b121_WillowModelLoaded)
         {
             b121go = new GameObject("B121-Willow");
-            bpos = new Vector3(-789, ymapheit, -436);// 1 cm raised to eliminate z fighting
-            ymapheit = sman.mpman.GetHeight(bpos.x, bpos.z);
+            bpos = new Vector3(-789, ymapheight, -436);// 1 cm raised to eliminate z fighting
+            ymapheight = sman.mpman.GetHeight(bpos.x, bpos.z);
             if (sman.mpman.useElevations.Get())
             {
-                ymapheit -= 1.0f; // adjust for map irrgularities - doesn't work well
+                ymapheight -= 1.0f; // adjust for map irrgularities - doesn't work well
             }
             var bps = bpos.ToString("f3");
-            sman.Lgg($"Loading B121 -- height - bpos:{bps} yheit(from map):{ymapheit:f2} total:{ymapheit+bpos.y:f2}","orange");
-            bpos = new Vector3(bpos.x, ymapheit + bpos.y, bpos.z);
+            sman.Lgg($"Loading B121 -- height - bpos:{bps} yheit(from map):{ymapheight:f2} total:{ymapheight+bpos.y:f2}","orange");
+            bpos = new Vector3(bpos.x, ymapheight + bpos.y, bpos.z);
             b121go.transform.Rotate(new Vector3(0, -20.15f, 0));
             b121go.transform.position = bpos;
             b121go.transform.SetParent(this.transform,worldPositionStays:false);

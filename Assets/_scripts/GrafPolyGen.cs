@@ -239,13 +239,13 @@ public class GrafPolyGen
         return bldgo;
     }
     //public delegate Vector3 PolyGenVekMapDel(Vector3 v);
-    public Vector3 FloorHeight(Vector3 v,OsmBldSpec osmbs,int floor)
-    {
-        var y = osmbs.GetLevelHeight(floor);
-        var cen = osmbs.GetCenterTop();
-        var rv = new Vector3(v.x, y, v.z);
-        return rv;
-    }
+    //public Vector3 FloorHeight(Vector3 v,OsmBldSpec osmbs,int floor)
+    //{
+    //    var y = osmbs.GetLevelHeight(floor);
+    //    var cen = osmbs.GetCenterTop();
+    //    var rv = new Vector3(v.x, y, v.z);
+    //    return rv;
+    //}
 
 
     public Vector3 GetCenter()

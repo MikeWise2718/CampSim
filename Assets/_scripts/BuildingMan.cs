@@ -481,10 +481,10 @@ namespace CampusSimulator
                     }
                     if (bd != null)
                     {
-                        //if (bd.name=="BldRWB")
-                        //{
-                        //    Debug.Log("Here I am again");
-                        //}
+                        if (bd.name == "BldRWB" && fname=="f03")
+                        {
+                            Debug.Log("Here I am again");
+                        }
                         if (floordict.ContainsKey(fname))
                         {
                             var iflr = floordict[fname];
@@ -513,6 +513,7 @@ namespace CampusSimulator
 
         public void ModelBuildPostLinkCloud()
         {
+            UpdateFloorHeights();
             InitTranswalls();// this can only be done after b121 is initialized
             ReinitDests();
             AddRoomsToBuildings();
@@ -528,7 +529,6 @@ namespace CampusSimulator
                     dronebldnames.Sort();
                 }
             }
-            UpdateFloorHeights();
             UpdateBldStats();
         }
         public void UpdateBldStats()

@@ -78,21 +78,33 @@ public class OsmBldSpec
         var rv = new List<Vector3>(boutline);
         return rv;
     }
-    public float GetLevelHeight(int level)
+    //public float GetLevelHeight(int level)
+    //{
+    //    if (level<0 || levels<level )
+    //    {
+    //        Debug.LogError($"BldPolyGen.OsmBldSPec.GetLevelHeight has bad level:{level} building levels:{levels}");
+    //        level = levels;
+    //    }
+    //    var y = level * levelheight;
+    //    return y;
+    //}
+    public float GetFloorHeight(int i)
     {
-        if (level<0 || levels<level )
+        // note that on a 3 story 12 meter building the 1, 2, 3 floors are on 0, 4, 8 meter altitude
+        var y = height;
+        if (levels > 1)
         {
-            Debug.LogError($"BldPolyGen.OsmBldSPec.GetLevelHeight has bad level:{level} building levels:{levels}");
-            level = levels;
+            var iflr = i - 1;
+            if (iflr < 0) iflr = 0;
+            if (iflr > levels - 1) iflr = levels - 1;
+            y = iflr * height / levels;
         }
-        var y = level * levelheight;
         return y;
     }
-
-    public Vector3 GetCenterTop()
+    public Vector3 GetCenterFloor(int i)
     {
         var rv = Vector3.zero;
-        var y = height;
+        var y = GetFloorHeight(i);
         if (boutline.Count > 0)
         {
             var vsum = Vector3.zero;
@@ -103,6 +115,16 @@ public class OsmBldSpec
             var ndiv = boutline.Count;
             rv = new Vector3(vsum.x / ndiv, y, vsum.z / ndiv);
         }
+        return rv;
+    }
+    public Vector3 GetCenterTop()
+    {
+        var rv = GetCenterFloor(levels);
+        return rv;
+    }
+    public Vector3 GetCenterBottom()
+    {
+        var rv = GetCenterFloor(0);
         return rv;
     }
     static Dictionary<string, string> clrcvt = new Dictionary<string, string>()

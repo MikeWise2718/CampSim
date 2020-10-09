@@ -351,6 +351,7 @@ namespace CampusSimulator
 
         public void CalculateAndSetHeightsOnLinkCloud()
         {
+            var sw = new StopWatch();
             longlatmap = sman.coman.glbllm;
             if (longlatmap == null) return;
             var calcHeights = true;
@@ -367,10 +368,10 @@ namespace CampusSimulator
                 {
                     var yoff = GetHeight(node.pto.x, node.pto.z);
                     node.pt = new Vector3(node.pto.x, node.pto.y + yoff, node.pto.z);
-                    if (node.name == "b121-f01-1071")
-                    {
-                        Debug.Log($"{node.name} pt:{node.pt:f1} pto:{node.pto:f1}");
-                    }
+                    //if (node.name == "b121-f01-1071")
+                    //{
+                    //    Debug.Log($"{node.name} pt:{node.pt:f1} pto:{node.pto:f1}");
+                    //}
                 }
             }
             var cam = Camera.current;
@@ -381,6 +382,8 @@ namespace CampusSimulator
                 cam.transform.position = new Vector3(pt.x, pt.y + ht, pt.z);
             }
             sman.needsLifted = false;
+            sw.Stop();
+            Debug.Log($"CalculateAndSetHeightOnLinkCloud took {sw.ElapSecs()} secs");
         }
         public GraphCtrl GetGraphCtrl(bool donotallocate=false)
         {

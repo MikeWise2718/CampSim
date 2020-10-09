@@ -172,6 +172,7 @@ namespace CampusSimulator
             defPercentFull = 1.0f;
             defRoomArea = 10;
             osmnamestart = "";
+
             var newosmlevels = 0;
             var newosmheight = 0;
 
@@ -481,13 +482,12 @@ namespace CampusSimulator
             }
         }
 
-        public void EchOsmOutline(GameObject parent,OsmBldSpec bs, PolyGenVekMapDel pgvd = null)
+        public void EchOsmOutline(GameObject parent,OsmBldSpec bs,string baseclr,PolyGenVekMapDel pgvd = null,int lev=-1)
         {
             var pgo = new GameObject("osmmarkers");
             pgo.transform.SetParent(parent.transform, worldPositionStays: false);
             var ska = 0.5f;
             var oline = bs.GetOutline();
-            var baseclr = "green";
             for (int i = 0; i < oline.Count; i++)
             {
                 var sph = GameObject.CreatePrimitive(PrimitiveType.Sphere);
@@ -497,9 +497,15 @@ namespace CampusSimulator
                 var x = oline[i].x;
                 var (lat, lng) = bm.sman.coman.xztoll(x, z);
                 var pos = new Vector3(x, 0, z);
-                if (pgvd!=null)
+                if (lev==-1)
                 {
                     pos = pgvd(pos);// mapman heights added to point
+                }
+                else
+                {
+                    var y = bldspec.GetFloorHeight(lev);
+                    pos = new Vector3(pos.x, y, pos.z);
+                    pos = pgvd(pos);
                 }
                 sph.transform.position = pos;
                 sph.transform.SetParent(pgo.transform, worldPositionStays: true);
@@ -541,32 +547,115 @@ namespace CampusSimulator
                 bldpadspecs = bm.GetFilteredPadSpecs(shortname);
             }
         }
+        public Vector3 GetCenterPoint(bool includeAltitude=false)
+        {
+            var rv = Vector3.zero;
+            if (b121comp != null)
+            {
+                rv = b121comp.GetCenterPoint(includeAltitude: includeAltitude);
+            }
+            else if (b19comp != null)
+            {
+                rv = b19comp.GetCenterPoint(includeAltitude: includeAltitude);
+            }
+            else if (isOsmGenerated)
+            {
+                rv = bldspec.GetCenterTop();
+                if (includeAltitude)
+                {
+                    var alt = bm.sman.mpman.GetHeight(rv.x, rv.z);
+                    rv = new Vector3(rv.x, alt, rv.z );
+                }
+            }
+            else
+            {
+                var (x, z) = bm.sman.coman.lltoxz(adhocLat, adhocLng);
+                var y = 0f;
+                rv = new Vector3(x, y, z);
+                if (includeAltitude)
+                {
+                    var alt = bm.sman.mpman.GetHeight(adhocCen.x, adhocCen.z);
+                    rv = new Vector3(rv.x, alt, rv.z);
+                }
+            }
+            return rv;
+        }
+
         public float GetFloorAltitude(int floornum,bool includeAltitude=true)
         {
             var rv = 0f;
             if (b121comp!=null)
             {
-                rv = b121comp.GetFloorHeight(floornum,includeAltitude:true);
+                rv = b121comp.GetFloorHeight(floornum,includeAltitude: includeAltitude);
             }
             else if (b19comp != null)
             {
-                rv = b19comp.GetFloorHeight(floornum,includeAltitude:true);
+                rv = b19comp.GetFloorHeight(floornum,includeAltitude: includeAltitude);
             }
             else if (isOsmGenerated)
             {
-                rv = bldspec.GetLevelHeight(floornum);
+                rv = bldspec.GetFloorHeight(floornum);
                 var ptcen = bldspec.GetCenterTop();
-                var alt = bm.sman.mpman.GetHeight(ptcen.x,ptcen.z);
-                rv += alt;
+                if (includeAltitude)
+                {
+                    var alt = bm.sman.mpman.GetHeight(ptcen.x, ptcen.z);
+                    rv += alt;
+                }
+            }
+            else
+            {
+                rv = adhocHeight;
+                if (includeAltitude)
+                {
+                    var alt = bm.sman.mpman.GetHeight(adhocCen.x, adhocCen.z);
+                    rv += alt;
+                }
             }
             return rv;
         }
+
+        public void SortOutFloorHeights()
+        {
+            if (b121comp != null)
+            {
+                (levels, totheight) = b121comp.GetFloorsAndHeight();
+            }
+            else if (b19comp != null)
+            {
+                (levels, totheight) = b19comp.GetFloorsAndHeight();
+            }
+            else if (isOsmGenerated)
+            {
+                levels = bldspec.levels;
+                totheight = bldspec.height;
+            }
+            else
+            {
+                levels = adhocLevels;
+                totheight = adhocHeight;
+            }
+        }
+
         int levels = 1;
+        float totheight = 4;
         public List<string> floorHeights = null;
         public void UpdateFloorHeightArray()
         {
+            SortOutFloorHeights();
+            if (shortname=="bRWB")
+            {
+                Debug.Log($"bRWB");
+            }
             floorHeights = new List<string>();
-            for(int i=0; i<levels;i++)
+            var msg0 = $"levels{levels} totheight:{totheight}";
+            floorHeights.Add(msg0);
+            var cp1 = GetCenterPoint(includeAltitude: false);
+            var cp2 = GetCenterPoint(includeAltitude: true);
+            var msg1 = $"GCP - wo alt:{cp1}";
+            var msg2 = $"GCP -    alt:{cp2}";
+            floorHeights.Add(msg1);
+            floorHeights.Add(msg2);
+            for (int i=0; i<levels;i++)
             {
                 var a1 = GetFloorAltitude(i, includeAltitude: false);
                 var a2 = GetFloorAltitude(i, includeAltitude: true);
@@ -853,7 +942,11 @@ namespace CampusSimulator
                     }
                     var bgo = bm.bpg.GenBldFromOsmBldSpec(this.gameObject, bldspec, pgvd: pgvd,alf:alf);
                     bldgos.Add(bgo);
-                    EchOsmOutline(this.gameObject, bldspec,pgvd:pgvd);
+                    EchOsmOutline(this.gameObject, bldspec,"green",pgvd:pgvd, lev:-1);
+                    for(var lev=1; lev<=levels; lev++ )
+                    {
+                        EchOsmOutline(this.gameObject, bldspec,"yellow", pgvd:pgvd, lev);
+                    }
                 }
             }
             var fixedbuildings = bm.fixedblds.Get();

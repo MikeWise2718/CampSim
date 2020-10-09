@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using Aiskwk.Map;
 using System.Collections.Generic;
 using UnityEngine;
 using UxUtils;
@@ -262,6 +262,29 @@ public class B19Willow : MonoBehaviour
             }
         }
     }
+    public Vector3 GetCenterPoint(bool includeAltitude = true)
+    {
+        var ll = GetCenterLatLng();
+        var (x, z) = sman.coman.lltoxz(ll.lat, ll.lng);
+        var y = 0f;
+        if (includeAltitude)
+        {
+            y += ymapheight;
+        }
+        var rv = new Vector3(x, y, z);
+
+        return rv;
+    }
+    public LatLng GetCenterLatLng()
+    {
+        var rv = new LatLng(47.643010, -122.131305);// took it off the map
+        return rv;
+    }
+    public (int, float) GetFloorsAndHeight()
+    {
+        return (2, 5f);
+    }
+
     public float GetFloorHeight(int floor, bool includeAltitude = true)
     {
         var rv = 0.01f;
