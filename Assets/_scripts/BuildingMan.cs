@@ -48,6 +48,8 @@ namespace CampusSimulator
         public UxSettingBool osmblds = new UxSettingBool("osmblds", true);
         public UxSettingBool osmbldstrans = new UxSettingBool("osmbldstrans", true);
         public UxSettingBool fixedblds = new UxSettingBool("fixedblds", false);
+        public UxSettingBool osmoutline = new UxSettingBool("osmoutline", true);
+        public UxSettingBool osmgroundoutline = new UxSettingBool("osmgroundoutline", true);
         public bool transwalls = false;
         public bool showhvac = false;
         public bool showelec = false;
@@ -236,6 +238,8 @@ namespace CampusSimulator
             walllinks.GetInitial(false);
             osmblds.GetInitial(true);
             osmbldstrans.GetInitial(true);
+            osmoutline.GetInitial(true);
+            osmgroundoutline.GetInitial(true);
             fixedblds.GetInitial(false);
             transwalls = false;
             scene_padspecs = new List<string>();

@@ -143,16 +143,13 @@ public class OptionsPanel : MonoBehaviour
         setAndSaveDict[TabState.Ui] = delegate { uiConfigPanel.SetVals(true); };
         setAndSaveDict[TabState.General] = delegate { generalPanel.SetVals(true); };
 
+        CloseOptionsPanel();
         // start inactive
-        if (gameObject.activeSelf)
-        {
-            gameObject.SetActive(false);
-        }
 
         inited = true;
     }
 
-    public bool OptionsPanelOpen()
+    public bool IsOptionsPanelOpen()
     {
         if (gameObject==null)
         {
@@ -166,6 +163,7 @@ public class OptionsPanel : MonoBehaviour
         if (gameObject != null)
         {
             gameObject.SetActive(true);
+            uiman.ottpan.gameObject.SetActive(true);
         }
     }
 
@@ -174,6 +172,7 @@ public class OptionsPanel : MonoBehaviour
         if (gameObject != null)
         {
             gameObject.SetActive(false);
+            uiman.ottpan.gameObject.SetActive(false);
         }
     }
 
@@ -217,9 +216,9 @@ public class OptionsPanel : MonoBehaviour
 
     public void OptionsSubMenuButtonPushed(TabState newstate)
     {
-        if (!gameObject.activeSelf)
+        if (!IsOptionsPanelOpen())
         {
-            gameObject.SetActive(true);
+            OpenOptionsPanel();
         }
         SetTabState(newstate);
     }
@@ -232,7 +231,7 @@ public class OptionsPanel : MonoBehaviour
             sman.LggError($"OptionsPanel.OptionsSubMenuButtonPushed Could not parse {newstate} as TabState enum");
             tabstate = TabState.Visuals;
         }
-        if (gameObject.activeSelf && tabstate==currentTabState)
+        if (IsOptionsPanelOpen() && tabstate==currentTabState)
         {
             ClosePanel();
         }
@@ -256,7 +255,7 @@ public class OptionsPanel : MonoBehaviour
     {
         if (!inited) return; // not initialized yet
 
-        if (gameObject.activeSelf)// only do this if the panel is active
+        if (IsOptionsPanelOpen())// only do this if the panel is active
         {
             foreach (var ts in panDict.Keys)
             {
@@ -272,14 +271,20 @@ public class OptionsPanel : MonoBehaviour
     }
     public void TogglePanelState()
     {
-        var newstate = !gameObject.activeSelf;
-        //Debug.Log($"Options Button Pushed optionsPanelGo.activeSelf:{optionsPanelGo.activeSelf} -> newstate:{newstate}");
-        gameObject.SetActive(newstate);// this does immediately take effect
+        var newstate = !IsOptionsPanelOpen();
+        if (newstate)
+        {
+            OpenOptionsPanel();
+        }
+        else
+        {
+            CloseOptionsPanel();
+        }
         SwitchOptionsSubPanel(isOpening: newstate);
     }
     public void ClosePanel()
     {
-        gameObject.SetActive(false);// this does immediately take effect
+        CloseOptionsPanel();
         SwitchOptionsSubPanel(isOpening: false);
         SyncOptionsTabState();
     }

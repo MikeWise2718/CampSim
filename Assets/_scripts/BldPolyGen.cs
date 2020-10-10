@@ -512,30 +512,30 @@ public class BldPolyGen
         return rv;
     }
 
-    public List<OsmBldSpec> GenBuildingsInRegion(GameObject parent, List<SimpleDf> dfwayslist, List<SimpleDf> dflinkslist, List<SimpleDf> dfnodeslist, float ptscale = 1, PolyGenVekMapDel pgvd = null, LatLongMap llm = null,bool useindexes=true)
-    {
-        var rv = new List<OsmBldSpec>();
-        var sw = new Aiskwk.Dataframe.StopWatch();
-        var osmblds = GetBuildspecsInRegion( dfwayslist, dflinkslist, dfnodeslist,ptscale,llm);
-        foreach (var bs in osmblds)
-        {
-            var nbspts = bs.GetOutline().Count;
-            if (nbspts >= 3)
-            {
-                //GenFixedFormBld(ObjForm.cross, bs.name, bs.loc, bs.height,bs.levels,"db");
-                var bldgo = GenBldFromOsmBldSpec(parent, bs, ptscale: ptscale, pgvd: pgvd);
-                bs.bgo = bldgo;
-                rv.Add(bs);
-            }
-            else
-            {
-                //Debug.LogWarning($"Building {bs.name} does not have enough outline points:{nbspts}");
-            }
-        }
-        sw.Stop();
-        Debug.Log($"BldPolyGen.LoadRegion Building Generation took {sw.ElapSecs()} secs");
-        return osmblds;
-    }
+    //public List<OsmBldSpec> GenBuildingsInRegion(GameObject parent, List<SimpleDf> dfwayslist, List<SimpleDf> dflinkslist, List<SimpleDf> dfnodeslist, float ptscale = 1, PolyGenVekMapDel pgvd = null, LatLongMap llm = null,bool useindexes=true)
+    //{
+    //    var rv = new List<OsmBldSpec>();
+    //    var sw = new Aiskwk.Dataframe.StopWatch();
+    //    var osmblds = GetBuildspecsInRegion( dfwayslist, dflinkslist, dfnodeslist,ptscale,llm);
+    //    foreach (var bs in osmblds)
+    //    {
+    //        var nbspts = bs.GetOutline().Count;
+    //        if (nbspts >= 3)
+    //        {
+    //            //GenFixedFormBld(ObjForm.cross, bs.name, bs.loc, bs.height,bs.levels,"db");
+    //            var bldgo = GenBldFromOsmBldSpec(parent, bs, ptscale: ptscale, pgvd: pgvd);
+    //            bs.bgo = bldgo;
+    //            rv.Add(bs);
+    //        }
+    //        else
+    //        {
+    //            //Debug.LogWarning($"Building {bs.name} does not have enough outline points:{nbspts}");
+    //        }
+    //    }
+    //    sw.Stop();
+    //    Debug.Log($"BldPolyGen.LoadRegion Building Generation took {sw.ElapSecs()} secs");
+    //    return osmblds;
+    //}
 
     public List<OsmBldSpec> GetBuildspecsInRegion(List<SimpleDf> dfwayslist, List<SimpleDf> dflinkslist, List<SimpleDf> dfnodeslist, float ptscale = 1, LatLongMap llm = null)
     {

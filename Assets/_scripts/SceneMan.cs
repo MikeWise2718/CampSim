@@ -1905,7 +1905,7 @@ namespace CampusSimulator
                 Debug.Log($"Refresh took {sw1.ElapSecs()} secs");
             }
 
-            if (!uiman.optpan.OptionsPanelOpen())
+            if (!uiman.optpan.IsOptionsPanelOpen())
             {
                 KeyProcessing();
 

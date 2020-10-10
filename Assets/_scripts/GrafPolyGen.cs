@@ -220,22 +220,9 @@ public class GrafPolyGen
             rufgo.transform.localScale = new Vector3(ska, ska, ska);
             rufgo.transform.SetParent(bldgo.transform, worldPositionStays: wps);
         }
-        //if (dosock)
-        //{
-        //    //Debug.Log($"GenPolyGen.GenBld doing roof for {bldname}");
-        //    StartAccumulatingSegments();
-        //    SetGenForm(PolyGenForm.tesselate);
-        //    var rname = $"{bs.osmname}-roof";
-        //    var rclr = "darkred";
-        //    var rufgo = GenMesh(rname, height: 0, clr: rclr, alf: alf, plotTesselation: plotTesselation, onesided: onesided, pgvd: pgvd);
-        //    rufgo.transform.localScale = new Vector3(ska, ska, ska);
-        //    rufgo.transform.SetParent(bldgo.transform, worldPositionStays: wps);
-        //}
         if (dofloors)
         {
-
-
-            for (int i=0; i<bs.levels; i++)
+            for (int i=1; i<=bs.levels; i++)
             {
                 //Debug.Log($"GenPolyGen.GenBld doing floor {i} for {bldname}");
                 StartAccumulatingSegments();
@@ -243,12 +230,6 @@ public class GrafPolyGen
                 var fname = $"{bs.osmname}-level-{i}";
                 //var fheit = bs.levels<2 ? 0 : (i*bs.height / bs.levels);
                 var y = bs.GetFloorHeight(i)+mapheit;
-                //var npgvd = pgvd;
-                //if (i >= 0)
-                //{
-                //    //pgvd = delegate (Vector3 v) { var y = bs.GetFloorHeight(i); var rv = new Vector3(v.x, y, v.z); return rv; };
-                //    pgvd = delegate (Vector3 v) { return FloorHeight(v, bs, i, mapheit); };
-                //}
                 var flrgo = GenMesh(fname, height: y, clr: clr, alf: alf, plotTesselation: plotTesselation, onesided: onesided, pgvd: null);
                 flrgo.transform.localScale = new Vector3(ska, ska, ska);
                 flrgo.transform.SetParent(bldgo.transform, worldPositionStays: wps);

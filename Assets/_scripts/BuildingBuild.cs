@@ -503,9 +503,8 @@ namespace CampusSimulator
                 }
                 else
                 {
-                    var y = bldspec.GetFloorHeight(lev);
+                    var y = this.GetFloorAltitude(lev,includeAltitude:true);
                     pos = new Vector3(pos.x, y, pos.z);
-                    pos = pgvd(pos);
                 }
                 sph.transform.position = pos;
                 sph.transform.SetParent(pgo.transform, worldPositionStays: true);
@@ -942,10 +941,16 @@ namespace CampusSimulator
                     }
                     var bgo = bm.bpg.GenBldFromOsmBldSpec(this.gameObject, bldspec, pgvd: pgvd,alf:alf);
                     bldgos.Add(bgo);
-                    EchOsmOutline(this.gameObject, bldspec,"green",pgvd:pgvd, lev:-1);
-                    for(var lev=1; lev<=levels; lev++ )
+                    if (bm.osmgroundoutline.Get())
                     {
-                        EchOsmOutline(this.gameObject, bldspec,"yellow", pgvd:pgvd, lev);
+                        EchOsmOutline(this.gameObject, bldspec, "green", pgvd: pgvd, lev: -1);
+                    }
+                    if (bm.osmoutline.Get())
+                    { 
+                        for (var lev = 1; lev <= levels; lev++)
+                        {
+                            EchOsmOutline(this.gameObject, bldspec, "yellow", pgvd: null, lev);
+                        }
                     }
                 }
             }
