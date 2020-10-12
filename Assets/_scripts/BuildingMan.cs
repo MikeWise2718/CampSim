@@ -47,6 +47,7 @@ namespace CampusSimulator
         public UxSettingBool walllinks = new UxSettingBool("walllinks", false);
         public UxSettingBool osmblds = new UxSettingBool("osmblds", true);
         public UxSettingBool osmbldstrans = new UxSettingBool("osmbldstrans", true);
+        public UxSettingBool osmbldpolygons = new UxSettingBool("osmbldpolygons", true);
         public UxSettingBool fixedblds = new UxSettingBool("fixedblds", false);
         public UxSettingBool osmoutline = new UxSettingBool("osmoutline", true);
         public UxSettingBool osmgroundoutline = new UxSettingBool("osmgroundoutline", true);
@@ -238,6 +239,7 @@ namespace CampusSimulator
             walllinks.GetInitial(false);
             osmblds.GetInitial(true);
             osmbldstrans.GetInitial(true);
+            osmbldpolygons.GetInitial(true);
             osmoutline.GetInitial(true);
             osmgroundoutline.GetInitial(true);
             fixedblds.GetInitial(false);
@@ -310,6 +312,45 @@ namespace CampusSimulator
             b19comp.MakeItSo();
         }
 
+        public void ToggleB19Doors()
+        {
+            var b19comp = GetB19();
+            var curval = b19comp.doors.Get();
+            b19comp.doors.SetAndSave(!curval);
+            b19comp.MakeItSo();
+        }
+        public void ToggleB19Floors()
+        {
+            var b19comp = GetB19();
+            var curval = b19comp.floors.Get();
+            b19comp.floors.SetAndSave(!curval);
+            b19comp.MakeItSo();
+        }
+        public void ToggleB19Osm()
+        {
+            var b19comp = GetB19();
+            var curval = b19comp.osmbld.Get();
+            b19comp.osmbld.SetAndSave(!curval);
+            b19comp.MakeItSo();
+        }
+
+        public void ToggleB19material()
+        {
+            var b19comp = GetB19();
+            var mat = b19comp.b19_materialMode.Get();
+            var newmat = mat;
+            if (mat== B19Willow.B19_MaterialMode.glass)
+            {
+                newmat = B19Willow.B19_MaterialMode.materialed;
+            }
+            else
+            {
+                newmat = B19Willow.B19_MaterialMode.glass;
+            }
+            b19comp.b19_materialMode.SetAndSave(newmat);
+            b19comp.MakeItSo();
+        }
+
 
         public B121Willow GetB121()
         {
@@ -377,6 +418,13 @@ namespace CampusSimulator
             var b121comp = GetB121();
             b121comp.ActuateShowPlumbing(showplum);
         }
+
+        public void ToggleBld121Osm()
+        {
+            var b121comp = GetB121();
+            b121comp.ActuateShowPlumbing(showplum);
+        }
+
 
         public BldPolyGen bpg = null;
 

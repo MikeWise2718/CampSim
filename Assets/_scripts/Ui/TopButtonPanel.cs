@@ -46,7 +46,10 @@ namespace CampusSimulator
             {"B19Level1Button",new TopButtonMan.TopButSpec("B19Level1Button", "L1", "Show B19 Level One","cen",0,"stretch",10,"B19")},
             {"B19Level2Button",new TopButtonMan.TopButSpec("B19Level2Button", "L2", "Show B19 Level Twoe","cen",0,"stretch",10,"B19")},
             {"B19Level3Button",new TopButtonMan.TopButSpec("B19Level3Button", "L3", "Show B19 Level Three","cen",0,"stretch",10,"B19")},
-            {"B19HvacButton",new TopButtonMan.TopButSpec("B19HvacButton", "Hvac", "After an evacuation, go back to starting positions","cen",0,"stretch",10,"B19")},
+            {"B19HvacButton",new TopButtonMan.TopButSpec("B19HvacButton", "Hvac", "Show HVAC system","cen",0,"stretch",10,"B19")},
+            {"B19FloorsButton",new TopButtonMan.TopButSpec("B19FloorsButton", "Flur", "Show floors","cen",0,"stretch",10,"B19")},
+            {"B19DoorsButton",new TopButtonMan.TopButSpec("B19DoorsButton", "Door", "Show floors","cen",0,"stretch",10,"B19")},
+            {"B19OsmButton",new TopButtonMan.TopButSpec("B19OsmButton", "Osm", "Show OSM Building","cen",0,"stretch",10,"B19")},
             {"B19GlassWallsButton",new TopButtonMan.TopButSpec("B19GlassWallsButton", "Gls", "After an evacuation, go back to starting positions","cen",0,"stretch",10,"B19")},
             {"#B19Spacer" ,new TopButtonMan.TopButSpec("#B19Spacer","#", "Spacerbutton","cen",0,"stretch",10,"B19")},
 
@@ -63,6 +66,7 @@ namespace CampusSimulator
             {"B121HvacButton" ,new TopButtonMan.TopButSpec("B121HvacButton","Hv", "Show HVAC System","cen",0,"stretch",10,"B121")},
             {"B121ElecButton" ,new TopButtonMan.TopButSpec("B121ElecButton","El", "Show Electrical System","cen",0,"stretch",10,"B121")},
             {"B121PlumButton" ,new TopButtonMan.TopButSpec("B121PlumButton","Pb", "Show Plumbing System","cen",0,"stretch",10,"B121")},
+            {"B121OsmButton" ,new TopButtonMan.TopButSpec("B121OsmButton","Osm", "Show OsmBUilding","cen",0,"stretch",10,"B121")},
             {"#B121Spacer" ,new TopButtonMan.TopButSpec("#B121Spacer","#", "Spacerbutton","cen",0,"stretch",10,"B121")},
 
 
@@ -89,7 +93,7 @@ namespace CampusSimulator
             butspec["RunButton"].action = delegate { RunButton(); };
             butspec["FlyButton"].action = delegate { FlyButton(); };
             butspec["GoButton"].action = delegate { GoButton(); };
-            butspec["ShadowButton"].action = delegate { ToggleJouneyShadow(); };
+            butspec["ShadowButton"].action = delegate { ToggleJourneyShadow(); };
             butspec["FreezeSimButton"].action = delegate { ToggleFreezeJourneys(); };
 
 
@@ -105,10 +109,14 @@ namespace CampusSimulator
             butspec["B121HvacButton"].action = delegate { B121DetectHvacButton(); };
             butspec["B121ElecButton"].action = delegate { B121DetectElecButton(); };
             butspec["B121PlumButton"].action = delegate { B121DetectPlumButton(); };
+            butspec["B121OsmButton"].action = delegate { B121OsmButton(); };
 
             butspec["B19Level1Button"].action = delegate { ShowB19Level1(); };
             butspec["B19Level2Button"].action = delegate { ShowB19Level2(); };
             butspec["B19Level3Button"].action = delegate { ShowB19Level3(); };
+            butspec["B19FloorsButton"].action = delegate { ShowB19Floors(); };
+            butspec["B19DoorsButton"].action = delegate { ShowB19Doors(); };
+            butspec["B19OsmButton"].action = delegate { ToggleB19Osm(); };
 
 
         }
@@ -122,11 +130,31 @@ namespace CampusSimulator
             clrbut("SecButton", "lightblue", loc, sman.frman.detectSecurity.Get(), "S");
             clrbut("VisButton", "lightblue", loc, sman.frman.detectVisitor.Get(), "V");
             clrbut("UnkButton", "lightblue", loc, sman.frman.detectUnknown.Get(), "U");
+
             clrbut("ShowTracksButton", "lightblue", loc, sman.trman.showtracks.Get(), "Tracks");
-            clrbut("B121TranButton", "lightblue", loc, sman.bdman.transwalls, "Tr");
-            clrbut("B121HvacButton", "yellow", loc, sman.bdman.showhvac, "Hv");
-            clrbut("B121ElecButton", "yellow", loc, sman.bdman.showelec, "El");
-            clrbut("B121PlumButton", "yellow", loc, sman.bdman.showplum, "Pb");
+
+            var b19comp = sman.bdman.GetB19();
+            if (b19comp!=null)
+            {
+                clrbut("B19Level1Button", "yellow", loc, b19comp.level01.Get(), "L1");
+                clrbut("B19Level2Button", "yellow", loc, b19comp.level02.Get(), "L2");
+                clrbut("B19Level3Button", "yellow", loc, b19comp.level03.Get(), "L3");
+                clrbut("B19DoorsButton", "yellow", loc, b19comp.doors.Get(), "Door");
+                clrbut("B19FloorsButton", "yellow", loc, b19comp.floors.Get(), "Flur");
+                //var glass = b19comp.b19_materialMode.Get() == B19Willow.B19_MaterialMode.glass;
+                //clrbut("B19FloorsButton", "yellow", loc,glass, "Gls");
+                clrbut("B19OsmButton", "yellow", loc, b19comp.osmbld.Get(), "Osm");
+            }
+
+            var b121comp = sman.bdman.GetB121();
+            {
+                clrbut("B121TranButton", "lightblue", loc, sman.bdman.transwalls, "Tr");
+                clrbut("B121HvacButton", "yellow", loc, sman.bdman.showhvac, "Hv");
+                clrbut("B121ElecButton", "yellow", loc, sman.bdman.showelec, "El");
+                clrbut("B121PlumButton", "yellow", loc, sman.bdman.showplum, "Pb");
+                clrbut("B121OsmButton", "yellow", loc, b121comp.osmbld.Get(), "Osm");
+            }
+
             clrbut("Vt2dButton", "lightblue", loc, sman.frman.visibilityTiedToDetectability.Get(), "Vt2D");
             clrbut("FrameButton", "pink", loc, sman.frman.frameJourneys.Get(), "Frame");
             clrbut("FreeFlyButton", "pink", loc, sman.vcman.InFreeFly(), "FreeFly");
@@ -181,7 +209,7 @@ namespace CampusSimulator
 
         public void SetScene(CampusSimulator.SceneSelE curscene)
         {
-            tbpfiltlist = "All,Sim";
+            tbpfiltlist = OptionsPanel.tbpfiltlistDefault;
             switch(curscene)
             {
                 case SceneSelE.MsftSmall:
@@ -204,6 +232,15 @@ namespace CampusSimulator
                     tbpfiltlist += ",Evac,Frame";
                     break;
             }
+            var tbss = sman.uiman.optpan.topButtonStringSetting;
+            if (!tbss.ValueRetrievedFromPersistentStore())
+            {
+                tbss.SetAndSave(tbpfiltlist);
+            }
+            tbpfiltlist = tbss.Get();
+            //enableString = enableStringSceneDefault; // disables saving state
+
+
             CreateButtonsAnew(tbpfiltlist);
         }
         public void Init0()
@@ -391,17 +428,41 @@ namespace CampusSimulator
         public void ShowB19Level1()
         {
             sman.bdman.ToggleB19Level1();
+            ColorizeButtonStates();
         }
         public void ShowB19Level2()
         {
             sman.bdman.ToggleB19Level2();
+            ColorizeButtonStates();
         }
         public void ShowB19Level3()
         {
             sman.bdman.ToggleB19Level3();
+            ColorizeButtonStates();
         }
 
-        public void ToggleJouneyShadow()
+        public void ShowB19Doors()
+        {
+            sman.bdman.ToggleB19Doors();
+            ColorizeButtonStates();
+        }
+        public void ShowB19Floors()
+        {
+            sman.bdman.ToggleB19Floors();
+            ColorizeButtonStates();
+        }
+        public void ToggleB19Osm()
+        {
+            sman.bdman.ToggleB19Osm();
+            ColorizeButtonStates();
+        }
+        public void ToggleMatMode()
+        {
+            sman.bdman.ToggleB19material();
+            ColorizeButtonStates();
+        }
+
+        public void ToggleJourneyShadow()
         {
             sman.jnman.shadowJourney = !sman.jnman.shadowJourney;
             ColorizeButtonStates();
@@ -481,11 +542,20 @@ namespace CampusSimulator
             sman.bdman.ShowPlumBld121Button();
             ColorizeButtonStates();
         }
+        public void ToggleB121Osm()
+        {
+            sman.bdman.ToggleBld121Osm();
+        }
 
 
         public void B121DetectPipButton()
         {
             sman.lcman.pipevis = !sman.lcman.pipevis;
+            sman.lcman.PipeVisButton();
+            ColorizeButtonStates();
+        }
+        public void B121OsmButton()
+        {
             sman.lcman.PipeVisButton();
             ColorizeButtonStates();
         }

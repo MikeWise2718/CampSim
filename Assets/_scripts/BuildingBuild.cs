@@ -482,9 +482,9 @@ namespace CampusSimulator
             }
         }
 
-        public void EchOsmOutline(GameObject parent,OsmBldSpec bs,string baseclr,PolyGenVekMapDel pgvd = null,int lev=-1)
+        public void EchOsmLevelOutline(GameObject parent,OsmBldSpec bs,string baseclr,int lev)
         {
-            var pgo = new GameObject("osmmarkers");
+            var pgo = new GameObject($"EchOsmLevelOutline level-{lev}");
             pgo.transform.SetParent(parent.transform, worldPositionStays: false);
             var ska = 0.5f;
             var oline = bs.GetOutline();
@@ -497,15 +497,8 @@ namespace CampusSimulator
                 var x = oline[i].x;
                 var (lat, lng) = bm.sman.coman.xztoll(x, z);
                 var pos = new Vector3(x, 0, z);
-                if (lev==-1)
-                {
-                    pos = pgvd(pos);// mapman heights added to point
-                }
-                else
-                {
-                    var y = this.GetFloorAltitude(lev,includeAltitude:true);
-                    pos = new Vector3(pos.x, y, pos.z);
-                }
+                var y = this.GetFloorAltitude(lev,includeAltitude:true);
+                pos = new Vector3(pos.x, y, pos.z);
                 sph.transform.position = pos;
                 sph.transform.SetParent(pgo.transform, worldPositionStays: true);
                 var spi = sph.AddComponent<Aiskwk.Map.QsphInfo>();
@@ -515,6 +508,40 @@ namespace CampusSimulator
             }
         }
 
+
+        public void EchOsmGroundOutline(GameObject parent, OsmBldSpec bs, string baseclr, PolyGenVekMapDel pgvd)
+        {
+            var pgo = new GameObject("EchOsmGroundOutline");
+            pgo.transform.SetParent(parent.transform, worldPositionStays: false);
+            var ska = 0.5f;
+            var oline = bs.GetOutline();
+            var ptb = Vector3.zero;
+            for (int i = 0; i < oline.Count; i++)
+            {
+                var sph = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                sph.name = $"{bs.shortname}-Marker-{i}";
+                sph.transform.localScale = new Vector3(ska, ska, ska);
+                var z = oline[i].z;
+                var x = oline[i].x;
+                var (lat, lng) = bm.sman.coman.xztoll(x, z);
+                var pos = new Vector3(x, 0, z);
+                pos = pgvd(pos);// mapman heights added to point
+                sph.transform.position = pos;
+                sph.transform.SetParent(pgo.transform, worldPositionStays: true);
+                var spi = sph.AddComponent<Aiskwk.Map.QsphInfo>();
+                spi.latLng = new Aiskwk.Map.LatLng(lat, lng);
+                spi.mapPoint = null;
+                Aiskwk.Map.qut.SetColorOfGo(sph, baseclr);
+                if (i>0)
+                {
+                    var lman = $"ll-{i}";
+                    var lgo = bm.sman.mpman.AddLine(lman, ptb, pos);
+                    lgo.transform.SetParent(pgo.transform, worldPositionStays: true);
+                }
+                ptb = pos;
+                
+            }
+        }
 
 
         public void AddOsmBldDetails(BuildingMan bm,OsmBldSpec bs)
@@ -939,17 +966,20 @@ namespace CampusSimulator
                     {
                         alf = 0.5f;
                     }
-                    var bgo = bm.bpg.GenBldFromOsmBldSpec(this.gameObject, bldspec, pgvd: pgvd,alf:alf);
-                    bldgos.Add(bgo);
+                    if (bm.osmbldpolygons.Get())
+                    {
+                        var bgo = bm.bpg.GenBldFromOsmBldSpec(this.gameObject, bldspec, pgvd: pgvd, alf: alf);
+                        bldgos.Add(bgo);
+                    }
                     if (bm.osmgroundoutline.Get())
                     {
-                        EchOsmOutline(this.gameObject, bldspec, "green", pgvd: pgvd, lev: -1);
+                        EchOsmGroundOutline(this.gameObject, bldspec, "green", pgvd: pgvd);
                     }
                     if (bm.osmoutline.Get())
                     { 
                         for (var lev = 1; lev <= levels; lev++)
                         {
-                            EchOsmOutline(this.gameObject, bldspec, "yellow", pgvd: null, lev);
+                            EchOsmLevelOutline(this.gameObject, bldspec, "yellow", lev);
                         }
                     }
                 }

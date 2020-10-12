@@ -34,9 +34,13 @@ public class OptionsPanel : MonoBehaviour
 
     public UxEnumSetting<TabState> initialSceneTabState = new UxEnumSetting<TabState>("OptionsLastTabUsed", TabState.Visuals);
     public UxSetting<string> enableStringSetting = new UxSetting<string>("OptionsEnableString", enableStringRoot);
+    public UxSetting<string> topButtonStringSetting = new UxSetting<string>("TopButtonEnableString", enableStringRoot);
 
     public const string enableStringRoot = "Visuals,MapSet,Frames,FireFly,Buildings,Osm,General,Ui,Log,Help,About";
     public string enableString;
+
+    public const string tbpfiltlistDefault = "All,Sim";
+
 
     public class OptButtSpec
     {
@@ -307,6 +311,7 @@ public class OptionsPanel : MonoBehaviour
     {
         initialSceneTabState.GetInitial();
         enableStringSetting.GetInitial();
+        topButtonStringSetting.GetInitial();
     }
 
     public void SetScene(CampusSimulator.SceneSelE curscene)
@@ -349,12 +354,12 @@ public class OptionsPanel : MonoBehaviour
         }
 
         InitializeValues();
-        //if (!enableStringSetting.ValueRetrievedFromPersistentStore())
-        //{
+        if (!enableStringSetting.ValueRetrievedFromPersistentStore())
+        {
             enableStringSetting.SetAndSave(enableStringSceneDefault);
-        //}
-        //enableString = enableStringSetting.Get();
-        enableString = enableStringSceneDefault;
+        }
+        enableString = enableStringSetting.Get();
+        //enableString = enableStringSceneDefault; // disables saving state
 
         MakeOptionsButtons();
         currentTabState = initialSceneTabState.Get();

@@ -60,6 +60,7 @@ public class UiConfigPanel : MonoBehaviour
         }
         //sman.Lgg($"newTbtEnableString:{newTbtEnableString}", "orange");
         uiman.tbtpan.tbpfiltlist = newTbtEnableString;
+        uiman.optpan.topButtonStringSetting.SetAndSave(newTbtEnableString);
         uiman.tbtpan.DestroyButtons();
         uiman.tbtpan.CreateButtonsAnew(newTbtEnableString);
     }
@@ -82,6 +83,7 @@ public class UiConfigPanel : MonoBehaviour
         }
         sman.Lgg($"newOttEnableString:{newOttEnableString}", "purple");
         uiman.optpan.enableString = newOttEnableString;
+        uiman.optpan.enableStringSetting.SetAndSave(newOttEnableString);
         uiman.ottpan.DestroyButtons();
         uiman.optpan.MakeOptionsButtons();
         return true;

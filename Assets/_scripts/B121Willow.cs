@@ -280,7 +280,7 @@ public class B121Willow : MonoBehaviour
             {
                 var stat = osmbld.Get();
                 var bspec = sman.bdman.FindBldSpecByNameStart(bld.osmnamestart);
-                
+
                 if (bspec != null)
                 {
                     // sman.bdman.RegisterBsBld(bspec, bld); // done at build registration time now
@@ -292,6 +292,7 @@ public class B121Willow : MonoBehaviour
                 }
                 _b121_osmbld = stat;
             }
+
 
             if (shell.Get() != _b121_shell)
             {
@@ -646,6 +647,28 @@ public class B121Willow : MonoBehaviour
                 b121pgo.SetActive(false);
             }
         }
+    }
+
+    public void ActuateShowOsm(bool newosmstat)
+    {
+        var stat = osmbld.Get();
+        if (stat==newosmstat)
+        {
+            return;
+        }
+        var bspec = sman.bdman.FindBldSpecByNameStart(bld.osmnamestart);
+
+        if (bspec != null)
+        {
+            // sman.bdman.RegisterBsBld(bspec, bld); // done at build registration time now
+            bspec.isVisible = newosmstat;
+            if (bspec.bgo != null)
+            {
+                bspec.bgo.SetActive(newosmstat);
+            }
+        }
+        osmbld.SetAndSave(newosmstat);
+        _b121_osmbld = newosmstat;
     }
 
     public void ActuateMaterialMode(bool writepartlisttofile=false)

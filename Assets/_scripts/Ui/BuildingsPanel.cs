@@ -30,6 +30,7 @@ public class BuildingsPanel : MonoBehaviour
     Toggle walllinks_toggle;
     Toggle osmblds_toggle;
     Toggle osmbldstrans_toggle;
+    Toggle osmbldspolys_toggle;
     Toggle osmoutline_toggle;
     Toggle osmgroundoutline_toggle;
     Toggle fixedblds_toggle;
@@ -75,6 +76,7 @@ public class BuildingsPanel : MonoBehaviour
         walllinks_toggle = transform.Find("WallLinksToggle").GetComponent<Toggle>();
         osmblds_toggle = transform.Find("OsmBldsToggle").GetComponent<Toggle>();
         osmbldstrans_toggle = transform.Find("OsmBldsTransToggle").GetComponent<Toggle>();
+        osmbldspolys_toggle = transform.Find("OsmBldsPolygonsToggle").GetComponent<Toggle>();
         osmoutline_toggle = transform.Find("OsmBldsOutlineToggle").GetComponent<Toggle>();
         osmgroundoutline_toggle = transform.Find("OsmBldsGroundOutlineToggle").GetComponent<Toggle>();
         fixedblds_toggle = transform.Find("FixedBldsToggle").GetComponent<Toggle>();
@@ -128,6 +130,7 @@ public class BuildingsPanel : MonoBehaviour
         walllinks_toggle.isOn = bdman.walllinks.Get();
         osmblds_toggle.isOn = bdman.osmblds.Get();
         osmbldstrans_toggle.isOn = bdman.osmbldstrans.Get();
+        osmbldspolys_toggle.isOn = bdman.osmbldpolygons.Get();
         osmoutline_toggle.isOn = bdman.osmoutline.Get();
         osmgroundoutline_toggle.isOn = bdman.osmgroundoutline.Get();
         fixedblds_toggle.isOn = bdman.fixedblds.Get();
@@ -290,6 +293,7 @@ public class BuildingsPanel : MonoBehaviour
         tchg = tchg || bdman.walllinks.SetAndSave(walllinks_toggle.isOn);
         tchg = tchg || bdman.osmblds.SetAndSave(osmblds_toggle.isOn);
         tchg = tchg || bdman.osmbldstrans.SetAndSave(osmbldstrans_toggle.isOn);
+        tchg = tchg || bdman.osmbldpolygons.SetAndSave(osmbldspolys_toggle.isOn);
         tchg = tchg || bdman.osmoutline.SetAndSave(osmoutline_toggle.isOn);
         tchg = tchg || bdman.osmgroundoutline.SetAndSave(osmgroundoutline_toggle.isOn);
         tchg = tchg || stman.osmstreets.SetAndSave(osmstreets_toggle.isOn);
