@@ -51,10 +51,6 @@ namespace CampusSimulator
         public UxSettingBool fixedblds = new UxSettingBool("fixedblds", false);
         public UxSettingBool osmoutline = new UxSettingBool("osmoutline", true);
         public UxSettingBool osmgroundoutline = new UxSettingBool("osmgroundoutline", true);
-        public bool transwalls = false;
-        public bool showhvac = false;
-        public bool showelec = false;
-        public bool showplum = false;
 
 
         // To do - get rid of bldmode and treemode regions in BuildingMan
@@ -243,7 +239,6 @@ namespace CampusSimulator
             osmoutline.GetInitial(true);
             osmgroundoutline.GetInitial(true);
             fixedblds.GetInitial(false);
-            transwalls = false;
             scene_padspecs = new List<string>();
             sman.Lgg($"BuildingMan.InitializeValues walllinks:{walllinks.Get()} osmblds:{osmblds.Get()} osmbldstrans:{osmbldstrans.Get()}   fixedblds:{fixedblds.Get()}","pink");
         }
@@ -326,20 +321,28 @@ namespace CampusSimulator
             b19comp.floors.SetAndSave(!curval);
             b19comp.MakeItSo();
         }
-        public void ToggleB19Osm()
+        public void ToggleB19hvac()
+        {
+            var b19comp = GetB19();
+            var curval = b19comp.hvac.Get();
+            b19comp.hvac.SetAndSave(!curval);
+            b19comp.MakeItSo();
+        }
+        public void ToggleB19osm()
         {
             var b19comp = GetB19();
             var curval = b19comp.osmbld.Get();
+            b19comp.ActuateOsmStatus(curval);
             b19comp.osmbld.SetAndSave(!curval);
             b19comp.MakeItSo();
         }
 
-        public void ToggleB19material()
+        public void ToggleB19glassmode()
         {
             var b19comp = GetB19();
             var mat = b19comp.b19_materialMode.Get();
-            var newmat = mat;
-            if (mat== B19Willow.B19_MaterialMode.glass)
+            B19Willow.B19_MaterialMode newmat;
+            if (mat == B19Willow.B19_MaterialMode.glass)
             {
                 newmat = B19Willow.B19_MaterialMode.materialed;
             }
@@ -348,6 +351,7 @@ namespace CampusSimulator
                 newmat = B19Willow.B19_MaterialMode.glass;
             }
             b19comp.b19_materialMode.SetAndSave(newmat);
+            b19comp.glasswalls.SetAndSave(newmat == B19Willow.B19_MaterialMode.glass);
             b19comp.MakeItSo();
         }
 
@@ -368,61 +372,65 @@ namespace CampusSimulator
             }
             return b121comp;
         }
-        public void InitTranswalls()
-        {
-            var b121comp = GetB121();
-            transwalls = b121comp.b121_materialMode.Get() == B121Willow.b121_MaterialMode.glasswalls;
-            showhvac = b121comp.hvac.Get();
-            showelec = b121comp.lighting.Get();
-            sman.uiman.SyncState();
-        }
 
-        public void TransBld121Button()
+        public void ToggleB19glassmodeExtra()
         {
-            var b121comp = GetB121();
-            var needtrans = transwalls;
-            var oristate = b121comp.b121_materialMode.Get();
-            if (needtrans)
+            var b19comp = GetB19();
+            var mat = b19comp.b19_materialMode.Get();
+            B19Willow.B19_MaterialMode newmat;
+            if (mat == B19Willow.B19_MaterialMode.glass)
             {
-                b121comp.b121_materialMode.SetAndSave(B121Willow.b121_MaterialMode.glasswalls);
+                newmat = B19Willow.B19_MaterialMode.materialed;
             }
             else
             {
-                b121comp.b121_materialMode.SetAndSave(B121Willow.b121_MaterialMode.materialed);
+                newmat = B19Willow.B19_MaterialMode.glass;
             }
-            var curstate = b121comp.b121_materialMode.Get();
-            if (oristate != curstate)
+            b19comp.b19_materialMode.SetAndSave(newmat);
+            b19comp.glasswalls.SetAndSave(newmat == B19Willow.B19_MaterialMode.glass);
+            b19comp.MakeItSo();
+        }
+
+
+        public void ToggleB121glassmode()
+        {
+            var b121comp = GetB121();
+            var mat = b121comp.b121_materialMode.Get();
+            B121Willow.B121_MaterialMode newmat;
+            if (mat == B121Willow.B121_MaterialMode.glasswalls)
             {
-                sman.Lgg($"Bld121 {oristate} changed to {curstate} - refresh required","pink");
-                b121comp.ActuateMaterialMode();
+                newmat = B121Willow.B121_MaterialMode.materialed;
             }
             else
             {
-                sman.Lgg($"Bld121 {oristate} unchanged to {curstate} - no refresh required", "pink");
+                newmat = B121Willow.B121_MaterialMode.glasswalls;
             }
+            b121comp.b121_materialMode.SetAndSave(newmat);
+            b121comp.glasswalls.SetAndSave(newmat == B121Willow.B121_MaterialMode.glasswalls);
+            b121comp.ActuateMaterialMode();
         }
 
-        public void ShowHvacBld121Button()
+        public void ToggleB121hvac()
         {
             var b121comp = GetB121();
-            b121comp.ActuateShowHvac(showhvac);
+            b121comp.ToggleHvac();
         }
-        public void ShowElecBld121Button()
+        public void ToggleB121lighting()
         {
             var b121comp = GetB121();
-            b121comp.ActuateShowLighting(showelec);
-        }
-
-        public void ShowPlumBld121Button()
-        {
-            var b121comp = GetB121();
-            b121comp.ActuateShowPlumbing(showplum);
+            b121comp.ToggleLighting();
         }
 
-        public void ToggleBld121Osm()
+        public void ToggleB121plumbing()
         {
             var b121comp = GetB121();
-            b121comp.ActuateShowPlumbing(showplum);
+            b121comp.TogglePlumbing();
+        }
+
+        public void ShowBld121OsmButton()
+        {
+            var b121comp = GetB121();
+            b121comp.ToggleOsm();
         }
 
 
@@ -566,7 +574,6 @@ namespace CampusSimulator
         public void ModelBuildPostLinkCloud()
         {
             UpdateFloorHeights();
-            InitTranswalls();// this can only be done after b121 is initialized
             ReinitDests();
             AddRoomsToBuildings();
             PopulateBuildings();

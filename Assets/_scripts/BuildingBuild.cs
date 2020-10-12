@@ -22,6 +22,7 @@ namespace CampusSimulator
             {
                 Object.Destroy(go);
             }
+            bldspec.bgo = null;// presumably we destroyed this guy too
         }
         public static List<string> GetPredefinedBuildingNames(string filter)
         {
@@ -509,13 +510,15 @@ namespace CampusSimulator
         }
 
 
-        public void EchOsmGroundOutline(GameObject parent, OsmBldSpec bs, string baseclr, PolyGenVekMapDel pgvd)
+        public void EchOsmGroundOutline(GameObject parent, OsmBldSpec bs, string baseclr,string linecolor, PolyGenVekMapDel pgvd)
         {
             var pgo = new GameObject("EchOsmGroundOutline");
             pgo.transform.SetParent(parent.transform, worldPositionStays: false);
             var ska = 0.5f;
             var oline = bs.GetOutline();
             var ptb = Vector3.zero;
+            var mpman = bm.sman.mpman;
+            var pt0 = Vector3.zero;
             for (int i = 0; i < oline.Count; i++)
             {
                 var sph = GameObject.CreatePrimitive(PrimitiveType.Sphere);
@@ -535,11 +538,19 @@ namespace CampusSimulator
                 if (i>0)
                 {
                     var lman = $"ll-{i}";
-                    var lgo = bm.sman.mpman.AddLine(lman, ptb, pos);
+                    var lgo = mpman.AddLine(lman, ptb, pos,lclr:linecolor,frag:true,lska:0.5f, fragang: mpman.fragang, fragxoff: mpman.fragxoff, fragzoff: mpman.fragzoff);
                     lgo.transform.SetParent(pgo.transform, worldPositionStays: true);
                 }
-                ptb = pos;
-                
+                else
+                {
+                    pt0 = pos;
+                }
+                ptb = pos;               
+            }
+            if (oline.Count>1)
+            {
+                var lman = $"ll-{oline.Count}";
+                var lgo = mpman.AddLine(lman, ptb, pt0, lclr: linecolor, frag: true, lska: 0.5f, fragang: mpman.fragang, fragxoff: mpman.fragxoff, fragzoff: mpman.fragzoff);
             }
         }
 
@@ -948,7 +959,33 @@ namespace CampusSimulator
             var beac = ago.AddComponent<BldEvacAlarm>();
             beac.Init(this, apos);  
         }
- 
+
+        public void GenerateOsmGos()
+        {
+            var pgvd = new PolyGenVekMapDel(bm.sman.mpman.GetHeightVector3);
+            var alf = 1f;
+            if (bm.osmbldstrans.Get())
+            {
+                alf = 0.5f;
+            }
+            if (bm.osmbldpolygons.Get())
+            {
+                bldspec.bgo = bm.bpg.GenBldFromOsmBldSpec(this.gameObject, bldspec, pgvd: pgvd, alf: alf);
+                bldgos.Add(bldspec.bgo);
+            }
+            if (bm.osmgroundoutline.Get())
+            {
+                EchOsmGroundOutline(bldspec.bgo, bldspec, "green","red", pgvd: pgvd);
+            }
+            if (bm.osmoutline.Get())
+            {
+                for (var lev = 1; lev <= levels; lev++)
+                {
+                    EchOsmLevelOutline(bldspec.bgo, bldspec, "yellow", lev);
+                }
+            }
+            bldspec.bgo.SetActive(bldspec.isVisible);
+        }
 
         public void CreateObjects()
         {
@@ -958,31 +995,7 @@ namespace CampusSimulator
             var tmode = bm.treeMode.Get();
             if (isOsmGenerated)
             {
-                var pgvd = new PolyGenVekMapDel(bm.sman.mpman.GetHeightVector3);
-                if (bldspec.isVisible)
-                {
-                    var alf = 1f;
-                    if (bm.osmbldstrans.Get())
-                    {
-                        alf = 0.5f;
-                    }
-                    if (bm.osmbldpolygons.Get())
-                    {
-                        var bgo = bm.bpg.GenBldFromOsmBldSpec(this.gameObject, bldspec, pgvd: pgvd, alf: alf);
-                        bldgos.Add(bgo);
-                    }
-                    if (bm.osmgroundoutline.Get())
-                    {
-                        EchOsmGroundOutline(this.gameObject, bldspec, "green", pgvd: pgvd);
-                    }
-                    if (bm.osmoutline.Get())
-                    { 
-                        for (var lev = 1; lev <= levels; lev++)
-                        {
-                            EchOsmLevelOutline(this.gameObject, bldspec, "yellow", lev);
-                        }
-                    }
-                }
+                GenerateOsmGos();
             }
             var fixedbuildings = bm.fixedblds.Get();
             var dofixed = fixedbuildings && bmode == BuildingMan.BldModeE.full;

@@ -15,6 +15,7 @@ public class B19Willow : MonoBehaviour
     public UxSetting<bool> floors = new UxSetting<bool>("B19_floors", true);
     public UxSetting<bool> doors = new UxSetting<bool>("B19_doors", true);
     public UxSetting<bool> osmbld = new UxSetting<bool>("B19_osmbld", false);
+    public UxSetting<bool> glasswalls = new UxSetting<bool>("B19_glasswalls", false);
 
     public CampusSimulator.SceneMan sman=null;
     public CampusSimulator.Building bld = null;
@@ -23,6 +24,7 @@ public class B19Willow : MonoBehaviour
     //   public UxSetting<bool> visibilityTiedToDetectability = new UxSetting<bool>("FrameVisibilityTiedToDetectability", true);
     // public B19_MaterialMode materialMode = B19_MaterialMode.materialed;
 
+    public OsmBldSpec bspec;
 
     public void InitializeValues(CampusSimulator.SceneMan sman,CampusSimulator.Building bld)
     {
@@ -37,7 +39,9 @@ public class B19Willow : MonoBehaviour
         _b19_floors = floors.GetInitial(false);
         _b19_doors = doors.GetInitial(false);
         _b19_osmbld = osmbld.GetInitial(false);
+        _b19_glasswalls = glasswalls.GetInitial(false);
         lastMaterialMode = b19_materialMode.Get();
+        bspec = null;
     }
 
 
@@ -50,6 +54,7 @@ public class B19Willow : MonoBehaviour
     bool _b19_floors = false;
     bool _b19_doors = false;
     bool _b19_osmbld = false;
+    bool _b19_glasswalls = false;
     B19_MaterialMode lastMaterialMode;
 
     GameObject b19go = null;
@@ -191,17 +196,7 @@ public class B19Willow : MonoBehaviour
             if (osmbld.Get() != _b19_osmbld)
             {
                 var stat = osmbld.Get();
-                var bspec = sman.bdman.FindBldSpecByNameStart(bld.osmnamestart);
-                if (bspec != null)
-                {
-                    //sman.bdman.RegisterBsBld(bspec, bld); we do this somewhere else now
-                    bspec.isVisible = stat;
-                    if (bspec.bgo != null)
-                    {
-                        bspec.bgo.SetActive(stat);
-                    }
-                }
-
+                ActuateOsmStatus(stat);
                 _b19_osmbld = stat;
             }
             if (level01.Get() != _b19_level01)
@@ -259,6 +254,22 @@ public class B19Willow : MonoBehaviour
             {
                 ActuateMaterialMode();
                 lastMaterialMode = b19_materialMode.Get();
+            }
+        }
+    }
+
+    public void ActuateOsmStatus(bool stat)
+    {
+        if (bspec == null)
+        {
+            bspec = sman.bdman.FindBldSpecByNameStart(bld.osmnamestart);
+        }
+        if (bspec != null)
+        {
+            bspec.isVisible = stat;
+            if (bspec.bgo != null)
+            {
+                bspec.bgo.SetActive(stat);
             }
         }
     }

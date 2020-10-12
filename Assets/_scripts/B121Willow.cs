@@ -1,11 +1,12 @@
 ﻿using Aiskwk.Map;
 using System.Collections.Generic;
+using TMPro.EditorUtilities;
 using UnityEngine;
 using UxUtils;
 
 public class B121Willow : MonoBehaviour
 {
-    public enum b121_MaterialMode {  raw, materialed, glasswalls, glassfloors, glass };
+    public enum B121_MaterialMode {  raw, materialed, glasswalls, glassfloors, glass };
 
     public UxSetting<bool> loadmodel = new UxSetting<bool>("B121_WillowModel", true);
     public UxSetting<bool> shell = new UxSetting<bool>("B121_shell", true);
@@ -14,10 +15,11 @@ public class B121Willow : MonoBehaviour
     public UxSetting<bool> lighting = new UxSetting<bool>("B121_lights", true);
     public UxSetting<bool> plumbing = new UxSetting<bool>("B121_plumbing", true);
     public UxSetting<bool> osmbld = new UxSetting<bool>("B121_osmbld", false);
+    public UxSetting<bool> glasswalls = new UxSetting<bool>("B121_glasswalls", false);
 
     public CampusSimulator.SceneMan sman=null;
 
-    public UxEnumSetting<b121_MaterialMode> b121_materialMode = new UxEnumSetting<b121_MaterialMode>("B121_MaterialMode", b121_MaterialMode.glass);
+    public UxEnumSetting<B121_MaterialMode> b121_materialMode = new UxEnumSetting<B121_MaterialMode>("B121_MaterialMode", B121_MaterialMode.glass);
     //   public UxSetting<bool> visibilityTiedToDetectability = new UxSetting<bool>("FrameVisibilityTiedToDetectability", true);
     // public B19_MaterialMode materialMode = B19_MaterialMode.materialed;
 
@@ -32,7 +34,8 @@ public class B121Willow : MonoBehaviour
     bool _b121_lighting = false;
     bool _b121_plumbing = false;
     bool _b121_osmbld = false;
-    b121_MaterialMode lastMaterialMode;
+    bool _b121_glasswalls = false;
+    B121_MaterialMode lastMaterialMode;
 
     GameObject b121go = null;
     GameObject b121sgo = null;
@@ -46,7 +49,7 @@ public class B121Willow : MonoBehaviour
         //Debug.Log("B121Willow.InitializeValues");
         this.sman = sman;
         this.bld = bld;
-        b121_materialMode.GetInitial(b121_MaterialMode.glasswalls);
+        b121_materialMode.GetInitial(B121_MaterialMode.glasswalls);
         loadmodel.GetInitial(true);
         _b121_shell = shell.GetInitial(true);
         _b121_interiorwalls = interiorwalls.GetInitial(true);
@@ -54,6 +57,7 @@ public class B121Willow : MonoBehaviour
         _b121_lighting = lighting.GetInitial(false);
         _b121_plumbing = plumbing.GetInitial(false);
         _b121_osmbld = osmbld.GetInitial(false);
+        _b121_glasswalls = glasswalls.GetInitial(false);
         lastMaterialMode = b121_materialMode.Get();
         //Debug.Log($"b121.loadmodel:{loadmodel.Get()}");
         //Debug.Log($"b121.shell:{shell.Get()}");
@@ -593,9 +597,10 @@ public class B121Willow : MonoBehaviour
         {"FloorMaterial","FloorMaterial"},
     };
 
-    public void ActuateShowHvac(bool showhvac)
+    public void ToggleHvac()
     {
-        if (showhvac)
+        _b121_hvac = !_b121_hvac;
+        if (_b121_hvac)
         {
             if (b121hgo==null)
             {
@@ -609,11 +614,13 @@ public class B121Willow : MonoBehaviour
             {
                 b121hgo.SetActive(false);
             }
-        }    
+        }
+        hvac.SetAndSave(_b121_hvac);
     }
-    public void ActuateShowLighting(bool showlighting)
+    public void ToggleLighting()
     {
-        if (showlighting)
+        _b121_lighting  = !_b121_lighting;
+        if (_b121_lighting)
         {
             if (b121lgo == null)
             {
@@ -628,11 +635,13 @@ public class B121Willow : MonoBehaviour
                 b121lgo.SetActive(false);
             }
         }
+        lighting.SetAndSave(_b121_lighting);
     }
 
-    public void ActuateShowPlumbing(bool showplumbing)
+    public void TogglePlumbing()
     {
-        if (showplumbing)
+        _b121_plumbing = !_b121_plumbing;
+        if (_b121_plumbing)
         {
             if (b121pgo == null)
             {
@@ -647,15 +656,14 @@ public class B121Willow : MonoBehaviour
                 b121pgo.SetActive(false);
             }
         }
+        plumbing.SetAndSave(_b121_plumbing);
+
     }
 
-    public void ActuateShowOsm(bool newosmstat)
+    public void ToggleOsm()
     {
         var stat = osmbld.Get();
-        if (stat==newosmstat)
-        {
-            return;
-        }
+        var newosmstat = !stat;
         var bspec = sman.bdman.FindBldSpecByNameStart(bld.osmnamestart);
 
         if (bspec != null)
@@ -688,10 +696,10 @@ public class B121Willow : MonoBehaviour
                 var matname = defmatname;
                 switch (b121_materialMode.Get())
                 {
-                    case b121_MaterialMode.glass:
+                    case B121_MaterialMode.glass:
                         matname = "ComputerGlass";
                         break;
-                    case b121_MaterialMode.materialed:
+                    case B121_MaterialMode.materialed:
                         {
                             if (!bldmatmap.ContainsKey(partmat))
                             {
@@ -703,7 +711,7 @@ public class B121Willow : MonoBehaviour
                             }
                             break;
                         }
-                    case b121_MaterialMode.glasswalls:
+                    case B121_MaterialMode.glasswalls:
                         {
                             var pnl = pname.ToLower();
                             if (pnl.Contains("interior") || pnl.Contains("door"))
@@ -716,7 +724,7 @@ public class B121Willow : MonoBehaviour
                             }
                             break;
                         }
-                    case b121_MaterialMode.glassfloors:
+                    case B121_MaterialMode.glassfloors:
                         {
                             var pnl = pname.ToLower();
                             if (pnl.Contains("interior") || pnl.Contains("floor") || pnl.Contains("door"))
@@ -729,7 +737,7 @@ public class B121Willow : MonoBehaviour
                             }
                             break;
                         }
-                    case b121_MaterialMode.raw:
+                    case B121_MaterialMode.raw:
                         {
                             //matname = parcom[1];
                             matname = "";
