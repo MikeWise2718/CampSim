@@ -21,6 +21,8 @@ public class OsmBldSpec
     public float z;
     public float bscale;
     public Vector3 loc;
+    public float maxy;
+    public float miny;
     public bool isVisible;
     List<Vector3> boutline;
     public GameObject bgo;
@@ -50,6 +52,8 @@ public class OsmBldSpec
         this.levelheight = height / levels;
         this.bgo = null;
         this.isVisible = true;
+        this.maxy = 0;
+        this.miny = 0;
         shortname = osmname;
         shortname = shortname.Replace("Microsoft Building ","Bld");
         shortname = shortname.Replace("Microsoft Studio ", "Stu");
@@ -73,6 +77,7 @@ public class OsmBldSpec
             boutline.Add(newpt);
         }
     }
+
     public List<Vector3> GetOutline()
     {
         var rv = new List<Vector3>(boutline);
@@ -94,10 +99,10 @@ public class OsmBldSpec
         var y = height;
         if (levels > 1)
         {
-            var iflr = i - 1;
+            var iflr = i-1;
             if (iflr < 0) iflr = 0;
-            if (iflr > levels - 1) iflr = levels - 1;
-            y = iflr * height / levels;
+            if (iflr > levels-1) iflr = levels-1;
+            y = iflr*height / levels;
         }
         return y;
     }
@@ -507,6 +512,24 @@ public class BldPolyGen
         {
             dowalls = false;
             dofloors = false;
+        }
+        var outline = bs.GetOutline();
+        if (pgvd != null)
+        {
+            bs.miny = float.MaxValue;
+            bs.maxy = float.MinValue;
+            foreach (var p in outline)
+            {
+                var np = pgvd(p);
+                if (np.y>bs.maxy)
+                {
+                    bs.maxy = np.y;
+                }
+                if (np.y < bs.miny)
+                {
+                    bs.miny = np.y;
+                }
+            }
         }
         var rv = pg.GenBld(parent, bs, clr, alf: alf, dowalls: dowalls, dofloors: dofloors, doroof: doroof,dosock:dosock, plotTesselation: plotTesselation, ptscale: ptscale, pgvd: pgvd);
         return rv;
