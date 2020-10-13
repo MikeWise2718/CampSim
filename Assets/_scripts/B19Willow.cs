@@ -313,7 +313,8 @@ public class B19Willow : MonoBehaviour
         }
         if (includeAltitude)
         {
-            rv += ymapheight;
+            //rv += ymapheight;
+            rv += bspec.GetGround();
         }
         return rv;
     }

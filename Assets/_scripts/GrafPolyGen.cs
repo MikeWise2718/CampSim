@@ -191,10 +191,14 @@ public class GrafPolyGen
         var ptcen = bs.GetCenterBottom();
         var probept = new Vector3(ptcen.x, 0, ptcen.z);
         var mappt = pgvd(probept);
-        var mapheit = mappt.y;
-        if (bs.shortname == "BldRWB")
+        var mapheit0 = mappt.y;
+        //bs.SetGroundValues(pgvd);
+        var mapheit1 = bs.GetGround();
+        var mapheit = mapheit1;
+        Debug.Log($"bs.shortname:{bs.shortname} mapheit0:{mapheit0}  mapheit1:{mapheit1}  {bs.groundRef}");
+        if (bs.shortname == "Bld20")
         {
-            Debug.Log("Here I am");
+            Debug.Log($"<color=\"red\">GenBld:Bld19 mapheit:{mapheit} {bs.groundRef}</color>");
         }
         //bldgo.transform.localScale = new Vector3(ska, ska, ska);
         if (dowalls)
@@ -205,6 +209,7 @@ public class GrafPolyGen
             SetGenForm(PolyGenForm.wallsmesh);
             var wname = $"{bs.osmname}-walls";
             PolyGenVekMapDel npgvd = delegate (Vector3 v) { return Yoffset(v, mapheit); };
+            //PolyGenVekMapDel npgvd = delegate (Vector3 v) { return Ysubstitute(v, mapheit); };
             var walgo = GenMesh(wname, height: bs.height, clr: clr, alf: alf, plotTesselation: false, onesided: onesided,pgvd: npgvd);
             walgo.transform.localScale = new Vector3(ska, ska, ska);
             walgo.transform.SetParent(bldgo.transform,worldPositionStays:wps);
@@ -250,6 +255,12 @@ public class GrafPolyGen
     public Vector3 Yoffset(Vector3 v, float mapheit)
     {
         var rv = new Vector3(v.x, v.y + mapheit, v.z);
+        return rv;
+    }
+
+    public Vector3 Ysubstitute(Vector3 v, float mapheit)
+    {
+        var rv = new Vector3(v.x, mapheit, v.z);
         return rv;
     }
 
@@ -904,7 +915,7 @@ public class GrafPolyGen
                     break;
                 }
                 var curcnt = woutline.Count;
-                Debug.LogError($"{parent.name} Error in teslation  startcount:{starcnt} current:{curcnt} remarea:{remarea:g3} remfrac:{remfrac:g4}");
+                Debug.LogError($"{parent.name} Error in tesslation  startcount:{starcnt} current:{curcnt} remarea:{remarea:g3} remfrac:{remfrac:g4}");
                 (maxval, maxidx) = FindSmallestPositiveCrossProductYcomponent(parent,woutline, dbout: true);
                 Debug.LogError($"{parent.name} Tesselate maxidx is -1 - breaking tesselation  startarea:{area:g3} fmaxidx:{fmaxidx}");
                 break;

@@ -4,7 +4,9 @@ using UnityEngine;
 using Aiskwk.Dataframe;
 using Aiskwk.Map;
 using System;
+using UnityEngine.UI;
 
+public enum GroundRef {  cen, min, max }
 [Serializable]
 public class OsmBldSpec
 {
@@ -22,7 +24,9 @@ public class OsmBldSpec
     public float bscale;
     public Vector3 loc;
     public float maxy;
+    public float ceny;
     public float miny;
+    public GroundRef groundRef;
     public bool isVisible;
     List<Vector3> boutline;
     public GameObject bgo;
@@ -53,7 +57,9 @@ public class OsmBldSpec
         this.bgo = null;
         this.isVisible = true;
         this.maxy = 0;
+        this.ceny = 0;
         this.miny = 0;
+        this.groundRef = GroundRef.cen;
         shortname = osmname;
         shortname = shortname.Replace("Microsoft Building ","Bld");
         shortname = shortname.Replace("Microsoft Studio ", "Stu");
@@ -68,13 +74,57 @@ public class OsmBldSpec
         this.z = z * bscale;
         this.loc = new Vector3(this.x, 0, -this.z);
     }
-    public void SetOutline(List<Vector3> outline)
+    public void SetOutline(List<Vector3> outline, PolyGenVekMapDel pgvd=null)
     {
+        // set the outline
+        // note boutline can not have the yvalues in there as the tesselation algorithems need them to be zero
+        // I suppose I could change that...
         boutline = new List<Vector3>();
+        var n = outline.Count;
+        if (n == 0)
+        {
+            miny = 0;
+            maxy = 0;
+            ceny = 0;
+            // make sure everything
+            return;
+        }
+        miny = float.MaxValue;
+        maxy = float.MinValue;
+        var sumx = 0f;
+        var sumz = 0f;
         foreach (var pt in outline)
         {
-            var newpt = new Vector3(pt.x * bscale, pt.y * bscale, pt.z * bscale);
-            boutline.Add(newpt);
+            var x = pt.x * bscale;
+            var y = pt.y * bscale;
+            var z = pt.z * bscale;
+            sumx += x;
+            sumz += z;
+            var newboutlinept = new Vector3(x, y, z);
+            if (pgvd != null)
+            {
+                var pgvd_pt = pgvd(new Vector3(x, 0, z));
+                y = pgvd_pt.y;
+            }
+            if (y<miny)
+            {
+                miny = y;
+            }
+            if (y > maxy)
+            {
+                maxy = y;
+            }
+            boutline.Add(newboutlinept);
+        }
+        if (pgvd != null)
+        {
+            var ptcen0 = new Vector3(sumx / n, 0, sumz / n);
+            var ptcen = pgvd(ptcen0);
+            ceny = ptcen.y;
+        }
+        else
+        {
+            ceny = (miny + maxy) / 2;// kind of arbitrary
         }
     }
 
@@ -83,26 +133,60 @@ public class OsmBldSpec
         var rv = new List<Vector3>(boutline);
         return rv;
     }
-    //public float GetLevelHeight(int level)
-    //{
-    //    if (level<0 || levels<level )
-    //    {
-    //        Debug.LogError($"BldPolyGen.OsmBldSPec.GetLevelHeight has bad level:{level} building levels:{levels}");
-    //        level = levels;
-    //    }
-    //    var y = level * levelheight;
-    //    return y;
-    //}
+
+
+
+    public void SetGroundValues(PolyGenVekMapDel pgvd)
+    {
+        miny = float.MaxValue;
+        maxy = float.MinValue;
+        foreach (var p in boutline)
+        {
+            var np = pgvd(p);
+            if (np.y > maxy)
+            {
+                maxy = np.y;
+            }
+            if (np.y < miny)
+            {
+                miny = np.y;
+            }
+        }
+        var ptcen = GetCenterBottom();
+        var ptcen1 = new Vector3(ptcen.x, 0, ptcen.z);// get rid of y component
+        var ptn = pgvd(ptcen1);
+        ceny = ptn.y;
+    }
+
+
+    public float GetGround()
+    {
+        var rv = 0f;
+        switch (groundRef)
+        {
+            case GroundRef.cen: 
+                rv = ceny;
+                break;
+            case GroundRef.max:
+                rv = maxy;
+                break;
+            case GroundRef.min:
+                rv = miny;
+                break;
+        }
+        return rv;
+    }
+
     public float GetFloorHeight(int i)
     {
         // note that on a 3 story 12 meter building the 1, 2, 3 floors are on 0, 4, 8 meter altitude
         var y = height;
         if (levels > 1)
         {
-            var iflr = i-1;
+            var iflr = i - 1;
             if (iflr < 0) iflr = 0;
-            if (iflr > levels-1) iflr = levels-1;
-            y = iflr*height / levels;
+            if (iflr > levels - 1) iflr = levels - 1;
+            y = iflr * height / levels;
         }
         return y;
     }
@@ -382,7 +466,7 @@ public class BldPolyGen
     }
 
 
-    public List<OsmBldSpec> LoadOsmBuildingsFromSdfs(SimpleDf dfways, SimpleDf dfnodes, SimpleDf dflinks, float ptscale = 1, LatLongMap llm = null, bool usenodedict = false)
+    public List<OsmBldSpec> LoadOsmBuildingsFromSdfs(SimpleDf dfways, SimpleDf dfnodes, SimpleDf dflinks, float ptscale = 1, LatLongMap llm = null, bool usenodedict = false, PolyGenVekMapDel pgvd = null)
     {
         var sw = new Aiskwk.Dataframe.StopWatch();
         sw.Start();
@@ -437,7 +521,7 @@ public class BldPolyGen
             {
                 nodeoutline.Reverse();
             }
-            bs.SetOutline(nodeoutline);
+            bs.SetOutline(nodeoutline,pgvd);
             rv.Add(bs);
             i++;
         }
@@ -498,10 +582,14 @@ public class BldPolyGen
     //}
     public GameObject GenBldFromOsmBldSpec(GameObject parent, OsmBldSpec bs, bool plotTesselation = false, float ptscale = 1, PolyGenVekMapDel pgvd = null,float alf=0.5f)
     {
-        if (bs.shortname=="Bld34")
-        {
-            Debug.Log("Bld34");
-        }
+        //if (bs.shortname=="Bld34")
+        //{
+        //    Debug.Log("Bld34");
+        //}
+        //if (pgvd != null)
+        //{
+        //    bs.SetGroundValues(pgvd);
+        //}
         pg.SetOutline(bs.GetOutline());
         var clr = bs.GetColor();
         var dowalls = true;
@@ -514,23 +602,7 @@ public class BldPolyGen
             dofloors = false;
         }
         var outline = bs.GetOutline();
-        if (pgvd != null)
-        {
-            bs.miny = float.MaxValue;
-            bs.maxy = float.MinValue;
-            foreach (var p in outline)
-            {
-                var np = pgvd(p);
-                if (np.y>bs.maxy)
-                {
-                    bs.maxy = np.y;
-                }
-                if (np.y < bs.miny)
-                {
-                    bs.miny = np.y;
-                }
-            }
-        }
+ 
         var rv = pg.GenBld(parent, bs, clr, alf: alf, dowalls: dowalls, dofloors: dofloors, doroof: doroof,dosock:dosock, plotTesselation: plotTesselation, ptscale: ptscale, pgvd: pgvd);
         return rv;
     }
@@ -560,7 +632,7 @@ public class BldPolyGen
     //    return osmblds;
     //}
 
-    public List<OsmBldSpec> GetBuildspecsInRegion(List<SimpleDf> dfwayslist, List<SimpleDf> dflinkslist, List<SimpleDf> dfnodeslist, float ptscale = 1, LatLongMap llm = null)
+    public List<OsmBldSpec> GetBuildspecsInRegion(List<SimpleDf> dfwayslist, List<SimpleDf> dflinkslist, List<SimpleDf> dfnodeslist, float ptscale = 1, LatLongMap llm = null, PolyGenVekMapDel pgvd = null)
     {
         var osmblds = new List<OsmBldSpec>();
 
@@ -570,14 +642,14 @@ public class BldPolyGen
             var wdf = dfwayslist[i];
             var ndf = dfnodeslist[i];
             var ldf = dflinkslist[i];
-            var lst = LoadOsmBuildingsFromSdfs(wdf, ndf, ldf, ptscale: ptscale, llm: llm);
+            var lst = LoadOsmBuildingsFromSdfs(wdf, ndf, ldf, ptscale: ptscale, llm: llm,pgvd:pgvd);
             osmblds.AddRange(lst);
         }
         return osmblds;
     }
 
 
-    public List<OsmBldSpec> LoadRegionOld(GameObject parent, string regionspec, float ptscale = 1, PolyGenVekMapDel pgvd = null, LatLongMap llm = null, string buildingFilter = "",bool plotTessalation=false)
+    public List<OsmBldSpec> LoadRegionOldForTesting(GameObject parent, string regionspec, float ptscale = 1, PolyGenVekMapDel pgvd = null, LatLongMap llm = null, string buildingFilter = "",bool plotTessalation=false)
     {
         var rv = new List<OsmBldSpec>();
         var sw = new Aiskwk.Dataframe.StopWatch();
@@ -587,7 +659,7 @@ public class BldPolyGen
         foreach (var regionname in sar)
         {
             LoadSdfs(regionname);
-            var lst = LoadOsmBuildingsFromSdfs(_dfways,_dfnodes,_dflinks,ptscale: ptscale,llm:llm);
+            var lst = LoadOsmBuildingsFromSdfs(_dfways,_dfnodes,_dflinks,ptscale: ptscale,llm:llm,pgvd:pgvd);
             osmblds.AddRange(lst);
         }
         var filterBuildings = buildingFilter != "";

@@ -453,7 +453,7 @@ namespace CampusSimulator
                 bpg = new BldPolyGen();
                 var llm = sman.mpman.GetLatLongMap();
                 var (waysdflst, linksdflist, nodesdflist) = sman.dfman.GetSdfs();
-                var osmbs = bpg.GetBuildspecsInRegion(waysdflst, linksdflist, nodesdflist, llm:llm);
+                var osmbs = bpg.GetBuildspecsInRegion(waysdflst, linksdflist, nodesdflist, llm:llm,pgvd:pgvd);
                 //var osmbs = bpg.GenBuildingsInRegion(osmroot, waysdflst, linksdflist, nodesdflist, pgvd: pgvd, llm: llm);
                 bldspecs.AddRange(osmbs);
             }

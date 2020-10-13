@@ -176,6 +176,7 @@ namespace CampusSimulator
 
             var newosmlevels = 0;
             var newosmheight = 0;
+            var newosmgroundref = GroundRef.max;
 
 
             switch (name)
@@ -184,6 +185,7 @@ namespace CampusSimulator
                     {
                         osmnamestart = "Microsoft Building 19";
                         maingaragename = "Garage19_1";
+                        newosmgroundref = GroundRef.max;
                         roomspecs = B19roomspec;
                         destnodes = SplitRoomNameOutOfRoomspecs(roomspecs);
                         shortname = "b19";
@@ -461,6 +463,7 @@ namespace CampusSimulator
                 if (bspec != null)
                 {
                     bm.RegisterBsBld(bspec, this);
+                    bspec.groundRef = newosmgroundref;
                     if (newosmlevels>0)
                     {
                         bspec.levels = newosmlevels;
