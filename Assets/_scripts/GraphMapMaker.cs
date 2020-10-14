@@ -708,31 +708,38 @@ namespace GraphAlgos
 
             // do drive paths
 
-            grc.SetCurUseType(LinkUse.driveway);
-            var d_nodeprev = (d_order == connectOrderE.dec ? "" : drivenode);
-            var d_ang = (d_exit == exitDirE.front ? 0 : 180);
-            for (int i = 0; i < nslots; i++)
+            if (garage.dnode != null)
             {
-                var d_pslotnodename = garage.SlotAxuxNodeName("dps", i);
-                var d_slotpos = garage.GetSlotPosition1(i, d_ang, d_len);
-                grc.NewAnchorLinkToxz(pslotnodename[i], d_pslotnodename, d_slotpos.x, d_slotpos.z);
-                //AddLink(pslotnodename[i], d_pslotnodename);
-                if (d_nodeprev != "")
+                grc.SetCurUseType(LinkUse.driveway);
+                var d_nodeprev = (d_order == connectOrderE.dec ? "" : drivenode);
+                var d_ang = (d_exit == exitDirE.front ? 0 : 180);
+                for (int i = 0; i < nslots; i++)
                 {
-                    if (d_nodeprev.StartsWith("osm")|| d_pslotnodename.StartsWith("osm"))
+                    var d_pslotnodename = garage.SlotAxuxNodeName("dps", i);
+                    var d_slotpos = garage.GetSlotPosition1(i, d_ang, d_len);
+                    grc.NewAnchorLinkToxz(pslotnodename[i], d_pslotnodename, d_slotpos.x, d_slotpos.z);
+                    //AddLink(pslotnodename[i], d_pslotnodename);
+                    if (d_nodeprev != "")
                     {
-                        grc.AddLateLink(d_pslotnodename, d_nodeprev, LinkUse.driveway);
+                        if (d_nodeprev.StartsWith("osm") || d_pslotnodename.StartsWith("osm"))
+                        {
+                            grc.AddLateLink(d_pslotnodename, d_nodeprev, LinkUse.driveway);
+                        }
+                        else
+                        {
+                            grc.AddLinkByNodeName(d_pslotnodename, d_nodeprev);
+                        }
                     }
-                    else
-                    {
-                        grc.AddLinkByNodeName(d_pslotnodename, d_nodeprev);
-                    }
+                    d_nodeprev = d_pslotnodename;
                 }
-                d_nodeprev = d_pslotnodename;
+                if (d_order == connectOrderE.dec)
+                {
+                    grc.AddLinkByNodeName(d_nodeprev, drivenode);
+                }
             }
-            if (d_order == connectOrderE.dec)
+            else
             {
-                grc.AddLinkByNodeName(d_nodeprev, drivenode);
+                gm.sman.LggError($"Garage {gname} dnode is null");
             }
 
             // do walk paths
@@ -761,6 +768,11 @@ namespace GraphAlgos
                     grc.AddLinkByNodeName(w_nodeprev, walknode);
                 }
             }
+            else
+            {
+                gm.sman.LggError($"Garage {gname} wnode is null");
+            }
+
         }
         public void CreatePointsSmall()
         {

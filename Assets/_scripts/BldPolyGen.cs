@@ -23,10 +23,11 @@ public class OsmBldSpec
     public float z;
     public float bscale;
     public Vector3 loc;
+    public GroundRef groundRef;
+    public Vector3 ptcen;
     public float maxy;
     public float ceny;
     public float miny;
-    public GroundRef groundRef;
     public bool isVisible;
     List<Vector3> boutline;
     public GameObject bgo;
@@ -119,12 +120,13 @@ public class OsmBldSpec
         if (pgvd != null)
         {
             var ptcen0 = new Vector3(sumx / n, 0, sumz / n);
-            var ptcen = pgvd(ptcen0);
+            ptcen = pgvd(ptcen0);
             ceny = ptcen.y;
         }
         else
         {
             ceny = (miny + maxy) / 2;// kind of arbitrary
+            ptcen = new Vector3( sumx/n, ceny, sumz/n );
         }
     }
 
@@ -133,31 +135,6 @@ public class OsmBldSpec
         var rv = new List<Vector3>(boutline);
         return rv;
     }
-
-
-
-    public void SetGroundValues(PolyGenVekMapDel pgvd)
-    {
-        miny = float.MaxValue;
-        maxy = float.MinValue;
-        foreach (var p in boutline)
-        {
-            var np = pgvd(p);
-            if (np.y > maxy)
-            {
-                maxy = np.y;
-            }
-            if (np.y < miny)
-            {
-                miny = np.y;
-            }
-        }
-        var ptcen = GetCenterBottom();
-        var ptcen1 = new Vector3(ptcen.x, 0, ptcen.z);// get rid of y component
-        var ptn = pgvd(ptcen1);
-        ceny = ptn.y;
-    }
-
 
     public float GetGround()
     {
@@ -177,43 +154,37 @@ public class OsmBldSpec
         return rv;
     }
 
-    public float GetFloorHeight(int i)
+    public float GetFloorHeight(int i,bool includeAltitude=false)
     {
-        // note that on a 3 story 12 meter building the 1, 2, 3 floors are on 0, 4, 8 meter altitude
+        // note that on a 3 story 12 meter building the 0, 1, 2 floors are on 0, 4, 8 meter altitude
         var y = height;
-        if (levels > 1)
+        if (levels > 0)
         {
-            var iflr = i - 1;
+            var iflr = i;
             if (iflr < 0) iflr = 0;
-            if (iflr > levels - 1) iflr = levels - 1;
+            if (iflr > levels) iflr = levels;
             y = iflr * height / levels;
+        }
+        if (includeAltitude)
+        {
+            y += GetGround();
         }
         return y;
     }
-    public Vector3 GetCenterFloor(int i)
+    public Vector3 GetCenterFloor(int i,bool includeAltitude=false)
     {
-        var rv = Vector3.zero;
-        var y = GetFloorHeight(i);
-        if (boutline.Count > 0)
-        {
-            var vsum = Vector3.zero;
-            foreach (var pt in boutline)
-            {
-                vsum += pt;
-            }
-            var ndiv = boutline.Count;
-            rv = new Vector3(vsum.x / ndiv, y, vsum.z / ndiv);
-        }
+        var y = GetFloorHeight(i, includeAltitude: includeAltitude);
+        var rv = new Vector3(ptcen.x, y, ptcen.z);
         return rv;
     }
-    public Vector3 GetCenterTop()
+    public Vector3 GetCenterTop(bool includeAltitude = false)
     {
-        var rv = GetCenterFloor(levels);
+        var rv = GetCenterFloor(levels,includeAltitude:includeAltitude); 
         return rv;
     }
-    public Vector3 GetCenterBottom()
+    public Vector3 GetCenterBottom(bool includeAltitude = false)
     {
-        var rv = GetCenterFloor(0);
+        var rv = GetCenterFloor(0, includeAltitude: includeAltitude);
         return rv;
     }
     static Dictionary<string, string> clrcvt = new Dictionary<string, string>()
@@ -586,10 +557,6 @@ public class BldPolyGen
         //{
         //    Debug.Log("Bld34");
         //}
-        //if (pgvd != null)
-        //{
-        //    bs.SetGroundValues(pgvd);
-        //}
         pg.SetOutline(bs.GetOutline());
         var clr = bs.GetColor();
         var dowalls = true;
@@ -607,30 +574,6 @@ public class BldPolyGen
         return rv;
     }
 
-    //public List<OsmBldSpec> GenBuildingsInRegion(GameObject parent, List<SimpleDf> dfwayslist, List<SimpleDf> dflinkslist, List<SimpleDf> dfnodeslist, float ptscale = 1, PolyGenVekMapDel pgvd = null, LatLongMap llm = null,bool useindexes=true)
-    //{
-    //    var rv = new List<OsmBldSpec>();
-    //    var sw = new Aiskwk.Dataframe.StopWatch();
-    //    var osmblds = GetBuildspecsInRegion( dfwayslist, dflinkslist, dfnodeslist,ptscale,llm);
-    //    foreach (var bs in osmblds)
-    //    {
-    //        var nbspts = bs.GetOutline().Count;
-    //        if (nbspts >= 3)
-    //        {
-    //            //GenFixedFormBld(ObjForm.cross, bs.name, bs.loc, bs.height,bs.levels,"db");
-    //            var bldgo = GenBldFromOsmBldSpec(parent, bs, ptscale: ptscale, pgvd: pgvd);
-    //            bs.bgo = bldgo;
-    //            rv.Add(bs);
-    //        }
-    //        else
-    //        {
-    //            //Debug.LogWarning($"Building {bs.name} does not have enough outline points:{nbspts}");
-    //        }
-    //    }
-    //    sw.Stop();
-    //    Debug.Log($"BldPolyGen.LoadRegion Building Generation took {sw.ElapSecs()} secs");
-    //    return osmblds;
-    //}
 
     public List<OsmBldSpec> GetBuildspecsInRegion(List<SimpleDf> dfwayslist, List<SimpleDf> dflinkslist, List<SimpleDf> dfnodeslist, float ptscale = 1, LatLongMap llm = null, PolyGenVekMapDel pgvd = null)
     {
@@ -665,7 +608,6 @@ public class BldPolyGen
         var filterBuildings = buildingFilter != "";
         foreach (var bs in osmblds)
         {
-            //GenFixedFormBld(ObjForm.cross, bs.name, bs.loc, bs.height,bs.levels,"db");
             if (filterBuildings)
             {
                 if (bs.osmname.StartsWith(buildingFilter))

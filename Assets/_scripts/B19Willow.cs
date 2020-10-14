@@ -41,7 +41,7 @@ public class B19Willow : MonoBehaviour
         _b19_osmbld = osmbld.GetInitial(false);
         _b19_glasswalls = glasswalls.GetInitial(false);
         lastMaterialMode = b19_materialMode.Get();
-        bspec = null;
+        bspec = sman.bdman.FindBldSpecByNameStart(bld.osmnamestart);
     }
 
 
@@ -295,8 +295,13 @@ public class B19Willow : MonoBehaviour
     {
         return (2, 5f);
     }
-
     public float GetFloorHeight(int floor, bool includeAltitude = true)
+    {
+        var rv = bspec.GetFloorHeight(floor, includeAltitude: includeAltitude);
+        return rv;
+    }
+
+    public float GetFloorHeightOld(int floor, bool includeAltitude = true)
     {
         var rv = 0.01f;
         if (floor < 0) floor = 0;
@@ -314,7 +319,14 @@ public class B19Willow : MonoBehaviour
         if (includeAltitude)
         {
             //rv += ymapheight;
-            rv += bspec.GetGround();
+            if (bspec == null)
+            {
+                sman.LggError("B19Willow.GetFloorHeight - bspec null with includeAltitude=true");
+            }
+            else
+            {
+                rv += bspec.GetGround();
+            }
         }
         return rv;
     }

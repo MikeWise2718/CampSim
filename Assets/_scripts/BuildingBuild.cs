@@ -175,7 +175,7 @@ namespace CampusSimulator
             osmnamestart = "";
 
             var newosmlevels = 0;
-            var newosmheight = 0;
+            var newosmheight = 0f;
             var newosmgroundref = GroundRef.max;
 
 
@@ -203,6 +203,8 @@ namespace CampusSimulator
                         b19comp.InitializeValues(bm.sman, this);
                         b19comp.MakeItSo();
                         bm.AddBuildingAlias("b19", this);
+                        newosmlevels = 2;
+                        newosmheight = 6;
                         break;
                     }
                 case "Bld33":
@@ -274,6 +276,11 @@ namespace CampusSimulator
                         defPercentFull = 0.80f;
                         defRoomArea = 16;
                         defAngAlign = 24.0f;
+
+                        newosmlevels = 3;
+                        newosmheight = 12.3f;
+
+
 
                         b121comp = this.transform.gameObject.AddComponent<B121Willow>();
                         b121comp.InitializeValues(bm.sman, this);
@@ -541,7 +548,7 @@ namespace CampusSimulator
                 if (i>0)
                 {
                     var lman = $"ll-{i}";
-                    var lgo = mpman.AddLine(lman, ptb, pos,lclr:linecolor,frag:true,lska:0.5f, fragang: mpman.fragang, fragxoff: mpman.fragxoff, fragzoff: mpman.fragzoff);
+                    var lgo = mpman.AddLine(lman, ptb, pos,lclr:linecolor, frag:true, lska:0.5f, fragang: mpman.fragang, fragxoff: mpman.fragxoff, fragzoff: mpman.fragzoff);
                     lgo.transform.SetParent(pgo.transform, worldPositionStays: true);
                 }
                 else
@@ -553,7 +560,8 @@ namespace CampusSimulator
             if (oline.Count>1)
             {
                 var lman = $"ll-{oline.Count}";
-                var lgo = mpman.AddLine(lman, ptb, pt0, lclr: linecolor, frag: true, lska: 0.5f, fragang: mpman.fragang, fragxoff: mpman.fragxoff, fragzoff: mpman.fragzoff);
+                var lgo = mpman.AddLine(lman, ptb, pt0, lclr:linecolor, frag:true, lska:0.5f, fragang: mpman.fragang, fragxoff: mpman.fragxoff, fragzoff: mpman.fragzoff);
+                lgo.transform.SetParent(pgo.transform, worldPositionStays: true);
             }
         }
 

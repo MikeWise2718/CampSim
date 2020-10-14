@@ -175,10 +175,10 @@ public class GrafPolyGen
             tribuf.Add(idx2);
             tribuf.Add(idx3);
         }
-        uvbuf.Add(new Vector2(iseg - 1, 0));
-        uvbuf.Add(new Vector2(iseg - 1, 1));
-        uvbuf.Add(new Vector2(iseg, 0));
-        uvbuf.Add(new Vector2(iseg, 1));
+        uvbuf.Add(new Vector2( iseg-1, 0));
+        uvbuf.Add(new Vector2( iseg-1, 1));
+        uvbuf.Add(new Vector2(   iseg, 0));
+        uvbuf.Add(new Vector2(   iseg, 1));
         iseg++;
     }
 
@@ -188,19 +188,11 @@ public class GrafPolyGen
         var wps = true;
         var bldgo = new GameObject(bs.osmname);
         var ska = 1/ptscale;
-        var ptcen = bs.GetCenterBottom();
-        var probept = new Vector3(ptcen.x, 0, ptcen.z);
-        var mappt = pgvd(probept);
-        var mapheit0 = mappt.y;
-        //bs.SetGroundValues(pgvd);
-        var mapheit1 = bs.GetGround();
-        var mapheit = mapheit1;
-        Debug.Log($"bs.shortname:{bs.shortname} mapheit0:{mapheit0}  mapheit1:{mapheit1}  {bs.groundRef}");
-        if (bs.shortname == "Bld20")
-        {
-            Debug.Log($"<color=\"red\">GenBld:Bld19 mapheit:{mapheit} {bs.groundRef}</color>");
-        }
-        //bldgo.transform.localScale = new Vector3(ska, ska, ska);
+        //Debug.Log($"bs.shortname:{bs.shortname} mapheit0:{mapheit0}  mapheit1:{mapheit1}  {bs.groundRef}");
+        //if (bs.shortname == "Bld20")
+        //{
+        //    Debug.Log($"<color=\"red\">GenBld:{bs.shortname} mapheit:{mapheit} {bs.groundRef}</color>");
+        //}
         if (dowalls)
         {
             //Debug.Log($"GenPolyGen.GenBld doing walls for {bldname}");
@@ -208,9 +200,10 @@ public class GrafPolyGen
             StartAccumulatingSegments();
             SetGenForm(PolyGenForm.wallsmesh);
             var wname = $"{bs.osmname}-walls";
+            var mapheit = bs.GetGround();
             PolyGenVekMapDel npgvd = delegate (Vector3 v) { return Yoffset(v, mapheit); };
-            //PolyGenVekMapDel npgvd = delegate (Vector3 v) { return Ysubstitute(v, mapheit); };
-            var walgo = GenMesh(wname, height: bs.height, clr: clr, alf: alf, plotTesselation: false, onesided: onesided,pgvd: npgvd);
+            var heit = bs.GetFloorHeight(bs.levels,includeAltitude:false);
+            var walgo = GenMesh(wname, height: heit, clr: clr, alf: alf, plotTesselation: false, onesided: onesided, pgvd: npgvd);
             walgo.transform.localScale = new Vector3(ska, ska, ska);
             walgo.transform.SetParent(bldgo.transform,worldPositionStays:wps);
         }
@@ -221,26 +214,26 @@ public class GrafPolyGen
             SetGenForm(PolyGenForm.tesselate);
             var rname = $"{bs.osmname}-roof";
             var rclr = "darkgreen";
-            var rufgo = GenMesh(rname, height: mapheit+bs.height, clr: rclr, alf: alf, plotTesselation: plotTesselation, onesided: onesided,pgvd: null);
+            var y = bs.GetFloorHeight(bs.levels, includeAltitude: true);
+            var rufgo = GenMesh(rname, height: y, clr: rclr, alf: alf, plotTesselation: plotTesselation, onesided: onesided, pgvd: null);
             rufgo.transform.localScale = new Vector3(ska, ska, ska);
             rufgo.transform.SetParent(bldgo.transform, worldPositionStays: wps);
         }
         if (dofloors)
         {
-            for (int i=1; i<=bs.levels; i++)
+            for (int i=0; i<=bs.levels-1; i++)
             {
                 //Debug.Log($"GenPolyGen.GenBld doing floor {i} for {bldname}");
                 StartAccumulatingSegments();
                 SetGenForm(PolyGenForm.tesselate);
                 var fname = $"{bs.osmname}-level-{i}";
                 //var fheit = bs.levels<2 ? 0 : (i*bs.height / bs.levels);
-                var y = bs.GetFloorHeight(i)+mapheit;
+                var y = bs.GetFloorHeight(i, includeAltitude: true);
                 var flrgo = GenMesh(fname, height: y, clr: clr, alf: alf, plotTesselation: plotTesselation, onesided: onesided, pgvd: null);
                 flrgo.transform.localScale = new Vector3(ska, ska, ska);
                 flrgo.transform.SetParent(bldgo.transform, worldPositionStays: wps);
             }
         }
-        //bldgo.transform.position = GetCenter();
         bldgo.transform.position = Vector3.zero;
         bldgo.transform.SetParent(parent.transform, worldPositionStays: true);
         return bldgo;

@@ -200,7 +200,7 @@ namespace CampusSimulator
             // these object don't need to be in the scene view as we don't really inspect them or change their parameters
             coman = (new GameObject("CoordMapMan")).AddComponent<CoordMapMan>();
             dfman = (new GameObject("DataFileMan")).AddComponent<DataFileMan>();
-            lgman = (new GameObject("LogMan")).AddComponent<LogMan>();
+
 
             // these object need to be in the scene we are starting because we might inspect them
             uiman = FindObjectOfType<UiMan>();
@@ -221,7 +221,7 @@ namespace CampusSimulator
 
             dfman.sman = this;
             coman.sman = this;
-            lgman.sman = this;
+            //lgman.sman = this; // trying to keep this independ of CampusSimulator namespace
 
             uiman.sman = this;
             mpman.sman = this;
@@ -488,62 +488,62 @@ namespace CampusSimulator
 
 
 
+        //public void LggOld(string msg, string clr1, string clr2, string delim = "|", bool unitylog = true)
+        //{
+        //    var color = new string[] { clr1, clr2 };
+        //    var nmsg = LogMan.ColorCode(msg, color, delim);
+        //    if (unitylog)
+        //    {
+        //        UnityLog(nmsg, LogSeverity.Info);
+        //    }
 
-        public void LggWarning(string msg)
-        {
-            Lgglong(msg, LogSeverity.Error, LogTyp.General, color: new string[] { "yellow", "white" });
-            //var nmsg = $"<color={color}>{msg}</color>";
-            //Debug.Log(nmsg);
-        }
+        //}
 
-        public void UnityLog(string nmsg,LogSeverity severity)
-        {
-            switch (severity)
-            {
-                case LogSeverity.Error:
-                    Debug.LogError(nmsg);
-                    break;
-                case LogSeverity.Warning:
-                    Debug.LogWarning(nmsg);
-                    break;
-                default:
-                    Debug.Log(nmsg);
-                    break;
-            }
-        }
-        public void Lgglong(string msg, LogSeverity severity = LogSeverity.Info, LogTyp typ = LogTyp.General, string[] color = null, string delim = "|", bool unitylog = true)
-        {
-            if (lgman != null)
-            {
-                lgman.AddMessage(msg, severity, typ, color);
-            }
-            var nmsg = LogMan.ColorCode(msg, color, delim);
-            if (unitylog)
-            {
-                UnityLog(nmsg, severity);
-            }
-        }
         public void Lgg(string msg, string clr1, string clr2, string delim = "|", bool unitylog = true)
         {
             var color = new string[] { clr1, clr2 };
-            var nmsg = LogMan.ColorCode(msg, color, delim);
-            if (unitylog)
+            if (lgman != null)
             {
-                UnityLog(nmsg, LogSeverity.Info);
+                lgman.Lgglong(msg, LogSeverity.Info, color: color, delim: delim, unitylog: unitylog);
             }
-
+            else
+            {
+                Debug.Log(msg);
+            }
         }
         public void Lgg(string msg, string color="gray")
         {
-            Lgglong(msg, LogSeverity.Info,LogTyp.General, color:new string[] { color });
-            //var nmsg = $"<color={color}>{msg}</color>";
-            //Debug.Log(nmsg);
+            if (lgman != null)
+            {
+                lgman.Lgglong(msg, LogSeverity.Info,LogTyp.General, color:new string[] { color });
+            }
+            else
+            {
+                Debug.Log(msg);
+            }
         }
+        public void LggWarning(string msg)
+        {
+            if (lgman != null)
+            {
+                lgman.Lgglong(msg, LogSeverity.Error, LogTyp.General, color: new string[] { "yellow", "white" });
+            }
+            else
+            {
+                Debug.Log(msg);
+            }
 
+        }
         public void LggError(string msg)
         {
-            Lgglong(msg, LogSeverity.Error, LogTyp.General, color: new string[] { "red", "white" });
-            Debug.LogError(msg);
+            if (lgman != null)
+            {
+                lgman.Lgglong(msg, LogSeverity.Error, LogTyp.General, color: new string[] { "red", "white" });
+            }
+            else
+            {
+                Debug.Log(msg);
+            }
         }
         public void PostMapAsyncLoadSetScene()
         {
@@ -1645,6 +1645,8 @@ namespace CampusSimulator
             IdentitySystemAndUser();
             var ndsp = Display.displays.Length;
             var msg = $"SceneMan.|Awake| called displayed connected:{ndsp} hostname:{hostname}";
+            lgman = (new GameObject("LogMan")).AddComponent<LogMan>();
+            lgman.InitPhase0();
             Lgg(msg,"darkblue","white" );
             InitPhase0();
         }
@@ -1914,7 +1916,7 @@ namespace CampusSimulator
                     var vcam = Viewer.GetViewerCamera();
                     if (vcam != null && Input.GetMouseButtonDown(0))
                     {
-                        Debug.Log("Left Mouse was pressed");
+                        //Debug.Log("Left Mouse was pressed");
 
 
                         Ray ray = vcam.ScreenPointToRay(Input.mousePosition);
@@ -1930,12 +1932,12 @@ namespace CampusSimulator
                                 jnman.SetShadowJourney(hitname);
                             }
                             lasthitname = hitname;
-                            Debug.Log($"Left mouse button hit {hitname}");
+                            //Debug.Log($"Left mouse button hit {hitname}");
                             //var hitname = go.name.ToLower();
                         }
                         else
                         {
-                            Debug.Log("Nothing was hit");
+                           // Debug.Log("Nothing was hit");
                         }
                     }
 
@@ -1977,18 +1979,18 @@ namespace CampusSimulator
             Event e = Event.current;
             if ((e.type == EventType.KeyDown) && (e.keyCode == KeyCode.B) && Event.current.modifiers == EventModifiers.Control)
             {
-                Debug.Log("Ctrl-B");
+                //Debug.Log("Ctrl-B");
                 e.Use(); // keeps unity shortcuts from popping up
             }
             else if ((e.type == EventType.KeyDown) && (e.keyCode == KeyCode.B))
             {
-                Debug.Log("B");
+                //Debug.Log("B");
                 e.Use();
             }
 
             if (e.type == EventType.MouseDown && e.button == 2 )
             {
-                Debug.Log("Middle Mouse was pressed");
+                //Debug.Log("Middle Mouse was pressed");
 
                 Vector3 mousePos = e.mousePosition;
                 float ppp = EditorGUIUtility.pixelsPerPoint;
@@ -2007,7 +2009,7 @@ namespace CampusSimulator
                         var pname = go.transform.parent.gameObject.name;
                         hitname = $"{pname}/{hitname}";
                     }
-                    Debug.Log("Middle mouse button hit " + go.name);
+                    //Debug.Log("Middle mouse button hit " + go.name);
                     if (hitname.StartsWith("bldevacalarm"))
                     {
                         var alarm = go.GetComponent<BldEvacAlarm>();
@@ -2027,7 +2029,7 @@ namespace CampusSimulator
             }
             if (e.type == EventType.MouseDown && e.button == 0)
             {
-                Debug.Log("Left Mouse was pressed");
+                //Debug.Log("Left Mouse was pressed");
 
                 Vector3 mousePos = e.mousePosition;
                 float ppp = EditorGUIUtility.pixelsPerPoint;
@@ -2040,7 +2042,7 @@ namespace CampusSimulator
                 if (Physics.Raycast(ray, out hit))
                 {
                     var go = hit.collider.gameObject;
-                    Debug.Log("Left Mouse button hit " + go.name +"  mousePos:"+mousePos.ToString("F1"));
+                    //Debug.Log("Left Mouse button hit " + go.name +"  mousePos:"+mousePos.ToString("F1"));
                     if (leditor.editMode)
                     {
                         leditor.MaybeSelectEditNode(go);
@@ -2049,7 +2051,7 @@ namespace CampusSimulator
                 }
                 else
                 {
-                    Debug.Log("Left Mouse button missed everything");
+                    //Debug.Log("Left Mouse button missed everything");
                 }
               
             }

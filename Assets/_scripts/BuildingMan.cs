@@ -490,14 +490,15 @@ namespace CampusSimulator
         Dictionary<string, int> floordict = new Dictionary<string, int>()
         {
             { "f00",0 },
-            { "f01",1 },
-            { "f02",2 },
-            { "f03",3 },
-            { "f04",4 },
-            { "f06",6 },
-            { "f07",7 },
-            { "f08",8 },
-            { "f09",9 },
+            { "f01",0 },
+            { "f02",1 },
+            { "f03",2 },
+            { "f04",3 },
+            { "f05",4 },
+            { "f06",5 },
+            { "f07",6 },
+            { "f08",7 },
+            { "f09",8 },
         };
         public void UpdateFloorHeights()
         {

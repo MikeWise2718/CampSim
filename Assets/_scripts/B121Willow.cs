@@ -26,6 +26,8 @@ public class B121Willow : MonoBehaviour
 
     CampusSimulator.Building bld;
 
+    public OsmBldSpec bspec;
+
 
     bool _b121_WillowModelLoaded = false;
     bool _b121_shell = false;
@@ -59,14 +61,7 @@ public class B121Willow : MonoBehaviour
         _b121_osmbld = osmbld.GetInitial(false);
         _b121_glasswalls = glasswalls.GetInitial(false);
         lastMaterialMode = b121_materialMode.Get();
-        //Debug.Log($"b121.loadmodel:{loadmodel.Get()}");
-        //Debug.Log($"b121.shell:{shell.Get()}");
-        //Debug.Log($"b121.interior:{interiorwalls.Get()}");
-        //Debug.Log($"b121.hvac:{hvac.Get()}");
-        //Debug.Log($"b121.lighting:{lighting.Get()}");
-        //Debug.Log($"b121.plumbing:{plumbing.Get()}");
-        //Debug.Log($"b121.osmbld:{osmbld.Get()}");
-        //Debug.Log($"b121.materialmode:{b121_materialMode.Get()}");
+        bspec = sman.bdman.FindBldSpecByNameStart(bld.osmnamestart);
     }
 
 
@@ -219,6 +214,15 @@ public class B121Willow : MonoBehaviour
                 rv = 8.40f;
                 break;
         }
+        //if (bspec == null)
+        //{
+        //    sman.LggError("B121Willow.GetFloorHeight - bspec null with includeAltitude=true");
+        //}
+        //else
+        //{
+        //    rv += bspec.GetGround();
+        //}
+
         if (includeAltitude)
         {
             rv += ymapheight;

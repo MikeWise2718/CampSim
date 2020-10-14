@@ -118,6 +118,7 @@ namespace CampusSimulator
 
         public void MakeOneButton(Transform parent, TopButSpec tbs)
         {
+            //sman.Lgg("MakeOneButton", "red");
             if (filterList.Count > 0)
             {
                 if (!IsInFilter(tbs.filter))
@@ -139,7 +140,7 @@ namespace CampusSimulator
             lay_but_y = 30;
             var pos = new Vector3(lay_but_x, lay_but_y, 0);
             recttrans.SetPositionAndRotation(pos, Quaternion.identity);
-            sman.Lgg($"{tbs.idname} btxt.text:{btxt.text+"*"} preflen:{preflen}", "cyan");
+            //sman.Lgg($"{tbs.idname} btxt.text:{btxt.text+"*"} preflen:{preflen}", "cyan");
             var txwneed = (int) (preflen+1);
             var (a_xmin, a_xmax) = (0.5f, 0.5f);
             var (a_ymin, a_ymax) = (0.5f, 0.5f);
@@ -204,7 +205,7 @@ namespace CampusSimulator
                                 lay_cen_stop = p_x + txwneed/2;
                             }
                         }
-                        sman.Lgg($"{tbs.idname} lay_cen_stop:{olcs} txwneed:{txwneed} tbs.xpos:{tbs.xpos}  new:lay_cen_stop:{lay_cen_stop}", "lightgreen");
+                        //sman.Lgg($"{tbs.idname} lay_cen_stop:{olcs} txwneed:{txwneed} tbs.xpos:{tbs.xpos}  new:lay_cen_stop:{lay_cen_stop}", "lightgreen");
                         break;
                     }
                 case "left":
@@ -226,7 +227,7 @@ namespace CampusSimulator
                                 lay_left_stop = p_x + txwneed/2;
                             }
                         }
-                        sman.Lgg($"{tbs.idname} lay_left_stop:{olls} txwneed:{txwneed} tbs.xpos:{tbs.xpos}  new:lay_left_stop:{lay_left_stop}", "orange");
+                        //sman.Lgg($"{tbs.idname} lay_left_stop:{olls} txwneed:{txwneed} tbs.xpos:{tbs.xpos}  new:lay_left_stop:{lay_left_stop}", "orange");
                         break;
                     }
                 case "right":
@@ -248,7 +249,7 @@ namespace CampusSimulator
                                 lay_right_stop = p_x - txwneed / 2;
                             }
                         }
-                        sman.Lgg($"{tbs.idname} lay_right_stop:{olrs} txwneed:{txwneed} tbs.xpos:{tbs.xpos}  new:lay_right_stop:{lay_right_stop}", "lightblue");
+                        //sman.Lgg($"{tbs.idname} lay_right_stop:{olrs} txwneed:{txwneed} tbs.xpos:{tbs.xpos}  new:lay_right_stop:{lay_right_stop}", "lightblue");
                         break;
                     }
             }
@@ -277,12 +278,12 @@ namespace CampusSimulator
             }
             if (!spacerButton)
             {
-                sman.Lgg($"Creating {butt.name}","pink");
+                //sman.Lgg($"Creating {butt.name}","pink");
                 createdButList.Add((butt, tbs.idname, tbs.dispname));
             }
             else
             {
-                sman.Lgg($"Destroying {butt.name}", "lightblue");
+                //sman.Lgg($"Destroying {butt.name}", "lightblue");
                 Destroy(butt.gameObject);// spacer buttons don't get added
             }
             lay_but_x += lay_but_w + lay_but_gap_x;
