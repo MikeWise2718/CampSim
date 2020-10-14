@@ -213,7 +213,7 @@ namespace CampusSimulator
                         //maingaragename = "Garage19_1";
                         roomspecs = B33roomspec;
                         destnodes = SplitRoomNameOutOfRoomspecs(roomspecs);
-                        shortname = "b33";
+                        shortname = "Bld33";
                         journeyChoiceWeight = 20;
                         if (bm.sman.curscene == SceneSelE.MsftB33focused)
                         {
@@ -279,6 +279,7 @@ namespace CampusSimulator
 
                         newosmlevels = 3;
                         newosmheight = 12.3f;
+                        newosmgroundref = GroundRef.max;
 
 
 

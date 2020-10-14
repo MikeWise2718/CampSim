@@ -15,8 +15,9 @@ public class OptionsPanel : MonoBehaviour
     FramePanel framePanel;
     FireFlyPanel fireFlyPanel;
     BuildingsPanel buildingsPanel;
-    GeneralPanel generalPanel;
     OsmPanel osmPanel;
+    JourneyPanel journeyPanel;
+    GeneralPanel generalPanel;
     UiConfigPanel uiConfigPanel;
     LogPanel logPanel;
     HelpPanel helpPanel;
@@ -36,7 +37,7 @@ public class OptionsPanel : MonoBehaviour
     public UxSetting<string> enableStringSetting = new UxSetting<string>("OptionsEnableString", enableStringRoot);
     public UxSetting<string> topButtonStringSetting = new UxSetting<string>("TopButtonEnableString", enableStringRoot);
 
-    public const string enableStringRoot = "Visuals,MapSet,Frames,FireFly,Buildings,Osm,General,Ui,Log,Help,About";
+    public const string enableStringRoot = "Visuals,MapSet,Frames,FireFly,Buildings,Osm,Journey,General,Ui,Log,Help,About";
     public string enableString;
 
     public const string tbpfiltlistDefault = "All,Sim";
@@ -65,6 +66,7 @@ public class OptionsPanel : MonoBehaviour
         {"FireFly",new OptButtSpec(TabState.FireFly.ToString(),"FireFly","FireFly related parameters") },
         {"Buildings",new OptButtSpec(TabState.Buildings.ToString(),"Buildings","Building related parameters") },
         {"Osm",new OptButtSpec(TabState.Osm.ToString(),"Osm","Open Street Map Import") },
+        {"Journey",new OptButtSpec(TabState.Journey.ToString(),"Journey","Configure a new Journey") },
         {"General",new OptButtSpec(TabState.General.ToString(),"General","General parameters") },
         {"Ui",new OptButtSpec(TabState.Ui.ToString(),"Ui","UI Configuration") },
         {"Log",new OptButtSpec(TabState.Log.ToString(),"Log","Log messages (i.e. errors, warnings, timings, etc)") },
@@ -84,7 +86,7 @@ public class OptionsPanel : MonoBehaviour
 
 
 
-    public enum TabState { Visuals, MapSet, FireFly, Frames, Buildings, Osm, General, Ui, Log, Help, About }
+    public enum TabState { Visuals, MapSet, FireFly, Frames, Buildings, Osm, Journey, General, Ui, Log, Help, About }
     TabState currentTabState;
 
     public void Init0()
@@ -106,6 +108,7 @@ public class OptionsPanel : MonoBehaviour
         fireFlyPanel = transform.Find("FireFlyPanel").GetComponent<FireFlyPanel>();
         buildingsPanel = transform.Find("BuildingsPanel").GetComponent<BuildingsPanel>();
         osmPanel = transform.Find("OsmPanel").GetComponent<OsmPanel>();
+        journeyPanel = transform.Find("JourneyPanel").GetComponent<JourneyPanel>();
         uiConfigPanel = transform.Find("UiConfigPanel").GetComponent<UiConfigPanel>();
         generalPanel = transform.Find("GeneralPanel").GetComponent<GeneralPanel>();
         logPanel = transform.Find("LogPanel").GetComponent<LogPanel>();
@@ -119,6 +122,7 @@ public class OptionsPanel : MonoBehaviour
         panDict[TabState.FireFly] = fireFlyPanel.gameObject;
         panDict[TabState.Buildings] = buildingsPanel.gameObject;
         panDict[TabState.Osm] = osmPanel.gameObject;
+        panDict[TabState.Journey] = journeyPanel.gameObject;
         panDict[TabState.Ui] = uiConfigPanel.gameObject;
         panDict[TabState.General] = generalPanel.gameObject;
         panDict[TabState.Log] = logPanel.gameObject;
@@ -132,6 +136,7 @@ public class OptionsPanel : MonoBehaviour
         initDict[TabState.FireFly] = delegate { fireFlyPanel.InitVals(); };
         initDict[TabState.Buildings] = delegate { buildingsPanel.InitVals(); };
         initDict[TabState.Osm] = delegate { osmPanel.InitVals(); };
+        initDict[TabState.Journey] = delegate { journeyPanel.InitVals(); };
         initDict[TabState.General] = delegate { generalPanel.InitVals(); };
         initDict[TabState.Ui] = delegate { uiConfigPanel.InitVals(); };
         initDict[TabState.Log] = delegate { logPanel.FillLogPanel(); };
@@ -144,6 +149,7 @@ public class OptionsPanel : MonoBehaviour
         setAndSaveDict[TabState.FireFly] = delegate { fireFlyPanel.SetVals(true); };
         setAndSaveDict[TabState.Buildings] = delegate { buildingsPanel.SetVals(true); };
         setAndSaveDict[TabState.Osm] = delegate { osmPanel.SetVals(true); };
+        setAndSaveDict[TabState.Journey] = delegate { journeyPanel.SetVals(true); };
         setAndSaveDict[TabState.Ui] = delegate { uiConfigPanel.SetVals(true); };
         setAndSaveDict[TabState.General] = delegate { generalPanel.SetVals(true); };
 
@@ -218,14 +224,14 @@ public class OptionsPanel : MonoBehaviour
         uiman.optpan.SyncOptionsTabState();
     }
 
-    public void OptionsSubMenuButtonPushed(TabState newstate)
-    {
-        if (!IsOptionsPanelOpen())
-        {
-            OpenOptionsPanel();
-        }
-        SetTabState(newstate);
-    }
+    //public void OptionsSubMenuButtonPushed(TabState newstate)
+    //{
+    //    if (!IsOptionsPanelOpen())
+    //    {
+    //        OpenOptionsPanel();
+    //    }
+    //    SetTabState(newstate);
+    //}
 
     public void OptionsSubMenuButtonPushed(string newstate)
     {
@@ -323,7 +329,7 @@ public class OptionsPanel : MonoBehaviour
             case SceneSelE.Eb12:
             case SceneSelE.Eb12small:
                 {
-                    enableStringSceneDefault = "Visuals,MapSet,Buildings,Osm,Ui,Log,Help,About";
+                    enableStringSceneDefault = "Visuals,MapSet,Buildings,Osm,Journey,Ui,Log,Help,About";
                     break;
                 }
             case SceneSelE.MsftSmall:
@@ -333,17 +339,17 @@ public class OptionsPanel : MonoBehaviour
                 }
             case SceneSelE.MsftB19focused:
                 {
-                    enableStringSceneDefault = "Visuals,MapSet,Frames,Buildings,Osm,General,Ui,Log,Help,About";
+                    enableStringSceneDefault = "Visuals,MapSet,Frames,Buildings,Osm,Journey,General,Ui,Log,Help,About";
                     break;
                 }
             case SceneSelE.MsftB33focused:
                 {
-                    enableStringSceneDefault = "Visuals,MapSet,Frames,Buildings,Osm,General,Ui,Log,Help,About";
+                    enableStringSceneDefault = "Visuals,MapSet,Frames,Buildings,Osm,Journey,General,Ui,Log,Help,About";
                     break;
                 }
             case SceneSelE.MsftB121focused:
                 {
-                    enableStringSceneDefault = "Visuals,MapSet,Buildings,Osm,General,Ui,Log,Help,About";
+                    enableStringSceneDefault = "Visuals,MapSet,Buildings,Osm,Journey,General,Ui,Log,Help,About";
                     break;
                 }
             case SceneSelE.TeneriffeMtn:
