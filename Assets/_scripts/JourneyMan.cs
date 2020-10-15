@@ -298,7 +298,7 @@ namespace CampusSimulator
                 return null;
             }
         }
-        public Journey AddBldBldJourney(string fr_node, string tu_node, string pathname)
+        public Journey AddBldNodeBldNodeJourney(string fr_node, string tu_node, string pathname)
         {
             if (!NodeExists(fr_node)) return null;
             if (!NodeExists(tu_node)) return null;
@@ -847,7 +847,7 @@ namespace CampusSimulator
             }
             var bdest1 = bar1[1];
             var bdest2 = bar2[1];
-            var jny = AddBldBldJourney(bdest1, bdest2, pathname);
+            var jny = AddBldNodeBldNodeJourney(bdest1, bdest2, pathname);
             return jny;
         }
         public Journey AddNodeNodeJourneyWithEphemeralPeople(string bdestnode1, string bdestnode2, LcCapType captype = LcCapType.anything, string ava = "", float velfak = 1f, float skafak = 1, float lambstart = 0, JourneyEnd jend = JourneyEnd.disappear)
@@ -878,7 +878,7 @@ namespace CampusSimulator
             }
             var bdest1 = bc1.GetRandomDest("jnygen");
             var bdest2 = bc2.GetRandomDest("jnygen");
-            var jny = AddBldBldJourney(bdest1, bdest2, pathname);
+            var jny = AddBldNodeBldNodeJourney(bdest1, bdest2, pathname);
             return jny;
         }
         public void CheckFastMode()

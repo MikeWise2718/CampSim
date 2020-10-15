@@ -708,38 +708,31 @@ namespace GraphAlgos
 
             // do drive paths
 
-            if (garage.dnode != null)
+            grc.SetCurUseType(LinkUse.driveway);
+            var d_nodeprev = (d_order == connectOrderE.dec ? "" : drivenode);
+            var d_ang = (d_exit == exitDirE.front ? 0 : 180);
+            for (int i = 0; i < nslots; i++)
             {
-                grc.SetCurUseType(LinkUse.driveway);
-                var d_nodeprev = (d_order == connectOrderE.dec ? "" : drivenode);
-                var d_ang = (d_exit == exitDirE.front ? 0 : 180);
-                for (int i = 0; i < nslots; i++)
+                var d_pslotnodename = garage.SlotAxuxNodeName("dps", i);
+                var d_slotpos = garage.GetSlotPosition1(i, d_ang, d_len);
+                grc.NewAnchorLinkToxz(pslotnodename[i], d_pslotnodename, d_slotpos.x, d_slotpos.z);
+                //AddLink(pslotnodename[i], d_pslotnodename);
+                if (d_nodeprev != "")
                 {
-                    var d_pslotnodename = garage.SlotAxuxNodeName("dps", i);
-                    var d_slotpos = garage.GetSlotPosition1(i, d_ang, d_len);
-                    grc.NewAnchorLinkToxz(pslotnodename[i], d_pslotnodename, d_slotpos.x, d_slotpos.z);
-                    //AddLink(pslotnodename[i], d_pslotnodename);
-                    if (d_nodeprev != "")
+                    if (d_nodeprev.StartsWith("osm") || d_pslotnodename.StartsWith("osm"))
                     {
-                        if (d_nodeprev.StartsWith("osm") || d_pslotnodename.StartsWith("osm"))
-                        {
-                            grc.AddLateLink(d_pslotnodename, d_nodeprev, LinkUse.driveway);
-                        }
-                        else
-                        {
-                            grc.AddLinkByNodeName(d_pslotnodename, d_nodeprev);
-                        }
+                        grc.AddLateLink(d_pslotnodename, d_nodeprev, LinkUse.driveway);
                     }
-                    d_nodeprev = d_pslotnodename;
+                    else
+                    {
+                        grc.AddLinkByNodeName(d_pslotnodename, d_nodeprev);
+                    }
                 }
-                if (d_order == connectOrderE.dec)
-                {
-                    grc.AddLinkByNodeName(d_nodeprev, drivenode);
-                }
+                d_nodeprev = d_pslotnodename;
             }
-            else
+            if (d_order == connectOrderE.dec)
             {
-                gm.sman.LggError($"Garage {gname} dnode is null");
+                grc.AddLinkByNodeName(d_nodeprev, drivenode);
             }
 
             // do walk paths

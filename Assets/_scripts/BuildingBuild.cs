@@ -227,7 +227,6 @@ namespace CampusSimulator
                         newosmheight = 8;
 
 
-
                         //b19comp = this.transform.gameObject.AddComponent<B19Willow>();
                         //b19comp.InitializeValues(bm.sman, this);
                         //b19comp.MakeItSo();
@@ -252,7 +251,6 @@ namespace CampusSimulator
                         defAngAlign = 24.0f;
                         newosmlevels = 5;
                         newosmheight = 20;
-
 
                         //b19comp = this.transform.gameObject.AddComponent<B19Willow>();
                         //b19comp.InitializeValues(bm.sman, this);
@@ -573,7 +571,10 @@ namespace CampusSimulator
             bldgos = new List<GameObject>();
             //maingaragename = "blurb";
             selectionweight = 1;
-            destnodes = new List<string>();
+            if (destnodes == null)
+            {
+                destnodes = new List<string>();
+            }
             isOsmGenerated = true;
             var parentname = this.transform.parent.gameObject.name;
             //Debug.Log($"Building {name}  {bs.shortname} isOsmGenerated:{isOsmGenerated} parentname:{parentname}");
@@ -643,13 +644,7 @@ namespace CampusSimulator
             }
             else if (isOsmGenerated)
             {
-                rv = bldspec.GetFloorHeight(floornum);
-                var ptcen = bldspec.GetCenterTop();
-                if (includeAltitude)
-                {
-                    var alt = bm.sman.mpman.GetHeight(ptcen.x, ptcen.z);
-                    rv += alt;
-                }
+                rv = bldspec.GetFloorHeight(floornum,includeAltitude:includeAltitude);
             }
             else
             {
@@ -988,6 +983,10 @@ namespace CampusSimulator
             if (bm.osmgroundoutline.Get())
             {
                 EchOsmGroundOutline(bldspec.bgo, bldspec, "green","red", pgvd: pgvd);
+            }
+            if (bldspec.shortname=="Bld33")
+            {
+                Debug.Log("Bld33");
             }
             if (bm.osmoutline.Get())
             {

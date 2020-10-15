@@ -175,7 +175,7 @@ namespace GraphAlgos
     public enum LcCapType { walk, drive, waterflow, elecflow, anything, fly }
     public enum LinkUse { legacy, highway, road, slowroad, driveway, walkway, walkwaynoshow, stairs, marker, excavation, waterpipe, recwaterpipe,sewerpipe, elecpipe,commspipe,oilgaspipe, bldwall, trackperson,trackheli,trackdrone, droneway }
 
-    [Serializable]
+    // [Serializable] leads to warnings about serilization depth being exeeded, but it still works if you need it
     public class LcLink
     {
         // public GraphCtrl grc;  //  commented out - this leads to an object composition cycle I think....

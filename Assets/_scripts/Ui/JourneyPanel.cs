@@ -8,6 +8,7 @@ public class JourneyPanel : MonoBehaviour
 {
     public SceneMan sman;
     BuildingMan bdman;
+    JourneyMan jnman;
     UiMan uiman;
 
     Dropdown startBuildingDropdown;
@@ -31,6 +32,7 @@ public class JourneyPanel : MonoBehaviour
         sman = FindObjectOfType<SceneMan>();
         uiman = sman.uiman;
         bdman = sman.bdman;
+        jnman = sman.jnman;
 
         startBuildingDropdown = transform.Find("StartBuildingDropdown").gameObject.GetComponent<Dropdown>();
         startBuildingText = transform.Find("StartBuildingText").gameObject.GetComponent<Text>();
@@ -92,6 +94,7 @@ public class JourneyPanel : MonoBehaviour
     {
         var bld1 = stopts[startBuildingDropdown.value];
         var bld2 = edopts[endBuildingDropdown.value];
+        jnman.AddBldBldJourneyWithEphemeralPeople(bld1, bld2);
         Debug.Log($"Launch journey from {bld1} to {bld2}");
     }
 

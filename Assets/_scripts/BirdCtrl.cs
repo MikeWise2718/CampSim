@@ -487,7 +487,7 @@ namespace CampusSimulator
         {
             StartBird();
         }
-        string lastscript = "";
+        public string lastscript = "";
         void SetAnimationScript()
         {
             if (movingAnimationScript != "")
@@ -505,6 +505,7 @@ namespace CampusSimulator
                     {
                         acomp.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>(script);
                         PersonMan.UnsyncAnimation(acomp, script, "BirdCtrl");
+                        lastscript = script;
                         //acomp.Play(script, 0, GraphAlgos.GraphUtil.GetRanFloat(0, 1));// unsync the animations for birdctrl
 
                     }
