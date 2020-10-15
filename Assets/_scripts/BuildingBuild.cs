@@ -231,6 +231,7 @@ namespace CampusSimulator
                         //b19comp.InitializeValues(bm.sman, this);
                         //b19comp.MakeItSo();
                         //bm.AddBuildingAlias("b19", this);
+                        bm.AddBuildingAlias("b33", this);
                         break;
                     }
                 case "Bld34":
@@ -256,6 +257,7 @@ namespace CampusSimulator
                         //b19comp.InitializeValues(bm.sman, this);
                         //b19comp.MakeItSo();
                         //bm.AddBuildingAlias("b19", this);
+                        bm.AddBuildingAlias("b34", this);
                         break;
                     }
                 case "Bld121":

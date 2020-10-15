@@ -296,13 +296,19 @@ namespace CampusSimulator
                         birdformgo.transform.localPosition = curpos + moveoffset;
                         //BirdFlyHeight = 1.5f;
                         birdgo.name = birdresourcename;
+                        movingAnimationScript = "Animations/PersonWalk";
+                        restingAnimationScript = "Animations/PersonIdle";
+                        if (person!=null)
+                        {
+                            if (person.isdronelike)
+                            {
+                                movingAnimationScript = "";
+                                restingAnimationScript = "";
+                            }
+                        }
                         if (person)
                         {
-                            if (!person.isdronelike)
-                            {
-                                movingAnimationScript = "Animations/PersonWalk";
-                                restingAnimationScript = "Animations/PersonIdle";
-                            }
+
                             if (person.hasCamera)
                             {
                                 person.AddCamera(birdformgo, "BirdCtrl CreateBirdFormGos");

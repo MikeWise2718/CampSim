@@ -530,7 +530,11 @@ namespace CampusSimulator
                     }
                     else
                     {
-                        bd = sman.bdman.GetBuildingFromAlias(bname, couldFail: true);
+                        bd = sman.bdman.GetBuilding(bname, couldFail: true);
+                        if (bd == null)
+                        {
+                            bd = sman.bdman.GetBuildingFromAlias(bname, couldFail: true);
+                        }
                         if (bd != null)
                         {
                             bldcache[bname] = bd;
@@ -542,10 +546,10 @@ namespace CampusSimulator
                     }
                     if (bd != null)
                     {
-                        //if (bd.name == "BldRWB" && fname=="f03")
-                        //{
-                        //    Debug.Log("Here I am again");
-                        //}
+                        if (bd.name == "Bld33" && fname=="f01")
+                        {
+                            Debug.Log("Here I am again");
+                        }
                         if (floordict.ContainsKey(fname))
                         {
                             var iflr = floordict[fname];
