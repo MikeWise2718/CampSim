@@ -2138,24 +2138,26 @@ namespace GraphAlgos
             //zs = 0;
 
             // stairwell
-            grc.AddNodePtxyz("b121-f01-str102-0", -820.06 + xs, 0.000, -481.8 + zs, comment: ""); //  1 nn:1 nl:0
-            grc.LinkToPtxyz("b121-f01-str102-1", -818.35 + xs, 1.150, -481.1 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
-            grc.LinkToPtxyz("b121-f01-str102-2", -816.26 + xs, 2.500, -480.56 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
-            grc.LinkToPtxyz("b121-f01-str102-3", -815.3 + xs, 2.500, -480.2 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
-            grc.LinkToPtxyz("b121-f01-str102-4", -814.7 + xs, 2.600, -482.4 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
-            grc.LinkToPtxyz("b121-f01-str102-5", -816.2 + xs, 2.600, -483.0 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
-            grc.LinkToPtxyz("b121-f02-str102-6", -818.4 + xs, 4.100, -483.77 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
-            grc.LinkToPtxyz("b121-f02-str102-7", -820.16 + xs, 4.100, -484.45 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
-            grc.LinkToPtxyz("b121-f02-str102-8", -820.83 + xs, 4.100, -482.29 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
-
-            var d1 = 4.1f;
+            var d1 = 4.3f;
             var d2 = 4.1f;
-            grc.LinkToPtxyz("b121-f02-str102-10", -820.06 + xs, d1 + 0.000, -481.8 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
-            grc.LinkToPtxyz("b121-f02-str102-11", -818.35 + xs, d1 + 1.150, -481.1 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
-            grc.LinkToPtxyz("b121-f02-str102-12", -816.26 + xs, d1 + 2.500, -480.56 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
-            grc.LinkToPtxyz("b121-f02-str102-13", -815.3 + xs, d1 + 2.500, -480.2 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
-            grc.LinkToPtxyz("b121-f02-str102-14", -814.7 + xs, d1 + 2.600, -482.4 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
-            grc.LinkToPtxyz("b121-f01-str102-15", -816.2 + xs, d1 + 2.600, -483.0 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
+            grc.AddNodePtxyz("b121-f01-str102-0", -820.2 + xs, 0.000, -481.8 + zs, comment: ""); //  1 nn:1 nl:0
+            //grc.LinkToPtxyz("b121-s12-str102-1", -818.35 + xs, 1.400, -481.25 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
+            grc.LinkToPtxyz("b121-s12-str102-1", -818.12 + xs, 1.500, -481.13 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
+            grc.LinkToPtxyz("b121-s12-str102-2", -816.26 + xs, 2.800, -480.56 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
+            grc.LinkToPtxyz("b121-s12-str102-3", -815.3 + xs, 2.800, -480.2 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
+            grc.LinkToPtxyz("b121-s12-str102-4", -814.7 + xs, 2.800, -482.4 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
+            grc.LinkToPtxyz("b121-s12-str102-5", -816.2 + xs, 2.800, -483.0 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
+            grc.LinkToPtxyz("b121-f02-str102-6", -818.4 + xs, d1, -483.77 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
+            grc.LinkToPtxyz("b121-f02-str102-7", -820.16 + xs, d1, -484.45 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
+            grc.LinkToPtxyz("b121-f02-str102-8", -820.83 + xs, d1, -482.29 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
+
+            grc.LinkToPtxyz("b121-f02-str102-10", -820.2 + xs, d1 + 0.000, -481.8 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
+            //grc.LinkToPtxyz("b121-s23-str102-11", -818.35 + xs, d1 + 1.200, -481.25 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
+            grc.LinkToPtxyz("b121-s23-str102-11", -818.12 + xs, d1 + 1.300, -481.13 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
+            grc.LinkToPtxyz("b121-s23-str102-12", -816.26 + xs, d1 + 2.600, -480.56 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
+            grc.LinkToPtxyz("b121-s23-str102-13", -815.3 + xs, d1 + 2.600, -480.2 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
+            grc.LinkToPtxyz("b121-s23-str102-14", -814.7 + xs, d1 + 2.600, -482.4 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
+            grc.LinkToPtxyz("b121-s23-str102-15", -816.2 + xs, d1 + 2.600, -483.0 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
             grc.LinkToPtxyz("b121-f03-str102-16", -818.4 + xs, d1 + d2, -483.77 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
             grc.LinkToPtxyz("b121-f03-str102-17", -820.16 + xs, d1 + d2, -484.45 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
             grc.LinkToPtxyz("b121-f03-str102-18", -821.82 + xs, d1 + d2, -482.29 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
@@ -2237,6 +2239,31 @@ namespace GraphAlgos
             grc.AddLinkByNodeName("b19-dronepad", "b19-os1-o00", LinkUse.walkway);
             grc.regman.SetRegion("default");
         }
+
+        public void createPointsFor_msft_b33()  // machine generated - do not edit
+        {
+            grc.regman.NewNodeRegion("msft-b33", "purple", saveToFile: true);
+            var xs = 0;
+            var zs = 0;
+            grc.AddNodePtxyz("b33-f01-lobby", -563.000 + xs, 0.000, 463.300 + zs, comment: "");
+            grc.LinkToPtxyz("b33-o01-001", -558.900 + xs, 0.000, 451.500 + zs, comment: "");
+            grc.regman.SetRegion("default");
+        }
+
+
+
+        public void createPointsFor_msft_b34()  // machine generated - do not edit
+        {
+            grc.regman.NewNodeRegion("msft-b34", "purple", saveToFile: true);
+            var xs = 0;
+            var zs = 0;
+            grc.AddNodePtxyz("b34-f01-lobby", -702.300 + xs, 0.000, 431.400 + zs, comment: "");
+            grc.LinkToPtxyz("b34-o01-001", -697.700 + xs, 0.000, 415.700 + zs, comment: "");
+            grc.regman.SetRegion("default");
+        }
+
+
+
         public void createPointsFor_msft_b19()  // machine generated - do not edit
         {
             grc.regman.NewNodeRegion("msft-b19", "purple", saveToFile: true);
@@ -7667,6 +7694,7 @@ namespace GraphAlgos
         public void createPointsFor_msft_bredwb()  // machine generated - do not edit
         {
             grc.regman.NewNodeRegion("msft-bredwb", "purple", saveToFile: true);
+            grc.gm.setmodxyz_off(grc.redwestNewMapXoffset, 0, grc.redwestNewMapZoffset);
             grc.AddNodePtxyz("bRWB-f01-lobby", -2044.300, 0.000, -1119.600, comment: ""); //  1 nn:1 nl:0
             grc.LinkToPtxyz("bRWB-f01-lobby", "bRWB-os1-o00", -2059.240, 0.000, -1124.150, LinkUse.walkway, comment: ""); //  2 nn:1 nl:1
             grc.LinkToPtxyz("bRWB-os1-o00", "bRWB-os1-o01", -2063.060, 0.000, -1138.260, LinkUse.walkway, comment: ""); //  3 nn:1 nl:1
@@ -7709,6 +7737,7 @@ namespace GraphAlgos
             grc.LinkToPtxyz("dw-RWB-c34", "dw-RWB-c36", -2021.000, 0.000, -1219.000, LinkUse.driveway, comment: ""); //  40 nn:1 nl:1
             grc.LinkToPtxyz("dw-RWB-c36", "dw-RWB-c38", -2030.300, 0.000, -1190.700, LinkUse.driveway, comment: ""); //  41 nn:1 nl:1
             grc.AddLinkByNodeName("dw-RWB-c00", "reg:msft-campus", LinkUse.driveway); //  42 nn:0 nl:1
+            grc.gm.setmodxyz_off(0,0,0);
             grc.regman.SetRegion("default");
         }
 
@@ -7716,6 +7745,7 @@ namespace GraphAlgos
         public void createPointsFor_msft_bredwb_f3()    // machine generated - do not edit
         {
             grc.regman.NewNodeRegion("msft-bredwb-f3", "purple", saveToFile: true);
+            grc.gm.setmodxyz_off(grc.redwestNewMapXoffset, 0, grc.redwestNewMapZoffset);
             grc.AddNodePtxyz("rwb-f03-cv0-s", -1971.357, 9.000, -1118.202, comment: ""); //  1 nn:1 nl:0
             grc.AddNodePtxyz("rwb-f03-cv0-e", -2048.843, 9.000, -1143.539, comment: ""); //  2 nn:1 nl:0
             grc.AddNodePtxyz("rwb-f03-cv1-s", -1975.537, 9.000, -1106.327, comment: ""); //  3 nn:1 nl:0
@@ -9094,6 +9124,7 @@ namespace GraphAlgos
             grc.AddLinkByNodeName("rwb-f03-cor3049", "rwb-f03-cor3381", LinkUse.legacy); //  1115 nn:0 nl:1
             grc.AddLinkByNodeName("rwb-f03-cor3049", "rwb-f03-ch12-1", LinkUse.legacy); //  1116 nn:0 nl:1
             grc.regman.SetRegion("default");
+            grc.gm.setmodxyz_off(0,0,0);
         }
 
         public void createPointsFor_msft_bsx()  // machine generated - do not edit

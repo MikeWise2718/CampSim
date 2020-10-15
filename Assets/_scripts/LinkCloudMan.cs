@@ -186,8 +186,12 @@ namespace CampusSimulator
             var rv = graphSceneE.gen_none;
             switch (ss)
             {
+                case SceneSelE.MsftSmall:
+                    rv = graphSceneE.gen_campus_small;
+                    break;
                 case SceneSelE.MsftCoreCampus:
                 case SceneSelE.MsftB19focused:
+                case SceneSelE.MsftB33focused:
                 case SceneSelE.MsftB121focused:
                 case SceneSelE.MsftRedwest:
                     rv = graphSceneE.gen_campus;
@@ -306,20 +310,6 @@ namespace CampusSimulator
             return rv;
         }
 
-        bool IsFragable(LcLink link)
-        {
-            var rv = true;
-            if (link.usetype== LinkUse.droneway)
-            {
-                rv = false;
-            }
-            if (link.node1.pt.y>0 || link.node2.pt.y>0)
-            {
-                rv = false;
-            }    
-            return rv;
-        }
-
         bool CheckCapUseVisibility(LcNode node)
         {
             var rv = true;
@@ -333,7 +323,6 @@ namespace CampusSimulator
             }
             return rv;
         }
-
 
 
         public bool CanGetHeights()
@@ -362,6 +351,7 @@ namespace CampusSimulator
 
         public void CalculateAndSetHeightsOnLinkCloud()
         {
+            var sw = new StopWatch();
             longlatmap = sman.coman.glbllm;
             if (longlatmap == null) return;
             var calcHeights = true;
@@ -378,10 +368,10 @@ namespace CampusSimulator
                 {
                     var yoff = GetHeight(node.pto.x, node.pto.z);
                     node.pt = new Vector3(node.pto.x, node.pto.y + yoff, node.pto.z);
-                    if (node.name == "b121-f01-1071")
-                    {
-                        Debug.Log($"{node.name} pt:{node.pt:f1} pto:{node.pto:f1}");
-                    }
+                    //if (node.name == "b121-f01-1071")
+                    //{
+                    //    Debug.Log($"{node.name} pt:{node.pt:f1} pto:{node.pto:f1}");
+                    //}
                 }
             }
             var cam = Camera.current;
@@ -392,6 +382,8 @@ namespace CampusSimulator
                 cam.transform.position = new Vector3(pt.x, pt.y + ht, pt.z);
             }
             sman.needsLifted = false;
+            sw.Stop();
+            Debug.Log($"CalculateAndSetHeightOnLinkCloud took {sw.ElapSecs()} secs");
         }
         public GraphCtrl GetGraphCtrl(bool donotallocate=false)
         {
@@ -449,6 +441,7 @@ namespace CampusSimulator
         GameObject pnsph = null;
 
         int gogencount = 0;
+
         void CreateGrcGos()
         {
             Debug.Log($"CreateGrcGos-{gogencount} scene:{sman.curscene} isnull:{grcgos==null}");
@@ -480,11 +473,12 @@ namespace CampusSimulator
                 foreach (var lnk in links)
                 {
                     if (!CheckCapUseVisibility(lnk)) continue;
-                    var dofrag = IsFragable(lnk);
+                    var dofrag = lnk.IsFragable();
                     var clrname = linkcolor(lnk);
                     var linkrad = linkradius(lnk);
                     var linkfrm = linkform(lnk);
-                    var go = LinkGo.MakeLinkGo(sman, lnk, linkfrm, linkrad, clrname,1-linkTrans,this.flatlinks,dofrag:dofrag);
+                    var go = LinkGo.MakeLinkGo(sman, lnk, linkfrm, linkrad, clrname,1-linkTrans,this.flatlinks,
+                                                    dofrag:dofrag, fragang:sman.mpman.fragang, fragxoff:sman.mpman.fragxoff, fragzoff:sman.mpman.fragzoff);
                     go.transform.parent = grclinks.transform;
                 }
                 swlk.Stop();

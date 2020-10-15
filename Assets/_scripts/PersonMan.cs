@@ -93,12 +93,14 @@ namespace CampusSimulator
                 case SceneSelE.MsftRedwest:
                 case SceneSelE.MsftCoreCampus:
                 case SceneSelE.MsftB19focused:
+                case SceneSelE.MsftB33focused:
                 case SceneSelE.MsftB121focused:
                     break;
                 case SceneSelE.TeneriffeMtn:
                     //presetPeople = mtten_presets;
                     break;
                 default:
+                case SceneSelE.MsftSmall:
                 case SceneSelE.None:
                     break;
             }

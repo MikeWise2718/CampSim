@@ -101,6 +101,12 @@ namespace GraphAlgos
             mod_z_off = 0.0f;
             this.llm = null;
         }
+        public void setmodxyz_off(float xoff,float yoff,float zoff)
+        {
+            mod_x_off = xoff;
+            mod_y_off = yoff;
+            mod_z_off = zoff;
+        }
         public void setmapper(LatLongMap llm)
         {
             this.llm = llm;
@@ -171,7 +177,56 @@ namespace GraphAlgos
         public string uniqueLinkPrefix = "link";
         public string graphdir = "";
 
+        public float redwestNewMapXoffset = 16.69f - 0.40f;
+        public float redwestNewMapZoffset = 12.95f + 0.70f;
 
+        LogMan lgman;
+
+        public void Lgg(string msg, string clr1, string clr2, string delim = "|", bool unitylog = true)
+        {
+            var color = new string[] { clr1, clr2 };
+            if (lgman != null)
+            {
+                lgman.Lgglong(msg, LogSeverity.Info, color: color, delim: delim, unitylog: unitylog);
+            }
+            else
+            {
+                Debug.Log(msg);
+            }
+        }
+        public void Lgg(string msg, string color = "gray")
+        {
+            if (lgman != null)
+            {
+                lgman.Lgglong(msg, LogSeverity.Info, LogTyp.GraphCtrl, color: new string[] { color });
+            }
+            else
+            {
+                Debug.Log(msg);
+            }
+        }
+        public void LggWarning(string msg)
+        {
+            if (lgman != null)
+            {
+                lgman.Lgglong(msg, LogSeverity.Error, LogTyp.GraphCtrl, color: new string[] { "yellow", "white" });
+            }
+            else
+            {
+                Debug.LogWarning(msg);
+            }
+        }
+        public void LggError(string msg)
+        {
+            if (lgman != null)
+            {
+                lgman.Lgglong(msg, LogSeverity.Error, LogTyp.GraphCtrl, color: new string[] { "red", "white" });
+            }
+            else
+            {
+                Debug.LogError(msg);
+            }
+        }
         public void SetCurUseType(LinkUse usetype)
         {
             curUseType = usetype;
@@ -263,7 +318,8 @@ namespace GraphAlgos
             regmango.transform.parent = rgo.transform;
             //regman.transform.SetParent(this.transform); there is no gameobject
             this.graphdir = graphdir;
-            //Debug.Log("Initialized LinkCloud and regman graphdir:"+graphdir);
+            lgman = GameObject.FindObjectOfType<LogMan>();
+            Lgg("Initialized LinkCloud and regman graphdir:"+graphdir,"orange");
         }
         public List<LcNode> GetLcNodes()
         {
@@ -295,14 +351,14 @@ namespace GraphAlgos
         public void SaveRegionFiles(string path)
         {
             var regs = regman.GetRegions();
-            Debug.Log($"GraphCloud SaveRegionFiles regs:{regs.Count}");
+            Lgg($"GraphCloud SaveRegionFiles regs:{regs.Count}");
             foreach (var reg in regs)
             {
                 var rreg = reg;
                 if (rreg.saveToFile)
                 {
                     var fname = path + rreg.name + ".region";
-                    Debug.Log("Saving " + fname);
+                    Lgg("SaveRegionFiles Saving " + fname);
                     LcMapMaker.SaveToFile(this, fname,ref rreg);
                 }
             }
@@ -310,14 +366,14 @@ namespace GraphAlgos
         public void LoadRegionBuildings(string path)
         {
             var regs = regman.GetRegions();
-            Debug.Log($"GraphCloud LoadRegionBuildings regs:{regs.Count} not implemented yet");
+            Lgg($"GraphCloud LoadRegionBuildings regs:{regs.Count} not implemented yet");
             //foreach (var reg in regs)
             //{
             //    var rreg = reg;
             //    if (rreg.saveToFile)
             //    {
             //        var fname = path + rreg.name + ".region";
-            //        Debug.Log("Saving " + fname);
+            //        Lgg("Saving " + fname);
             //        LcMapMaker.SaveToFile(this, fname, ref rreg);
             //    }
             //}
@@ -325,7 +381,7 @@ namespace GraphAlgos
         public void SaveRegionCodeFiles(string path)
         {
             var regs = regman.GetRegions();
-            Debug.Log($"GraphCloud SaveRegionCodeFiles regs:{regs.Count}");
+            Lgg($"GraphCloud SaveRegionCodeFiles regs:{regs.Count}");
             var codeWriter = new GraphAlgos.CodeFileSaver(this);
             path = path + "code/";
             System.IO.Directory.CreateDirectory(path);
@@ -335,7 +391,7 @@ namespace GraphAlgos
                 if (rreg.saveToFile)
                 {
                     var fname = path  + rreg.name + ".code";
-                    Debug.Log("Saving " + fname);
+                    Lgg("Saving " + fname);
                     codeWriter.SaveToFile(fname, reg);
                 }
             }
@@ -346,7 +402,7 @@ namespace GraphAlgos
             if (nodedict.ContainsKey(ndname))
             {
                 var msg = $"Duplicate Point name:{ndname}";
-                Debug.LogWarning(msg);
+                LggWarning(msg);
                 if (exceptionOnDuplicate)
                 {
                     throw new UnityException(msg);
@@ -395,11 +451,11 @@ namespace GraphAlgos
         {
             if (lltoxz==null)
             {
-                Debug.LogError($"lltoxz null in AddNodePtll");
+                LggError($"lltoxz null in AddNodePtll");
                 return null;
             }
             var (x, z) = lltoxz(lat, lng);
-            //Debug.Log($"AddNodePtll lat:{lat} lng:{lng}  x:{x} z:{z}");
+            //Lgg($"AddNodePtll lat:{lat} lng:{lng}  x:{x} z:{z}");
             var rv = AddNodePtxzNoInc(ndname, x, z, comment);
             regman.curNodeRegion.IncDefStepIdx();
             return rv;
@@ -439,7 +495,7 @@ namespace GraphAlgos
         //{
         //    if (!nodedict.ContainsKey(name))
         //    {
-        //        Debug.LogWarning("AddIdToNode could not find node:" + name);
+        //        LggWarning("AddIdToNode could not find node:" + name);
         //        return;
         //    var node = GetNode(name);
         //    node.AddRegion(regman.curNodeRegion.regid);
@@ -456,7 +512,7 @@ namespace GraphAlgos
         {
             //if (lname== "rwb-f03-cv1101")
             //{
-            //    Debug.Log("Magic link begin added");
+            //    Lgg("Magic link begin added");
             //}
             if (lname == "")
             {
@@ -469,7 +525,7 @@ namespace GraphAlgos
             if (linkdict.ContainsKey(lname))
             {
                 var msg = "AddLink: Duplicate Link name:" + lname;
-                Debug.LogWarning(msg);
+                LggWarning(msg);
                 if (exceptionOnDuplicate)
                 {
                     throw new UnityException(msg);
@@ -524,7 +580,7 @@ namespace GraphAlgos
                     AddLateLink(lp1name, lp2name, usetype, comment);
                 }
                 regman.curNodeRegion.IncDefStepIdx();
-                //Debug.Log($"doll1:{doll1} lp1name:{lp1name}  doll2:{doll2} lp2name:{lp2name}");
+                //Lgg($"doll1:{doll1} lp1name:{lp1name}  doll2:{doll2} lp2name:{lp2name}");
                 return null;
             }
             var lp1 = nodedict[lp1name];
@@ -537,11 +593,15 @@ namespace GraphAlgos
             {
                 lname = gm.addprefix(lname);
             }
+            if (lname== "osm1506613711:osm1506613724")
+            {
+                Lgg($"ALBNN processing link:{lname} linknamelist.Count:{linknamelist.Count}");
+            }
 
             if (linkdict.ContainsKey(lname))
             {
-                var msg = "AddLinkByNodeName: Duplicate Link name:" + lname;
-                Debug.LogWarning(msg);
+                var msg = "ALBNN: Duplicate Link name:" + lname;
+                LggWarning(msg);
                 if (exceptionOnDuplicate)
                 {
                     throw new UnityException(msg);
@@ -555,7 +615,7 @@ namespace GraphAlgos
             var lnk = new LcLink(this, lname, lp1, lp2,usetype,comment:comment);
             linkdict.Add(lname, lnk);
             regman.curNodeRegion.IncDefStepIdx();
-            //Debug.Log("Added link:" + lname);
+            //Lgg("Added link:" + lname);
             //lklistlist.Add(lnk);
             return (lnk);
         }
@@ -581,7 +641,7 @@ namespace GraphAlgos
             if (linkdict.ContainsKey(lname))
             {
                 var msg = "LinkTo: Duplicate Link name:" + lname;
-                Debug.LogWarning(msg);
+                LggWarning(msg);
                 if (exceptionOnDuplicate)
                 {
                     throw new UnityException(msg);
@@ -616,7 +676,7 @@ namespace GraphAlgos
             var zf = (float)z;
             //if (lname=="tracklink_0_1")
             //{
-            //    Debug.Log($"Link to tracklink_0_1");
+            //    Lgg($"Link to tracklink_0_1");
             //}
             return (LinkTo(nodename, new Vector3(xf, yf, zf), curUseType, lname, comment));
         }
@@ -686,7 +746,7 @@ namespace GraphAlgos
             lname2 = gm.addprefix(lname2);
             var pt0 = new Vector3(x, yfloor, z);
             var pt = gm.modv(pt0);
-            //Debug.Log("pt0:"+pt0+"  pt:"+pt);
+            //Lgg("pt0:"+pt0+"  pt:"+pt);
             // find closest filtered link 1 and 2
             //var go = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             //go.transform.position = pt;
@@ -771,7 +831,7 @@ namespace GraphAlgos
             }
             if (n < 0 || nodenamelist.Count <= n)
             {
-                Debug.LogError("GetNode: index out of range:" + n);
+                LggError("GetNode: index out of range:" + n);
                 return null;
             }
             var pname = nodenamelist[n];
@@ -782,7 +842,7 @@ namespace GraphAlgos
             nodename = LcNode.NormName(nodename);
             if (!IsNodeName(nodename))
             {
-                Debug.LogError("GetNode: No node with this name:" + nodename);
+                LggError("GetNode: No node with this name:" + nodename);
                 return null;
                 //throw new UnityException("GetNode: No node with this name:" + nodename);
             }
@@ -846,7 +906,7 @@ namespace GraphAlgos
 
         public void RealizeLateLinks()
         {
-            //Debug.LogWarning("RealizeLateLinks");
+            //LggWarning("RealizeLateLinks");
             try
             {
                 int nllnkcnt = latelinks.Count;
@@ -859,37 +919,37 @@ namespace GraphAlgos
                     iter++;
                     if (iter > maxiter)
                     {
-                        Debug.LogError($"RealizeLateLinks: probable infinite loop detected i:{ilnk} iter:{iter} maxiter:{maxiter} nllnkcnt0:{nllnkcnt0}");
+                        LggError($"RealizeLateLinks: probable infinite loop detected i:{ilnk} iter:{iter} maxiter:{maxiter} nllnkcnt0:{nllnkcnt0}");
                         break;
                     }
                     var lnk = latelinks[ilnk];
                     var (name1, name2, usetype, regStepIdx, regid, cmt) = lnk;
                     var oname2 = name2;
-                    //Debug.Log($"RealizeLateLinks {i}/{nllnkcnt}  :  {name1} to {name2}  {usetype} regStepIdx:{regStepIdx}");
+                    //Lgg($"RealizeLateLinks {i}/{nllnkcnt}  :  {name1} to {name2}  {usetype} regStepIdx:{regStepIdx}");
                     if (name2.StartsWith("reg:"))
                     {
                         var regname = name2.Split(':')[1];
-                        //Debug.Log("Linking "+name1+" to region " + regname);
+                        //Lgg("Linking "+name1+" to region " + regname);
                         var reg = regman.GetRegion(regname);
                         if (reg == null)
                         {
-                            Debug.LogWarning($"RealizeLateLinks: bad region name:{regname}  ilnk:{ilnk} iter:{iter} nllnkcnt:{nllnkcnt}");
+                            LggWarning($"RealizeLateLinks: bad region name:{regname}  ilnk:{ilnk} iter:{iter} nllnkcnt:{nllnkcnt}");
                             ilnk++;
                             nllnkcnt = latelinks.Count;
                             continue;
                         }
                         var pt = GetNode(name1).pt;
                         var (nlnk, nppt) = FindClosestPointOnLineCloud(pt, reg);
-                        //Debug.Log("FindClosestPointOnLineCloud returned nlnk:"+nlnk.name);
+                        //Lgg("FindClosestPointOnLineCloud returned nlnk:"+nlnk.name);
                         var nnode = PunchNewNode(nlnk, nppt, deleteparentlink: false);
-                        //Debug.Log("PunchNewNode name:"+nnode.name +" at " + nppt.ToString("f1"));
+                        //Lgg("PunchNewNode name:"+nnode.name +" at " + nppt.ToString("f1"));
                         name2 = nnode.name;
                     }
-                    //Debug.Log($"AddingLink name1:{name1} name2:{name2} oname2:{oname2}");
+                    //Lgg($"AddingLink name1:{name1} name2:{name2} oname2:{oname2}");
                     var nllnk = AddLinkByNodeName(name1, name2, usetype,inLateLinkingPhase:true);
                     if (nllnk == null)
                     {
-                        Debug.LogWarning($"RealizeLateLinks: failed on {cmt}");
+                        LggWarning($"RealizeLateLinks: failed on {cmt}");
                     }
                     else
                     {
@@ -903,8 +963,8 @@ namespace GraphAlgos
             }
             catch(Exception ex)
             {
-                Debug.LogError("RealizeLateLinks: Exception caught");
-                Debug.LogError(ex.ToString());
+                LggError("RealizeLateLinks: Exception caught");
+                LggError(ex.ToString());
             }
         }
 
@@ -974,12 +1034,12 @@ namespace GraphAlgos
                     movedNodes.Add(node);
                 }
             }
-            //Debug.Log("checkForNodeMovement - nmoved:" + movedNodes.Count);
+            //Lgg("checkForNodeMovement - nmoved:" + movedNodes.Count);
             return movedNodes;
         }
         public LcNode finishStretchMovement(string nodename,Vector3 oposition,LinkUse usetype,int regid)
         {
-            Debug.Log("finishStretchMovement");
+            Lgg("finishStretchMovement");
             nodename = LcNode.NormName(nodename);
             var lnode = GetNode(nodename);
             var closeest = FindClosestNodeToNodeGo(lnode);
@@ -1169,7 +1229,7 @@ namespace GraphAlgos
         {
             if (deb)
             {
-                Debug.Log("FCLOLCF filter:" + filter + " pt:" + pt);
+                Lgg("FCLOLCF filter:" + filter + " pt:" + pt);
             }
             var rpt = Vector3.zero;
             int nflthit = 0;
@@ -1191,15 +1251,15 @@ namespace GraphAlgos
                         if (deb)
                         {
                             var lamb = lnk.FindClosestLamb(pt);
-                            Debug.Log("    lnk:" + lnk.name + " npt:" + npt + " dist:" + dist + " lamb:" + lamb);
-                            Debug.Log("    lnk.p1:" + lnk.node1.pt + " p2:" + lnk.node2.pt);
+                            Lgg("    lnk:" + lnk.name + " npt:" + npt + " dist:" + dist + " lamb:" + lamb);
+                            Lgg("    lnk.p1:" + lnk.node1.pt + " p2:" + lnk.node2.pt);
                         }
                     }
                 }
             }
             if (deb)
             {
-                Debug.Log("FCLOLCF found:" + rlnk.name+" from "+nflthit+" filter hits");
+                Lgg("FCLOLCF found:" + rlnk.name+" from "+nflthit+" filter hits");
             }
             return rlnk;
         }
@@ -1238,7 +1298,7 @@ namespace GraphAlgos
             }
             if (minnode == null)
             {
-                Debug.LogWarning("minnode is null in findminfscore");
+                LggWarning("minnode is null in findminfscore");
             }
             return (minnode);
         }
@@ -1296,7 +1356,7 @@ namespace GraphAlgos
             VerfiyNodeExists("GenAstar", eptname);
             if (sptname == eptname)
             {
-                Debug.LogError("GenAstar called with start and end nodes being the same");
+                LggError("GenAstar called with start and end nodes being the same");
                 return null;
             }
 
@@ -1331,7 +1391,7 @@ namespace GraphAlgos
                 var current = findminfscore(openSet);
                 if (current==null)
                 {
-                    Debug.LogWarning("current null in genAstar - exiting");
+                    LggWarning("current null in genAstar - exiting");
                     return null;
                 }
                 if (current == ept)
@@ -1343,7 +1403,7 @@ namespace GraphAlgos
 
                 if (current.wegtos == null)
                 {
-                    Debug.LogWarning("current.wegtos null in genAstar - exiting");
+                    LggWarning("current.wegtos null in genAstar - exiting");
                     return null;
                 }
                 foreach (var w in current.wegtos)
@@ -1365,7 +1425,7 @@ namespace GraphAlgos
                     w.toNode.fScore = w.toNode.gScore + ept.heuristic_cost_estimate(w.toNode);
                 }
             }
-            Debug.LogWarning("openset null in genAstar - exiting");
+            LggWarning("openset null in genAstar - exiting");
             return (null);
         }
         public Path GenRanPath(string sptname, int npts)

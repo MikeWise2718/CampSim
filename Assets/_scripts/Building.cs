@@ -29,6 +29,12 @@ namespace CampusSimulator
         public float defRoomArea = 10;
         public float journeyChoiceWeight = 1;
         public string osmnamestart = "";
+        public int adhocLevels = 1;
+        public float adhocHeight = 4;
+        public Vector3 adhocCen = Vector3.zero;
+        public double adhocLat = 0;
+        public double adhocLng = 0;
+
 
         B121Willow b121comp = null;
         B19Willow b19comp = null;
@@ -347,9 +353,9 @@ namespace CampusSimulator
             var padnodename = padname;
             if (padname.EndsWith("centertop"))
             {
-                if (!isOsmBld)
+                if (!isOsmGenerated)
                 {
-                    Debug.LogError($"Building.AddOnePadFromStringPadspec - cannot compute center of building without OsmBldSpec");
+                    bm.sman.LggError($"Building.AddOnePadFromStringPadspec - cannot compute center of building without OsmBldSpec");
                     return;
                 }
                 var bs = bm.GetBldBs(this);
@@ -360,7 +366,7 @@ namespace CampusSimulator
             }
             else if (!lc.IsNodeName(padnodename))
             { 
-                Debug.LogError($"Building.AddOnePadFromStringPadspec - bad padspec{padspec}");
+                bm.sman.LggError($"Building.AddOnePadFromStringPadspec - bad padspec{padspec}");
                 return;
             }
             var lpt = lc.GetNode(padnodename);
@@ -421,8 +427,17 @@ namespace CampusSimulator
             padlist.ForEach(pad => pad.CreateGos());
         }
         // Update is called once per frame
+        //float lasttime = 0;
         //void Update()
         //{
+        //    //if (name == "Bld34")
+        //    //{
+        //    //    if (Time.time - lasttime > 1)
+        //    //    {
+        //    //        Debug.Log($"{name} isAnOsmBld:{isAnOsmBld}");
+        //    //        lasttime = Time.time;
+        //    //    }
+        //    //}
         //}
     }
 }

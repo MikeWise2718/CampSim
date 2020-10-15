@@ -56,6 +56,7 @@ namespace CampusSimulator
             {
                 case SceneSelE.MsftCoreCampus:
                 case SceneSelE.MsftB19focused:
+                case SceneSelE.MsftB33focused:
                 case SceneSelE.MsftB121focused:
                     //Debug.Log("Making cams for MsftCore");
                     MakeVidcams("Ms_c");
@@ -75,6 +76,7 @@ namespace CampusSimulator
                     //mcamvcam = "Eb_vc_frontdoor";
                     break;
                 default:
+                case SceneSelE.MsftSmall:
                 case SceneSelE.None:
                     break;
             }
@@ -386,7 +388,7 @@ namespace CampusSimulator
         {
             if (!vidcam.ContainsKey(vcname))
             {
-                Debug.LogError($"Bad Vidcam lookup:{vcname}");
+                sman.LggError($"Bad Vidcam lookup:{vcname}");
                 return null;
             }
             return vidcam[vcname];
@@ -401,7 +403,7 @@ namespace CampusSimulator
         {
             if (vidcam.ContainsKey(Vidcam.name))
             {
-                Debug.LogError($"Tried to add duplicate Vidcam:{Vidcam.name}");
+                sman.LggError($"Tried to add duplicate Vidcam:{Vidcam.name}");
                 return;
             }
             vidcamnames.Add(Vidcam.name);

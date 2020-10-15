@@ -4,6 +4,7 @@ using UnityEngine;
 using UxUtils;
 using Aiskwk.Map;
 using System.Data.Common;
+using UnityEngine.Rendering;
 
 namespace CampusSimulator
 {
@@ -11,7 +12,8 @@ namespace CampusSimulator
     public class BuildingMan : MonoBehaviour
     {
 
-        Dictionary<string, Building> bldlookup = new Dictionary<string, Building>();
+        Dictionary<string, Building> bldalias = new Dictionary<string, Building>();
+        Dictionary<string, Building> bldmasterlist = new Dictionary<string, Building>();
         List<string> bldnames = new List<string>(); // maintain a sorted list of buildings with destinations
         List<string> wtdbldnames = new List<string>(); // maintain a sorted weighted list of buildings with destinations
         List<string> dronebldnames = new List<string>(); // maintain a  weighted list of buildings with drone destinations
@@ -45,11 +47,10 @@ namespace CampusSimulator
         public UxSettingBool walllinks = new UxSettingBool("walllinks", false);
         public UxSettingBool osmblds = new UxSettingBool("osmblds", true);
         public UxSettingBool osmbldstrans = new UxSettingBool("osmbldstrans", true);
+        public UxSettingBool osmbldpolygons = new UxSettingBool("osmbldpolygons", true);
         public UxSettingBool fixedblds = new UxSettingBool("fixedblds", false);
-        public bool transwalls = false;
-        public bool showhvac = false;
-        public bool showelec = false;
-        public bool showplum = false;
+        public UxSettingBool osmoutline = new UxSettingBool("osmoutline", true);
+        public UxSettingBool osmgroundoutline = new UxSettingBool("osmgroundoutline", true);
 
 
         // To do - get rid of bldmode and treemode regions in BuildingMan
@@ -103,7 +104,7 @@ namespace CampusSimulator
             {
                 if (!expectFailure)
                 {
-                    Debug.LogError($"Bad roomname lookup {roomname}");
+                    sman.LggError($"Bad roomname lookup {roomname}");
                 }
                 return null;
             }
@@ -120,7 +121,7 @@ namespace CampusSimulator
             {
                 if (!expectFailure)
                 {
-                    Debug.LogError($"Bad padname lookup {padname}");
+                    sman.LggError($"Bad padname lookup {padname}");
                 }
                 return null;
             }
@@ -203,13 +204,14 @@ namespace CampusSimulator
                     }
                 }
             }
-            Debug.LogWarning($"Found nothing that starts with \"{namestart}\"");
+            sman.LggWarning($"Found nothing that starts with \"{namestart}\"");
             return null;
         }
 
         public void ModelInitialize(SceneSelE newregion)
         {
-            bldlookup = new Dictionary<string, Building>();
+            bldmasterlist = new Dictionary<string, Building>();
+            bldalias = new Dictionary<string, Building>();
             bldnames = new List<string>(); // maintain a sorted list of buildings with destinations
             wtdbldnames = new List<string>(); // maintain a sorted weighted list of buildings with destinations
             dronebldnames = new List<string>(); // maintain a  weighted list of buildings with drone destinations
@@ -225,7 +227,7 @@ namespace CampusSimulator
             InitializeValues();
         }
 
-         void InitializeValues()
+        void InitializeValues()
         {
             //treeMode = GetInitialTreeMode();
             treeMode.GetInitial(TreeModeE.full);
@@ -233,10 +235,12 @@ namespace CampusSimulator
             walllinks.GetInitial(false);
             osmblds.GetInitial(true);
             osmbldstrans.GetInitial(true);
+            osmbldpolygons.GetInitial(true);
+            osmoutline.GetInitial(true);
+            osmgroundoutline.GetInitial(true);
             fixedblds.GetInitial(false);
-            transwalls = false;
             scene_padspecs = new List<string>();
-            Debug.Log($"BuildingMan.InitializeValues walllinks:{walllinks.Get()} osmblds:{osmblds.Get()} osmbldstrans:{osmbldstrans.Get()}   fixedblds:{fixedblds.Get()}");
+            sman.Lgg($"BuildingMan.InitializeValues walllinks:{walllinks.Get()} osmblds:{osmblds.Get()} osmbldstrans:{osmbldstrans.Get()}   fixedblds:{fixedblds.Get()}","pink");
         }
 
         public List<string> GetFilteredPadNames(string prefix)
@@ -264,112 +268,171 @@ namespace CampusSimulator
             }
             return rv;
         }
-        public void InitTranswalls()
+        public B19Willow GetB19()
         {
-            var bld121 = GetBuilding("Bld121", couldFail: true);
-            if (bld121 == null)
+            var bld19 = GetBuilding("Bld19", couldFail: true);
+            if (bld19 == null)
             {
-                Debug.LogError($"No Bld121 in scene");
-                return;
+                //sman.LggError($"No Bld19 in scene"); // not all scenes even have B19
+                return null;
             }
-            var b121comp = bld121.GetComponent<B121Willow>();
-            if (b121comp == null)
+            var b19comp = bld19.GetComponent<B19Willow>();
+            if (b19comp == null)
             {
-                Debug.LogError($"No B121 Component attached to Bld121 in scene");
-                return;
+                sman.LggError($"No B19 Component attached to Bld19 in scene");
+                return null;
             }
-            transwalls = b121comp.b121_materialMode.Get() == B121Willow.b121_MaterialMode.glasswalls;
-            showhvac = b121comp.hvac.Get();
-            showelec = b121comp.lighting.Get();
-            sman.uiman.SyncState();
+            return b19comp;
         }
 
-        public void TransBld121Button()
+        public void ToggleB19Level1()
         {
-            var bld121 = GetBuilding("Bld121", couldFail: true);
-            if (bld121 == null)
+            var b19comp = GetB19();
+            var curval = b19comp.level01.Get();
+            b19comp.level01.SetAndSave(!curval);
+            b19comp.MakeItSo();
+        }
+        public void ToggleB19Level2()
+        {
+            var b19comp = GetB19();
+            var curval = b19comp.level02.Get();
+            b19comp.level02.SetAndSave(!curval);
+            b19comp.MakeItSo();
+        }
+        public void ToggleB19Level3()
+        {
+            var b19comp = GetB19();
+            var curval = b19comp.level03.Get();
+            b19comp.level03.SetAndSave(!curval);
+            b19comp.MakeItSo();
+        }
+
+        public void ToggleB19Doors()
+        {
+            var b19comp = GetB19();
+            var curval = b19comp.doors.Get();
+            b19comp.doors.SetAndSave(!curval);
+            b19comp.MakeItSo();
+        }
+        public void ToggleB19Floors()
+        {
+            var b19comp = GetB19();
+            var curval = b19comp.floors.Get();
+            b19comp.floors.SetAndSave(!curval);
+            b19comp.MakeItSo();
+        }
+        public void ToggleB19hvac()
+        {
+            var b19comp = GetB19();
+            var curval = b19comp.hvac.Get();
+            b19comp.hvac.SetAndSave(!curval);
+            b19comp.MakeItSo();
+        }
+        public void ToggleB19osm()
+        {
+            var b19comp = GetB19();
+            var curval = b19comp.osmbld.Get();
+            b19comp.ActuateOsmStatus(curval);
+            b19comp.osmbld.SetAndSave(!curval);
+            b19comp.MakeItSo();
+        }
+
+        public void ToggleB19glassmode()
+        {
+            var b19comp = GetB19();
+            var mat = b19comp.b19_materialMode.Get();
+            B19Willow.B19_MaterialMode newmat;
+            if (mat == B19Willow.B19_MaterialMode.glass)
             {
-                Debug.LogError($"BuildingMan.TransBld121Button - No Bld121 in scene");
-                return;
-            }
-            var b121comp = bld121.GetComponent<B121Willow>();
-            if (b121comp == null)
-            {
-                Debug.LogError($"BuildingMan.TransBld121Button - No B121 Component attached to Bld121 in scene");
-                return;
-            }
-            var needtrans = transwalls;
-            var oristate = b121comp.b121_materialMode.Get();
-            if (needtrans)
-            {
-                b121comp.b121_materialMode.SetAndSave(B121Willow.b121_MaterialMode.glasswalls);
+                newmat = B19Willow.B19_MaterialMode.materialed;
             }
             else
             {
-                b121comp.b121_materialMode.SetAndSave(B121Willow.b121_MaterialMode.materialed);
+                newmat = B19Willow.B19_MaterialMode.glass;
             }
-            var curstate = b121comp.b121_materialMode.Get();
-            if (oristate != curstate)
+            b19comp.b19_materialMode.SetAndSave(newmat);
+            b19comp.glasswalls.SetAndSave(newmat == B19Willow.B19_MaterialMode.glass);
+            b19comp.MakeItSo();
+        }
+
+
+        public B121Willow GetB121()
+        {
+            var bld121 = GetBuilding("Bld121", couldFail: true);
+            if (bld121 == null)
             {
-                Debug.Log($"Bld121 {oristate} changed to {curstate} - refresh required");
-                b121comp.ActuateMaterialMode();
-                //sman.RequestRefresh("TransBld121Button", totalrefresh: false);
+                //sman.LggError($"No Bld121 in scene"); // not all scenes even have B121
+                return null;
+            }
+            var b121comp = bld121.GetComponent<B121Willow>();
+            if (b121comp == null)
+            {
+                sman.LggError($"No B121 Component attached to Bld121 in scene");
+                return null;
+            }
+            return b121comp;
+        }
+
+        public void ToggleB19glassmodeExtra()
+        {
+            var b19comp = GetB19();
+            var mat = b19comp.b19_materialMode.Get();
+            B19Willow.B19_MaterialMode newmat;
+            if (mat == B19Willow.B19_MaterialMode.glass)
+            {
+                newmat = B19Willow.B19_MaterialMode.materialed;
             }
             else
             {
-                Debug.Log($"Bld121 {oristate} unchanged to {curstate} - no refresh required");
+                newmat = B19Willow.B19_MaterialMode.glass;
             }
+            b19comp.b19_materialMode.SetAndSave(newmat);
+            b19comp.glasswalls.SetAndSave(newmat == B19Willow.B19_MaterialMode.glass);
+            b19comp.MakeItSo();
         }
 
-        public void ShowHvacBld121Button()
+
+        public void ToggleB121glassmode()
         {
-            var bld121 = GetBuilding("Bld121", couldFail: true);
-            if (bld121==null)
+            var b121comp = GetB121();
+            var mat = b121comp.b121_materialMode.Get();
+            B121Willow.B121_MaterialMode newmat;
+            if (mat == B121Willow.B121_MaterialMode.glasswalls)
             {
-                Debug.LogError($"BuildingMan.ShowHvacBld121Button - No Bld121 in scene");
-                return;
+                newmat = B121Willow.B121_MaterialMode.materialed;
             }
-            var b121comp= bld121.GetComponent<B121Willow>();
-            if (b121comp == null)
+            else
             {
-                Debug.LogError($"BuildingMan.ShowHvacBld121Button - No B121 Component attached to Bld121 in scene");
-                return;
+                newmat = B121Willow.B121_MaterialMode.glasswalls;
             }
-            b121comp.ActuateShowHvac(showhvac);
-        }
-        public void ShowElecBld121Button()
-        {
-            var bld121 = GetBuilding("Bld121", couldFail: true);
-            if (bld121 == null)
-            {
-                Debug.LogError($"BuildingMan.ShowElecBld121Button - No Bld121 in scene");
-                return;
-            }
-            var b121comp = bld121.GetComponent<B121Willow>();
-            if (b121comp == null)
-            {
-                Debug.LogError($"BuildingMan.ShowElecBld121Button - No B121 Component attached to Bld121 in scene");
-                return;
-            }
-            b121comp.ActuateShowLighting(showelec);
+            b121comp.b121_materialMode.SetAndSave(newmat);
+            b121comp.glasswalls.SetAndSave(newmat == B121Willow.B121_MaterialMode.glasswalls);
+            b121comp.ActuateMaterialMode();
         }
 
-        public void ShowPlumBld121Button()
+        public void ToggleB121hvac()
         {
-            var bld121 = GetBuilding("Bld121", couldFail: true);
-            if (bld121 == null)
-            {
-                Debug.LogError($"BuildingMan.ShowPlumBld121Button - No Bld121 in scene");
-                return;
-            }
-            var b121comp = bld121.GetComponent<B121Willow>();
-            if (b121comp == null)
-            {
-                Debug.LogError($"BuildingMan.ShowPlumBld121Button - No B121 Component attached to Bld121 in scene");
-                return;
-            }
-            b121comp.ActuateShowPlumbing(showplum);
+            var b121comp = GetB121();
+            b121comp.ToggleHvac();
         }
+        public void ToggleB121lighting()
+        {
+            var b121comp = GetB121();
+            b121comp.ToggleLighting();
+        }
+
+        public void ToggleB121plumbing()
+        {
+            var b121comp = GetB121();
+            b121comp.TogglePlumbing();
+        }
+
+        public void ShowBld121OsmButton()
+        {
+            var b121comp = GetB121();
+            b121comp.ToggleOsm();
+        }
+
 
         public BldPolyGen bpg = null;
 
@@ -390,7 +453,7 @@ namespace CampusSimulator
                 bpg = new BldPolyGen();
                 var llm = sman.mpman.GetLatLongMap();
                 var (waysdflst, linksdflist, nodesdflist) = sman.dfman.GetSdfs();
-                var osmbs = bpg.GetBuildspecsInRegion(waysdflst, linksdflist, nodesdflist, llm:llm);
+                var osmbs = bpg.GetBuildspecsInRegion(waysdflst, linksdflist, nodesdflist, llm:llm,pgvd:pgvd);
                 //var osmbs = bpg.GenBuildingsInRegion(osmroot, waysdflst, linksdflist, nodesdflist, pgvd: pgvd, llm: llm);
                 bldspecs.AddRange(osmbs);
             }
@@ -399,6 +462,7 @@ namespace CampusSimulator
             {
                 case SceneSelE.MsftRedwest:
                 case SceneSelE.MsftCoreCampus:
+                case SceneSelE.MsftB33focused:
                 case SceneSelE.MsftB19focused:
                 case SceneSelE.MsftB121focused:
                     scene_padspecs = Building.MsftDronePadspec;
@@ -414,6 +478,7 @@ namespace CampusSimulator
                 case SceneSelE.TeneriffeMtn:
                     MakeBuildings("MtTen");
                     break;
+                case SceneSelE.MsftSmall:
                 default:
                     MakeBuildings("");
                     break;
@@ -422,15 +487,104 @@ namespace CampusSimulator
                     break;
             }
         }
+        Dictionary<string, int> floordict = new Dictionary<string, int>()
+        {
+            { "f00",0 },
+            { "f01",0 },
+            { "f02",1 },
+            { "f03",2 },
+            { "f04",3 },
+            { "f05",4 },
+            { "f06",5 },
+            { "f07",6 },
+            { "f08",7 },
+            { "f09",8 },
+        };
+        public void UpdateFloorHeights()
+        {
+            var sw = new Aiskwk.Map.StopWatch();
+            foreach(var bldname in bldnames)
+            {
+                var bld = GetBuilding(bldname);
+                bld.UpdateFloorHeightArray();
+            }
+
+            var grc = sman.lcman.GetGraphCtrl();
+            var nnlst = grc.nodenamelist;
+            var nnodes = nnlst.Count;
+            var updnodes = 0;
+            var bldcache = new Dictionary<string, Building>();
+            var bbadnamedict = new Dictionary<string, bool>();
+            foreach (var nname in nnlst)
+            {
+                var node = grc.GetNode(nname);
+                var nnamear = nname.Split('-');
+                if (nnamear.Length>2)
+                {
+                    var bname = nnamear[0];
+                    var fname = nnamear[1];
+                    Building bd;
+                    if (bldcache.ContainsKey(bname))
+                    {
+                        bd = bldcache[bname];
+                    }
+                    else
+                    {
+                        bd = sman.bdman.GetBuilding(bname, couldFail: true);
+                        if (bd == null)
+                        {
+                            bd = sman.bdman.GetBuildingFromAlias(bname, couldFail: true);
+                        }
+                        if (bd != null)
+                        {
+                            bldcache[bname] = bd;
+                        }
+                        else
+                        {
+                            bbadnamedict[bname] = true;
+                        }
+                    }
+                    if (bd != null)
+                    {
+                        if (bd.name == "Bld33" && fname=="f01")
+                        {
+                            Debug.Log("Here I am again");
+                        }
+                        if (floordict.ContainsKey(fname))
+                        {
+                            var iflr = floordict[fname];
+                            var h = bd.GetFloorAltitude(iflr);
+                            var x = node.pt.x;
+                            var z = node.pt.z;
+                            //var y = sman.lcman.GetHeight(x,z);
+                            var pt = new Vector3(x, h, z);
+                            node.pt = pt;
+                            //var nmsg = $"{nname} bld:{bname}  flr:{fname}  node.pt:{pt}";
+                            //sman.Lgg(nmsg, "orange");
+                            updnodes++;
+                        }
+                   }
+                }
+            }
+            sw.Stop();
+            var nbadnames = bbadnamedict.Count;
+            var msg = $"nodes: {nnodes}  blds:{bldcache.Count} nbadnames:{nbadnames} updated floor nodes:{updnodes} secs:{sw.ElapSecs()}";
+            //foreach(var bn in bbadnamedict.Keys)
+            //{
+            //    sman.Lgg($"   {bn}","lilac");
+            //}
+            //sman.Lgg(msg, "pink");
+        }
+
         public void ModelBuildPostLinkCloud()
         {
-            InitTranswalls();// this can only be done after b121 is initialized
+            UpdateFloorHeights();
             ReinitDests();
             AddRoomsToBuildings();
             PopulateBuildings();
             AddExtraPeople();
             dronebldnames = new List<string>();
-            foreach (var bld in bldlookup.Values)
+            foreach (var bld in bldmasterlist.Values)
             {
                 var npads = bld.GetPads().Count;
                 if (npads > 0)
@@ -443,7 +597,7 @@ namespace CampusSimulator
         }
         public void UpdateBldStats()
         {
-            nBuildings = bldlookup.Count;
+            nBuildings = bldmasterlist.Count;
             nDroneBuildings = dronebldnames.Count;
             nRooms = roomlookup.Count;
             nPads = padlookup.Count;
@@ -466,8 +620,8 @@ namespace CampusSimulator
             {
                 var bldlst = Building.GetPredefinedBuildingNames(filtername);
                 bldlst.ForEach(mbname => MakeBuilding(mbname));
+                bldspecs.ForEach(osmbs => MakeOsmBuilding(osmbs));
             }
-            bldspecs.ForEach(osmbs => MakeOsmBuilding(osmbs));
         }
         public string presetEvacBldName = "";
         public void EvacPresetBld()
@@ -485,7 +639,7 @@ namespace CampusSimulator
             var zones = sman.znman.GetZones(presetEvacBldName);
             if (zones.Count==0)
             {
-                Debug.Log("No evac zones found for:" + presetEvacBldName);
+                sman.LggError("No evac zones found for:" + presetEvacBldName);
                 return;
             }
             foreach (var z in zones)
@@ -500,6 +654,7 @@ namespace CampusSimulator
             {
                 case SceneSelE.MsftRedwest:
                 case SceneSelE.MsftCoreCampus:
+                case SceneSelE.MsftB33focused:
                 case SceneSelE.MsftB19focused:
                 case SceneSelE.MsftB121focused:
                     presetEvacBldName = "Bld19";
@@ -595,13 +750,13 @@ namespace CampusSimulator
         }
         public void AddRoomsToBuildings()
         {
-            var bldlst = new List<Building>(bldlookup.Values);
+            var bldlst = new List<Building>(bldmasterlist.Values);
             //bldlst.ForEach(bld => bld.DefineBuildingConstants());
             bldlst.ForEach(bld => bld.AddRoomsToBuilding());
         }
         public void PopulateBuildings()
         {
-            var bldlst = new List<Building>(bldlookup.Values);
+            var bldlst = new List<Building>(bldmasterlist.Values);
             bldlst.ForEach(bld => bld.PopulateBuilding());
         }
         public void MakeOsmBuilding(OsmBldSpec bldspec)
@@ -622,6 +777,11 @@ namespace CampusSimulator
                 bld = bgo.AddComponent<Building>();
                 RegisterBsBld(bldspec, bld);
             }
+            if (bldspec.shortname == "Bld34")
+            {
+                Debug.Log("Bld34");
+            }
+            //sman.Lgg($"MakeOsmBuilding name:{name} bs.shortname:{bldspec.shortname} bs.osmname:{bldspec.osmname}","lilac");
             bld.AddOsmBldDetails(this, bldspec);
             AddBuildingToCollection(bld,mightAlreadyExist:true);
 
@@ -649,19 +809,19 @@ namespace CampusSimulator
         public void DelBuildings()
         {
             //Debug.Log("DelBuildings called");
-            if (bldlookup != null)
+            if (bldmasterlist != null)
             {
-                var namelist = new List<string>(bldlookup.Keys);
+                var namelist = new List<string>(bldmasterlist.Keys);
                 namelist.ForEach(name => DelBuilding(name));
             }
-            bldlookup = null;
+            bldmasterlist = null;
             if (bldspecs != null)
             {
                 bldspecs.ForEach(bs => Destroy(bs.bgo));
             }
             bldspecs = null;
 
-            bldlookup = null;
+            bldmasterlist = null;
             bldnames = null;
             wtdbldnames = null;
             dronebldnames = null;
@@ -677,11 +837,11 @@ namespace CampusSimulator
         {
             //Debug.Log($"Deleting building {name} nbld:{bldlookup.Count}");
             //var go = GameObject.Find(name);
-            if (!bldlookup.ContainsKey(name)) return;
+            if (!bldmasterlist.ContainsKey(name)) return;
 
-            var bld = bldlookup[name];
+            var bld = bldmasterlist[name];
             bld.Empty(); // destroys game object as well
-            bldlookup.Remove(name);
+            bldmasterlist.Remove(name);
             UpdateBldStats();
             Destroy(bld.gameObject);
             //Debug.Log($"After deleting building {name} nbld:{bldlookup.Count}");
@@ -693,23 +853,50 @@ namespace CampusSimulator
                 var sar = bname.Split('/');
                 bname = sar[0];
             }
-            if (!bldlookup.ContainsKey(bname))
+            if (!bldmasterlist.ContainsKey(bname))
             {
                 if (!couldFail)
                 {
-                    Debug.Log("Bad building lookup:" + bname);
+                    sman.LggError("Bad building lookup:" + bname);
                 }
                 return null;
             }
-            return bldlookup[bname];
+            return bldmasterlist[bname];
+        }
+        public Building GetBuildingFromAlias(string bname,bool couldFail=false)
+        {
+            if (!bldalias.ContainsKey(bname))
+            {
+                if (!couldFail)
+                {
+                    sman.LggError("Bad building lookup:" + bname);
+                }
+                return null;
+            }
+            return bldalias[bname];
+        }
+
+        public void AddBuildingAlias(string alias,Building building)
+        {
+            if (bldmasterlist.ContainsKey(alias))
+            {
+                sman.LggError("AddBUildingAlisas - Tried to add duplicate alias to bldmasterlist:" + building.name); 
+                return;
+            }
+            if (bldalias.ContainsKey(alias))
+            {
+                sman.LggError("AddBUildingAlisas - Tried to add duplicate alias to bldalias:" + building.name); 
+                return;
+            }
+            bldalias[alias] = building;
         }
         public void AddBuildingToCollection(Building building,bool mightAlreadyExist=false)
         {
-            if (bldlookup.ContainsKey(building.name))
+            if (bldmasterlist.ContainsKey(building.name))
             {
                 if (!mightAlreadyExist)
                 {
-                    Debug.Log("Tried to add duplicate building:" + building.name); // this can happen with osmbuildings
+                    sman.LggError("AddBuildingToCollection - tried to add duplicate building:" + building.name); // this can happen with osmbuildings
                 }
                 return;
             }
@@ -720,11 +907,11 @@ namespace CampusSimulator
                 bldnames.Sort();
                 for (int i=0; i < building.selectionweight; i++ )
                 {
-                    wtdbldnames.Add(building.name);
+                    wtdbldnames.Add(building.name);// duplicate name selectionweight times (not vey elegant)
                 }
                 wtdbldnames.Sort();
             }
-            bldlookup[building.name] = building;
+            bldmasterlist[building.name] = building;
             //Debug.Log("Added bld " + building.name);
         }
 
@@ -744,7 +931,7 @@ namespace CampusSimulator
         }
         public void ReinitDests()
         {
-            foreach( var bld in bldlookup.Values)
+            foreach( var bld in bldmasterlist.Values)
             {
                 bld.ReinitDests();
             }
@@ -753,7 +940,7 @@ namespace CampusSimulator
         {
             if (roomlookup.ContainsKey(roomname))
             {
-                Debug.LogError($"In BuildingMan - Room being registered twice:{roomname}");
+                sman.LggError($"In BuildingMan - Room being registered twice:{roomname}");
             }
             roomlookup[roomname] = bldRoom;
         }
@@ -761,7 +948,7 @@ namespace CampusSimulator
         {
             if (!roomlookup.ContainsKey(roomname))
             {
-                Debug.LogError($"In BuildingMan - Room being unregistered that was not registered:{roomname}");
+                sman.LggError($"In BuildingMan - Room being unregistered that was not registered:{roomname}");
             }
             roomlookup.Remove(roomname);
         }
@@ -783,7 +970,7 @@ namespace CampusSimulator
         {
             if (padlookup.ContainsKey(padname))
             {
-                Debug.LogError($"In BuildingMan - Pad being registered twice:{padname}");
+                sman.LggError($"In BuildingMan - Pad being registered twice:{padname}");
             }
             padlookup[padname] = pad;
         }
@@ -791,7 +978,7 @@ namespace CampusSimulator
         {
             if (!padlookup.ContainsKey(padname))
             {
-                Debug.LogError($"In BuildingMan - Pad being unregistered that was not registered:{padname}");
+                sman.LggError($"In BuildingMan - Pad being unregistered that was not registered:{padname}");
             }
             padlookup.Remove(padname);
         }
@@ -850,7 +1037,7 @@ namespace CampusSimulator
                 var bpad = GetAssociatedPad(vacnode);
                 if (!bpad)
                 {
-                    Debug.LogWarning($"BuildingMan cannot find vacnode as room or pad - can not vacate slot:{vacnode}");
+                    sman.LggWarning($"BuildingMan cannot find vacnode as room or pad - can not vacate slot:{vacnode}");
                     return;
                 }
                 bpad.Vacate(person);
@@ -862,16 +1049,16 @@ namespace CampusSimulator
 
         public void DeleteGos()
         {
-            foreach (var bname in bldlookup.Keys)
+            foreach (var bname in bldmasterlist.Keys)
             {
-                bldlookup[bname].DeleteGos();
+                bldmasterlist[bname].DeleteGos();
             }
         }
         public void CreateGos()
         {
-            foreach (var bname in bldlookup.Keys)
+            foreach (var bname in bldmasterlist.Keys)
             {
-                bldlookup[bname].CreateGos();
+                bldmasterlist[bname].CreateGos();
             }
         }
         public void RefreshGos()
@@ -879,10 +1066,5 @@ namespace CampusSimulator
             DeleteGos();
             CreateGos();
         }
-
-
-
-
-
     }
 }

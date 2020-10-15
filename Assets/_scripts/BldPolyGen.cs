@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using Aiskwk.Dataframe;
 using Aiskwk.Map;
-using UnityEngine.UIElements;
-using System.Text;
-using System.Linq;
-using UnityEngine.AI;
-using System.Data.Common;
 using System;
+using UnityEngine.UI;
 
+public enum GroundRef {  cen, min, max }
+[Serializable]
 public class OsmBldSpec
 {
     public string osmname;
@@ -17,6 +15,7 @@ public class OsmBldSpec
     public string bldtyp;
     public string wid;
     public float height;
+    public float levelheight;
     public int levels;
     public double lat;
     public double lng;
@@ -24,9 +23,15 @@ public class OsmBldSpec
     public float z;
     public float bscale;
     public Vector3 loc;
+    public GroundRef groundRef;
+    public Vector3 ptcen;
+    public float maxy;
+    public float ceny;
+    public float miny;
     public bool isVisible;
     List<Vector3> boutline;
     public GameObject bgo;
+
 
     public OsmBldSpec(string nname, string bldtyp, string wid, float height = 0, int levels = 0, float bscale = 1)
     {
@@ -49,9 +54,17 @@ public class OsmBldSpec
         this.wid = wid;
         this.height = height;
         this.levels = levels;
+        this.levelheight = height / levels;
         this.bgo = null;
         this.isVisible = true;
-        this.shortname = osmname.Replace("Microsoft Building ","Bld");
+        this.maxy = 0;
+        this.ceny = 0;
+        this.miny = 0;
+        this.groundRef = GroundRef.cen;
+        shortname = osmname;
+        shortname = shortname.Replace("Microsoft Building ","Bld");
+        shortname = shortname.Replace("Microsoft Studio ", "Stu");
+        shortname = shortname.Replace("RedWest-", "BldRW");
         //Debug.Log($"osmname:{osmname}  shortname:{shortname}");
     }
     public void AddPos(double lat, double lng, float x, float z)
@@ -62,45 +75,116 @@ public class OsmBldSpec
         this.z = z * bscale;
         this.loc = new Vector3(this.x, 0, -this.z);
     }
-    public void SetOutline(List<Vector3> outline)
+    public void SetOutline(List<Vector3> outline, PolyGenVekMapDel pgvd=null)
     {
+        // set the outline
+        // note boutline can not have the yvalues in there as the tesselation algorithems need them to be zero
+        // I suppose I could change that...
         boutline = new List<Vector3>();
+        var n = outline.Count;
+        if (n == 0)
+        {
+            miny = 0;
+            maxy = 0;
+            ceny = 0;
+            // make sure everything
+            return;
+        }
+        miny = float.MaxValue;
+        maxy = float.MinValue;
+        var sumx = 0f;
+        var sumz = 0f;
         foreach (var pt in outline)
         {
-            var npt = new Vector3(pt.x * bscale, pt.y * bscale, pt.z * bscale);
-            boutline.Add(npt);
+            var x = pt.x * bscale;
+            var y = pt.y * bscale;
+            var z = pt.z * bscale;
+            sumx += x;
+            sumz += z;
+            var newboutlinept = new Vector3(x, y, z);
+            if (pgvd != null)
+            {
+                var pgvd_pt = pgvd(new Vector3(x, 0, z));
+                y = pgvd_pt.y;
+            }
+            if (y<miny)
+            {
+                miny = y;
+            }
+            if (y > maxy)
+            {
+                maxy = y;
+            }
+            boutline.Add(newboutlinept);
+        }
+        if (pgvd != null)
+        {
+            var ptcen0 = new Vector3(sumx / n, 0, sumz / n);
+            ptcen = pgvd(ptcen0);
+            ceny = ptcen.y;
+        }
+        else
+        {
+            ceny = (miny + maxy) / 2;// kind of arbitrary
+            ptcen = new Vector3( sumx/n, ceny, sumz/n );
         }
     }
+
     public List<Vector3> GetOutline()
     {
         var rv = new List<Vector3>(boutline);
         return rv;
     }
-    public float GetLevelHeight(int level)
+
+    public float GetGround()
     {
-        if (level<0 || levels<level )
+        var rv = 0f;
+        switch (groundRef)
         {
-            Debug.LogError($"BldPolyGen.OsmBldSPec.GetLevelHeight has bad level:{level} building levels:{levels}");
-            level = levels;
+            case GroundRef.cen: 
+                rv = ceny;
+                break;
+            case GroundRef.max:
+                rv = maxy;
+                break;
+            case GroundRef.min:
+                rv = miny;
+                break;
         }
-        var y = height * level;
-        return y;
+        return rv;
     }
 
-    public Vector3 GetCenterTop()
+    public float GetFloorHeight(int i,bool includeAltitude=false)
     {
-        var rv = Vector3.zero;
-        var y = height * levels;
-        if (boutline.Count > 0)
+        // note that on a 3 story 12 meter building the 0, 1, 2 floors are on 0, 4, 8 meter altitude
+        var y = height;
+        if (levels > 0)
         {
-            var vsum = Vector3.zero;
-            foreach (var pt in boutline)
-            {
-                vsum += pt;
-            }
-            var ndiv = boutline.Count;
-            rv = new Vector3(vsum.x / ndiv, y, vsum.z / ndiv);
+            var iflr = i;
+            if (iflr < 0) iflr = 0;
+            if (iflr > levels) iflr = levels;
+            y = iflr * height / levels;
         }
+        if (includeAltitude)
+        {
+            y += GetGround();
+        }
+        return y;
+    }
+    public Vector3 GetCenterFloor(int i,bool includeAltitude=false)
+    {
+        var y = GetFloorHeight(i, includeAltitude: includeAltitude);
+        var rv = new Vector3(ptcen.x, y, ptcen.z);
+        return rv;
+    }
+    public Vector3 GetCenterTop(bool includeAltitude = false)
+    {
+        var rv = GetCenterFloor(levels,includeAltitude:includeAltitude); 
+        return rv;
+    }
+    public Vector3 GetCenterBottom(bool includeAltitude = false)
+    {
+        var rv = GetCenterFloor(0, includeAltitude: includeAltitude);
         return rv;
     }
     static Dictionary<string, string> clrcvt = new Dictionary<string, string>()
@@ -267,31 +351,6 @@ public class BldPolyGen
     }
 
 
-    //(SimpleDf ways, SimpleDf links, SimpleDf nodes) GetDfsFromFiles(string areaprefix, string dname = "")
-    //{
-    //    if (dname == "")
-    //    {
-    //        dname = "d:/pyprj/overpy/output/";
-    //    }
-    //    var fnameways = $"{dname}{areaprefix}_ways.csv";
-    //    var fnamenodes = $"{dname}{areaprefix}_nodes.csv";
-    //    var fnamelinks = $"{dname}{areaprefix}_links.csv";
-
-    //    var dfways = new SimpleDf(areaprefix + "_ways");
-    //    dfways.ReadCsv(fnameways);
-    //    Debug.Log($"Read {dfways.Nrow()} ways from {fnameways}");
-
-    //    var dflinks = new SimpleDf(areaprefix + "links");
-    //    dflinks.ReadCsv(fnamelinks);
-    //    Debug.Log($"Read {dflinks.Nrow()} links from {fnamelinks}");
-
-    //    var dfnodes = new SimpleDf(areaprefix + "nodes");
-    //    dfnodes.ReadCsv(fnamenodes);
-    //    Debug.Log($"Read {dfnodes.Nrow()} links from {fnamenodes}");
-
-    //    return (dfways, dflinks, dfnodes);
-    //}
-
     public (SimpleDf dfways1, SimpleDf dflinks1, SimpleDf dfnodes1) GetDfsFromResources(string areaprefix, string dname = "", LatLongMap llm = null)
     {
         if (dname == "")
@@ -378,7 +437,7 @@ public class BldPolyGen
     }
 
 
-    public List<OsmBldSpec> LoadOsmBuildingsFromSdfs(SimpleDf dfways, SimpleDf dfnodes, SimpleDf dflinks, float ptscale = 1, LatLongMap llm = null, bool usenodedict = false)
+    public List<OsmBldSpec> LoadOsmBuildingsFromSdfs(SimpleDf dfways, SimpleDf dfnodes, SimpleDf dflinks, float ptscale = 1, LatLongMap llm = null, bool usenodedict = false, PolyGenVekMapDel pgvd = null)
     {
         var sw = new Aiskwk.Dataframe.StopWatch();
         sw.Start();
@@ -433,7 +492,7 @@ public class BldPolyGen
             {
                 nodeoutline.Reverse();
             }
-            bs.SetOutline(nodeoutline);
+            bs.SetOutline(nodeoutline,pgvd);
             rv.Add(bs);
             i++;
         }
@@ -460,80 +519,63 @@ public class BldPolyGen
         levs = 3;
 
         ReInit();
-        var l1 = new Vector3(v, 0, v);
-        GenFixedFormBld(parent, ObjForm.circle, "b10", l1, height, levs, "db", ptscale: ptscale, pgvd:pgvd );
+        //var l1 = new Vector3(v, 0, v);
+        //GenFixedFormBldForTesting(parent, ObjForm.circle, "b10", l1, height, levs, "db", ptscale: ptscale, pgvd:pgvd );
 
         //ReInit();
         //var l2 = new Vector3(-v, 0, v);
-        //GenFixedFormBld(parent, ObjForm.star, "b01", l2, height, levs, "dg", ptscale: ptscale, pgvd: pgvd);
+        //GenFixedFormBldForTesting(parent, ObjForm.star, "b01", l2, height, levs, "dg", ptscale: ptscale, pgvd: pgvd);
 
 
         //ReInit();
         //var l3 = new Vector3(v, 0, -v);
-        //GenFixedFormBld(parent, ObjForm.cross, "b10", l3, height, levs, "dr", ptscale: ptscale, pgvd: pgvd);
+        //GenFixedFormBldForTesting(parent, ObjForm.cross, "b10", l3, height, levs, "dr", ptscale: ptscale, pgvd: pgvd);
 
 
 
         //ReInit();
         //var l4 = new Vector3(-v, 0, -v);
-        //GenFixedFormBld(parent, ObjForm.cross, "b00", l4, height, levs, "dy", ptscale: ptscale, pgvd: pgvd);
+        //GenFixedFormBldForTesting(parent, ObjForm.cross, "b00", l4, height, levs, "dy", ptscale: ptscale, pgvd: pgvd);
     }
 
 
 
 
-    public GameObject GenFixedFormBld(GameObject parent, ObjForm objform, string bldname, Vector3 loc, float height, int levels, string clr, float ptscale = 1, PolyGenVekMapDel pgvd = null)
-    {
-        GenOutline(objform, loc);
-        var dowalls = true;
-        var dofloors = true;
-        var doroof = true;
-        var rv = pg.GenBld(parent, bldname, height, levels, clr, alf: 0.5f,dowalls:dowalls,dofloors: dofloors,doroof:doroof, ptscale: ptscale, pgvd:pgvd);
-        return rv;
-    }
+    //public GameObject GenFixedFormBldForTesting(GameObject parent, ObjForm objform, string bldname, Vector3 loc, float height, int levels, string clr, float ptscale = 1, PolyGenVekMapDel pgvd = null)
+    //{
+    //    GenOutline(objform, loc);
+    //    var dowalls = true;
+    //    var dofloors = true;
+    //    var doroof = true;
+    //    // broke it, needs a bldspec now
+    //    //var rv = pg.GenBld(parent, bldname,bldname, height, levels, clr, alf: 0.5f,dowalls:dowalls,dofloors: dofloors,doroof:doroof, ptscale: ptscale, pgvd:pgvd);
+    //    return rv;
+    //}
     public GameObject GenBldFromOsmBldSpec(GameObject parent, OsmBldSpec bs, bool plotTesselation = false, float ptscale = 1, PolyGenVekMapDel pgvd = null,float alf=0.5f)
     {
+        //if (bs.shortname=="Bld34")
+        //{
+        //    Debug.Log("Bld34");
+        //}
         pg.SetOutline(bs.GetOutline());
         var clr = bs.GetColor();
-        var bldname = $"{bs.osmname} ({bs.wid} {bs.bldtyp})";
         var dowalls = true;
         var dofloors = true;
         var doroof = true;
+        var dosock = true;
         if (plotTesselation)
         {
             dowalls = false;
             dofloors = false;
         }
-        var rv = pg.GenBld(parent, bldname, bs.height, bs.levels, clr, alf: alf, dowalls: dowalls, dofloors: dofloors, doroof: doroof, plotTesselation: plotTesselation, ptscale: ptscale, pgvd: pgvd);
+        var outline = bs.GetOutline();
+ 
+        var rv = pg.GenBld(parent, bs, clr, alf: alf, dowalls: dowalls, dofloors: dofloors, doroof: doroof,dosock:dosock, plotTesselation: plotTesselation, ptscale: ptscale, pgvd: pgvd);
         return rv;
     }
 
-    public List<OsmBldSpec> GenBuildingsInRegion(GameObject parent, List<SimpleDf> dfwayslist, List<SimpleDf> dflinkslist, List<SimpleDf> dfnodeslist, float ptscale = 1, PolyGenVekMapDel pgvd = null, LatLongMap llm = null,bool useindexes=true)
-    {
-        var rv = new List<OsmBldSpec>();
-        var sw = new Aiskwk.Dataframe.StopWatch();
-        var osmblds = GetBuildspecsInRegion( dfwayslist, dflinkslist, dfnodeslist,ptscale,llm);
-        foreach (var bs in osmblds)
-        {
-            var nbspts = bs.GetOutline().Count;
-            if (nbspts >= 3)
-            {
-                //GenFixedFormBld(ObjForm.cross, bs.name, bs.loc, bs.height,bs.levels,"db");
-                var bldgo = GenBldFromOsmBldSpec(parent, bs, ptscale: ptscale, pgvd: pgvd);
-                bs.bgo = bldgo;
-                rv.Add(bs);
-            }
-            else
-            {
-                //Debug.LogWarning($"Building {bs.name} does not have enough outline points:{nbspts}");
-            }
-        }
-        sw.Stop();
-        Debug.Log($"BldPolyGen.LoadRegion Building Generation took {sw.ElapSecs()} secs");
-        return osmblds;
-    }
 
-    public List<OsmBldSpec> GetBuildspecsInRegion(List<SimpleDf> dfwayslist, List<SimpleDf> dflinkslist, List<SimpleDf> dfnodeslist, float ptscale = 1, LatLongMap llm = null)
+    public List<OsmBldSpec> GetBuildspecsInRegion(List<SimpleDf> dfwayslist, List<SimpleDf> dflinkslist, List<SimpleDf> dfnodeslist, float ptscale = 1, LatLongMap llm = null, PolyGenVekMapDel pgvd = null)
     {
         var osmblds = new List<OsmBldSpec>();
 
@@ -543,14 +585,14 @@ public class BldPolyGen
             var wdf = dfwayslist[i];
             var ndf = dfnodeslist[i];
             var ldf = dflinkslist[i];
-            var lst = LoadOsmBuildingsFromSdfs(wdf, ndf, ldf, ptscale: ptscale, llm: llm);
+            var lst = LoadOsmBuildingsFromSdfs(wdf, ndf, ldf, ptscale: ptscale, llm: llm,pgvd:pgvd);
             osmblds.AddRange(lst);
         }
         return osmblds;
     }
 
 
-    public List<OsmBldSpec> LoadRegionOld(GameObject parent, string regionspec, float ptscale = 1, PolyGenVekMapDel pgvd = null, LatLongMap llm = null, string buildingFilter = "",bool plotTessalation=false)
+    public List<OsmBldSpec> LoadRegionOldForTesting(GameObject parent, string regionspec, float ptscale = 1, PolyGenVekMapDel pgvd = null, LatLongMap llm = null, string buildingFilter = "",bool plotTessalation=false)
     {
         var rv = new List<OsmBldSpec>();
         var sw = new Aiskwk.Dataframe.StopWatch();
@@ -560,13 +602,12 @@ public class BldPolyGen
         foreach (var regionname in sar)
         {
             LoadSdfs(regionname);
-            var lst = LoadOsmBuildingsFromSdfs(_dfways,_dfnodes,_dflinks,ptscale: ptscale,llm:llm);
+            var lst = LoadOsmBuildingsFromSdfs(_dfways,_dfnodes,_dflinks,ptscale: ptscale,llm:llm,pgvd:pgvd);
             osmblds.AddRange(lst);
         }
         var filterBuildings = buildingFilter != "";
         foreach (var bs in osmblds)
         {
-            //GenFixedFormBld(ObjForm.cross, bs.name, bs.loc, bs.height,bs.levels,"db");
             if (filterBuildings)
             {
                 if (bs.osmname.StartsWith(buildingFilter))

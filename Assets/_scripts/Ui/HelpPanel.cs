@@ -84,8 +84,8 @@ public class HelpPanel : MonoBehaviour
         catch (Exception ex)
         {
             msg += "\n" + ex.Message;
-            Debug.LogError("Error filling help text");
-            Debug.LogError(ex.ToString());
+            sman.LggError("Error filling help text");
+            sman.LggError(ex.ToString());
         }
         return msg;
     }

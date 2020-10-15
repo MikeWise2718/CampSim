@@ -52,7 +52,7 @@ public class BldPolyGenTest : MonoBehaviour
         latlngmap.InitMapFromSceneSelString("MsftRedwest");
         var hmo = new heightMocker(33);
         var pgvd = new PolyGenVekMapDel(hmo.ChangeHeight);
-        bpg.LoadRegionOld(this.gameObject, "msftcampcore", 1f, pgvd: pgvd, llm: latlngmap);
+        bpg.LoadRegionOldForTesting(this.gameObject, "msftcampcore", 1f, pgvd: pgvd, llm: latlngmap);
 
     }
 
@@ -62,7 +62,7 @@ public class BldPolyGenTest : MonoBehaviour
         latlngmap.InitMapFromSceneSelString("MsftRedwest");
         var hmo = new heightMocker(33);
         var pgvd = new PolyGenVekMapDel(hmo.ChangeHeight);
-        bpg.LoadRegionOld(this.gameObject, "seattle", 1f, pgvd: pgvd, llm: latlngmap);
+        bpg.LoadRegionOldForTesting(this.gameObject, "seattle", 1f, pgvd: pgvd, llm: latlngmap);
 
     }
 
@@ -75,7 +75,7 @@ public class BldPolyGenTest : MonoBehaviour
         var pgvd = new PolyGenVekMapDel(hmo.ChangeHeight);
         //bpg.LoadRegionOld(this.gameObject, "tenmtn", 1f, pgvd: pgvd, llm: latlngmap);
         //bpg.LoadRegionOld(this.gameObject, "tenmtn", 1f, pgvd: pgvd, llm: latlngmap,buildingFilter:"house85",plotTessalation:true);
-        bpg.LoadRegionOld(this.gameObject, "tenmtn", 1f, pgvd: pgvd, llm: latlngmap, buildingFilter: "house148", plotTessalation: true);
+        bpg.LoadRegionOldForTesting(this.gameObject, "tenmtn", 1f, pgvd: pgvd, llm: latlngmap, buildingFilter: "house148", plotTessalation: true);
     }
     void TestFrisco()
     {
@@ -85,7 +85,7 @@ public class BldPolyGenTest : MonoBehaviour
         var hmo = new heightMocker(33);
         var pgvd = new PolyGenVekMapDel(hmo.ChangeHeight);
         //bpg.LoadRegionOld(this.gameObject, "sanfrancisco", 1f, pgvd: pgvd, llm: latlngmap);
-        bpg.LoadRegionOld(this.gameObject, "sanfrancisco", 1f, pgvd: pgvd, llm: latlngmap,buildingFilter:"yes304",plotTessalation:true);
+        bpg.LoadRegionOldForTesting(this.gameObject, "sanfrancisco", 1f, pgvd: pgvd, llm: latlngmap,buildingFilter:"yes304",plotTessalation:true);
     }
 
     void Test4()
@@ -98,7 +98,7 @@ public class BldPolyGenTest : MonoBehaviour
     void TestEb12()
     {
         //bpg.LoadRegion(this.gameObject, "eb12small", 0.5f);
-        bpg.LoadRegionOld(this.gameObject, "eb12small", 1);
+        bpg.LoadRegionOldForTesting(this.gameObject, "eb12small", 1);
     }
 
 

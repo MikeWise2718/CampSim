@@ -1,13 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Security.Cryptography;
-using UnityEditor;
+﻿using Aiskwk.Map;
+using System.Collections.Generic;
+using TMPro.EditorUtilities;
 using UnityEngine;
-using UnityEngine.Assertions.Must;
 using UxUtils;
 
 public class B121Willow : MonoBehaviour
 {
-    public enum b121_MaterialMode {  raw, materialed, glasswalls, glassfloors, glass };
+    public enum B121_MaterialMode {  raw, materialed, glasswalls, glassfloors, glass };
 
     public UxSetting<bool> loadmodel = new UxSetting<bool>("B121_WillowModel", true);
     public UxSetting<bool> shell = new UxSetting<bool>("B121_shell", true);
@@ -16,15 +15,18 @@ public class B121Willow : MonoBehaviour
     public UxSetting<bool> lighting = new UxSetting<bool>("B121_lights", true);
     public UxSetting<bool> plumbing = new UxSetting<bool>("B121_plumbing", true);
     public UxSetting<bool> osmbld = new UxSetting<bool>("B121_osmbld", false);
+    public UxSetting<bool> glasswalls = new UxSetting<bool>("B121_glasswalls", false);
 
-    public CampusSimulator.SceneMan sman;
+    public CampusSimulator.SceneMan sman=null;
 
-    public UxEnumSetting<b121_MaterialMode> b121_materialMode = new UxEnumSetting<b121_MaterialMode>("B121_MaterialMode", b121_MaterialMode.glass);
+    public UxEnumSetting<B121_MaterialMode> b121_materialMode = new UxEnumSetting<B121_MaterialMode>("B121_MaterialMode", B121_MaterialMode.glass);
     //   public UxSetting<bool> visibilityTiedToDetectability = new UxSetting<bool>("FrameVisibilityTiedToDetectability", true);
     // public B19_MaterialMode materialMode = B19_MaterialMode.materialed;
 
 
     CampusSimulator.Building bld;
+
+    public OsmBldSpec bspec;
 
 
     bool _b121_WillowModelLoaded = false;
@@ -34,7 +36,8 @@ public class B121Willow : MonoBehaviour
     bool _b121_lighting = false;
     bool _b121_plumbing = false;
     bool _b121_osmbld = false;
-    b121_MaterialMode lastMaterialMode;
+    bool _b121_glasswalls = false;
+    B121_MaterialMode lastMaterialMode;
 
     GameObject b121go = null;
     GameObject b121sgo = null;
@@ -48,7 +51,7 @@ public class B121Willow : MonoBehaviour
         //Debug.Log("B121Willow.InitializeValues");
         this.sman = sman;
         this.bld = bld;
-        b121_materialMode.GetInitial(b121_MaterialMode.glasswalls);
+        b121_materialMode.GetInitial(B121_MaterialMode.glasswalls);
         loadmodel.GetInitial(true);
         _b121_shell = shell.GetInitial(true);
         _b121_interiorwalls = interiorwalls.GetInitial(true);
@@ -56,15 +59,9 @@ public class B121Willow : MonoBehaviour
         _b121_lighting = lighting.GetInitial(false);
         _b121_plumbing = plumbing.GetInitial(false);
         _b121_osmbld = osmbld.GetInitial(false);
+        _b121_glasswalls = glasswalls.GetInitial(false);
         lastMaterialMode = b121_materialMode.Get();
-        //Debug.Log($"b121.loadmodel:{loadmodel.Get()}");
-        //Debug.Log($"b121.shell:{shell.Get()}");
-        //Debug.Log($"b121.interior:{interiorwalls.Get()}");
-        //Debug.Log($"b121.hvac:{hvac.Get()}");
-        //Debug.Log($"b121.lighting:{lighting.Get()}");
-        //Debug.Log($"b121.plumbing:{plumbing.Get()}");
-        //Debug.Log($"b121.osmbld:{osmbld.Get()}");
-        //Debug.Log($"b121.materialmode:{b121_materialMode.Get()}");
+        bspec = sman.bdman.FindBldSpecByNameStart(bld.osmnamestart);
     }
 
 
@@ -152,7 +149,7 @@ public class B121Willow : MonoBehaviour
     public float bshellska = 0.025f;
     public float bangle = -90;
     public Vector3 bpos;
-    public float ymapheit;
+    public float ymapheight = 0.20f;// 1 cm eliminates z-fighting
     public float xhlp_boff = 1.6f;
     public float zhlp_boff = 1.3f;
 
@@ -176,24 +173,59 @@ public class B121Willow : MonoBehaviour
     {
         b121pgo = LoadObjFile(b121go, "Willow/B121/1716045-BH-PLUMBING-B121_2020", "plumbing", xrot: bangle, zoff: zhlp_boff, xoff: xhlp_boff);
     }
-
-    public float GetFloorHeight(int floor)
+    public Vector3 GetCenterPoint( bool includeAltitude = true)
     {
-        var rv = 0.01f;
+        var ll = GetCenterLatLng();
+        var (x,z) = sman.coman.lltoxz(ll.lat, ll.lng);
+        var y = 0f;
+        if (includeAltitude)
+        {
+            y+= ymapheight;
+        }
+        var rv = new Vector3(x, y, z);
+
+        return rv;
+    }
+    public LatLng GetCenterLatLng()
+    {
+        var rv = new LatLng(47.647827, -122.136954);// took it off the map
+        return rv;
+    }
+    public (int,float) GetFloorsAndHeight()
+    {
+        return (3, 12.6f);
+    }
+    public float GetFloorHeight(int floor, bool includeAltitude = true)
+    {
+        float rv;
         if (floor < 0) floor = 0;
         if (floor > 3) floor = 3;
         switch(floor)
         {
+            default:
             case 0:
             case 1:
-                rv = 0.01f;
+                rv = 0.21f;
                 break;
             case 2:
-                rv = 2.11f;
+                rv = 4.30f;
                 break;
             case 3:
-                rv = 4.21f;
+                rv = 8.40f;
                 break;
+        }
+        //if (bspec == null)
+        //{
+        //    sman.LggError("B121Willow.GetFloorHeight - bspec null with includeAltitude=true");
+        //}
+        //else
+        //{
+        //    rv += bspec.GetGround();
+        //}
+
+        if (includeAltitude)
+        {
+            rv += ymapheight;
         }
         return rv;
     }
@@ -204,17 +236,15 @@ public class B121Willow : MonoBehaviour
         if (loadmodel.Get() && !_b121_WillowModelLoaded)
         {
             b121go = new GameObject("B121-Willow");
-            bpos = new Vector3(-789, 0.01f, -436);// 1 cm raised to eliminate z fighting
-            if (sman != null)
+            bpos = new Vector3(-789, ymapheight, -436);// 1 cm raised to eliminate z fighting
+            ymapheight = sman.mpman.GetHeight(bpos.x, bpos.z);
+            if (sman.mpman.useElevations.Get())
             {
-                ymapheit = sman.mpman.GetHeight(bpos.x, bpos.z);
-                if (sman.mpman.useElevations.Get())
-                {
-                    ymapheit -= 1.0f; // adjust for map irrgularities - doesn't work well
-                }
-                Debug.Log($"Loading B121 - height - bpos:{bpos:f1} yheit(from map):{ymapheit} total:{ymapheit+bpos.y}");
-                bpos = new Vector3(bpos.x, ymapheit + bpos.y, bpos.z);
+                ymapheight -= 1.0f; // adjust for map irrgularities - doesn't work well
             }
+            var bps = bpos.ToString("f3");
+            sman.Lgg($"Loading B121 -- height - bpos:{bps} yheit(from map):{ymapheight:f2} total:{ymapheight+bpos.y:f2}","orange");
+            bpos = new Vector3(bpos.x, ymapheight + bpos.y, bpos.z);
             b121go.transform.Rotate(new Vector3(0, -20.15f, 0));
             b121go.transform.position = bpos;
             b121go.transform.SetParent(this.transform,worldPositionStays:false);
@@ -258,10 +288,10 @@ public class B121Willow : MonoBehaviour
             {
                 var stat = osmbld.Get();
                 var bspec = sman.bdman.FindBldSpecByNameStart(bld.osmnamestart);
-                
+
                 if (bspec != null)
                 {
-                    sman.bdman.RegisterBsBld(bspec, bld);
+                    // sman.bdman.RegisterBsBld(bspec, bld); // done at build registration time now
                     bspec.isVisible = stat;
                     if (bspec.bgo != null)
                     {
@@ -270,6 +300,7 @@ public class B121Willow : MonoBehaviour
                 }
                 _b121_osmbld = stat;
             }
+
 
             if (shell.Get() != _b121_shell)
             {
@@ -359,7 +390,7 @@ public class B121Willow : MonoBehaviour
         }
         if (this.b121sgo == null)
         {
-            Debug.LogWarning("Cound not find B19-Willow");
+            sman.LggWarning("Cound not find B19-Willow");
             return;
         }
         var lst = GraphAlgos.GraphUtil.HierarchyDescToText(this.b121sgo, "");
@@ -381,7 +412,7 @@ public class B121Willow : MonoBehaviour
             {
                 if (!canfail)
                 {
-                    Debug.LogWarning("GetPart failed to find " + partname + "-  failed name part:" + part);
+                    sman.LggWarning("GetPart failed to find " + partname + "-  failed name part:" + part);
                 }
                 return null;
             }
@@ -434,7 +465,7 @@ public class B121Willow : MonoBehaviour
             }
             else
             {
-                Debug.LogError($"Could not load material{fullmatname}");
+                sman.LggError($"Could not load material{fullmatname}");
             }
         }
     }
@@ -477,7 +508,7 @@ public class B121Willow : MonoBehaviour
             newMat = Resources.Load<Material>(fullmatname);
             if (!newMat)
             {
-                Debug.LogWarning("Material " + fullmatname + " not found in Resources");
+                sman.LggWarning("Material " + fullmatname + " not found in Resources");
                 return;
             }
         }
@@ -570,9 +601,10 @@ public class B121Willow : MonoBehaviour
         {"FloorMaterial","FloorMaterial"},
     };
 
-    public void ActuateShowHvac(bool showhvac)
+    public void ToggleHvac()
     {
-        if (showhvac)
+        _b121_hvac = !_b121_hvac;
+        if (_b121_hvac)
         {
             if (b121hgo==null)
             {
@@ -586,11 +618,13 @@ public class B121Willow : MonoBehaviour
             {
                 b121hgo.SetActive(false);
             }
-        }    
+        }
+        hvac.SetAndSave(_b121_hvac);
     }
-    public void ActuateShowLighting(bool showlighting)
+    public void ToggleLighting()
     {
-        if (showlighting)
+        _b121_lighting  = !_b121_lighting;
+        if (_b121_lighting)
         {
             if (b121lgo == null)
             {
@@ -605,11 +639,13 @@ public class B121Willow : MonoBehaviour
                 b121lgo.SetActive(false);
             }
         }
+        lighting.SetAndSave(_b121_lighting);
     }
 
-    public void ActuateShowPlumbing(bool showplumbing)
+    public void TogglePlumbing()
     {
-        if (showplumbing)
+        _b121_plumbing = !_b121_plumbing;
+        if (_b121_plumbing)
         {
             if (b121pgo == null)
             {
@@ -624,6 +660,27 @@ public class B121Willow : MonoBehaviour
                 b121pgo.SetActive(false);
             }
         }
+        plumbing.SetAndSave(_b121_plumbing);
+
+    }
+
+    public void ToggleOsm()
+    {
+        var stat = osmbld.Get();
+        var newosmstat = !stat;
+        var bspec = sman.bdman.FindBldSpecByNameStart(bld.osmnamestart);
+
+        if (bspec != null)
+        {
+            // sman.bdman.RegisterBsBld(bspec, bld); // done at build registration time now
+            bspec.isVisible = newosmstat;
+            if (bspec.bgo != null)
+            {
+                bspec.bgo.SetActive(newosmstat);
+            }
+        }
+        osmbld.SetAndSave(newosmstat);
+        _b121_osmbld = newosmstat;
     }
 
     public void ActuateMaterialMode(bool writepartlisttofile=false)
@@ -643,14 +700,14 @@ public class B121Willow : MonoBehaviour
                 var matname = defmatname;
                 switch (b121_materialMode.Get())
                 {
-                    case b121_MaterialMode.glass:
+                    case B121_MaterialMode.glass:
                         matname = "ComputerGlass";
                         break;
-                    case b121_MaterialMode.materialed:
+                    case B121_MaterialMode.materialed:
                         {
                             if (!bldmatmap.ContainsKey(partmat))
                             {
-                                Debug.LogWarning($"Missing material:{partmat}");
+                                sman.LggWarning($"Missing material:{partmat}");
                             }
                             else
                             {
@@ -658,7 +715,7 @@ public class B121Willow : MonoBehaviour
                             }
                             break;
                         }
-                    case b121_MaterialMode.glasswalls:
+                    case B121_MaterialMode.glasswalls:
                         {
                             var pnl = pname.ToLower();
                             if (pnl.Contains("interior") || pnl.Contains("door"))
@@ -671,7 +728,7 @@ public class B121Willow : MonoBehaviour
                             }
                             break;
                         }
-                    case b121_MaterialMode.glassfloors:
+                    case B121_MaterialMode.glassfloors:
                         {
                             var pnl = pname.ToLower();
                             if (pnl.Contains("interior") || pnl.Contains("floor") || pnl.Contains("door"))
@@ -684,7 +741,7 @@ public class B121Willow : MonoBehaviour
                             }
                             break;
                         }
-                    case b121_MaterialMode.raw:
+                    case B121_MaterialMode.raw:
                         {
                             //matname = parcom[1];
                             matname = "";

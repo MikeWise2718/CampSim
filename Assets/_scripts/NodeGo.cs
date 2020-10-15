@@ -35,28 +35,32 @@ namespace CampusSimulator
 
         //}
 
-        // Update is called once per frame
-        void Update()
-        {
-            if (node.transformSetCount != nodeTransformSetCount)
-            {
-                nodeTransform = node.transform;
-                nodeTransformSetCount = node.transformSetCount;
-                if (node.transform != null)
-                {
-                    nodePtWc = node.transform.TransformPoint(node.pt);
-                    //var m = node.transform.worldToLocalMatrix;
-                    //var trans0 = m.GetRow(0);
-                    //var trans1 = m.GetRow(1);
-                    //var trans2 = m.GetRow(2);
-                    //var trans3 = m.GetRow(3);
-                    //strans0 = trans0.ToString("F2");
-                    //strans1 = trans1.ToString("F2");
-                    //strans2 = trans2.ToString("F2");
-                    //strans3 = trans3.ToString("F2");
-                }
-            }
-        }
+        // Update is called once per frame - very costly
+        //void Update()
+        //{
+        //    if (node==null)
+        //    {
+        //        return;
+        //    }
+        //    if (node.transformSetCount != nodeTransformSetCount)
+        //    {
+        //        nodeTransform = node.transform;
+        //        nodeTransformSetCount = node.transformSetCount;
+        //        if (node.transform != null)
+        //        {
+        //            nodePtWc = node.transform.TransformPoint(node.pt);
+        //            //var m = node.transform.worldToLocalMatrix;
+        //            //var trans0 = m.GetRow(0);
+        //            //var trans1 = m.GetRow(1);
+        //            //var trans2 = m.GetRow(2);
+        //            //var trans3 = m.GetRow(3);
+        //            //strans0 = trans0.ToString("F2");
+        //            //strans1 = trans1.ToString("F2");
+        //            //strans2 = trans2.ToString("F2");
+        //            //strans3 = trans3.ToString("F2");
+        //        }
+        //    }
+        //}
         public static string normname(string name)
         {
             if (name.EndsWith("-sph"))

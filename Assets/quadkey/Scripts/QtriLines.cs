@@ -124,14 +124,42 @@ namespace Aiskwk.Map
             }
             return (ptlist.Count, icomps);
         }
-
-        public List<(Vector3 pt, float lamb)> GetIsectList(string lname, Vector3 pt1, Vector3 pt2, int omit = -1, QkCoordSys coordsys= QkCoordSys.UserWc, bool db =false)
+        public Vector3 StupidTransform(Vector3 pt,float ang,float xoff,float zoff)
+        {
+            var rang = Mathf.PI * ang / 180;
+            var s = Mathf.Sin(rang);
+            var c = Mathf.Cos(rang);
+            var nx = pt.x - xoff;
+            var nz = pt.z - zoff;
+            var x = c*nx - s*nz;
+            var z = s*nx + c*nz;
+            var rv = new Vector3(x, pt.y, z);
+            return rv;
+        }
+        public Vector3 StupidReverseTransform(Vector3 pt, float ang, float xoff, float zoff)
+        {
+            var rang = Mathf.PI * (-ang) / 180;
+            var s = Mathf.Sin(rang);
+            var c = Mathf.Cos(rang);
+            var x = c*pt.x - s*pt.z;
+            var z = s*pt.x + c*pt.z;
+            var nx = x + xoff;
+            var nz = z + zoff;
+            var rv = new Vector3(nx, pt.y, nz);
+            return rv;
+        }
+        public List<(Vector3 pt, float lamb)> GetIsectList(string lname, Vector3 pt1, Vector3 pt2, int omit = -1, QkCoordSys coordsys= QkCoordSys.UserWc, bool db =false,float ang=0,float xoff=0,float zoff=0)
         {
             var rv = new List<(Vector3 pt, float lamb)>();
             var (_, icomp1) = AddPoint(lname, rv, pt1, 0);
             var (_, icomp2) = AddPoint(lname, rv, pt2, 1);
             nTotComps += icomp1 + icomp2;
             //rv.Add((pt2, Vector3.Distance(pt1,pt2)));
+            if (ang!=0)
+            {
+                pt1 = StupidTransform(pt1, ang, xoff, zoff);
+                pt2 = StupidTransform(pt2, ang, xoff, zoff);
+            }
             var ls1 = new LineSegment2xz(pt1, pt2);
             for (int i = 0; i < trilinesegs.Count; i++)
             {
@@ -141,6 +169,10 @@ namespace Aiskwk.Map
                     var (isect,pti,t,u) = ls1.TryIntersect(ls2);
                     if (isect)
                     {
+                        if (ang != 0)
+                        {
+                            pti = StupidReverseTransform(pti, ang, xoff, zoff);
+                        }
                         var (ptii, _, _) = qmm.GetWcMeshPosProjectedAlongYnew(pti,coordsys:coordsys, db:db);
                         var (_, icomp) = AddPoint(lname, rv, ptii, t);
                         nTotComps += icomp;
@@ -171,7 +203,7 @@ namespace Aiskwk.Map
             frago.transform.SetParent(parent.transform, worldPositionStays:wps);
             return frago;
         }
-        public GameObject AddFragLine(string lname, Vector3 pt1, Vector3 pt2,string form="pipe", float lska = 1.0f, float nska = 1.0f, string lclr = "red", string nclr = "", int omit = -1, float widratio = 1, bool wps = true, QkCoordSys coordsys = QkCoordSys.UserWc)
+        public GameObject AddFragLine(string lname, Vector3 pt1, Vector3 pt2,string form="pipe", float lska = 1.0f, float nska = 1.0f, string lclr = "red", string nclr = "", int omit = -1, float widratio = 1, bool wps = true, QkCoordSys coordsys = QkCoordSys.UserWc, float fragang = 0, float fragxoff = 0, float fragzoff = 0)
         {
             var dowall = false;
             //var db = lname == "1202033022121033-b";
@@ -181,7 +213,11 @@ namespace Aiskwk.Map
             //    var pt2s = pt2.ToString("f3");
             //    Debug.Log($"AFL p1:{pt1s} p2:{pt2s}");
             //}
-            var ptlist = GetIsectList(lname, pt1, pt2, omit: omit, db: false,coordsys:coordsys);
+            //var ang = 71.1f-90;
+            //var xoff = -6;
+            //var zoff = 17;
+            //var ang = 0f;
+            var ptlist = GetIsectList(lname, pt1, pt2, omit: omit, db: false,coordsys:coordsys,ang:fragang,xoff:fragxoff,zoff:fragzoff);
             ntotIsects += ptlist.Count;
             nFragLines++;
             //Debug.Log($"AddFragLine found {ptlist.Count} intersections");
@@ -201,23 +237,25 @@ namespace Aiskwk.Map
 
             for (int i = 0; i < ptlist.Count - 1; i++)
             {
-                var (pit1, d1) = ptlist[i];
-                var (pit2, d2) = ptlist[i+1];
-                var pit1s = pit1.ToString("f3");
-                //if (db)
-                //{
-                //    var d1s = d1.ToString("f3");
-                //    var pit2s = pit2.ToString("f3");
-                //    var d2s = d2.ToString("f3");
-                //    Debug.Log($"{i}  - pt1:{pit1s} l1:{d1s}   pt2:{pit2s} l2:{d2s}");
-                //}
+                var (pit1, lamb1) = ptlist[i];
+                var (pit2, lamb2) = ptlist[i+1];
                 var llname = $"{lname}_{i}";
-                if (nclr != "" && i == 0)
-                {
-                    sname = $"{llname}_pt1_{d1.ToString("f4")}";
-                    sphgo = qut.CreateMarkerSphere(sname, pit1, lska * nska, nclr);
-                    sphgo.transform.SetParent(lgo.transform, worldPositionStays: wps);
-                }
+                //if (i >= 1)
+                //{
+                //    var pit1s = pit1.ToString("f3");
+                //    var l1s = lamb1.ToString("f3");
+                //    var pit2s = pit2.ToString("f3");
+                //    var l2s = lamb2.ToString("f3");
+                //    Debug.Log($"AddFragLine {lname} - {i}  - pt1:{pit1s} l1:{l1s}   pt2:{pit2s} l2:{l2s}");
+                //}
+                //if (0 < i)
+                //{
+                //    var l1s = lamb1.ToString("f4");
+                //    sname = $"marker-{llname}_pt1_{l1s}";
+                //    Debug.Log($"AFL:{sname}");
+                //    sphgo = qut.CreateMarkerSphere(sname, pit1, 10*lska * nska, "lightgreen");
+                //    sphgo.transform.SetParent(lgo.transform, worldPositionStays: wps);
+                //}
                 GameObject cylgo;
                 if (dowall)
                 {
@@ -232,7 +270,8 @@ namespace Aiskwk.Map
                 cylgo.transform.parent = lgo.transform;
                 if (nclr != "")
                 {
-                    sname = $"{llname}_pt2_{d2.ToString("f4")}";
+                    var l2s = lamb2.ToString("f4");
+                    sname = $"{llname}_pt2_{l2s}";
                     var sphgotform = GpuInst.CreateSphereGpu(sname, pit2, lska * nska, nclr);
                     sphgotform.transform.SetParent(lgo.transform, worldPositionStays: wps);
                     //sphgotform.transform.parent = lgo.transform;

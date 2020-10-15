@@ -54,9 +54,9 @@ namespace CampusSimulator
 
         Path path = null;
 
-        public bool isRunning() { return (BirdState == BirdStateE.running); }
-        public bool isAtStart() { return (BirdState == BirdStateE.atstart); }
-        public bool isAtGoal() { return (BirdState == BirdStateE.atgoal); }
+        public bool IsRunning() { return (BirdState == BirdStateE.running); }
+        public bool IsAtStart() { return (BirdState == BirdStateE.atstart); }
+        public bool IsAtGoal() { return (BirdState == BirdStateE.atgoal); }
 
         public BirdFormE BirdForm
         {
@@ -296,13 +296,19 @@ namespace CampusSimulator
                         birdformgo.transform.localPosition = curpos + moveoffset;
                         //BirdFlyHeight = 1.5f;
                         birdgo.name = birdresourcename;
+                        movingAnimationScript = "Animations/PersonWalk";
+                        restingAnimationScript = "Animations/PersonIdle";
+                        if (person!=null)
+                        {
+                            if (person.isdronelike)
+                            {
+                                movingAnimationScript = "";
+                                restingAnimationScript = "";
+                            }
+                        }
                         if (person)
                         {
-                            if (!person.isdronelike)
-                            {
-                                movingAnimationScript = "Animations/PersonWalk";
-                                restingAnimationScript = "Animations/PersonIdle";
-                            }
+
                             if (person.hasCamera)
                             {
                                 person.AddCamera(birdformgo, "BirdCtrl CreateBirdFormGos");
@@ -375,9 +381,13 @@ namespace CampusSimulator
                     break;
             }
         }
-        public void startAnimation()
+        public void StartAnimation()
         {
-
+            SetAnimationScript();
+        }
+        public void StopAnimation()
+        {
+            ClearAimationScript();
         }
         public void AdjustBirdHeight(float factor)
         {
@@ -483,7 +493,7 @@ namespace CampusSimulator
         {
             StartBird();
         }
-        string lastscript = "";
+        public string lastscript = "";
         void SetAnimationScript()
         {
             if (movingAnimationScript != "")
@@ -501,6 +511,7 @@ namespace CampusSimulator
                     {
                         acomp.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>(script);
                         PersonMan.UnsyncAnimation(acomp, script, "BirdCtrl");
+                        lastscript = script;
                         //acomp.Play(script, 0, GraphAlgos.GraphUtil.GetRanFloat(0, 1));// unsync the animations for birdctrl
 
                     }
@@ -558,7 +569,7 @@ namespace CampusSimulator
                 Destroy(birdgo);
                 birdgo = null;
             }
-            initValues();
+            InitValues();
         }
         public PathPos GetBirdPos()
         {
@@ -566,7 +577,7 @@ namespace CampusSimulator
         }
         #endregion
 
-        void initValues()
+        void InitValues()
         {
             BirdSpeed = 0;
             BirdFlyHeight = 1.5f;
@@ -581,7 +592,7 @@ namespace CampusSimulator
         }
         void Start()
         {
-            initValues();
+            InitValues();
             //Debug.Log("birdctrl starts called");
         }
         // Update is called once per frame

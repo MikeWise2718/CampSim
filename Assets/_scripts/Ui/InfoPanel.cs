@@ -109,7 +109,8 @@ public class InfoPanel : MonoBehaviour
             viewer = FindObjectOfType<Aiskwk.Map.Viewer>();
         }
 
-        var msg = $"{vman.lastcamset}\nJny:{jman.njnys} Sspn:{jman.nspawned} Fspn:{jman.nspawnfails}\n";
+        var msg = $"{vman.lastcamset} VPK:{Aiskwk.Map.Viewer.ViewerProcessKeys}\n";
+        msg += $"Jny:{jman.njnys} Sspn:{jman.nspawned} Fspn:{jman.nspawnfails}\n";
 
         smoothedDeltaTime += (Time.unscaledDeltaTime - smoothedDeltaTime) * 0.1f;
         float fps = 1.0f / smoothedDeltaTime;
@@ -204,6 +205,8 @@ public class InfoPanel : MonoBehaviour
                 $"B:{sman.bdman.GetBuildingCount()} BR:{sman.bdman.GetBroomCount()} VC:{sman.vcman.GetVidcamCount()}\n"+
                 $"{GraphAlgos.GraphUtil.GetVersionString()}";
         mscText.text = mmsg;
+
+        geoText.text = $"{sman.lasthitname}\n{jman.journeyToShadow}";
 
     }
     private void Update()

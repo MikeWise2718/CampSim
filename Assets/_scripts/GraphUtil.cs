@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using System.IO;
 using System.Reflection;
+using System.Security.Cryptography;
 
 /// <summary>
 /// GraphAlgos.cs  - This file contains static algoritms that we need in various places. 
@@ -13,9 +14,28 @@ namespace GraphAlgos
 {
     public class GraphUtil
     {
-        static string _verstring = "2020.09.22.1 - PanCaming";
+        static string _verstring = "2020.10.05.1 - Journey Following";
         static string _sysver = "";
         static DateTime _buildDate = DateTime.UtcNow;
+
+
+
+        public static string GetUserPrefRegKey(bool entirekey=false,bool editor=false,string progname="campusim")
+        {
+            //static string sedregkey = "Computer\\HKEY_CURRENT_USER\\Software\\Unity\\UnityEditor\\DefaultCompany\\campusim";
+            //static string splregkey = "Computer\\HKEY_CURRENT_USER\\Software\\DefaultCompany\\campusim";
+            var seckeyname = "Software\\DefaultCompany";
+            if (editor)
+            {
+                seckeyname = "Software\\Unity\\UnityEditor\\DefaultCompany";
+            }
+            var rv = $"{seckeyname}\\{progname}";
+            if (entirekey)
+            {
+                rv = $"Computer\\HKEY_CURRENT_USER\\{rv}";
+            }
+            return rv;
+        }
 
         private static void getsysdata()
         {
@@ -198,6 +218,13 @@ namespace GraphAlgos
                 {
                     clder.enabled = false;
                 }
+                if (dirname=="People/")
+                {
+                    var cc = go.AddComponent<CapsuleCollider>();
+                    cc.center = new Vector3(0, 0.9f, 0);
+                    cc.radius = 0.25f;
+                    cc.height = 1.8f;
+                }
                 var rigid = go.GetComponent<Rigidbody>();
                 if (rigid != null)
                 {
@@ -216,6 +243,18 @@ namespace GraphAlgos
             { "jnygen",1234 },
         };
         static Dictionary<string, System.Random> ransetdict = new Dictionary<string, System.Random>();
+        public static void InitializeRansets()
+        {
+            var keys = new List<string>(ranseedset.Keys);
+            foreach (var k in keys)
+            {
+                ransetdict[k] = new System.Random(ranseedset[k]);
+            }
+        }
+        public static void SetRanSeed(string sname,int seed)
+        {
+            ranseedset[sname] = seed;
+        }
         static System.Random GetRanMan(string ranset)
         {
             if (!ransetdict.ContainsKey(ranset))
@@ -360,7 +399,7 @@ namespace GraphAlgos
             colorTable["phlox"] = rgbbyte(223, 0, 255);
             colorTable["mauve"] = rgbbyte(224, 176, 255);
             colorTable["fuchsia"] = rgbbyte(255, 0, 255);
-            colorTable["lilac"] = new Color(0.86f, 0.8130f, 1.0f);
+            colorTable["lilac"] = rgbbyte(200,162,200);
             // whites and grays
             colorTable["w"] =
             colorTable["white"] = new Color(1, 1, 1);

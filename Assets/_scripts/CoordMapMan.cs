@@ -23,10 +23,30 @@ namespace CampusSimulator
         {
         }
 
+        public string SceneToRegSelector(SceneSelE scene)
+        {
+            var strdict = new Dictionary<SceneSelE, string>()
+            {
+                { SceneSelE.MsftB121focused,"MsftCoreCampus" },
+                { SceneSelE.MsftB19focused,"MsftCoreCampus" },
+                { SceneSelE.MsftB33focused,"MsftCoreCampus" },
+                { SceneSelE.MsftRedwest,"MsftCoreCampus" },
+                { SceneSelE.MsftSmall,"MsftCoreCampus" },
+                { SceneSelE.Eb12small,"Eb12" },
+            };
+            var rv = scene.ToString();
+            if (strdict.ContainsKey(scene))
+            {
+                rv = strdict[scene];
+            }
+            return rv;
+        }
+
         public void InitializeGlbLlMap()
         {
             glbllm = new LatLongMap($"SceneMan.InitializeGlbLlMap(  ) with curscene:{curscene}");
-            glbllm.InitMapFromSceneSelString(curscene.ToString(), sman.mpman.bespokespec?.llbox); // doesn't handle non-llmap scenes 
+            var curscenestring = SceneToRegSelector(curscene);
+            glbllm.InitMapFromSceneSelString(curscenestring, sman.mpman.bespokespec?.llbox); // doesn't handle non-llmap scenes 
         }
         public (float x, float z) lltoxz(double lat, double lng)
         {

@@ -74,7 +74,6 @@ namespace Aiskwk.Map
         private void Load()
         {
             sdf = null;// delete any old ones
-            var sw = new StopWatch();
             var fname = gtm.geotTiffPath + $"output/{gname}.csvc";
             var exists = System.IO.File.Exists(fname);
             Debug.Log($"Geotiff {fname} exists:{exists}");
@@ -86,7 +85,6 @@ namespace Aiskwk.Map
         private async void LoadLidarDataAsync()
         {
             sdf = null;// delete any old ones
-            var sw = new StopWatch();
             var fname = gtm.geotTiffPath + $"output/{gname}.csvc";
             var exists = System.IO.File.Exists(fname);
             Debug.Log($"Lidar file {fname} exists:{exists}");

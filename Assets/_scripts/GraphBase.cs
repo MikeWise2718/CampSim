@@ -44,7 +44,7 @@ namespace GraphAlgos
 
     #region basics - Weg,LcNode,LcLink
 
-    [Serializable]
+    //[Serializable] // leads to circular inspector loop warnings that trigger at depth 7
     public class LcNode
     {
         public GraphCtrl grc;
@@ -58,6 +58,7 @@ namespace GraphAlgos
         public LinkUse usetype;
         public string comment;
         public int regionStepIdx;
+        public bool indoor;
         
 
         public LcNode cameFrom;
@@ -98,6 +99,7 @@ namespace GraphAlgos
             this.usetype = usetype;
             this.regid = nodeRegion.regid;
             this.comment = comment;
+            this.indoor = name.Contains("-f"); // floor nodes of form "b121-f01-xxx"
             regionStepIdx = nodeRegion.GetCurStepIdx();
             wegtos = null;
             AstarInit();
@@ -173,7 +175,7 @@ namespace GraphAlgos
     public enum LcCapType { walk, drive, waterflow, elecflow, anything, fly }
     public enum LinkUse { legacy, highway, road, slowroad, driveway, walkway, walkwaynoshow, stairs, marker, excavation, waterpipe, recwaterpipe,sewerpipe, elecpipe,commspipe,oilgaspipe, bldwall, trackperson,trackheli,trackdrone, droneway }
 
-    [Serializable]
+    // [Serializable] leads to warnings about serilization depth being exeeded, but it still works if you need it
     public class LcLink
     {
         // public GraphCtrl grc;  //  commented out - this leads to an object composition cycle I think....
@@ -275,6 +277,24 @@ namespace GraphAlgos
             this.regionStepIdx = grc.regman.curNodeRegion.GetCurStepIdx();
             len = Vector3.Distance(node1.pt, node2.pt);
             LinkLink();
+        }
+
+        public bool IsFragable()
+        {
+            var rv = true;
+            if (usetype == LinkUse.droneway)
+            {
+                rv = false;
+            }
+            else if (usetype == LinkUse.stairs)
+            {
+                rv = false;
+            }
+            else if (node1.indoor && node2.indoor)
+            {
+                rv = false;
+            }
+            return rv;
         }
         public void SetNode1Spec(string spec)
         {

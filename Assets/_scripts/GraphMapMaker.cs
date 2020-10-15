@@ -9,7 +9,7 @@ namespace GraphAlgos
     public enum graphSceneE
     {
         gen_none, gen_circ, gen_sphere, gen_b43_1, gen_b43_2, gen_b43_3, gen_b43_4, gen_b43_1p2,
-        gen_bho, gen_small, gen_redwb_3, gen_json_file, gen_campus, gen_eb12, gen_eb12_json, gen_eb12_small,
+        gen_bho, gen_small, gen_redwb_3, gen_json_file, gen_campus, gen_campus_small, gen_eb12, gen_eb12_json, gen_eb12_small,
         gen_dublin,gen_tukwila,gen_tenmtn
     };
 
@@ -476,6 +476,16 @@ namespace GraphAlgos
                           d_order: connectOrderE.dec, d_exit: exitDirE.front, d_len: 5f,
                           w_order: connectOrderE.inc, w_exit: exitDirE.back, w_len: 7f);
 
+            // Garage 33
+            CreateGarageLinks("MsGarage33_1", "b33-o01-001", "osm4751758029",
+                          d_order: connectOrderE.dec, d_exit: exitDirE.back, d_len: 5f,
+                          w_order: connectOrderE.inc, w_exit: exitDirE.back, w_len: 7f);
+
+            // Garage 34
+            CreateGarageLinks("MsGarage34_1", "b34-o01-001", "osm4751736328",
+                          d_order: connectOrderE.dec, d_exit: exitDirE.front, d_len: 5f,
+                          w_order: connectOrderE.inc, w_exit: exitDirE.back, w_len: 7f);
+
             // Garage 19
             CreateGarageLinks("MsGarage19_1", "b19-os1-o03", "dw-B19-c02",
                           d_order: connectOrderE.inc, d_exit: exitDirE.back, d_len: 5f,
@@ -613,7 +623,7 @@ namespace GraphAlgos
             CreateGarageLinks("MsGarageRWB/cswwn", "bRWB-os1-o06", "dw-RWB-c06",
                           d_order: connectOrderE.inc, d_exit: exitDirE.back, d_len: 7f,
                           w_order: connectOrderE.dec, w_exit: exitDirE.back, w_len: 4f);
-
+            //grc.gm.setmodxyz_off(0,0,0);
         }
 
         void AddRedwestCalibrationMarkers()
@@ -674,7 +684,7 @@ namespace GraphAlgos
             var garage = gm.GetGarage(gname);
             if (garage == null)
             {
-                Debug.Log("Garage " + gname + " not found in CreateGarageLinks");
+                gm.sman.LggWarning("Garage " + gname + " not found in CreateGarageLinks");
                 return;
             }
             int nslots = garage.slotnames.Count;
@@ -697,6 +707,7 @@ namespace GraphAlgos
             }
 
             // do drive paths
+
             grc.SetCurUseType(LinkUse.driveway);
             var d_nodeprev = (d_order == connectOrderE.dec ? "" : drivenode);
             var d_ang = (d_exit == exitDirE.front ? 0 : 180);
@@ -708,7 +719,14 @@ namespace GraphAlgos
                 //AddLink(pslotnodename[i], d_pslotnodename);
                 if (d_nodeprev != "")
                 {
-                    grc.AddLinkByNodeName(d_pslotnodename, d_nodeprev);
+                    if (d_nodeprev.StartsWith("osm") || d_pslotnodename.StartsWith("osm"))
+                    {
+                        grc.AddLateLink(d_pslotnodename, d_nodeprev, LinkUse.driveway);
+                    }
+                    else
+                    {
+                        grc.AddLinkByNodeName(d_pslotnodename, d_nodeprev);
+                    }
                 }
                 d_nodeprev = d_pslotnodename;
             }
@@ -718,28 +736,36 @@ namespace GraphAlgos
             }
 
             // do walk paths
-            grc.SetCurUseType(LinkUse.walkway);
-            var w_nodeprev = (w_order == connectOrderE.dec ? "" : walknode);
-            var w_ang = (w_exit == exitDirE.front ? 0 : 180);
-            for (int i = 0; i < nslots; i++)
+            if (garage.wnode != null)
             {
-                var w_pslotnodename_door = garage.SlotAxuxNodeName("wpsdoor", i);
-                var w_slotpos_door = garage.GetSlotPosition1(i, -90, 1.0f);
-                grc.NewAnchorLinkToxz(pslotnodename[i], w_pslotnodename_door, w_slotpos_door.x, w_slotpos_door.z);
-
-                var w_pslotnodename = garage.SlotAxuxNodeName("wps", i);
-                var w_slotpos = garage.GetSlotPosition2(i, w_ang, w_len, -90, 1.0f);
-                grc.LinkToPtxz(w_pslotnodename, w_slotpos.x, w_slotpos.z);
-                if (w_nodeprev != "")
+                grc.SetCurUseType(LinkUse.walkway);
+                var w_nodeprev = (w_order == connectOrderE.dec ? "" : walknode);
+                var w_ang = (w_exit == exitDirE.front ? 0 : 180);
+                for (int i = 0; i < nslots; i++)
                 {
-                    grc.AddLinkByNodeName(w_pslotnodename, w_nodeprev);
+                    var w_pslotnodename_door = garage.SlotAxuxNodeName("wpsdoor", i);
+                    var w_slotpos_door = garage.GetSlotPosition1(i, -90, 1.0f);
+                    grc.NewAnchorLinkToxz(pslotnodename[i], w_pslotnodename_door, w_slotpos_door.x, w_slotpos_door.z);
+
+                    var w_pslotnodename = garage.SlotAxuxNodeName("wps", i);
+                    var w_slotpos = garage.GetSlotPosition2(i, w_ang, w_len, -90, 1.0f);
+                    grc.LinkToPtxz(w_pslotnodename, w_slotpos.x, w_slotpos.z);
+                    if (w_nodeprev != "")
+                    {
+                        grc.AddLinkByNodeName(w_pslotnodename, w_nodeprev);
+                    }
+                    w_nodeprev = w_pslotnodename;
                 }
-                w_nodeprev = w_pslotnodename;
+                if (w_order == connectOrderE.dec)
+                {
+                    grc.AddLinkByNodeName(w_nodeprev, walknode);
+                }
             }
-            if (w_order == connectOrderE.dec)
+            else
             {
-                grc.AddLinkByNodeName(w_nodeprev, walknode);
+                gm.sman.LggError($"Garage {gname} wnode is null");
             }
+
         }
         public void CreatePointsSmall()
         {
@@ -785,12 +811,15 @@ namespace GraphAlgos
                         CreateSpherePoints(nlng: globpar.nlat, nlat: globpar.nlng, rad: globpar.height, heit: globpar.height);
                         break;
                     }
+                case graphSceneE.gen_campus_small:
                 case graphSceneE.gen_campus:
                     {
                         switch (genMode)
                         {
                             case GraphGenerationModeE.GenFromCode:
                                 lmd.createPointsFor_msft_b19();
+                                lmd.createPointsFor_msft_b33();
+                                lmd.createPointsFor_msft_b34();
                                 lmd.createPointsFor_msft_drones();
                                 lmd.createPointsFor_msft_b121();
                                 lmd.createPointsFor_msft_b40();
@@ -816,8 +845,11 @@ namespace GraphAlgos
                                 CreateLinksFromRegionFiles("msft");
                                 break;
                         }
-                        GenCampusGarageLinks();
-                        grc.AddLinkByNodeName("bRWB-f01-lobby", "rwb-f03-rm3999");// stairway (sort of)
+                        if (graphScene != graphSceneE.gen_campus_small)
+                        {
+                            GenCampusGarageLinks();
+                            grc.AddLinkByNodeName("bRWB-f01-lobby", "rwb-f03-rm3999");// stairway (sort of)
+                        }
                         break;
                     }
                 case graphSceneE.gen_b43_1:

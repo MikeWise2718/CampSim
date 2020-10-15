@@ -134,9 +134,11 @@ namespace CampusSimulator
             var regcolor = "blue";
             switch (sman.curscene)
             {
+                case SceneSelE.MsftSmall:
                 case SceneSelE.MsftRedwest:
                 case SceneSelE.MsftCoreCampus:
                 case SceneSelE.MsftB19focused:
+                case SceneSelE.MsftB33focused:
                 case SceneSelE.MsftB121focused:
                     regname = "msft-campus";
                     break;

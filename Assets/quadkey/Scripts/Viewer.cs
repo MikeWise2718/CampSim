@@ -697,28 +697,28 @@ namespace Aiskwk.Map
 
         void RotateViewerToYangle(float yangle)
         {
-            Debug.Log($"RotateViewerToYangle - Viewer rotation before  {transform.localRotation.eulerAngles}");
-            Debug.Log($"RotateViewerToYangle - Moveplane rotation before  {moveplane.transform.localRotation.eulerAngles}");
+            //Debug.Log($"RotateViewerToYangle - Viewer rotation before  {transform.localRotation.eulerAngles}");
+            //Debug.Log($"RotateViewerToYangle - Moveplane rotation before  {moveplane.transform.localRotation.eulerAngles}");
 
             bodyPlaneRotation = Quaternion.Euler(new Vector3(0, yangle, 0));
             moveplane.transform.localRotation = bodyPlaneRotation;
             bodyPrefabRotation = Quaternion.Euler(new Vector3(0, yangle, 0));
             body.transform.localRotation = Quaternion.FromToRotation(Vector3.up, lstnrm) * bodyPrefabRotation;
 
-            Debug.Log($"RotateViewerToYangle - Moveplane rotation after  {moveplane.transform.localRotation.eulerAngles}");
-            Debug.Log($"RotateViewerToYangle - Viewer rotation after   {transform.localRotation.eulerAngles}");
+            //Debug.Log($"RotateViewerToYangle - Moveplane rotation after  {moveplane.transform.localRotation.eulerAngles}");
+            //Debug.Log($"RotateViewerToYangle - Viewer rotation after   {transform.localRotation.eulerAngles}");
         }
 
         void RotateViewerNoTimeFak(float rotate)
         {
-            Debug.Log($"RotateViewerNoTimeFak - Viewer rotation before  {transform.localRotation.eulerAngles}");
+            //Debug.Log($"RotateViewerNoTimeFak - Viewer rotation before  {transform.localRotation.eulerAngles}");
 
             bodyPlaneRotation *= Quaternion.Euler(new Vector3(0, rotate, 0));
             moveplane.transform.localRotation = bodyPlaneRotation;
             bodyPrefabRotation *= Quaternion.Euler(new Vector3(0, rotate, 0));
             body.transform.localRotation = Quaternion.FromToRotation(Vector3.up, lstnrm) * bodyPrefabRotation;
 
-            Debug.Log($"RotateViewerNoTimeFak - Viewer rotation after   {transform.localRotation.eulerAngles}");
+            //Debug.Log($"RotateViewerNoTimeFak - Viewer rotation after   {transform.localRotation.eulerAngles}");
         }
 
         public delegate (string panCamOrietation, string panCamMonitors) GetPanCamParametersDelegate();
@@ -966,7 +966,7 @@ namespace Aiskwk.Map
 
 
 
-        void SetViewerInState(ViewerState vst)
+        public void SetViewerInState(ViewerState vst)
         {
             if (vst.camconfig != viewerCamPosition)
             {

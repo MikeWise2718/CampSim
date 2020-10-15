@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Analytics;
 
 namespace CampusSimulator
 {
@@ -8,8 +9,8 @@ namespace CampusSimulator
     {
         List<GameObject> bldgos;
         List<BldEvacAlarm> bldalarms;
-        public bool isOsmBld = false;
-        OsmBldSpec bldspec = null;
+        public bool isOsmGenerated = false;
+        public OsmBldSpec bldspec = null;
 
         void ActuallyDestroyObjects()
         {
@@ -21,6 +22,7 @@ namespace CampusSimulator
             {
                 Object.Destroy(go);
             }
+            bldspec.bgo = null;// presumably we destroyed this guy too
         }
         public static List<string> GetPredefinedBuildingNames(string filter)
         {
@@ -28,6 +30,8 @@ namespace CampusSimulator
             {
                 //"Bld11",
                 "Bld19",
+                "Bld33",
+                "Bld34",
                 "Bld121",
                 "Bld40",
                 "Bld43",
@@ -67,7 +71,6 @@ namespace CampusSimulator
             "Bld123-dronepad-centertop:6:0:4:4:T",
             "Bld99-dronepad-centertop:6:0:4:4:T",
         };
-
 
         List<string> B19roomspec = new List<string>()
         {
@@ -112,6 +115,18 @@ namespace CampusSimulator
             "b19-f01-rm1038:5:-18.5:2.6:2.6:T",
             "b19-f01-rm1039:3:-18.5:2.6:2.6:T",
         };
+
+        List<string> B33roomspec = new List<string>()
+        {
+          "b33-f01-lobby:6:-18.5:4:4:T",
+        };
+
+        List<string> B34roomspec = new List<string>()
+        {
+          "b34-f01-lobby:6:-18.5:4:4:T",
+        };
+
+
 
         List<string> Eb12roomspec = new List<string>()
         {
@@ -159,12 +174,18 @@ namespace CampusSimulator
             defRoomArea = 10;
             osmnamestart = "";
 
+            var newosmlevels = 0;
+            var newosmheight = 0f;
+            var newosmgroundref = GroundRef.max;
+
+
             switch (name)
             {
                 case "Bld19":
                     {
                         osmnamestart = "Microsoft Building 19";
                         maingaragename = "Garage19_1";
+                        newosmgroundref = GroundRef.max;
                         roomspecs = B19roomspec;
                         destnodes = SplitRoomNameOutOfRoomspecs(roomspecs);
                         shortname = "b19";
@@ -181,7 +202,62 @@ namespace CampusSimulator
                         b19comp = this.transform.gameObject.AddComponent<B19Willow>();
                         b19comp.InitializeValues(bm.sman, this);
                         b19comp.MakeItSo();
+                        bm.AddBuildingAlias("b19", this);
+                        newosmlevels = 2;
+                        newosmheight = 6;
+                        break;
+                    }
+                case "Bld33":
+                    {
+                        osmnamestart = "Microsoft Building 33";
+                        //maingaragename = "Garage19_1";
+                        roomspecs = B33roomspec;
+                        destnodes = SplitRoomNameOutOfRoomspecs(roomspecs);
+                        shortname = "Bld33";
+                        journeyChoiceWeight = 20;
+                        if (bm.sman.curscene == SceneSelE.MsftB33focused)
+                        {
+                            //bm.sman.jnman.preferedJourneyBuildingName = name;
+                        }
+                        defPeoplePerRoom = 8;
+                        defPercentFull = 0.80f;
+                        defRoomArea = 16;
+                        defAngAlign = 24.0f;
+                        newosmlevels = 2;
+                        newosmheight = 8;
 
+
+                        //b19comp = this.transform.gameObject.AddComponent<B19Willow>();
+                        //b19comp.InitializeValues(bm.sman, this);
+                        //b19comp.MakeItSo();
+                        //bm.AddBuildingAlias("b19", this);
+                        bm.AddBuildingAlias("b33", this);
+                        break;
+                    }
+                case "Bld34":
+                    {
+                        osmnamestart = "Microsoft Building 34";
+                        //maingaragename = "Garage19_1";
+                        roomspecs = B34roomspec;
+                        destnodes = SplitRoomNameOutOfRoomspecs(roomspecs);
+                        shortname = "b34";
+                        journeyChoiceWeight = 20;
+                        //if (bm.sman.curscene == SceneSelE.MsftB33focused)
+                        //{
+                        //    bm.sman.jnman.preferedJourneyBuildingName = name;
+                        //}
+                        defPeoplePerRoom = 8;
+                        defPercentFull = 0.80f;
+                        defRoomArea = 16;
+                        defAngAlign = 24.0f;
+                        newosmlevels = 5;
+                        newosmheight = 20;
+
+                        //b19comp = this.transform.gameObject.AddComponent<B19Willow>();
+                        //b19comp.InitializeValues(bm.sman, this);
+                        //b19comp.MakeItSo();
+                        //bm.AddBuildingAlias("b19", this);
+                        bm.AddBuildingAlias("b34", this);
                         break;
                     }
                 case "Bld121":
@@ -201,14 +277,21 @@ namespace CampusSimulator
                         defRoomArea = 16;
                         defAngAlign = 24.0f;
 
+                        newosmlevels = 3;
+                        newosmheight = 12.3f;
+                        newosmgroundref = GroundRef.max;
+
+
+
                         b121comp = this.transform.gameObject.AddComponent<B121Willow>();
                         b121comp.InitializeValues(bm.sman, this);
                         b121comp.MakeItSo();
-
+                        bm.AddBuildingAlias("b121",this);
                         break;
                     }
                 case "Bld40":
                     {
+                        osmnamestart = "Microsoft Building 40";
                         maingaragename = "Garage40_1";
                         destnodes = new List<string> { "b40-f01-lobby" };
                         shortname = "b40";
@@ -220,6 +303,7 @@ namespace CampusSimulator
                     }
                 case "Bld43":
                     {
+                        osmnamestart = "Microsoft Building 43";
                         maingaragename = "Garage43_1";
                         destnodes = new List<string> { "b43-f01-rm1001", "b43-f01-rm1002", "b43-f01-rm1003" };
                         shortname = "b43";
@@ -231,6 +315,7 @@ namespace CampusSimulator
                     }
                 case "BldSX":
                     {
+                        osmnamestart = "Microsoft Studio X";
                         maingaragename = "GarageX_1";
                         destnodes = new List<string> { "bSX-f01-lobby" };
                         shortname = "bSX";
@@ -242,6 +327,7 @@ namespace CampusSimulator
                     }
                 case "Bld99":
                     {
+                        osmnamestart = "Building 99";
                         maingaragename = "Garage99_1";
                         destnodes = new List<string> { "b99-f01-lobby" };
                         shortname = "b99";
@@ -254,13 +340,14 @@ namespace CampusSimulator
                     }
                 case "BldRWB":
                     {
+                        osmnamestart = "RedWest-B";
                         maingaragename = "GarageRWB_1";
                         selectionweight = 10;
                         destnodes = new List<string> { "bRWB-f01-lobby", "rwb-f03-rm3999" }; // reset in reinitdests
                         
                         shortname = "bRWB";
                         defPeoplePerRoom = 2;
-                        if (bm.sman.curscene == SceneSelE.MsftB19focused || bm.sman.curscene == SceneSelE.MsftB121focused)
+                        if (bm.sman.curscene == SceneSelE.MsftB19focused || bm.sman.curscene == SceneSelE.MsftB121focused || bm.sman.curscene == SceneSelE.MsftB33focused)
                         {
                             defPercentFull = 0.05f;
                         }
@@ -274,6 +361,9 @@ namespace CampusSimulator
                         {
                             bm.sman.jnman.preferedJourneyBuildingName = name;
                         }
+                        bm.AddBuildingAlias("rwb", this);
+                        bm.AddBuildingAlias("bRWB", this);
+
                         //var lcman = bm.sman.lcman;
                         //var grctrl = lcman.GetGraphCtrl();
                         //var mm = new GraphAlgos.LcMapMaker(grctrl, lcman.mappars);
@@ -371,9 +461,32 @@ namespace CampusSimulator
                     }
                 default:
                     {
-                        Debug.LogError("AddBldDetails bad building name:" + name);
+                        bm.sman.LggError("AddBldDetails bad building name:" + name);
                         break;
                     }
+            }
+            if (osmnamestart != "")
+            {
+                var bspec = bm.FindBldSpecByNameStart(osmnamestart);
+                if (bspec != null)
+                {
+                    bm.RegisterBsBld(bspec, this);
+                    bspec.groundRef = newosmgroundref;
+                    if (newosmlevels>0)
+                    {
+                        bspec.levels = newosmlevels;
+                        bspec.height = newosmheight;
+                        if (bspec.levels == 0)
+                        {
+                            bspec.levels = 1;
+                        }
+                        bspec.levelheight = bspec.height / bspec.levels;
+                    }
+                }
+                else
+                {
+                    bm.sman.LggError($"Could not find osmbld from name start:{osmnamestart}");
+                }
             }
             if (shortname != "")
             {
@@ -381,45 +494,92 @@ namespace CampusSimulator
             }
         }
 
-        public void EchOsmOutline(GameObject parent,OsmBldSpec bs, PolyGenVekMapDel pgvd = null)
+        public void EchOsmLevelOutline(GameObject parent,OsmBldSpec bs,string baseclr,int lev)
         {
-            var pgo = new GameObject("osmmarkers");
+            var pgo = new GameObject($"EchOsmLevelOutline level-{lev}");
             pgo.transform.SetParent(parent.transform, worldPositionStays: false);
             var ska = 0.5f;
             var oline = bs.GetOutline();
-            var clr = "green";
             for (int i = 0; i < oline.Count; i++)
             {
                 var sph = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                sph.name = "Marker " + i;
+                sph.name = $"{bs.shortname}-Marker-{i}";
                 sph.transform.localScale = new Vector3(ska, ska, ska);
                 var z = oline[i].z;
                 var x = oline[i].x;
                 var (lat, lng) = bm.sman.coman.xztoll(x, z);
                 var pos = new Vector3(x, 0, z);
-                if (pgvd!=null)
-                {
-                    pos = pgvd(pos);
-                }
+                var y = this.GetFloorAltitude(lev,includeAltitude:true);
+                pos = new Vector3(pos.x, y, pos.z);
                 sph.transform.position = pos;
                 sph.transform.SetParent(pgo.transform, worldPositionStays: true);
                 var spi = sph.AddComponent<Aiskwk.Map.QsphInfo>();
                 spi.latLng = new Aiskwk.Map.LatLng(lat, lng);
                 spi.mapPoint = null;
-                Aiskwk.Map.qut.SetColorOfGo(sph, clr);
+                Aiskwk.Map.qut.SetColorOfGo(sph, baseclr);
             }
         }
 
+
+        public void EchOsmGroundOutline(GameObject parent, OsmBldSpec bs, string baseclr,string linecolor, PolyGenVekMapDel pgvd)
+        {
+            var pgo = new GameObject("EchOsmGroundOutline");
+            pgo.transform.SetParent(parent.transform, worldPositionStays: false);
+            var ska = 0.5f;
+            var oline = bs.GetOutline();
+            var ptb = Vector3.zero;
+            var mpman = bm.sman.mpman;
+            var pt0 = Vector3.zero;
+            for (int i = 0; i < oline.Count; i++)
+            {
+                var sph = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                sph.name = $"{bs.shortname}-Marker-{i}";
+                sph.transform.localScale = new Vector3(ska, ska, ska);
+                var z = oline[i].z;
+                var x = oline[i].x;
+                var (lat, lng) = bm.sman.coman.xztoll(x, z);
+                var pos = new Vector3(x, 0, z);
+                pos = pgvd(pos);// mapman heights added to point
+                sph.transform.position = pos;
+                sph.transform.SetParent(pgo.transform, worldPositionStays: true);
+                var spi = sph.AddComponent<Aiskwk.Map.QsphInfo>();
+                spi.latLng = new Aiskwk.Map.LatLng(lat, lng);
+                spi.mapPoint = null;
+                Aiskwk.Map.qut.SetColorOfGo(sph, baseclr);
+                if (i>0)
+                {
+                    var lman = $"ll-{i}";
+                    var lgo = mpman.AddLine(lman, ptb, pos,lclr:linecolor, frag:true, lska:0.5f, fragang: mpman.fragang, fragxoff: mpman.fragxoff, fragzoff: mpman.fragzoff);
+                    lgo.transform.SetParent(pgo.transform, worldPositionStays: true);
+                }
+                else
+                {
+                    pt0 = pos;
+                }
+                ptb = pos;               
+            }
+            if (oline.Count>1)
+            {
+                var lman = $"ll-{oline.Count}";
+                var lgo = mpman.AddLine(lman, ptb, pt0, lclr:linecolor, frag:true, lska:0.5f, fragang: mpman.fragang, fragxoff: mpman.fragxoff, fragzoff: mpman.fragzoff);
+                lgo.transform.SetParent(pgo.transform, worldPositionStays: true);
+            }
+        }
 
 
         public void AddOsmBldDetails(BuildingMan bm,OsmBldSpec bs)
         {
             this.bm = bm;
             bldgos = new List<GameObject>();
-            maingaragename = "";
+            //maingaragename = "blurb";
             selectionweight = 1;
-            destnodes = new List<string>();
-            isOsmBld = true;
+            if (destnodes == null)
+            {
+                destnodes = new List<string>();
+            }
+            isOsmGenerated = true;
+            var parentname = this.transform.parent.gameObject.name;
+            //Debug.Log($"Building {name}  {bs.shortname} isOsmGenerated:{isOsmGenerated} parentname:{parentname}");
             //if (bs.osmname.Contains("122"))
             //{
             //    Debug.Log("b122");
@@ -439,22 +599,115 @@ namespace CampusSimulator
                 bldpadspecs = bm.GetFilteredPadSpecs(shortname);
             }
         }
-        public float GetFloorAltitude(int floornum)
+        public Vector3 GetCenterPoint(bool includeAltitude=false)
+        {
+            var rv = Vector3.zero;
+            if (b121comp != null)
+            {
+                rv = b121comp.GetCenterPoint(includeAltitude: includeAltitude);
+            }
+            else if (b19comp != null)
+            {
+                rv = b19comp.GetCenterPoint(includeAltitude: includeAltitude);
+            }
+            else if (isOsmGenerated)
+            {
+                rv = bldspec.GetCenterTop();
+                if (includeAltitude)
+                {
+                    var alt = bm.sman.mpman.GetHeight(rv.x, rv.z);
+                    rv = new Vector3(rv.x, alt, rv.z );
+                }
+            }
+            else
+            {
+                var (x, z) = bm.sman.coman.lltoxz(adhocLat, adhocLng);
+                var y = 0f;
+                rv = new Vector3(x, y, z);
+                if (includeAltitude)
+                {
+                    var alt = bm.sman.mpman.GetHeight(adhocCen.x, adhocCen.z);
+                    rv = new Vector3(rv.x, alt, rv.z);
+                }
+            }
+            return rv;
+        }
+
+        public float GetFloorAltitude(int floornum,bool includeAltitude=true)
         {
             var rv = 0f;
             if (b121comp!=null)
             {
-                rv = b121comp.GetFloorHeight(floornum);
+                rv = b121comp.GetFloorHeight(floornum,includeAltitude: includeAltitude);
             }
             else if (b19comp != null)
             {
-                rv = b19comp.GetFloorHeight(floornum);
+                rv = b19comp.GetFloorHeight(floornum,includeAltitude: includeAltitude);
             }
-            else if (isOsmBld)
+            else if (isOsmGenerated)
             {
-                rv = bldspec.GetLevelHeight(floornum);
+                rv = bldspec.GetFloorHeight(floornum,includeAltitude:includeAltitude);
+            }
+            else
+            {
+                rv = adhocHeight;
+                if (includeAltitude)
+                {
+                    var alt = bm.sman.mpman.GetHeight(adhocCen.x, adhocCen.z);
+                    rv += alt;
+                }
             }
             return rv;
+        }
+
+        public void SortOutFloorHeights()
+        {
+            if (b121comp != null)
+            {
+                (levels, totheight) = b121comp.GetFloorsAndHeight();
+            }
+            else if (b19comp != null)
+            {
+                (levels, totheight) = b19comp.GetFloorsAndHeight();
+            }
+            else if (isOsmGenerated)
+            {
+                levels = bldspec.levels;
+                totheight = bldspec.height;
+            }
+            else
+            {
+                levels = adhocLevels;
+                totheight = adhocHeight;
+            }
+        }
+
+        int levels = 1;
+        float totheight = 4;
+        public List<string> floorHeights = null;
+        public void UpdateFloorHeightArray()
+        {
+            SortOutFloorHeights();
+            if (shortname=="bRWB")
+            {
+                Debug.Log($"bRWB");
+            }
+            floorHeights = new List<string>();
+            var msg0 = $"levels{levels} totheight:{totheight}";
+            floorHeights.Add(msg0);
+            var cp1 = GetCenterPoint(includeAltitude: false);
+            var cp2 = GetCenterPoint(includeAltitude: true);
+            var msg1 = $"GCP - wo alt:{cp1}";
+            var msg2 = $"GCP -    alt:{cp2}";
+            floorHeights.Add(msg1);
+            floorHeights.Add(msg2);
+            for (int i=0; i<levels;i++)
+            {
+                var a1 = GetFloorAltitude(i, includeAltitude: false);
+                var a2 = GetFloorAltitude(i, includeAltitude: true);
+                var flrec = $"{i}   {a1:f1}   {a2:f1}";
+                floorHeights.Add(flrec);
+            }
         }
 
 
@@ -696,11 +949,7 @@ namespace CampusSimulator
             
            return;
         }
-        void AddBld43Ref()
-        {
-            // add a empty game obect at 0,0.5,0
-            // Load in Models/B4model prefab underneath it
-        }
+
         void AddAlarmToNode(GameObject parentnode,string alarmname,string nodename,float almheight=2)
         {
             var lc = bm.sman.lcman;
@@ -719,7 +968,37 @@ namespace CampusSimulator
             var beac = ago.AddComponent<BldEvacAlarm>();
             beac.Init(this, apos);  
         }
- 
+
+        public void GenerateOsmGos()
+        {
+            var pgvd = new PolyGenVekMapDel(bm.sman.mpman.GetHeightVector3);
+            var alf = 1f;
+            if (bm.osmbldstrans.Get())
+            {
+                alf = 0.5f;
+            }
+            if (bm.osmbldpolygons.Get())
+            {
+                bldspec.bgo = bm.bpg.GenBldFromOsmBldSpec(this.gameObject, bldspec, pgvd: pgvd, alf: alf);
+                bldgos.Add(bldspec.bgo);
+            }
+            if (bm.osmgroundoutline.Get())
+            {
+                EchOsmGroundOutline(bldspec.bgo, bldspec, "green","red", pgvd: pgvd);
+            }
+            if (bldspec.shortname=="Bld33")
+            {
+                Debug.Log("Bld33");
+            }
+            if (bm.osmoutline.Get())
+            {
+                for (var lev = 1; lev <= levels; lev++)
+                {
+                    EchOsmLevelOutline(bldspec.bgo, bldspec, "yellow", lev);
+                }
+            }
+            bldspec.bgo.SetActive(bldspec.isVisible);
+        }
 
         public void CreateObjects()
         {
@@ -727,20 +1006,9 @@ namespace CampusSimulator
             bldgos = new List<GameObject>();
             var bmode = bm.bldMode.Get();
             var tmode = bm.treeMode.Get();
-            if (isOsmBld)
+            if (isOsmGenerated)
             {
-                var pgvd = new PolyGenVekMapDel(bm.sman.mpman.GetHeightVector3);
-                if (bldspec.isVisible)
-                {
-                    var alf = 1f;
-                    if (bm.osmbldstrans.Get())
-                    {
-                        alf = 0.5f;
-                    }
-                    var bgo = bm.bpg.GenBldFromOsmBldSpec(this.gameObject, bldspec, pgvd: pgvd,alf:alf);
-                    bldgos.Add(bgo);
-                    EchOsmOutline(this.gameObject, bldspec,pgvd:pgvd);
-                }
+                GenerateOsmGos();
             }
             var fixedbuildings = bm.fixedblds.Get();
             var dofixed = fixedbuildings && bmode == BuildingMan.BldModeE.full;
@@ -881,7 +1149,8 @@ namespace CampusSimulator
                     }
                 case "BldRWB":
                     {
-                        if (bm.sman.curscene == SceneSelE.MsftB19focused || bm.sman.curscene == SceneSelE.MsftB121focused)
+                        if (bm.sman.curscene == SceneSelE.MsftB19focused || bm.sman.curscene == SceneSelE.MsftB121focused || bm.sman.curscene == SceneSelE.MsftB33focused)
+
                         {
                             defPercentFull = 0.05f;
                         }
@@ -994,4 +1263,5 @@ namespace CampusSimulator
             }
         }
     }
+
 }

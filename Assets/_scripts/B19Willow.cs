@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using Aiskwk.Map;
 using System.Collections.Generic;
 using UnityEngine;
 using UxUtils;
@@ -15,6 +15,7 @@ public class B19Willow : MonoBehaviour
     public UxSetting<bool> floors = new UxSetting<bool>("B19_floors", true);
     public UxSetting<bool> doors = new UxSetting<bool>("B19_doors", true);
     public UxSetting<bool> osmbld = new UxSetting<bool>("B19_osmbld", false);
+    public UxSetting<bool> glasswalls = new UxSetting<bool>("B19_glasswalls", false);
 
     public CampusSimulator.SceneMan sman=null;
     public CampusSimulator.Building bld = null;
@@ -23,6 +24,7 @@ public class B19Willow : MonoBehaviour
     //   public UxSetting<bool> visibilityTiedToDetectability = new UxSetting<bool>("FrameVisibilityTiedToDetectability", true);
     // public B19_MaterialMode materialMode = B19_MaterialMode.materialed;
 
+    public OsmBldSpec bspec;
 
     public void InitializeValues(CampusSimulator.SceneMan sman,CampusSimulator.Building bld)
     {
@@ -37,7 +39,9 @@ public class B19Willow : MonoBehaviour
         _b19_floors = floors.GetInitial(false);
         _b19_doors = doors.GetInitial(false);
         _b19_osmbld = osmbld.GetInitial(false);
+        _b19_glasswalls = glasswalls.GetInitial(false);
         lastMaterialMode = b19_materialMode.Get();
+        bspec = sman.bdman.FindBldSpecByNameStart(bld.osmnamestart);
     }
 
 
@@ -50,6 +54,7 @@ public class B19Willow : MonoBehaviour
     bool _b19_floors = false;
     bool _b19_doors = false;
     bool _b19_osmbld = false;
+    bool _b19_glasswalls = false;
     B19_MaterialMode lastMaterialMode;
 
     GameObject b19go = null;
@@ -138,7 +143,7 @@ public class B19Willow : MonoBehaviour
     {
         DestroyOneGo(ref b19go);
     }
-
+    float ymapheight = 0.01f;
     public void MakeItSo()
     {
         bool loadedThisTime  = false;
@@ -148,13 +153,9 @@ public class B19Willow : MonoBehaviour
             var xoff = -3;
             var zoff = -3;
             Vector3 defpos = new Vector3(-474.3f+xoff, 4.72f, 87.6f+zoff);
-            var yoff = 0f;
-            if (sman!=null)
-            {
-                yoff = sman.mpman.GetHeight(defpos.x, defpos.z);
-                //Debug.Log($"B19 yoff:{yoff}");
-                defpos = new Vector3(defpos.x, yoff+defpos.y, defpos.z);
-            }
+            ymapheight = sman.mpman.GetHeight(defpos.x, defpos.z);
+            sman.Lgg($"B19 ymapheight:{ymapheight:f3}","orange");
+            defpos = new Vector3(defpos.x, ymapheight+defpos.y, defpos.z);
             var obprefab = Resources.Load<GameObject>("Willow/B19/B19-Willow");
             if (obprefab != null)
             {
@@ -195,17 +196,7 @@ public class B19Willow : MonoBehaviour
             if (osmbld.Get() != _b19_osmbld)
             {
                 var stat = osmbld.Get();
-                var bspec = sman.bdman.FindBldSpecByNameStart(bld.osmnamestart);
-                if (bspec != null)
-                {
-                    sman.bdman.RegisterBsBld(bspec, bld);
-                    bspec.isVisible = stat;
-                    if (bspec.bgo != null)
-                    {
-                        bspec.bgo.SetActive(stat);
-                    }
-                }
-
+                ActuateOsmStatus(stat);
                 _b19_osmbld = stat;
             }
             if (level01.Get() != _b19_level01)
@@ -266,7 +257,51 @@ public class B19Willow : MonoBehaviour
             }
         }
     }
-    public float GetFloorHeight(int floor)
+
+    public void ActuateOsmStatus(bool stat)
+    {
+        if (bspec == null)
+        {
+            bspec = sman.bdman.FindBldSpecByNameStart(bld.osmnamestart);
+        }
+        if (bspec != null)
+        {
+            bspec.isVisible = stat;
+            if (bspec.bgo != null)
+            {
+                bspec.bgo.SetActive(stat);
+            }
+        }
+    }
+    public Vector3 GetCenterPoint(bool includeAltitude = true)
+    {
+        var ll = GetCenterLatLng();
+        var (x, z) = sman.coman.lltoxz(ll.lat, ll.lng);
+        var y = 0f;
+        if (includeAltitude)
+        {
+            y += ymapheight;
+        }
+        var rv = new Vector3(x, y, z);
+
+        return rv;
+    }
+    public LatLng GetCenterLatLng()
+    {
+        var rv = new LatLng(47.643010, -122.131305);// took it off the map
+        return rv;
+    }
+    public (int, float) GetFloorsAndHeight()
+    {
+        return (2, 5f);
+    }
+    public float GetFloorHeight(int floor, bool includeAltitude = true)
+    {
+        var rv = bspec.GetFloorHeight(floor, includeAltitude: includeAltitude);
+        return rv;
+    }
+
+    public float GetFloorHeightOld(int floor, bool includeAltitude = true)
     {
         var rv = 0.01f;
         if (floor < 0) floor = 0;
@@ -280,6 +315,18 @@ public class B19Willow : MonoBehaviour
             case 2:
                 rv = 2.11f;
                 break;
+        }
+        if (includeAltitude)
+        {
+            //rv += ymapheight;
+            if (bspec == null)
+            {
+                sman.LggError("B19Willow.GetFloorHeight - bspec null with includeAltitude=true");
+            }
+            else
+            {
+                rv += bspec.GetGround();
+            }
         }
         return rv;
     }

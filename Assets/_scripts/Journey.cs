@@ -45,6 +45,8 @@ namespace CampusSimulator
         public float jnyTime = 0;
         public bool pullViewer = false;
 
+
+
         public bool IsRunning()
         {
             var rv = false;
@@ -95,7 +97,7 @@ namespace CampusSimulator
 
         public void StartLeg(int legidx)
         {
-            //Debug.Log("StartLeg legidx:" + legidx);
+            //jman.sman.Log("StartLeg legidx:" + legidx);
             if (legidx >= nlegs)
             {
                 if (journeyEnd == JourneyEnd.disappear)
@@ -112,12 +114,12 @@ namespace CampusSimulator
                 {
                     if (legidx != 0)
                     {
-                        Debug.Log($"Jouney {name} restarting");
+                        jman.sman.Lgg($"Jouney {name} restarting");
                         StartLeg(0);
                     }
                     else
                     {
-                        Debug.LogError("No legs in journey");
+                        jman.sman.LggError("No legs in journey");
                     }    
                 }
                 return;
@@ -143,7 +145,7 @@ namespace CampusSimulator
             //pathctrl.GenAstarPath(currentleg.snode, currentleg.enode, LcCapType.anything);
             if (pathctrl.status != PathCtrl.PathStatusE.AstarOk)
             {
-                Debug.LogWarning("Path status:"+pathctrl.status+" looking for path from "+currentleg.snode+" to "+currentleg.enode);
+                jman.sman.LggWarning("Path status:"+pathctrl.status+" looking for path from "+currentleg.snode+" to "+currentleg.enode);
                 return;
             }
             currentleg.dist = pathctrl.PathLength;
@@ -170,6 +172,20 @@ namespace CampusSimulator
                 sm.Vacate();
             }
         }
+        public void SetFreeze(bool freezeValue)
+        {
+            if (birdctrl != null)
+            {
+                if (freezeValue)
+                {
+                    birdctrl.StartAnimation();
+                }
+                else
+                {
+                    birdctrl.StopAnimation();
+                }
+            }
+        }
         public void NextLeg()
         {
             StartLeg(legindex + 1);
@@ -194,7 +210,7 @@ namespace CampusSimulator
             }
             if (pathctrl.status != PathCtrl.PathStatusE.AstarOk)
             {
-                Debug.LogWarning("Failed to find path from start to dest for starting leg");
+                jman.sman.LggWarning("Failed to find path from start to dest for starting leg");
                 status = JourneyStatE.Failed;
                 failedtime = Time.time;
             }
@@ -232,7 +248,7 @@ namespace CampusSimulator
                 }
             }
             status = JourneyStatE.Finished;
-            // Debug.Log("--Journey "+jgo.name+" took " + journeyelap + " secs");
+            // sman.Lgg("--Journey "+jgo.name+" took " + journeyelap + " secs");
         }
         public void AddLeg(Leg leg)
         {
@@ -247,11 +263,14 @@ namespace CampusSimulator
         float updateLogInterval = 1;
         public void UpdatePosition()
         {
-            PathPos pos = birdctrl.GetBirdPos();
-            if (IsRunning() && (Time.time-lastUpdatedLoggedTime)>updateLogInterval)
+            if (jman.logJourneys)
             {
-                Debug.Log($"Jny:{name} position:{pos.pt:f1}");
-                lastUpdatedLoggedTime = Time.time;
+                PathPos pos = birdctrl.GetBirdPos();
+                if (IsRunning() && (Time.time - lastUpdatedLoggedTime) > updateLogInterval)
+                {
+                    jman.sman.Lgg($"Jny:{name} position:{pos.pt:f1}");
+                    lastUpdatedLoggedTime = Time.time;
+                }
             }
         }
         //// Update is called once per frame

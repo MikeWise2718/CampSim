@@ -162,7 +162,7 @@ namespace CampusSimulator
                 if (pers.roomPlaceIdx >= occlookup.Length)
                 {
                     var msg =$"BldRoomOccman index out of range ({pers.roomPlaceIdx} >= {occlookup.Length} in roomm/pad {placename}";
-                    Debug.LogError(msg);
+                    bman.sman.LggError(msg);
                 }
                 else
                 {

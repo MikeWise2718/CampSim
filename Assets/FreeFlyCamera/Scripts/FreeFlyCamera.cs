@@ -68,13 +68,13 @@ public class FreeFlyCamera : MonoBehaviour
     }
 #endif
 
-    CampusSimulator.StatusPanel span = null;
+    CampusSimulator.TopButtonPanel span = null;
 
     private void Start()
     {
         _initPosition = transform.position;
         _initRotation = transform.eulerAngles;
-        span = GameObject.FindObjectOfType<CampusSimulator.StatusPanel>();
+        span = GameObject.FindObjectOfType<CampusSimulator.TopButtonPanel>();
     }
 
     private void OnEnable()

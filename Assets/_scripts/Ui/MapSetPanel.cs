@@ -172,8 +172,8 @@ public class MapSetPanel : MonoBehaviour
         sman.uiman.ttman.WireUpToolTip(closeButton.gameObject, "mapsetpanel-closepanel", "Close Panel");
         sman.uiman.ttman.WireUpToolTip(copyClipboardButton.gameObject, "mapsetpanel-copyclipboard", "Copy bitmap information to clipboard");
         sman.uiman.ttman.WireUpToolTip(doesNothingButton.gameObject, "mapsetpanel-doesnothing", "Currently does nothing");
-        sman.uiman.ttman.WireUpToolTip(loadMapsButton.gameObject, "mapsetpanel-loadmaps", "Reload maps\nmight take awhile - get some coffee",danger:true);
-        sman.uiman.ttman.WireUpToolTip(deleteMapsButton.gameObject, "mapsetpanel-deletemaps", "Delete scenario maps\ncareful reloading them might take awhile",danger:true);
+        sman.uiman.ttman.WireUpToolTip(loadMapsButton.gameObject, "mapsetpanel-loadmaps", "Reload maps\nmight take awhile - get some coffee",isDangerous:true);
+        sman.uiman.ttman.WireUpToolTip(deleteMapsButton.gameObject, "mapsetpanel-deletemaps", "Delete scenario maps\ncareful reloading them might take awhile",isDangerous:true);
     }
     public void SetScene(CampusSimulator.SceneSelE curscene)
     {

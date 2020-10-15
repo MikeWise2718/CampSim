@@ -216,7 +216,7 @@ namespace CampusSimulator
 
             if (nrows<=0)
             {
-                Debug.LogError($"No rows in {dft.name}");
+                sman.LggError($"No rows in {dft.name}");
                 return;
             }
             var started = false;

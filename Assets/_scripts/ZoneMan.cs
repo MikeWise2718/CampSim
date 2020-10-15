@@ -135,6 +135,7 @@ namespace CampusSimulator
             switch (sman.curscene)
             {
                 case SceneSelE.MsftB19focused:
+                case SceneSelE.MsftB33focused:
                 case SceneSelE.MsftB121focused:
                     MakeZones("Ms-B19");
                     break;
@@ -144,6 +145,8 @@ namespace CampusSimulator
                 case SceneSelE.Eb12small:
                 case SceneSelE.Eb12:
                     MakeZones("Eb12");
+                    break;
+                default:
                     break;
             }
         }

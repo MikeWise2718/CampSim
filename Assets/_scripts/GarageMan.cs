@@ -142,6 +142,7 @@ namespace CampusSimulator
                 case SceneSelE.MsftRedwest:
                 case SceneSelE.MsftCoreCampus:
                 case SceneSelE.MsftB19focused:
+                case SceneSelE.MsftB33focused:
                 case SceneSelE.MsftB121focused:
                     MakeGarages("MsGarage");
                     break;
@@ -150,6 +151,7 @@ namespace CampusSimulator
                     MakeGarages("Eb12");
                     break;
                 default:
+                case SceneSelE.MsftSmall:
                 case SceneSelE.None:
                     break;
             }
@@ -225,7 +227,7 @@ namespace CampusSimulator
             {
                 if (!expectfailure)
                 {
-                    Debug.Log("Bad garage lookup - not found:" + name);
+                    sman.LggError("Bad garage lookup - not found:" + name);
                 }
                 return null;
             }

@@ -10,6 +10,7 @@ using System.Linq;
 using GraphAlgos;
 using UnityEngine.Analytics;
 using TMPro;
+using UxUtils;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -19,7 +20,7 @@ namespace CampusSimulator
 {
     public enum RouteGarnishE { none, names, coords, all }
 
-    public enum SceneSelE { MsftCoreCampus, MsftB121focused, MsftB19focused, MsftRedwest,MsftMountainView, Custom, Seattle, MtStHelens,Riggins, Eb12,Eb12small,  MsftDublin, TukSouCen, HiddenLakeLookout,TeneriffeMtn,SanFrancisco,Frankfurt, None }
+    public enum SceneSelE {MsftSmall, MsftCoreCampus, MsftB121focused, MsftB33focused, MsftB19focused, MsftRedwest,MsftMountainView, Custom, Seattle, MtStHelens,Riggins, Eb12,Eb12small,  MsftDublin, TukSouCen, HiddenLakeLookout,TeneriffeMtn,SanFrancisco,Frankfurt, None }
 
     public class SceneMan : MonoBehaviour
     {
@@ -93,6 +94,7 @@ namespace CampusSimulator
         public string graphsdir = "graphs/";
         public string hostname = "";
         public bool bemike = false;
+        public UxSetting<int> scenarioSeed = new UxSetting<int>("scenarioSeed",1234);
 
 
 #if USE_SPATIALMAPPPER
@@ -102,6 +104,10 @@ namespace CampusSimulator
         public Transform rgoTransform;
         public int rgoTransformSetCount = 0;
         public int lastRgoTransformSetCount = -1;
+
+        public LogMan lgman;
+        public UiMan uiman;
+        public DataFileMan dfman;
 
         public GarageMan gaman;
         public BuildingMan bdman;
@@ -117,9 +123,8 @@ namespace CampusSimulator
         public ZoneMan znman;
         public FrameMan frman;
         public CalibMan cbman;
-        public DataFileMan dfman;
         public CoordMapMan coman;
-        public UiMan uiman;
+
         public string runtimestamp = DateTime.UtcNow.ToString("yyyyMMdd-HHmmss");
         public string simrundir;
         public LinkEditor leditor;
@@ -196,6 +201,7 @@ namespace CampusSimulator
             coman = (new GameObject("CoordMapMan")).AddComponent<CoordMapMan>();
             dfman = (new GameObject("DataFileMan")).AddComponent<DataFileMan>();
 
+
             // these object need to be in the scene we are starting because we might inspect them
             uiman = FindObjectOfType<UiMan>();
             mpman = FindObjectOfType<MapMan>();
@@ -207,7 +213,7 @@ namespace CampusSimulator
             znman = FindObjectOfType<ZoneMan>();
             jnman = FindObjectOfType<JourneyMan>();
             //loman = FindObjectOfType<LocationMan>(); // Only for handhelds (Android, iPhone, etc)
-                                                       // causes lots of error messages
+            // causes lots of error messages
             psman = FindObjectOfType<PersonMan>();
             veman = FindObjectOfType<VehicleMan>();
             drman = FindObjectOfType<DroneMan>();
@@ -215,6 +221,7 @@ namespace CampusSimulator
 
             dfman.sman = this;
             coman.sman = this;
+            //lgman.sman = this; // trying to keep this independ of CampusSimulator namespace
 
             uiman.sman = this;
             mpman.sman = this;
@@ -250,7 +257,7 @@ namespace CampusSimulator
                 frman.transform.parent = rgo.transform;
                 dfman.transform.parent = rgo.transform;
             }
-
+            lgman.InitPhase0();
             mpman.InitPhase0();
             bdman.InitPhase0();
             stman.InitPhase0();
@@ -260,9 +267,12 @@ namespace CampusSimulator
             dfman.InitPhase0();
             veman.InitPhase0();
             drman.InitPhase0();
-
         }
-
+        public void InitializeValues()
+        {
+            scenarioSeed.GetInitial();
+            Lgg($"Read initialscenario seed:{scenarioSeed.Get()}","green");
+        }
         //private T CreateObjectAddComp<T>(string cname) 
         //{
         //    var go = new GameObject(cname);
@@ -281,8 +291,15 @@ namespace CampusSimulator
             }
             simrundir = "./simrun/" + newscene + "_" + runtimestamp + "/";
             UxUtils.UxSettingsMan.SetScenario(newscene.ToString());
-
             curscene = newscene;
+            InitializeValues();
+
+            var curseed = scenarioSeed.Get();
+            GraphAlgos.GraphUtil.SetRanSeed("popbld",curseed );
+            GraphAlgos.GraphUtil.SetRanSeed("jnygen", curseed);
+            GraphAlgos.GraphUtil.SetRanSeed("journeyspawn", curseed);
+            GraphAlgos.GraphUtil.SetRanSeed("spawnstreaming", curseed);
+            GraphAlgos.GraphUtil.InitializeRansets();
         }
         //public void InitializeGlbLlMap()
         //{
@@ -357,6 +374,7 @@ namespace CampusSimulator
                     veman.DelVehicles();
                     lcman.DeleteGrcGos();
                     lcman.DeleteAllNodes();
+                    uiman.DeleteStuff();
 
 
                     mpman.DeleteQmap();
@@ -373,6 +391,7 @@ namespace CampusSimulator
                     // Low level
 
                     this.BaseInitialize(newscene);// start with setting the scene - curscene set here
+
                     dfman.BaseInitialize(newscene);
                     mpman.BaseInitialize(newscene); // lnglat constants and bspokespec set here
                     coman.BaseInitialize(newscene); // must happen after mpman.InitializeScene - should pull longlat code out of there and make coman the first component sman call (i.e. before dfman)
@@ -408,7 +427,7 @@ namespace CampusSimulator
                     bdman.ModelBuild();// building details, but no nodes and links
 
 
-                    lcman.ModelBuild(); // create or read in many nodes and links
+                    lcman.ModelBuild(); // create or read in many nodes and links - including building floor plans att the moment
 
                     trman.ModelBuild();
                     stman.ModelBuild();
@@ -431,11 +450,11 @@ namespace CampusSimulator
 
                     SetInitState(InitState.modelBuildPost);
 
-                    this.Lgg("lcman.ModelBuildFinal", "yellow");
+                    //this.Lgg("lcman.ModelBuildFinal", "yellow");
                     lcman.ModelBuildFinal();  // realize latelinks and heights
                     mpman.ModelBuildFinal();
 
-                    bdman.ModelBuildPostLinkCloud();// building details that need nodes and links - i.e destrooms are derived from nodes
+                    bdman.ModelBuildPostLinkCloud();// building details that need nodes and links - i.e destrooms are derived from nodes - floor heights are also adjusted!
                     gaman.ModelBuildPostLinkCloud();// garage details that need nodes and links
                     drman.ModelBuildPostLinkCloud();// dronman details that need nodes and links
 
@@ -455,71 +474,77 @@ namespace CampusSimulator
                 }
                 catch (Exception ex)
                 {
-                    Debug.LogError("Scene "+newscene.ToString()+" not initialized successfully Exception:"+ex.ToString());
+                   LggError("Scene "+newscene.ToString()+" not initialized successfully Exception:"+ex.ToString());
                 }
                 CancelRefreshes();
-                Debug.Log($"SceneMan.SetScene completed scenario initialization for {curscene}");
+                Lgg($"SceneMan.SetScene completed scenario initialization for {curscene}");
             }
             else
             {
-                Debug.Log("Scene already set to " + newscene + " so this is a noop");
+                Lgg("Scene already set to " + newscene + " so this is a noop");
             }
             requestScene = SceneSelE.None;
         }
 
-        public void Lgg(string msg,string color)
-        {
-            Lgg(msg, new string[] { color });
-            //var nmsg = $"<color={color}>{msg}</color>";
-            //Debug.Log(nmsg);
-        }
-        public string ColorCode(string msg, string[] color, string delim = "|")
-        {
-            if (color.Length == 0)
-            {
-                return msg;
-            }
-            var delimIdxes = new List<int>();
-            {
-                var idx = msg.IndexOf(delim);
-                while (idx >= 0)
-                {
-                    delimIdxes.Add(idx);
-                    idx = msg.IndexOf(delim, idx+1);
-                }
-            }
-            var iclr = 0;
-            var nmsg = $"<color={color[0]}>";
-            var sidx = nmsg.Length;
-            nmsg += msg;
-            var lidx = 0;
-            foreach (var idx in delimIdxes)
-            {
-                iclr = (iclr + 1) % color.Length;
-                var isrt = $"</color><color={color[iclr]}>";
-                sidx += idx-lidx;
-                nmsg = nmsg.Remove(sidx, delim.Length);// remove the delim
-                nmsg = nmsg.Insert(sidx, isrt);
-                sidx += isrt.Length - delim.Length;
-                lidx = idx;
-            }
-            nmsg += "</color>";
-            return nmsg;
-        }
-        public void Lgg(string msg, string[] color, string delim = "|")
-        {
-            var nmsg = ColorCode(msg, color, delim);
-            Debug.Log(nmsg);
-        }
 
-        public void Lgg(string msg, string clr1, string clr2, string delim = "|")
+
+        //public void LggOld(string msg, string clr1, string clr2, string delim = "|", bool unitylog = true)
+        //{
+        //    var color = new string[] { clr1, clr2 };
+        //    var nmsg = LogMan.ColorCode(msg, color, delim);
+        //    if (unitylog)
+        //    {
+        //        UnityLog(nmsg, LogSeverity.Info);
+        //    }
+
+        //}
+
+        public void Lgg(string msg, string clr1, string clr2, string delim = "|", bool unitylog = true)
         {
             var color = new string[] { clr1, clr2 };
-            var nmsg = ColorCode(msg, color, delim);
-            Debug.Log(nmsg);
+            if (lgman != null)
+            {
+                lgman.Lgglong(msg, LogSeverity.Info, color: color, delim: delim, unitylog: unitylog);
+            }
+            else
+            {
+                Debug.Log(msg);
+            }
         }
+        public void Lgg(string msg, string color="gray")
+        {
+            if (lgman != null)
+            {
+                lgman.Lgglong(msg, LogSeverity.Info,LogTyp.General, color:new string[] { color });
+            }
+            else
+            {
+                Debug.Log(msg);
+            }
+        }
+        public void LggWarning(string msg)
+        {
+            if (lgman != null)
+            {
+                lgman.Lgglong(msg, LogSeverity.Error, LogTyp.General, color: new string[] { "yellow", "white" });
+            }
+            else
+            {
+                Debug.Log(msg);
+            }
 
-
+        }
+        public void LggError(string msg)
+        {
+            if (lgman != null)
+            {
+                lgman.Lgglong(msg, LogSeverity.Error, LogTyp.General, color: new string[] { "red", "white" });
+            }
+            else
+            {
+                Debug.Log(msg);
+            }
+        }
         public void PostMapAsyncLoadSetScene()
         {
             vcman.PostMapLoadAdjustments();
@@ -563,7 +588,7 @@ namespace CampusSimulator
         }
         public void RequestRefresh(string requester,bool totalrefresh=false, SceneSelE requestedScene = SceneSelE.None)
         {
-            Debug.LogWarning($"RefreshRequested by {requester} total:{totalrefresh}");    
+            Lgg($"RefreshRequested by {requester} total:{totalrefresh}","purple");    
             needsrefresh = true;
             if (totalrefresh)
             {
@@ -1174,7 +1199,7 @@ namespace CampusSimulator
 #region birdcommands
         public void StartBird()
         {
-            if (firstPersonBirdCtrl.isAtGoal())
+            if (firstPersonBirdCtrl.IsAtGoal())
             {
                 ReversePath();
             }
@@ -1218,7 +1243,7 @@ namespace CampusSimulator
         }
         public void SetSpeed(float newvel)
         {
-            if (firstPersonBirdCtrl.isAtStart())
+            if (firstPersonBirdCtrl.IsAtStart())
             {
                 StartBird();
             }
@@ -1272,7 +1297,7 @@ namespace CampusSimulator
         }
         public void SetStartNode(string newenodename)
         {
-            if (firstPersonBirdCtrl.isRunning())
+            if (firstPersonBirdCtrl.IsRunning())
             {
                 StopBird();  // If we reset the endnode during running we need to stop and set a new node there
             }
@@ -1348,7 +1373,7 @@ namespace CampusSimulator
         {
             bool restartbird = false;
             if (!lcman.IsNodeName(newenodename)) return;
-            if (firstPersonBirdCtrl.isAtGoal())
+            if (firstPersonBirdCtrl.IsAtGoal())
             {
                 //var tmp = pathctrl.startnodename;
                 firstPersonPathCtrl.startnodename = firstPersonPathCtrl.endnodename;
@@ -1356,7 +1381,7 @@ namespace CampusSimulator
                 // when we change the end node when we are finished and want to go somewhere else
                 // note that calling ReversePath leads to a stackoverflow
             }
-            if (firstPersonBirdCtrl.isRunning())
+            if (firstPersonBirdCtrl.IsRunning())
             {
                 StopBird();  // If we reset the endnode during running we need to stop and set a new node there
                 restartbird = true;
@@ -1617,9 +1642,12 @@ namespace CampusSimulator
         #endregion SceneOptions
         void Awake()
         {
-            Lgg("SceneMan.|Awake| called", new string[] { "red","white"} );
-            Debug.Log($"Monitors connected:{Display.displays.Length}");
             IdentitySystemAndUser();
+            var ndsp = Display.displays.Length;
+            var msg = $"SceneMan.|Awake| called displayed connected:{ndsp} hostname:{hostname}";
+            lgman = (new GameObject("LogMan")).AddComponent<LogMan>();
+            lgman.InitPhase0();
+            Lgg(msg,"darkblue","white" );
             InitPhase0();
         }
 
@@ -1637,7 +1665,6 @@ namespace CampusSimulator
                 flines.AddRange(uiman.abtpan.GetAboutTextAsList());
                 File.WriteAllLines("help.txt", flines);
 
-                uiman.stapan.OptionsButton(true);
                 uiman.optpan.SetTabState(OptionsPanel.TabState.Help);
             }
             if (dodelsettings)
@@ -1776,7 +1803,7 @@ namespace CampusSimulator
             if (((Time.time - F10hitTime) > 1) && Input.GetKeyDown(KeyCode.F10))
             {
                 Debug.Log("F10 - Options");
-                uiman.stapan.OptionsButton(toggleState:true);
+                uiman.optpan.TogglePanelState();
                 //this.RequestRefresh("F5 hit", totalrefresh: true);
             }
             if (ctrlhit && Input.GetKeyDown(KeyCode.C))
@@ -1800,6 +1827,8 @@ namespace CampusSimulator
         public float lastRefreshTime = 0;
 
         int updateCount = 0;
+        public bool canClickOnObjects = true;
+        public string lasthitname = "";
         private void Update()
         {
             //Debug.Log($"SceneMan.Update called {updateCount}");
@@ -1877,14 +1906,51 @@ namespace CampusSimulator
                 sw1.Stop();
                 Debug.Log($"Refresh took {sw1.ElapSecs()} secs");
             }
-            KeyProcessing();
+
+            if (!uiman.optpan.IsOptionsPanelOpen())
+            {
+                KeyProcessing();
+
+                if (canClickOnObjects)
+                {
+                    var vcam = Viewer.GetViewerCamera();
+                    if (vcam != null && Input.GetMouseButtonDown(0))
+                    {
+                        //Debug.Log("Left Mouse was pressed");
+
+
+                        Ray ray = vcam.ScreenPointToRay(Input.mousePosition);
+                        RaycastHit hit;
+                        if (Physics.Raycast(ray, out hit))
+                        {
+                            var go = hit.collider.gameObject;
+                            var hitname = go.name;
+                            if (go.transform.parent != null)
+                            {
+                                var pname = go.transform.parent.gameObject.name;
+                                hitname = $"{pname}/{hitname}";
+                                jnman.SetShadowJourney(hitname);
+                            }
+                            lasthitname = hitname;
+                            //Debug.Log($"Left mouse button hit {hitname}");
+                            //var hitname = go.name.ToLower();
+                        }
+                        else
+                        {
+                           // Debug.Log("Nothing was hit");
+                        }
+                    }
+
+                }
+            }
             updateCount++;
+
         }
 
         public void IdentitySystemAndUser()
         {
-            string hostName = System.Net.Dns.GetHostName().ToLower();
-            if (hostName == "absol")
+            hostname = System.Net.Dns.GetHostName().ToLower();
+            if (hostname == "absol")
             {
                 bemike = true;
             }
@@ -1908,15 +1974,17 @@ namespace CampusSimulator
 
         void OnScene(SceneView scene)
         {
+            // Editor only stuff
+
             Event e = Event.current;
             if ((e.type == EventType.KeyDown) && (e.keyCode == KeyCode.B) && Event.current.modifiers == EventModifiers.Control)
             {
-                Debug.Log("Ctrl-B");
+                //Debug.Log("Ctrl-B");
                 e.Use(); // keeps unity shortcuts from popping up
             }
             else if ((e.type == EventType.KeyDown) && (e.keyCode == KeyCode.B))
             {
-                Debug.Log("B");
+                //Debug.Log("B");
                 e.Use();
             }
 
@@ -1935,8 +2003,13 @@ namespace CampusSimulator
                 if (Physics.Raycast(ray, out hit))
                 {
                     var go = hit.collider.gameObject;
-                    //Debug.Log("Middle mouse button hit " + go.name);
                     var hitname = go.name.ToLower();
+                    if (go.transform.parent!=null)
+                    {
+                        var pname = go.transform.parent.gameObject.name;
+                        hitname = $"{pname}/{hitname}";
+                    }
+                    //Debug.Log("Middle mouse button hit " + go.name);
                     if (hitname.StartsWith("bldevacalarm"))
                     {
                         var alarm = go.GetComponent<BldEvacAlarm>();
@@ -1945,7 +2018,7 @@ namespace CampusSimulator
                     }
                     if (hitname.StartsWith("allfreealarm"))
                     {
-                        Debug.Log("hit:" + go.name);
+                        //Debug.Log("hit:" + go.name);
                         var alarm = go.GetComponent<BldEvacAlarm>();
                         bool justone = e.control;
                         bool startstream = e.shift;
@@ -1969,7 +2042,7 @@ namespace CampusSimulator
                 if (Physics.Raycast(ray, out hit))
                 {
                     var go = hit.collider.gameObject;
-                    Debug.Log("Left Mouse button hit " + go.name +"  mousePos:"+mousePos.ToString("F1"));
+                    //Debug.Log("Left Mouse button hit " + go.name +"  mousePos:"+mousePos.ToString("F1"));
                     if (leditor.editMode)
                     {
                         leditor.MaybeSelectEditNode(go);
