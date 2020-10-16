@@ -2140,13 +2140,15 @@ namespace GraphAlgos
             // stairwell
             var d1 = 4.3f;
             var d2 = 4.1f;
+            var land1 = 2.70f;// was 2.8
+            var land2 = 2.50f;// was 2.6
             grc.AddNodePtxyz("b121-f01-str102-0", -820.2 + xs, 0.000, -481.8 + zs, comment: ""); //  1 nn:1 nl:0
             //grc.LinkToPtxyz("b121-s12-str102-1", -818.35 + xs, 1.400, -481.25 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
             grc.LinkToPtxyz("b121-s12-str102-1", -818.12 + xs, 1.500, -481.13 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
-            grc.LinkToPtxyz("b121-s12-str102-2", -816.26 + xs, 2.800, -480.56 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
-            grc.LinkToPtxyz("b121-s12-str102-3", -815.3 + xs, 2.800, -480.2 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
-            grc.LinkToPtxyz("b121-s12-str102-4", -814.7 + xs, 2.800, -482.4 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
-            grc.LinkToPtxyz("b121-s12-str102-5", -816.2 + xs, 2.800, -483.0 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
+            grc.LinkToPtxyz("b121-s12-str102-2", -816.26 + xs, land1, -480.56 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
+            grc.LinkToPtxyz("b121-s12-str102-3", -815.3 + xs, land1, -480.2 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
+            grc.LinkToPtxyz("b121-s12-str102-4", -814.7 + xs, land1, -482.4 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
+            grc.LinkToPtxyz("b121-s12-str102-5", -816.2 + xs, land1, -483.0 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
             grc.LinkToPtxyz("b121-f02-str102-6", -818.4 + xs, d1, -483.77 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
             grc.LinkToPtxyz("b121-f02-str102-7", -820.16 + xs, d1, -484.45 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
             grc.LinkToPtxyz("b121-f02-str102-8", -820.83 + xs, d1, -482.29 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
@@ -2154,10 +2156,10 @@ namespace GraphAlgos
             grc.LinkToPtxyz("b121-f02-str102-10", -820.2 + xs, d1 + 0.000, -481.8 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
             //grc.LinkToPtxyz("b121-s23-str102-11", -818.35 + xs, d1 + 1.200, -481.25 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
             grc.LinkToPtxyz("b121-s23-str102-11", -818.12 + xs, d1 + 1.300, -481.13 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
-            grc.LinkToPtxyz("b121-s23-str102-12", -816.26 + xs, d1 + 2.600, -480.56 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
-            grc.LinkToPtxyz("b121-s23-str102-13", -815.3 + xs, d1 + 2.600, -480.2 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
-            grc.LinkToPtxyz("b121-s23-str102-14", -814.7 + xs, d1 + 2.600, -482.4 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
-            grc.LinkToPtxyz("b121-s23-str102-15", -816.2 + xs, d1 + 2.600, -483.0 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
+            grc.LinkToPtxyz("b121-s23-str102-12", -816.26 + xs, d1 + land2, -480.56 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
+            grc.LinkToPtxyz("b121-s23-str102-13", -815.3 + xs, d1 + land2, -480.2 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
+            grc.LinkToPtxyz("b121-s23-str102-14", -814.7 + xs, d1 + land2, -482.4 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
+            grc.LinkToPtxyz("b121-s23-str102-15", -816.2 + xs, d1 + land2, -483.0 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
             grc.LinkToPtxyz("b121-f03-str102-16", -818.4 + xs, d1 + d2, -483.77 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
             grc.LinkToPtxyz("b121-f03-str102-17", -820.16 + xs, d1 + d2, -484.45 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
             grc.LinkToPtxyz("b121-f03-str102-18", -821.82 + xs, d1 + d2, -482.29 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0

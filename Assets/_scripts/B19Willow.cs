@@ -152,7 +152,8 @@ public class B19Willow : MonoBehaviour
         {
             var xoff = -3;
             var zoff = -3;
-            Vector3 defpos = new Vector3(-474.3f+xoff, 4.72f, 87.6f+zoff);
+            //var defpos = new Vector3(-474.3f+xoff, 4.72f, 87.6f+zoff);
+            var defpos = new Vector3(-474.3f+xoff, 5.22f, 87.6f+zoff);
             ymapheight = sman.mpman.GetHeight(defpos.x, defpos.z);
             sman.Lgg($"B19 ymapheight:{ymapheight:f3}","orange");
             defpos = new Vector3(defpos.x, ymapheight+defpos.y, defpos.z);

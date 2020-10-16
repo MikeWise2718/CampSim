@@ -332,8 +332,10 @@ namespace CampusSimulator
         {
             var b19comp = GetB19();
             var curval = b19comp.osmbld.Get();
+            curval = !curval;
             b19comp.ActuateOsmStatus(curval);
-            b19comp.osmbld.SetAndSave(!curval);
+            b19comp.osmbld.SetAndSave(curval);
+            //Debug.Log($"Togglingb19osm new val{curval}");
             b19comp.MakeItSo();
         }
 

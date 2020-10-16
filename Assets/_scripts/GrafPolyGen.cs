@@ -2,8 +2,6 @@
 using UnityEngine;
 using Aiskwk.Map;
 using System.Linq;
-using System.Security.Cryptography;
-using UnityEditorInternal;
 
 public delegate Vector3 PolyGenVekMapDel(Vector3 v);
 public enum PolyGenForm { pipes, walls, wallsmesh, tesselate }

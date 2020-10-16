@@ -1,6 +1,5 @@
 ﻿using Aiskwk.Map;
 using System.Collections.Generic;
-using TMPro.EditorUtilities;
 using UnityEngine;
 using UxUtils;
 
@@ -195,7 +194,13 @@ public class B121Willow : MonoBehaviour
     {
         return (3, 12.6f);
     }
+
     public float GetFloorHeight(int floor, bool includeAltitude = true)
+    {
+        var rv = bspec.GetFloorHeight(floor, includeAltitude: includeAltitude);
+        return rv;
+    }
+    public float GetFloorHeightOld(int floor, bool includeAltitude = true)
     {
         float rv;
         if (floor < 0) floor = 0;
@@ -240,7 +245,7 @@ public class B121Willow : MonoBehaviour
             ymapheight = sman.mpman.GetHeight(bpos.x, bpos.z);
             if (sman.mpman.useElevations.Get())
             {
-                ymapheight -= 1.0f; // adjust for map irrgularities - doesn't work well
+                ymapheight -= 0.10f; // adjust for map irrgularities - doesn't work well
             }
             var bps = bpos.ToString("f3");
             sman.Lgg($"Loading B121 -- height - bpos:{bps} yheit(from map):{ymapheight:f2} total:{ymapheight+bpos.y:f2}","orange");
