@@ -139,7 +139,7 @@ namespace CampusSimulator
             var bnar = birdname.Split('/');
             foreach (var bn in bnar)
             {
-                if (bn == "instance") continue;
+                if (!bn.EndsWith("ava-bc")) continue;
                 foreach (var jny in journeys)
                 {
                     //sman.Lgg($"FJWB looking for {birdname} in jny.birctrl:{jny.birdctrl.name} - jny - {jny.name}","orange");
@@ -149,12 +149,14 @@ namespace CampusSimulator
                         {
                             if (bn == jny.birdctrl.birdformgo.name)
                             {
+                                sman.Lgg($"FJWB found {jny.name}", "orange");
                                 return jny;
                             }
                         }
                     }
                 }
             }
+            sman.Lgg($"FJWB cound not find {birdname} in {journeys.Count} joureys", "orange");
             return null;
         }
 
@@ -162,7 +164,7 @@ namespace CampusSimulator
         public void SetShadowJourney(string hitname)
         {
             var jny = FindJourneyWithBird(hitname);
-            if (jny!=null)
+            if (jny != null)
             {
                 journeyToShadow = jny.name;
             }
@@ -176,7 +178,7 @@ namespace CampusSimulator
         public void ToggleFreezeJourneys()
         {
             freezeJourneys = !freezeJourneys;
-            foreach(var jny in journeys)
+            foreach (var jny in journeys)
             {
                 jny.SetFreeze(freezeJourneys);
             }
@@ -624,7 +626,6 @@ namespace CampusSimulator
                 var gm = GameObject.FindObjectOfType<GarageMan>();
 
                 var perform = person.avatarName;
-                var frroom = bm.GetBroom(person.placeRoom);
 
                 Leg leg1 = new Leg
                 {
@@ -1480,8 +1481,8 @@ namespace CampusSimulator
                     lastspawn = Time.time;
                 }
             }
-        }
 
+        }
 
 
         public void ModifyJourneySpeeds()
@@ -1595,6 +1596,7 @@ namespace CampusSimulator
         int updateCount = 0;
         // Update is called once per frame
         float lastSpawnTime = 0;
+        int spawnMethodCount = 0;
         void DoJourneyHousekeeping()
         {
             // Journey housekeeping
@@ -1645,27 +1647,30 @@ namespace CampusSimulator
                 ndeleted++;
             }
             // Journey spawning - give everybody a chance to spawn
-            var diceroll = GraphAlgos.GraphUtil.GetRanInt(3, "journeyspawn");
-            switch (diceroll)
+            if (!freezeJourneys)
             {
-                case 0:
-                    if (spawnrunjourneys)
-                    {
-                        SpawnJourneysByBuilding();
-                    }
-                    break;
-                case 1:
-                    if (spawnflyjourneys)
-                    {
-                        SpawnDroneJourneysByBuilding();
-                    }
-                    break;
-                case 2:
-                    if (doStreamJourneys)
-                    {
-                        spawnStreamJourneys();
-                    }
-                    break;
+                switch (spawnMethodCount % 3)
+                {
+                    case 0:
+                        if (spawnrunjourneys)
+                        {
+                            SpawnJourneysByBuilding();
+                        }
+                        break;
+                    case 1:
+                        if (spawnflyjourneys)
+                        {
+                            SpawnDroneJourneysByBuilding();
+                        }
+                        break;
+                    case 2:
+                        if (doStreamJourneys)
+                        {
+                            spawnStreamJourneys();
+                        }
+                        break;
+                }
+                spawnMethodCount++;
             }
             ModifyJourneySpeeds();
             //sman.Lgg("Updatecount:" + updateCount + " started:" + nstarted + " deleted:" + ndeleted);

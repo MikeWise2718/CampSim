@@ -4,7 +4,6 @@ using System.Linq;
 using UnityEngine;
 using System.IO;
 using System.Reflection;
-using System.Security.Cryptography;
 
 /// <summary>
 /// GraphAlgos.cs  - This file contains static algoritms that we need in various places. 
@@ -202,38 +201,50 @@ namespace GraphAlgos
 
 
         static Dictionary<string, GameObject> uniresdict = new Dictionary<string, GameObject>();
-        public static GameObject GetUniResPrefab(string dirname,string name)
+        public static GameObject GetUniResPrefab(string dirname,string prefabname)
         {
-            if (!uniresdict.ContainsKey(name))
+            if (!uniresdict.ContainsKey(prefabname))
             {
-                var realname = name;
+                var realname = prefabname;
                 if (dirname != "")
                 {
                     if (!dirname.EndsWith("/")) dirname += "/";
-                    realname = dirname + name;
+                    realname = dirname + prefabname;
                 }
                 var go = Resources.Load<GameObject>(realname);
-                var clder = go.GetComponent<Collider>();
-                if (clder!=null)
+                var clders = go.GetComponents<Collider>();
+                if (clders.Length == 1)
                 {
-                    clder.enabled = false;
+                    clders[0].enabled = false;
                 }
-                if (dirname=="People/")
+                else if (clders.Length>1)
                 {
-                    var cc = go.AddComponent<CapsuleCollider>();
-                    cc.center = new Vector3(0, 0.9f, 0);
-                    cc.radius = 0.25f;
-                    cc.height = 1.8f;
+                    clders[0].enabled = false;
+                    var nclders = clders.Length;
+                    for(int i=1;i<nclders; i++)
+                    {
+                        UnityEngine.Object.DestroyImmediate(clders[i], allowDestroyingAssets:true);
+                    }
+                    Debug.Log($"Destroyed {nclders-1} colliders for {dirname} {prefabname}");
+                }
+                else if (clders.Length == 0)
+                {
+                    if (dirname == "People/")
+                    {
+                        var cc = go.AddComponent<CapsuleCollider>();
+                        cc.center = new Vector3(0, 0.9f, 0);
+                        cc.radius = 0.25f;
+                        cc.height = 1.8f;
+                    }
                 }
                 var rigid = go.GetComponent<Rigidbody>();
                 if (rigid != null)
                 {
                     rigid.isKinematic = true;
                 }
-
-                uniresdict[name] = go;
+                uniresdict[prefabname] = go;
             }
-            return uniresdict[name];
+            return uniresdict[prefabname];
         }
 
         //static System.Random ranman = new System.Random(1234);

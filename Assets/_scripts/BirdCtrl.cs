@@ -529,6 +529,11 @@ namespace CampusSimulator
         }
         void ClearAimationScript()
         {
+            if (birdformgo == null)
+            {
+                sman.LggWarning("birdformgo is null in BirdCtrl.ClearAnimationScript");
+                return;
+            }
             var acomp = birdformgo.GetComponentInChildren<Animator>();
             if (acomp != null)
             {

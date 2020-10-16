@@ -1925,14 +1925,15 @@ namespace CampusSimulator
                         {
                             var go = hit.collider.gameObject;
                             var hitname = go.name;
-                            if (go.transform.parent != null)
+                            while (go.transform.parent!=null)
                             {
                                 var pname = go.transform.parent.gameObject.name;
                                 hitname = $"{pname}/{hitname}";
-                                jnman.SetShadowJourney(hitname);
+                                go = go.transform.parent.gameObject;
                             }
+                            jnman.SetShadowJourney(hitname);
                             lasthitname = hitname;
-                            //Debug.Log($"Left mouse button hit {hitname}");
+                            Debug.Log($"Left mouse button hit {hitname}");
                             //var hitname = go.name.ToLower();
                         }
                         else

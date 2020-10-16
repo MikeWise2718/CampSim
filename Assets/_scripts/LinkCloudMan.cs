@@ -429,7 +429,7 @@ namespace CampusSimulator
         {
             var cname = nodecolor(node.name);
             var nsize = nodesize(node);
-            var go = NodeGo.MakeNodeGo(sman, node, nsize, cname, 1 - linkTrans);
+            var go = NodeGo.MakeNodeGo(sman, node, nsize, cname, 1 - linkTrans,addcollider:false);
             go.transform.parent = grcnodes.transform;
         }
         public void CreateNodeGo(string lptname)
