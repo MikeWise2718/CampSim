@@ -266,6 +266,11 @@ namespace Aiskwk.Map
                 else
                 {
                     cylgo = GpuInst.CreateCylinderGpu(llname, pit1, pit2, lska, lclr, widratio: widratio, alf: alf);
+                    var cldr = cylgo.GetComponent<Collider>();
+                    if (cldr!=null)
+                    {
+                        cldr.enabled = false;
+                    }
                 }
                 cylgo.transform.parent = lgo.transform;
                 if (nclr != "")

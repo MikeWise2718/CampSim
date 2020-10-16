@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using CampusSimulator;
+using System.Runtime.InteropServices;
 
 public class InfoPanel : MonoBehaviour
 {
@@ -90,13 +91,49 @@ public class InfoPanel : MonoBehaviour
         mscText.verticalOverflow = VerticalWrapMode.Overflow;
     }
 
+    float lastCountSaveTime;
+    int savecnt = 0;
+    (int nexist,int nenabled) CountColliders()
+    {
+        var collid = GameObject.FindObjectsOfType<Collider>();
+        if (Time.time - lastCountSaveTime > 5 && savecnt==0)
+        {
+            var collidlist = new List<string>();
+            int i = 0;
+            foreach (var c in collid)
+            {
+                var eflag = "";
+                if (c.enabled)
+                {
+                    eflag = "enabled";
+                }
+                var line = $"{i} - {c.name}  - {eflag}";
+                collidlist.Add(line);
+                i++;
+            }
+            GraphAlgos.GraphUtil.writeListToFile(collidlist, "collidlist.txt");
+            lastCountSaveTime = Time.time;
+            savecnt++;
+        }
+        var nenabled = 0;
+        foreach (var c in collid)
+        {
+            if (c.enabled)
+            {
+                nenabled++;
+            }
+        }
+
+        var ncolliders = collid.Length;
+        return (ncolliders,nenabled);
+    }
 
     float smoothedDeltaTime = 0.0f;
     int updatecount;
     float lastupdate=-1;
     void UpdateInfoPanel()
     {
-        if (Time.time - lastupdate < 0.25f) return;
+        if (Time.time - lastupdate < 0.33f) return;
 
         var curcam = vman.GetCurrentCamera();
         trackedObject = null;
@@ -200,9 +237,10 @@ public class InfoPanel : MonoBehaviour
             geoText.text = txt;
         }
         var mmsg = $"Reg:{sman.curscene} - {gogen}\n";
+        var (ncolliders,nenabled) = CountColliders();
         mmsg += System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss zzz\n");
         mmsg += $"P:{sman.psman.GetPersonCount()} V:{sman.veman.GetVehicleCount()} "+
-                $"B:{sman.bdman.GetBuildingCount()} BR:{sman.bdman.GetBroomCount()} VC:{sman.vcman.GetVidcamCount()}\n"+
+                $"B:{sman.bdman.GetBuildingCount()} BR:{sman.bdman.GetBroomCount()} VC:{sman.vcman.GetVidcamCount()} C:{nenabled}/{ncolliders}\n"+
                 $"{GraphAlgos.GraphUtil.GetVersionString()}";
         mscText.text = mmsg;
 

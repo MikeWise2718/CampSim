@@ -2,8 +2,7 @@
 using UnityEngine;
 using Aiskwk.Map;
 using System.Linq;
-using System.Security.Cryptography;
-using UnityEditorInternal;
+using UnityStandardAssets.Utility;
 
 public delegate Vector3 PolyGenVekMapDel(Vector3 v);
 public enum PolyGenForm { pipes, walls, wallsmesh, tesselate }
@@ -452,28 +451,37 @@ public class GrafPolyGen
     }
     public void Generate(GameObject parent, bool plotTesselation,bool onesided=false,PolyGenVekMapDel pgvd=null)
     {
+        GameObject go = null;
         switch (genform)
         {
             case PolyGenForm.pipes:
                 {
-                    GenerateBySegment(parent, wallheight,onesided:onesided, pgvd:pgvd);
+                    go = GenerateBySegment(parent, wallheight,onesided:onesided, pgvd:pgvd);
                     break;
                 }
             case PolyGenForm.walls:
                 {
-                    GenerateBySegment(parent, wallheight, onesided: onesided, pgvd: pgvd);
+                    go = GenerateBySegment(parent, wallheight, onesided: onesided, pgvd: pgvd);
                     break;
                 }
             case PolyGenForm.wallsmesh:
                 {
-                    GenerateBySegment(parent, wallheight, asmesh: true, onesided: onesided, pgvd: pgvd);
+                    go = GenerateBySegment(parent, wallheight, asmesh: true, onesided: onesided, pgvd: pgvd);
                     break;
                 }
             case PolyGenForm.tesselate:
                 {
-                    TesselateYup(parent, wallheight, plotTesselation: plotTesselation, onesided:onesided, pgvd: pgvd);
+                    go = TesselateYup(parent, wallheight, plotTesselation: plotTesselation, onesided:onesided, pgvd: pgvd);
                     break;
                 }
+        }
+        if (go!=null)
+        {
+            var colid = go.GetComponent<Collider>();
+            if (colid != null)
+            {
+                Object.Destroy(colid);
+            }
         }
     }
     static int moduloInc(int i, int inc, int n)
@@ -920,12 +928,12 @@ public class GrafPolyGen
         return go;
     }
 
-    public void GenerateBySegment(GameObject parent,float height,bool asmesh=false, bool onesided=false,PolyGenVekMapDel pgvd=null)
+    public GameObject GenerateBySegment(GameObject parent,float height,bool asmesh=false, bool onesided=false,PolyGenVekMapDel pgvd=null)
     {
         if (_poutline.Count <= 1)
         {
             Debug.LogError("BldPolyGenForm can not generate with less than two points");
-            return;
+            return null;
         }
         if (asmesh)
         {
@@ -972,6 +980,11 @@ public class GrafPolyGen
         {
             var go = GetAccumulatedMesh("accumesh",pgvd);
             go.transform.parent = parent.transform;
+            return go;
+        }
+        else
+        {
+            return null;
         }
     }
 }

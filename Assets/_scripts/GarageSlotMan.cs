@@ -122,6 +122,7 @@ namespace CampusSimulator
                 crenderer.material.shader = Shader.Find("Diffuse");
                 var clrdr = floor.GetComponent<Collider>();
                 clrdr.enabled = false;
+                Destroy(clrdr);
                 //map.AddDrawingElement(new OnlineMapsDrawingRect(new Vector2(2, 2), new Vector2(1, 1), Color.green, 1,Color.blue));
             }
             if (createparkbox)
@@ -136,6 +137,7 @@ namespace CampusSimulator
                 pbrenderer.material.shader = Shader.Find("Transparent/Diffuse");
                 var clrdr = parkbox.GetComponent<Collider>();
                 clrdr.enabled = false;
+                Destroy(clrdr);
             }
             if (createsign)
             {
@@ -148,6 +150,7 @@ namespace CampusSimulator
                 SetSlotState(slotstate);
                 var clrdr = sign.GetComponent<Collider>();
                 clrdr.enabled = false;
+                Destroy(clrdr);
             }
             if (createraspi)
             {
@@ -160,6 +163,7 @@ namespace CampusSimulator
                 rrenderer.material.color = Color.white;
                 var clrdr = raspibox.GetComponent<Collider>();
                 clrdr.enabled = false;
+                Destroy(clrdr);
             }
             if (createcam) // usually off
             {
@@ -193,6 +197,7 @@ namespace CampusSimulator
                 //rrenderer.material.color = (occupied ? Color.red : Color.cyan);
                 var clrdr = node.GetComponent<Collider>();
                 clrdr.enabled = false;
+                Destroy(clrdr);
             }
 
             if (createcar && occupied)
@@ -203,6 +208,11 @@ namespace CampusSimulator
                 //cargo = Instantiate<GameObject>(objPrefab);
                 cargo = VehicleMan.LoadCarGo(slotformgo, carformname);
                 neutercargo(cargo);
+                var clrdr = cargo.GetComponent<Collider>();
+                if (clrdr != null)
+                {
+                    clrdr.enabled = false;
+                }
                 //cargo.transform.parent = slotformgo.transform;
                 //cargo.transform.position = slotformgo.transform.position + cargo.transform.position;
                 //cargo.transform.rotation = slotformgo.transform.rotation;

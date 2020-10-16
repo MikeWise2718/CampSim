@@ -165,7 +165,7 @@ namespace CampusSimulator
             clrbut("RunButton", "pink", loc, sman.jnman.spawnrunjourneys, "Run");
             clrbut("FlyButton", "lightblue", loc, sman.jnman.spawnflyjourneys, "Fly");
             clrbut("ShadowButton", "lightblue", loc, sman.jnman.shadowJourney, "Shad");
-            Debug.Log($"ColorizeButtonStates sman.jnman.freezeJourneys:{sman.jnman.freezeJourneys}");
+            //Debug.Log($"ColorizeButtonStates sman.jnman.freezeJourneys:{sman.jnman.freezeJourneys}");
             clrbut("FreezeSimButton", "lightblue", loc, sman.jnman.freezeJourneys, "Frz");
         }
 

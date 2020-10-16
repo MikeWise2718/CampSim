@@ -140,11 +140,11 @@ namespace CampusSimulator
 
         GameObject lastpogo;
 
-        public GameObject CreatePersonGo(string callerSuffix,bool moving=false)
+        public GameObject CreatePersonGo(string callerSuffix, bool moving = false)
         {
             var dirname = "People";
             var ispeople = true;
-            if (avatarType!="Person")
+            if (avatarType != "Person")
             {
                 dirname = avatarType;
                 ispeople = false;
@@ -154,10 +154,10 @@ namespace CampusSimulator
             var ipogo = Instantiate<GameObject>(pfab);// there is no global pogo at this point
             ipogo.name = "instance";
             ipogo.transform.localScale = new Vector3(scale, scale, scale);
-            ipogo.transform.localRotation *= Quaternion.Euler( rotate );
+            ipogo.transform.localRotation *= Quaternion.Euler(rotate);
             ipogo.transform.position = tran;
             var pogo = new GameObject();
-            ipogo.transform.SetParent(pogo.transform,worldPositionStays:false);
+            ipogo.transform.SetParent(pogo.transform, worldPositionStays: false);
             //var animator = pogo.GetComponent<Animator>();
             //animator.applyRootMotion = false;
             //animator.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>("Animations/PersonIdle");
@@ -172,6 +172,12 @@ namespace CampusSimulator
                 }
             }
             pogo.name = this.name + callerSuffix;
+
+            var cc = pogo.AddComponent<CapsuleCollider>();
+            cc.center = new Vector3(0, 0.9f, 0);
+            cc.radius = 0.25f;
+            cc.height = 1.8f;
+
             lastpogo = pogo;
             return pogo;
         }

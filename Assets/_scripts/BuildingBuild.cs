@@ -205,6 +205,7 @@ namespace CampusSimulator
                         bm.AddBuildingAlias("b19", this);
                         newosmlevels = 2;
                         newosmheight = 6;
+                        newosmgroundref = GroundRef.max;
                         break;
                     }
                 case "Bld33":
@@ -279,7 +280,7 @@ namespace CampusSimulator
 
                         newosmlevels = 3;
                         newosmheight = 12.3f;
-                        newosmgroundref = GroundRef.max;
+                        newosmgroundref = GroundRef.cen;
 
 
 
@@ -503,6 +504,8 @@ namespace CampusSimulator
             for (int i = 0; i < oline.Count; i++)
             {
                 var sph = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                var clder = sph.GetComponent<Collider>();
+                Destroy(clder);
                 sph.name = $"{bs.shortname}-Marker-{i}";
                 sph.transform.localScale = new Vector3(ska, ska, ska);
                 var z = oline[i].z;
@@ -533,6 +536,8 @@ namespace CampusSimulator
             for (int i = 0; i < oline.Count; i++)
             {
                 var sph = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                var clder = sph.GetComponent<Collider>();
+                Destroy(clder);
                 sph.name = $"{bs.shortname}-Marker-{i}";
                 sph.transform.localScale = new Vector3(ska, ska, ska);
                 var z = oline[i].z;
@@ -705,7 +710,7 @@ namespace CampusSimulator
             {
                 var a1 = GetFloorAltitude(i, includeAltitude: false);
                 var a2 = GetFloorAltitude(i, includeAltitude: true);
-                var flrec = $"{i}   {a1:f1}   {a2:f1}";
+                var flrec = $"{i}   {a1:f3}   {a2:f3}";
                 floorHeights.Add(flrec);
             }
         }
