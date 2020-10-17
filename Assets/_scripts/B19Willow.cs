@@ -15,6 +15,7 @@ public class B19Willow : MonoBehaviour
     public UxSetting<bool> floors = new UxSetting<bool>("B19_floors", true);
     public UxSetting<bool> doors = new UxSetting<bool>("B19_doors", true);
     public UxSetting<bool> osmbld = new UxSetting<bool>("B19_osmbld", false);
+    public UxSetting<bool> wilbld = new UxSetting<bool>("B19_wilbld", false);
     public UxSetting<bool> glasswalls = new UxSetting<bool>("B19_glasswalls", false);
 
     public CampusSimulator.SceneMan sman=null;
@@ -39,6 +40,7 @@ public class B19Willow : MonoBehaviour
         _b19_floors = floors.GetInitial(false);
         _b19_doors = doors.GetInitial(false);
         _b19_osmbld = osmbld.GetInitial(false);
+        _b19_wilbld = wilbld.GetInitial(false);
         _b19_glasswalls = glasswalls.GetInitial(false);
         lastMaterialMode = b19_materialMode.Get();
         bspec = sman.bdman.FindBldSpecByNameStart(bld.osmnamestart);
@@ -54,6 +56,7 @@ public class B19Willow : MonoBehaviour
     bool _b19_floors = false;
     bool _b19_doors = false;
     bool _b19_osmbld = false;
+    bool _b19_wilbld = false;
     bool _b19_glasswalls = false;
     B19_MaterialMode lastMaterialMode;
 
@@ -96,6 +99,11 @@ public class B19Willow : MonoBehaviour
             //Debug.Log("floors");
         }
         if (osmbld.Get() != _b19_osmbld)
+        {
+            chg = true;
+            //Debug.Log("floors");
+        }
+        if (wilbld.Get() != _b19_wilbld)
         {
             chg = true;
             //Debug.Log("floors");
@@ -194,6 +202,12 @@ public class B19Willow : MonoBehaviour
         }
         if (b19go)
         {
+            if (wilbld.Get() != _b19_wilbld)
+            {
+                var stat = wilbld.Get();
+                ActuateWilStatus(stat);
+                _b19_wilbld = stat;
+            }
             if (osmbld.Get() != _b19_osmbld)
             {
                 var stat = osmbld.Get();
@@ -274,6 +288,15 @@ public class B19Willow : MonoBehaviour
             }
         }
     }
+
+    public void ActuateWilStatus(bool stat)
+    {
+        if (b19go != null)
+        {
+            b19go.SetActive(stat);
+        }
+    }
+
     public Vector3 GetCenterPoint(bool includeAltitude = true)
     {
         var ll = GetCenterLatLng();

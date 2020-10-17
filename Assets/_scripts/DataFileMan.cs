@@ -122,6 +122,9 @@ namespace CampusSimulator
                     osmloadspec = "seattle";
                     //ptscale = 1000f;
                     break;
+                case SceneSelE.Seatac:
+                    //ptscale = 1000f;
+                    break;
                 case SceneSelE.SanFrancisco:
                     osmloadspec = "sanfrancisco";
                     //ptscale = 1000f;

@@ -1068,6 +1068,29 @@ namespace CampusSimulator
 
 
                     break;
+                case SceneSelE.Seatac:
+                    (maplat, maplng) = (47.441389, -122.293056);
+                    mapscale = 1;
+                    maprot = Vector3.zero;
+                    maptrans = Vector3.zero;
+                    //xdistkm = 14.84f / (2 * 0.4096f);
+                    //zdistkm = 25.17f / (2 * 0.4096f);
+                    xdistkm = 150;
+                    zdistkm = 150;
+                    lod = 12;
+                    //hmultForNow = 10;
+                    useElesForNow = true;
+                    useViewer = true;
+                    mapscale = 1f;
+                    roty2 = 0;
+                    //nodesPerQuadKey = 8;
+                    //vviewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
+                    viewHome.avatar = ViewerAvatar.QuadCopter;
+
+                    hasLLmap = false;
+                    isCustomizable = false;
+                    break;
+
                 case SceneSelE.Seattle:
                     maplat = 47.608439;
                     maplng = -122.340765;

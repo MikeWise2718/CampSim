@@ -338,6 +338,15 @@ namespace CampusSimulator
             //Debug.Log($"Togglingb19osm new val{curval}");
             b19comp.MakeItSo();
         }
+        public void ToggleB19wil()
+        {
+            var b19comp = GetB19();
+            var curval = b19comp.wilbld.Get();
+            curval = !curval;
+            b19comp.ActuateWilStatus(curval);
+            b19comp.wilbld.SetAndSave(curval);
+            //Debug.Log($"Togglingb19osm new val{curval}");
+        }
 
         public void ToggleB19glassmode()
         {
@@ -433,6 +442,12 @@ namespace CampusSimulator
         {
             var b121comp = GetB121();
             b121comp.ToggleOsm();
+        }
+
+        public void ShowBld121WilButton()
+        {
+            var b121comp = GetB121();
+            b121comp.ToggleWil();
         }
 
 

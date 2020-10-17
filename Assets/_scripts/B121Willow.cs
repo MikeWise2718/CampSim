@@ -14,6 +14,7 @@ public class B121Willow : MonoBehaviour
     public UxSetting<bool> lighting = new UxSetting<bool>("B121_lights", true);
     public UxSetting<bool> plumbing = new UxSetting<bool>("B121_plumbing", true);
     public UxSetting<bool> osmbld = new UxSetting<bool>("B121_osmbld", false);
+    public UxSetting<bool> wilbld = new UxSetting<bool>("B121_wilbld", false);
     public UxSetting<bool> glasswalls = new UxSetting<bool>("B121_glasswalls", false);
 
     public CampusSimulator.SceneMan sman=null;
@@ -35,6 +36,7 @@ public class B121Willow : MonoBehaviour
     bool _b121_lighting = false;
     bool _b121_plumbing = false;
     bool _b121_osmbld = false;
+    bool _b121_wilbld = false;
     bool _b121_glasswalls = false;
     B121_MaterialMode lastMaterialMode;
 
@@ -58,6 +60,7 @@ public class B121Willow : MonoBehaviour
         _b121_lighting = lighting.GetInitial(false);
         _b121_plumbing = plumbing.GetInitial(false);
         _b121_osmbld = osmbld.GetInitial(false);
+        _b121_wilbld = wilbld.GetInitial(false);
         _b121_glasswalls = glasswalls.GetInitial(false);
         lastMaterialMode = b121_materialMode.Get();
         bspec = sman.bdman.FindBldSpecByNameStart(bld.osmnamestart);
@@ -95,6 +98,11 @@ public class B121Willow : MonoBehaviour
             chg = true;
         }
         if (osmbld.Get() != _b121_osmbld)
+        {
+            //Debug.Log($"b121 osmbld changed to {osmbld.Get()}");
+            chg = true;
+        }
+        if (wilbld.Get() != _b121_wilbld)
         {
             //Debug.Log($"b121 osmbld changed to {osmbld.Get()}");
             chg = true;
@@ -287,8 +295,12 @@ public class B121Willow : MonoBehaviour
             _b121_osmbld = sman.bdman.osmblds.Get();
 
         }
-        if (b121go)
+        if (b121go!=null)
         {
+            if (wilbld.Get() != b121go.activeSelf)
+            {
+                b121go.SetActive(wilbld.Get());
+            }
             if (osmbld.Get() != _b121_osmbld)
             {
                 var stat = osmbld.Get();
@@ -686,6 +698,19 @@ public class B121Willow : MonoBehaviour
         }
         osmbld.SetAndSave(newosmstat);
         _b121_osmbld = newosmstat;
+    }
+
+    public void ToggleWil()
+    {
+        var stat = wilbld.Get();
+        var newwilstat = !stat;
+        // sman.bdman.RegisterBsBld(bspec, bld); // done at build registration time now
+        if (b121go != null)
+        {
+            b121go.SetActive(newwilstat);
+        }
+        wilbld.SetAndSave(newwilstat);
+        _b121_wilbld = newwilstat;
     }
 
     public void ActuateMaterialMode(bool writepartlisttofile=false)
