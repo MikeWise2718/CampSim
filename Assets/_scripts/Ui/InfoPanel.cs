@@ -96,25 +96,25 @@ public class InfoPanel : MonoBehaviour
     (int nexist,int nenabled) CountColliders()
     {
         var collid = GameObject.FindObjectsOfType<Collider>();
-        if (Time.time - lastCountSaveTime > 5 && savecnt==0)
-        {
-            var collidlist = new List<string>();
-            int i = 0;
-            foreach (var c in collid)
-            {
-                var eflag = "";
-                if (c.enabled)
-                {
-                    eflag = "enabled";
-                }
-                var line = $"{i} - {c.name}  - {eflag}";
-                collidlist.Add(line);
-                i++;
-            }
-            GraphAlgos.GraphUtil.writeListToFile(collidlist, "collidlist.txt");
-            lastCountSaveTime = Time.time;
-            savecnt++;
-        }
+        //if (Time.time - lastCountSaveTime > 5 && savecnt==0)
+        //{
+        //    var collidlist = new List<string>();
+        //    int i = 0;
+        //    foreach (var c in collid)
+        //    {
+        //        var eflag = "";
+        //        if (c.enabled)
+        //        {
+        //            eflag = "enabled";
+        //        }
+        //        var line = $"{i} - {c.name}  - {eflag}";
+        //        collidlist.Add(line);
+        //        i++;
+        //    }
+        //    GraphAlgos.GraphUtil.writeListToFile(collidlist, "collidlist.txt");
+        //    lastCountSaveTime = Time.time;
+        //    savecnt++;
+        //}
         var nenabled = 0;
         foreach (var c in collid)
         {

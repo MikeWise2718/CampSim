@@ -120,6 +120,7 @@ namespace CampusSimulator
         public PersonMan psman;
         public VehicleMan veman;
         public DroneMan drman;
+        public FlightVolMan fvman;
         public ZoneMan znman;
         public FrameMan frman;
         public CalibMan cbman;
@@ -217,6 +218,7 @@ namespace CampusSimulator
             psman = FindObjectOfType<PersonMan>();
             veman = FindObjectOfType<VehicleMan>();
             drman = FindObjectOfType<DroneMan>();
+            fvman = FindObjectOfType<FlightVolMan>();
             frman = FindObjectOfType<FrameMan>();
 
             dfman.sman = this;
@@ -236,6 +238,7 @@ namespace CampusSimulator
             psman.sman = this;
             veman.sman = this;
             drman.sman = this;
+            fvman.sman = this;
             frman.sman = this;
 
             bool subbordinatethemall = false;
@@ -254,6 +257,7 @@ namespace CampusSimulator
                 psman.transform.parent = rgo.transform;
                 veman.transform.parent = rgo.transform;
                 drman.transform.parent = rgo.transform;
+                fvman.transform.parent = rgo.transform;
                 frman.transform.parent = rgo.transform;
                 dfman.transform.parent = rgo.transform;
             }
@@ -371,6 +375,7 @@ namespace CampusSimulator
                     gaman.DelGarages();
                     vcman.DelVidcams();
                     drman.DeleteDroneInfra();
+                    fvman.DelFlightVols();
                     veman.DelVehicles();
                     lcman.DeleteGrcGos();
                     lcman.DeleteAllNodes();
@@ -410,6 +415,7 @@ namespace CampusSimulator
                     psman.ModelInitialize(newscene);
                     veman.ModelInitiailze(newscene);
                     drman.ModelInitiailze(newscene);
+                    fvman.ModelInitiailze(newscene);
                     jnman.ModelInitialize(newscene);
                     frman.ModelInitialize(newscene);
                     uiman.ModelInitialize(newscene);
@@ -436,7 +442,8 @@ namespace CampusSimulator
                     vcman.ModelBuild();
                     psman.ModelBuild(); // needs to be before we populate the buildings
                     veman.ModelBuild(); // needs to be before we populate the garages
-                    drman.ModelBuild(); // needs to be before we populate the garages
+                    drman.ModelBuild();
+                    fvman.ModelBuild();
 
                     //bdman.SetScenePostLinkCloud(newscene);// building details that need nodes and links
                     //gaman.SetScenePostLinkCloud(newscene);// garage details that need nodes and links
@@ -456,7 +463,8 @@ namespace CampusSimulator
 
                     bdman.ModelBuildPostLinkCloud();// building details that need nodes and links - i.e destrooms are derived from nodes - floor heights are also adjusted!
                     gaman.ModelBuildPostLinkCloud();// garage details that need nodes and links
-                    drman.ModelBuildPostLinkCloud();// dronman details that need nodes and links
+                    drman.ModelBuildPostLinkCloud();// droneman details that need nodes and links
+                    fvman.ModelBuildPostLinkCloud();
 
                     setsw.Stop();
                     finsw.Start();
