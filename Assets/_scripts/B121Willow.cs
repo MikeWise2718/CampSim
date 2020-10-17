@@ -208,40 +208,7 @@ public class B121Willow : MonoBehaviour
         var rv = bspec.GetFloorHeight(floor, includeAltitude: includeAltitude);
         return rv;
     }
-    public float GetFloorHeightOld(int floor, bool includeAltitude = true)
-    {
-        float rv;
-        if (floor < 0) floor = 0;
-        if (floor > 3) floor = 3;
-        switch(floor)
-        {
-            default:
-            case 0:
-            case 1:
-                rv = 0.21f;
-                break;
-            case 2:
-                rv = 4.30f;
-                break;
-            case 3:
-                rv = 8.40f;
-                break;
-        }
-        //if (bspec == null)
-        //{
-        //    sman.LggError("B121Willow.GetFloorHeight - bspec null with includeAltitude=true");
-        //}
-        //else
-        //{
-        //    rv += bspec.GetGround();
-        //}
 
-        if (includeAltitude)
-        {
-            rv += ymapheight;
-        }
-        return rv;
-    }
     public void MakeItSo()
     {
         bool loadedThisTime = false;
@@ -249,15 +216,19 @@ public class B121Willow : MonoBehaviour
         if (loadmodel.Get() && !_b121_WillowModelLoaded)
         {
             b121go = new GameObject("B121-Willow");
-            bpos = new Vector3(-789, ymapheight, -436);// 1 cm raised to eliminate z fighting
-            ymapheight = sman.mpman.GetHeight(bpos.x, bpos.z);
-            if (sman.mpman.useElevations.Get())
-            {
-                ymapheight -= 0.10f; // adjust for map irrgularities - doesn't work well
-            }
+            //bpos = new Vector3(-789, ymapheight, -436);// 1 cm raised to eliminate z fighting
+            //ymapheight = sman.mpman.GetHeight(bpos.x, bpos.z);
+            //if (sman.mpman.useElevations.Get())
+            //{
+            //    ymapheight -= 0.10f; // adjust for map irrgularities - doesn't work well
+            //}
+            //var bps = bpos.ToString("f3");
+            //sman.Lgg($"Loading B121 -- height - bpos:{bps} yheit(from map):{ymapheight:f2} total:{ymapheight+bpos.y:f2}","orange");
+            var bsheit = GetFloorHeight(0, includeAltitude: true);
+            bpos = new Vector3(-789, bsheit, -436);
             var bps = bpos.ToString("f3");
-            sman.Lgg($"Loading B121 -- height - bpos:{bps} yheit(from map):{ymapheight:f2} total:{ymapheight+bpos.y:f2}","orange");
-            bpos = new Vector3(bpos.x, ymapheight + bpos.y, bpos.z);
+            sman.Lgg($"Loading B121 -- bpos:{bps} bsheit:{bsheit:f3}", "orange");
+            bpos = new Vector3(bpos.x, bsheit, bpos.z);
             b121go.transform.Rotate(new Vector3(0, -20.15f, 0));
             b121go.transform.position = bpos;
             b121go.transform.SetParent(this.transform,worldPositionStays:false);

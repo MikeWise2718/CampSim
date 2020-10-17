@@ -182,6 +182,7 @@ public class B19Willow : MonoBehaviour
                 _b19_doors = true;
                 _b19_hvac = true;
                 _b19_osmbld = sman.bdman.osmblds.Get();
+                _b19_wilbld = true;
                 loadedThisTime = true;
             }
         }

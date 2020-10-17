@@ -152,7 +152,7 @@ namespace CampusSimulator
                 clrbut("B19HvacButton", "yellow", loc, b19comp.hvac.Get(), "Hvac");
                 //var glass = b19comp.b19_materialMode.Get() == B19Willow.B19_MaterialMode.glass;
                 clrbut("B19OsmButton", "yellow", loc, b19comp.osmbld.Get(), "Osm");
-                clrbut("B19WilButton", "yellow", loc, b19comp.osmbld.Get(), "Wil");
+                clrbut("B19WilButton", "yellow", loc, b19comp.wilbld.Get(), "Wil");
             }
 
             var b121comp = sman.bdman.GetB121();
