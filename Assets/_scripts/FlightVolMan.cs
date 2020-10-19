@@ -46,9 +46,18 @@ namespace CampusSimulator
                     }
             }
         }
-
+        BldPolyGen bpg;
         public void ModelBuild()
         {
+            var doflightvols = true;
+
+            if (doflightvols)
+            {
+                var pgvd = new PolyGenVekMapDel(sman.mpman.GetHeightVector3);
+                bpg = new BldPolyGen();
+                var llm = sman.mpman.GetLatLongMap();
+                //var osmbs = bpg.GenBuildingsInRegion(osmroot, waysdflst, linksdflist, nodesdflist, pgvd: pgvd, llm: llm);
+            }
         }
 
         public void ModelBuildPostLinkCloud()
@@ -67,9 +76,17 @@ namespace CampusSimulator
 
         public void DeleteGos()
         {
+            foreach (var fv in vols)
+            {
+                fv.DeleteGos();
+            }
         }
         public void CreateGos()
         {
+            foreach(var fv in vols)
+            {
+                fv.CreateGos();
+            }
         }
         public void RefreshGos()
         {

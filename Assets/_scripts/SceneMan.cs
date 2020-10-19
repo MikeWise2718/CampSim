@@ -1515,6 +1515,7 @@ namespace CampusSimulator
             floorplanctrl.RefreshGos();
             gaman.RefreshGos();
             bdman.RefreshGos();
+            fvman.RefreshGos();
             vcman.RefreshGos();
             trman.RefreshGos();
             psman.RefreshGos();
