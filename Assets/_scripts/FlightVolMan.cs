@@ -26,8 +26,25 @@ namespace CampusSimulator
             namelist.ForEach(name => DelFlightVol(name));
         }
 
+        public void MakeNewFlightVol(string fvname,string filename)
+        {
+            var go = new GameObject(fvname);
+            go.transform.SetParent(this.transform, worldPositionStays: false);
+            var fv = go.AddComponent<FlightVol>();
+            fv.Init(this,filename);
+            vols.Add(fv);
+        }
+
         public void ModelInitiailze(SceneSelE newregion)
         {
+            switch (newregion)
+            {
+                case SceneSelE.Seatac:
+                    {
+                        MakeNewFlightVol("SeattleB", "FlightVols/seattleclassb.geojson");
+                        break;
+                    }
+            }
         }
 
         public void ModelBuild()
