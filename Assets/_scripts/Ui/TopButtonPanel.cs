@@ -220,7 +220,7 @@ namespace CampusSimulator
             return rv;
         }
 
-        public const string tbprootfiltlist = "All,Sim,Trx,B19,B121,Evac,Frame";
+        public const string tbprootfiltlist = "All,Sim,Trx,B19,B121,Evac,Frame,Fvol";
 
         public string tbpfiltlist;
 
