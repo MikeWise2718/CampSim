@@ -344,9 +344,9 @@ namespace CampusSimulator
             {
                 pers.persGo.gameObject.SetActive(enabled);
             }
-            else
+            else if (!pers.isdronelike)
             {
-                Debug.Log("null persgo for " + pers.personName);
+                Debug.Log("null persgo for non-dronelike " + pers.personName);
             }
             pers.SetVisiblity(GetEnabled(pers.empStatus));
             return enabled;

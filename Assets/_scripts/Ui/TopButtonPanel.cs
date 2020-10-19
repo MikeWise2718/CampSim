@@ -74,6 +74,11 @@ namespace CampusSimulator
             {"#B121Spacer" ,new TopButtonMan.TopButSpec("#B121Spacer","#", "Spacerbutton","cen",0,"stretch",10,"B121")},
 
 
+             {"FvGridButton" ,new TopButtonMan.TopButSpec("FvGridButton","Gd", "Show Flight Volume Grids","cen",0,"stretch",10,"Fvol")},
+             {"FvTranButton" ,new TopButtonMan.TopButSpec("FvTranButton","Tr", "Show Flight Volume Transparently","cen",0,"stretch",10,"Fvol")},
+             {"#FvSpacer" ,new TopButtonMan.TopButSpec("#FvSpacer","#", "Spacerbutton","cen",0,"stretch",10,"Fvol")},
+
+
             {"ShowTracksButton",new TopButtonMan.TopButSpec("ShowTracksButton","Tracks", "Show GPX Tracks","cen",0,"stretch",10,"Trx")},
             {"#TrxSpacer" ,new TopButtonMan.TopButSpec("#TrxSpacer","#", "Spacerbutton","cen",0,"stretch",10,"Trx")},
 
@@ -202,6 +207,7 @@ namespace CampusSimulator
             { "B19","B19 options" },
             { "Evac","Evacuation options" },
             { "Frame","Simulated Objectt detection" },
+            { "Fvol","Flight Volume Managemnt" },
 
         };
         public string GetTbtClassToolTip(string option)
@@ -223,6 +229,9 @@ namespace CampusSimulator
             tbpfiltlist = OptionsPanel.tbpfiltlistDefault;
             switch(curscene)
             {
+                case SceneSelE.Seatac:
+                    tbpfiltlist = "Fvol,All";
+                    break;
                 case SceneSelE.MsftSmall:
                     tbpfiltlist = ",All";
                     break;

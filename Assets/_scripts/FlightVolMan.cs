@@ -12,8 +12,10 @@ namespace CampusSimulator
 
         public SceneMan sman = null;
 
-        public int nvols = 0;
         public List<FlightVol> vols = new List<FlightVol>();
+
+        public UxSettingBool gridVols = new UxSettingBool("gridVols", false);
+        public UxSettingBool tranVols = new UxSettingBool("tranVols", false);
 
 
         public void InitPhase0()
@@ -22,8 +24,11 @@ namespace CampusSimulator
 
         public void DelFlightVols()
         {
+            sman.Lgg($"DeleteFlightVols called nvols:{vols.Count}", "red");
             var namelist = new List<string>(nameLookup.Keys);
             namelist.ForEach(name => DelFlightVol(name));
+            nameLookup = new Dictionary<string, FlightVol>();
+            vols = new List<FlightVol>();
         }
 
         public void MakeNewFlightVol(string fvname,string filename)
@@ -33,19 +38,34 @@ namespace CampusSimulator
             var fv = go.AddComponent<FlightVol>();
             fv.Init(this,filename);
             vols.Add(fv);
+            nameLookup[fvname] = fv;
         }
 
         public void ModelInitiailze(SceneSelE newregion)
         {
+            nameLookup = new Dictionary<string, FlightVol>();
+            vols = new List<FlightVol>();
+            sman.Lgg($"ModelInitialize {newregion} nvols:{vols.Count}","red");
             switch (newregion)
             {
+                case SceneSelE.MsftB19focused:
+                case SceneSelE.MsftB121focused:
+                case SceneSelE.MsftCoreCampus:
                 case SceneSelE.Seatac:
                     {
                         MakeNewFlightVol("SeattleB", "FlightVols/seattleclassb.geojson");
                         break;
                     }
             }
+            InitializeValues();
         }
+        public void InitializeValues()
+        {
+            gridVols.GetInitial(false);
+            tranVols.GetInitial(false);
+        }
+
+
         BldPolyGen bpg;
         public void ModelBuild()
         {
@@ -71,6 +91,9 @@ namespace CampusSimulator
 
         public void DelFlightVol(string name)
         {
+            var fv = nameLookup[name];
+            fv.Delete();
+            Destroy(fv.gameObject);
         }
 
 

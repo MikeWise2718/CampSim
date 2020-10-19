@@ -67,7 +67,7 @@ namespace CampusSimulator
             this.fm = fm;
             this.fname = fname;
             this.features = new List<FvFeatture>();
-            var str = ReadResourceAsString(fname);
+            var str = ReadResourceAsString(this.fname);
 
             var json = JSON.Parse(str);
 
@@ -122,7 +122,8 @@ namespace CampusSimulator
         public void CreateGos()
         {
             var llm = fm.sman.mpman.GetLatLongMap();
-            fvgo = new GameObject(name);
+            var fname = $"fv-{name}";
+            fvgo = new GameObject(fname);
             foreach (var f in features)
             {
                 var n = f.fvcoords.Count;
@@ -132,20 +133,35 @@ namespace CampusSimulator
                 {
                     var c = f.fvcoords[i];
                     pt = llm.xycoord(c.lat, c.lng,(float) c.alt);
-                    var cname = $"c{i}";
+                    var cname = $"fv-c{i}";
                     var cgo = qut.CreateMarkerSphere(cname, pt,size:600);
                     cgo.transform.parent = fvgo.transform;
                     if (i>0)
                     {
-                        qut.CreatePipe(cname,pt0,pt, size: 300  );
+                        var pname = $"fv-p{i-1}:{i}";
+                        var pip = qut.CreatePipe( pname, pt0, pt, size: 300  );
+                        pip.transform.parent = fvgo.transform;
                     }
                     pt0 = pt;
                 }
             }
+            fvgo.transform.parent = this.transform;
 
         }
         public void DeleteGos()
         {
+            if (fvgo != null)
+            {
+                fm.sman.Lgg("Deleting fvgo");
+                Destroy(fvgo);
+            }
+            fvgo = null;
+        }
+
+        public void Delete()
+        {
+            DeleteGos();
+            features = new List<FvFeatture>();
         }
 
             // Start is called before the first frame update
