@@ -61,6 +61,7 @@ namespace CampusSimulator
             {"B19FloorsButton",new TopButtonMan.TopButSpec("B19FloorsButton", "Flur", "Show floors","cen",0,"stretch",10,"B19")},
             {"B19DoorsButton",new TopButtonMan.TopButSpec("B19DoorsButton", "Door", "Show floors","cen",0,"stretch",10,"B19")},
             {"B19OsmButton",new TopButtonMan.TopButSpec("B19OsmButton", "Osm", "Show OSM Building","cen",0,"stretch",10,"B19")},
+            {"B19WilButton",new TopButtonMan.TopButSpec("B19WilButton", "Wil", "Show Willow Building Model","cen",0,"stretch",10,"B19")},
             {"#B19Spacer" ,new TopButtonMan.TopButSpec("#B19Spacer","#", "Spacerbutton","cen",0,"stretch",10,"B19")},
 
 
@@ -69,7 +70,13 @@ namespace CampusSimulator
             {"B121ElecButton" ,new TopButtonMan.TopButSpec("B121ElecButton","El", "Show Electrical System","cen",0,"stretch",10,"B121")},
             {"B121PlumButton" ,new TopButtonMan.TopButSpec("B121PlumButton","Pb", "Show Plumbing System","cen",0,"stretch",10,"B121")},
             {"B121OsmButton" ,new TopButtonMan.TopButSpec("B121OsmButton","Osm", "Show OsmBUilding","cen",0,"stretch",10,"B121")},
+            {"B121WilButton",new TopButtonMan.TopButSpec("B121WilButton", "Wil", "Show Willow Building Model","cen",0,"stretch",10,"B121")},
             {"#B121Spacer" ,new TopButtonMan.TopButSpec("#B121Spacer","#", "Spacerbutton","cen",0,"stretch",10,"B121")},
+
+
+             {"FvGridButton" ,new TopButtonMan.TopButSpec("FvGridButton","Gd", "Show Flight Volume Grids","cen",0,"stretch",10,"Fvol")},
+             {"FvTranButton" ,new TopButtonMan.TopButSpec("FvTranButton","Tr", "Show Flight Volume Transparently","cen",0,"stretch",10,"Fvol")},
+             {"#FvSpacer" ,new TopButtonMan.TopButSpec("#FvSpacer","#", "Spacerbutton","cen",0,"stretch",10,"Fvol")},
 
 
             {"ShowTracksButton",new TopButtonMan.TopButSpec("ShowTracksButton","Tracks", "Show GPX Tracks","cen",0,"stretch",10,"Trx")},
@@ -107,6 +114,10 @@ namespace CampusSimulator
             butspec["UnkButton"].action = delegate { DetectUnkButton(); };
             butspec["Vt2DButton"].action = delegate { Vt2DButton(); };
 
+            butspec["FvGridButton"].action = delegate { ToggleFvGrid(); };
+            butspec["FvTranButton"].action = delegate { ToggleFvTran(); };
+
+
             butspec["B19Level1Button"].action = delegate { ToggleB19Level1(); };
             butspec["B19Level2Button"].action = delegate { ToggleB19Level2(); };
             butspec["B19Level3Button"].action = delegate { ToggleB19Level3(); };
@@ -114,6 +125,7 @@ namespace CampusSimulator
             butspec["B19FloorsButton"].action = delegate { ToggleB19Floors(); };
             butspec["B19DoorsButton"].action = delegate { ToggleB19Doors(); };
             butspec["B19OsmButton"].action = delegate { ToggleB19Osm(); };
+            butspec["B19WilButton"].action = delegate { ToggleB19Wil(); };
             butspec["B19GlassWallsButton"].action = delegate { ToggleB19GlassMode(); };
 
             butspec["B121TranButton"].action = delegate { B121MakeTransButton(); };
@@ -121,6 +133,7 @@ namespace CampusSimulator
             butspec["B121ElecButton"].action = delegate { ToggleB121lighting(); };
             butspec["B121PlumButton"].action = delegate { ToggleB121plumbing(); };
             butspec["B121OsmButton"].action = delegate { ToggleB121osm(); };
+            butspec["B121WilButton"].action = delegate { ToggleB121wil(); };
 
         }
 
@@ -148,15 +161,18 @@ namespace CampusSimulator
                 clrbut("B19HvacButton", "yellow", loc, b19comp.hvac.Get(), "Hvac");
                 //var glass = b19comp.b19_materialMode.Get() == B19Willow.B19_MaterialMode.glass;
                 clrbut("B19OsmButton", "yellow", loc, b19comp.osmbld.Get(), "Osm");
+                clrbut("B19WilButton", "yellow", loc, b19comp.wilbld.Get(), "Wil");
             }
 
             var b121comp = sman.bdman.GetB121();
+            if (b121comp!=null)
             {
                 clrbut("B121TranButton", "lightblue", loc, b121comp.glasswalls.Get(), "Gl");
                 clrbut("B121HvacButton", "yellow", loc, b121comp.hvac.Get(), "Hv");
                 clrbut("B121ElecButton", "yellow", loc, b121comp.lighting.Get(), "El");
                 clrbut("B121PlumButton", "yellow", loc, b121comp.plumbing.Get(), "Pb");
                 clrbut("B121OsmButton", "yellow", loc, b121comp.osmbld.Get(), "Osm");
+                clrbut("B121WilButton", "yellow", loc, b121comp.wilbld.Get(), "Wil");
             }
 
             clrbut("Vt2dButton", "lightblue", loc, sman.frman.visibilityTiedToDetectability.Get(), "Vt2D");
@@ -167,6 +183,9 @@ namespace CampusSimulator
             clrbut("ShadowButton", "lightblue", loc, sman.jnman.shadowJourney, "Shad");
             //Debug.Log($"ColorizeButtonStates sman.jnman.freezeJourneys:{sman.jnman.freezeJourneys}");
             clrbut("FreezeSimButton", "lightblue", loc, sman.jnman.freezeJourneys, "Frz");
+
+            clrbut("FvGridButton", "pink", loc, sman.fvman.gridVols.Get(), "Gd");
+            clrbut("FvTranButton", "pink", loc, sman.fvman.tranVols.Get(), "Tr");
         }
 
         void LinkObjectsAndComponents()
@@ -195,6 +214,7 @@ namespace CampusSimulator
             { "B19","B19 options" },
             { "Evac","Evacuation options" },
             { "Frame","Simulated Objectt detection" },
+            { "Fvol","Flight Volume Managemnt" },
 
         };
         public string GetTbtClassToolTip(string option)
@@ -207,7 +227,7 @@ namespace CampusSimulator
             return rv;
         }
 
-        public const string tbprootfiltlist = "All,Sim,Trx,B19,B121,Evac,Frame";
+        public const string tbprootfiltlist = "All,Sim,Trx,B19,B121,Evac,Frame,Fvol";
 
         public string tbpfiltlist;
 
@@ -216,6 +236,9 @@ namespace CampusSimulator
             tbpfiltlist = OptionsPanel.tbpfiltlistDefault;
             switch(curscene)
             {
+                case SceneSelE.Seatac:
+                    tbpfiltlist = "Fvol,All";
+                    break;
                 case SceneSelE.MsftSmall:
                     tbpfiltlist = ",All";
                     break;
@@ -485,6 +508,17 @@ namespace CampusSimulator
             ColorizeButtonStates();
         }
 
+        public void ToggleFvGrid()
+        {
+            sman.fvman.ToggleFvGrid();
+            ColorizeButtonStates();
+        }
+        public void ToggleFvTran()
+        {
+            sman.fvman.ToggleFvTran();
+            ColorizeButtonStates();
+        }
+
 
         public void ToggleB19Level1()
         {
@@ -522,6 +556,11 @@ namespace CampusSimulator
             sman.bdman.ToggleB19osm();
             ColorizeButtonStates();
         }
+        public void ToggleB19Wil()
+        {
+            sman.bdman.ToggleB19wil();
+            ColorizeButtonStates();
+        }
         public void ToggleB19GlassMode()
         {
             sman.bdman.ToggleB19glassmode();
@@ -554,6 +593,12 @@ namespace CampusSimulator
         public void ToggleB121osm()
         {
             sman.bdman.ShowBld121OsmButton();
+            ColorizeButtonStates();
+        }
+
+        public void ToggleB121wil()
+        {
+            sman.bdman.ShowBld121WilButton();
             ColorizeButtonStates();
         }
 

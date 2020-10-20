@@ -14,6 +14,7 @@ public class B121Willow : MonoBehaviour
     public UxSetting<bool> lighting = new UxSetting<bool>("B121_lights", true);
     public UxSetting<bool> plumbing = new UxSetting<bool>("B121_plumbing", true);
     public UxSetting<bool> osmbld = new UxSetting<bool>("B121_osmbld", false);
+    public UxSetting<bool> wilbld = new UxSetting<bool>("B121_wilbld", false);
     public UxSetting<bool> glasswalls = new UxSetting<bool>("B121_glasswalls", false);
 
     public CampusSimulator.SceneMan sman=null;
@@ -35,6 +36,7 @@ public class B121Willow : MonoBehaviour
     bool _b121_lighting = false;
     bool _b121_plumbing = false;
     bool _b121_osmbld = false;
+    bool _b121_wilbld = false;
     bool _b121_glasswalls = false;
     B121_MaterialMode lastMaterialMode;
 
@@ -58,6 +60,7 @@ public class B121Willow : MonoBehaviour
         _b121_lighting = lighting.GetInitial(false);
         _b121_plumbing = plumbing.GetInitial(false);
         _b121_osmbld = osmbld.GetInitial(false);
+        _b121_wilbld = wilbld.GetInitial(false);
         _b121_glasswalls = glasswalls.GetInitial(false);
         lastMaterialMode = b121_materialMode.Get();
         bspec = sman.bdman.FindBldSpecByNameStart(bld.osmnamestart);
@@ -95,6 +98,11 @@ public class B121Willow : MonoBehaviour
             chg = true;
         }
         if (osmbld.Get() != _b121_osmbld)
+        {
+            //Debug.Log($"b121 osmbld changed to {osmbld.Get()}");
+            chg = true;
+        }
+        if (wilbld.Get() != _b121_wilbld)
         {
             //Debug.Log($"b121 osmbld changed to {osmbld.Get()}");
             chg = true;
@@ -200,40 +208,7 @@ public class B121Willow : MonoBehaviour
         var rv = bspec.GetFloorHeight(floor, includeAltitude: includeAltitude);
         return rv;
     }
-    public float GetFloorHeightOld(int floor, bool includeAltitude = true)
-    {
-        float rv;
-        if (floor < 0) floor = 0;
-        if (floor > 3) floor = 3;
-        switch(floor)
-        {
-            default:
-            case 0:
-            case 1:
-                rv = 0.21f;
-                break;
-            case 2:
-                rv = 4.30f;
-                break;
-            case 3:
-                rv = 8.40f;
-                break;
-        }
-        //if (bspec == null)
-        //{
-        //    sman.LggError("B121Willow.GetFloorHeight - bspec null with includeAltitude=true");
-        //}
-        //else
-        //{
-        //    rv += bspec.GetGround();
-        //}
 
-        if (includeAltitude)
-        {
-            rv += ymapheight;
-        }
-        return rv;
-    }
     public void MakeItSo()
     {
         bool loadedThisTime = false;
@@ -241,15 +216,19 @@ public class B121Willow : MonoBehaviour
         if (loadmodel.Get() && !_b121_WillowModelLoaded)
         {
             b121go = new GameObject("B121-Willow");
-            bpos = new Vector3(-789, ymapheight, -436);// 1 cm raised to eliminate z fighting
-            ymapheight = sman.mpman.GetHeight(bpos.x, bpos.z);
-            if (sman.mpman.useElevations.Get())
-            {
-                ymapheight -= 0.10f; // adjust for map irrgularities - doesn't work well
-            }
+            //bpos = new Vector3(-789, ymapheight, -436);// 1 cm raised to eliminate z fighting
+            //ymapheight = sman.mpman.GetHeight(bpos.x, bpos.z);
+            //if (sman.mpman.useElevations.Get())
+            //{
+            //    ymapheight -= 0.10f; // adjust for map irrgularities - doesn't work well
+            //}
+            //var bps = bpos.ToString("f3");
+            //sman.Lgg($"Loading B121 -- height - bpos:{bps} yheit(from map):{ymapheight:f2} total:{ymapheight+bpos.y:f2}","orange");
+            var bsheit = GetFloorHeight(0, includeAltitude: true);
+            bpos = new Vector3(-789, bsheit, -436);
             var bps = bpos.ToString("f3");
-            sman.Lgg($"Loading B121 -- height - bpos:{bps} yheit(from map):{ymapheight:f2} total:{ymapheight+bpos.y:f2}","orange");
-            bpos = new Vector3(bpos.x, ymapheight + bpos.y, bpos.z);
+            sman.Lgg($"Loading B121 -- bpos:{bps} bsheit:{bsheit:f3}", "orange");
+            bpos = new Vector3(bpos.x, bsheit, bpos.z);
             b121go.transform.Rotate(new Vector3(0, -20.15f, 0));
             b121go.transform.position = bpos;
             b121go.transform.SetParent(this.transform,worldPositionStays:false);
@@ -287,8 +266,12 @@ public class B121Willow : MonoBehaviour
             _b121_osmbld = sman.bdman.osmblds.Get();
 
         }
-        if (b121go)
+        if (b121go!=null)
         {
+            if (wilbld.Get() != b121go.activeSelf)
+            {
+                b121go.SetActive(wilbld.Get());
+            }
             if (osmbld.Get() != _b121_osmbld)
             {
                 var stat = osmbld.Get();
@@ -686,6 +669,19 @@ public class B121Willow : MonoBehaviour
         }
         osmbld.SetAndSave(newosmstat);
         _b121_osmbld = newosmstat;
+    }
+
+    public void ToggleWil()
+    {
+        var stat = wilbld.Get();
+        var newwilstat = !stat;
+        // sman.bdman.RegisterBsBld(bspec, bld); // done at build registration time now
+        if (b121go != null)
+        {
+            b121go.SetActive(newwilstat);
+        }
+        wilbld.SetAndSave(newwilstat);
+        _b121_wilbld = newwilstat;
     }
 
     public void ActuateMaterialMode(bool writepartlisttofile=false)

@@ -338,6 +338,15 @@ namespace CampusSimulator
             //Debug.Log($"Togglingb19osm new val{curval}");
             b19comp.MakeItSo();
         }
+        public void ToggleB19wil()
+        {
+            var b19comp = GetB19();
+            var curval = b19comp.wilbld.Get();
+            curval = !curval;
+            b19comp.ActuateWilStatus(curval);
+            b19comp.wilbld.SetAndSave(curval);
+            //Debug.Log($"Togglingb19osm new val{curval}");
+        }
 
         public void ToggleB19glassmode()
         {
@@ -433,6 +442,12 @@ namespace CampusSimulator
         {
             var b121comp = GetB121();
             b121comp.ToggleOsm();
+        }
+
+        public void ShowBld121WilButton()
+        {
+            var b121comp = GetB121();
+            b121comp.ToggleWil();
         }
 
 
@@ -616,14 +631,14 @@ namespace CampusSimulator
                 nDronesOnPads += pad.GetAllPeopleInRoom().Count;
             }
         }
-        public void MakeBuildings(string filtername)
+        public void MakeBuildings(string predeffiltername)
         {
-            if (filtername != "")
+            if (predeffiltername != "")
             {
-                var bldlst = Building.GetPredefinedBuildingNames(filtername);
+                var bldlst = Building.GetPredefinedBuildingNames(predeffiltername);
                 bldlst.ForEach(mbname => MakeBuilding(mbname));
-                bldspecs.ForEach(osmbs => MakeOsmBuilding(osmbs));
             }
+            bldspecs.ForEach(osmbs => MakeOsmBuilding(osmbs));
         }
         public string presetEvacBldName = "";
         public void EvacPresetBld()

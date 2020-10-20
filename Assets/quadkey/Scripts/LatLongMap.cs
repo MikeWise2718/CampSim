@@ -770,12 +770,12 @@ namespace Aiskwk.Map
             this.origin = origin;
         }
 
-        public Vector3 xycoord(double lng, double lat)
+        public Vector3 xycoord(double lng, double lat, float alt=0)
         {
             // backwards because I specified the forumla wrong
             var x = maps.xmap.Map(lng, lat);
             var z = maps.zmap.Map(lng, lat);
-            var rv = new Vector3((float)x, 0, (float)z);
+            var rv = new Vector3((float)x, alt, (float)z);
             return rv;
         }
         public Vector2 llcoord(double x, double z)

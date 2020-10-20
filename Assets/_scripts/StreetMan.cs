@@ -166,6 +166,10 @@ namespace CampusSimulator
                     regname = "seattle";
                     //ptscale = 1000f;
                     break;
+                case SceneSelE.Seatac:
+                    regname = "seatac";
+                    //ptscale = 1000f;
+                    break;
                 case SceneSelE.SanFrancisco:
                     regname = "sanfrancisco";
                     //ptscale = 1000f;
