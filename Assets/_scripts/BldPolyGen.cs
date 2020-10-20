@@ -265,7 +265,7 @@ public class OsmBldSpec
 
 public class BldPolyGen
 {
-    public GrafPolyGen pg;
+    public GrafPolyGen gpg;
 
     public BldPolyGen()
     {
@@ -274,7 +274,7 @@ public class BldPolyGen
 
     public void ReInit()
     {
-        pg = new GrafPolyGen();
+        gpg = new GrafPolyGen();
     }
 
     List<Vector3> ExtractNodes(string wid, string name, SimpleDf linksdf, SimpleDf nodedf, Dictionary<string, int> nodedict)
@@ -557,7 +557,7 @@ public class BldPolyGen
         //{
         //    Debug.Log("Bld34");
         //}
-        pg.SetOutline(bs.GetOutline());
+        gpg.SetOutline(bs.GetOutline());
         var clr = bs.GetColor();
         var dowalls = true;
         var dofloors = true;
@@ -570,7 +570,7 @@ public class BldPolyGen
         }
         var outline = bs.GetOutline();
  
-        var rv = pg.GenBld(parent, bs, clr, alf: alf, dowalls: dowalls, dofloors: dofloors, doroof: doroof,dosock:dosock, plotTesselation: plotTesselation, ptscale: ptscale, pgvd: pgvd);
+        var rv = gpg.GenBld(parent, bs, clr, alf: alf, dowalls: dowalls, dofloors: dofloors, doroof: doroof,dosock:dosock, plotTesselation: plotTesselation, ptscale: ptscale, pgvd: pgvd);
         return rv;
     }
 
@@ -667,17 +667,17 @@ public class BldPolyGen
             default:
             case ObjForm.star:
                 {
-                    pg.GenStarOutline(loc, 8, radiusinnner, radius);
+                    gpg.GenStarOutline(loc, 8, radiusinnner, radius);
                     break;
                 }
             case ObjForm.cross:
                 {
-                    pg.GenCrossOutline(loc, radius);
+                    gpg.GenCrossOutline(loc, radius);
                     break;
                 }
             case ObjForm.circle:
                 {
-                    pg.GenCylinderOutline(loc, 5, radius);
+                    gpg.GenCylinderOutline(loc, 5, radius);
                     break;
                 }
         }

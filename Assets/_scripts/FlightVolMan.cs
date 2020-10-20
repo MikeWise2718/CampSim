@@ -51,6 +51,10 @@ namespace CampusSimulator
                 case SceneSelE.MsftB19focused:
                 case SceneSelE.MsftB121focused:
                 case SceneSelE.MsftCoreCampus:
+                case SceneSelE.Seattle:
+                case SceneSelE.TeneriffeMtn:
+                case SceneSelE.HiddenLakeLookout:
+                case SceneSelE.TukSouCen:
                 case SceneSelE.Seatac:
                     {
                         MakeNewFlightVol("SeattleB", "FlightVols/seattleclassb.geojson");
@@ -82,22 +86,9 @@ namespace CampusSimulator
         BldPolyGen bpg;
         public void ModelBuild()
         {
-            var doflightvols = true;
-
-            if (doflightvols)
-            {
-                var pgvd = new PolyGenVekMapDel(sman.mpman.GetHeightVector3);
-                bpg = new BldPolyGen();
-                var llm = sman.mpman.GetLatLongMap();
-                //var osmbs = bpg.GenBuildingsInRegion(osmroot, waysdflst, linksdflist, nodesdflist, pgvd: pgvd, llm: llm);
-            }
         }
 
         public void ModelBuildPostLinkCloud()
-        {
-        }
-
-        public void RegisterDronePad(BldDronePad pad)
         {
         }
 

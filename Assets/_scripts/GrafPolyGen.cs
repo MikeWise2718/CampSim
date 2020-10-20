@@ -15,7 +15,7 @@ public class GrafPolyGen
     private PolyGenForm genform;
     private float wallheight = 1f;
     private float wallalf = 1f;
-    private string wallclr;
+    private string wallclr="orange";
     private List<(int id, Vector3 pt)> ptsbuf = null;
     private List<int> tribuf = null;
     private List<Vector2> uvbuf = null;
@@ -449,7 +449,7 @@ public class GrafPolyGen
         }
         return rv;
     }
-    public void Generate(GameObject parent, bool plotTesselation,bool onesided=false,PolyGenVekMapDel pgvd=null)
+    public void Generate(GameObject parent, bool plotTesselation=false,bool onesided=false,PolyGenVekMapDel pgvd=null)
     {
         GameObject go = null;
         switch (genform)

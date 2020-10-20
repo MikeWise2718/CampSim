@@ -4,6 +4,7 @@ using UnityEngine;
 using Aiskwk.SimpleJSON;
 using System;
 using Aiskwk.Map;
+using UnityEngine.UIElements;
 
 namespace CampusSimulator
 {
@@ -129,6 +130,7 @@ namespace CampusSimulator
                     var llm = fm.sman.mpman.GetLatLongMap();
                     var fname = $"fv-gridgo-{name}";
                     fvgridgo = new GameObject(fname);
+                    fvgridgo.transform.parent = this.transform;
                     foreach (var f in features)
                     {
                         var n = f.fvcoords.Count;
@@ -139,7 +141,7 @@ namespace CampusSimulator
                             var c = f.fvcoords[i];
                             pt = llm.xycoord(c.lat, c.lng, (float)c.alt);
                             var cname = $"fv-c{i}";
-                            var cgo = qut.CreateMarkerSphere(cname, pt, size: 600);
+                            var cgo = qut.CreateMarkerSphere(cname, pt, size: 600,clr:"green");
                             cgo.transform.parent = fvgridgo.transform;
                             if (i > 0)
                             {
@@ -150,7 +152,6 @@ namespace CampusSimulator
                             pt0 = pt;
                         }
                     }
-                    fvgridgo.transform.parent = this.transform;
                 }
                 else
                 {
@@ -168,22 +169,29 @@ namespace CampusSimulator
             {
                 if (fvtrango == null)
                 {
+                    var gpg = new GrafPolyGen();
                     var llm = fm.sman.mpman.GetLatLongMap();
                     var fname = $"fv-trango-{name}";
                     fvtrango = new GameObject(fname);
-                    var ptlist = new List<Vector3>();
+                    fvtrango.transform.parent = this.transform;
                     foreach (var f in features)
                     {
                         var n = f.fvcoords.Count;
                         var pt = Vector3.zero;
+                        var ptlist = new List<Vector3>();
                         for (int i = 0; i < n; i++)
                         {
                             var c = f.fvcoords[i];
                             pt = llm.xycoord(c.lat, c.lng, (float)c.alt);
                             ptlist.Add(pt);
                         }
+                        gpg.StartAccumulatingSegments();
+                        gpg.SetGenForm(PolyGenForm.tesselate);
+                        gpg.SetOutline(ptlist);
+                        var go = gpg.GenMesh("mesh",height:ptlist[0].y,clr:"blue",alf:0.5f );
+                        go.transform.parent = fvtrango.transform;
+                        Debug.Log($"Generated fvtran from {ptlist.Count} points");
                     }
-                    fvtrango.transform.parent = this.transform;
                 }
                 else
                 {

@@ -198,6 +198,10 @@ namespace Aiskwk.Map
             {
                 InitColorTable();
             }
+            if (name==null)
+            {
+                return false;
+            }
             return colorTable.ContainsKey(name);
         }
         static void InitColorTable()
