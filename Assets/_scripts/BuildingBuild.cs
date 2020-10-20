@@ -22,7 +22,10 @@ namespace CampusSimulator
             {
                 Object.Destroy(go);
             }
-            bldspec.bgo = null;// presumably we destroyed this guy too
+            if (bldspec != null)
+            {
+                bldspec.bgo = null;// presumably we destroyed this guy too
+            }
         }
         public static List<string> GetPredefinedBuildingNames(string filter)
         {

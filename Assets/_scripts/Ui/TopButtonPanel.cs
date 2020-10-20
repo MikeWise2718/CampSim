@@ -114,6 +114,10 @@ namespace CampusSimulator
             butspec["UnkButton"].action = delegate { DetectUnkButton(); };
             butspec["Vt2DButton"].action = delegate { Vt2DButton(); };
 
+            butspec["FvGridButton"].action = delegate { ToggleFvGrid(); };
+            butspec["FvTranButton"].action = delegate { ToggleFvTran(); };
+
+
             butspec["B19Level1Button"].action = delegate { ToggleB19Level1(); };
             butspec["B19Level2Button"].action = delegate { ToggleB19Level2(); };
             butspec["B19Level3Button"].action = delegate { ToggleB19Level3(); };
@@ -179,6 +183,9 @@ namespace CampusSimulator
             clrbut("ShadowButton", "lightblue", loc, sman.jnman.shadowJourney, "Shad");
             //Debug.Log($"ColorizeButtonStates sman.jnman.freezeJourneys:{sman.jnman.freezeJourneys}");
             clrbut("FreezeSimButton", "lightblue", loc, sman.jnman.freezeJourneys, "Frz");
+
+            clrbut("FvGridButton", "pink", loc, sman.fvman.gridVols.Get(), "Gd");
+            clrbut("FvTranButton", "pink", loc, sman.fvman.tranVols.Get(), "Tr");
         }
 
         void LinkObjectsAndComponents()
@@ -498,6 +505,17 @@ namespace CampusSimulator
         public void DetectUnkButton()
         {
             sman.frman.detectUnknown.SetAndSave(!sman.frman.detectUnknown.Get());
+            ColorizeButtonStates();
+        }
+
+        public void ToggleFvGrid()
+        {
+            sman.fvman.ToggleFvGrid();
+            ColorizeButtonStates();
+        }
+        public void ToggleFvTran()
+        {
+            sman.fvman.ToggleFvTran();
             ColorizeButtonStates();
         }
 

@@ -631,14 +631,14 @@ namespace CampusSimulator
                 nDronesOnPads += pad.GetAllPeopleInRoom().Count;
             }
         }
-        public void MakeBuildings(string filtername)
+        public void MakeBuildings(string predeffiltername)
         {
-            if (filtername != "")
+            if (predeffiltername != "")
             {
-                var bldlst = Building.GetPredefinedBuildingNames(filtername);
+                var bldlst = Building.GetPredefinedBuildingNames(predeffiltername);
                 bldlst.ForEach(mbname => MakeBuilding(mbname));
-                bldspecs.ForEach(osmbs => MakeOsmBuilding(osmbs));
             }
+            bldspecs.ForEach(osmbs => MakeOsmBuilding(osmbs));
         }
         public string presetEvacBldName = "";
         public void EvacPresetBld()

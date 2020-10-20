@@ -118,44 +118,100 @@ namespace CampusSimulator
             }
             return asset.text;
         }
-        GameObject fvgo = null;
+        GameObject fvgridgo = null;
+        GameObject fvtrango = null;
         public void CreateGos()
         {
-            var llm = fm.sman.mpman.GetLatLongMap();
-            var fname = $"fv-{name}";
-            fvgo = new GameObject(fname);
-            foreach (var f in features)
+            if (fm.gridVols.Get())
             {
-                var n = f.fvcoords.Count;
-                var pt = Vector3.zero;
-                var pt0 = pt;
-                for(int i=0; i<n; i++)
+                if (fvgridgo == null)
                 {
-                    var c = f.fvcoords[i];
-                    pt = llm.xycoord(c.lat, c.lng,(float) c.alt);
-                    var cname = $"fv-c{i}";
-                    var cgo = qut.CreateMarkerSphere(cname, pt,size:600);
-                    cgo.transform.parent = fvgo.transform;
-                    if (i>0)
+                    var llm = fm.sman.mpman.GetLatLongMap();
+                    var fname = $"fv-gridgo-{name}";
+                    fvgridgo = new GameObject(fname);
+                    foreach (var f in features)
                     {
-                        var pname = $"fv-p{i-1}:{i}";
-                        var pip = qut.CreatePipe( pname, pt0, pt, size: 300  );
-                        pip.transform.parent = fvgo.transform;
+                        var n = f.fvcoords.Count;
+                        var pt = Vector3.zero;
+                        var pt0 = pt;
+                        for (int i = 0; i < n; i++)
+                        {
+                            var c = f.fvcoords[i];
+                            pt = llm.xycoord(c.lat, c.lng, (float)c.alt);
+                            var cname = $"fv-c{i}";
+                            var cgo = qut.CreateMarkerSphere(cname, pt, size: 600);
+                            cgo.transform.parent = fvgridgo.transform;
+                            if (i > 0)
+                            {
+                                var pname = $"fv-p{i - 1}:{i}";
+                                var pip = qut.CreatePipe(pname, pt0, pt, size: 300);
+                                pip.transform.parent = fvgridgo.transform;
+                            }
+                            pt0 = pt;
+                        }
                     }
-                    pt0 = pt;
+                    fvgridgo.transform.parent = this.transform;
+                }
+                else
+                {
+                    fvgridgo.SetActive(true);
                 }
             }
-            fvgo.transform.parent = this.transform;
-
+            else
+            {
+                if(fvgridgo!=null)
+                {
+                    fvgridgo.SetActive(false);
+                }
+            }
+            if (fm.tranVols.Get())
+            {
+                if (fvtrango == null)
+                {
+                    var llm = fm.sman.mpman.GetLatLongMap();
+                    var fname = $"fv-trango-{name}";
+                    fvtrango = new GameObject(fname);
+                    var ptlist = new List<Vector3>();
+                    foreach (var f in features)
+                    {
+                        var n = f.fvcoords.Count;
+                        var pt = Vector3.zero;
+                        for (int i = 0; i < n; i++)
+                        {
+                            var c = f.fvcoords[i];
+                            pt = llm.xycoord(c.lat, c.lng, (float)c.alt);
+                            ptlist.Add(pt);
+                        }
+                    }
+                    fvtrango.transform.parent = this.transform;
+                }
+                else
+                {
+                    fvtrango.SetActive(true);
+                }
+            }
+            else
+            {
+                if (fvtrango != null)
+                {
+                    fvtrango.SetActive(false);
+                }
+            }
         }
         public void DeleteGos()
         {
-            if (fvgo != null)
+            if (fvgridgo != null)
             {
-                fm.sman.Lgg("Deleting fvgo");
-                Destroy(fvgo);
+                fm.sman.Lgg("Deleting fvgridgo");
+                Destroy(fvgridgo);
             }
-            fvgo = null;
+            fvgridgo = null;
+            if (fvtrango != null)
+            {
+                fm.sman.Lgg("Deleting fvtrango");
+                Destroy(fvtrango);
+            }
+            fvtrango = null;
         }
 
         public void Delete()

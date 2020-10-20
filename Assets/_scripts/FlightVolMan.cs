@@ -65,6 +65,19 @@ namespace CampusSimulator
             tranVols.GetInitial(false);
         }
 
+        public void ToggleFvGrid()
+        {
+            var curstat = !gridVols.Get();
+            gridVols.SetAndSave(curstat);
+            CreateGos();
+        }
+        public void ToggleFvTran()
+        {
+            var curstat = !tranVols.Get();
+            tranVols.SetAndSave(curstat);
+            CreateGos();
+        }
+
 
         BldPolyGen bpg;
         public void ModelBuild()
