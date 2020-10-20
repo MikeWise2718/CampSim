@@ -190,7 +190,7 @@ namespace CampusSimulator
                         gpg.SetOutline(ptlist);
                         var go = gpg.GenMesh("mesh",height:ptlist[0].y,clr:"blue",alf:0.5f );
                         go.transform.parent = fvtrango.transform;
-                        Debug.Log($"Generated fvtran from {ptlist.Count} points");
+                        //Debug.Log($"Generated fvtran from {ptlist.Count} points");
                     }
                 }
                 else
