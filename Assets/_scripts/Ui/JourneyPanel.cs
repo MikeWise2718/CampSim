@@ -80,6 +80,15 @@ public class JourneyPanel : MonoBehaviour
     public void InitVals()
     {
         Debug.Log("JourneyPanels InitVals called");
+        var curjny = jnman.curJnySpec.Get();
+        if (curjny=="")
+        {
+
+            var js = new JourneySpec(jnman.journeySpecMan,"");
+            curjny = js.SerialString();
+        }
+        curJnySerializedStringText.text = curjny;
+
         var errmsg = "Exception caught in JourneyPanel.Initvals";
         try
         {

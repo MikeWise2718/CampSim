@@ -64,6 +64,8 @@ namespace CampusSimulator
         public bool shadowJourney = false;
         public string journeyToShadow = "";
 
+        public JourneySpecMan journeySpecMan;
+
         public UxSetting<string> lastViewerStartJourney = new UxSetting<string>("lastViewerStartJourney", "");
         public UxSetting<string> lastViewerEndJourney = new UxSetting<string>("lastViewerEndJourney", "");
 
@@ -1336,8 +1338,9 @@ namespace CampusSimulator
 
         public void ModelInitialize(SceneSelE newregion)
         {
-            DeleteAllJourneys();
             InitializeValues();
+            journeySpecMan = new JourneySpecMan();
+            journeySpecMan.Init();
             viewerJourneyNodes = new List<string>();
         }
 
