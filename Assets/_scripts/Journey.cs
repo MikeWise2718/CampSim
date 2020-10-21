@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using GraphAlgos;
-using System.Runtime.CompilerServices;
 
 namespace CampusSimulator
 {
@@ -141,14 +140,16 @@ namespace CampusSimulator
     public enum JourneySpecMethod {routePrinceAction }
     public class JourneySpec
     {
-        string jouneyId;
+        public string jouneyId;
+        public string displayName;
         JourneySpecMethod journeySpecMethod;
         RouteSpec routeSpec;
         JourneyPrincipalSpec princeSpec;
         ActionSpec actionSpec;
-        public JourneySpec(JourneySpecMan jm,RouteSpec routeSpec,JourneyPrincipalSpec princeSpec,ActionSpec actionSpec)
+        public JourneySpec(JourneySpecMan jm,string displayName,RouteSpec routeSpec,JourneyPrincipalSpec princeSpec,ActionSpec actionSpec)
         {
             jouneyId = jm.GetNewJourneyId();
+            this.displayName = displayName;
             this.journeySpecMethod = JourneySpecMethod.routePrinceAction;
             this.routeSpec = routeSpec;
             this.princeSpec = princeSpec;
@@ -162,6 +163,7 @@ namespace CampusSimulator
             if (sar.Length < 3)
             {
                 journeySpecMethod = JourneySpecMethod.routePrinceAction;
+                this.displayName = "";
                 this.routeSpec = new RouteSpec("");
                 this.princeSpec = new JourneyPrincipalSpec("");
                 this.actionSpec = new ActionSpec("");
@@ -169,6 +171,7 @@ namespace CampusSimulator
             }
 
             this.journeySpecMethod = JourneySpecMethod.routePrinceAction;
+            this.displayName = sar[0];
             this.routeSpec = new RouteSpec(sar[0]);
             this.princeSpec = new JourneyPrincipalSpec(sar[1]);
             this.actionSpec = new ActionSpec(sar[4]);
@@ -191,12 +194,21 @@ namespace CampusSimulator
         int numAlloced = 0;
         public JourneySpecMan()
         {
+            Init();
+        }
+        public void DeleteJourneySpecs()
+        {
+            Init();
+        }
+        public void Init()
+        {
             journeySpecs = new Dictionary<string, JourneySpec>();
             numAlloced = 0;
         }
+
         public string GetNewJourneyId()
         {
-            var rv = $"jny{numAlloced}";
+            var rv = $"jnyspec{numAlloced:d3}";
             numAlloced++;
             return rv;
         }
@@ -206,8 +218,27 @@ namespace CampusSimulator
         }
         public static string GetMajorSep()
         {
-            return "+";
+            return "|";
         }
+        public (bool,string) AddJourneySpec(JourneySpec journeySpec)
+        {
+            var jid = journeySpec.jouneyId;
+            if (journeySpecs.ContainsKey(jid))
+            {
+                return (false, $"AddJourneySpec - Duplicate JourneyID{jid}");
+            }
+            journeySpecs[journeySpec.jouneyId] = journeySpec;
+            return (true, "");
+        }
+        public void DelJourneySpec(JourneySpec journeySpec)
+        {
+            var jid = journeySpec.jouneyId;
+            if (journeySpecs.ContainsKey(jid))
+            {
+                journeySpecs.Remove(jid);
+            }
+        }
+
     }
 
 

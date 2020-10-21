@@ -11,10 +11,15 @@ public class JourneyPanel : MonoBehaviour
     JourneyMan jnman;
     UiMan uiman;
 
-    Dropdown startBuildingDropdown;
-    Text startBuildingText;
-    Dropdown endBuildingDropdown;
-    Text endBuildingText;
+    Text statusMessageText;
+    Text curJnySerializedStringText;
+    InputField jnyIdInput;
+    Dropdown jnyStartBuildingDropdown;
+    Dropdown jnyStartRoomDropdown;
+    Dropdown jnyEndBuildingDropdown;
+    Dropdown jnyEndRoomDropdown;
+    Toggle jnyQuitOnEndToggle;
+    InputField jnyEndActionInput;
 
     Button closeButton;
     Button launchButton;
@@ -34,11 +39,18 @@ public class JourneyPanel : MonoBehaviour
         bdman = sman.bdman;
         jnman = sman.jnman;
 
-        startBuildingDropdown = transform.Find("StartBuildingDropdown").gameObject.GetComponent<Dropdown>();
-        startBuildingText = transform.Find("StartBuildingText").gameObject.GetComponent<Text>();
+        statusMessageText = transform.Find("StatusMessageText").gameObject.GetComponent<Text>();
+        curJnySerializedStringText = transform.Find("CurJnySerializedStringText").gameObject.GetComponent<Text>();
 
-        endBuildingDropdown = transform.Find("EndBuildingDropdown").gameObject.GetComponent<Dropdown>();
-        endBuildingText = transform.Find("EndBuildingText").gameObject.GetComponent<Text>();
+
+        jnyIdInput = transform.Find("JnyIdInput").gameObject.GetComponent<InputField>();
+        jnyStartBuildingDropdown = transform.Find("JnyStartBuildingDropdown").gameObject.GetComponent<Dropdown>();
+        jnyStartRoomDropdown = transform.Find("JnyStartRoomDropdown").gameObject.GetComponent<Dropdown>();
+
+        jnyEndBuildingDropdown = transform.Find("JnyEndBuildingDropdown").gameObject.GetComponent<Dropdown>();
+        jnyEndRoomDropdown = transform.Find("JnyEndRoomDropdown").gameObject.GetComponent<Dropdown>();
+        jnyQuitOnEndToggle = transform.Find("JnyQuitOnEndToggle").gameObject.GetComponent<Toggle>();
+        jnyEndActionInput = transform.Find("JnyEndActionInput").gameObject.GetComponent<InputField>();
 
 
         launchButton = transform.Find("LaunchButton").gameObject.GetComponent<Button>();
@@ -52,6 +64,19 @@ public class JourneyPanel : MonoBehaviour
         return true;
     }
 
+    public void SetStatusMessage(string message, bool error)
+    {
+        statusMessageText.text = message;
+        if (error)
+        {
+            statusMessageText.color = Color.red;
+        }
+        else
+        {
+            statusMessageText.color = Color.black;
+        }
+    }
+
     public void InitVals()
     {
         Debug.Log("JourneyPanels InitVals called");
@@ -63,9 +88,9 @@ public class JourneyPanel : MonoBehaviour
             var idx = stopts.FindIndex(s => s == inival);
             if (idx <= 0) idx = 0;
 
-            startBuildingDropdown.ClearOptions();
-            startBuildingDropdown.AddOptions(stopts);
-            startBuildingDropdown.value = idx;
+            jnyStartBuildingDropdown.ClearOptions();
+            jnyStartBuildingDropdown.AddOptions(stopts);
+            jnyStartBuildingDropdown.value = idx;
         }
         catch (Exception ex)
         {
@@ -79,9 +104,9 @@ public class JourneyPanel : MonoBehaviour
             var idx = edopts.FindIndex(s => s == inival);
             if (idx <= 0) idx = 0;
 
-            endBuildingDropdown.ClearOptions();
-            endBuildingDropdown.AddOptions(edopts);
-            endBuildingDropdown.value = idx;
+            jnyEndBuildingDropdown.ClearOptions();
+            jnyEndBuildingDropdown.AddOptions(edopts);
+            jnyEndBuildingDropdown.value = idx;
         }
         catch (Exception ex)
         {
@@ -92,8 +117,8 @@ public class JourneyPanel : MonoBehaviour
 
     public void LaunchJourney()
     {
-        var bld1 = stopts[startBuildingDropdown.value];
-        var bld2 = edopts[endBuildingDropdown.value];
+        var bld1 = stopts[jnyStartBuildingDropdown.value];
+        var bld2 = edopts[jnyEndBuildingDropdown.value];
         jnman.AddBldBldJourneyWithEphemeralPeople(bld1, bld2);
         Debug.Log($"Launch journey from {bld1} to {bld2}");
     }
