@@ -2,9 +2,215 @@
 using System.Collections.Generic;
 using UnityEngine;
 using GraphAlgos;
+using System.Runtime.CompilerServices;
 
 namespace CampusSimulator
 {
+
+    public enum RouteSpecMethod { BldRoomBldRoom }
+    public class RouteSpec
+    {
+        public RouteSpecMethod routeSpecMethod;
+        public string bld1name;
+        public string bld1room;
+        public string bld2name;
+        public string bld2room;
+        public RouteSpec(RouteSpecMethod routeSpecMethod, string b1name, string b1room, string b2name, string b2room, string personname)
+        {
+            this.routeSpecMethod = routeSpecMethod;
+            this.bld1name = b1name;
+            this.bld1room = b1room;
+            this.bld2name = b2name;
+            this.bld1room = b2room;
+        }
+        public RouteSpec(string serialstring)
+        {
+            var ms = new string[] { JourneySpecMan.GetMinorSep() };
+            var sar = serialstring.Split(ms, System.StringSplitOptions.None);
+            if (sar.Length < 5)
+            {
+                this.routeSpecMethod = RouteSpecMethod.BldRoomBldRoom;
+                this.bld1name = "";
+                this.bld1room = "";
+                this.bld2name = "";
+                this.bld2room = "";
+                return;
+            }
+            var ok1 = RouteSpecMethod.TryParse(sar[0], out this.routeSpecMethod);
+            if (!ok1)
+            {
+                routeSpecMethod = RouteSpecMethod.BldRoomBldRoom;
+            }
+            this.bld1name = sar[1];
+            this.bld1room = sar[2];
+            this.bld2name = sar[3];
+            this.bld2room = sar[4];
+        }
+
+        public string SerialString()
+        {
+            var ms = JourneySpecMan.GetMinorSep();
+            var rv = $"{routeSpecMethod}{ms}{bld1name}{ms}{bld1room}{ms}{bld2name}{ms}{bld2room}";
+            return rv;
+        }
+    }
+    public enum JourneyMethod { walking, flying, droning, driving }
+    public class JourneyPrincipalSpec
+    {
+        public JourneyMethod journeyMethod;
+        public string pname;
+        public string avatar;
+        public JourneyPrincipalSpec(JourneyMethod journeyMethod, string pname, string avatar)
+        {
+            this.journeyMethod = journeyMethod;
+            this.pname = pname;
+            this.avatar = avatar;
+        }
+        public JourneyPrincipalSpec(string serialstring)
+        {
+            var ms = new string[] { JourneySpecMan.GetMinorSep() };
+            var sar = serialstring.Split(ms, System.StringSplitOptions.None);
+            if (sar.Length<3)
+            {
+                this.journeyMethod = JourneyMethod.walking;
+                this.pname = "";
+                this.avatar = "";
+                return;
+            }
+            var ok1 = JourneyMethod.TryParse(sar[0], out this.journeyMethod);
+            if (!ok1)
+            {
+                journeyMethod = JourneyMethod.walking;
+            }
+            this.pname = sar[1];
+            this.avatar = sar[2];
+        }
+        public string SerialString()
+        {
+            var ms = JourneySpecMan.GetMinorSep();
+            var rv = $"{journeyMethod}{ms}{pname}{ms}{avatar}";
+            return rv;
+        }
+
+    }
+    public class ActionSpec
+    {
+        public JourneyEnd journeyEnd;
+        public bool quitAtDest;
+        public string thingToDo;
+
+        public ActionSpec(JourneyEnd journeyEnd, bool quitAtDest, string thingToDo)
+        {
+            this.journeyEnd = journeyEnd;
+            this.quitAtDest = quitAtDest;
+            this.thingToDo = thingToDo;
+        }
+
+        public ActionSpec(string serialstring)
+        {
+            var ms = new string[] { JourneySpecMan.GetMinorSep() };
+            var sar = serialstring.Split(ms,System.StringSplitOptions.None);
+            if (sar.Length < 3)
+            {
+                this.journeyEnd = JourneyEnd.disappear;
+                this.quitAtDest = false;
+                this.thingToDo = "";
+                return;
+            }
+            var ok1 = JourneyEnd.TryParse(sar[0], out this.journeyEnd );
+            if (!ok1)
+            {
+                journeyEnd = JourneyEnd.disappear;
+            }
+            var ok2 = bool.TryParse(sar[1], out this.quitAtDest);
+            if (!ok2)
+            {
+                quitAtDest = false;
+            }
+            this.thingToDo = sar[2];
+        }
+
+        public string SerialString()
+        {
+            var ms = JourneySpecMan.GetMinorSep();
+            var rv = $"{journeyEnd}{ms}{quitAtDest}{ms}{thingToDo}";
+            return rv;
+        }
+    }
+
+    public enum JourneySpecMethod {routePrinceAction }
+    public class JourneySpec
+    {
+        string jouneyId;
+        JourneySpecMethod journeySpecMethod;
+        RouteSpec routeSpec;
+        JourneyPrincipalSpec princeSpec;
+        ActionSpec actionSpec;
+        public JourneySpec(JourneySpecMan jm,RouteSpec routeSpec,JourneyPrincipalSpec princeSpec,ActionSpec actionSpec)
+        {
+            jouneyId = jm.GetNewJourneyId();
+            this.journeySpecMethod = JourneySpecMethod.routePrinceAction;
+            this.routeSpec = routeSpec;
+            this.princeSpec = princeSpec;
+            this.actionSpec = actionSpec;
+        }
+        public JourneySpec(JourneySpecMan jm,string serialstring)
+        {
+            var mjs = new string[] { JourneySpecMan.GetMajorSep() };
+            var sar = serialstring.Split(mjs, System.StringSplitOptions.None);
+            jouneyId = jm.GetNewJourneyId();
+            if (sar.Length < 3)
+            {
+                journeySpecMethod = JourneySpecMethod.routePrinceAction;
+                this.routeSpec = new RouteSpec("");
+                this.princeSpec = new JourneyPrincipalSpec("");
+                this.actionSpec = new ActionSpec("");
+                return;
+            }
+
+            this.journeySpecMethod = JourneySpecMethod.routePrinceAction;
+            this.routeSpec = new RouteSpec(sar[0]);
+            this.princeSpec = new JourneyPrincipalSpec(sar[1]);
+            this.actionSpec = new ActionSpec(sar[4]);
+        }
+
+        public string SerialString()
+        {
+            var mjs = JourneySpecMan.GetMajorSep();
+            var rrs = routeSpec.SerialString();
+            var pps = routeSpec.SerialString();
+            var aas = routeSpec.SerialString();
+            var rv = $"{journeySpecMethod}{mjs}{rrs}{mjs}{pps}{mjs}{aas}";
+            return rv;
+        }
+    }
+
+    public class JourneySpecMan
+    {
+        Dictionary<string, JourneySpec> journeySpecs;
+        int numAlloced = 0;
+        public JourneySpecMan()
+        {
+            journeySpecs = new Dictionary<string, JourneySpec>();
+            numAlloced = 0;
+        }
+        public string GetNewJourneyId()
+        {
+            var rv = $"jny{numAlloced}";
+            numAlloced++;
+            return rv;
+        }
+        public static string GetMinorSep()
+        {
+            return ":";
+        }
+        public static string GetMajorSep()
+        {
+            return "+";
+        }
+    }
+
+
     public enum JourneyEnd { disappear, restart, reverse }
 
     public class Journey : MonoBehaviour
