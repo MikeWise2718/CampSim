@@ -243,6 +243,17 @@ namespace CampusSimulator
             var roomlist = new List<BldRoom>(roomdict.Values);
             return roomlist;
         }
+
+        public List<string> GetRoomNames()
+        {
+            var roomlist = new List<BldRoom>(roomdict.Values);
+            var rv = new List<string>();
+            foreach(var rm in roomlist)
+            {
+                rv.Add(rm.name);
+            }
+            return rv;
+        }
         public List<BldDronePad> GetPads()
         {
             var padlist = new List<BldDronePad>(paddict.Values);

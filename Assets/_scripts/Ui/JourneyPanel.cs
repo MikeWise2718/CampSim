@@ -23,6 +23,7 @@ public class JourneyPanel : MonoBehaviour
 
     Button closeButton;
     Button launchButton;
+    Button launchAndShadowhButton;
 
     List<string> stopts;
     List<string> edopts;
@@ -54,21 +55,28 @@ public class JourneyPanel : MonoBehaviour
 
 
         launchButton = transform.Find("LaunchButton").gameObject.GetComponent<Button>();
-        launchButton.onClick.AddListener(delegate { LaunchJourney(); });
+        launchButton.onClick.AddListener(delegate { LaunchJourney(shadow: false); });
+        launchAndShadowhButton = transform.Find("LaunchAndShadowButton").gameObject.GetComponent<Button>();
+        launchAndShadowhButton.onClick.AddListener(delegate { LaunchJourney(shadow:true); });
         closeButton = transform.Find("CloseButton").gameObject.GetComponent<Button>();
         closeButton.onClick.AddListener(delegate { uiman.ClosePanel();  });
 
-        jnyStartBuildingDropdown.onValueChanged.AddListener(delegate { BldDropdownChanged(jnyStartBuildingDropdown); });
-        jnyEndBuildingDropdown.onValueChanged.AddListener(delegate { BldDropdownChanged(jnyEndBuildingDropdown); });
-
-
+        jnyStartBuildingDropdown.onValueChanged.AddListener(delegate { RepopulateRoomsDropdown(jnyStartBuildingDropdown, jnyStartRoomDropdown); });
+        jnyEndBuildingDropdown.onValueChanged.AddListener(delegate { RepopulateRoomsDropdown(jnyEndBuildingDropdown, jnyEndRoomDropdown); });
     }
 
-    public void BldDropdownChanged(Dropdown control)
+    public void RepopulateRoomsDropdown(Dropdown bldctrl,Dropdown roomctrl)
     {
-        var ctrlname = control.name;
-        var curval = control.value;
-        Debug.Log($"{ctrlname} dropdown changed current val:{curval}");
+        var ctrlbldname = bldctrl.name;
+        var curbldval = bldctrl.value;
+        var bldlist = bdman.GetBuildingList();
+        var bldname = bldlist[curbldval];
+        //Debug.Log($"{ctrlbldname} dropdown changed current bld:{bldname}");
+        var bld = bdman.GetBuilding(bldname);
+        var roomlist = bld.GetRoomNames();
+        //Debug.Log($"Found {roomlist.Count} rooms for {bldname}");
+        roomctrl.ClearOptions();
+        roomctrl.AddOptions(roomlist);
     }
 
     public bool VerifyValues()
@@ -136,12 +144,18 @@ public class JourneyPanel : MonoBehaviour
     }
 
 
-    public void LaunchJourney()
+    public void LaunchJourney(bool shadow)
     {
         var bld1 = stopts[jnyStartBuildingDropdown.value];
         var bld2 = edopts[jnyEndBuildingDropdown.value];
-        jnman.AddBldBldJourneyWithEphemeralPeople(bld1, bld2);
-        Debug.Log($"Launch journey from {bld1} to {bld2}");
+        Debug.Log($"Launching journey from {bld1} to {bld2}");
+        var jny = jnman.AddBldBldJourneyWithEphemeralPeople(bld1, bld2);
+        if (shadow)
+        {
+            jnman.journeyToShadow = jny.name;
+            jnman.shadowJourney = true;
+            Debug.Log($"Shadowing {jny.name}");
+        }
     }
 
     public void SetScene(CampusSimulator.SceneSelE curscene)

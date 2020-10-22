@@ -1692,7 +1692,7 @@ namespace CampusSimulator
                 if (jny != null)
                 {
                     var bgo = jny.birdctrl.birdformgo;
-                    if (bgo != null)
+                    if (bgo != null && jny.status!=JourneyStatE.WaitingToStart)
                     {
                         var pt = bgo.transform.position;
                         var rt = bgo.transform.localRotation.eulerAngles;
