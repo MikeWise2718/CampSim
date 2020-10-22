@@ -58,7 +58,19 @@ public class JourneyPanel : MonoBehaviour
         closeButton = transform.Find("CloseButton").gameObject.GetComponent<Button>();
         closeButton.onClick.AddListener(delegate { uiman.ClosePanel();  });
 
+        jnyStartBuildingDropdown.onValueChanged.AddListener(delegate { BldDropdownChanged(jnyStartBuildingDropdown); });
+        jnyEndBuildingDropdown.onValueChanged.AddListener(delegate { BldDropdownChanged(jnyEndBuildingDropdown); });
+
+
     }
+
+    public void BldDropdownChanged(Dropdown control)
+    {
+        var ctrlname = control.name;
+        var curval = control.value;
+        Debug.Log($"{ctrlname} dropdown changed current val:{curval}");
+    }
+
     public bool VerifyValues()
     {
         return true;
@@ -140,7 +152,8 @@ public class JourneyPanel : MonoBehaviour
     }
 
 
-    public void SetVals(bool closing = false)
+
+public void SetVals(bool closing = false)
     {
         Debug.Log($"JourneyPanel.SetVals called - closing:{closing}");
 

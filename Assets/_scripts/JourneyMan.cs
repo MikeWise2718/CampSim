@@ -1339,7 +1339,7 @@ namespace CampusSimulator
         public void ModelInitialize(SceneSelE newregion)
         {
             InitializeValues();
-            journeySpecMan = new JourneySpecMan();
+            journeySpecMan = new JourneySpecMan(this);
             journeySpecMan.Init();
             viewerJourneyNodes = new List<string>();
         }

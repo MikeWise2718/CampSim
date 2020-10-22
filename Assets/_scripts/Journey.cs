@@ -6,140 +6,221 @@ using GraphAlgos;
 namespace CampusSimulator
 {
 
-    public enum RouteSpecMethod { BldRoomBldRoom }
+    public enum RouteSpecMethod { BldRoomToBldRoom }
     public class RouteSpec
     {
+        JourneySpecMan jm;
         public RouteSpecMethod routeSpecMethod;
         public string bld1name;
         public string bld1room;
         public string bld2name;
         public string bld2room;
-        public RouteSpec(RouteSpecMethod routeSpecMethod, string b1name, string b1room, string b2name, string b2room, string personname)
+        public RouteSpec(JourneySpecMan jm, RouteSpecMethod routeSpecMethod, string b1name, string b1room, string b2name, string b2room, string personname)
         {
+            this.jm = jm;
             this.routeSpecMethod = routeSpecMethod;
             this.bld1name = b1name;
             this.bld1room = b1room;
             this.bld2name = b2name;
             this.bld1room = b2room;
         }
-        public RouteSpec(string serialstring)
+        public RouteSpec(JourneySpecMan jm)
+        {
+            this.jm = jm;
+            var ss = RouteSpec.GetDefault();
+            SetOnString(ss);
+        }
+
+        public RouteSpec(JourneySpecMan jm, string serialstring)
+        {
+            this.jm = jm;
+            SetOnString(serialstring);
+        }
+        public void SetOnString(string serialstring)
         {
             var ms = new string[] { JourneySpecMan.GetMinorSep() };
             var sar = serialstring.Split(ms, System.StringSplitOptions.None);
-            if (sar.Length < 5)
+            if (sar.Length < 6 || sar[0] != "#Route")
             {
-                this.routeSpecMethod = RouteSpecMethod.BldRoomBldRoom;
+                jm.jnman.sman.LggError($"Bad serialstring for RouteSpec:'{serialstring}'");
+                this.routeSpecMethod = RouteSpecMethod.BldRoomToBldRoom;
                 this.bld1name = "";
                 this.bld1room = "";
                 this.bld2name = "";
                 this.bld2room = "";
                 return;
             }
-            var ok1 = RouteSpecMethod.TryParse(sar[0], out this.routeSpecMethod);
+            var ok1 = RouteSpecMethod.TryParse(sar[1], out this.routeSpecMethod);
             if (!ok1)
             {
-                routeSpecMethod = RouteSpecMethod.BldRoomBldRoom;
+                routeSpecMethod = RouteSpecMethod.BldRoomToBldRoom;
             }
-            this.bld1name = sar[1];
-            this.bld1room = sar[2];
-            this.bld2name = sar[3];
-            this.bld2room = sar[4];
+            this.bld1name = sar[2];
+            this.bld1room = sar[3];
+            this.bld2name = sar[4];
+            this.bld2room = sar[5];
+        }
+        public static string GetDefault()
+        {
+            var ms = JourneySpecMan.GetMinorSep();
+            var rsm = RouteSpecMethod.BldRoomToBldRoom;
+            var rv = $"#Route{ms}{rsm}{ms}{"Bld33"}{ms}{"lobby"}{ms}{"Bld19"}{ms}{"lobby"}";
+            return rv;
         }
 
         public string SerialString()
         {
             var ms = JourneySpecMan.GetMinorSep();
-            var rv = $"{routeSpecMethod}{ms}{bld1name}{ms}{bld1room}{ms}{bld2name}{ms}{bld2room}";
+            var rv = $"#Route{ms}{routeSpecMethod}{ms}{bld1name}{ms}{bld1room}{ms}{bld2name}{ms}{bld2room}";
             return rv;
         }
     }
-    public enum JourneyMethod { walking, flying, droning, driving }
+    public enum JourneyMethod { walkjour, autojour, flyjour, dronejour }
     public class JourneyPrincipalSpec
     {
+        JourneySpecMan jm;
         public JourneyMethod journeyMethod;
         public string pname;
         public string avatar;
-        public JourneyPrincipalSpec(JourneyMethod journeyMethod, string pname, string avatar)
+        public JourneyPrincipalSpec(JourneySpecMan jm, JourneyMethod journeyMethod, string pname, string avatar)
         {
+            this.jm = jm;
             this.journeyMethod = journeyMethod;
             this.pname = pname;
             this.avatar = avatar;
         }
-        public JourneyPrincipalSpec(string serialstring)
+        public JourneyPrincipalSpec(JourneySpecMan jm)
         {
+            this.jm = jm;
+            var ss = JourneyPrincipalSpec.GetDefault();
+            SetOnString(ss);
+        }
+        public JourneyPrincipalSpec(JourneySpecMan jm, string serialstring)
+        {
+            this.jm = jm;
+            SetOnString(serialstring);
+        }
+        public void SetOnString(string serialstring)
+        { 
             var ms = new string[] { JourneySpecMan.GetMinorSep() };
             var sar = serialstring.Split(ms, System.StringSplitOptions.None);
-            if (sar.Length<3)
+            if (sar.Length<4 || sar[0]!="#Prince")
             {
-                this.journeyMethod = JourneyMethod.walking;
+                jm.jnman.sman.LggError($"Bad serialstring for JourneyPrincipalSpec:'{serialstring}'");
+                this.journeyMethod = JourneyMethod.walkjour;
                 this.pname = "";
                 this.avatar = "";
                 return;
             }
-            var ok1 = JourneyMethod.TryParse(sar[0], out this.journeyMethod);
+            var ok1 = JourneyMethod.TryParse(sar[1], out this.journeyMethod);
             if (!ok1)
             {
-                journeyMethod = JourneyMethod.walking;
+                journeyMethod = JourneyMethod.walkjour;
             }
-            this.pname = sar[1];
-            this.avatar = sar[2];
+            this.pname = sar[2];
+            this.avatar = sar[3];
         }
         public string SerialString()
         {
             var ms = JourneySpecMan.GetMinorSep();
-            var rv = $"{journeyMethod}{ms}{pname}{ms}{avatar}";
+            var rv = $"#Prince{ms}{journeyMethod}{ms}{pname}{ms}{avatar}";
+            return rv;
+        }
+        public static string GetDefault()
+        {
+            var ms = JourneySpecMan.GetMinorSep();
+            var jm = JourneyMethod.walkjour;
+            var rv = $"#Prince{ms}{jm}{ms}{"Jane"}{ms}{"Girl001"}";
             return rv;
         }
 
     }
     public class ActionSpec
     {
+        JourneySpecMan jm;
         public JourneyEnd journeyEnd;
         public bool quitAtDest;
         public string thingToDo;
 
-        public ActionSpec(JourneyEnd journeyEnd, bool quitAtDest, string thingToDo)
+        public ActionSpec(JourneySpecMan jm, JourneyEnd journeyEnd, bool quitAtDest, string thingToDo)
         {
+            this.jm = jm;
             this.journeyEnd = journeyEnd;
             this.quitAtDest = quitAtDest;
             this.thingToDo = thingToDo;
         }
-
-        public ActionSpec(string serialstring)
+        public ActionSpec(JourneySpecMan jm)
         {
+            this.jm = jm;
+            var ss = GetDefault();
+            SetOnString(ss);
+        }
+        public ActionSpec(JourneySpecMan jm, string serialstring)
+        {
+            this.jm = jm;
+            SetOnString(serialstring);
+        }
+        public void SetOnString( string serialstring)
+        { 
             var ms = new string[] { JourneySpecMan.GetMinorSep() };
             var sar = serialstring.Split(ms,System.StringSplitOptions.None);
-            if (sar.Length < 3)
+            if (sar.Length < 4)
             {
+                jm.jnman.sman.LggError($"Bad serialstring for ActionSpec:'{serialstring}'");
                 this.journeyEnd = JourneyEnd.disappear;
                 this.quitAtDest = false;
                 this.thingToDo = "";
                 return;
             }
-            var ok1 = JourneyEnd.TryParse(sar[0], out this.journeyEnd );
+            var ok1 = JourneyEnd.TryParse(sar[1], out this.journeyEnd );
             if (!ok1)
             {
                 journeyEnd = JourneyEnd.disappear;
             }
-            var ok2 = bool.TryParse(sar[1], out this.quitAtDest);
-            if (!ok2)
+            var s2low = sar[2].ToLower();
+            if (s2low == "")
             {
                 quitAtDest = false;
             }
-            this.thingToDo = sar[2];
+            else if (s2low.StartsWith("quit"))
+            {
+                quitAtDest = true;
+            }
+            else
+            {
+                var ok2 = bool.TryParse(sar[2], out this.quitAtDest);
+                if (!ok2)
+                {
+                    quitAtDest = false;
+                }
+            }
+            this.thingToDo = sar[3];
         }
 
         public string SerialString()
         {
             var ms = JourneySpecMan.GetMinorSep();
-            var rv = $"{journeyEnd}{ms}{quitAtDest}{ms}{thingToDo}";
+            var qad = quitAtDest ? "QuitAtDest" : "";
+            var rv = $"#Action{ms}{journeyEnd}{ms}{qad}{ms}{thingToDo}";
             return rv;
         }
+
+        public static string GetDefault()
+        {
+            var ms = JourneySpecMan.GetMinorSep();
+            var jem = JourneyEnd.disappear;
+            var qad = "";
+            var thingtodo = "";
+            var rv = $"#Action{ms}{jem}{ms}{qad}{ms}{thingtodo}";
+            return rv;
+        }
+
     }
 
-    public enum JourneySpecMethod {routePrinceAction }
+    public enum JourneySpecMethod {rpa }
     public class JourneySpec
     {
+        JourneySpecMan jm;
         public string jouneyId;
         public string displayName;
         JourneySpecMethod journeySpecMethod;
@@ -148,52 +229,77 @@ namespace CampusSimulator
         ActionSpec actionSpec;
         public JourneySpec(JourneySpecMan jm,string displayName,RouteSpec routeSpec,JourneyPrincipalSpec princeSpec,ActionSpec actionSpec)
         {
+            this.jm = jm;
             jouneyId = jm.GetNewJourneyId();
             this.displayName = displayName;
-            this.journeySpecMethod = JourneySpecMethod.routePrinceAction;
+            this.journeySpecMethod = JourneySpecMethod.rpa;
             this.routeSpec = routeSpec;
             this.princeSpec = princeSpec;
             this.actionSpec = actionSpec;
         }
-        public JourneySpec(JourneySpecMan jm,string serialstring)
+
+        public JourneySpec(JourneySpecMan jm)
         {
+            this.jm = jm;
+            SetOnString("");
+        }
+
+        public JourneySpec(JourneySpecMan jm, string serialstring)
+        {
+            this.jm = jm;
+            SetOnString(serialstring);
+        }
+        public void SetOnString(string serialstring)
+        { 
             var mjs = new string[] { JourneySpecMan.GetMajorSep() };
-            var sar = serialstring.Split(mjs, System.StringSplitOptions.None);
             jouneyId = jm.GetNewJourneyId();
-            if (sar.Length < 3)
+            if (serialstring=="")
             {
-                journeySpecMethod = JourneySpecMethod.routePrinceAction;
+                journeySpecMethod = JourneySpecMethod.rpa;
+                displayName = jouneyId;
+                routeSpec = new RouteSpec(jm);
+                princeSpec = new JourneyPrincipalSpec(jm);
+                actionSpec = new ActionSpec(jm);
+                return;
+            }
+            var sar = serialstring.Split(mjs, System.StringSplitOptions.None);
+            if (sar.Length < 5 || sar[0]!="#JourneySpec")
+            {
+                jm.jnman.sman.LggError($"Bad serialstring for JourneySpec:'{serialstring}'");
+                journeySpecMethod = JourneySpecMethod.rpa;
                 this.displayName = "";
-                this.routeSpec = new RouteSpec("");
-                this.princeSpec = new JourneyPrincipalSpec("");
-                this.actionSpec = new ActionSpec("");
+                this.routeSpec = new RouteSpec(jm, "");
+                this.princeSpec = new JourneyPrincipalSpec(jm,"");
+                this.actionSpec = new ActionSpec(jm,"");
                 return;
             }
 
-            this.journeySpecMethod = JourneySpecMethod.routePrinceAction;
-            this.displayName = sar[0];
-            this.routeSpec = new RouteSpec(sar[0]);
-            this.princeSpec = new JourneyPrincipalSpec(sar[1]);
-            this.actionSpec = new ActionSpec(sar[4]);
+            this.journeySpecMethod = JourneySpecMethod.rpa;
+            this.displayName = sar[1];
+            this.routeSpec = new RouteSpec(jm, sar[2]);
+            this.princeSpec = new JourneyPrincipalSpec(jm,sar[3]);
+            this.actionSpec = new ActionSpec(jm,sar[4]);
         }
 
         public string SerialString()
         {
             var mjs = JourneySpecMan.GetMajorSep();
             var rrs = routeSpec.SerialString();
-            var pps = routeSpec.SerialString();
-            var aas = routeSpec.SerialString();
-            var rv = $"{journeySpecMethod}{mjs}{rrs}{mjs}{pps}{mjs}{aas}";
+            var pps = princeSpec.SerialString();
+            var aas = actionSpec.SerialString();
+            var rv = $"#JourneySpec{mjs}{journeySpecMethod}{mjs}{rrs}{mjs}{pps}{mjs}{aas}";
             return rv;
         }
     }
 
     public class JourneySpecMan
     {
+        public JourneyMan jnman;
         Dictionary<string, JourneySpec> journeySpecs;
         int numAlloced = 0;
-        public JourneySpecMan()
+        public JourneySpecMan(JourneyMan jnman)
         {
+            this.jnman = jnman;
             Init();
         }
         public void DeleteJourneySpecs()
