@@ -112,7 +112,15 @@ public class JourneyPanel : MonoBehaviour
     public void LoadDefinedJourneys()
     {
         definedJourneys = new List<string>();
+        var curspeckeys = jnman.curJnySpecKeys.Get();
+        var cskarr = curspeckeys.Split('|');
+        foreach(var key in cskarr)
+        {
+            definedJourneys.Add(key);
+        }
     }
+
+
 
     public void InitVals(JourneySpec js)
     {
@@ -170,10 +178,10 @@ public class JourneyPanel : MonoBehaviour
             sman.LggError($"{errmsg} initializing jnyAvatarDropdown - ex.Message:{ex.Message}");
         }
 
-        PopulateDefinedJourneys();
+        PopulateDefinedJourneyDropdown();
     }
 
-    public void PopulateDefinedJourneys()
+    public void PopulateDefinedJourneyDropdown()
     {
         try
         {
@@ -238,14 +246,34 @@ public class JourneyPanel : MonoBehaviour
     JourneySpec definedJourney = null;
     Journey launchedJny = null;
 
+    public void AddDefinedJourneyToKeys(JourneySpec js)
+    {
+        var newkey = js.displayName;
+        definedJourneys.Add(newkey);
+        var newkeystring = "";
+        foreach (var key in definedJourneys)
+        {
+            if (newkeystring == "")
+            {
+                newkeystring = key;
+            }
+            else
+            {
+                newkeystring = $"{newkeystring}|{key}";
+            }
+        }
+        jnman.curJnySpecKeys.SetAndSave(newkeystring);
+        Debug.Log($"ADJTK key:{newkey} newkeystring:{newkeystring} listcnt:{definedJourneys.Count}");
+        PopulateDefinedJourneyDropdown();
+    }
+
     public void DefineJourney()
     {
         definedJourney = BuildJourneySpecFromControls();
         var ss = definedJourney.SerialString();
         jnman.curJnySpec.SetAndSave(ss);
         Debug.Log($"Defined {definedJourney.jouneyId} length:{ss.Length}");
-        definedJourneys.Add(definedJourney.jouneyId);
-        PopulateDefinedJourneys();
+        AddDefinedJourneyToKeys(definedJourney);
     }
 
 

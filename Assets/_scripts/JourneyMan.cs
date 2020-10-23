@@ -70,6 +70,7 @@ namespace CampusSimulator
         public UxSetting<string> lastViewerEndJourney = new UxSetting<string>("lastViewerEndJourney", "");
 
         public UxSetting<string> curJnySpec = new UxSetting<string>("curJnySpec", "");
+        public UxSetting<string> curJnySpecKeys = new UxSetting<string>("curJnySpecKeys", "");
 
 
         public void AddJ(Journey jny)
@@ -1362,6 +1363,7 @@ namespace CampusSimulator
             lastViewerStartJourney.GetInitial("");
             lastViewerEndJourney.GetInitial("");
             curJnySpec.GetInitial("");
+            curJnySpecKeys.GetInitial("");
         }
 
         public void ModelBuild()
