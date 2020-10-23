@@ -103,20 +103,27 @@ public class JourneyPanel : MonoBehaviour
     public void InitVals()
     {
         Debug.Log("JourneyPanels InitVals called");
-        var curjny = jnman.curJnySpec.Get();
-        if (curjny=="")
-        {
+        var curjnystr = jnman.curJnySpec.Get();
+        var js = new JourneySpec(jnman.journeySpecMan,curjnystr);
+        LoadDefinedJourneys();
+        InitVals(js);
+    }
 
-            var js = new JourneySpec(jnman.journeySpecMan,"");
-            curjny = js.SerialString();
-        }
-        curJnySerializedStringText.text = curjny;
+    public void LoadDefinedJourneys()
+    {
+        definedJourneys = new List<string>();
+    }
+
+    public void InitVals(JourneySpec js)
+    {
+        Debug.Log("JourneyPanels InitVals called");
+        curJnySerializedStringText.text = js.SerialString();
 
         var errmsg = "Exception caught in JourneyPanel.Initvals";
         try
         {
             startBuildingOpts = bdman.GetBuildingList();
-            var inival = "Bld33";
+            var inival = js.routeSpec.bld1name;
             var idx = startBuildingOpts.FindIndex(s => s == inival);
             if (idx <= 0) idx = 0;
 
@@ -132,7 +139,7 @@ public class JourneyPanel : MonoBehaviour
         try
         {
             endBuildingOpts = bdman.GetBuildingList();
-            var inival = "Bld19";
+            var inival = js.routeSpec.bld2name;
             var idx = endBuildingOpts.FindIndex(s => s == inival);
             if (idx <= 0) idx = 0;
 
@@ -148,7 +155,7 @@ public class JourneyPanel : MonoBehaviour
         try
         {
             avatarOpts = avatars;
-            var inival = "drone/drone2";
+            var inival = js.princeSpec.avatar;
             var idx = avatarOpts.FindIndex(s => s == inival);
             if (idx <= 0) idx = 0;
 
@@ -212,7 +219,7 @@ public class JourneyPanel : MonoBehaviour
         "People/Businessman005",
     };
 
-    public JourneySpec BuildJouneySpecFromControls()
+    public JourneySpec BuildJourneySpecFromControls()
     {
         var jm = jnman.journeySpecMan;
         var bld1 = startBuildingOpts[jnyStartBuildingDropdown.value];
@@ -231,8 +238,12 @@ public class JourneyPanel : MonoBehaviour
 
     public void DefineJourney()
     {
-        definedJourney = BuildJouneySpecFromControls();
-        Debug.Log($"Defined {definedJourney.jouneyId}");
+        definedJourney = BuildJourneySpecFromControls();
+        var ss = definedJourney.SerialString();
+        jnman.curJnySpec.SetAndSave(ss);
+        Debug.Log($"Defined {definedJourney.jouneyId} length:{ss.Length}");
+        definedJourneys.Add(definedJourney.jouneyId);
+        PopulateDefinedJourneys();
     }
 
 

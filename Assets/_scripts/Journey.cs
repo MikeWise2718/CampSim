@@ -64,7 +64,7 @@ namespace CampusSimulator
         {
             var ms = JourneySpecMan.GetMinorSep();
             var rsm = RouteSpecMethod.BldRoomToBldRoom;
-            var rv = $"#Route{ms}{rsm}{ms}{"Bld33"}{ms}{"lobby"}{ms}{"Bld19"}{ms}{"lobby"}";
+            var rv = $"#Route{ms}{rsm}{ms}{"Bld33"}{ms}{"lobby"}{ms}{"Bld34"}{ms}{"lobby"}";
             return rv;
         }
 
@@ -130,7 +130,7 @@ namespace CampusSimulator
         {
             var ms = JourneySpecMan.GetMinorSep();
             var jm = JourneyMethod.walkjour;
-            var rv = $"#Prince{ms}{jm}{ms}{"Jane"}{ms}{"Girl001"}";
+            var rv = $"#Prince{ms}{jm}{ms}{"Jane"}{ms}{"People/Businesswoman001"}";
             return rv;
         }
 
