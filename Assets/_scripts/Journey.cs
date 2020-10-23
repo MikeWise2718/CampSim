@@ -263,7 +263,7 @@ namespace CampusSimulator
                 return;
             }
             var sar = serialstring.Split(mjs, System.StringSplitOptions.None);
-            if (sar.Length < 5 || sar[0]!="#JourneySpec")
+            if (sar.Length < 6 || sar[0]!="#JourneySpec")
             {
                 jm.jnman.sman.LggError($"Bad serialstring for JourneySpec:'{serialstring}'");
                 journeySpecMethod = JourneySpecMethod.rpa;
@@ -274,11 +274,18 @@ namespace CampusSimulator
                 return;
             }
 
-            this.journeySpecMethod = JourneySpecMethod.rpa;
             this.displayName = sar[1];
-            this.routeSpec = new RouteSpec(jm, sar[2]);
-            this.princeSpec = new JourneyPrincipalSpec(jm,sar[3]);
-            this.actionSpec = new ActionSpec(jm,sar[4]);
+            if (sar[2] == "rpa")
+            {
+                this.journeySpecMethod = JourneySpecMethod.rpa;
+            }
+            else
+            {
+                this.journeySpecMethod = JourneySpecMethod.rpa;// there will be more
+            }
+            this.routeSpec = new RouteSpec(jm, sar[3]);
+            this.princeSpec = new JourneyPrincipalSpec(jm,sar[4]);
+            this.actionSpec = new ActionSpec(jm,sar[5]);
         }
 
         public string SerialString()
@@ -287,7 +294,7 @@ namespace CampusSimulator
             var rrs = routeSpec.SerialString();
             var pps = princeSpec.SerialString();
             var aas = actionSpec.SerialString();
-            var rv = $"#JourneySpec{mjs}{journeySpecMethod}{mjs}{rrs}{mjs}{pps}{mjs}{aas}";
+            var rv = $"#JourneySpec{mjs}{displayName}{mjs}rpa{mjs}{rrs}{mjs}{pps}{mjs}{aas}";
             return rv;
         }
     }

@@ -119,6 +119,8 @@ public class JourneyPanel : MonoBehaviour
         Debug.Log("JourneyPanels InitVals called");
         curJnySerializedStringText.text = js.SerialString();
 
+        jnyIdInput.text = js.jouneyId;
+
         var errmsg = "Exception caught in JourneyPanel.Initvals";
         try
         {
