@@ -13,20 +13,30 @@ public class JourneyPanel : MonoBehaviour
 
     Text statusMessageText;
     Text curJnySerializedStringText;
+
+    Dropdown jnyDefinedJnysDropdown;
+
+
     InputField jnyIdInput;
     Dropdown jnyStartBuildingDropdown;
     Dropdown jnyStartRoomDropdown;
     Dropdown jnyEndBuildingDropdown;
     Dropdown jnyEndRoomDropdown;
+    Dropdown jnyAvatarDropdown;
     Toggle jnyQuitOnEndToggle;
     InputField jnyEndActionInput;
 
-    Button closeButton;
+    Button defineButton;
     Button launchButton;
-    Button launchAndShadowhButton;
+    Button shadowButton;
+    Button closeButton;
 
-    List<string> stopts;
-    List<string> edopts;
+    List<string> startBuildingOpts;
+    List<string> endBuildingOpts;
+    List<string> avatarOpts;
+
+    List<string> definedJourneys;
+
 
     public void Init0()
     {
@@ -43,6 +53,8 @@ public class JourneyPanel : MonoBehaviour
         statusMessageText = transform.Find("StatusMessageText").gameObject.GetComponent<Text>();
         curJnySerializedStringText = transform.Find("CurJnySerializedStringText").gameObject.GetComponent<Text>();
 
+        jnyDefinedJnysDropdown = transform.Find("JnyDefinedJnysDropdown").gameObject.GetComponent<Dropdown>();
+
 
         jnyIdInput = transform.Find("JnyIdInput").gameObject.GetComponent<InputField>();
         jnyStartBuildingDropdown = transform.Find("JnyStartBuildingDropdown").gameObject.GetComponent<Dropdown>();
@@ -50,20 +62,27 @@ public class JourneyPanel : MonoBehaviour
 
         jnyEndBuildingDropdown = transform.Find("JnyEndBuildingDropdown").gameObject.GetComponent<Dropdown>();
         jnyEndRoomDropdown = transform.Find("JnyEndRoomDropdown").gameObject.GetComponent<Dropdown>();
+
+        jnyAvatarDropdown = transform.Find("JnyAvatarDropdown").gameObject.GetComponent<Dropdown>();
+
+
         jnyQuitOnEndToggle = transform.Find("JnyQuitOnEndToggle").gameObject.GetComponent<Toggle>();
         jnyEndActionInput = transform.Find("JnyEndActionInput").gameObject.GetComponent<InputField>();
 
 
+        defineButton = transform.Find("DefineButton").gameObject.GetComponent<Button>();
+        defineButton.onClick.AddListener(delegate { DefineJourney(); });
         launchButton = transform.Find("LaunchButton").gameObject.GetComponent<Button>();
-        launchButton.onClick.AddListener(delegate { LaunchJourney(shadow: false); });
-        launchAndShadowhButton = transform.Find("LaunchAndShadowButton").gameObject.GetComponent<Button>();
-        launchAndShadowhButton.onClick.AddListener(delegate { LaunchJourney(shadow:true); });
+        launchButton.onClick.AddListener(delegate { LaunchJourney(); });
+        shadowButton = transform.Find("ShadowButton").gameObject.GetComponent<Button>();
+        shadowButton.onClick.AddListener(delegate { ShadowJourney(); });
         closeButton = transform.Find("CloseButton").gameObject.GetComponent<Button>();
         closeButton.onClick.AddListener(delegate { uiman.ClosePanel();  });
 
         jnyStartBuildingDropdown.onValueChanged.AddListener(delegate { RepopulateRoomsDropdown(jnyStartBuildingDropdown, jnyStartRoomDropdown); });
         jnyEndBuildingDropdown.onValueChanged.AddListener(delegate { RepopulateRoomsDropdown(jnyEndBuildingDropdown, jnyEndRoomDropdown); });
     }
+
 
     public void RepopulateRoomsDropdown(Dropdown bldctrl,Dropdown roomctrl)
     {
@@ -79,23 +98,7 @@ public class JourneyPanel : MonoBehaviour
         roomctrl.AddOptions(roomlist);
     }
 
-    public bool VerifyValues()
-    {
-        return true;
-    }
 
-    public void SetStatusMessage(string message, bool error)
-    {
-        statusMessageText.text = message;
-        if (error)
-        {
-            statusMessageText.color = Color.red;
-        }
-        else
-        {
-            statusMessageText.color = Color.black;
-        }
-    }
 
     public void InitVals()
     {
@@ -112,42 +115,108 @@ public class JourneyPanel : MonoBehaviour
         var errmsg = "Exception caught in JourneyPanel.Initvals";
         try
         {
-            stopts = bdman.GetBuildingList();
+            startBuildingOpts = bdman.GetBuildingList();
             var inival = "Bld33";
-            var idx = stopts.FindIndex(s => s == inival);
+            var idx = startBuildingOpts.FindIndex(s => s == inival);
             if (idx <= 0) idx = 0;
 
             jnyStartBuildingDropdown.ClearOptions();
-            jnyStartBuildingDropdown.AddOptions(stopts);
+            jnyStartBuildingDropdown.AddOptions(startBuildingOpts);
             jnyStartBuildingDropdown.value = idx;
         }
         catch (Exception ex)
         {
-            sman.LggError($"{errmsg} initializing startBuildingDropdown - ex.Message:{ex.Message}");
+            sman.LggError($"{errmsg} initializing jnyStartBuildingDropdown - ex.Message:{ex.Message}");
         }
 
         try
         {
-            edopts = bdman.GetBuildingList();
+            endBuildingOpts = bdman.GetBuildingList();
             var inival = "Bld19";
-            var idx = edopts.FindIndex(s => s == inival);
+            var idx = endBuildingOpts.FindIndex(s => s == inival);
             if (idx <= 0) idx = 0;
 
             jnyEndBuildingDropdown.ClearOptions();
-            jnyEndBuildingDropdown.AddOptions(edopts);
+            jnyEndBuildingDropdown.AddOptions(endBuildingOpts);
             jnyEndBuildingDropdown.value = idx;
         }
         catch (Exception ex)
         {
-            sman.LggError($"{errmsg} initializing endBuildingDropdown - ex.Message:{ex.Message}");
+            sman.LggError($"{errmsg} initializing jnyEndBuildingDropdown - ex.Message:{ex.Message}");
+        }
+
+        try
+        {
+            avatarOpts = avatars;
+            var inival = "drone/drone2";
+            var idx = avatarOpts.FindIndex(s => s == inival);
+            if (idx <= 0) idx = 0;
+
+            jnyAvatarDropdown.ClearOptions();
+            jnyAvatarDropdown.AddOptions(avatarOpts);
+            jnyAvatarDropdown.value = idx;
+        }
+        catch (Exception ex)
+        {
+            sman.LggError($"{errmsg} initializing jnyAvatarDropdown - ex.Message:{ex.Message}");
+        }
+
+        PopulateDefinedJourneys();
+    }
+
+    public void PopulateDefinedJourneys()
+    {
+        try
+        {
+            var inival = "";
+            var idx = definedJourneys.FindIndex(s => s == inival);
+            if (idx <= 0) idx = 0;
+
+            jnyDefinedJnysDropdown.ClearOptions();
+            jnyDefinedJnysDropdown.AddOptions(definedJourneys);
+            jnyDefinedJnysDropdown.value = idx;
+        }
+        catch (Exception ex)
+        {
+            sman.LggError($"Exception caught in JourneyPanel.PopulateDefinedJourneys jnyAvatarDropdown - ex.Message:{ex.Message}");
         }
     }
+
+    public void SetStatusMessage(string message, bool error)
+    {
+        statusMessageText.text = message;
+        if (error)
+        {
+            statusMessageText.color = Color.red;
+        }
+        else
+        {
+            statusMessageText.color = Color.black;
+        }
+    }
+
+
+    List<string> avatars = new List<string>()
+    {
+        "drone/drone1",
+        "drone/drone2",
+        "People/Businesswoman001",
+        "People/Businesswoman002",
+        "People/Businesswoman003",
+        "People/Businesswoman004",
+        "People/Businesswoman005",
+        "People/Businessman001",
+        "People/Businessman002",
+        "People/Businessman003",
+        "People/Businessman004",
+        "People/Businessman005",
+    };
 
     public JourneySpec BuildJouneySpecFromControls()
     {
         var jm = jnman.journeySpecMan;
-        var bld1 = stopts[jnyStartBuildingDropdown.value];
-        var bld2 = edopts[jnyEndBuildingDropdown.value];
+        var bld1 = startBuildingOpts[jnyStartBuildingDropdown.value];
+        var bld2 = endBuildingOpts[jnyEndBuildingDropdown.value];
         Debug.Log($"BJS for {bld1} to {bld2}");
         var rs = new RouteSpec(jnman.journeySpecMan, RouteSpecMethod.BldRoomToBldRoom, bld1, "room1", bld2, "room3", "ephemeral");
         var jps = new JourneyPrincipalSpec(jm, JourneyMethod.walkjour, "ephemera", "Girl003");
@@ -157,20 +226,40 @@ public class JourneyPanel : MonoBehaviour
         return js;
     }
 
+    JourneySpec definedJourney = null;
+    Journey launchedJny = null;
 
-    public void LaunchJourney(bool shadow)
+    public void DefineJourney()
     {
-        //var bld1 = stopts[jnyStartBuildingDropdown.value];
-        //var bld2 = edopts[jnyEndBuildingDropdown.value];
-        //Debug.Log($"Launching journey from {bld1} to {bld2}");
-        //var jny = jnman.AddBldBldJourneyWithEphemeralPeople(bld1, bld2);
-        var js = BuildJouneySpecFromControls();
-        var jny = jnman.AddJsmJourney(js);
-        if (shadow)
+        definedJourney = BuildJouneySpecFromControls();
+        Debug.Log($"Defined {definedJourney.jouneyId}");
+    }
+
+
+    public void LaunchJourney()
+    {
+        if (definedJourney!=null)
         {
-            jnman.journeyToShadow = jny.name;
+            launchedJny = jnman.AddJsmJourney(definedJourney);
+            Debug.Log($"Launched {launchedJny.name}");
+        }
+        else
+        {
+            SetStatusMessage("No journey has been defined yet", error: true);
+        }
+    }
+
+    public void ShadowJourney()
+    {
+        if (launchedJny != null)
+        {
+            jnman.journeyToShadow = launchedJny.name;
             jnman.shadowJourney = true;
-            Debug.Log($"Shadowing {jny.name}");
+            Debug.Log($"Shadowing {launchedJny.name}");
+        }
+        else
+        {
+            SetStatusMessage("No journey has been launched yet",error:true);
         }
     }
 
