@@ -223,10 +223,10 @@ namespace CampusSimulator
         JourneySpecMan jm;
         public string jouneyId;
         public string displayName;
-        JourneySpecMethod journeySpecMethod;
-        RouteSpec routeSpec;
-        JourneyPrincipalSpec princeSpec;
-        ActionSpec actionSpec;
+        public JourneySpecMethod journeySpecMethod;
+        public RouteSpec routeSpec;
+        public JourneyPrincipalSpec princeSpec;
+        public ActionSpec actionSpec;
         public JourneySpec(JourneySpecMan jm,string displayName,RouteSpec routeSpec,JourneyPrincipalSpec princeSpec,ActionSpec actionSpec)
         {
             this.jm = jm;

@@ -143,13 +143,29 @@ public class JourneyPanel : MonoBehaviour
         }
     }
 
+    public JourneySpec BuildJouneySpecFromControls()
+    {
+        var jm = jnman.journeySpecMan;
+        var bld1 = stopts[jnyStartBuildingDropdown.value];
+        var bld2 = edopts[jnyEndBuildingDropdown.value];
+        Debug.Log($"BJS for {bld1} to {bld2}");
+        var rs = new RouteSpec(jnman.journeySpecMan, RouteSpecMethod.BldRoomToBldRoom, bld1, "room1", bld2, "room3", "ephemeral");
+        var jps = new JourneyPrincipalSpec(jm, JourneyMethod.walkjour, "ephemera", "Girl003");
+        var aas = new ActionSpec(jm, JourneyEnd.disappear, quitAtDest: false, thingToDo: "nothing");
+        var jid = jm.GetNewJourneyId();
+        var js = new JourneySpec(jm,jid, rs, jps, aas);
+        return js;
+    }
+
 
     public void LaunchJourney(bool shadow)
     {
-        var bld1 = stopts[jnyStartBuildingDropdown.value];
-        var bld2 = edopts[jnyEndBuildingDropdown.value];
-        Debug.Log($"Launching journey from {bld1} to {bld2}");
-        var jny = jnman.AddBldBldJourneyWithEphemeralPeople(bld1, bld2);
+        //var bld1 = stopts[jnyStartBuildingDropdown.value];
+        //var bld2 = edopts[jnyEndBuildingDropdown.value];
+        //Debug.Log($"Launching journey from {bld1} to {bld2}");
+        //var jny = jnman.AddBldBldJourneyWithEphemeralPeople(bld1, bld2);
+        var js = BuildJouneySpecFromControls();
+        var jny = jnman.AddJsmJourney(js);
         if (shadow)
         {
             jnman.journeyToShadow = jny.name;

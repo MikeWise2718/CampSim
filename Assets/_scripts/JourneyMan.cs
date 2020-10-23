@@ -864,6 +864,19 @@ namespace CampusSimulator
             return jny;
         }
 
+        public Journey AddJsmJourney(JourneySpec jsm)
+        {
+            CheckFastMode();
+            var bld1 = jsm.routeSpec.bld1name;
+            var bld2 = jsm.routeSpec.bld2name;
+            var bc1 = bm.GetBuilding(bld1);
+            var bc2 = bm.GetBuilding(bld2);
+            var bdest1 = bc1.GetRandomDest("jnygen");
+            var bdest2 = bc2.GetRandomDest("jnygen");
+            var pathname = bc1.shortname + " to " + bc2.shortname;
+            var jny = AddBldNodeBldNodeJourney(bdest1, bdest2, pathname);
+            return jny;
+        }
         public Journey AddBldBldJourneyWithEphemeralPeople(string b1, string b2)
         {
             CheckFastMode();
@@ -1692,7 +1705,7 @@ namespace CampusSimulator
                 if (jny != null)
                 {
                     var bgo = jny.birdctrl.birdformgo;
-                    if (bgo != null && jny.status!=JourneyStatE.WaitingToStart)
+                    if (bgo != null )
                     {
                         var pt = bgo.transform.position;
                         var rt = bgo.transform.localRotation.eulerAngles;
@@ -1714,7 +1727,10 @@ namespace CampusSimulator
                     }
                     else
                     {
-                        Debug.Log($"ShadowSync birdgo is null");
+                        if (jny.status != JourneyStatE.WaitingToStart)
+                        {
+                            Debug.Log($"ShadowSync birdgo is null status:{jny.status}");
+                        }
                     }
                 }
                 lastShadowSyncTime = Time.time;
