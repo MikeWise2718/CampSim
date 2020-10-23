@@ -17,7 +17,7 @@ public class JourneyPanel : MonoBehaviour
     Dropdown jnyDefinedJnysDropdown;
 
 
-    InputField jnyIdInput;
+    InputField jnyNameInput;
     Dropdown jnyStartBuildingDropdown;
     Dropdown jnyStartRoomDropdown;
     Dropdown jnyEndBuildingDropdown;
@@ -26,6 +26,7 @@ public class JourneyPanel : MonoBehaviour
     Toggle jnyQuitOnEndToggle;
     InputField jnyEndActionInput;
 
+    Button deleteButton;
     Button defineButton;
     Button launchButton;
     Button shadowButton;
@@ -35,7 +36,8 @@ public class JourneyPanel : MonoBehaviour
     List<string> endBuildingOpts;
     List<string> avatarOpts;
 
-    List<string> definedJourneys;
+    Dictionary<string,string> definedJourneys;
+    Dictionary<string, UxUtils.UxSetting<string>> jkeys;
 
 
     public void Init0()
@@ -56,7 +58,7 @@ public class JourneyPanel : MonoBehaviour
         jnyDefinedJnysDropdown = transform.Find("JnyDefinedJnysDropdown").gameObject.GetComponent<Dropdown>();
 
 
-        jnyIdInput = transform.Find("JnyIdInput").gameObject.GetComponent<InputField>();
+        jnyNameInput = transform.Find("JnyNameInput").gameObject.GetComponent<InputField>();
         jnyStartBuildingDropdown = transform.Find("JnyStartBuildingDropdown").gameObject.GetComponent<Dropdown>();
         jnyStartRoomDropdown = transform.Find("JnyStartRoomDropdown").gameObject.GetComponent<Dropdown>();
 
@@ -69,6 +71,8 @@ public class JourneyPanel : MonoBehaviour
         jnyQuitOnEndToggle = transform.Find("JnyQuitOnEndToggle").gameObject.GetComponent<Toggle>();
         jnyEndActionInput = transform.Find("JnyEndActionInput").gameObject.GetComponent<InputField>();
 
+        deleteButton = transform.Find("DeleteButton").gameObject.GetComponent<Button>();
+        deleteButton.onClick.AddListener(delegate { DeleteJourney(); });
 
         defineButton = transform.Find("DefineButton").gameObject.GetComponent<Button>();
         defineButton.onClick.AddListener(delegate { DefineJourney(); });
@@ -81,12 +85,41 @@ public class JourneyPanel : MonoBehaviour
 
         jnyStartBuildingDropdown.onValueChanged.AddListener(delegate { RepopulateRoomsDropdown(jnyStartBuildingDropdown, jnyStartRoomDropdown); });
         jnyEndBuildingDropdown.onValueChanged.AddListener(delegate { RepopulateRoomsDropdown(jnyEndBuildingDropdown, jnyEndRoomDropdown); });
+        jnyDefinedJnysDropdown.onValueChanged.AddListener(delegate { DefinedJourneyDropdown(); });
     }
 
+    public void DefinedJourneyDropdown()
+    {
+        int idx = jnyDefinedJnysDropdown.value;
+        var jslist = new List<string>(definedJourneys.Keys);
+        var key = jslist[idx];
+        var ss = definedJourneys[key];
+        var js = new JourneySpec(jnman.journeySpecMan, ss);
+        Debug.Log($"DefinedJourneyDropdown key:{key}");
+        SetValsToJourneySpec(js);
+    }
+    public void PopulateDefinedJourneyDropdown(string inijname="" )
+    {
+        Debug.Log("PopulateDefinedJourneyDropdown");
+        try
+        {
+            var inival = inijname;
+            var definedJourneysList = new List<string>(definedJourneys.Keys);
+            var idx = definedJourneysList.FindIndex(s => s == inival);
+            if (idx <= 0) idx = 0;
+
+            jnyDefinedJnysDropdown.ClearOptions();
+            jnyDefinedJnysDropdown.AddOptions(definedJourneysList);
+            jnyDefinedJnysDropdown.value = idx;
+        }
+        catch (Exception ex)
+        {
+            sman.LggError($"Exception caught in JourneyPanel.PopulateDefinedJourneys jnyAvatarDropdown - ex.Message:{ex.Message}");
+        }
+    }
 
     public void RepopulateRoomsDropdown(Dropdown bldctrl,Dropdown roomctrl)
     {
-        var ctrlbldname = bldctrl.name;
         var curbldval = bldctrl.value;
         var bldlist = bdman.GetBuildingList();
         var bldname = bldlist[curbldval];
@@ -103,31 +136,73 @@ public class JourneyPanel : MonoBehaviour
     public void InitVals()
     {
         Debug.Log("JourneyPanels InitVals called");
-        var curjnystr = jnman.curJnySpec.Get();
-        var js = new JourneySpec(jnman.journeySpecMan,curjnystr);
         LoadDefinedJourneys();
-        InitVals(js);
+        var curjnyname = jnman.curJnySpecName.Get();
+        JourneySpec js;
+        if (!definedJourneys.ContainsKey(curjnyname))
+        {
+            SetStatusMessage($"Initial journey name not found in defined journeys:{curjnyname}", error: true);
+            js = new JourneySpec(jnman.journeySpecMan, "");
+        }
+        else
+        {
+            SetStatusMessage($"Initial journey name:{curjnyname}", error: false);
+            var curjnyss = definedJourneys[curjnyname];
+            js = new JourneySpec(jnman.journeySpecMan, curjnyss);
+        }
+        SetValsToJourneySpec(js);
     }
+
+
+    public (bool ok,string val) GetJsKeySave(string key)
+    {
+        var wholekey = $"journeyspec_{key}";
+        var uxset = new UxUtils.UxSetting<string>(wholekey, "");
+        var sval = uxset.Get();
+        var ok = false;
+        if (sval != "")
+        {
+            ok = true;
+        }
+        return (ok, sval);
+    }
+    public void SetJsKeySave(string key,string sval)
+    {
+        var wholekey = $"journeyspec_{key}";
+        var uxset = new UxUtils.UxSetting<string>(wholekey, "");
+        uxset.SetAndSave(sval);
+    }
+
+    public void EraseJsKey(string key, string sval)
+    {
+        var wholekey = $"journeyspec_{key}";
+        var uxset = new UxUtils.UxSetting<string>(wholekey, "");
+        uxset.SetAndSave("");
+        // doesn't actually delete the key - just erases its values
+    }
+
 
     public void LoadDefinedJourneys()
     {
-        definedJourneys = new List<string>();
+        definedJourneys = new Dictionary<string,string>();
         var curspeckeys = jnman.curJnySpecKeys.Get();
         var cskarr = curspeckeys.Split('|');
         foreach(var key in cskarr)
         {
-            definedJourneys.Add(key);
+            var (ok, sval) = GetJsKeySave(key);
+            definedJourneys[key] = sval;
         }
+        PopulateDefinedJourneyDropdown();
     }
 
 
 
-    public void InitVals(JourneySpec js)
+    public void SetValsToJourneySpec(JourneySpec js)
     {
         Debug.Log("JourneyPanels InitVals called");
         curJnySerializedStringText.text = js.SerialString();
 
-        jnyIdInput.text = js.jouneyId;
+        jnyNameInput.text = js.displayName;
 
         var errmsg = "Exception caught in JourneyPanel.Initvals";
         try
@@ -178,26 +253,9 @@ public class JourneyPanel : MonoBehaviour
             sman.LggError($"{errmsg} initializing jnyAvatarDropdown - ex.Message:{ex.Message}");
         }
 
-        PopulateDefinedJourneyDropdown();
     }
 
-    public void PopulateDefinedJourneyDropdown()
-    {
-        try
-        {
-            var inival = "";
-            var idx = definedJourneys.FindIndex(s => s == inival);
-            if (idx <= 0) idx = 0;
 
-            jnyDefinedJnysDropdown.ClearOptions();
-            jnyDefinedJnysDropdown.AddOptions(definedJourneys);
-            jnyDefinedJnysDropdown.value = idx;
-        }
-        catch (Exception ex)
-        {
-            sman.LggError($"Exception caught in JourneyPanel.PopulateDefinedJourneys jnyAvatarDropdown - ex.Message:{ex.Message}");
-        }
-    }
 
     public void SetStatusMessage(string message, bool error)
     {
@@ -232,14 +290,14 @@ public class JourneyPanel : MonoBehaviour
     public JourneySpec BuildJourneySpecFromControls()
     {
         var jm = jnman.journeySpecMan;
+        var jname = jnyNameInput.text;
         var bld1 = startBuildingOpts[jnyStartBuildingDropdown.value];
         var bld2 = endBuildingOpts[jnyEndBuildingDropdown.value];
         Debug.Log($"BJS for {bld1} to {bld2}");
         var rs = new RouteSpec(jnman.journeySpecMan, RouteSpecMethod.BldRoomToBldRoom, bld1, "room1", bld2, "room3", "ephemeral");
         var jps = new JourneyPrincipalSpec(jm, JourneyMethod.walkjour, "ephemera", "Girl003");
         var aas = new ActionSpec(jm, JourneyEnd.disappear, quitAtDest: false, thingToDo: "nothing");
-        var jid = jm.GetNewJourneyId();
-        var js = new JourneySpec(jm,jid, rs, jps, aas);
+        var js = new JourneySpec(jm,jname, rs, jps, aas);
         return js;
     }
 
@@ -249,9 +307,11 @@ public class JourneyPanel : MonoBehaviour
     public void AddDefinedJourneyToKeys(JourneySpec js)
     {
         var newkey = js.displayName;
-        definedJourneys.Add(newkey);
+        var sval = js.SerialString();
+        definedJourneys[newkey] = sval;
+        SetJsKeySave(newkey, sval);
         var newkeystring = "";
-        foreach (var key in definedJourneys)
+        foreach (var key in definedJourneys.Keys)
         {
             if (newkeystring == "")
             {
@@ -267,12 +327,26 @@ public class JourneyPanel : MonoBehaviour
         PopulateDefinedJourneyDropdown();
     }
 
+    public void DeleteJourney()
+    {
+        var key = jnyNameInput.text;
+        if (!definedJourneys.ContainsKey(key))
+        {
+            SetStatusMessage($"Journey {key} does not exist",error:true);
+            return;
+        }
+        definedJourneys.Remove(key);
+    }
+
+
+
     public void DefineJourney()
     {
         definedJourney = BuildJourneySpecFromControls();
         var ss = definedJourney.SerialString();
-        jnman.curJnySpec.SetAndSave(ss);
-        Debug.Log($"Defined {definedJourney.jouneyId} length:{ss.Length}");
+        curJnySerializedStringText.text = ss;
+        //jnman.curJnySpec.SetAndSave(ss);
+        //Debug.Log($"Defined {definedJourney.jouneyId} length:{ss.Length}");
         AddDefinedJourneyToKeys(definedJourney);
     }
 
@@ -313,7 +387,7 @@ public class JourneyPanel : MonoBehaviour
 
 
 
-public void SetVals(bool closing = false)
+    public void SetVals(bool closing = false)
     {
         Debug.Log($"JourneyPanel.SetVals called - closing:{closing}");
 

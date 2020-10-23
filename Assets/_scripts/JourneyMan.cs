@@ -69,7 +69,7 @@ namespace CampusSimulator
         public UxSetting<string> lastViewerStartJourney = new UxSetting<string>("lastViewerStartJourney", "");
         public UxSetting<string> lastViewerEndJourney = new UxSetting<string>("lastViewerEndJourney", "");
 
-        public UxSetting<string> curJnySpec = new UxSetting<string>("curJnySpec", "");
+        public UxSetting<string> curJnySpecName = new UxSetting<string>("curJnySpecName", "");
         public UxSetting<string> curJnySpecKeys = new UxSetting<string>("curJnySpecKeys", "");
 
 
@@ -1362,7 +1362,7 @@ namespace CampusSimulator
         {
             lastViewerStartJourney.GetInitial("");
             lastViewerEndJourney.GetInitial("");
-            curJnySpec.GetInitial("");
+            curJnySpecName.GetInitial("");
             curJnySpecKeys.GetInitial("");
         }
 
