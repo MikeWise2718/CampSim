@@ -221,7 +221,7 @@ namespace CampusSimulator
     public class JourneySpec
     {
         JourneySpecMan jm;
-        public string jouneyId;
+        public string newjid;
         public string displayName;
         public JourneySpecMethod journeySpecMethod;
         public RouteSpec routeSpec;
@@ -230,7 +230,7 @@ namespace CampusSimulator
         public JourneySpec(JourneySpecMan jm,string displayName,RouteSpec routeSpec,JourneyPrincipalSpec princeSpec,ActionSpec actionSpec)
         {
             this.jm = jm;
-            jouneyId = jm.GetNewJourneyId();
+            newjid = jm.GetNewJourneyId();
             this.displayName = displayName;
             this.journeySpecMethod = JourneySpecMethod.rpa;
             this.routeSpec = routeSpec;
@@ -252,11 +252,11 @@ namespace CampusSimulator
         public void SetOnString(string serialstring)
         { 
             var mjs = new string[] { JourneySpecMan.GetMajorSep() };
-            jouneyId = jm.GetNewJourneyId();
+            newjid = jm.GetNewJourneyId();
             if (serialstring=="")
             {
                 journeySpecMethod = JourneySpecMethod.rpa;
-                displayName = jouneyId;
+                displayName = newjid;
                 routeSpec = new RouteSpec(jm);
                 princeSpec = new JourneyPrincipalSpec(jm);
                 actionSpec = new ActionSpec(jm);
@@ -267,10 +267,10 @@ namespace CampusSimulator
             {
                 jm.jnman.sman.LggError($"Bad serialstring for JourneySpec:'{serialstring}'");
                 journeySpecMethod = JourneySpecMethod.rpa;
-                this.displayName = "";
-                this.routeSpec = new RouteSpec(jm, "");
-                this.princeSpec = new JourneyPrincipalSpec(jm,"");
-                this.actionSpec = new ActionSpec(jm,"");
+                this.displayName = newjid;
+                this.routeSpec = new RouteSpec(jm);
+                this.princeSpec = new JourneyPrincipalSpec(jm);
+                this.actionSpec = new ActionSpec(jm);
                 return;
             }
 
@@ -335,17 +335,17 @@ namespace CampusSimulator
         }
         public (bool,string) AddJourneySpec(JourneySpec journeySpec)
         {
-            var jid = journeySpec.jouneyId;
+            var jid = journeySpec.newjid;
             if (journeySpecs.ContainsKey(jid))
             {
                 return (false, $"AddJourneySpec - Duplicate JourneyID{jid}");
             }
-            journeySpecs[journeySpec.jouneyId] = journeySpec;
+            journeySpecs[journeySpec.newjid] = journeySpec;
             return (true, "");
         }
         public void DelJourneySpec(JourneySpec journeySpec)
         {
-            var jid = journeySpec.jouneyId;
+            var jid = journeySpec.newjid;
             if (journeySpecs.ContainsKey(jid))
             {
                 journeySpecs.Remove(jid);
