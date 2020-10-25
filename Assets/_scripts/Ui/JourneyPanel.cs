@@ -126,8 +126,8 @@ public class JourneyPanel : MonoBehaviour
     {
         ClearStatusMessage();
         int idx = jnyDefinedJnysDropdown.value;
-        var jslist = new List<string>(definedJourneys.Keys);
-        var key = jslist[idx];
+        var jslist = jnyDefinedJnysDropdown.options;
+        var key = jslist[idx].ToString();
         if (definedJourneys.ContainsKey(key))
         {
             var ss = definedJourneys[key];
@@ -138,7 +138,8 @@ public class JourneyPanel : MonoBehaviour
         }
         else
         {
-            SetStatusMessage("Can't find key:{key} in definedJourneys", error: true);
+            //NewJourney();
+            Debug.Log($"DefinedJourneyDropdown changed to new journey");
         }
     }
     public void PopulateDefinedJourneyDropdown(string inijname="" )
@@ -148,10 +149,10 @@ public class JourneyPanel : MonoBehaviour
         {
             var inival = inijname;
             var definedJourneysList = new List<string>(definedJourneys.Keys);
-            definedJourneysList.Add("");
+            definedJourneysList.Add("(blank)");
             var idx = definedJourneysList.FindIndex(s => s == inival);
             if (idx <= 0) idx = definedJourneysList.Count-1;// this is the blank entry we added
-
+            //if (idx <= 0) idx = 0;
             jnyDefinedJnysDropdown.ClearOptions();
             jnyDefinedJnysDropdown.AddOptions(definedJourneysList);
             jnyDefinedJnysDropdown.value = idx;
@@ -394,7 +395,7 @@ public class JourneyPanel : MonoBehaviour
         SetValsToJourneySpec(js);
         curJnySerializedStringText.text = js.SerialString();
         jnman.curJnySpecName.SetAndSave("");
-        PopulateDefinedJourneyDropdown(inijname:"");
+        //PopulateDefinedJourneyDropdown(inijname:"");
     }
 
 
@@ -495,6 +496,7 @@ public class JourneyPanel : MonoBehaviour
                     b1name = "Bld19";
                     b1room = "lobby";
                     b2name = "Bld121";
+                    b2room = "lobby";
                     personname = "Wei VonB19";
                     avaname = "People/Businesswoman003";
                     b2room = "lobby";
@@ -502,9 +504,10 @@ public class JourneyPanel : MonoBehaviour
                 }
             case SceneSelE.MsftB33focused:
                 {
-                    b1name = "Bld19";
+                    b1name = "Bld33";
                     b1room = "lobby";
-                    b2name = "Bld121";
+                    b2name = "Bld19";
+                    b2room = "lobby";
                     personname = "Fatma VanB33";
                     avaname = "People/Businesswoman004";
                     b2room = "lobby";
