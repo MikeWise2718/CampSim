@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using CampusSimulator;
+using System.Linq;
 
 public class JourneyPanel : MonoBehaviour
 {
@@ -126,20 +127,19 @@ public class JourneyPanel : MonoBehaviour
     {
         ClearStatusMessage();
         int idx = jnyDefinedJnysDropdown.value;
-        var jslist = jnyDefinedJnysDropdown.options;
-        var key = jslist[idx].ToString();
-        if (definedJourneys.ContainsKey(key))
+        var jslist = definedJourneys.Keys.ToList<string>();
+        if (idx<definedJourneys.Count)
         {
+            var key = jslist[idx].ToString();
             var ss = definedJourneys[key];
             var js = new JourneySpec(jnman.journeySpecMan, ss);
             definedJourney = js;
-            SetValsToJourneySpec(js);
+            PopulateFormValsWithJourneySpec(js);
             Debug.Log($"DefinedJourneyDropdown changed key:{key}");
         }
         else
         {
-            //NewJourney();
-            Debug.Log($"DefinedJourneyDropdown changed to new journey");
+            Debug.Log($"DefinedJourneyDropdown out of range:{idx} definedJourneys:{definedJourneys.Count}");
         }
     }
     public void PopulateDefinedJourneyDropdown(string inijname="" )
@@ -201,7 +201,7 @@ public class JourneyPanel : MonoBehaviour
             js = GetNextNewJourneySpec();
             SetStatusMessage($"Initial journey name empty", error: false);
         }
-        SetValsToJourneySpec(js);
+        PopulateFormValsWithJourneySpec(js);
     }
 
 
@@ -209,7 +209,7 @@ public class JourneyPanel : MonoBehaviour
     {
         var wholekey = $"journeyspec_{key}";
         var uxset = new UxUtils.UxSetting<string>(wholekey, "");
-        var sval = uxset.Get();
+        var sval = uxset.GetInitial("");
         var ok = false;
         if (sval != "")
         {
@@ -253,7 +253,7 @@ public class JourneyPanel : MonoBehaviour
 
 
 
-    public void SetValsToJourneySpec(JourneySpec js)
+    public void PopulateFormValsWithJourneySpec(JourneySpec js)
     {
         Debug.Log($"JourneyPanels.SetValsToJourneySpec called with js.displayName:{js.displayName}");
         jnman.curJnySpecName.SetAndSave(js.displayName);
@@ -392,7 +392,7 @@ public class JourneyPanel : MonoBehaviour
     {
         ClearStatusMessage();
         var js = GetNextNewJourneySpec();
-        SetValsToJourneySpec(js);
+        PopulateFormValsWithJourneySpec(js);
         curJnySerializedStringText.text = js.SerialString();
         jnman.curJnySpecName.SetAndSave("");
         //PopulateDefinedJourneyDropdown(inijname:"");
