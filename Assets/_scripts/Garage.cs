@@ -135,8 +135,10 @@ namespace CampusSimulator
             int npoped = 0;
             var veman = gm.sman.veman;
             var slotlist = new List<GarageSlot>(slots.Values);
+            var maxflip = (int)(cointoss_pctFull * slots.Count);
             foreach (var slot in slotlist)
             {
+                if (npoped >= maxflip) continue;// otherwise we get too many full lots unintentinoally
                 if (GraphAlgos.GraphUtil.FlipBiasedCoin(cointoss_pctFull))
                 {
                     var v = veman.MakeVehicle();
@@ -145,7 +147,8 @@ namespace CampusSimulator
                     npoped++;
                 }
             }
-            //Debug.Log("Populated garage " + name + " with "+npoped+" vehicles - slots:" + slots.Count);
+           // var truerate = npoped / (1.0 * slots.Count);
+            //Debug.Log($"Populated garage {name} with {+npoped} vehicles - slots:{slots.Count} truerate:{truerate:f3} desired rate:{cointoss_pctFull:f3}");
         }
         void DestroySlot(string name)
         {
@@ -692,11 +695,11 @@ namespace CampusSimulator
                     GenSlots("g_121_1", 16, -836f, -542.00f, 1.12f, -3.0f, 70);
                     break;
                 case "MsGarage33_1":
-                    defPercentFull = 0.9f;
+                    defPercentFull = 0.7f;
                     GenSlots("g_33_1", 8, -558.3f, 412.40f, -2.55f,-0.48f, -20);
                     break;
                 case "MsGarage34_1":
-                    defPercentFull = 0.9f;
+                    defPercentFull = 0.6f;
                     GenSlots("g_34_1", 5, -694.5f, 402.7f,  2.85f,  0.8f, -20);
                     break;
                 case "MsGarage11_1":

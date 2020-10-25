@@ -96,6 +96,18 @@ namespace CampusSimulator
             var i = GraphAlgos.GraphUtil.GetRanInt(destnodes.Count,ranset:"jnygen");
             return destnodes[i];
         }
+        public string GetMatchingDestOrRandom(string roomname,string ranset="")
+        {
+            foreach(var d in destnodes)
+            {
+                if (roomname == d)
+                {
+                    return roomname;
+                }
+            }
+            var rv = GetRandomDest(ranset);
+            return rv;
+        }
         public List<string> GetRoomListFromNodes()
         {
             return destnodes;

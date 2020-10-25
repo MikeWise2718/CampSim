@@ -12,9 +12,10 @@ public class JourneyPanel : MonoBehaviour
     UiMan uiman;
 
     Text statusMessageText;
-    Text curJnySerializedStringText;
+    Text definedJourneyText;
     Text curJnySpecKeys;
     Text curJnySpecName;
+    Text curJnySerializedStringText;
 
     Dropdown jnyDefinedJnysDropdown;
 
@@ -25,6 +26,8 @@ public class JourneyPanel : MonoBehaviour
     Dropdown jnyEndBuildingDropdown;
     Dropdown jnyEndRoomDropdown;
     Dropdown jnyAvatarDropdown;
+    InputField jnyPersonNameInput;
+
     Toggle jnyQuitOnEndToggle;
     InputField jnyEndActionInput;
 
@@ -48,6 +51,28 @@ public class JourneyPanel : MonoBehaviour
         LinkObjectsAndComponents();
     }
 
+    public string GenNewJourneyUniqueName()
+    {
+        var i = 1;
+        var keylist = new List<string>(definedJourneys.Keys);
+        while (i<=keylist.Count+1)
+        {
+            var ok = true;
+            var newname = $"Journey{i:d3}";
+            foreach(var key in keylist)
+            {
+                if (key==newname)
+                {
+                    ok = false;
+                    break;
+                }
+            }
+            if (ok) return newname;
+            i++;
+        }
+        return "JourneyX";
+    }
+
     public void LinkObjectsAndComponents()
     {
         sman = FindObjectOfType<SceneMan>();
@@ -59,6 +84,7 @@ public class JourneyPanel : MonoBehaviour
         curJnySerializedStringText = transform.Find("CurJnySerializedStringText").gameObject.GetComponent<Text>();
         curJnySpecKeys = transform.Find("CurJnySpecKeys").gameObject.GetComponent<Text>();
         curJnySpecName = transform.Find("CurJnySpecName").gameObject.GetComponent<Text>();
+        definedJourneyText = transform.Find("DefinedJourney").gameObject.GetComponent<Text>();
 
         jnyDefinedJnysDropdown = transform.Find("JnyDefinedJnysDropdown").gameObject.GetComponent<Dropdown>();
 
@@ -70,6 +96,7 @@ public class JourneyPanel : MonoBehaviour
         jnyEndBuildingDropdown = transform.Find("JnyEndBuildingDropdown").gameObject.GetComponent<Dropdown>();
         jnyEndRoomDropdown = transform.Find("JnyEndRoomDropdown").gameObject.GetComponent<Dropdown>();
 
+        jnyPersonNameInput = transform.Find("JnyPersonNameInput").gameObject.GetComponent<InputField>();
         jnyAvatarDropdown = transform.Find("JnyAvatarDropdown").gameObject.GetComponent<Dropdown>();
 
 
@@ -77,7 +104,7 @@ public class JourneyPanel : MonoBehaviour
         jnyEndActionInput = transform.Find("JnyEndActionInput").gameObject.GetComponent<InputField>();
 
         newButton = transform.Find("NewButton").gameObject.GetComponent<Button>();
-        newButton.onClick.AddListener(delegate { DeleteJourney(); });
+        newButton.onClick.AddListener(delegate { NewJourney(); });
         deleteButton = transform.Find("DeleteButton").gameObject.GetComponent<Button>();
         deleteButton.onClick.AddListener(delegate { DeleteJourney(); });
 
@@ -97,14 +124,22 @@ public class JourneyPanel : MonoBehaviour
 
     public void DefinedJourneyDropdownChanged()
     {
+        ClearStatusMessage();
         int idx = jnyDefinedJnysDropdown.value;
         var jslist = new List<string>(definedJourneys.Keys);
         var key = jslist[idx];
-        var ss = definedJourneys[key];
-        var js = new JourneySpec(jnman.journeySpecMan, ss);
-
-        Debug.Log($"DefinedJourneyDropdown key:{key}");
-        SetValsToJourneySpec(js);
+        if (definedJourneys.ContainsKey(key))
+        {
+            var ss = definedJourneys[key];
+            var js = new JourneySpec(jnman.journeySpecMan, ss);
+            definedJourney = js;
+            SetValsToJourneySpec(js);
+            Debug.Log($"DefinedJourneyDropdown changed key:{key}");
+        }
+        else
+        {
+            SetStatusMessage("Can't find key:{key} in definedJourneys", error: true);
+        }
     }
     public void PopulateDefinedJourneyDropdown(string inijname="" )
     {
@@ -113,8 +148,9 @@ public class JourneyPanel : MonoBehaviour
         {
             var inival = inijname;
             var definedJourneysList = new List<string>(definedJourneys.Keys);
+            definedJourneysList.Add("");
             var idx = definedJourneysList.FindIndex(s => s == inival);
-            if (idx <= 0) idx = 0;
+            if (idx <= 0) idx = definedJourneysList.Count-1;// this is the blank entry we added
 
             jnyDefinedJnysDropdown.ClearOptions();
             jnyDefinedJnysDropdown.AddOptions(definedJourneysList);
@@ -144,11 +180,12 @@ public class JourneyPanel : MonoBehaviour
         Debug.Log("JourneyPanels InitVals called");
         LoadDefinedJourneys();
         var curjnyname = jnman.curJnySpecName.Get();
-        var js  = new JourneySpec(jnman.journeySpecMan, ""); ;
+        JourneySpec js;
         if (curjnyname != "")
         {
             if (!definedJourneys.ContainsKey(curjnyname))
             {
+                js = GetNextNewJourneySpec();
                 SetStatusMessage($"Initial journey name not found in defined journeys:{curjnyname}", error: true);
             }
             else
@@ -160,6 +197,7 @@ public class JourneyPanel : MonoBehaviour
         }
         else
         {
+            js = GetNextNewJourneySpec();
             SetStatusMessage($"Initial journey name empty", error: false);
         }
         SetValsToJourneySpec(js);
@@ -198,27 +236,32 @@ public class JourneyPanel : MonoBehaviour
     {
         definedJourneys = new Dictionary<string,string>();
         var curspeckeys = jnman.curJnySpecKeys.Get();
-        var cskarr = curspeckeys.Split('|');
-        foreach(var key in cskarr)
+        if (curspeckeys != "")
         {
-            var (ok, sval) = GetJsKeySave(key);
-            definedJourneys[key] = sval;
+            var cskarr = curspeckeys.Split('|');
+            foreach (var key in cskarr)
+            {
+                var (ok, sval) = GetJsKeySave(key);
+                definedJourneys[key] = sval;
+            }
         }
         var curkey = jnman.curJnySpecName.Get();
-        PopulateDefinedJourneyDropdown( inijname:curkey); 
+        Debug.Log($"LoadDefinedJourneys:{curkey}");
+        PopulateDefinedJourneyDropdown( inijname:curkey ); 
     }
 
 
 
     public void SetValsToJourneySpec(JourneySpec js)
     {
-        Debug.Log("JourneyPanels InitVals called");
+        Debug.Log($"JourneyPanels.SetValsToJourneySpec called with js.displayName:{js.displayName}");
         jnman.curJnySpecName.SetAndSave(js.displayName);
         curJnySerializedStringText.text = js.SerialString();
 
         jnyNameInput.text = js.displayName;
+        jnyPersonNameInput.text = js.princeSpec.pname;
 
-        var errmsg = "Exception caught in JourneyPanel.Initvals";
+        var errmsg = "Exception caught in JourneyPanel.SetValsToJourneySpec";
         try
         {
             startBuildingOpts = bdman.GetBuildingList();
@@ -274,7 +317,7 @@ public class JourneyPanel : MonoBehaviour
         statusMessageText.text = "";
     }
 
-    public void SetStatusMessage(string message, bool error)
+    public void SetStatusMessage(string message, bool error=false)
     {
         statusMessageText.text = message;
         if (error)
@@ -341,12 +384,13 @@ public class JourneyPanel : MonoBehaviour
         }
         jnman.curJnySpecKeys.SetAndSave(newkeystring);
         Debug.Log($"ADJTK key:{newkey} newkeystring:{newkeystring} listcnt:{definedJourneys.Count}");
-        PopulateDefinedJourneyDropdown();
+        PopulateDefinedJourneyDropdown( inijname:newkey );
     }
 
     public void NewJourney()
     {
-        var js = new JourneySpec(jnman.journeySpecMan);
+        ClearStatusMessage();
+        var js = GetNextNewJourneySpec();
         SetValsToJourneySpec(js);
         curJnySerializedStringText.text = js.SerialString();
         jnman.curJnySpecName.SetAndSave("");
@@ -356,6 +400,7 @@ public class JourneyPanel : MonoBehaviour
 
     public void DeleteJourney()
     {
+        ClearStatusMessage();
         var key = jnyNameInput.text;
         if (!definedJourneys.ContainsKey(key))
         {
@@ -369,6 +414,7 @@ public class JourneyPanel : MonoBehaviour
 
     public void DefineJourney()
     {
+        ClearStatusMessage();
         definedJourney = BuildJourneySpecFromControls();
         var ss = definedJourney.SerialString();
         curJnySerializedStringText.text = ss;
@@ -380,41 +426,113 @@ public class JourneyPanel : MonoBehaviour
 
     public void LaunchJourney()
     {
+        ClearStatusMessage();
         if (definedJourney!=null)
         {
             launchedJny = jnman.AddJsmJourney(definedJourney);
-            Debug.Log($"Launched {launchedJny.name}");
+            if (launchedJny)
+            {
+                SetStatusMessage($"Launched {launchedJny.name}");
+            }
+            else
+            {
+                SetStatusMessage($"Could not launch journey (jny==null)",error:true);
+            }
         }
         else
         {
-            SetStatusMessage("No journey has been defined yet", error: true);
+            SetStatusMessage("No journey has been defined yet for shadoing", error: true);
         }
     }
 
     public void ShadowJourney()
     {
+        ClearStatusMessage();
         if (launchedJny != null)
         {
             jnman.journeyToShadow = launchedJny.name;
             jnman.shadowJourney = true;
-            Debug.Log($"Shadowing {launchedJny.name}");
+            SetStatusMessage($"Shadowing {launchedJny.name}");
         }
         else
         {
             SetStatusMessage("No journey has been launched yet",error:true);
         }
     }
+    RouteSpec defaultRoute;
+    JourneyPrincipalSpec defaultPrinceSpec;
+    ActionSpec defaultActionSpec;
 
+    JourneySpec GetNextNewJourneySpec()
+    {
+        var newname = GenNewJourneyUniqueName();
+        var jm = jnman.journeySpecMan;
+        var js = new JourneySpec(jm, newname, defaultRoute, defaultPrinceSpec, defaultActionSpec);
+        return js;
+    }
     public void SetScene(CampusSimulator.SceneSelE curscene)
     {
+        string b1name="Bld3X";
+        string b1room="lobby";
+        string b2name="BldY";
+        string b2room="lobby";
+        string personname = "Eve";
+        string avaname = "People/Businesswoman001";
+        switch (curscene)
+        {
+            case SceneSelE.MsftB121focused:
+                {
+                    b1name = "Bld121";
+                    b1room = "lobby";
+                    b2name = "Bld19";
+                    b2room = "lobby";
+                    personname = "Mary DelaB121";
+                    avaname = "People/Businesswoman002";
+                    break;
+                }
+            case SceneSelE.MsftB19focused:
+                {
+                    b1name = "Bld19";
+                    b1room = "lobby";
+                    b2name = "Bld121";
+                    personname = "Wei VonB19";
+                    avaname = "People/Businesswoman003";
+                    b2room = "lobby";
+                    break;
+                }
+            case SceneSelE.MsftB33focused:
+                {
+                    b1name = "Bld19";
+                    b1room = "lobby";
+                    b2name = "Bld121";
+                    personname = "Fatma VanB33";
+                    avaname = "People/Businesswoman004";
+                    b2room = "lobby";
+                    break;
+                }
+        }
+        var jm = jnman.journeySpecMan;
+        var rs = new RouteSpec(jm, RouteSpecMethod.BldRoomToBldRoom,b1name,b1room,b2name,b2room, avaname);
+        var jjps = new JourneyPrincipalSpec(jm, JourneyMethod.walkjour, personname, avaname);
+        var aas = new ActionSpec(jm, JourneyEnd.disappear, quitAtDest: false, "nothingtodo");
+        defaultActionSpec = aas;
+        defaultPrinceSpec = jjps;
+        defaultRoute = rs;
     }
     public void UpdateText()
     {
-        curJnySpecKeys.text = jnman.curJnySpecKeys.Get();
-        curJnySpecName.text = jnman.curJnySpecName.Get();
+        if (definedJourney == null)
+        {
+            definedJourneyText.text = "definedJourney:null";
+        }
+        else
+        {
+            definedJourneyText.text = $"definedJourney:{definedJourney.displayName}";
+        }
+
+        curJnySpecKeys.text = $"jman.CurJnySpecKeys:{jnman.curJnySpecKeys.Get()}";
+        curJnySpecName.text = $"jman.CurJnySpecName:{jnman.curJnySpecName.Get()}";
     }
-
-
 
     public void SetVals(bool closing = false)
     {
