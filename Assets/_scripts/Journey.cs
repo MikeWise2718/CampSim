@@ -503,7 +503,7 @@ namespace CampusSimulator
             birdctrl.person = this.person;
             //Debug.Log("Setting bird path");
             birdctrl.SetBirdPath(pathctrl.path);
-            birdctrl.birdresourcename = currentleg.formname;
+            birdctrl.birdresourcename = currentleg.formname.ToLower();
             birdctrl.birdscale = currentleg.skafak;
             birdctrl.lookatpoint = currentleg.lookatpt;
             birdctrl.flatlookatpoint = currentleg.flatlookatpt;

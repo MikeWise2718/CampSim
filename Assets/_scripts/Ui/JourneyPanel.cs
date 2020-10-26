@@ -588,6 +588,7 @@ public class JourneyPanel : MonoBehaviour
         {
             jnman.journeyToShadow = launchedJny.name;
             jnman.shadowJourney = true;
+            uiman.tbtpan.ColorizeButtonStates();
             SetStatusMessage($"Shadowing {launchedJny.name}");
         }
         else

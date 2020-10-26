@@ -274,12 +274,16 @@ namespace CampusSimulator
                         }
                         else
                         {
-                            var resname = "people/girl004";
-                            if (birdresourcename!="")
+                            var resname = birdresourcename;
+                            if (birdresourcename!="" && !birdresourcename.StartsWith("people"))
                             {
                                 resname = $"people/{birdresourcename}";
                             }
                             var objPrefab = Resources.Load<GameObject>(resname);
+                            if (objPrefab==null)
+                            {
+                                objPrefab = Resources.Load<GameObject>("people/girl004");
+                            }
                             birdformgo = Instantiate<GameObject>(objPrefab);
                         }
                         var s = sman.trman.peoplescalemodelnumber.Get();
