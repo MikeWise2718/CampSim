@@ -380,6 +380,7 @@ namespace CampusSimulator
                     lcman.DeleteGrcGos();
                     lcman.DeleteAllNodes();
                     uiman.DeleteStuff();
+                    jnman.DeleteAllJourneys();
 
 
                     mpman.DeleteQmap();

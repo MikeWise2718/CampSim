@@ -64,8 +64,14 @@ namespace CampusSimulator
         public bool shadowJourney = false;
         public string journeyToShadow = "";
 
+        public JourneySpecMan journeySpecMan;
+
         public UxSetting<string> lastViewerStartJourney = new UxSetting<string>("lastViewerStartJourney", "");
         public UxSetting<string> lastViewerEndJourney = new UxSetting<string>("lastViewerEndJourney", "");
+
+        public UxSetting<string> curJnySpecName = new UxSetting<string>("curJnySpecName", "");
+        public UxSetting<string> curJnySpecKeys = new UxSetting<string>("curJnySpecKeys", "");
+
 
         public void AddJ(Journey jny)
         {
@@ -300,7 +306,7 @@ namespace CampusSimulator
                 return null;
             }
         }
-        public Journey AddBldNodeBldNodeJourney(string fr_node, string tu_node, string pathname)
+        public Journey AddBldNodeBldNodeJourney(string fr_node, string tu_node, string pathname,string avatar="")
         {
             if (!NodeExists(fr_node)) return null;
             if (!NodeExists(tu_node)) return null;
@@ -314,7 +320,10 @@ namespace CampusSimulator
                 var jenode = tu_node;
                 var gm = GameObject.FindObjectOfType<GarageMan>();
 
-                var perform = GetRandomPersonFormname();
+                if (avatar == "")
+                {
+                    avatar = GetRandomPersonFormname();
+                }
 
 
                 Leg leg1 = new Leg
@@ -323,7 +332,7 @@ namespace CampusSimulator
                     enode = "",
                     form = BirdFormE.person,
                     capneed = LcCapType.walk,
-                    formname = perform,
+                    formname = avatar,
                     vel = 2 * lvelfak
                 };
                 var spos = linkctrl.GetNode(jsnode).pt;
@@ -384,10 +393,10 @@ namespace CampusSimulator
                     enode = jenode,
                     form = BirdFormE.person,
                     capneed = LcCapType.walk,
-                    formname = perform,
+                    formname = avatar,
                     vel = 2 * lvelfak
                 };
-                var description = " - " + pathname + " " + perform + " " + sm1.carformname;
+                var description = " - " + pathname + " " + avatar + " " + sm1.carformname;
                 var jgo = new GameObject();
                 var jny = jgo.AddComponent<Journey>();
                 jny.InitJourney(this, null, null, null, null, description, jorg: "ephemeral");
@@ -859,6 +868,23 @@ namespace CampusSimulator
             return jny;
         }
 
+        public Journey AddJsmJourney(JourneySpec jsm)
+        {
+            CheckFastMode();
+            var bld1 = jsm.routeSpec.bld1name;
+            var bld2 = jsm.routeSpec.bld2name;
+            var bc1 = bm.GetBuilding(bld1);
+            var bc2 = bm.GetBuilding(bld2);
+            var b1room = jsm.routeSpec.bld1room;
+            var b2room = jsm.routeSpec.bld1room;
+            var ranset = "jnygen";
+            var bdest1 = bc1.GetMatchingDestOrRandom(b1room, ranset);
+            var bdest2 = bc2.GetMatchingDestOrRandom(b2room, ranset);
+            var pathname = bc1.shortname + " to " + bc2.shortname;
+            var avatar = jsm.princeSpec.avatar;
+            var jny = AddBldNodeBldNodeJourney(bdest1, bdest2, pathname,avatar:avatar);
+            return jny;
+        }
         public Journey AddBldBldJourneyWithEphemeralPeople(string b1, string b2)
         {
             CheckFastMode();
@@ -877,8 +903,9 @@ namespace CampusSimulator
             {
                 sman.Lgg("Spawning ABBJWEP journey " + pathname);
             }
-            var bdest1 = bc1.GetRandomDest("jnygen");
-            var bdest2 = bc2.GetRandomDest("jnygen");
+            var ranset = "jnygen";
+            var bdest1 = bc1.GetRandomDest(ranset);
+            var bdest2 = bc2.GetRandomDest(ranset);
             var jny = AddBldNodeBldNodeJourney(bdest1, bdest2, pathname);
             return jny;
         }
@@ -1333,8 +1360,9 @@ namespace CampusSimulator
 
         public void ModelInitialize(SceneSelE newregion)
         {
-            DeleteAllJourneys();
             InitializeValues();
+            journeySpecMan = new JourneySpecMan(this);
+            journeySpecMan.Init();
             viewerJourneyNodes = new List<string>();
         }
 
@@ -1342,6 +1370,8 @@ namespace CampusSimulator
         {
             lastViewerStartJourney.GetInitial("");
             lastViewerEndJourney.GetInitial("");
+            curJnySpecName.GetInitial("");
+            curJnySpecKeys.GetInitial("");
         }
 
         public void ModelBuild()
@@ -1685,7 +1715,7 @@ namespace CampusSimulator
                 if (jny != null)
                 {
                     var bgo = jny.birdctrl.birdformgo;
-                    if (bgo != null)
+                    if (bgo != null )
                     {
                         var pt = bgo.transform.position;
                         var rt = bgo.transform.localRotation.eulerAngles;
@@ -1707,7 +1737,10 @@ namespace CampusSimulator
                     }
                     else
                     {
-                        Debug.Log($"ShadowSync birdgo is null");
+                        if (jny.status != JourneyStatE.WaitingToStart)
+                        {
+                            Debug.Log($"ShadowSync birdgo is null status:{jny.status}");
+                        }
                     }
                 }
                 lastShadowSyncTime = Time.time;
