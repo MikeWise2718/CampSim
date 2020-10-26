@@ -170,6 +170,7 @@ public class JourneyPanel : MonoBehaviour
                 SetStatusMessage($"Initial journey name:{curjnyname}", error: false);
                 var curjnyss = definedJourneys[curjnyname];
                 js = new JourneySpec(jnman.journeySpecMan, curjnyss);
+                definedJourney = js;
             }
         }
         else
@@ -517,6 +518,7 @@ public class JourneyPanel : MonoBehaviour
                 newkeystring = $"{newkeystring}|{key}";
             }
         }
+        jnman.curJnySpecName.SetAndSave(newkey);
         jnman.curJnySpecKeys.SetAndSave(newkeystring);
         Debug.Log($"ADJTK key:{newkey} newkeystring:{newkeystring} listcnt:{definedJourneys.Count}");
         PopulateDefinedJourneyDropdown( inijname:newkey );
@@ -557,6 +559,7 @@ public class JourneyPanel : MonoBehaviour
         //jnman.curJnySpec.SetAndSave(ss);
         //Debug.Log($"Defined {definedJourney.jouneyId} length:{ss.Length}");
         AddDefinedJourneyToKeys(definedJourney);
+        SaveDefinedJourneyToPersistentStore();
     }
 
 
@@ -682,16 +685,22 @@ public class JourneyPanel : MonoBehaviour
         curJnySpecName.text = $"jman.CurJnySpecName:{jnman.curJnySpecName.Get()}";
     }
 
-    public void SetVals(bool closing = false)
+
+    public void SaveDefinedJourneyToPersistentStore()
     {
-        Debug.Log($"JourneyPanel.SetVals called - closing:{closing}");
-        foreach(var key in definedJourneys.Keys)
+        foreach (var key in definedJourneys.Keys)
         {
             var val = definedJourneys[key];
             SetJsKeySave(key, val);
         }
 
         //sman.RequestRefresh("JourneyPanel-SetVals");
+    }
+
+    public void SetVals(bool closing = false)
+    {
+        Debug.Log($"JourneyPanel.SetVals called - closing:{closing}");
+        SaveDefinedJourneyToPersistentStore();
     }
 
     float checkInterval = 1f;
