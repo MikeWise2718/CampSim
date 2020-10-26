@@ -151,6 +151,36 @@ public class JourneyPanel : MonoBehaviour
 
         sman.Lgg("JouneyPanel.LinkObjectAndComponents","orange");
     }
+
+    public void InitVals()
+    {
+        Debug.Log("JourneyPanels InitVals called");
+        LoadDefinedJourneys();
+        var curjnyname = jnman.curJnySpecName.Get();
+        JourneySpec js;
+        if (curjnyname != "")
+        {
+            if (!definedJourneys.ContainsKey(curjnyname))
+            {
+                js = GetNextNewJourneySpec();
+                SetStatusMessage($"Initial journey name not found in defined journeys:{curjnyname}", error: true);
+            }
+            else
+            {
+                SetStatusMessage($"Initial journey name:{curjnyname}", error: false);
+                var curjnyss = definedJourneys[curjnyname];
+                js = new JourneySpec(jnman.journeySpecMan, curjnyss);
+            }
+        }
+        else
+        {
+            js = GetNextNewJourneySpec();
+            SetStatusMessage($"Initial journey name empty", error: false);
+        }
+        PopulateFormValsWithJourneySpec(js);
+    }
+
+
     bool controlsBeingBuilt = false;
     public JourneySpec BuildJourneySpecFromControls()
     {
@@ -270,33 +300,6 @@ public class JourneyPanel : MonoBehaviour
         roomopts = roomlist;
     }
 
-    public void InitVals()
-    {
-        Debug.Log("JourneyPanels InitVals called");
-        LoadDefinedJourneys();
-        var curjnyname = jnman.curJnySpecName.Get();
-        JourneySpec js;
-        if (curjnyname != "")
-        {
-            if (!definedJourneys.ContainsKey(curjnyname))
-            {
-                js = GetNextNewJourneySpec();
-                SetStatusMessage($"Initial journey name not found in defined journeys:{curjnyname}", error: true);
-            }
-            else
-            {
-                SetStatusMessage($"Initial journey name:{curjnyname}", error: false);
-                var curjnyss = definedJourneys[curjnyname];
-                js = new JourneySpec(jnman.journeySpecMan, curjnyss);
-            }
-        }
-        else
-        {
-            js = GetNextNewJourneySpec();
-            SetStatusMessage($"Initial journey name empty", error: false);
-        }
-        PopulateFormValsWithJourneySpec(js);
-    }
 
 
     public (bool ok,string val) GetJsKeySave(string key)
@@ -395,6 +398,9 @@ public class JourneyPanel : MonoBehaviour
             sman.LggError($"{errmsg} initializing jnyEndBuildingDropdown - ex.Message:{ex.Message}");
         }
 
+
+        jnyPersonNameInput.text = js.princeSpec.pname;
+
         try
         {
             avatarOpts = avatars;
@@ -465,6 +471,22 @@ public class JourneyPanel : MonoBehaviour
         "People/Businessman003",
         "People/Businessman004",
         "People/Businessman005",
+        "People/Girl001",
+        "People/Girl002",
+        "People/Girl003",
+        "People/Girl004",
+        "People/Girl005",
+        "People/Girl006",
+        "People/Girl007",
+        "People/Girl008",
+        "People/Man001",
+        "People/Man002",
+        "People/Man003",
+        "People/Man004",
+        "People/Man005",
+        "People/Man006",
+        "People/Man007",
+        "People/Man008",
     };
 
 
@@ -601,8 +623,8 @@ public class JourneyPanel : MonoBehaviour
                     b1room = "eb12-12-lob";
                     b2name = "EbRewe";
                     b2room = "eb12-rewe-lob";
-                    personname = "Mary DelaB121";
-                    avaname = "People/Businesswoman002";
+                    personname = "Mary Poppins";
+                    avaname = "People/Girl005";
                     break;
                 }
             case SceneSelE.MsftB121focused:
