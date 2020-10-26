@@ -121,6 +121,7 @@ public class JourneyPanel : MonoBehaviour
         jnyStartBuildingDropdown.onValueChanged.AddListener(delegate { RepopulateRoomsDropdownOnBldChange(jnyStartBuildingDropdown, jnyStartRoomDropdown); });
         jnyEndBuildingDropdown.onValueChanged.AddListener(delegate { RepopulateRoomsDropdownOnBldChange(jnyEndBuildingDropdown, jnyEndRoomDropdown); });
         jnyDefinedJnysDropdown.onValueChanged.AddListener(delegate { DefinedJourneyDropdownChanged(); });
+        sman.Lgg("JouneyPanel.LinkObjectAndComponents","orange");
     }
 
     public void DefinedJourneyDropdownChanged()
@@ -135,11 +136,11 @@ public class JourneyPanel : MonoBehaviour
             var js = new JourneySpec(jnman.journeySpecMan, ss);
             definedJourney = js;
             PopulateFormValsWithJourneySpec(js);
-            Debug.Log($"DefinedJourneyDropdown changed key:{key}");
+            sman.Lgg($"DefinedJourneyDropdown changed key:{key}","orange");
         }
         else
         {
-            Debug.Log($"DefinedJourneyDropdown out of range:{idx} definedJourneys:{definedJourneys.Count}");
+            sman.Lgg($"DefinedJourneyDropdown out of range:{idx} definedJourneys:{definedJourneys.Count}","orange");
         }
     }
     public void PopulateDefinedJourneyDropdown(string inijname="" )
@@ -163,17 +164,28 @@ public class JourneyPanel : MonoBehaviour
         }
     }
 
-    public void RepopulateRoomsDropdownOnBldChange(Dropdown bldctrl,Dropdown roomctrl)
+    public void RepopulateRoomsDropdownOnBldChange(Dropdown bldctrl,Dropdown roomctrl,string defaultroom="")
     {
         var curbldval = bldctrl.value;
         var bldlist = bdman.GetBuildingList();
         var bldname = bldlist[curbldval];
-        //Debug.Log($"{ctrlbldname} dropdown changed current bld:{bldname}");
+        sman.Lgg($"{bldctrl.name} dropdown changed current bld:{bldname}","orange");
         var bld = bdman.GetBuilding(bldname);
         var roomlist = bld.GetRoomNames();
-        //Debug.Log($"Found {roomlist.Count} rooms for {bldname}");
+        sman.Lgg($"Found {roomlist.Count} rooms for {bldname}","orange");
         roomctrl.ClearOptions();
         roomctrl.AddOptions(roomlist);
+        if (defaultroom!="")
+        {
+            for(int i=0; i<roomlist.Count; i++)
+            {
+                if (roomlist[i]==defaultroom)
+                {
+                    roomctrl.value = i;
+                    break;
+                }
+            }
+        }
     }
 
     public void InitVals()
@@ -255,7 +267,7 @@ public class JourneyPanel : MonoBehaviour
 
     public void PopulateFormValsWithJourneySpec(JourneySpec js)
     {
-        Debug.Log($"JourneyPanels.SetValsToJourneySpec called with js.displayName:{js.displayName}");
+        sman.Lgg($"JourneyPanels.SetValsToJourneySpec called with js.displayName:{js.displayName}","green");
         jnman.curJnySpecName.SetAndSave(js.displayName);
         curJnySerializedStringText.text = js.SerialString();
 
@@ -273,6 +285,8 @@ public class JourneyPanel : MonoBehaviour
             jnyStartBuildingDropdown.ClearOptions();
             jnyStartBuildingDropdown.AddOptions(startBuildingOpts);
             jnyStartBuildingDropdown.value = idx;
+            RepopulateRoomsDropdownOnBldChange(jnyStartBuildingDropdown, jnyStartRoomDropdown, defaultroom:js.routeSpec.bld1room);
+            sman.Lgg($"SetStartBuilding value:{idx}");
         }
         catch (Exception ex)
         {
@@ -289,6 +303,8 @@ public class JourneyPanel : MonoBehaviour
             jnyEndBuildingDropdown.ClearOptions();
             jnyEndBuildingDropdown.AddOptions(endBuildingOpts);
             jnyEndBuildingDropdown.value = idx;
+            RepopulateRoomsDropdownOnBldChange(jnyEndBuildingDropdown, jnyEndRoomDropdown, defaultroom: js.routeSpec.bld2room);
+            sman.Lgg($"SetEndBuilding value:{idx}");
         }
         catch (Exception ex)
         {
@@ -310,7 +326,7 @@ public class JourneyPanel : MonoBehaviour
         {
             sman.LggError($"{errmsg} initializing jnyAvatarDropdown - ex.Message:{ex.Message}");
         }
-
+        sman.Lgg($"JourneyPanels.SetValsToJourneySpec done", "green");
     }
 
     public void ClearStatusMessage()
@@ -474,19 +490,30 @@ public class JourneyPanel : MonoBehaviour
     public void SetScene(CampusSimulator.SceneSelE curscene)
     {
         string b1name="Bld3X";
-        string b1room="lobby";
+        string b1room="";
         string b2name="BldY";
-        string b2room="lobby";
+        string b2room="";
         string personname = "Eve";
         string avaname = "People/Businesswoman001";
         switch (curscene)
         {
+            case SceneSelE.Eb12small:
+            case SceneSelE.Eb12:
+                {
+                    b1name = "Eb12-22";
+                    b1room = "eb12-12-lob";
+                    b2name = "EbRewe";
+                    b2room = "eb12-rewe-lob";
+                    personname = "Mary DelaB121";
+                    avaname = "People/Businesswoman002";
+                    break;
+                }
             case SceneSelE.MsftB121focused:
                 {
                     b1name = "Bld121";
-                    b1room = "lobby";
+                    b1room = "";
                     b2name = "Bld19";
-                    b2room = "lobby";
+                    b2room = "";
                     personname = "Mary DelaB121";
                     avaname = "People/Businesswoman002";
                     break;
@@ -494,23 +521,21 @@ public class JourneyPanel : MonoBehaviour
             case SceneSelE.MsftB19focused:
                 {
                     b1name = "Bld19";
-                    b1room = "lobby";
+                    b1room = "";
                     b2name = "Bld121";
-                    b2room = "lobby";
+                    b2room = "";
                     personname = "Wei VonB19";
                     avaname = "People/Businesswoman003";
-                    b2room = "lobby";
                     break;
                 }
             case SceneSelE.MsftB33focused:
                 {
                     b1name = "Bld33";
-                    b1room = "lobby";
+                    b1room = "";
                     b2name = "Bld19";
-                    b2room = "lobby";
+                    b2room = "";
                     personname = "Fatma VanB33";
                     avaname = "People/Businesswoman004";
-                    b2room = "lobby";
                     break;
                 }
         }

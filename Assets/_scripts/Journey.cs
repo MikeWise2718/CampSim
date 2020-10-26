@@ -22,7 +22,7 @@ namespace CampusSimulator
             this.bld1name = b1name;
             this.bld1room = b1room;
             this.bld2name = b2name;
-            this.bld1room = b2room;
+            this.bld2room = b2room;
         }
         public RouteSpec(JourneySpecMan jm)
         {
