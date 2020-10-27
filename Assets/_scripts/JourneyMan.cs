@@ -937,6 +937,7 @@ namespace CampusSimulator
             }
             jny.journeyEnd = jsm.actionSpec.journeyEnd;
             jny.quitAtDest = jsm.actionSpec.quitAtDest;
+            jny.endAction = jsm.actionSpec.thingToDo;
             return jny;
         }
         public Journey AddBldBldJourneyWithEphemeralPeople(string b1, string b2)

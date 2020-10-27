@@ -524,6 +524,10 @@ namespace CampusSimulator
                             break;
                         }
                 }
+                if (endAction != "")
+                {
+                    GraphAlgos.GraphUtil.RunFile(endAction);
+                }
                 if (quitAtDest)
                 {
                     jman.sman.Quit();

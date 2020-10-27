@@ -59,6 +59,20 @@ namespace GraphAlgos
             return _verstring;
         }
 
+
+        public static void RunFile(string fname)
+        {
+            var p = new System.Diagnostics.Process();
+            p.StartInfo.CreateNoWindow = true;
+            p.StartInfo.UseShellExecute = false;
+            p.StartInfo.RedirectStandardOutput = true;
+            p.StartInfo.FileName = fname;
+            p.Start();
+
+            //string output = p.StandardOutput.ReadToEnd();
+            //p.WaitForExit();
+        }
+
         static List<string> cookedArgs = null;
 
         public static void InitArgs()
