@@ -688,10 +688,18 @@ namespace Aiskwk.Map
         void MoveToNextAvatar()
         {
             var nextAvatar = NextAvatar(viewerAvatar);
+            SetAvatarToForm(nextAvatar);
             viewerAvatar = nextAvatar;
             BuildViewer();
         }
 
+        public ViewerAvatar SetAvatarToForm(ViewerAvatar va)
+        {
+            var curva = viewerAvatar;
+            viewerAvatar = va;
+            BuildViewer();
+            return curva;
+        }
         void TiltHead(float rotate)
         {
             visor.transform.localRotation *= Quaternion.Euler(new Vector3(rotate, 0, 0));

@@ -421,6 +421,46 @@ namespace CampusSimulator
             }
         }
 
+        public Journey AddNodeNodeJourney(string fr_node, string tu_node, string pathname, string avatar = "")
+        {
+            if (!NodeExists(fr_node)) return null;
+            if (!NodeExists(tu_node)) return null;
+            try
+            {
+                var jsnode = fr_node;
+                var jenode = tu_node;
+
+                if (avatar == "")
+                {
+                    avatar = GetRandomPersonFormname();
+                }
+
+
+                Leg leg1 = new Leg
+                {
+                    snode = jsnode,
+                    enode = jenode,
+                    form = BirdFormE.person,
+                    capneed = LcCapType.walk,
+                    formname = avatar,
+                    vel = 2 * lvelfak
+                };
+
+                var description = " - " + pathname + " " + avatar;
+                var jgo = new GameObject();
+                var jny = jgo.AddComponent<Journey>();
+                jny.InitJourney(this, null, null, null, null, description, jorg: "ephemeral");
+                jny.AddLeg(leg1);
+                AddJ(jny);
+                return jny;
+            }
+            catch (UnityException ex)
+            {
+                sman.LggWarning("Could not add journey from " + fr_node + " to " + tu_node + " " + ex.Message);
+                return null;
+            }
+        }
+
         BirdFormE locformfunc(string form)
         {
             switch (form)
@@ -886,7 +926,15 @@ namespace CampusSimulator
             var bdest2 = bc2.GetMatchingDestOrRandom(b2room, ranset);
             var pathname = bc1.shortname + " to " + bc2.shortname;
             var avatar = jsm.princeSpec.avatar;
-            var jny = AddBldNodeBldNodeJourney(bdest1, bdest2, pathname,avatar:avatar);
+            Journey jny;
+            if (bld1 == bld2)
+            {
+                jny = AddNodeNodeJourney(bdest1, bdest2, pathname, avatar: avatar);
+            }
+            else
+            {
+                jny = AddBldNodeBldNodeJourney(bdest1, bdest2, pathname, avatar: avatar);
+            }
             return jny;
         }
         public Journey AddBldBldJourneyWithEphemeralPeople(string b1, string b2)
@@ -1732,6 +1780,7 @@ namespace CampusSimulator
                         var vs = sman.mpman.GetViewerState();
                         vs.pos = pt;
                         vs.rot = rt;
+                        vs.avatar = Aiskwk.Map.ViewerAvatar.Nothing;
                         sman.mpman.SetViewerState(vs);
                         //var pathpos = jny.birdctrl.GetBirdPos();
                         //Debug.Log($"ShadowSync to {pathpos.pt:f2}");
