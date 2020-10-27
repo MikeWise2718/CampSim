@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Aiskwk.Map
 {
-    public enum ViewerAvatar { SphereMan, CapsuleMan, SimpleTruck, Minehaul1, Shovel1, Dozer1, Dozer2, Rover, QuadCopter, QuadCopter2, Car012 };
+    public enum ViewerAvatar { Nothing, CubeMan, SphereMan, CapsuleMan, SimpleTruck, Minehaul1, Shovel1, Dozer1, Dozer2, Rover, QuadCopter, QuadCopter2, Car012 };
     public enum ViewerCamConfig { EyesDown, Eyes, FloatBehindDiv4, FloatBehindDiv2, FloatBehind, FloatBehindTimes2, FloatBehindTimes4 }
     public enum ViewerControl { Position, Velocity }
 
@@ -354,8 +354,16 @@ namespace Aiskwk.Map
             moveplane = new GameObject("moveplane");
             body = new GameObject("body");
 
-            float height = 0;
-            (bodyprefab, height) = GetAvatarPrefab(avaname, angle, shift, rot, scale);
+            float height;
+            if (avaname != "nothing")
+            {
+                (bodyprefab, height) = GetAvatarPrefab(avaname, angle, shift, rot, scale);
+            }
+            else
+            {
+                bodyprefab = null;
+                height = 1.5f;
+            }
 
             body.transform.SetParent(transform, worldPositionStays: false);
 
@@ -610,8 +618,21 @@ namespace Aiskwk.Map
                     }
                 case ViewerAvatar.SphereMan:
                     {
-                        shift = new Vector3(0, 1, 0);
-                        MakeAvatar("Sphere", angle, shift, rot, scale);
+                        shift = new Vector3(0, 0, 0);
+                        MakeAvatar("Sphere", angle, shift, rot, scale, visorscale: 0.64f);
+                        break;
+                    }
+                case ViewerAvatar.CubeMan:
+                    {
+                        shift = new Vector3(0, 0, 0);
+                        MakeAvatar("Cube", angle, shift, rot, scale, visorscale: 0.64f);
+                        break;
+                    }
+                case ViewerAvatar.Nothing:
+                    {
+                        shift = new Vector3(0, 0, 0);
+                        scale = 0.001f;
+                        MakeAvatar("Quad", angle, shift, rot, scale, visorscale: scale );
                         break;
                     }
                 default:
@@ -644,6 +665,15 @@ namespace Aiskwk.Map
                     rv = ViewerAvatar.CapsuleMan;
                     break;
                 case ViewerAvatar.CapsuleMan:
+                    rv = ViewerAvatar.SphereMan;
+                    break;
+                case ViewerAvatar.SphereMan:
+                    rv = ViewerAvatar.CubeMan;
+                    break;
+                case ViewerAvatar.CubeMan:
+                    rv = ViewerAvatar.Nothing;
+                    break;
+                case ViewerAvatar.Nothing:
                     rv = ViewerAvatar.SimpleTruck;
                     break;
                 case ViewerAvatar.SimpleTruck:

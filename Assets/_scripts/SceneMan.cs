@@ -1618,7 +1618,8 @@ namespace CampusSimulator
         }
         public static SceneSelE GetInitialSceneOption()
         {
-            GraphUtil.AddArgs("testjnykickoff");
+            //GraphUtil.AddArgs(new string [] { "-jny","BlueTina" });
+
             var einival = SceneSelE.MsftB121focused; // default scene
             kickOffFly = GraphUtil.ParmBool("-fly");
             kickOffRun = GraphUtil.ParmBool("-run");

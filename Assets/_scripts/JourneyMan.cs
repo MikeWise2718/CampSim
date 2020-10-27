@@ -880,7 +880,7 @@ namespace CampusSimulator
             var bc1 = bm.GetBuilding(bld1);
             var bc2 = bm.GetBuilding(bld2);
             var b1room = jsm.routeSpec.bld1room;
-            var b2room = jsm.routeSpec.bld1room;
+            var b2room = jsm.routeSpec.bld2room;
             var ranset = "jnygen";
             var bdest1 = bc1.GetMatchingDestOrRandom(b1room, ranset);
             var bdest2 = bc2.GetMatchingDestOrRandom(b2room, ranset);

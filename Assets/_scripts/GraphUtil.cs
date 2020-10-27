@@ -75,15 +75,20 @@ namespace GraphAlgos
             {
                 case "test":
                     {
-                        cookedArgs.AddRange(new List<string>() { "-testb", "newarg2", "-tests", "hiya", "-testi", "3", "-testf", "3.14", "-testd", "1.234567890123", "-scene", "msftb19focused", "riggins", "-fly", "-run", "-nopipes" });
+                        AddArgs( new string [] { "-testb", "newarg2", "-tests", "hiya", "-testi", "3", "-testf", "3.14", "-testd", "1.234567890123", "-scene", "msftb19focused", "riggins", "-fly", "-run", "-nopipes" });
                         break;
                     }
                 case "testjnykickoff":
                     {
-                        cookedArgs.AddRange(new List<string>() { "-jny","BlueTina" });
+                        AddArgs(new string [] { "-jny","BlueTina" });
                         break;
                     }
             }
+        }
+        public static void AddArgs(string[] parms)
+        {
+            InitArgs();
+            cookedArgs.AddRange(parms);
         }
 
         public static List<string> GetArgs()

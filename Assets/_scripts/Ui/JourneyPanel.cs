@@ -200,7 +200,7 @@ public class JourneyPanel : MonoBehaviour
             bld1 = startBuildingOpts[jnyStartBuildingDropdown.value];
             room1 = startRoomOpts[jnyStartRoomDropdown.value];
             bld2 = endBuildingOpts[jnyEndBuildingDropdown.value];
-            room2 = endRoomOpts[jnyStartRoomDropdown.value];
+            room2 = endRoomOpts[jnyEndRoomDropdown.value];
             pname = jnyPersonNameInput.text;
             aname = avatarOpts[jnyAvatarDropdown.value];
             var jeoptstr = jourEndOpts[jnyEndActionDropdown.value];
