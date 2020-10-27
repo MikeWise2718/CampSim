@@ -868,6 +868,10 @@ namespace CampusSimulator
             return jny;
         }
 
+        public Journey AddJsmJourney(string jname)
+        {
+            return null;
+        }
         public Journey AddJsmJourney(JourneySpec jsm)
         {
             CheckFastMode();

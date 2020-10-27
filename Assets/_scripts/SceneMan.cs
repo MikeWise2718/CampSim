@@ -67,6 +67,8 @@ namespace CampusSimulator
         public static bool kickOffRun = false;
         public static bool kickOffFly = false;
         public static bool kickOffEvac = false;
+        public static bool kickOffJourney = false;
+        public static string kickoffJname = "";
         public static bool showNoPipes = false;
 
 
@@ -496,17 +498,6 @@ namespace CampusSimulator
         }
 
 
-
-        //public void LggOld(string msg, string clr1, string clr2, string delim = "|", bool unitylog = true)
-        //{
-        //    var color = new string[] { clr1, clr2 };
-        //    var nmsg = LogMan.ColorCode(msg, color, delim);
-        //    if (unitylog)
-        //    {
-        //        UnityLog(nmsg, LogSeverity.Info);
-        //    }
-
-        //}
 
         public void Lgg(string msg, string clr1, string clr2, string delim = "|", bool unitylog = true)
         {
@@ -1627,9 +1618,11 @@ namespace CampusSimulator
         }
         public static SceneSelE GetInitialSceneOption()
         {
+            GraphUtil.AddArgs("testjnykickoff");
             var einival = SceneSelE.MsftB121focused; // default scene
             kickOffFly = GraphUtil.ParmBool("-fly");
             kickOffRun = GraphUtil.ParmBool("-run");
+            (kickOffJourney,kickoffJname) = GraphUtil.ParmString("-jny");
             kickOffEvac = GraphUtil.ParmBool("-evac");
             showNoPipes = GraphUtil.ParmBool("-nopipes");
 
@@ -1869,6 +1862,24 @@ namespace CampusSimulator
                 if (kickOffEvac)
                 {
                     bdman.EvacPresetBld();
+                }
+                if (kickOffJourney)
+                {
+                    var (ok,jss) = JourneySpec.GetJsKeySave(kickoffJname);
+                    if (ok)
+                    {
+                        var js = new JourneySpec(jnman.journeySpecMan, jss);
+                        var launchedJny = jnman.AddJsmJourney(js);
+                        if (launchedJny != null)
+                        {
+                            jnman.journeyToShadow = launchedJny.name;
+                            jnman.shadowJourney = true;
+                        }
+                    }
+                    else
+                    {
+                        LggError($"Error dehydrating journey {kickoffJname}");
+                    }
                 }
                 uiman.SyncState();
             }

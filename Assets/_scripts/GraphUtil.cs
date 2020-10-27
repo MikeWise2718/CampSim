@@ -13,7 +13,7 @@ namespace GraphAlgos
 {
     public class GraphUtil
     {
-        static string _verstring = "2020.10.20.1 - Seattle Flight Vols";
+        static string _verstring = "2020.10.27.1 - Shadowing Journeys";
         static string _sysver = "";
         static DateTime _buildDate = DateTime.UtcNow;
 
@@ -60,16 +60,35 @@ namespace GraphAlgos
         }
 
         static List<string> cookedArgs = null;
-        public static List<string> GetArgs(bool addtestparms = false)
+
+        public static void InitArgs()
         {
             if (cookedArgs == null)
             {
                 cookedArgs = new List<string>(System.Environment.GetCommandLineArgs());
-                if (addtestparms)
-                {
-                    cookedArgs.AddRange(new List<string>() { "-testb", "newarg2", "-tests", "hiya", "-testi", "3", "-testf", "3.14", "-testd", "1.234567890123", "-scene", "msftb19focused", "riggins","-fly","-run","-nopipes" });
-                }
             }
+        }
+        public static void AddArgs(string parmselector = "")
+        {
+            InitArgs();
+            switch (parmselector)
+            {
+                case "test":
+                    {
+                        cookedArgs.AddRange(new List<string>() { "-testb", "newarg2", "-tests", "hiya", "-testi", "3", "-testf", "3.14", "-testd", "1.234567890123", "-scene", "msftb19focused", "riggins", "-fly", "-run", "-nopipes" });
+                        break;
+                    }
+                case "testjnykickoff":
+                    {
+                        cookedArgs.AddRange(new List<string>() { "-jny","BlueTina" });
+                        break;
+                    }
+            }
+        }
+
+        public static List<string> GetArgs()
+        {
+            InitArgs();
             return cookedArgs;
         }
 

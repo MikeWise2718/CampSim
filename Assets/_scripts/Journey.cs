@@ -238,6 +238,50 @@ namespace CampusSimulator
             this.actionSpec = actionSpec;
         }
 
+        public static (bool ok, string val) GetJsKeySave(string key)
+        {
+            var wholekey = $"journeyspec_{key}";
+            var uxset = new UxUtils.UxSetting<string>(wholekey, "");
+            var sval = uxset.GetInitial("");
+            var ok = false;
+            if (sval != "")
+            {
+                ok = true;
+            }
+            return (ok, sval);
+        }
+
+        //public static JourneySpec GetJsKeySaveJs(string key)
+        //{
+        //    var (ok, ss) = GetJsKeySave(key);
+        //    if (!ok)
+        //    {
+        //        return null;
+        //    }    
+        //    var js = new JourneySpec(jm.jnman.journeySpecMan, ss);
+        //    return js;
+        //}
+
+        public static void SetJsKeySave(string key, string sval)
+        {
+            var wholekey = $"journeyspec_{key}";
+            var uxset = new UxUtils.UxSetting<string>(wholekey, "");
+            uxset.SetAndSave(sval);
+        }
+
+        public static void SetJsKeySave(string key, JourneySpec js)
+        {
+            var ss = js.SerialString();
+            SetJsKeySave(key, ss);
+        }
+
+        public static void EraseJsKey(string key)
+        {
+            var wholekey = $"journeyspec_{key}";
+            var uxset = new UxUtils.UxSetting<string>(wholekey, "");
+            uxset.SetAndSave("");
+        }
+
         public JourneySpec(JourneySpecMan jm)
         {
             this.jm = jm;

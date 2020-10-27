@@ -303,31 +303,31 @@ public class JourneyPanel : MonoBehaviour
 
 
 
-    public (bool ok,string val) GetJsKeySave(string key)
-    {
-        var wholekey = $"journeyspec_{key}";
-        var uxset = new UxUtils.UxSetting<string>(wholekey, "");
-        var sval = uxset.GetInitial("");
-        var ok = false;
-        if (sval != "")
-        {
-            ok = true;
-        }
-        return (ok, sval);
-    }
-    public void SetJsKeySave(string key,string sval)
-    {
-        var wholekey = $"journeyspec_{key}";
-        var uxset = new UxUtils.UxSetting<string>(wholekey, "");
-        uxset.SetAndSave(sval);
-    }
+    //public (bool ok,string val) GetJsKeySave(string key)
+    //{
+    //    var wholekey = $"journeyspec_{key}";
+    //    var uxset = new UxUtils.UxSetting<string>(wholekey, "");
+    //    var sval = uxset.GetInitial("");
+    //    var ok = false;
+    //    if (sval != "")
+    //    {
+    //        ok = true;
+    //    }
+    //    return (ok, sval);
+    //}
+    //public void SetJsKeySave(string key,string sval)
+    //{
+    //    var wholekey = $"journeyspec_{key}";
+    //    var uxset = new UxUtils.UxSetting<string>(wholekey, "");
+    //    uxset.SetAndSave(sval);
+    //}
 
-    public void EraseJsKey(string key)
-    {
-        var wholekey = $"journeyspec_{key}";
-        var uxset = new UxUtils.UxSetting<string>(wholekey, "");
-        uxset.SetAndSave("");
-    }
+    //public void EraseJsKey(string key)
+    //{
+    //    var wholekey = $"journeyspec_{key}";
+    //    var uxset = new UxUtils.UxSetting<string>(wholekey, "");
+    //    uxset.SetAndSave("");
+    //}
 
 
     public void LoadDefinedJourneys()
@@ -339,7 +339,7 @@ public class JourneyPanel : MonoBehaviour
             var cskarr = curspeckeys.Split('|');
             foreach (var key in cskarr)
             {
-                var (ok, sval) = GetJsKeySave(key);
+                var (ok, sval) = JourneySpec.GetJsKeySave(key);
                 definedJourneys[key] = sval;
             }
         }
@@ -545,7 +545,7 @@ public class JourneyPanel : MonoBehaviour
             return;
         }
         definedJourneys.Remove(key);
-        EraseJsKey(key);
+        JourneySpec.EraseJsKey(key);
     }
 
 
@@ -691,7 +691,7 @@ public class JourneyPanel : MonoBehaviour
         foreach (var key in definedJourneys.Keys)
         {
             var val = definedJourneys[key];
-            SetJsKeySave(key, val);
+            JourneySpec.SetJsKeySave(key, val);
         }
 
         //sman.RequestRefresh("JourneyPanel-SetVals");
