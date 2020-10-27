@@ -997,7 +997,8 @@ namespace CampusSimulator
 
                     viewHome.avatar = ViewerAvatar.QuadCopter;
                     viewHome.pos = new Vector3(-567.2f, 3f, 427.7f);
-                    viewHome.rot = new Vector3(0, -90, 0);
+                    //viewHome.rot = new Vector3(0, -90, 0);
+                    viewHome.rot = new Vector3(0, 0, 0);
 
                     isCustomizable = false;
                     break;

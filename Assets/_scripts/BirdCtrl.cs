@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using GraphAlgos;
 using System.ComponentModel.Design.Serialization;
+using UnityEngine.UIElements;
+using Aiskwk.Map;
 
 namespace CampusSimulator
 {
@@ -41,7 +43,6 @@ namespace CampusSimulator
 
         public PathPos pathpos = null;
         public Weg pathweg = null;
-        public string spathweg = "";
         public float wegdistance = 0;
         public Guid wegguid = Guid.Empty;
         public string swegguid = Guid.Empty.ToString();
@@ -106,22 +107,26 @@ namespace CampusSimulator
             return rendgo;
         }
 
-        Vector3 GetPathPoint(float gpprdist,bool curpos=true)
+        Vector3 GetPathPoint(float gpprdist,bool setpathpos=true)
         {
             if (path == null) return Vector3.zero;
-            var pp = path.MovePositionAlongPath(gpprdist);
-            if (curpos)
+            PathPos pp = path.MovePositionAlongPath(gpprdist);
+            dragclr = "blue";
+            if (pp.weg.link.IsFragable())
+            {
+                dragclr = "green";
+            }
+            if (setpathpos)
             {
                 pathpos = pp;
                 pathweg = pp.weg;
-                spathweg = pathweg.frNode.name + " to " + pathweg.toNode.name;
                 wegguid = pp.weg.id;
                 swegguid = wegguid.ToString();
                 wegdistance = pp.wegDistSoFar;
                 cntgp++;
             }
-            
             var pt = new Vector3(pp.pt.x, pp.pt.y + BirdFlyHeight, pp.pt.z);
+            //var pt = new Vector3(pp.pt.x, pp.pt.y + 0, pp.pt.z);
             return pt;
         }
         void CreateBirdFormGos()
@@ -427,10 +432,13 @@ namespace CampusSimulator
             BirdSpeed = 0;
             SetAnimationScript();
         }
+        public bool dragMarkerSphere = true;
+        GameObject draggo;
+        string dragclr = "red";
         void MoveBirdGos(float deltatime)
         {
             rundist += BirdSpeedFactor*BirdSpeed*deltatime; // deltaTime is time to complete last frame
-            curpt = GetPathPoint(rundist);
+            curpt = GetPathPoint(rundist,setpathpos:true);
             var delt = curpt - lastcurpt;
             if (deltatime > 0)
             {
@@ -439,7 +447,7 @@ namespace CampusSimulator
             birdgo.transform.localPosition += delt;
             if (lookatpoint)
             {
-                var curlookpt = GetPathPoint(rundist + lookaheadtime + deltatime, curpos: false);
+                var curlookpt = GetPathPoint(rundist + lookaheadtime + deltatime, setpathpos: false);
                 if (flatlookatpoint)
                 {
                     var flatlookpt = new Vector3(curlookpt.x, curpt.y, curlookpt.z);
@@ -451,6 +459,18 @@ namespace CampusSimulator
                 else
                 {
                     birdgo.transform.LookAt(curlookpt);
+                }
+            }
+            if (dragMarkerSphere)
+            {
+                if (draggo == null)
+                {
+                    draggo = GraphAlgos.GraphUtil.CreateMarkerSphere("dragsphere", curpt, clr: dragclr);
+                }
+                else
+                {
+                    draggo.transform.position = curpt;
+                    GraphAlgos.GraphUtil.SetColorOfGo(draggo, dragclr);
                 }
             }
             lastcurpt = curpt;
