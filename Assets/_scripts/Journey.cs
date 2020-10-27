@@ -412,6 +412,8 @@ namespace CampusSimulator
         public PathCtrl pathctrl;
         public BirdCtrl birdctrl;
         public JourneyEnd journeyEnd=JourneyEnd.disappear;
+        public bool quitAtDest = false;
+        public string endAction = "";
         public int jindex = 0;
         public int legindex = 0;
         public Leg currentleg = null;
@@ -494,27 +496,37 @@ namespace CampusSimulator
             //jman.sman.Log("StartLeg legidx:" + legidx);
             if (legidx >= nlegs)
             {
-                if (journeyEnd == JourneyEnd.disappear)
+                switch (journeyEnd)
                 {
-                    finishedtime = Time.time;
-                    journeyelap = finishedtime - starttime;
-                    status = JourneyStatE.AlmostFinished;
-                    if (person != null)
-                    {
-                        person.PersonStateStartUntraveling("", "");
-                    }
+                    default:
+                    case JourneyEnd.disappear:
+                        {
+                            finishedtime = Time.time;
+                            journeyelap = finishedtime - starttime;
+                            status = JourneyStatE.AlmostFinished;
+                            if (person != null)
+                            {
+                                person.PersonStateStartUntraveling("", "");
+                            }
+                            break;
+                        }
+                    case JourneyEnd.restart:
+                        {
+                            if (legidx != 0)
+                            {
+                                jman.sman.Lgg($"Jouney {name} restarting");
+                                StartLeg(0);
+                            }
+                            else
+                            {
+                                jman.sman.LggError("No legs in journey");
+                            }
+                            break;
+                        }
                 }
-                else
+                if (quitAtDest)
                 {
-                    if (legidx != 0)
-                    {
-                        jman.sman.Lgg($"Jouney {name} restarting");
-                        StartLeg(0);
-                    }
-                    else
-                    {
-                        jman.sman.LggError("No legs in journey");
-                    }    
+                    jman.sman.Quit();
                 }
                 return;
             }

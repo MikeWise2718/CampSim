@@ -935,6 +935,8 @@ namespace CampusSimulator
             {
                 jny = AddBldNodeBldNodeJourney(bdest1, bdest2, pathname, avatar: avatar);
             }
+            jny.journeyEnd = jsm.actionSpec.journeyEnd;
+            jny.quitAtDest = jsm.actionSpec.quitAtDest;
             return jny;
         }
         public Journey AddBldBldJourneyWithEphemeralPeople(string b1, string b2)
