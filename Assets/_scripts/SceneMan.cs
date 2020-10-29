@@ -1906,6 +1906,7 @@ namespace CampusSimulator
                 var sw1 = new StopWatch();
                 if (needstotalrefresh)
                 {
+                    var vstate = mpman.GetViewerState();
                     var sceneToRefresh = curscene;
                     if (requestScene != SceneSelE.None)
                     {
@@ -1915,6 +1916,7 @@ namespace CampusSimulator
                     SetScenario(sceneToRefresh, force: true);
                     sw2.Stop();
                     lastRefreshTime = (float) sw2.Elap().TotalSeconds;
+                    mpman.SetViewerState(vstate);
                     Debug.Log($"TotalRefresh SetScene took {sw2.ElapSecs()} secs");
                 }
                 else

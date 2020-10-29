@@ -140,7 +140,8 @@ namespace Aiskwk.Map
         {
             var vn = new ViewerState();
             vn.pos = transform.position;
-            vn.rot = transform.localRotation.eulerAngles;
+            //vn.rot = transform.localRotation.eulerAngles;
+            vn.rot =bodyPlaneRotation.eulerAngles;
             vn.avatar = viewerAvatar;
             vn.camconfig = viewerCamPosition;
             vn.vctrl = viewerControl;
