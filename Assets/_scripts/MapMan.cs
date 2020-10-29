@@ -1115,6 +1115,53 @@ namespace CampusSimulator
                     hasLLmap = false;
                     isCustomizable = false;
                     break;
+                case SceneSelE.KeppelPort:
+                    maplat = 1.300600;
+                    maplng = 103.655660;
+                    mapscale = 1;
+                    maprot = Vector3.zero;
+                    maptrans = Vector3.zero;
+                    //xdistkm = 14.84f / (2 * 0.4096f);
+                    //zdistkm = 25.17f / (2 * 0.4096f);
+                    xdistkm = 2;
+                    zdistkm = 2;
+                    lod = 17;
+                    //hmultForNow = 10;
+                    useElesForNow = true;
+                    useViewer = true;
+                    mapscale = 1f;
+                    roty2 = 0;
+                    //nodesPerQuadKey = 8;
+                    //vviewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
+                    viewHome.avatar = ViewerAvatar.QuadCopter;
+
+                    hasLLmap = false;
+                    isCustomizable = false;
+                    break;
+                case SceneSelE.KeppelDist:
+                    maplat = 1.27159;
+                    maplng = 103.82914;
+                    mapscale = 1;
+                    maprot = Vector3.zero;
+                    maptrans = Vector3.zero;
+                    //xdistkm = 14.84f / (2 * 0.4096f);
+                    //zdistkm = 25.17f / (2 * 0.4096f);
+                    xdistkm = 2;
+                    zdistkm = 2;
+                    lod = 17;
+                    //hmultForNow = 10;
+                    useElesForNow = true;
+                    useViewer = true;
+                    mapscale = 1f;
+                    roty2 = 0;
+                    //nodesPerQuadKey = 8;
+                    //vviewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
+                    viewHome.avatar = ViewerAvatar.QuadCopter;
+
+                    hasLLmap = false;
+                    isCustomizable = false;
+                    break;
+
                 case SceneSelE.SanFrancisco:
                     maplat = 37.774900;
                     maplng = -122.419400;
