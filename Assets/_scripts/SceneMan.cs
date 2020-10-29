@@ -314,7 +314,10 @@ namespace CampusSimulator
             var cnames = GraphAlgos.GraphUtil.GetColorNames();
             foreach(var cn in cnames)
             {
-                this.Lgg(cn, cn);
+                var c = GraphAlgos.GraphUtil.GetColorByName(cn);
+                var (hx,alf) = GraphAlgos.GraphUtil.HexColor(c);
+                var msg = $"{hx} - {cn}";
+                this.Lgg(msg, hx);
             }
 
         }
