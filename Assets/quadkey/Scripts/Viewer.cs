@@ -110,7 +110,7 @@ namespace Aiskwk.Map
 
         private static ViewerState defViewer = new ViewerState();
 
-        public ViewerState home;
+        public ViewerState homestate;
 
         public static Camera GetViewerCamera()
         {
@@ -157,24 +157,24 @@ namespace Aiskwk.Map
             this.qmm = qmm;
             if (homespec != null)
             {
-                home = homespec;
+                homestate = homespec;
             }
             else
             {
-                home = defViewer;
+                homestate = defViewer;
             }
-            viewerAvatar = home.avatar;
-            viewerCamPosition = home.camconfig;
-            viewerControl = home.vctrl;
-            carriageCameraExists = home.hasCameraCarriage;
-            carriageCamNumber = home.nCameras;
-            carriageOn = home.carriageOn;
-            carriageAngleStart = home.angstart;
-            carriageAngleEnd = home.angend;
+            viewerAvatar = homestate.avatar;
+            viewerCamPosition = homestate.camconfig;
+            viewerControl = homestate.vctrl;
+            carriageCameraExists = homestate.hasCameraCarriage;
+            carriageCamNumber = homestate.nCameras;
+            carriageOn = homestate.carriageOn;
+            carriageAngleStart = homestate.angstart;
+            carriageAngleEnd = homestate.angend;
             carriageCams = new List<Camera>();
             carriageMons = new List<int>();
             //var (vo,_, istat) = qmm.GetWcMeshPosFromLambda(0.5f, 0.5f);
-            var (vo, _, istat) = qmm.GetWcMeshPosProjectedAlongYnew(home.pos);
+            var (vo, _, istat) = qmm.GetWcMeshPosProjectedAlongYnew(homestate.pos);
             transform.position = vo;
             altitude = 0;
             altbase = "map";
@@ -209,9 +209,9 @@ namespace Aiskwk.Map
 
             var parent = transform.parent;
             transform.SetParent(null, worldPositionStays: false);// disconnect
-            transform.position = home.pos;
+            transform.position = homestate.pos;
             //transform.localRotation = Quaternion.Euler(home.rot);
-            RotateViewerToYangle(home.rot.y);
+            RotateViewerToYangle(homestate.rot.y);
             //Debug.Log($"ReAdjustViewerInitialPosition - viewerDefaultRotation:{viewerDefaultRotation}");
             var t = GetRootTransform(parent.transform);
             var s = t.localScale.x;
@@ -883,7 +883,7 @@ namespace Aiskwk.Map
         void TeleportViewer(string trigger)
         {
             //var newrot = 0f; /// this seems wierd, but we seemingly have the homeRotation coded in the toplevel Viewer rotation already
-            Debug.Log($"MoveViewerToStoredPos:{trigger} pos:{home.pos:f1} rot:{home.rot:f1}");
+            Debug.Log($"MoveViewerToStoredPos:{trigger} pos:{homestate.pos:f1} rot:{homestate.rot:f1}");
             var (valid, vst) = teleporter(trigger);
             //var bodyeuler = bodyPrefabRotation.eulerAngles;
             if (valid)
@@ -1025,7 +1025,7 @@ namespace Aiskwk.Map
         void MoveViewerToHomeOld()
         {
             //Debug.Log($"MoveViewerToHome pos:{home.viewerPosition:f1} rot:{home.viewerRotation:f1}");
-            var newpos = home.pos;
+            var newpos = homestate.pos;
             var newrot = Vector3.zero; /// this seems wierd, but we seemingly have the homeRotation coded in the toplevel Viewer rotation already
 
 
@@ -1044,7 +1044,11 @@ namespace Aiskwk.Map
         }
         void MoveViewerToHome()
         {
-            SetViewerInState(home);
+            SetViewerInState(homestate);
+            var (vo, _, istat) = qmm.GetWcMeshPosProjectedAlongYnew(homestate.pos);
+            transform.position = vo;
+            altitude = 0;
+            altbase = "map";
         }
 
         Vector3 lstnrm = Vector3.up;
