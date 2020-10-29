@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using System.IO;
 using System.Reflection;
+using Newtonsoft.Json;
 
 /// <summary>
 /// GraphAlgos.cs  - This file contains static algoritms that we need in various places. 
@@ -389,6 +390,58 @@ namespace GraphAlgos
             }
             return asset.text;
         }
+        public static int GetHexVal(char hex)
+        {
+            int val = (int)hex;
+            //For uppercase A-F letters:
+            return val - (val < 58 ? 48 : 55);
+            //For lowercase a-f letters:
+            //return val - (val < 58 ? 48 : 87);
+            //Or the two combined, but a bit slower:
+            //return val - (val < 58 ? 48 : (val < 97 ? 55 : 87));
+        }
+        public static byte[] StringToByteArrayFastest(string hex)
+        {
+            if (hex.Length % 2 == 1)
+                throw new Exception("The binary key cannot have an odd number of digits");
+
+            byte[] arr = new byte[hex.Length >> 1];
+
+            for (int i = 0; i < hex.Length >> 1; ++i)
+            {
+                arr[i] = (byte)((GetHexVal(hex[i << 1]) << 4) + (GetHexVal(hex[(i << 1) + 1])));
+            }
+            return arr;
+        }
+
+        public static Color rgbhex(string hexstr, float alpha = 1)
+        {
+            if (hexstr.Length > 6)
+            {
+                hexstr = hexstr.Remove(0, hexstr.Length - 6);
+            }
+            var bv = StringToByteArrayFastest(hexstr);
+            var c = new Color(bv[0] / 255f, bv[1] / 255f, bv[2] / 255f, alpha);
+            return c;
+        }
+        public static (string hexval, float alpha) HexColor(Color clr)
+        {
+            var r = (int)(255.99 * clr.r);
+            var g = (int)(255.99 * clr.g);
+            var b = (int)(255.99 * clr.b);
+            var rs = r.ToString("X2");
+            var gs = g.ToString("X2");
+            var bs = b.ToString("X2");
+            var hexstr = $"#{rs}{gs}{bs}";
+            return (hexstr, clr.a);
+        }
+
+        public static List<string> GetColorNames()
+        {
+            var rv = new List<string>(colorTable.Keys);
+            return rv;
+        }
+
         static void InitXkcdColors()
         {
             var str = ReadResourceAsString("xkcd/colors");
@@ -396,13 +449,31 @@ namespace GraphAlgos
             {
                 var json = Aiskwk.SimpleJSON.JSON.Parse(str);
                 var clrs = json["colors"];
+                for (int i = 0; i < clrs.Count; i++)
+                {
+                    var clrval = clrs[i];
+                    var clrname = clrval["color"];
+                    var clrhex = clrval["hex"];
+                    colorTable[clrname] = rgbhex(clrhex);
+                }
                 Debug.Log($"SimpleJSON read {clrs.Count} xkcd colors");
+                var newjson = JsonConvert.DeserializeObject<Dictionary<string,object>>(str);
+                var newclrs = newjson["colors"];
+                //var newclrtab1 = newclrs as Dictionary<string,string>;
+                //var newclrtab2 = newclrs as Dictionary<string, object>;
+                //var newclrtab3 = newclrs as Dictionary<object, object>;
+                //var newclrtab4 = newclrs as Dictionary<string, Dictionary<string,object>>;
+                //var newclrtab5 = newclrs as Dictionary<string, Dictionary<string, string>>;
+                //var newclrarr1 = newclrs as object [];
+                //var newclrarr2 = newclrs as string[];
+                Debug.Log("Here I am");
+                //Debug.Log($"Newtonsoft read {newclrtab.Count} xkcd colors");
             }
         }
-        static void InitColorTable()
+        public static void InitColorTable()
         {
-            InitXkcdColors();
             colorTable = new Dictionary<string, Color>();
+            InitXkcdColors();
             // reds
             colorTable["r"] =
             colorTable["red"] = new Color(1, 0, 0);

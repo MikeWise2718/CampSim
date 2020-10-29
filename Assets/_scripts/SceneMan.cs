@@ -309,6 +309,14 @@ namespace CampusSimulator
             GraphAlgos.GraphUtil.SetRanSeed("journeyspawn", curseed);
             GraphAlgos.GraphUtil.SetRanSeed("spawnstreaming", curseed);
             GraphAlgos.GraphUtil.InitializeRansets();
+            GraphAlgos.GraphUtil.InitColorTable();
+            var isblueblue = GraphAlgos.GraphUtil.isColorName("blue");
+            var cnames = GraphAlgos.GraphUtil.GetColorNames();
+            foreach(var cn in cnames)
+            {
+                this.Lgg(cn, cn);
+            }
+
         }
         //public void InitializeGlbLlMap()
         //{
