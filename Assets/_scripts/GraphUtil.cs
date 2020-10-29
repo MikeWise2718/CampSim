@@ -379,8 +379,29 @@ namespace GraphAlgos
             }
             return colorTable.ContainsKey(name);
         }
+        public static string ReadResourceAsString(string pathname)
+        {
+            var asset = Resources.Load<TextAsset>(pathname);// only reads json, csv, txt and a few others - without specifying
+            if (asset == null)
+            {
+                Debug.LogError($"Could not load asset:{pathname}");
+                return null;
+            }
+            return asset.text;
+        }
+        static void InitXkcdColors()
+        {
+            var str = ReadResourceAsString("xkcd/colors");
+            if (str != null)
+            {
+                var json = Aiskwk.SimpleJSON.JSON.Parse(str);
+                var clrs = json["colors"];
+                Debug.Log($"SimpleJSON read {clrs.Count} xkcd colors");
+            }
+        }
         static void InitColorTable()
         {
+            InitXkcdColors();
             colorTable = new Dictionary<string, Color>();
             // reds
             colorTable["r"] =
