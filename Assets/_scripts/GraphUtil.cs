@@ -437,6 +437,14 @@ namespace GraphAlgos
             return (hexstr, clr.a);
         }
 
+        public float Brightness(Color c)
+        {
+            var maxclr = 256*254*3f;
+            var rv = Mathf.Sqrt(c.r*c.r + c.g*c.g + c.b*c.b  )/maxclr;
+            return rv;
+        }
+
+
         public static List<string> GetColorNames()
         {
             var rv = new List<string>(colorTable.Keys);

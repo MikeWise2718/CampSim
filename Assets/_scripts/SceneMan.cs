@@ -290,6 +290,8 @@ namespace CampusSimulator
         //}
 
 
+
+
         public void DumpColorName1(string cname)
         {
             var clr = GraphAlgos.GraphUtil.GetColorByName(cname);
@@ -305,6 +307,7 @@ namespace CampusSimulator
             DumpColorName1("blue");
             DumpColorName1("green");
             var cnames = GraphAlgos.GraphUtil.GetColorNames();
+
             foreach (var cn in cnames)
             {
                 DumpColorName1(cn);

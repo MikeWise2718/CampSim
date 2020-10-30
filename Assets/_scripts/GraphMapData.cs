@@ -7603,8 +7603,9 @@ namespace GraphAlgos
         public void createPointsFor_msft_b40()  // machine generated - do not edit
         {
             grc.regman.NewNodeRegion("msft-b40", "purple", saveToFile: true);
-            grc.AddNodePtxyz("b40-f01-lobby", 243.700, 0.000, 175.500, comment: ""); //  1 nn:1 nl:0
-            grc.LinkToPtxyz("b40-f01-lobby", "b40-os1-o01", 234.800, 0.000, 170.000, LinkUse.walkway, comment: ""); //  2 nn:1 nl:1
+            grc.AddNodePtxyz("b40-f01-lobby", 246.400, 0.000, 175.500, comment: ""); //  1 nn:1 nl:0
+            grc.LinkToPtxyz("b40-f01-lobby", "b40-f01-o01", 241.120, 0.000, 172.910, LinkUse.walkway, comment: ""); //  2 nn:1 nl:1
+            grc.LinkToPtxyz("b40-f01-o01", "b40-os1-o01", 234.800, 0.000, 170.000, LinkUse.walkway, comment: ""); //  2 nn:1 nl:1
             grc.LinkToPtxyz("b40-os1-o01", "b40-os1-o02", 242.200, 0.000, 144.200, LinkUse.walkway, comment: ""); //  3 nn:1 nl:1
             grc.LinkToPtxyz("b40-os1-o02", "b40-os1-o03", 249.250, 0.000, 121.260, LinkUse.walkway, comment: ""); //  4 nn:1 nl:1
             grc.AddNodePtxyz("dw-B40-c01", 194.330, 0.000, 90.500, comment: ""); //  5 nn:1 nl:0

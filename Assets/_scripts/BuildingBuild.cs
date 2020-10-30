@@ -301,9 +301,10 @@ namespace CampusSimulator
                         destnodes = new List<string> { "b40-f01-lobby" };
                         shortname = "b40";
 
-                        defPeoplePerRoom = 20;
+                        defPeoplePerRoom = 10;
                         defPercentFull = 1.0f;
                         defRoomArea = 40;
+                        bm.AddBuildingAlias("b40", this);
                         break;
                     }
                 case "Bld43":
@@ -316,6 +317,7 @@ namespace CampusSimulator
                         defPeoplePerRoom = 4;
                         defPercentFull = 1.0f;
                         defRoomArea = 15;
+                        bm.AddBuildingAlias("b43", this);
                         break;
                     }
                 case "BldSX":
@@ -324,8 +326,9 @@ namespace CampusSimulator
                         maingaragename = "GarageX_1";
                         destnodes = new List<string> { "bSX-f01-lobby" };
                         shortname = "bSX";
+                        bm.AddBuildingAlias("bSX", this);
 
-                        defPeoplePerRoom = 20;
+                        defPeoplePerRoom = 10;
                         defPercentFull = 1.0f;
                         defRoomArea = 40;
                         break;
@@ -337,9 +340,10 @@ namespace CampusSimulator
                         destnodes = new List<string> { "b99-f01-lobby" };
                         shortname = "b99";
 
-                        defPeoplePerRoom = 20;
+                        defPeoplePerRoom = 10;
                         defPercentFull = 1.0f;
                         defRoomArea = 40;
+                        bm.AddBuildingAlias("b99", this);
 
                         break;
                     }
