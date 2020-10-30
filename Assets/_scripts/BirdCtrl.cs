@@ -47,7 +47,7 @@ namespace CampusSimulator
         public Guid wegguid = Guid.Empty;
         public string swegguid = Guid.Empty.ToString();
         public int cntgp = 0;
-        public Vector3 moveoffset = new Vector3(0.3f, -1.55f, 0);
+        public Vector3 moveoffset = new Vector3(0.3f, -1.45f, 0);
 
         static public GameObject birdgoes = null;
         public Person person = null;
@@ -107,15 +107,12 @@ namespace CampusSimulator
             return rendgo;
         }
 
-        Vector3 GetPathPoint(float gpprdist,bool setpathpos=true)
+        (Vector3 pt,bool fragable) GetPathPoint(float gpprdist,bool setpathpos=true)
         {
-            if (path == null) return Vector3.zero;
+            var fragable = false;
+            if (path == null) return (Vector3.zero,fragable);
             PathPos pp = path.MovePositionAlongPath(gpprdist);
-            dragclr = "blue";
-            if (pp.weg.link.IsFragable())
-            {
-                dragclr = "green";
-            }
+            fragable = pp.weg.link.IsFragable();
             if (setpathpos)
             {
                 pathpos = pp;
@@ -127,7 +124,7 @@ namespace CampusSimulator
             }
             var pt = new Vector3(pp.pt.x, pp.pt.y + BirdFlyHeight, pp.pt.z);
             //var pt = new Vector3(pp.pt.x, pp.pt.y + 0, pp.pt.z);
-            return pt;
+            return (pt,fragable);
         }
         void CreateBirdFormGos()
         {
@@ -438,7 +435,8 @@ namespace CampusSimulator
         void MoveBirdGos(float deltatime)
         {
             rundist += BirdSpeedFactor*BirdSpeed*deltatime; // deltaTime is time to complete last frame
-            curpt = GetPathPoint(rundist,setpathpos:true);
+            bool fragable;
+            (curpt,fragable) = GetPathPoint(rundist,setpathpos:true);
             var delt = curpt - lastcurpt;
             if (deltatime > 0)
             {
@@ -447,7 +445,7 @@ namespace CampusSimulator
             birdgo.transform.localPosition += delt;
             if (lookatpoint)
             {
-                var curlookpt = GetPathPoint(rundist + lookaheadtime + deltatime, setpathpos: false);
+                var (curlookpt,_) = GetPathPoint(rundist + lookaheadtime + deltatime, setpathpos: false);
                 if (flatlookatpoint)
                 {
                     var flatlookpt = new Vector3(curlookpt.x, curpt.y, curlookpt.z);
@@ -469,9 +467,22 @@ namespace CampusSimulator
                 }
                 else
                 {
-                    draggo.transform.position = curpt;
+                    dragclr = "blue";
+                    var yval = curpt.y - BirdFlyHeight;
+                    if (fragable)
+                    {
+                        dragclr = "blue";
+                        yval = sman.mpman.GetHeight(curpt.x, curpt.z);
+                    }
+                    var dragpt = new Vector3(curpt.x, yval, curpt.z);
+                    draggo.transform.position = dragpt;
                     GraphAlgos.GraphUtil.SetColorOfGo(draggo, dragclr);
                 }
+            }
+            if (fragable)
+            {
+              //  var yval = sman.mpman.GetHeight(curpt.x, curpt.z);
+              //  curpt = new Vector3(curpt.x, yval, curpt.z);
             }
             lastcurpt = curpt;
             SetAnimationScript();
