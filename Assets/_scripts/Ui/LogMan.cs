@@ -48,7 +48,7 @@ public class LogMan : MonoBehaviour
             }
         }
         var iclr = 0;
-        var hclr0 = GraphAlgos.GraphUtil.GetHexColorByName(color[iclr]);
+        var hclr0 = GraphAlgos.GraphUtil.GetHexColorByName(color[0]);
         var nmsg = $"<color={hclr0}>";
         var sidx = nmsg.Length;
         nmsg += msg;
