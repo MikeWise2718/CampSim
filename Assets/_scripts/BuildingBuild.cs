@@ -135,14 +135,14 @@ namespace CampusSimulator
         List<string> Eb12roomspec = new List<string>()
         {
             // room name,pcap,alignang,length,width,frameit - see AddOneRoomSpec for code
-            "eb12-08-lob:11:0.0:4:4:T",
-            "eb12-10-lob:15:0.0:4:4:T",
-            "eb12-12-lob:7:0.0:4:4:T",
-            "eb12-14-lob:9:0.0:4:4:T",
-            "eb12-16-lob:15:0.0:4:4:T",
-            "eb12-18-lob:9:0.0:4:4:T",
-            "eb12-20-lob:7:0.0:4:4:T",
-            "eb12-22-lob:9:0.0:4:4:T",
+            "eb12-08-lob:7:0.0:2:3:T",
+            "eb12-10-lob:3:0.0:2:3:T",
+            "eb12-12-lob:7:0.0:2:3:T",
+            "eb12-14-lob:5:0.0:2:3:T",
+            "eb12-16-lob:3:0.0:2:3:T",
+            "eb12-18-lob:3:0.0:2:3:T",
+            "eb12-20-lob:3:0.0:2:3:T",
+            "eb12-22-lob:5:0.0:2:3:T",
         };
 
         List<string> MtTenFoundSpotSpec = new List<string>()
@@ -392,6 +392,7 @@ namespace CampusSimulator
                         defPercentFull = 1.0f;
                         defRoomArea = 10;
                         defAngAlign = 0;
+                        bm.AddBuildingAlias("eb12", this);
                         break;
                     }
                 case "Eb12-test":
