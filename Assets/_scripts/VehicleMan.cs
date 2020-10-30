@@ -48,7 +48,7 @@ namespace CampusSimulator
             while (iter < maxiter)
             {
                 var fpart = GraphAlgos.GraphUtil.GetRanListEntry(countyCodes);
-                var lpart = GraphAlgos.GraphUtil.GetRanInt(9000)+1000;
+                var lpart = GraphAlgos.GraphUtil.GetRanInt(9000, "popbld") +1000;
                 var platename = fpart + "-" + lpart;
                 if (!plateLookup.ContainsKey(platename))
                 {
@@ -64,7 +64,7 @@ namespace CampusSimulator
             {
                 maxranint = sman.maxLegacyCarGen;
             }
-            var cidx = GraphAlgos.GraphUtil.GetRanInt(maxranint) + 1;
+            var cidx = GraphAlgos.GraphUtil.GetRanInt(maxranint, "popbld") + 1;
             return "Car" + cidx.ToString("D3");              
         }
 
