@@ -290,6 +290,28 @@ namespace CampusSimulator
         //}
 
 
+        public void DumpColorName1(string cname)
+        {
+            var clr = GraphAlgos.GraphUtil.GetColorByName(cname);
+            var (hex, alf) = GraphAlgos.GraphUtil.HexColor(clr);
+            var msg = $"{hex} - {cname}";
+            this.Lgg(msg, cname);
+        }
+        public void DumpColorNames()
+        {
+            GraphAlgos.GraphUtil.InitColorTable();
+            //var isblueblue = GraphAlgos.GraphUtil.isColorName("blue");
+            DumpColorName1("red");
+            DumpColorName1("blue");
+            DumpColorName1("green");
+            var cnames = GraphAlgos.GraphUtil.GetColorNames();
+            foreach (var cn in cnames)
+            {
+                DumpColorName1(cn);
+            }
+        }
+
+
         public void BaseInitialize(SceneSelE newscene)
         {
             // Here we do two things
@@ -309,16 +331,7 @@ namespace CampusSimulator
             GraphAlgos.GraphUtil.SetRanSeed("journeyspawn", curseed);
             GraphAlgos.GraphUtil.SetRanSeed("spawnstreaming", curseed);
             GraphAlgos.GraphUtil.InitializeRansets();
-            GraphAlgos.GraphUtil.InitColorTable();
-            var isblueblue = GraphAlgos.GraphUtil.isColorName("blue");
-            var cnames = GraphAlgos.GraphUtil.GetColorNames();
-            foreach(var cn in cnames)
-            {
-                var c = GraphAlgos.GraphUtil.GetColorByName(cn);
-                var (hx,alf) = GraphAlgos.GraphUtil.HexColor(c);
-                var msg = $"{hx} - {cn}";
-                this.Lgg(msg, hx);
-            }
+            DumpColorNames();
 
         }
         //public void InitializeGlbLlMap()

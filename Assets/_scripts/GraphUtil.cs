@@ -371,6 +371,7 @@ namespace GraphAlgos
         {
             return new Color(r / 255f, g / 255f, b / 255f, alpha);
         }
+        static Dictionary<string, string> hexColorTable = null;
         static Dictionary<string, Color> colorTable =null;
         public static bool isColorName(string name)
         {
@@ -394,11 +395,11 @@ namespace GraphAlgos
         {
             int val = (int)hex;
             //For uppercase A-F letters:
-            return val - (val < 58 ? 48 : 55);
+            //return val - (val < 58 ? 48 : 55);
             //For lowercase a-f letters:
             //return val - (val < 58 ? 48 : 87);
             //Or the two combined, but a bit slower:
-            //return val - (val < 58 ? 48 : (val < 97 ? 55 : 87));
+            return val - (val < 58 ? 48 : (val < 97 ? 55 : 87));
         }
         public static byte[] StringToByteArrayFastest(string hex)
         {
@@ -441,7 +442,16 @@ namespace GraphAlgos
             var rv = new List<string>(colorTable.Keys);
             return rv;
         }
-
+        static void InitHexColors()
+        {
+            hexColorTable = new Dictionary<string, string>();
+            foreach (var key in colorTable.Keys)
+            {
+                var c = colorTable[key];
+                var (hexval,_) = GraphAlgos.GraphUtil.HexColor(c);
+                hexColorTable[key] = hexval;
+            }
+        }
         static void InitXkcdColors()
         {
             var str = ReadResourceAsString("xkcd/colors");
@@ -452,8 +462,10 @@ namespace GraphAlgos
                 for (int i = 0; i < clrs.Count; i++)
                 {
                     var clrval = clrs[i];
-                    var clrname = clrval["color"];
-                    var clrhex = clrval["hex"];
+                    var clrname = clrval["color"].ToString();
+                    clrname = clrname.Replace("\"", "");
+                    var clrhex = clrval["hex"].ToString();
+                    clrhex = clrhex.Replace("\"", "");
                     colorTable[clrname] = rgbhex(clrhex);
                 }
                 Debug.Log($"SimpleJSON read {clrs.Count} xkcd colors");
@@ -561,6 +573,7 @@ namespace GraphAlgos
             colorTable["gray"] = rgbbyte(128, 128, 128);
             colorTable["blk"] =
             colorTable["black"] = new Color(0, 0, 0);
+            InitHexColors();
         }
         static string[] dcolorseq = { "dr", "dg", "db", "dm", "dy", "dc" };
         static string[] colorseq = { "r", "g", "b", "m", "y", "c" };
@@ -585,6 +598,15 @@ namespace GraphAlgos
                 return Color.gray;
             }
             return colorTable[name];
+        }
+        public static string GetHexColorByName(string name)
+        {
+            if (!isColorName(name))
+            {
+                Debug.LogError($"color {name} not defined in colortable");
+                return "#808080";
+            }
+            return hexColorTable[name];
         }
         public static Color GetColorByName(string name, float alpha = 0.4f)
         {
