@@ -2249,6 +2249,7 @@ namespace GraphAlgos
             var zs = 0;
             grc.AddNodePtxyz("b33-f01-room1", -567.600 + xs, 0.000, 470.400 + zs, comment: "");
             grc.LinkToPtxyz("b33-f01-lobby", -563.000 + xs, 0.000, 463.300 + zs, comment: "");
+            grc.LinkToPtxyz("b33-f01-001", -558.900 + xs, 0.000, 452.800 + zs, comment: "");
             grc.LinkToPtxyz("b33-o01-001", -558.900 + xs, 0.000, 451.500 + zs, comment: "");
             grc.regman.SetRegion("default");
         }

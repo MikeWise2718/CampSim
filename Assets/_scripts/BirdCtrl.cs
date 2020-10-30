@@ -122,7 +122,16 @@ namespace CampusSimulator
                 wegdistance = pp.wegDistSoFar;
                 cntgp++;
             }
-            var pt = new Vector3(pp.pt.x, pp.pt.y + BirdFlyHeight, pp.pt.z);
+            var yval = pp.pt.y;
+            if (fragable)
+            {
+            //    sman.Lgg($"before curpt:{curpt}","amber");
+                yval = sman.mpman.GetHeight(pp.pt.x, pp.pt.z);
+            //    sman.Lgg($"after  curpt:{curpt}", "light green");
+            }
+            var pt = new Vector3(pp.pt.x, yval + BirdFlyHeight, pp.pt.z);
+
+            //var pt = new Vector3(pp.pt.x, pp.pt.y + BirdFlyHeight, pp.pt.z);
             //var pt = new Vector3(pp.pt.x, pp.pt.y + 0, pp.pt.z);
             return (pt,fragable);
         }
@@ -479,11 +488,7 @@ namespace CampusSimulator
                     GraphAlgos.GraphUtil.SetColorOfGo(draggo, dragclr);
                 }
             }
-            if (fragable)
-            {
-              //  var yval = sman.mpman.GetHeight(curpt.x, curpt.z);
-              //  curpt = new Vector3(curpt.x, yval, curpt.z);
-            }
+
             lastcurpt = curpt;
             SetAnimationScript();
             
