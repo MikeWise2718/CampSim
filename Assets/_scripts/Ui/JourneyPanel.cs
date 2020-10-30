@@ -630,7 +630,7 @@ public class JourneyPanel : MonoBehaviour
             case SceneSelE.Eb12:
                 {
                     b1name = "Eb12-22";
-                    b1room = "eb12-12-lob";
+                    b1room = "eb12-f01-12-lob";
                     b2name = "EbRewe";
                     b2room = "eb12-rewe-lob";
                     personname = "Mary Poppins";

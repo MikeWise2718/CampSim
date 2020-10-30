@@ -711,7 +711,7 @@ namespace CampusSimulator
                 case SceneSelE.Eb12small:
                 case SceneSelE.Eb12:
                     presetEvacBldName = "Eb12-22";
-                    sman.psman.AddPersonToBuildingAtNode(PersonMan.GenderE.male, "eb12-16-lob", "eb12-oso1a", "Arnie Schwarzwald", "Businessman004",
+                    sman.psman.AddPersonToBuildingAtNode(PersonMan.GenderE.male, "eb12-f01-16-lob", "eb12-oso1a", "Arnie Schwarzwald", "Businessman004",
                                                          PersonMan.empStatusE.Security, "IdleUnarmed", false, 0, hasHololens: true, hasCamera: true, flagged: true);
                     break;
                 default:

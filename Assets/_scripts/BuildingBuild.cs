@@ -135,14 +135,14 @@ namespace CampusSimulator
         List<string> Eb12roomspec = new List<string>()
         {
             // room name,pcap,alignang,length,width,frameit - see AddOneRoomSpec for code
-            "eb12-08-lob:7:0.0:2:3:T",
-            "eb12-10-lob:3:0.0:2:3:T",
-            "eb12-12-lob:7:0.0:2:3:T",
-            "eb12-14-lob:5:0.0:2:3:T",
-            "eb12-16-lob:3:0.0:2:3:T",
-            "eb12-18-lob:3:0.0:2:3:T",
-            "eb12-20-lob:3:0.0:2:3:T",
-            "eb12-22-lob:5:0.0:2:3:T",
+            "eb12-f01-08-lob:7:0.0:2:3:T",
+            "eb12-f01-10-lob:3:0.0:2:3:T",
+            "eb12-f01-12-lob:7:0.0:2:3:T",
+            "eb12-f01-14-lob:5:0.0:2:3:T",
+            "eb12-f01-16-lob:3:0.0:2:3:T",
+            "eb12-f01-18-lob:3:0.0:2:3:T",
+            "eb12-f01-20-lob:3:0.0:2:3:T",
+            "eb12-f01-22-lob:5:0.0:2:3:T",
         };
 
         List<string> MtTenFoundSpotSpec = new List<string>()
@@ -385,8 +385,8 @@ namespace CampusSimulator
                     {
                         maingaragename = "Eb12_1";
                         roomspecs = Eb12roomspec;
-                        destnodes = new List<string> { "eb12-08-lob", "eb12-10-lob", "eb12-12-lob","eb12-14-lob",
-                                                       "eb12-16-lob", "eb12-18-lob", "eb12-20-lob","eb12-22-lob" };
+                        destnodes = new List<string> { "eb12-f01-08-lob", "eb12-f01-10-lob", "eb12-f01-12-lob","eb12-f01-14-lob",
+                                                       "eb12-f01-16-lob", "eb12-f01-18-lob", "eb12-f01-20-lob","eb12-f01-22-lob" };
                         shortname = "eb12";
                         defPeoplePerRoom = 10;
                         defPercentFull = 1.0f;

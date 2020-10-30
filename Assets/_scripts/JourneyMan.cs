@@ -1099,7 +1099,7 @@ namespace CampusSimulator
             pers.GrabMainCamera();
             if (sman.curscene == SceneSelE.Eb12 || sman.curscene == SceneSelE.Eb12small)
             {
-                room = "eb12-12-lob";
+                room = "eb12-f01-12-lob";
             }
             if (pers.IsInHomeRoom())
             {
