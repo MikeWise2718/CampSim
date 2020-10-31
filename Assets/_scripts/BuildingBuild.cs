@@ -150,6 +150,14 @@ namespace CampusSimulator
             "eb1622-f01-22-lob:5:0.0:2:3:T",
         };
 
+        List<string> Ebreweroomspec = new List<string>()
+        {
+            // room name,pcap,alignang,length,width,frameit - see AddOneRoomSpec for code
+            "eb12-rewe-lob:5:30.0:7:7:T",
+            "eb12-rewe-rm01:5:30.0:7:7:T",
+            "eb12-rewe-rm02:5:30.0:7:7:T",
+        };
+
         List<string> MtTenFoundSpotSpec = new List<string>()
         {
             // room name,pcap,alignang,length,width,frameit - see AddOneRoomSpec for code
@@ -415,6 +423,18 @@ namespace CampusSimulator
                         bm.AddBuildingAlias("eb0622", this);
                         break;
                     }
+                case "EbRewe":
+                    {
+                        maingaragename = "Eb12_Rewe";
+                        roomspecs = Ebreweroomspec;
+                        destnodes = new List<string> { "eb12-rewe-lob", "eb12-rewe-rm01", "eb12-rewe-rm02" };
+                        shortname = "Rewe";
+                        osmwid = "w340004557";
+                        defPeoplePerRoom = 5; // 20
+                        defPercentFull = 1.0f;
+                        defRoomArea = 100;
+                        break;
+                    }
                 case "Eb12-test":
                     {
                         shortname = "test";
@@ -455,17 +475,7 @@ namespace CampusSimulator
                         shortname = "Ophm";
                         break;
                     }
-                case "EbRewe":
-                    {
-                        maingaragename = "Eb12_Rewe";
-                        destnodes = new List<string> { "eb12-rewe-lob", "eb12-rewe-rm01", "eb12-rewe-rm02" };
-                        shortname = "Rewe";
-                        osmwid = "w340004557";
-                        defPeoplePerRoom = 5; // 20
-                        defPercentFull = 1.0f;
-                        defRoomArea = 100;
-                        break;
-                    }
+
                 case "DubBld1":
                     {
                         shortname = "DubBld1";

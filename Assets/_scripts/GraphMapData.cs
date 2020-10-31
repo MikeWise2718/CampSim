@@ -114,16 +114,18 @@ namespace GraphAlgos
         public void createPointsFor_eb12_retail()  // machine generated - do not edit
         {
             grc.regman.NewNodeRegion("eb12-retail", "blue", saveToFile: true);
-            grc.AddNodePtxyz("eb12-rw01", 237.000, 0.000, 169.000, comment: "driveway start"); //  1 nn:1 nl:0
-            grc.LinkToPtxyz("eb12-rw01", "eb12-rw02", 247.000, 0.000, 109.000, LinkUse.driveway, comment: ""); //  2 nn:1 nl:1
-            grc.LinkToPtxyz("eb12-rw02", "eb12-rw03", 270.000, 0.000, 112.000, LinkUse.driveway, comment: ""); //  3 nn:1 nl:1
-            grc.LinkToPtxyz("eb12-rw03", "eb12-rw04", 257.000, 0.000, 153.000, LinkUse.driveway, comment: ""); //  4 nn:1 nl:1
-            grc.LinkToPtxyz("eb12-rw04", "eb12-rw05", 254.000, 0.000, 172.000, LinkUse.driveway, comment: ""); //  5 nn:1 nl:1
+            var dx_rewe = -9.3;
+            var dz_rewe = -4.1;
+            grc.AddNodePtxyz("eb12-rw01", 237.000 + dx_rewe, 0.000, 169.000 + dz_rewe, comment: "driveway start"); //  1 nn:1 nl:0
+            grc.LinkToPtxyz("eb12-rw01", "eb12-rw02", 247.000 + dx_rewe, 0.000, 109.000 + dz_rewe, LinkUse.driveway, comment: ""); //  2 nn:1 nl:1
+            grc.LinkToPtxyz("eb12-rw02", "eb12-rw03", 270.000 + dx_rewe, 0.000, 112.000 + dz_rewe, LinkUse.driveway, comment: ""); //  3 nn:1 nl:1
+            grc.LinkToPtxyz("eb12-rw03", "eb12-rw04", 257.000 + dx_rewe, 0.000, 153.000 + dz_rewe, LinkUse.driveway, comment: ""); //  4 nn:1 nl:1
+            grc.LinkToPtxyz("eb12-rw04", "eb12-rw05", 254.000 + dx_rewe, 0.000, 172.000 + dz_rewe, LinkUse.driveway, comment: ""); //  5 nn:1 nl:1
             grc.AddLinkByNodeName("eb12-rw05", "eb12-rw01", LinkUse.driveway); //  6 nn:0 nl:1
-            grc.LinkToPtxyz("eb12-rw04", "eb12-rewe-lob", 262.000, 0.000, 156.000, LinkUse.walkway, comment: "walkway start"); //  7 nn:1 nl:1
-            grc.LinkToPtxyz("eb12-rewe-lob", "eb12-rewe-rm01", 275.000, 0.000, 170.000, LinkUse.walkway, comment: ""); //  8 nn:1 nl:1
-            grc.LinkToPtxyz("eb12-rewe-lob", "eb12-rewe-rm02", 283.000, 0.000, 156.000, LinkUse.walkway, comment: ""); //  9 nn:1 nl:1
-            grc.LinkToPtxyz("eb12-rw04", "eb12-rewe-os21", 243.000, 0.000, 150.000, LinkUse.walkway, comment: ""); //  10 nn:1 nl:1
+            grc.LinkToPtxyz("eb12-rw04", "eb12-rewe-lob", 262.000 + 0, 0.000, 156.000 + 0, LinkUse.walkway, comment: "walkway start"); //  7 nn:1 nl:1
+            grc.LinkToPtxyz("eb12-rewe-lob", "eb12-rewe-rm01", 275.000 + dx_rewe, 0.000, 170.000 + dz_rewe, LinkUse.walkway, comment: ""); //  8 nn:1 nl:1
+            grc.LinkToPtxyz("eb12-rewe-lob", "eb12-rewe-rm02", 283.000 + dx_rewe, 0.000, 156.000 + dz_rewe, LinkUse.walkway, comment: ""); //  9 nn:1 nl:1
+            grc.LinkToPtxyz("eb12-rw04", "eb12-rewe-os21", 243.000 + dx_rewe, 0.000, 150.000 + dz_rewe, LinkUse.walkway, comment: ""); //  10 nn:1 nl:1
             grc.AddLinkByNodeName("eb12-rewe-rm01", "eb12-rewe-rm02", LinkUse.walkway); //  11 nn:0 nl:1
             grc.AddLinkByNodeName("eb12-rw01", "reg:eb12-streets", LinkUse.driveway); //  12 nn:0 nl:1
             grc.AddLinkByNodeName("eb12-rw03", "reg:eb12-streets", LinkUse.driveway); //  

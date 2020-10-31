@@ -880,8 +880,10 @@ namespace Aiskwk.Map
                 case "Eb12":
                     mapcoord.AddRowLatLng(49.993313, 8.678353, 0, 0);          // eb12 origin streetlamp     
                     mapcoord.AddRowLatLng(49.993472, 8.677981, 18.45, 27.90);   // eb12-f01-12 doorway
-                    mapcoord.AddRowLatLng(49.995560, 8.676101, 260.80, 167.7); // SW corner of Rewe
-                    mapcoord.AddRowLatLng(49.995788, 8.676752, 287.25, 118.35); //SE corner of Rewe
+                    //mapcoord.AddRowLatLng(49.995560, 8.676101, 260.80, 167.7); // SW corner of Rewe
+                    //mapcoord.AddRowLatLng(49.995788, 8.676752, 287.25, 118.35); //SE corner of Rewe
+                    mapcoord.AddRowLatLng(49.995560, 8.676101, 251.62, 162.6); // SW corner of Rewe  // 9.18,5.1 decrease
+                    mapcoord.AddRowLatLng(49.995788, 8.676752, 277.8, 115.02); //SE corner of Rewe   // 9.45,3.33 decrease
                     ok = true;
                     break;
                 case "MsftDublin":
