@@ -194,6 +194,7 @@ namespace CampusSimulator
 
             var newosmlevels = 0;
             var newosmheight = 0f;
+            var newffoffset = 0f;
             var newosmgroundref = GroundRef.max;
 
 
@@ -407,6 +408,10 @@ namespace CampusSimulator
                         defAngAlign = 0;
                         osmwid = "w362265666";
                         bm.AddBuildingAlias("eb0814", this);
+                        newosmlevels = 3;
+                        newosmheight = 7.5f;
+                        newosmgroundref = GroundRef.cen;
+                        newffoffset = 1f;
                         break;
                     }
                 case "Eb1622":
@@ -420,7 +425,11 @@ namespace CampusSimulator
                         defRoomArea = 10;
                         defAngAlign = 0;
                         osmwid = "w362265668";
-                        bm.AddBuildingAlias("eb0622", this);
+                        bm.AddBuildingAlias("eb1622", this);
+                        newosmlevels = 3;
+                        newosmheight = 7.5f;
+                        newosmgroundref = GroundRef.cen;
+                        newffoffset = 1f;
                         break;
                     }
                 case "EbRewe":
@@ -531,6 +540,7 @@ namespace CampusSimulator
                 {
                     bspec.levels = newosmlevels;
                     bspec.height = newosmheight;
+                    bspec.firstflooroffset = newffoffset;
                     if (bspec.levels == 0)
                     {
                         bspec.levels = 1;

@@ -16,6 +16,7 @@ public class OsmBldSpec
     public string wid;
     public float height;
     public float levelheight;
+    public float firstflooroffset;
     public int levels;
     public double lat;
     public double lng;
@@ -54,6 +55,7 @@ public class OsmBldSpec
         this.wid = wid;
         this.height = height;
         this.levels = levels;
+        this.firstflooroffset = 0;
         this.levelheight = height / levels;
         this.bgo = null;
         this.isVisible = true;
@@ -163,7 +165,7 @@ public class OsmBldSpec
             var iflr = i;
             if (iflr < 0) iflr = 0;
             if (iflr > levels) iflr = levels;
-            y = iflr * height / levels;
+            y = firstflooroffset + ((iflr * height) / levels);
         }
         if (includeAltitude)
         {
