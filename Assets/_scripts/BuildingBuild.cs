@@ -41,7 +41,8 @@ namespace CampusSimulator
                 "BldSX",
                 "Bld99",
                 "BldRWB",
-                "Eb12-22",
+                "Eb0814",
+                "Eb1622",
                 //"Eb12-test",
                 "Eb12-carport",
                 "Eb30",
@@ -132,17 +133,21 @@ namespace CampusSimulator
 
 
 
-        List<string> Eb12roomspec = new List<string>()
+        List<string> Eb0814roomspec = new List<string>()
         {
             // room name,pcap,alignang,length,width,frameit - see AddOneRoomSpec for code
-            "eb12-f01-08-lob:7:0.0:2:3:T",
-            "eb12-f01-10-lob:3:0.0:2:3:T",
-            "eb12-f01-12-lob:7:0.0:2:3:T",
-            "eb12-f01-14-lob:5:0.0:2:3:T",
-            "eb12-f01-16-lob:3:0.0:2:3:T",
-            "eb12-f01-18-lob:3:0.0:2:3:T",
-            "eb12-f01-20-lob:3:0.0:2:3:T",
-            "eb12-f01-22-lob:5:0.0:2:3:T",
+            "eb0814-f01-08-lob:7:0.0:2:3:T",
+            "eb0814-f01-10-lob:3:0.0:2:3:T",
+            "eb0814-f01-12-lob:7:0.0:2:3:T",
+            "eb0814-f01-14-lob:5:0.0:2:3:T",
+        };
+        List<string> Eb1622roomspec = new List<string>()
+        {
+            // room name,pcap,alignang,length,width,frameit - see AddOneRoomSpec for code
+            "eb1622-f01-16-lob:3:0.0:2:3:T",
+            "eb1622-f01-18-lob:3:0.0:2:3:T",
+            "eb1622-f01-20-lob:3:0.0:2:3:T",
+            "eb1622-f01-22-lob:5:0.0:2:3:T",
         };
 
         List<string> MtTenFoundSpotSpec = new List<string>()
@@ -177,6 +182,7 @@ namespace CampusSimulator
             defPercentFull = 1.0f;
             defRoomArea = 10;
             osmnamestart = "";
+            osmwid = "";
 
             var newosmlevels = 0;
             var newosmheight = 0f;
@@ -291,7 +297,7 @@ namespace CampusSimulator
                         b121comp = this.transform.gameObject.AddComponent<B121Willow>();
                         b121comp.InitializeValues(bm.sman, this);
                         b121comp.MakeItSo();
-                        bm.AddBuildingAlias("b121",this);
+                        bm.AddBuildingAlias("b121", this);
                         break;
                     }
                 case "Bld40":
@@ -353,7 +359,7 @@ namespace CampusSimulator
                         maingaragename = "GarageRWB_1";
                         selectionweight = 10;
                         destnodes = new List<string> { "bRWB-f01-lobby", "rwb-f03-rm3999" }; // reset in reinitdests
-                        
+
                         shortname = "bRWB";
                         defPeoplePerRoom = 2;
                         if (bm.sman.curscene == SceneSelE.MsftB19focused || bm.sman.curscene == SceneSelE.MsftB121focused || bm.sman.curscene == SceneSelE.MsftB33focused)
@@ -381,18 +387,32 @@ namespace CampusSimulator
                         //lmd.createPointsFor_msft_bredwb_f3();
                         break;
                     }
-                case "Eb12-22":
+                case "Eb0814":
                     {
                         maingaragename = "Eb12_1";
-                        roomspecs = Eb12roomspec;
-                        destnodes = new List<string> { "eb12-f01-08-lob", "eb12-f01-10-lob", "eb12-f01-12-lob","eb12-f01-14-lob",
-                                                       "eb12-f01-16-lob", "eb12-f01-18-lob", "eb12-f01-20-lob","eb12-f01-22-lob" };
+                        roomspecs = Eb0814roomspec;
+                        destnodes = new List<string> { "eb0814-f01-08-lob", "eb0814-f01-10-lob", "eb0814-f01-12-lob", "eb0814-f01-14-lob" };
                         shortname = "eb12";
-                        defPeoplePerRoom = 10;
+                        defPeoplePerRoom = 4;
                         defPercentFull = 1.0f;
                         defRoomArea = 10;
                         defAngAlign = 0;
-                        bm.AddBuildingAlias("eb12", this);
+                        osmwid = "w362265666";
+                        bm.AddBuildingAlias("eb0814", this);
+                        break;
+                    }
+                case "Eb1622":
+                    {
+                        maingaragename = "Eb12_1";
+                        roomspecs = Eb1622roomspec;
+                        destnodes = new List<string> { "eb0622-f01-16-lob", "eb0622-f01-18-lob", "eb0622-f01-20-lob", "eb0622-f01-22-lob" };
+                        shortname = "eb12";
+                        defPeoplePerRoom = 4;
+                        defPercentFull = 1.0f;
+                        defRoomArea = 10;
+                        defAngAlign = 0;
+                        osmwid = "w362265668";
+                        bm.AddBuildingAlias("eb0622", this);
                         break;
                     }
                 case "Eb12-test":
@@ -440,6 +460,7 @@ namespace CampusSimulator
                         maingaragename = "Eb12_Rewe";
                         destnodes = new List<string> { "eb12-rewe-lob", "eb12-rewe-rm01", "eb12-rewe-rm02" };
                         shortname = "Rewe";
+                        osmwid = "w340004557";
                         defPeoplePerRoom = 5; // 20
                         defPercentFull = 1.0f;
                         defRoomArea = 100;
@@ -475,27 +496,36 @@ namespace CampusSimulator
                         break;
                     }
             }
+            OsmBldSpec bspec = null;
             if (osmnamestart != "")
             {
-                var bspec = bm.FindBldSpecByNameStart(osmnamestart);
-                if (bspec != null)
-                {
-                    bm.RegisterBsBld(bspec, this);
-                    bspec.groundRef = newosmgroundref;
-                    if (newosmlevels>0)
-                    {
-                        bspec.levels = newosmlevels;
-                        bspec.height = newosmheight;
-                        if (bspec.levels == 0)
-                        {
-                            bspec.levels = 1;
-                        }
-                        bspec.levelheight = bspec.height / bspec.levels;
-                    }
-                }
-                else
+                bspec = bm.FindBldSpecByNameStart(osmnamestart);
+                if (bspec == null)
                 {
                     bm.sman.LggError($"Could not find osmbld from name start:{osmnamestart}");
+                }
+            }
+            if (osmwid != "")
+            {
+                bspec = bm.FindBldSpecByWid(osmwid);
+                if (bspec == null)
+                {
+                    bm.sman.LggError($"Could not find osmbld from wid:{osmwid}");
+                }
+            }
+            if (bspec != null)
+            {
+                bm.RegisterBsBld(bspec, this);
+                bspec.groundRef = newosmgroundref;
+                if (newosmlevels > 0)
+                {
+                    bspec.levels = newosmlevels;
+                    bspec.height = newosmheight;
+                    if (bspec.levels == 0)
+                    {
+                        bspec.levels = 1;
+                    }
+                    bspec.levelheight = bspec.height / bspec.levels;
                 }
             }
             if (shortname != "")
@@ -521,7 +551,7 @@ namespace CampusSimulator
                 var x = oline[i].x;
                 var (lat, lng) = bm.sman.coman.xztoll(x, z);
                 var pos = new Vector3(x, 0, z);
-                var y = this.GetFloorAltitude(lev,includeAltitude:true);
+                var y = this.GetZeroBasedFloorAltitude(lev,includeAltitude:true);
                 pos = new Vector3(pos.x, y, pos.z);
                 sph.transform.position = pos;
                 sph.transform.SetParent(pgo.transform, worldPositionStays: true);
@@ -647,24 +677,27 @@ namespace CampusSimulator
             return rv;
         }
 
-        public float GetFloorAltitude(int floornum,bool includeAltitude=true)
+        public float GetZeroBasedFloorAltitude(int floornum,bool includeAltitude=true)
         {
             var rv = 0f;
             if (b121comp!=null)
             {
-                rv = b121comp.GetFloorHeight(floornum,includeAltitude: includeAltitude);
+                rv = b121comp.GetZeroBasedFloorHeight(floornum,includeAltitude: includeAltitude);
             }
             else if (b19comp != null)
             {
-                rv = b19comp.GetFloorHeight(floornum,includeAltitude: includeAltitude);
+                rv = b19comp.GetZeroBasedFloorHeight(floornum,includeAltitude: includeAltitude);
             }
             else if (isOsmGenerated)
             {
-                rv = bldspec.GetFloorHeight(floornum,includeAltitude:includeAltitude);
+                rv = bldspec.GetZeroBasedFloorHeight(floornum,includeAltitude:includeAltitude);
             }
             else
             {
-                rv = adhocHeight;
+
+                // this is wrong, i.e. no dependency on floornum - need to sort it out
+                var pct = ((float)floornum) / Mathf.Max(adhocLevels,1);
+                rv = adhocHeight*pct;
                 if (includeAltitude)
                 {
                     var alt = bm.sman.mpman.GetHeight(adhocCen.x, adhocCen.z);
@@ -717,8 +750,8 @@ namespace CampusSimulator
             floorHeights.Add(msg2);
             for (int i=0; i<levels;i++)
             {
-                var a1 = GetFloorAltitude(i, includeAltitude: false);
-                var a2 = GetFloorAltitude(i, includeAltitude: true);
+                var a1 = GetZeroBasedFloorAltitude(i, includeAltitude: false);
+                var a2 = GetZeroBasedFloorAltitude(i, includeAltitude: true);
                 var flrec = $"{i}   {a1:f3}   {a2:f3}";
                 floorHeights.Add(flrec);
             }
@@ -1047,7 +1080,7 @@ namespace CampusSimulator
                         }
                         break;
                     }
-                case "Eb12-22":
+                case "Eb0814":
                     {
                         if (bm.sman.curscene == SceneSelE.Eb12 || bm.sman.curscene == SceneSelE.Eb12small)
                         {

@@ -204,7 +204,24 @@ namespace CampusSimulator
                     }
                 }
             }
-            sman.LggWarning($"Found nothing that starts with \"{namestart}\"");
+            sman.LggWarning($"FindBldSpecByNameStart - Found nothing that starts with \"{namestart}\"");
+            return null;
+        }
+
+        public OsmBldSpec FindBldSpecByWid(string seekwid)
+        {
+            if (bldspecs != null)
+            {
+                foreach (var bs in bldspecs)
+                {
+                    if (bs.wid==seekwid)
+                    {
+                        //Debug.Log($"Found {bs.wid}");
+                        return bs;
+                    }
+                }
+            }
+            sman.LggWarning($"FindBldSpecByWid - Cound not find {seekwid}");
             return null;
         }
 
@@ -570,7 +587,7 @@ namespace CampusSimulator
                         if (floordict.ContainsKey(fname))
                         {
                             var iflr = floordict[fname];
-                            var h = bd.GetFloorAltitude(iflr);
+                            var h = bd.GetZeroBasedFloorAltitude(iflr);
                             var x = node.pt.x;
                             var z = node.pt.z;
                             //var y = sman.lcman.GetHeight(x,z);
@@ -710,8 +727,8 @@ namespace CampusSimulator
                     break;
                 case SceneSelE.Eb12small:
                 case SceneSelE.Eb12:
-                    presetEvacBldName = "Eb12-22";
-                    sman.psman.AddPersonToBuildingAtNode(PersonMan.GenderE.male, "eb12-f01-16-lob", "eb12-oso1a", "Arnie Schwarzwald", "Businessman004",
+                    presetEvacBldName = "Eb0814";
+                    sman.psman.AddPersonToBuildingAtNode(PersonMan.GenderE.male, "eb0814-f01-12-lob", "eb12-oso1a", "Arnie Schwarzwald", "Businessman004",
                                                          PersonMan.empStatusE.Security, "IdleUnarmed", false, 0, hasHololens: true, hasCamera: true, flagged: true);
                     break;
                 default:

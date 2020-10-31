@@ -29,6 +29,7 @@ namespace CampusSimulator
         public float defRoomArea = 10;
         public float journeyChoiceWeight = 1;
         public string osmnamestart = "";
+        public string osmwid = "";
         public int adhocLevels = 1;
         public float adhocHeight = 4;
         public Vector3 adhocCen = Vector3.zero;

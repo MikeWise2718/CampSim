@@ -201,7 +201,7 @@ public class GrafPolyGen
             var wname = $"{bs.osmname}-walls";
             var mapheit = bs.GetGround();
             PolyGenVekMapDel npgvd = delegate (Vector3 v) { return Yoffset(v, mapheit); };
-            var heit = bs.GetFloorHeight(bs.levels,includeAltitude:false);
+            var heit = bs.GetZeroBasedFloorHeight(bs.levels,includeAltitude:false);
             var walgo = GenMesh(wname, height: heit, clr: clr, alf: alf, plotTesselation: false, onesided: onesided, pgvd: npgvd);
             walgo.transform.localScale = new Vector3(ska, ska, ska);
             walgo.transform.SetParent(bldgo.transform,worldPositionStays:wps);
@@ -213,7 +213,7 @@ public class GrafPolyGen
             SetGenForm(PolyGenForm.tesselate);
             var rname = $"{bs.osmname}-roof";
             var rclr = "darkgreen";
-            var y = bs.GetFloorHeight(bs.levels, includeAltitude: true);
+            var y = bs.GetZeroBasedFloorHeight(bs.levels, includeAltitude: true);
             var rufgo = GenMesh(rname, height: y, clr: rclr, alf: alf, plotTesselation: plotTesselation, onesided: onesided, pgvd: null);
             rufgo.transform.localScale = new Vector3(ska, ska, ska);
             rufgo.transform.SetParent(bldgo.transform, worldPositionStays: wps);
@@ -227,7 +227,7 @@ public class GrafPolyGen
                 SetGenForm(PolyGenForm.tesselate);
                 var fname = $"{bs.osmname}-level-{i}";
                 //var fheit = bs.levels<2 ? 0 : (i*bs.height / bs.levels);
-                var y = bs.GetFloorHeight(i, includeAltitude: true);
+                var y = bs.GetZeroBasedFloorHeight(i, includeAltitude: true);
                 var flrgo = GenMesh(fname, height: y, clr: clr, alf: alf, plotTesselation: plotTesselation, onesided: onesided, pgvd: null);
                 flrgo.transform.localScale = new Vector3(ska, ska, ska);
                 flrgo.transform.SetParent(bldgo.transform, worldPositionStays: wps);
@@ -239,7 +239,7 @@ public class GrafPolyGen
     }
     public Vector3 FloorHeight(Vector3 v, OsmBldSpec osmbs, int floor, float mapheit)
     {
-        var y = osmbs.GetFloorHeight(floor);
+        var y = osmbs.GetZeroBasedFloorHeight(floor);
         var rv = new Vector3(v.x, y+mapheit, v.z);
         return rv;
     }

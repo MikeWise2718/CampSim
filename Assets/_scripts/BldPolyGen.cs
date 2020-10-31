@@ -154,7 +154,7 @@ public class OsmBldSpec
         return rv;
     }
 
-    public float GetFloorHeight(int i,bool includeAltitude=false)
+    public float GetZeroBasedFloorHeight(int i,bool includeAltitude=false)
     {
         // note that on a 3 story 12 meter building the 0, 1, 2 floors are on 0, 4, 8 meter altitude
         var y = height;
@@ -173,7 +173,7 @@ public class OsmBldSpec
     }
     public Vector3 GetCenterFloor(int i,bool includeAltitude=false)
     {
-        var y = GetFloorHeight(i, includeAltitude: includeAltitude);
+        var y = GetZeroBasedFloorHeight(i, includeAltitude: includeAltitude);
         var rv = new Vector3(ptcen.x, y, ptcen.z);
         return rv;
     }

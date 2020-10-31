@@ -320,9 +320,9 @@ public class B19Willow : MonoBehaviour
     {
         return (2, 5f);
     }
-    public float GetFloorHeight(int floor, bool includeAltitude = true)
+    public float GetZeroBasedFloorHeight(int floor, bool includeAltitude = true)
     {
-        var rv = bspec.GetFloorHeight(floor, includeAltitude: includeAltitude);
+        var rv = bspec.GetZeroBasedFloorHeight(floor, includeAltitude: includeAltitude);
         return rv;
     }
 
