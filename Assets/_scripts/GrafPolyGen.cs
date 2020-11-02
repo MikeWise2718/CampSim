@@ -5,7 +5,7 @@ using System.Linq;
 using UnityStandardAssets.Utility;
 
 public delegate Vector3 PolyGenVekMapDel(Vector3 v);
-public enum PolyGenForm { pipes, walls, wallsmesh, tesselate }
+public enum PolyGenForm { pipes, walls, wallsmesh, wallsock, tesselate }
 public class GrafPolyGen
 {
     public static int reverseOpps = 0;
@@ -206,6 +206,21 @@ public class GrafPolyGen
             walgo.transform.localScale = new Vector3(ska, ska, ska);
             walgo.transform.SetParent(bldgo.transform,worldPositionStays:wps);
         }
+        if (dosock)
+        {
+            //Debug.Log($"GenPolyGen.GenBld doing walls for {bldname}");
+
+            StartAccumulatingSegments();
+            SetGenForm(PolyGenForm.wallsock);
+            var wname = $"{bs.osmname}-sock";
+            var mapheit = bs.GetGround();
+            var sclr = "yellow";
+            PolyGenVekMapDel npgvd = delegate (Vector3 v) { return YConditionalOffset(v, mapheit,pgvd); };
+            var heit = bs.GetZeroBasedFloorHeight(0, includeAltitude: false);
+            var walgo = GenMesh(wname, height: heit, clr: sclr, alf: alf, plotTesselation: false, onesided: onesided, pgvd: npgvd);
+            walgo.transform.localScale = new Vector3(ska, ska, ska);
+            walgo.transform.SetParent(bldgo.transform, worldPositionStays: wps);
+        }
         if (doroof)
         {
             //Debug.Log($"GenPolyGen.GenBld doing roof for {bldname}");
@@ -247,6 +262,18 @@ public class GrafPolyGen
     public Vector3 Yoffset(Vector3 v, float mapheit)
     {
         var rv = new Vector3(v.x, v.y + mapheit, v.z);
+        return rv;
+    }
+    public Vector3 YConditionalOffset(Vector3 v, float mapheit, PolyGenVekMapDel pgvd)
+    {
+        var y = v.y+mapheit;
+        if (v.y==float.MinValue)
+        {
+            var v1 = new Vector3(v.x, 0, v.z);
+            var v2 = pgvd(v1);
+            y = v2.y;
+        }
+        var rv = new Vector3(v.x, y, v.z);
         return rv;
     }
 
@@ -467,6 +494,11 @@ public class GrafPolyGen
             case PolyGenForm.wallsmesh:
                 {
                     go = GenerateBySegment(parent, wallheight, asmesh: true, onesided: onesided, pgvd: pgvd);
+                    break;
+                }
+            case PolyGenForm.wallsock:
+                {
+                    go = GenerateBySegment(parent, wallheight, asmesh: true, onesided: onesided, pgvd: pgvd, clobbery:true);
                     break;
                 }
             case PolyGenForm.tesselate:
@@ -928,7 +960,7 @@ public class GrafPolyGen
         return go;
     }
 
-    public GameObject GenerateBySegment(GameObject parent,float height,bool asmesh=false, bool onesided=false,PolyGenVekMapDel pgvd=null)
+    public GameObject GenerateBySegment(GameObject parent,float height,bool asmesh=false, bool onesided=false,PolyGenVekMapDel pgvd=null,bool clobbery=false)
     {
         if (_poutline.Count <= 1)
         {
@@ -956,6 +988,11 @@ public class GrafPolyGen
         {
             var pt1 = woutline[i1].pt;
             var pt2 = woutline[i2].pt;
+            if (clobbery)
+            {
+                pt1 = new Vector3(pt1.x, float.MinValue, pt1.z);
+                pt2 = new Vector3(pt2.x, float.MinValue, pt2.z);
+            }
             //if (pgvd!=null)
             //{
             //    pt1 = pgvd(pt1);

@@ -572,7 +572,7 @@ public class BldPolyGen
         }
         var outline = bs.GetOutline();
  
-        var rv = gpg.GenBld(parent, bs, clr, alf: alf, dowalls: dowalls, dofloors: dofloors, doroof: doroof,dosock:dosock, plotTesselation: plotTesselation, ptscale: ptscale, pgvd: pgvd);
+        var rv = gpg.GenBld(parent, bs, clr, alf: alf, dowalls: dowalls, dofloors: dofloors, doroof: doroof, dosock:dosock, plotTesselation: plotTesselation, ptscale: ptscale, pgvd: pgvd);
         return rv;
     }
 
