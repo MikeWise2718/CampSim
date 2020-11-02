@@ -136,18 +136,18 @@ namespace CampusSimulator
         List<string> Eb0814roomspec = new List<string>()
         {
             // room name,pcap,alignang,length,width,frameit - see AddOneRoomSpec for code
-            "eb0814-f01-08-lob:7:0.0:2:3:T",
+            "eb0814-f01-08-lob:4:0.0:2:3:T",
             "eb0814-f01-10-lob:3:0.0:2:3:T",
-            "eb0814-f01-12-lob:7:0.0:2:3:T",
-            "eb0814-f01-14-lob:5:0.0:2:3:T",
+            "eb0814-f01-12-lob:5:0.0:2:3:T",
+            "eb0814-f01-14-lob:2:0.0:2:3:T",
         };
         List<string> Eb1622roomspec = new List<string>()
         {
             // room name,pcap,alignang,length,width,frameit - see AddOneRoomSpec for code
             "eb1622-f01-16-lob:3:0.0:2:3:T",
-            "eb1622-f01-18-lob:3:0.0:2:3:T",
-            "eb1622-f01-20-lob:3:0.0:2:3:T",
-            "eb1622-f01-22-lob:5:0.0:2:3:T",
+            "eb1622-f01-18-lob:6:0.0:2:3:T",
+            "eb1622-f01-20-lob:4:0.0:2:3:T",
+            "eb1622-f01-22-lob:4:0.0:2:3:T",
         };
 
         List<string> Ebreweroomspec = new List<string>()
@@ -411,7 +411,7 @@ namespace CampusSimulator
                         newosmlevels = 3;
                         newosmheight = 7.5f;
                         newosmgroundref = GroundRef.cen;
-                        newffoffset = 1f;
+                        newffoffset = 1.5f;
                         break;
                     }
                 case "Eb1622":
@@ -429,7 +429,7 @@ namespace CampusSimulator
                         newosmlevels = 3;
                         newosmheight = 7.5f;
                         newosmgroundref = GroundRef.cen;
-                        newffoffset = 1f;
+                        newffoffset = 1.5f;
                         break;
                     }
                 case "EbRewe":
