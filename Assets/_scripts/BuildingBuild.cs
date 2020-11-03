@@ -613,7 +613,8 @@ namespace CampusSimulator
                 if (i>0)
                 {
                     var lman = $"ll-{i}";
-                    var lgo = mpman.AddLine(lman, ptb, pos,lclr:linecolor, frag:true, lska:0.5f, fragang: mpman.fragang, fragxoff: mpman.fragxoff, fragzoff: mpman.fragzoff);
+                    //var lgo = mpman.AddLine(lman, ptb, pos,lclr:linecolor, frag:true, lska:0.5f, fragang: mpman.fragang, fragxoff: mpman.fragxoff, fragzoff: mpman.fragzoff);
+                    var lgo = mpman.AddLine(lman, ptb, pos, lclr: linecolor, frag: true, lska: 0.5f);
                     lgo.transform.SetParent(pgo.transform, worldPositionStays: true);
                 }
                 else
@@ -625,7 +626,8 @@ namespace CampusSimulator
             if (oline.Count>1)
             {
                 var lman = $"ll-{oline.Count}";
-                var lgo = mpman.AddLine(lman, ptb, pt0, lclr:linecolor, frag:true, lska:0.5f, fragang: mpman.fragang, fragxoff: mpman.fragxoff, fragzoff: mpman.fragzoff);
+                //var lgo = mpman.AddLine(lman, ptb, pt0, lclr:linecolor, frag:true, lska:0.5f, fragang: mpman.fragang, fragxoff: mpman.fragxoff, fragzoff: mpman.fragzoff);
+                var lgo = mpman.AddLine(lman, ptb, pt0, lclr: linecolor, frag: true, lska: 0.5f);
                 lgo.transform.SetParent(pgo.transform, worldPositionStays: true);
             }
         }

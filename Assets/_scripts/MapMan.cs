@@ -545,6 +545,17 @@ namespace CampusSimulator
             }
             return lgo;
         }
+
+        public GameObject AddFragLine(string lname, Vector3 pt1, Vector3 pt2, RmLinkFormE lnform = RmLinkFormE.pipe, float lska = 1.0f, float nska = 1.0f, string lclr = "red", string nclr = "", int omit = -1, float widratio = 1, bool wps = true)
+        {
+            if (qmapman == null || qmapman.qmm == null) return null;
+            var frm = lnform.ToString();
+            qmapman.qmm.qtt.ntotIsects = 0;
+            var lgo = qmapman.qmm.qtt.AddFragLine(lname, pt1, pt2, frm, lska, nska, lclr, nclr, omit, widratio, wps, fragang: fragang, fragxoff: fragxoff, fragzoff: fragzoff);
+            nTotIsects += qmapman.qmm.qtt.ntotIsects;
+            return lgo;
+        }
+
         //public GameObject AddLine(GameObject parent, string lname, Vector3 pt1, Vector3 pt2, RmLinkFormE lnform = RmLinkFormE.pipe, float lska = 1.0f, float nska = 1.0f, string lclr = "red", string nclr = "", int omit = -1, float widratio = 1, bool wps = true, bool frag = false)
         //{
         //    if (qmapman == null || qmapman.qmm == null) return null;
