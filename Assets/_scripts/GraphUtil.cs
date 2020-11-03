@@ -445,9 +445,54 @@ namespace GraphAlgos
         }
 
 
-        public static List<string> GetColorNames()
+        class ColorMagComparer : IComparer<string>
+        {
+            public int Compare(string x, string y)
+            {
+                var mx = ColorMag(x);
+                var my = ColorMag(y);
+                var rv = 0;
+                if (mx > my) rv = -1;
+                if (mx < my) rv = +1;
+                return rv;
+            }
+        }
+        static float clrmagmax = Mathf.Sqrt(3.00001f);
+        public static float ColorMag(string cname)
+        {
+            if (!colorTable.ContainsKey(cname))
+            {
+                return 0;
+            }
+            //if (cname=="w")
+            //{
+            //    Debug.Log("w");
+            //}
+            var clr = colorTable[cname];
+            var vc = new Vector3(clr.r, clr.g, clr.b);
+            var rv = vc.magnitude/ clrmagmax;
+            return rv;
+        }
+
+        public enum ColorNameOrder { KeyOrder, AlphaOrder, Mag }
+        public static List<string> GetColorNames(ColorNameOrder cord=ColorNameOrder.KeyOrder,bool reverse=false)
         {
             var rv = new List<string>(colorTable.Keys);
+            switch(cord)
+            {
+                case ColorNameOrder.KeyOrder:
+                    break;
+                case ColorNameOrder.AlphaOrder:
+                    rv.Sort();
+                    break;
+                case ColorNameOrder.Mag :
+                    rv.Sort(new ColorMagComparer());
+                    break;
+            }
+            if (reverse)
+            {
+                rv.Reverse();
+            }
             return rv;
         }
         static void InitHexColors()
