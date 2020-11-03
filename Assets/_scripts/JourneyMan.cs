@@ -308,8 +308,16 @@ namespace CampusSimulator
         }
         public Journey AddBldNodeBldNodeJourney(string fr_node, string tu_node, string pathname,string avatar="")
         {
-            if (!NodeExists(fr_node)) return null;
-            if (!NodeExists(tu_node)) return null;
+            if (!NodeExists(fr_node))
+            {
+                sman.LggWarning($"JourneyMan.AddBldNodeBldNodeJourney fr_node:{fr_node} does not exist");
+                return null;
+            }
+            if (!NodeExists(tu_node))
+            {
+                sman.LggWarning($"JourneyMan.AddBldNodeBldNodeJourney tu_node:{tu_node} does not exist");
+                return null;
+            }
             bool reservedCar = false;
             bool reservedSlot = false;
             GarageSlot sm1 = null;
@@ -423,8 +431,17 @@ namespace CampusSimulator
 
         public Journey AddNodeNodeJourney(string fr_node, string tu_node, string pathname, string avatar = "")
         {
-            if (!NodeExists(fr_node)) return null;
-            if (!NodeExists(tu_node)) return null;
+            if (!NodeExists(fr_node))
+            {
+                sman.LggWarning($"JourneyMan.AddNodeNodeJourney fr_node:{fr_node} does not exist");
+                return null;
+            }
+            if (!NodeExists(tu_node))
+            {
+                sman.LggWarning($"JourneyMan.AddNodeNodeJourney tu_node:{tu_node} does not exist");
+                return null;
+            }
+
             try
             {
                 var jsnode = fr_node;
@@ -536,8 +553,16 @@ namespace CampusSimulator
             }
             var fr_node = person.placeNode;
             var tu_node = broom.roomNodeName;
-            if (!NodeExists(fr_node)) return null;
-            if (!NodeExists(tu_node)) return null;
+            if (!NodeExists(fr_node))
+            {
+                sman.LggError($"JouneyMan.AddPersonBldroomJourney fr_node:{fr_node} does not exist");
+                return null;
+            }
+            if (!NodeExists(tu_node))
+            {
+                sman.LggError($"JouneyMan.AddPersonBldroomJourney tu_node:{tu_node} does not exist");
+                return null;
+            }
             GarageSlot sm1 = null;
             GarageSlot sm2 = null;
             try
@@ -666,8 +691,16 @@ namespace CampusSimulator
             }
             var fr_node = person.placeNode;
             var tu_node = bpad.padNodeName;
-            if (!NodeExists(fr_node)) return null;
-            if (!NodeExists(tu_node)) return null;
+            if (!NodeExists(fr_node))
+            {
+                sman.LggError($"JouneyMan.AddDroneJourney fr_node:{fr_node} does not exist");
+                return null;
+            }
+            if (!NodeExists(tu_node))
+            {
+                sman.LggError($"JouneyMan.AddDroneJourney tu_node:{tu_node} does not exist");
+                return null;
+            }
             try
             {
                 var jsnode = fr_node;
@@ -711,7 +744,11 @@ namespace CampusSimulator
         {
             var fr_node = person.placeNode;
             var perform = person.avatarName;
-            if (!NodeExists(fr_node)) return null;
+            if (!NodeExists(fr_node))
+            {
+                sman.LggError($"JouneyMan.AddEvacJourney fr_node:{fr_node} does not exist");
+                return null;
+            }
             try
             {
                 var jsnode = fr_node;
@@ -768,7 +805,11 @@ namespace CampusSimulator
             CheckFastMode();
             var fr_node = pers.GetWaitNodeName();
             var perform = pers.avatarName;
-            if (!NodeExists(fr_node)) return null;
+            if (!NodeExists(fr_node))
+            {
+                sman.LggError($"JouneyMan.AddPersonToRoomJourney fr_node:{fr_node} does not exist");
+                return null;
+            }
             try
             {
                 var jsnode = fr_node;
@@ -819,7 +860,11 @@ namespace CampusSimulator
             CheckFastMode();
             var fr_node = pers.placeNode;
             var perform = pers.avatarName;
-            if (!NodeExists(fr_node)) return null;
+            if (!NodeExists(fr_node))
+            {
+                sman.LggError($"JouneyMan.AddPersonToRoomJourney fr_node:{fr_node} does not exist");
+                return null;
+            }
             try
             {
                 var jsnode = fr_node;

@@ -107,12 +107,13 @@ namespace CampusSimulator
             return rendgo;
         }
 
-        (Vector3 pt,bool fragable) GetPathPoint(float gpprdist,bool setpathpos=true)
+        (Vector3 pt,bool fragable,LinkUse lu) GetPathPoint(float gpprdist,bool setpathpos=true)
         {
             var fragable = false;
-            if (path == null) return (Vector3.zero,fragable);
+            if (path == null) return (Vector3.zero,fragable,LinkUse.legacy);
             PathPos pp = path.MovePositionAlongPath(gpprdist);
             fragable = pp.weg.link.IsFragable();
+            var lu = pp.weg.link.usetype;
             if (setpathpos)
             {
                 pathpos = pp;
@@ -133,7 +134,7 @@ namespace CampusSimulator
 
             //var pt = new Vector3(pp.pt.x, pp.pt.y + BirdFlyHeight, pp.pt.z);
             //var pt = new Vector3(pp.pt.x, pp.pt.y + 0, pp.pt.z);
-            return (pt,fragable);
+            return (pt,fragable,lu);
         }
         void CreateBirdFormGos()
         {
@@ -445,7 +446,8 @@ namespace CampusSimulator
         {
             rundist += BirdSpeedFactor*BirdSpeed*deltatime; // deltaTime is time to complete last frame
             bool fragable;
-            (curpt,fragable) = GetPathPoint(rundist,setpathpos:true);
+            LinkUse lu1;
+            (curpt,fragable,lu1) = GetPathPoint(rundist,setpathpos:true);
             var delt = curpt - lastcurpt;
             if (deltatime > 0)
             {
@@ -454,8 +456,8 @@ namespace CampusSimulator
             birdgo.transform.localPosition += delt;
             if (lookatpoint)
             {
-                var (curlookpt,_) = GetPathPoint(rundist + lookaheadtime + deltatime, setpathpos: false);
-                if (flatlookatpoint)
+                var (curlookpt,_,lu2) = GetPathPoint(rundist + lookaheadtime + deltatime, setpathpos: false);
+                if (lu1==LinkUse.stairs || lu2 == LinkUse.stairs || flatlookatpoint)
                 {
                     var flatlookpt = new Vector3(curlookpt.x, curpt.y, curlookpt.z);
                     if (flatlookpt.magnitude > 0.1f)

@@ -418,7 +418,7 @@ namespace CampusSimulator
                     {
                         maingaragename = "Eb12_1";
                         roomspecs = Eb1622roomspec;
-                        destnodes = new List<string> { "eb0622-f01-16-lob", "eb0622-f01-18-lob", "eb0622-f01-20-lob", "eb0622-f01-22-lob" };
+                        destnodes = new List<string> { "eb1622-f01-16-lob", "eb1622-f01-18-lob", "eb1622-f01-20-lob", "eb1622-f01-22-lob" };
                         shortname = "eb12";
                         defPeoplePerRoom = 4;
                         defPercentFull = 1.0f;
