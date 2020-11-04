@@ -7741,7 +7741,7 @@ namespace GraphAlgos
             grc.regman.NewNodeRegion("msft-bredwb", "purple", saveToFile: true);
             grc.gm.setmodxyz_off(grc.redwestNewMapXoffset, 0, grc.redwestNewMapZoffset);
             grc.AddNodePtxyz("bRWB-f01-lobby", -2044.300, 0.000, -1119.600, comment: ""); //  1 nn:1 nl:0
-            grc.LinkToPtxyz("bRWB-f01-lobby", "bRWB-os1-o00", -2059.240, 0.000, -1124.150, LinkUse.walkway, comment: ""); //  2 nn:1 nl:1
+            grc.LinkToPtxyz("bRWB-f01-lobby", "bRWB-os1-o00", -2059.240, 0.000, -1124.150, LinkUse.stairs, comment: ""); //  2 nn:1 nl:1
             grc.LinkToPtxyz("bRWB-os1-o00", "bRWB-os1-o01", -2063.060, 0.000, -1138.260, LinkUse.walkway, comment: ""); //  3 nn:1 nl:1
             grc.LinkToPtxyz("bRWB-os1-o01", "bRWB-os1-o02", -2056.220, 0.000, -1160.760, LinkUse.walkway, comment: ""); //  4 nn:1 nl:1
             grc.LinkToPtxyz("bRWB-os1-o02", "bRWB-os1-o04", -2045.160, 0.000, -1172.130, LinkUse.walkway, comment: ""); //  5 nn:1 nl:1
