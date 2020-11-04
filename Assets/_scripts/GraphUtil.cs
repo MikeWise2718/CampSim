@@ -373,6 +373,7 @@ namespace GraphAlgos
         }
         static Dictionary<string, string> hexColorTable = null;
         static Dictionary<string, Color> colorTable =null;
+        static Dictionary<string, string> colorOrigin = null;
         public static bool isColorName(string name)
         {
             if (colorTable == null)
@@ -474,6 +475,7 @@ namespace GraphAlgos
             return rv;
         }
 
+
         public enum ColorNameOrder { KeyOrder, AlphaOrder, Mag }
         public static List<string> GetColorNames(ColorNameOrder cord=ColorNameOrder.KeyOrder,bool reverse=false)
         {
@@ -519,11 +521,17 @@ namespace GraphAlgos
                     clrname = clrname.Replace("\"", "");
                     var clrhex = clrval["hex"].ToString();
                     clrhex = clrhex.Replace("\"", "");
+                    if (colorTable.ContainsKey(clrname))
+                    {
+                        clrname = $"{clrname}:xkcd";
+                        Debug.LogWarning($"Duplicate color {clrname}");
+                    }
                     colorTable[clrname] = rgbhex(clrhex);
+                    colorOrigin[clrname] = "xkcd";
                 }
                 Debug.Log($"SimpleJSON read {clrs.Count} xkcd colors");
-                var newjson = JsonConvert.DeserializeObject<Dictionary<string,object>>(str);
-                var newclrs = newjson["colors"];
+                //var newjson = JsonConvert.DeserializeObject<Dictionary<string,object>>(str);
+                //var newclrs = newjson["colors"];
                 //var newclrtab1 = newclrs as Dictionary<string,string>;
                 //var newclrtab2 = newclrs as Dictionary<string, object>;
                 //var newclrtab3 = newclrs as Dictionary<object, object>;
@@ -531,101 +539,144 @@ namespace GraphAlgos
                 //var newclrtab5 = newclrs as Dictionary<string, Dictionary<string, string>>;
                 //var newclrarr1 = newclrs as object [];
                 //var newclrarr2 = newclrs as string[];
-                Debug.Log("Here I am");
+                //Debug.Log("Here I am");
                 //Debug.Log($"Newtonsoft read {newclrtab.Count} xkcd colors");
             }
         }
+
+        public static void AddCoreColor(string cname, Color clr)
+        {
+            if (colorTable.ContainsKey(cname))
+            {
+                Debug.LogWarning($"Duplicate color {cname}");
+                return;
+            }
+            colorTable[cname] = clr;
+            colorOrigin[cname] = "core";
+        }
+
+
+        public static void AddColor(string cname,Color clr)
+        {
+            if (colorTable.ContainsKey(cname))
+            {
+                Debug.LogWarning($"Duplicate color {cname}");
+                return;
+            }
+            colorTable[cname] = clr;
+            colorOrigin[cname] = "adhoc";
+        }
+
+
+
+        public static void InitCoreColors()
+        {
+            AddCoreColor("red", Color.red);
+            AddCoreColor("green", Color.green);
+            AddCoreColor("blue", Color.blue);
+            AddCoreColor("gray", Color.gray);
+            AddCoreColor("grey", Color.grey);
+            AddCoreColor("cyan", Color.cyan);
+            AddCoreColor("magenta", Color.magenta);
+            AddCoreColor("yellow", Color.yellow);
+            AddCoreColor("white", Color.white);
+            AddCoreColor("black", Color.black);
+            AddCoreColor("clear", Color.clear);
+        }
         public static void InitColorTable()
         {
+
             colorTable = new Dictionary<string, Color>();
+            colorOrigin = new Dictionary<string, string>();
+            InitCoreColors();
             InitXkcdColors();
             // reds
-            colorTable["r"] =
-            colorTable["red"] = new Color(1, 0, 0);
-            colorTable["dr"] = new Color(0.5f, 0, 0);
-            colorTable["crimsom"] = rgbbyte(220, 20, 60);
-            colorTable["coral"] = rgbbyte(255, 127, 80);
-            colorTable["firebrick"] = rgbbyte(178, 34, 34);
-            colorTable["darkred"] = rgbbyte(139, 0, 0);
-            colorTable["dirtyred"] = rgbbyte(117, 10, 10);
-            colorTable["lightred"] = new Color(1, 0.412f, 0.71f);
-            colorTable["pink"] = new Color(1, 0.412f, 0.71f);
-            colorTable["scarlet"] = new Color(1, 0.14f, 0.0f);
+            AddColor("r", new Color(1, 0, 0));
+            AddColor("red", new Color(1, 0, 0));
+            AddColor("dr", new Color(0.5f, 0, 0));
+            AddColor("crimsom", rgbbyte(220, 20, 60));
+            AddColor("coral", rgbbyte(255, 127, 80));
+            AddColor("firebrick", rgbbyte(178, 34, 34));
+            AddColor("darkred", rgbbyte(139, 0, 0));
+            AddColor("dirtyred", rgbbyte(117, 10, 10));
+            AddColor("lightred", new Color(1, 0.412f, 0.71f));
+            AddColor("pink", new Color(1, 0.412f, 0.71f));
+            AddColor("scarlet", new Color(1, 0.14f, 0.0f));
             // yellows
-            colorTable["y"] =
-            colorTable["yellow"] = new Color(1, 1, 0);
-            colorTable["dy"] = new Color(0.5f, 0.5f, 0);
-            colorTable["lightyellow"] = new Color(1, 1, 0.5f);
-            colorTable["goldenrod"] = rgbbyte(218, 165, 32);
+            AddColor("y", new Color(1, 1, 0));
+            AddColor("yellow", new Color(1, 1, 0));
+            AddColor("dy", new Color(0.5f, 0.5f, 0));
+            AddColor("lightyellow", new Color(1, 1, 0.5f));
+            AddColor("goldenrod", rgbbyte(218, 165, 32));
             // oranges
-            colorTable["orange"] = new Color(1, 0.5f, 0);
-            colorTable["lightorange"] = new Color(1, 0.75f, 0);
-            colorTable["darkorange"] = new Color(0.75f, 0.25f, 0);
-            colorTable["brown"] = new Color(0.647f, 0.164f, 0.164f);
-            colorTable["saddlebrown"] = new Color(0.545f, 0.271f, 0.075f);
-            colorTable["darkbrown"] = new Color(0.396f, 0.263f, 0.129f);
+            AddColor("orange", new Color(1, 0.5f, 0));
+            AddColor("lightorange", new Color(1, 0.75f, 0));
+            AddColor("darkorange", new Color(0.75f, 0.25f, 0));
+            AddColor("brown", new Color(0.647f, 0.164f, 0.164f));
+            AddColor("saddlebrown", new Color(0.545f, 0.271f, 0.075f));
+            AddColor("darkbrown", new Color(0.396f, 0.263f, 0.129f));
             // greens
-            colorTable["g"] =
-            colorTable["lightgreen"] = new Color(0.5f, 1, 0.5f);
-            colorTable["green"] = new Color(0, 1, 0);
-            colorTable["dg"] = new Color(0, 0.5f, 0);
-            colorTable["olive"] = new Color(0.5f, 0.5f, 0f);
-            colorTable["darkgreen"] = new Color(0, 0.5f, 0);
-            colorTable["darkgreen1"] = new Color(0.004f, 0.196f, 0.125f);
-            colorTable["forestgreen"] = new Color(0.132f, 0.543f, 0.132f);
-            colorTable["limegreen"] = new Color(0.195f, 0.8f, 0.195f);
-            colorTable["seagreen"] = new Color(0.33f, 1.0f, 0.62f);
+            AddColor("g", new Color(0.5f, 1, 0.5f));
+            AddColor("lightgreen", new Color(0.5f, 1, 0.5f));
+            AddColor("green", new Color(0, 1, 0));
+            AddColor("dg", new Color(0, 0.5f, 0));
+            AddColor("olive", new Color(0.5f, 0.5f, 0f));
+            AddColor("darkgreen", new Color(0, 0.5f, 0));
+            AddColor("darkgreen1", new Color(0.004f, 0.196f, 0.125f));
+            AddColor("forestgreen", new Color(0.132f, 0.543f, 0.132f));
+            AddColor("limegreen", new Color(0.195f, 0.8f, 0.195f));
+            AddColor("seagreen", new Color(0.33f, 1.0f, 0.62f));
             // cyans
-            colorTable["c"] =
-            colorTable["cyan"] = new Color(0, 1, 1);
-            colorTable["dc"] = new Color(0, 0.5f, 0.5f);
-            colorTable["turquoise"] =
-            colorTable["turquis"] = rgbbyte(64, 224, 208);
-            colorTable["teal"] = rgbbyte(0, 128, 128);
-            colorTable["aquamarine"] = rgbbyte(128, 255, 212);
+            AddColor("c", new Color(0, 1, 1));
+            AddColor("cyan", new Color(0, 1, 1));
+            AddColor("dc", new Color(0, 0.5f, 0.5f));
+            AddColor("turquoise", rgbbyte(64, 224, 208));
+            AddColor("turquis", rgbbyte(64, 224, 208));
+            AddColor("teal", rgbbyte(0, 128, 128));
+            AddColor("aquamarine", rgbbyte(128, 255, 212));
             // blues
-            colorTable["b"] =
-            colorTable["blue"] = new Color(0, 0, 1);
-            colorTable["db"] = new Color(0, 0, 0.5f);
-            colorTable["steelblue"] = new Color(0.27f, 0.51f, 0.71f);
-            colorTable["lightblue"] = rgbbyte(173, 216, 230);
-            colorTable["azure"] = rgbbyte(0, 127, 255);
-            colorTable["skyblue"] = rgbbyte(135, 206, 235);
-            colorTable["darkblue"] = new Color(0.0f, 0.0f, 0.500f);
-            colorTable["navyblue"] = new Color(0.0f, 0.0f, 0.398f);
+            AddColor("b", new Color(0, 0, 1));
+            AddColor("blue", new Color(0, 0, 1));
+            AddColor("db", new Color(0, 0, 0.5f));
+            AddColor("steelblue", new Color(0.27f, 0.51f, 0.71f));
+            AddColor("lightblue", rgbbyte(173, 216, 230));
+            AddColor("azure", rgbbyte(0, 127, 255));
+            AddColor("skyblue", rgbbyte(135, 206, 235));
+            AddColor("darkblue", new Color(0.0f, 0.0f, 0.500f));
+            AddColor("navyblue", new Color(0.0f, 0.0f, 0.398f));
             // purples
-            colorTable["m"] =
-            colorTable["magenta"] = new Color(1, 0, 1);
-            colorTable["dm"] =
-            colorTable["purple"] = new Color(0.5f, 0, 0.5f);
-            colorTable["violet"] = new Color(0.75f, 0, 0.75f);
-            colorTable["indigo"] = rgbbyte(43, 34, 170);
-            colorTable["deeppurple"] = new Color(0.4f, 0, 0.4f);
-            colorTable["darkpurple"] = rgbbyte(48, 25, 52);
-            colorTable["phlox"] = rgbbyte(223, 0, 255);
-            colorTable["mauve"] = rgbbyte(224, 176, 255);
-            colorTable["fuchsia"] = rgbbyte(255, 0, 255);
-            colorTable["lilac"] = rgbbyte(200,162,200);
+            AddColor("m", new Color(1, 0, 1));
+            AddColor("magenta", new Color(1, 0, 1));
+            AddColor("dm", new Color(0.5f, 0, 0.5f));
+            AddColor("purple", new Color(0.5f, 0, 0.5f));
+            AddColor("violet", new Color(0.75f, 0, 0.75f));
+            AddColor("indigo", rgbbyte(43, 34, 170));
+            AddColor("deeppurple", new Color(0.4f, 0, 0.4f));
+            AddColor("darkpurple", rgbbyte(48, 25, 52));
+            AddColor("phlox", rgbbyte(223, 0, 255));
+            AddColor("mauve", rgbbyte(224, 176, 255));
+            AddColor("fuchsia", rgbbyte(255, 0, 255));
+            AddColor("lilac", rgbbyte(200,162,200));
             // whites and grays
-            colorTable["w"] =
-            colorTable["white"] = new Color(1, 1, 1);
-            colorTable["chinawhite"] = new Color(0.937f, 0.910f, 0.878f);
-            colorTable["clear"] = Color.clear;
-            colorTable["silver"] = rgbbyte(192, 192, 192);
-            colorTable["lightgrey"] =
-            colorTable["lightgray"] = rgbbyte(211, 211, 211);
-            colorTable["slategray"] =
-            colorTable["slategrey"] = rgbbyte(112, 128, 144);
-            colorTable["darkslategray"] =
-            colorTable["darkslategrey"] = rgbbyte(74, 85, 83);
-            colorTable["darkgray"] =
-            colorTable["darkgrey"] =
-            colorTable["dimgray"] =
-            colorTable["dimgrey"] = rgbbyte(105, 105, 105);
-            colorTable["grey"] =
-            colorTable["gray"] = rgbbyte(128, 128, 128);
-            colorTable["blk"] =
-            colorTable["black"] = new Color(0, 0, 0);
+            AddColor("w", new Color(1, 1, 1));
+            AddColor("white", new Color(1, 1, 1));
+            AddColor("chinawhite", new Color(0.937f, 0.910f, 0.878f));
+            AddColor("clear", Color.clear );
+            AddColor("silver", rgbbyte(192, 192, 192));
+            AddColor("lightgrey", rgbbyte(211, 211, 211));
+            AddColor("lightgray", rgbbyte(211, 211, 211));
+            AddColor("slategray", rgbbyte(112, 128, 144));
+            AddColor("slategrey", rgbbyte(112, 128, 144));
+            AddColor("darkslategray", rgbbyte(74, 85, 83));
+            AddColor("darkslategrey", rgbbyte(74, 85, 83));
+            AddColor("darkgray", rgbbyte(105, 105, 105));
+            AddColor("darkgrey", rgbbyte(105, 105, 105));
+            AddColor("dimgray", rgbbyte(105, 105, 105));
+            AddColor("dimgrey", rgbbyte(105, 105, 105));
+            AddColor("grey", rgbbyte(128, 128, 128));
+            AddColor("gray", rgbbyte(128, 128, 128));
+            AddColor("blk", new Color(0, 0, 0));
+            AddColor("black", new Color(0, 0, 0));
             InitHexColors();
         }
         static string[] dcolorseq = { "dr", "dg", "db", "dm", "dy", "dc" };
@@ -651,6 +702,15 @@ namespace GraphAlgos
                 return Color.gray;
             }
             return colorTable[name];
+        }
+        public static string GetColorOriginByName(string name)
+        {
+            if (!isColorName(name))
+            {
+                Debug.LogError($"color {name} not defined in colortable");
+                return "unknown";
+            }
+            return colorOrigin[name];
         }
         public static string GetHexColorByName(string name)
         {

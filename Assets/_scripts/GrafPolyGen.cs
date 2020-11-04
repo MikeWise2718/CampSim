@@ -5,6 +5,8 @@ using System.Linq;
 using UnityStandardAssets.Utility;
 
 public delegate Vector3 PolyGenVekMapDel(Vector3 v);
+public delegate List<(Vector3 pt, float lamb)> GetIsectListDel(string lname, Vector3 pt1, Vector3 pt2);
+
 public enum PolyGenForm { pipes, walls, wallsmesh, wallsock, tesselate }
 public class GrafPolyGen
 {
@@ -971,7 +973,7 @@ public class GrafPolyGen
         {
             StartAccumulatingSegments();
         }
-        var woutline = GetOutline(); ;
+        var woutline = GetOutline();
         var area = CalcAreaWithYup(woutline);
         if (area < 0)
         {

@@ -5,6 +5,8 @@ using Aiskwk.Dataframe;
 using Aiskwk.Map;
 using System;
 using UnityEngine.UI;
+using UnityEditor.U2D.Sprites;
+using System.Runtime.InteropServices;
 
 public enum GroundRef {  cen, min, max }
 [Serializable]
@@ -62,7 +64,7 @@ public class OsmBldSpec
         this.maxy = 0;
         this.ceny = 0;
         this.miny = 0;
-        this.groundRef = GroundRef.cen;
+        this.groundRef = GroundRef.max;
         shortname = osmname;
         shortname = shortname.Replace("Microsoft Building ","Bld");
         shortname = shortname.Replace("Microsoft Studio ", "Stu");
@@ -553,7 +555,39 @@ public class BldPolyGen
     //    //var rv = pg.GenBld(parent, bldname,bldname, height, levels, clr, alf: 0.5f,dowalls:dowalls,dofloors: dofloors,doroof:doroof, ptscale: ptscale, pgvd:pgvd);
     //    return rv;
     //}
-    public GameObject GenBldFromOsmBldSpec(GameObject parent, OsmBldSpec bs, bool plotTesselation = false, float ptscale = 1, PolyGenVekMapDel pgvd = null,float alf=0.5f)
+
+    public List<Vector3> IsectOutline(List<Vector3> baseoutline, GetIsectListDel gisl )
+    {
+        var newoutline = new List<Vector3>();
+        Vector3 pta = Vector3.zero;
+        Vector3 ptb = Vector3.zero;
+        var lname = "lname";
+        for (var i = 0; i < baseoutline.Count; i++)
+        {
+            ptb = baseoutline[i];
+            if (i > 0)
+            {
+                var isectlist = gisl(lname, pta, ptb);
+                newoutline.Add(pta);
+                var n = isectlist.Count;
+                //var n = 4;
+                for (var j = 0; j < n; j++)
+                {
+                    var (pt,lamb) = isectlist[j];
+                    //var lamb = isj * 1f / n;
+                    var ptab = lamb * (ptb - pta) + pta;
+                    //ptab = pt;
+                    newoutline.Add(ptab);
+                }
+            }
+            pta = ptb;
+        }
+        newoutline.Add(ptb);
+        return newoutline;
+    }
+
+
+    public GameObject GenBldFromOsmBldSpec(GameObject parent, OsmBldSpec bs, bool plotTesselation = false, float ptscale = 1, PolyGenVekMapDel pgvd = null, GetIsectListDel gisl=null, float alf=0.5f)
     {
         //if (bs.shortname=="Bld34")
         //{
@@ -565,13 +599,21 @@ public class BldPolyGen
         var dofloors = true;
         var doroof = true;
         var dosock = true;
+        var doisects = true;
         if (plotTesselation)
         {
             dowalls = false;
             dofloors = false;
         }
-        var outline = bs.GetOutline();
- 
+
+        if (doisects && gisl!=null)
+        {
+            var outline = bs.GetOutline();
+            var newoutline = IsectOutline(outline,gisl);
+            gpg.SetOutline(newoutline);
+            //Debug.Log($"{bs.shortname} outline.count:{outline.Count} newoutline.count:{newoutline.Count}");
+        }
+
         var rv = gpg.GenBld(parent, bs, clr, alf: alf, dowalls: dowalls, dofloors: dofloors, doroof: doroof, dosock:dosock, plotTesselation: plotTesselation, ptscale: ptscale, pgvd: pgvd);
         return rv;
     }

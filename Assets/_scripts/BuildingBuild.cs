@@ -1041,6 +1041,7 @@ namespace CampusSimulator
         public void GenerateOsmGos()
         {
             var pgvd = new PolyGenVekMapDel(bm.sman.mpman.GetHeightVector3);
+            var gisl = new GetIsectListDel(bm.sman.mpman.GetIsectList);
             var alf = 1f;
             if (bm.osmbldstrans.Get())
             {
@@ -1048,7 +1049,7 @@ namespace CampusSimulator
             }
             if (bm.osmbldpolygons.Get())
             {
-                bldspec.bgo = bm.bpg.GenBldFromOsmBldSpec(this.gameObject, bldspec, pgvd: pgvd, alf: alf);
+                bldspec.bgo = bm.bpg.GenBldFromOsmBldSpec(this.gameObject, bldspec, pgvd: pgvd, gisl:gisl, alf: alf);
                 bldgos.Add(bldspec.bgo);
             }
             if (bm.osmgroundoutline.Get())

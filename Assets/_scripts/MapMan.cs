@@ -545,6 +545,11 @@ namespace CampusSimulator
             }
             return lgo;
         }
+        public List<(Vector3 pt, float lamb)> GetIsectList(string lname, Vector3 pt1, Vector3 pt2 )
+        {
+            var rv = qmapman.qmm.qtt.GetIsectList(lname, pt1, pt2, omit:-1, coordsys: QkCoordSys.UserWc, db:false, ang: fragang, xoff: fragxoff, zoff: fragzoff);
+            return rv;
+        }
 
         public GameObject AddFragLine(string lname, Vector3 pt1, Vector3 pt2, RmLinkFormE lnform = RmLinkFormE.pipe, float lska = 1.0f, float nska = 1.0f, string lclr = "red", string nclr = "", int omit = -1, float widratio = 1, bool wps = true)
         {

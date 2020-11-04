@@ -295,9 +295,10 @@ namespace CampusSimulator
         public void DumpColorName1(string cname)
         {
             var clr = GraphAlgos.GraphUtil.GetColorByName(cname);
+            var org = GraphAlgos.GraphUtil.GetColorOriginByName(cname);
             var (hex, _) = GraphAlgos.GraphUtil.HexColor(clr);
             var mag = GraphAlgos.GraphUtil.ColorMag(cname);
-            var msg = $"{hex} - {mag:f3} - {cname}";
+            var msg = $"{hex} - {mag:f3} - {cname} - {org}";
             this.Lgg(msg, cname);
         }
         public void DumpColorNames()
@@ -305,8 +306,11 @@ namespace CampusSimulator
             GraphAlgos.GraphUtil.InitColorTable();
             //var isblueblue = GraphAlgos.GraphUtil.isColorName("blue");
             DumpColorName1("red");
+            DumpColorName1("red:xkcd");
             DumpColorName1("blue");
+            DumpColorName1("blue:xkcd");
             DumpColorName1("green");
+            DumpColorName1("green:xkcd");
             var cnames = GraphAlgos.GraphUtil.GetColorNames( GraphUtil.ColorNameOrder.Mag );
             foreach (var cn in cnames)
             {
