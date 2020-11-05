@@ -2003,6 +2003,7 @@ namespace CampusSimulator
                                 go = go.transform.parent.gameObject;
                             }
                             jnman.SetShadowJourney(hitname);
+                            bdman.SetSelectedBuilding(hitname);
                             lasthitname = hitname;
                             Debug.Log($"Left mouse button hit {hitname}");
                             //var hitname = go.name.ToLower();

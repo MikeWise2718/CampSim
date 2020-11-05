@@ -240,7 +240,7 @@ public class InfoPanel : MonoBehaviour
         var (ncolliders,nenabled) = CountColliders();
         mmsg += System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss zzz\n");
         mmsg += $"P:{sman.psman.GetPersonCount()} V:{sman.veman.GetVehicleCount()} "+
-                $"B:{sman.bdman.GetBuildingCount()} BR:{sman.bdman.GetBroomCount()} VC:{sman.vcman.GetVidcamCount()} C:{nenabled}/{ncolliders}\n"+
+                $"B:{sman.bdman.GetDestinationBuildingCount()}/{sman.bdman.GetAllBuildingsCount()} BR:{sman.bdman.GetBroomCount()} VC:{sman.vcman.GetVidcamCount()} C:{nenabled}/{ncolliders}\n"+
                 $"{GraphAlgos.GraphUtil.GetVersionString()}";
         mscText.text = mmsg;
 

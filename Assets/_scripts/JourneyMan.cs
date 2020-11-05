@@ -1495,7 +1495,7 @@ namespace CampusSimulator
         }
         void SpawnJourneysByBuilding()
         {
-            var nbldcnt = bm.GetBuildingCount();
+            var nbldcnt = bm.GetDestinationBuildingCount();
             if (nbldcnt == 0)
             {
                 nspawnfails++;
@@ -1555,7 +1555,7 @@ namespace CampusSimulator
 
         void SpawnDroneJourneysByBuilding()
         {
-            var nbldcnt = bm.GetBuildingCount();
+            var nbldcnt = bm.GetDestinationBuildingCount();
             if (nbldcnt == 0)
             {
                 nspawnfails++;

@@ -88,7 +88,7 @@ public class OsmPanel : MonoBehaviour
         var bld = bdman.GetBuilding(selbld);
         if (bld == null)
         {
-            var blist = bdman.GetBuildingList();
+            var blist = new List<string>(definedBuildings.Keys);
             if (blist.Count > 0)
             {
                 bld = bdman.GetBuilding(blist[0]);
@@ -118,7 +118,7 @@ public class OsmPanel : MonoBehaviour
 
     public void LoadBuildings(string selbld)
     {
-        var bldlist = bdman.GetBuildingList();
+        var bldlist = bdman.GetAllBuildings();
         definedBuildings = new Dictionary<string, Building>();
         foreach (var bname in bldlist)
         {
@@ -231,7 +231,7 @@ public class OsmPanel : MonoBehaviour
         bspec.height = GetFloatFromText(heightInput.text, 4, 0, 1000);
         bspec.sockOffset = GetFloatFromText(sockOffsetInput.text, 0, 0, 1000);
         {
-            var grftxt = Enum.GetName(typeof(GroundRef), renderModeDropdown.value);
+            var grftxt = Enum.GetName(typeof(GroundRef), groundRefDropdown.value);
             var ok = System.Enum.TryParse<GroundRef>(grftxt, true, out GroundRef genumval);
             if (!ok)
             {

@@ -279,7 +279,7 @@ public class JourneyPanel : MonoBehaviour
     {
 
         var curbldval = bldctrl.value;
-        var bldlist = bdman.GetBuildingList();
+        var bldlist = bdman.GetBuildingsWithDestinations();
         var bldname = bldlist[curbldval];
         sman.Lgg($"{bldctrl.name} dropdown changed current bld:{bldname}","orange");
         var bld = bdman.GetBuilding(bldname);
@@ -365,7 +365,7 @@ public class JourneyPanel : MonoBehaviour
         var errmsg = "Exception caught in JourneyPanel.SetValsToJourneySpec";
         try
         {
-            startBuildingOpts = bdman.GetBuildingList();
+            startBuildingOpts = bdman.GetBuildingsWithDestinations();
             var inival = js.routeSpec.bld1name;
             var idx = startBuildingOpts.FindIndex(s => s == inival);
             if (idx <= 0) idx = 0;
@@ -383,7 +383,7 @@ public class JourneyPanel : MonoBehaviour
 
         try
         {
-            endBuildingOpts = bdman.GetBuildingList();
+            endBuildingOpts = bdman.GetBuildingsWithDestinations();
             var inival = js.routeSpec.bld2name;
             var idx = endBuildingOpts.FindIndex(s => s == inival);
             if (idx <= 0) idx = 0;

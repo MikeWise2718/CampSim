@@ -204,6 +204,7 @@ public class GrafPolyGen
             var mapheit = bs.GetGround();
             PolyGenVekMapDel npgvd = delegate (Vector3 v) { return Yoffset(v, mapheit); };
             var heit = bs.GetZeroBasedFloorHeight(bs.levels,includeAltitude:false);
+            CampusSimulator.SceneMan.Lggg($"{bs.shortname} bs.levels:{bs.levels} heit:{heit}","grass");
             var walgo = GenMesh(wname, height: heit, clr: wallclr, alf: alf, plotTesselation: false, onesided: onesided, pgvd: npgvd);
             walgo.transform.localScale = new Vector3(ska, ska, ska);
             walgo.transform.SetParent(bldgo.transform,worldPositionStays:wps);

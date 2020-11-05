@@ -950,14 +950,37 @@ namespace CampusSimulator
             //Debug.Log("Added bld " + building.name);
         }
 
-        public List<string> GetBuildingList()
+        public Building FindBuildingWithHitobject(string hitname)
+        {
+            return null;
+        }
+
+        public void SetSelectedBuilding(string hitname)
+        {
+            var bld = FindBuildingWithHitobject(hitname);
+            if (bld != null)
+            {
+                selectedbldname.SetAndSave(bld.name);
+            }
+        }
+
+        public List<string> GetBuildingsWithDestinations()
         {
             return bldnames;
         }
-        public int GetBuildingCount()
+        public int GetDestinationBuildingCount()
         {
-            if (bldnames == null) return 0;
             return bldnames.Count;
+        }
+        public List<string> GetAllBuildings()
+        {
+            var rv = new List<string>(bldmasterlist.Keys);
+            return rv;
+        }
+        public int GetAllBuildingsCount()
+        {
+            var rv = bldmasterlist.Count;
+            return rv;
         }
         public int GetBroomCount()
         {
