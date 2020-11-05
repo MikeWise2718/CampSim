@@ -544,7 +544,7 @@ namespace CampusSimulator
                 {
                     bspec.levels = newosmlevels;
                     bspec.height = newosmheight;
-                    bspec.firstflooroffset = newffoffset;
+                    bspec.sockOffset = newffoffset;
                     if (bspec.levels == 0)
                     {
                         bspec.levels = 1;

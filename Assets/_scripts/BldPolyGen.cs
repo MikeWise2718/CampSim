@@ -9,6 +9,7 @@ using UnityEditor.U2D.Sprites;
 using System.Runtime.InteropServices;
 
 public enum GroundRef {  cen, min, max }
+public enum OsmBldRenderMode {  transparent, solid, defaultmode }
 [Serializable]
 public class OsmBldSpec
 {
@@ -18,7 +19,7 @@ public class OsmBldSpec
     public string wid;
     public float height;
     public float levelheight;
-    public float firstflooroffset;
+    public float sockOffset;
     public int levels;
     public double lat;
     public double lng;
@@ -28,10 +29,12 @@ public class OsmBldSpec
     public Vector3 loc;
     public GroundRef groundRef;
     public Vector3 ptcen;
+    public OsmBldRenderMode renmode;
     public float maxy;
     public float ceny;
     public float miny;
     public bool isVisible;
+    public float transparency;
     List<Vector3> boutline;
     public GameObject bgo;
 
@@ -57,10 +60,12 @@ public class OsmBldSpec
         this.wid = wid;
         this.height = height;
         this.levels = levels;
-        this.firstflooroffset = 0;
+        this.sockOffset = 0;
         this.levelheight = height / levels;
         this.bgo = null;
         this.isVisible = true;
+        this.renmode = OsmBldRenderMode.defaultmode;
+        this.transparency = 0.5f;
         this.maxy = 0;
         this.ceny = 0;
         this.miny = 0;
@@ -167,7 +172,7 @@ public class OsmBldSpec
             var iflr = i;
             if (iflr < 0) iflr = 0;
             if (iflr > levels) iflr = levels;
-            y = firstflooroffset + ((iflr * height) / levels);
+            y = sockOffset + ((iflr * height) / levels);
         }
         if (includeAltitude)
         {
