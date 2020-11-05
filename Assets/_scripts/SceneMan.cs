@@ -545,6 +545,19 @@ namespace CampusSimulator
                 Debug.Log(msg);
             }
         }
+
+        public static void Lggg(string msg, string color = "gray")
+        {
+            var lgman = FindObjectOfType<LogMan>();
+            if (lgman != null)
+            {
+                lgman.Lgglong(msg, LogSeverity.Info, LogTyp.General, color: new string[] { color });
+            }
+            else
+            {
+                Debug.Log(msg);
+            }
+        }
         public void Lgg(string msg, string color="gray")
         {
             if (lgman != null)

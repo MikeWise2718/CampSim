@@ -183,7 +183,7 @@ public class GrafPolyGen
         iseg++;
     }
 
-    public GameObject GenBld(GameObject parent,OsmBldSpec bs, string clr,float alf=1,bool plotTesselation=false,bool dowalls=true,bool dofloors=true,bool doroof=true,bool dosock=true,float ptscale=1,PolyGenVekMapDel pgvd=null)
+    public GameObject GenBld(GameObject parent,OsmBldSpec bs, string wallclr,float alf=1,bool plotTesselation=false,bool dowalls=true,bool dofloors=true,bool doroof=true,bool dosock=true,float ptscale=1,PolyGenVekMapDel pgvd=null)
     {
         bool onesided = false;
         var wps = true;
@@ -204,7 +204,7 @@ public class GrafPolyGen
             var mapheit = bs.GetGround();
             PolyGenVekMapDel npgvd = delegate (Vector3 v) { return Yoffset(v, mapheit); };
             var heit = bs.GetZeroBasedFloorHeight(bs.levels,includeAltitude:false);
-            var walgo = GenMesh(wname, height: heit, clr: clr, alf: alf, plotTesselation: false, onesided: onesided, pgvd: npgvd);
+            var walgo = GenMesh(wname, height: heit, clr: wallclr, alf: alf, plotTesselation: false, onesided: onesided, pgvd: npgvd);
             walgo.transform.localScale = new Vector3(ska, ska, ska);
             walgo.transform.SetParent(bldgo.transform,worldPositionStays:wps);
         }
@@ -245,7 +245,8 @@ public class GrafPolyGen
                 var fname = $"{bs.osmname}-level-{i}";
                 //var fheit = bs.levels<2 ? 0 : (i*bs.height / bs.levels);
                 var y = bs.GetZeroBasedFloorHeight(i, includeAltitude: true);
-                var flrgo = GenMesh(fname, height: y, clr: clr, alf: alf, plotTesselation: plotTesselation, onesided: onesided, pgvd: null);
+                var fclr = "darkred";
+                var flrgo = GenMesh(fname, height: y, clr: fclr, alf: alf, plotTesselation: plotTesselation, onesided: onesided, pgvd: null);
                 flrgo.transform.localScale = new Vector3(ska, ska, ska);
                 flrgo.transform.SetParent(bldgo.transform, worldPositionStays: wps);
             }

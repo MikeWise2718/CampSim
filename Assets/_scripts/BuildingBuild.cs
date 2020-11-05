@@ -136,10 +136,14 @@ namespace CampusSimulator
         List<string> Eb0814roomspec = new List<string>()
         {
             // room name,pcap,alignang,length,width,frameit - see AddOneRoomSpec for code
-            "eb0814-f01-08-lob:4:0.0:2:3:T",
-            "eb0814-f01-10-lob:3:0.0:2:3:T",
+            "eb0814-f01-08-lob:2:0.0:2:3:T",
+            "eb0814-f02-08-mbed:2:0.0:2:3:T",
+            "eb0814-f01-10-lob:1:0.0:2:3:T",
+            "eb0814-f02-10-mbed:2:0.0:2:3:T",
             "eb0814-f01-12-lob:5:0.0:2:3:T",
+            "eb0814-f02-12-mbed:3:0.0:2:3:T",
             "eb0814-f01-14-lob:2:0.0:2:3:T",
+            "eb0814-f02-14-mbed:1:0.0:2:3:T",
         };
         List<string> Eb1622roomspec = new List<string>()
         {
@@ -400,7 +404,7 @@ namespace CampusSimulator
                     {
                         maingaragename = "Eb12_1";
                         roomspecs = Eb0814roomspec;
-                        destnodes = new List<string> { "eb0814-f01-08-lob", "eb0814-f01-10-lob", "eb0814-f01-12-lob", "eb0814-f01-14-lob" };
+                        destnodes = new List<string> { "eb0814-f01-08-lob", "eb0814-f02-08-mbed", "eb0814-f01-10-lob", "eb0814-f02-10-mbed", "eb0814-f01-12-lob", "eb0814-f02-12-mbed", "eb0814-f01-14-lob","eb0814-f02-14-mbed", };
                         shortname = "eb12";
                         defPeoplePerRoom = 4;
                         defPercentFull = 1.0f;
@@ -1037,16 +1041,37 @@ namespace CampusSimulator
             var beac = ago.AddComponent<BldEvacAlarm>();
             beac.Init(this, apos);  
         }
+        public float GetAlf()
+        {
+            var alf = 1f;
+            if (name=="Bld19")
+            {
+                var b19comp = bm.GetB19();
+                if (b19comp.glasswalls.Get())
+                {
+                    alf = 0.5f;
+                }
+            }
+            if (name == "Bld121")
+            {
+                var b121comp = bm.GetB121();
+                if (b121comp.glasswalls.Get())
+                {
+                    alf = 0.5f;
+                }
+            }
+            else if (bm.osmbldstrans.Get())
+            {
+                alf = 0.5f;
+            }
+            return alf;
+        }
 
         public void GenerateOsmGos()
         {
             var pgvd = new PolyGenVekMapDel(bm.sman.mpman.GetHeightVector3);
             var gisl = new GetIsectListDel(bm.sman.mpman.GetIsectList);
-            var alf = 1f;
-            if (bm.osmbldstrans.Get())
-            {
-                alf = 0.5f;
-            }
+            var alf = GetAlf();
             if (bm.osmbldpolygons.Get())
             {
                 bldspec.bgo = bm.bpg.GenBldFromOsmBldSpec(this.gameObject, bldspec, pgvd: pgvd, gisl:gisl, alf: alf);

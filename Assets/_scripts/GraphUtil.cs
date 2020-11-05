@@ -458,6 +458,8 @@ namespace GraphAlgos
                 return rv;
             }
         }
+        public static int colordups = 0;
+        public static int colorconflicts = 0;
         static float clrmagmax = Mathf.Sqrt(3.00001f);
         public static float ColorMag(string cname)
         {
@@ -507,6 +509,13 @@ namespace GraphAlgos
                 hexColorTable[key] = hexval;
             }
         }
+        static bool clrEqual(Color c1,Color c2)
+        {
+            if (c1.r != c2.r) return false;
+            if (c1.g != c2.g) return false;
+            if (c1.b != c2.b) return false;
+            return true;
+        }
         static void InitXkcdColors()
         {
             var str = ReadResourceAsString("xkcd/colors");
@@ -521,12 +530,20 @@ namespace GraphAlgos
                     clrname = clrname.Replace("\"", "");
                     var clrhex = clrval["hex"].ToString();
                     clrhex = clrhex.Replace("\"", "");
+                    var newclr = rgbhex(clrhex);
                     if (colorTable.ContainsKey(clrname))
                     {
+                        var oldclr = colorTable[clrname];
+                        if (clrEqual(newclr, oldclr))
+                        {
+                            colordups++;
+                            continue;
+                        }
+                        colorconflicts++;
                         clrname = $"{clrname}:xkcd";
-                        Debug.LogWarning($"Duplicate color {clrname}");
+                        //Debug.LogWarning($"Duplicate color {clrname}"); to be expected
                     }
-                    colorTable[clrname] = rgbhex(clrhex);
+                    colorTable[clrname] = newclr;
                     colorOrigin[clrname] = "xkcd";
                 }
                 Debug.Log($"SimpleJSON read {clrs.Count} xkcd colors");
@@ -548,7 +565,14 @@ namespace GraphAlgos
         {
             if (colorTable.ContainsKey(cname))
             {
-                Debug.LogWarning($"Duplicate color {cname}");
+                var oldclr = colorTable[cname];
+                if (clrEqual(clr, oldclr))
+                {
+                    colordups++;
+                    return;
+                }
+                colorconflicts++;
+                //Debug.LogWarning($"Duplicate color {cname}"); // to be expected
                 return;
             }
             colorTable[cname] = clr;
@@ -560,7 +584,14 @@ namespace GraphAlgos
         {
             if (colorTable.ContainsKey(cname))
             {
-                Debug.LogWarning($"Duplicate color {cname}");
+                //Debug.LogWarning($"Duplicate color {cname}"); // to be expected
+                var oldclr = colorTable[cname];
+                if (clrEqual(clr, oldclr))
+                {
+                    colordups++;
+                    return;
+                }
+                colorconflicts++;
                 return;
             }
             colorTable[cname] = clr;
@@ -678,6 +709,9 @@ namespace GraphAlgos
             AddColor("blk", new Color(0, 0, 0));
             AddColor("black", new Color(0, 0, 0));
             InitHexColors();
+            var ncnt = colorTable.Count;
+            var msg = $"Inited color table count:{ncnt} dups:{colordups} conflicts:{colorconflicts}";
+            CampusSimulator.SceneMan.Lggg(msg, "grass");
         }
         static string[] dcolorseq = { "dr", "dg", "db", "dm", "dy", "dc" };
         static string[] colorseq = { "r", "g", "b", "m", "y", "c" };

@@ -47,21 +47,25 @@ namespace GraphAlgos
             grc.LinkToPtxyz("eb12-oso14", "eb12-oso14a", 23.600, 0.000, 26.200, LinkUse.walkway, comment: ""); //  14 nn:1 nl:1
             grc.LinkToPtxyz("eb12-oso14a", "eb0814-f01-14-door", 23.600, 0.000, 27.700, LinkUse.stairs, comment: ""); //  14 nn:1 nl:1
             grc.LinkToPtxyz("eb0814-f01-14-door", "eb0814-f01-14-lob", 23.600, 0.000, 29.800, LinkUse.walkway, comment: ""); //  14 nn:1 nl:1
+            grc.LinkToPtxyz("eb0814-f01-14-lob", "eb0814-f02-14-mbed", 23.000, 0.000, 32.800, LinkUse.stairs, comment: ""); //  17 nn:1 nl:1
 
             //grc.LinkToPtxyz("eb12-oso12", "eb0814-f01-12-lob", 19.000, 0.000, 29.600, LinkUse.walkway, comment: ""); //  15 nn:1 nl:1
             grc.LinkToPtxyz("eb12-oso12", "eb12-oso12a", 19.000, 0.000, 26.000, LinkUse.walkway, comment: ""); //  15 nn:1 nl:1
             grc.LinkToPtxyz("eb12-oso12a", "eb0814-f01-12-door", 19.000, 0.000, 27.500, LinkUse.stairs, comment: ""); //  15 nn:1 nl:1
             grc.LinkToPtxyz("eb0814-f01-12-door", "eb0814-f01-12-lob", 19.000, 0.000, 29.600, LinkUse.walkway, comment: ""); //  15 nn:1 nl:1
+            grc.LinkToPtxyz("eb0814-f01-12-lob", "eb0814-f02-12-mbed", 19.000, 0.000, 32.600, LinkUse.stairs, comment: ""); //  17 nn:1 nl:1
 
             //grc.LinkToPtxyz("eb12-oso10", "eb0814-f01-10-lob", 12.500, 0.000, 29.400, LinkUse.walkway, comment: ""); //  16 nn:1 nl:1
             grc.LinkToPtxyz("eb12-oso10", "eb12-oso10a", 12.500, 0.000, 25.800, LinkUse.walkway, comment: ""); //  16 nn:1 nl:1
             grc.LinkToPtxyz("eb12-oso10a", "eb0814-f01-10-door", 12.500, 0.000, 27.300, LinkUse.stairs, comment: ""); //  16 nn:1 nl:1
             grc.LinkToPtxyz("eb0814-f01-10-door", "eb0814-f01-10-lob", 12.500, 0.000, 29.400, LinkUse.walkway, comment: ""); //  16 nn:1 nl:1
+            grc.LinkToPtxyz("eb0814-f01-10-lob", "eb0814-f02-10-mbed", 12.500, 0.000, 32.400, LinkUse.stairs, comment: ""); //  17 nn:1 nl:1
 
             //grc.LinkToPtxyz("eb12-oso08", "eb0814-f01-08-lob", 8.000, 0.000, 29.200, LinkUse.walkway, comment: ""); //  17 nn:1 nl:1
             grc.LinkToPtxyz("eb12-oso08", "eb12-oso08a", 8.000, 0.000, 25.600, LinkUse.walkway, comment: ""); //  17 nn:1 nl:1
             grc.LinkToPtxyz("eb12-oso08a", "eb0814-f01-08-door", 8.000, 0.000, 27.100, LinkUse.stairs, comment: ""); //  17 nn:1 nl:1
             grc.LinkToPtxyz("eb0814-f01-08-door", "eb0814-f01-08-lob", 8.000, 0.000, 29.200, LinkUse.walkway, comment: ""); //  17 nn:1 nl:1
+            grc.LinkToPtxyz("eb0814-f01-08-lob", "eb0814-f02-08-mbed", 8.000, 0.000, 32.200, LinkUse.stairs, comment: ""); //  17 nn:1 nl:1
 
             grc.LinkToPtxyz("eb12-osp16", "eb12-oso16", 30.000, 0.000, 29.500, LinkUse.walkway, comment: ""); //  18 nn:1 nl:1
             grc.LinkToPtxyz("eb12-osp18", "eb12-oso18", 34.400, 0.000, 29.500, LinkUse.walkway, comment: ""); //  20 nn:1 nl:1

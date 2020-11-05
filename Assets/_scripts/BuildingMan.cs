@@ -51,7 +51,7 @@ namespace CampusSimulator
         public UxSettingBool fixedblds = new UxSettingBool("fixedblds", false);
         public UxSettingBool osmoutline = new UxSettingBool("osmoutline", true);
         public UxSettingBool osmgroundoutline = new UxSettingBool("osmgroundoutline", true);
-
+        public UxSetting<string> selectedbldname = new UxSetting<string>("selectedbldname", "");
 
         // To do - get rid of bldmode and treemode regions in BuildingMan
         #region bldMode
@@ -255,6 +255,7 @@ namespace CampusSimulator
             osmbldpolygons.GetInitial(true);
             osmoutline.GetInitial(true);
             osmgroundoutline.GetInitial(true);
+            selectedbldname.GetInitial("");
             fixedblds.GetInitial(false);
             scene_padspecs = new List<string>();
             sman.Lgg($"BuildingMan.InitializeValues walllinks:{walllinks.Get()} osmblds:{osmblds.Get()} osmbldstrans:{osmbldstrans.Get()}   fixedblds:{fixedblds.Get()}","pink");

@@ -1358,7 +1358,7 @@ namespace Aiskwk.Map
             if (Time.time - ctrlThit < 2)
             {
                 var gap = Time.time - ctrlThit;
-                //Debug.Log($"hit second ctrl-T char inputstring:\"{Input.inputString}\" gap:{gap}");
+                Debug.Log($"hit second ctrl-T char inputstring:\"{Input.inputString}\" gap:{gap}");
                 if (Input.inputString.Length>0)
                 {
                     var trigger = "t" + Input.inputString[0];
@@ -1368,7 +1368,7 @@ namespace Aiskwk.Map
             }
             if (Input.GetKey(KeyCode.T) && ctrlpressed)
             {
-                //Debug.Log($"hit T {Time.time - ctrlThit}");
+                Debug.Log($"hit ctrl-T {Time.time - ctrlThit} setting time");
                 ctrlThit = Time.time;
             }
             if (Input.GetKey(KeyCode.F2) && Time.time-f2Hit >hitgap3 )
