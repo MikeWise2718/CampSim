@@ -9,7 +9,7 @@ namespace CampusSimulator
     {
         List<GameObject> bldgos;
         List<BldEvacAlarm> bldalarms;
-        public bool isOsmGenerated = false;
+        public bool hasBldSpec = false;
         public OsmBldSpec bldspec = null;
 
         void ActuallyDestroyObjects()
@@ -647,7 +647,7 @@ namespace CampusSimulator
             {
                 destnodes = new List<string>();
             }
-            isOsmGenerated = true;
+            hasBldSpec = true;
             var parentname = this.transform.parent.gameObject.name;
             //Debug.Log($"Building {name}  {bs.shortname} isOsmGenerated:{isOsmGenerated} parentname:{parentname}");
             //if (bs.osmname.Contains("122"))
@@ -680,7 +680,7 @@ namespace CampusSimulator
             {
                 rv = b19comp.GetCenterPoint(includeAltitude: includeAltitude);
             }
-            else if (isOsmGenerated)
+            else if (hasBldSpec)
             {
                 rv = bldspec.GetCenterTop();
                 if (includeAltitude)
@@ -714,7 +714,7 @@ namespace CampusSimulator
             {
                 rv = b19comp.GetZeroBasedFloorHeight(floornum,includeAltitude: includeAltitude);
             }
-            else if (isOsmGenerated)
+            else if (hasBldSpec)
             {
                 rv = bldspec.GetZeroBasedFloorHeight(floornum,includeAltitude:includeAltitude);
             }
@@ -743,7 +743,7 @@ namespace CampusSimulator
             {
                 (levels, totheight) = b19comp.GetFloorsAndHeight();
             }
-            else if (isOsmGenerated)
+            else if (hasBldSpec)
             {
                 levels = bldspec.levels;
                 totheight = bldspec.height;
@@ -1044,25 +1044,27 @@ namespace CampusSimulator
         public float GetAlf()
         {
             var alf = 1f;
-            if (name=="Bld19")
+            switch (bldspec.renmode)
             {
-                var b19comp = bm.GetB19();
-                if (b19comp.glasswalls.Get())
-                {
-                    alf = 0.5f;
-                }
-            }
-            if (name == "Bld121")
-            {
-                var b121comp = bm.GetB121();
-                if (b121comp.glasswalls.Get())
-                {
-                    alf = 0.5f;
-                }
-            }
-            else if (bm.osmbldstrans.Get())
-            {
-                alf = 0.5f;
+                case OsmBldRenderMode.defaultmode:
+                    {
+                        if (bm.osmbldstrans.Get())
+                        {
+                            alf = 0.5f;
+                        }
+                        break;
+                    }
+                case OsmBldRenderMode.transparent:
+                    {
+                        alf = bldspec.transparency;
+                        break;
+                    }
+                default:
+                case OsmBldRenderMode.solid:
+                    {
+                        alf = 1f;
+                        break;
+                    }
             }
             return alf;
         }
@@ -1101,7 +1103,7 @@ namespace CampusSimulator
             bldgos = new List<GameObject>();
             var bmode = bm.bldMode.Get();
             var tmode = bm.treeMode.Get();
-            if (isOsmGenerated)
+            if (hasBldSpec)
             {
                 GenerateOsmGos();
             }

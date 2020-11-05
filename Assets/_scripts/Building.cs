@@ -377,7 +377,7 @@ namespace CampusSimulator
             var padnodename = padname;
             if (padname.EndsWith("centertop"))
             {
-                if (!isOsmGenerated)
+                if (!hasBldSpec)
                 {
                     bm.sman.LggError($"Building.AddOnePadFromStringPadspec - cannot compute center of building without OsmBldSpec");
                     return;

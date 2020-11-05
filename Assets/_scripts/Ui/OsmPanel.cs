@@ -229,10 +229,33 @@ public class OsmPanel : MonoBehaviour
         bspec.shortname = shortNameInput.text;
         bspec.levels = GetIntFromText(levelsInput.text, 1, 1, 200);
         bspec.height = GetFloatFromText(heightInput.text, 4, 0, 1000);
-        bspec.sockOffset = GetFloatFromText(sockOffsetInput.text, 0, 0, 1000);       
-        transparentInput.text = bspec.transparency.ToString("f3");
-        controlsBeingBuilt = false;
+        bspec.sockOffset = GetFloatFromText(sockOffsetInput.text, 0, 0, 1000);
+        {
+            var grftxt = Enum.GetName(typeof(GroundRef), renderModeDropdown.value);
+            var ok = System.Enum.TryParse<GroundRef>(grftxt, true, out GroundRef genumval);
+            if (!ok)
+            {
+                Debug.LogError($"Bad enum text ({grftxt}) - unknown error - should not happen");
+            }
+            else
+            {
+                bspec.groundRef = genumval;
+            }
+        }
 
+        {
+            var rentxt = Enum.GetName(typeof(OsmBldRenderMode), renderModeDropdown.value);
+            var ok = System.Enum.TryParse<OsmBldRenderMode>(rentxt, true, out OsmBldRenderMode renumval);
+            if (!ok)
+            {
+                Debug.LogError($"Bad enum text ({rentxt}) - unknown error - should not happen");
+            }
+            else
+            {
+                bspec.renmode = renumval;
+            }
+        }
+        transparentInput.text = bspec.transparency.ToString("f3");
     }
 
     public void RealizeChanges(Building bld)
