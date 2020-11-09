@@ -205,7 +205,7 @@ public class GrafPolyGen
             PolyGenVekMapDel npgvd = delegate (Vector3 v) { return Yoffset(v, mapheit); };
             var heit = bs.GetZeroBasedFloorHeight(bs.levels,includeAltitude:false);
             CampusSimulator.SceneMan.Lggg($"{bs.shortname} bs.levels:{bs.levels} heit:{heit}","grass");
-            var walgo = GenMesh(wname, height: heit, clr: wallclr, alf: alf, plotTesselation: false, onesided: onesided, pgvd: npgvd);
+            var walgo = GenMesh(wname, height: heit, clr: wallclr, alf: alf, plotTesselation: false, onesided: onesided, pgvd: npgvd,addcollider:true);
             walgo.transform.localScale = new Vector3(ska, ska, ska);
             walgo.transform.SetParent(bldgo.transform,worldPositionStays:wps);
         }
@@ -401,7 +401,7 @@ public class GrafPolyGen
         }
     }
 
-    public GameObject GenMesh(string name, float height = 1, string clr = "indigo", float alf = 1, bool plotTesselation = false, bool onesided=false,PolyGenVekMapDel pgvd=null)
+    public GameObject GenMesh(string name, float height = 1, string clr = "indigo", float alf = 1, bool plotTesselation = false, bool onesided=false,PolyGenVekMapDel pgvd=null,bool addcollider=false)
     {
         var go = new GameObject(name);
         var pos = GetCenter(height);
@@ -409,7 +409,7 @@ public class GrafPolyGen
         this.wallheight = height;
         this.wallalf = alf;
         this.wallclr = clr;
-        Generate(go, plotTesselation,onesided:onesided, pgvd:pgvd);
+        Generate(go, plotTesselation,onesided:onesided, pgvd:pgvd, addcollider: addcollider);
         return go;
     }
 
@@ -480,45 +480,45 @@ public class GrafPolyGen
         }
         return rv;
     }
-    public void Generate(GameObject parent, bool plotTesselation=false,bool onesided=false,PolyGenVekMapDel pgvd=null)
+    public void Generate(GameObject parent, bool plotTesselation=false,bool onesided=false,PolyGenVekMapDel pgvd=null,bool addcollider=false)
     {
         GameObject go = null;
         switch (genform)
         {
             case PolyGenForm.pipes:
                 {
-                    go = GenerateBySegment(parent, wallheight,onesided:onesided, pgvd:pgvd);
+                    go = GenerateBySegment(parent, wallheight,onesided:onesided, pgvd:pgvd,addcollider:addcollider);
                     break;
                 }
             case PolyGenForm.walls:
                 {
-                    go = GenerateBySegment(parent, wallheight, onesided: onesided, pgvd: pgvd);
+                    go = GenerateBySegment(parent, wallheight, onesided: onesided, pgvd: pgvd, addcollider: addcollider);
                     break;
                 }
             case PolyGenForm.wallsmesh:
                 {
-                    go = GenerateBySegment(parent, wallheight, asmesh: true, onesided: onesided, pgvd: pgvd);
+                    go = GenerateBySegment(parent, wallheight, asmesh: true, onesided: onesided, pgvd: pgvd, addcollider: addcollider);
                     break;
                 }
             case PolyGenForm.wallsock:
                 {
-                    go = GenerateBySegment(parent, wallheight, asmesh: true, onesided: onesided, pgvd: pgvd, clobbery:true);
+                    go = GenerateBySegment(parent, wallheight, asmesh: true, onesided: onesided, pgvd: pgvd, clobbery:true, addcollider: addcollider);
                     break;
                 }
             case PolyGenForm.tesselate:
                 {
-                    go = TesselateYup(parent, wallheight, plotTesselation: plotTesselation, onesided:onesided, pgvd: pgvd);
+                    go = TesselateYup(parent, wallheight, plotTesselation: plotTesselation, onesided:onesided, pgvd: pgvd, addcollider: addcollider);
                     break;
                 }
         }
-        if (go!=null)
-        {
-            var colid = go.GetComponent<Collider>();
-            if (colid != null)
-            {
-                Object.Destroy(colid);
-            }
-        }
+        //if (go!=null) // why did I do this?
+        //{
+        //    var colid = go.GetComponent<Collider>();
+        //    if (colid != null)
+        //    {
+        //        Object.Destroy(colid);
+        //    }
+        //}
     }
     static int moduloInc(int i, int inc, int n)
     {
@@ -837,7 +837,7 @@ public class GrafPolyGen
         }
 
     }
-    public GameObject TesselateYup(GameObject parent,float height,bool onesided=false, bool plotTesselation = false, PolyGenVekMapDel pgvd = null)
+    public GameObject TesselateYup(GameObject parent,float height,bool onesided=false, bool plotTesselation = false, PolyGenVekMapDel pgvd = null,bool addcollider=false)
     {
         var eps = 1e-3f;
         int lev = 0;
@@ -869,8 +869,12 @@ public class GrafPolyGen
         if (area==0)
         {
             Debug.LogWarning("Cannot tesselate zero area polygon - terminating tesselation");
-            var go1 = GetAccumulatedMesh("accumesh",pgvd);
+            var go1 = GetAccumulatedMesh("accumesh_yup",pgvd);
             go1.transform.SetParent( parent.transform, worldPositionStays:true );
+            if (addcollider)
+            {
+                go1.AddComponent<MeshCollider>();
+            }
             return go1;
         }
         else if (area<0)
@@ -959,12 +963,16 @@ public class GrafPolyGen
             }
             iter++;
         }
-        var go = GetAccumulatedMesh("accumesh",pgvd);
+        var go = GetAccumulatedMesh("accumesh_yup",pgvd);
         go.transform.parent = parent.transform;
+        if (addcollider)
+        {
+            go.AddComponent<MeshCollider>();
+        }
         return go;
     }
 
-    public GameObject GenerateBySegment(GameObject parent,float height,bool asmesh=false, bool onesided=false,PolyGenVekMapDel pgvd=null,bool clobbery=false)
+    public GameObject GenerateBySegment(GameObject parent,float height,bool asmesh=false, bool onesided=false,PolyGenVekMapDel pgvd=null,bool clobbery=false,bool addcollider=false)
     {
         if (_poutline.Count <= 1)
         {
@@ -1019,7 +1027,14 @@ public class GrafPolyGen
         }
         if (asmesh)
         {
-            var go = GetAccumulatedMesh("accumesh",pgvd);
+            var go = GetAccumulatedMesh("accumesh_gbs",pgvd);
+            if (addcollider)
+            {
+                //var ppname = parent.transform.parent.name;
+                var ppname = "";
+                CampusSimulator.SceneMan.Lggg($"Added mesh collider:{ppname}/{parent.name}","grapefruit");
+                go.AddComponent<MeshCollider>();
+            }
             go.transform.parent = parent.transform;
             return go;
         }

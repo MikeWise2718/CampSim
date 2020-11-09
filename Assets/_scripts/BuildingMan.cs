@@ -952,6 +952,17 @@ namespace CampusSimulator
 
         public Building FindBuildingWithHitobject(string hitname)
         {
+            sman.Lgg($"FindBuildingWithHitObject: {hitname}");
+            var bnar = hitname.Split('/');
+            foreach (var bn in bnar)
+            {
+                if (bldmasterlist.ContainsKey(bn))
+                {
+                    var bld = GetBuilding(bn);
+                    return bld;
+                }
+            }
+            sman.Lgg($"FindBuildingWithHitobject cound not find {hitname} in in building master list", "orange");
             return null;
         }
 
@@ -960,6 +971,7 @@ namespace CampusSimulator
             var bld = FindBuildingWithHitobject(hitname);
             if (bld != null)
             {
+                sman.Lgg($"selectedbldname.SetAndSave {bld.name}","amber");
                 selectedbldname.SetAndSave(bld.name);
             }
         }

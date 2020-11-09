@@ -1875,6 +1875,46 @@ namespace CampusSimulator
                 ctrlDhitTime = Time.time;
             }
         }
+        public void KickoffStartupJourneys()
+        {
+            var (ok, jss) = JourneySpec.GetJsKeySave(kickoffJname);
+            if (ok)
+            {
+                var js = new JourneySpec(jnman.journeySpecMan, jss);
+                var launchedJny = jnman.AddJsmJourney(js);
+                if (launchedJny != null)
+                {
+                    jnman.journeyToShadow = launchedJny.name;
+                    jnman.shadowJourney = true;
+                }
+            }
+            else
+            {
+                LggError($"Error dehydrating journey {kickoffJname}");
+            }
+        }
+
+        public void KickoffStartups()
+        {
+            if (kickOffRun)
+            {
+                jnman.spawnrunjourneys = true;
+            }
+            if (kickOffFly)
+            {
+                jnman.spawnflyjourneys = true;
+            }
+            if (kickOffEvac)
+            {
+                bdman.EvacPresetBld();
+            }
+            if (kickOffJourney)
+            {
+                KickoffStartupJourneys();
+            }
+            uiman.SyncState();
+        }
+
         public float lastRefreshTime = 0;
 
         int updateCount = 0;
@@ -1899,37 +1939,7 @@ namespace CampusSimulator
             }
             if (updateCount == 10)
             {
-                if (kickOffRun)
-                {
-                    jnman.spawnrunjourneys = true;
-                }
-                if (kickOffFly)
-                {
-                    jnman.spawnflyjourneys = true;
-                }
-                if (kickOffEvac)
-                {
-                    bdman.EvacPresetBld();
-                }
-                if (kickOffJourney)
-                {
-                    var (ok,jss) = JourneySpec.GetJsKeySave(kickoffJname);
-                    if (ok)
-                    {
-                        var js = new JourneySpec(jnman.journeySpecMan, jss);
-                        var launchedJny = jnman.AddJsmJourney(js);
-                        if (launchedJny != null)
-                        {
-                            jnman.journeyToShadow = launchedJny.name;
-                            jnman.shadowJourney = true;
-                        }
-                    }
-                    else
-                    {
-                        LggError($"Error dehydrating journey {kickoffJname}");
-                    }
-                }
-                uiman.SyncState();
+                KickoffStartups();
             }
             checkTripod();
             SetArcoreTracking();
@@ -1987,7 +1997,7 @@ namespace CampusSimulator
                     var vcam = Viewer.GetViewerCamera();
                     if (vcam != null && Input.GetMouseButtonDown(0))
                     {
-                        //Debug.Log("Left Mouse was pressed");
+                        Debug.Log("Left Mouse was pressed");
 
 
                         Ray ray = vcam.ScreenPointToRay(Input.mousePosition);
