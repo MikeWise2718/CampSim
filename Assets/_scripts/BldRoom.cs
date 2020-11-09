@@ -63,6 +63,11 @@ namespace CampusSimulator {
         {
             // have to defer
             //Debug.Log("start slot");
+            if (bm.sman.lcman.IsNodeName(roomNodeName))
+            {
+                var lpt = bm.sman.lcman.GetNode(roomNodeName);
+                pos = lpt.pt;
+            }
 
             if (roomformgo != null)
             {
@@ -268,6 +273,16 @@ namespace CampusSimulator {
                 roomformgo = null;
             }
         }
+        public void SetHeight()
+        {
+            var node = bm.sman.lcman.GetNode(roomNodeName);
+            if (node!=null)
+            {
+
+            }
+        }
+
+
         public void CreateGos()
         {
             CreateObjects();

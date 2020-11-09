@@ -267,8 +267,10 @@ public class OsmPanel : MonoBehaviour
         }
         if (bld != null)
         {
+            bdman.UpdateFloorHeights();
             bld.DeleteGos();
             bld.CreateGos();
+            bdman.sman.lcman.RefreshGos();
         }
     }
 

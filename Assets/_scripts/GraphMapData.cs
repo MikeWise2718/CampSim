@@ -2209,7 +2209,8 @@ namespace GraphAlgos
             grc.LinkToPtxyz("b121-f03-str102-18", -821.82 + xs, d1 + d2, -482.29 + zs, LinkUse.stairs, comment: ""); //  1 nn:1 nl:0
 
 
-            grc.AddNodePtxyz("b121-f01-lobby", -811.80 + xs, 0.200, -485.8 + zs, comment: ""); //  1 nn:1 nl:0
+            grc.AddNodePtxyz("b121-f01-lobby", -813.60 + xs, 0.200, -484.7 + zs, comment: ""); //  1 nn:1 nl:0
+            //grc.AddNodePtxyz("b121-f01-lobby", -811.80 + xs, 0.200, -485.8 + zs, comment: ""); //  1 nn:1 nl:0
             grc.LinkToPtxyz("b121-os1-o001", -808.1 + xs, 0.000, -484.8 + zs, LinkUse.walkway, comment: ""); //  2 nn:1 nl:1
             grc.LinkToPtxyz("b121-os1-o002", -807.200 + xs, 0.000, -486.0 + zs, LinkUse.walkway, comment: ""); //  2 nn:1 nl:1
             grc.LinkToPtxyz("b121-os1-o003", -808.600 + xs, 0.000, -492.0 + zs, LinkUse.walkway, comment: ""); //  2 nn:1 nl:1

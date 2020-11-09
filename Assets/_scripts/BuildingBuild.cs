@@ -63,7 +63,7 @@ namespace CampusSimulator
         List<string> B121roomspec = new List<string>()
         {
             // room name,pcap,alignang,length,width,frameit
-            "b121-f01-lobby:6:-18.5:4:4:T",
+            "b121-f01-lobby:6:-10:4:4:T",
         };
         public static List<string> MsftDronePadspec = new List<string>()
         {
