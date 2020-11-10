@@ -435,7 +435,7 @@ namespace CampusSimulator
         {
             var nbld = bldgos.Count;
             ActuallyDestroyObjects();
-            bm.sman.Lgg($"Deleted {bldgos.Count} gos for building {name}","lilac");
+            //bm.sman.Lgg($"Deleted {bldgos.Count} gos for building {name}","lilac");
             var roomlist = new List<BldRoom>(roomdict.Values);
             roomlist.ForEach(brm => brm.DeleteGos());
             var padlist = new List<BldDronePad>(paddict.Values);
@@ -444,7 +444,7 @@ namespace CampusSimulator
         public void CreateGos()
         {
             CreateObjects();
-            bm.sman.Lgg($"Created {bldgos.Count} gos for building {name}", "lilac");
+            //bm.sman.Lgg($"Created {bldgos.Count} gos for building {name}", "lilac");
             var roomlist = new List<BldRoom>(roomdict.Values);
             roomlist.ForEach(brm => brm.CreateGos());
             var padlist = new List<BldDronePad>(paddict.Values);

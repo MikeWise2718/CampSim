@@ -314,7 +314,11 @@ namespace CampusSimulator
             var cnames = GraphAlgos.GraphUtil.GetColorNames( GraphUtil.ColorNameOrder.Mag );
             foreach (var cn in cnames)
             {
-                DumpColorName1(cn);
+                var mag = GraphAlgos.GraphUtil.ColorMag(cn);
+                if (mag > 0.44f)
+                {
+                    DumpColorName1(cn);
+                }
             }
         }
 
@@ -562,7 +566,8 @@ namespace CampusSimulator
         {
             if (lgman != null)
             {
-                lgman.Lgglong(msg, LogSeverity.Info,LogTyp.General, color:new string[] { color });
+                var nmsg = $"{msg} ({color})";
+                lgman.Lgglong(nmsg, LogSeverity.Info,LogTyp.General, color:new string[] { color });
             }
             else
             {

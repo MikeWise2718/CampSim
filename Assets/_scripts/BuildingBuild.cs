@@ -225,7 +225,6 @@ namespace CampusSimulator
 
                         b19comp = this.transform.gameObject.AddComponent<B19Willow>();
                         b19comp.InitializeValues(bm.sman, this);
-                        b19comp.MakeItSo();
                         bm.AddBuildingAlias("b19", this);
                         newosmlevels = 2;
                         newosmheight = 6;
@@ -235,7 +234,7 @@ namespace CampusSimulator
                 case "Bld33":
                     {
                         osmnamestart = "Microsoft Building 33";
-                        //maingaragename = "Garage19_1";
+                        maingaragename = "Garage33_1";
                         roomspecs = B33roomspec;
                         destnodes = SplitRoomNameOutOfRoomspecs(roomspecs);
                         shortname = "Bld33";
@@ -250,27 +249,17 @@ namespace CampusSimulator
                         defAngAlign = 24.0f;
                         newosmlevels = 2;
                         newosmheight = 8;
-
-
-                        //b19comp = this.transform.gameObject.AddComponent<B19Willow>();
-                        //b19comp.InitializeValues(bm.sman, this);
-                        //b19comp.MakeItSo();
-                        //bm.AddBuildingAlias("b19", this);
                         bm.AddBuildingAlias("b33", this);
                         break;
                     }
                 case "Bld34":
                     {
                         osmnamestart = "Microsoft Building 34";
-                        //maingaragename = "Garage19_1";
+                        maingaragename = "Garage34_1";
                         roomspecs = B34roomspec;
                         destnodes = SplitRoomNameOutOfRoomspecs(roomspecs);
                         shortname = "b34";
                         journeyChoiceWeight = 20;
-                        //if (bm.sman.curscene == SceneSelE.MsftB33focused)
-                        //{
-                        //    bm.sman.jnman.preferedJourneyBuildingName = name;
-                        //}
                         defPeoplePerRoom = 8;
                         defPercentFull = 0.80f;
                         defRoomArea = 16;
@@ -278,10 +267,6 @@ namespace CampusSimulator
                         newosmlevels = 5;
                         newosmheight = 20;
 
-                        //b19comp = this.transform.gameObject.AddComponent<B19Willow>();
-                        //b19comp.InitializeValues(bm.sman, this);
-                        //b19comp.MakeItSo();
-                        //bm.AddBuildingAlias("b19", this);
                         bm.AddBuildingAlias("b34", this);
                         break;
                     }
@@ -305,12 +290,8 @@ namespace CampusSimulator
                         newosmlevels = 3;
                         newosmheight = 12.3f;
                         newosmgroundref = GroundRef.cen;
-
-
-
                         b121comp = this.transform.gameObject.AddComponent<B121Willow>();
                         b121comp.InitializeValues(bm.sman, this);
-                        b121comp.MakeItSo();
                         bm.AddBuildingAlias("b121", this);
                         break;
                     }
@@ -556,6 +537,14 @@ namespace CampusSimulator
             if (shortname != "")
             {
                 bldpadspecs = bm.GetFilteredPadSpecs(shortname);
+            }
+            if (b121comp != null)
+            {
+                b121comp.MakeItSo();
+            }
+            if (b19comp != null)
+            {
+                b19comp.MakeItSo();
             }
         }
 

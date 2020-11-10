@@ -223,7 +223,6 @@ public class B121Willow : MonoBehaviour
             //    ymapheight -= 0.10f; // adjust for map irrgularities - doesn't work well
             //}
             //var bps = bpos.ToString("f3");
-            //sman.Lgg($"Loading B121 -- height - bpos:{bps} yheit(from map):{ymapheight:f2} total:{ymapheight+bpos.y:f2}","orange");
             var bsheit = GetZeroBasedFloorHeight(0, includeAltitude: true);
             bpos = new Vector3(-789, bsheit, -436);
             var bps = bpos.ToString("f3");

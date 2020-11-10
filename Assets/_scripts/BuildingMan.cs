@@ -581,9 +581,9 @@ namespace CampusSimulator
                     }
                     if (bd != null)
                     {
-                        //if (bd.name == "Bld33" && fname=="f01")
+                        //if (bd.name == "Bld121" && fname=="f01")
                         //{
-                        //    Debug.Log("Here I am again");
+                        //    Debug.Log($"here is {bd.name} {fname}");
                         //}
                         if (floordict.ContainsKey(fname))
                         {

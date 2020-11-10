@@ -204,8 +204,9 @@ public class GrafPolyGen
             var mapheit = bs.GetGround();
             PolyGenVekMapDel npgvd = delegate (Vector3 v) { return Yoffset(v, mapheit); };
             var heit = bs.GetZeroBasedFloorHeight(bs.levels,includeAltitude:false);
-            CampusSimulator.SceneMan.Lggg($"{bs.shortname} bs.levels:{bs.levels} heit:{heit}","grass");
-            var walgo = GenMesh(wname, height: heit, clr: wallclr, alf: alf, plotTesselation: false, onesided: onesided, pgvd: npgvd,addcollider:true);
+            //CampusSimulator.SceneMan.Lggg($"{bs.shortname} bs.levels:{bs.levels} heit:{heit}","grass");
+            var yzero = bs.GetZeroBasedFloorHeight(0);
+            var walgo = GenMesh(wname, height: heit, clr: wallclr, alf: alf, plotTesselation: false, onesided: onesided, pgvd: npgvd,addcollider:true,yzero:yzero);
             walgo.transform.localScale = new Vector3(ska, ska, ska);
             walgo.transform.SetParent(bldgo.transform,worldPositionStays:wps);
         }
@@ -401,7 +402,7 @@ public class GrafPolyGen
         }
     }
 
-    public GameObject GenMesh(string name, float height = 1, string clr = "indigo", float alf = 1, bool plotTesselation = false, bool onesided=false,PolyGenVekMapDel pgvd=null,bool addcollider=false)
+    public GameObject GenMesh(string name, float height = 1, string clr = "indigo", float alf = 1, bool plotTesselation = false, bool onesided=false,PolyGenVekMapDel pgvd=null,bool addcollider=false,float yzero=float.MinValue)
     {
         var go = new GameObject(name);
         var pos = GetCenter(height);
@@ -409,7 +410,7 @@ public class GrafPolyGen
         this.wallheight = height;
         this.wallalf = alf;
         this.wallclr = clr;
-        Generate(go, plotTesselation,onesided:onesided, pgvd:pgvd, addcollider: addcollider);
+        Generate(go, plotTesselation,onesided:onesided, pgvd:pgvd, addcollider: addcollider,yzero:yzero);
         return go;
     }
 
@@ -480,7 +481,7 @@ public class GrafPolyGen
         }
         return rv;
     }
-    public void Generate(GameObject parent, bool plotTesselation=false,bool onesided=false,PolyGenVekMapDel pgvd=null,bool addcollider=false)
+    public void Generate(GameObject parent, bool plotTesselation=false,bool onesided=false,PolyGenVekMapDel pgvd=null,bool addcollider=false,float yzero=float.MinValue)
     {
         GameObject go = null;
         switch (genform)
@@ -497,7 +498,7 @@ public class GrafPolyGen
                 }
             case PolyGenForm.wallsmesh:
                 {
-                    go = GenerateBySegment(parent, wallheight, asmesh: true, onesided: onesided, pgvd: pgvd, addcollider: addcollider);
+                    go = GenerateBySegment(parent, wallheight, asmesh: true, onesided: onesided, pgvd: pgvd, addcollider: addcollider, yzero:yzero);
                     break;
                 }
             case PolyGenForm.wallsock:
@@ -972,7 +973,7 @@ public class GrafPolyGen
         return go;
     }
 
-    public GameObject GenerateBySegment(GameObject parent,float height,bool asmesh=false, bool onesided=false,PolyGenVekMapDel pgvd=null,bool clobbery=false,bool addcollider=false)
+    public GameObject GenerateBySegment(GameObject parent,float height,bool asmesh=false, bool onesided=false,PolyGenVekMapDel pgvd=null,bool clobbery=false,bool addcollider=false,float yzero=float.MinValue)
     {
         if (_poutline.Count <= 1)
         {
@@ -992,7 +993,7 @@ public class GrafPolyGen
             area = CalcAreaWithYup(woutline);
             Debug.Log($"new area:{area}");
         }
-
+        bool doyzero = yzero != float.MinValue;
         int i1 = 0;
         int i2 = i1 + 1;
         int nsegdone = 0;
@@ -1004,6 +1005,11 @@ public class GrafPolyGen
             {
                 pt1 = new Vector3(pt1.x, float.MinValue, pt1.z);
                 pt2 = new Vector3(pt2.x, float.MinValue, pt2.z);
+            }
+            else if (doyzero)
+            {
+                pt1 = new Vector3(pt1.x, yzero, pt1.z);
+                pt2 = new Vector3(pt2.x, yzero, pt2.z);
             }
             //if (pgvd!=null)
             //{
@@ -1032,7 +1038,7 @@ public class GrafPolyGen
             {
                 //var ppname = parent.transform.parent.name;
                 var ppname = "";
-                CampusSimulator.SceneMan.Lggg($"Added mesh collider:{ppname}/{parent.name}","grapefruit");
+                //CampusSimulator.SceneMan.Lggg($"Added mesh collider:{ppname}/{parent.name}","grapefruit");
                 go.AddComponent<MeshCollider>();
             }
             go.transform.parent = parent.transform;
