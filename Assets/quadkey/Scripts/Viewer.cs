@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Aiskwk.Map
 {
-    public enum ViewerAvatar { Nothing, CubeMan, SphereMan, CapsuleMan, SimpleTruck, Minehaul1, Shovel1, Dozer1, Dozer2, Rover, QuadCopter, QuadCopter2, Car012 };
+    public enum ViewerAvatar { Nothing, CubeMan, SphereMan, CapsuleMan, SimpleTruck, Minehaul1, Shovel1, Dozer1, Dozer2, Rover, Delivery_Robot, QuadCopter, QuadCopter2, Matrice_600, Delivery_Drone, Car012 };
     public enum ViewerCamConfig { EyesDown, Eyes, FloatBehindDiv4, FloatBehindDiv2, FloatBehind, FloatBehindTimes2, FloatBehindTimes4 }
     public enum ViewerControl { Position, Velocity }
 
@@ -617,6 +617,36 @@ namespace Aiskwk.Map
                         followGround = false;
                         break;
                     }
+                case ViewerAvatar.Matrice_600:
+                    {
+                        angle = 0;
+                        scale = 3;
+                        shift = new Vector3(0, 0, 0);
+                        //MakeAvatar(pfix + "quadcopter", angle, shift, scale,visorscale:0.01f);
+                        MakeAvatar(pfix + "matrice_600", angle, shift, rot, scale, visorscale: 0.01f);
+                        followGround = false;
+                        break;
+                    }
+                case ViewerAvatar.Delivery_Drone:
+                    {
+                        angle = 0;
+                        scale = 3;
+                        shift = new Vector3(0, 0, 0);
+                        //MakeAvatar(pfix + "quadcopter", angle, shift, scale,visorscale:0.01f);
+                        MakeAvatar(pfix + "delivery_drone", angle, shift, rot, scale, visorscale: 0.01f);
+                        followGround = false;
+                        break;
+                    }
+                case ViewerAvatar.Delivery_Robot:
+                    {
+                        angle = 0;
+                        scale = 3;
+                        shift = new Vector3(0, 0, 0);
+                        //MakeAvatar(pfix + "quadcopter", angle, shift, scale,visorscale:0.01f);
+                        MakeAvatar(pfix + "delivery_robot", angle, shift, rot, scale, visorscale: 0.01f);
+                        followGround = false;
+                        break;
+                    }
                 case ViewerAvatar.SphereMan:
                     {
                         shift = new Vector3(0, 0, 0);
@@ -660,9 +690,18 @@ namespace Aiskwk.Map
                     rv = ViewerAvatar.QuadCopter2;
                     break;
                 case ViewerAvatar.QuadCopter2:
+                    rv = ViewerAvatar.Matrice_600;
+                    break;
+                case ViewerAvatar.Matrice_600:
+                    rv = ViewerAvatar.Delivery_Drone;
+                    break;
+                case ViewerAvatar.Delivery_Drone:
                     rv = ViewerAvatar.Rover;
                     break;
                 case ViewerAvatar.Rover:
+                    rv = ViewerAvatar.Delivery_Robot;
+                    break;
+                case ViewerAvatar.Delivery_Robot:
                     rv = ViewerAvatar.CapsuleMan;
                     break;
                 case ViewerAvatar.CapsuleMan:
