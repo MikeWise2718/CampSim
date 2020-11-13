@@ -847,6 +847,7 @@ namespace CampusSimulator
         }
         public void SetViewerState(Aiskwk.Map.ViewerState vs)
         {
+            if (vs == null) return;
             qmapman.qmm.viewer.SetViewerInState(vs);
         }
 
@@ -868,6 +869,7 @@ namespace CampusSimulator
                         break;
                     }
             }
+            Viewer.ActivateViewerKeys(true);
         }
 
         void SetMeshCollider(bool enable)

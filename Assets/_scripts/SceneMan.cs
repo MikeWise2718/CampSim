@@ -63,6 +63,7 @@ namespace CampusSimulator
         public bool autoerrorcorrect = false;
         private bool needsrefresh = false;
         private bool needstotalrefresh = false;
+        private bool scenechange = false;
 
         public SceneSelE requestScene = SceneSelE.None;
         public SceneSelE curscene = SceneSelE.None;
@@ -342,7 +343,7 @@ namespace CampusSimulator
             GraphAlgos.GraphUtil.SetRanSeed("journeyspawn", curseed);
             GraphAlgos.GraphUtil.SetRanSeed("spawnstreaming", curseed);
             GraphAlgos.GraphUtil.InitializeRansets();
-            DumpColorNames();
+            //DumpColorNames();
 
         }
         //public void InitializeGlbLlMap()
@@ -525,7 +526,7 @@ namespace CampusSimulator
                 {
                    LggError("Scene "+newscene.ToString()+" not initialized successfully Exception:"+ex.ToString());
                 }
-                CancelRefreshes();
+                CancelAnyPendingRefreshes(); // if we got here we want to stop now
                 Lgg($"SceneMan.SetScene completed scenario initialization for {curscene}");
             }
             else
@@ -633,10 +634,11 @@ namespace CampusSimulator
             }
 #endif
         }
-        public void CancelRefreshes()
+        public void CancelAnyPendingRefreshes()
         {
             needsrefresh = false;
             needstotalrefresh = false;
+            scenechange = false;
         }
         public void RequestRefresh(string requester,bool totalrefresh=false, SceneSelE requestedScene = SceneSelE.None)
         {
@@ -647,6 +649,7 @@ namespace CampusSimulator
                 // note that just setting this to totalrefresh would overwrite other totalrefresh requests
                 needstotalrefresh = true; 
             }
+            scenechange = requestedScene != curscene;
             if (requestedScene!=SceneSelE.None)
             {
                 this.requestScene = requestedScene;
@@ -1961,11 +1964,16 @@ namespace CampusSimulator
 
             if (needsrefresh)
             {
-                Debug.Log($"SetScene.Update cnt:{updateCount} needsrefresh:{needsrefresh}");
+                Lgg($"SetScene.Update cnt:{updateCount} needsrefresh:{needsrefresh} sceenchange:{scenechange}","grass");
                 var sw1 = new StopWatch();
                 if (needstotalrefresh)
                 {
-                    var vstate = mpman.GetViewerState();
+                    var saveviewstate = !scenechange;
+                    ViewerState vstatesave=null;
+                    if (saveviewstate)
+                    {
+                        vstatesave = mpman.GetViewerState();
+                    }
                     var sceneToRefresh = curscene;
                     if (requestScene != SceneSelE.None)
                     {
@@ -1975,8 +1983,12 @@ namespace CampusSimulator
                     SetScenario(sceneToRefresh, force: true);
                     sw2.Stop();
                     lastRefreshTime = (float) sw2.Elap().TotalSeconds;
-                    mpman.SetViewerState(vstate);
-                    Debug.Log($"TotalRefresh SetScene took {sw2.ElapSecs()} secs");
+                    if (saveviewstate)
+                    {
+                        Lgg($"Setting viewstate avatar to {vstatesave.avatar}","amber");
+                        mpman.SetViewerState(vstatesave);
+                    }
+                    Lgg($"TotalRefresh SetScene took {sw2.ElapSecs()} secs","grass");
                 }
                 else
                 {
@@ -1984,13 +1996,13 @@ namespace CampusSimulator
                     RefreshSceneManGos(); // in update if needs refresh
                     sw3.Stop();
                     lastRefreshTime = (float) sw3.Elap().TotalSeconds;
-                    Debug.Log($"RefreshSceneManGos took {sw3.ElapSecs()} secs");
+                    Lgg($"RefreshSceneManGos took {sw3.ElapSecs()} secs","grass");
                 }
                 uiman.SyncState();
                 needstotalrefresh = false;
                 needsrefresh = false;
                 sw1.Stop();
-                Debug.Log($"Refresh took {sw1.ElapSecs()} secs");
+                Lgg($"Refresh took {sw1.ElapSecs()} secs","grass");
             }
 
             if (!uiman.optpan.IsOptionsPanelOpen())

@@ -230,7 +230,7 @@ namespace Aiskwk.Map
             //transform.localRotation = Quaternion.Euler(home.rot); // Think this has to match the rotation it was built with
                                                                   // or we get problems when we follownormal along the mesh
             TranslateViewer(0, 0);
-            RotateViewer(0);
+            RotateViewerToYangle(0);
             //Debug.Log($"ReAdjustViewerInitialPosition - after  scale:{transform.localScale} rotation:{transform.localRotation.eulerAngles}");
             //DumpViewer();
         }
@@ -266,8 +266,7 @@ namespace Aiskwk.Map
                 if (!ptypespecified)
                 {
                     ptype = PrimitiveType.Capsule;
-                    shift = new Vector3(0, 1, 0)
-    ;
+                    shift = new Vector3(0, 1, 0);
                 }
                 instancego = GameObject.CreatePrimitive(ptype);
                 instancego.transform.position = new Vector3(0, 0.98f, 0);
@@ -535,9 +534,10 @@ namespace Aiskwk.Map
 
         public void BuildViewer()
         {
-            //Debug.Log("BuildViewer");
-            //Debug.Log($"BuildViewer - Viewer rotation before  {transform.localRotation.eulerAngles}");
+            Debug.Log("BuildViewer");
+            Debug.Log($"BuildViewer - Viewer rotation before  {bodyPlaneRotation.eulerAngles}");
 
+            var curang = bodyPlaneRotation.eulerAngles.y;
             DestroyAvatar();
             var shift = Vector3.zero;
             var scale = 1.0f;
@@ -676,8 +676,8 @@ namespace Aiskwk.Map
                     }
             }
             TranslateViewer(0, 0);
-            RotateViewer(0);
-            //Debug.Log($"BuildViewer - Viewer rotation after  {transform.localRotation.eulerAngles}");
+            RotateViewerToYangle(curang);
+            Debug.Log($"    Viewer rotation after  {bodyPlaneRotation.eulerAngles}");
         }
 
         ViewerAvatar NextAvatar(ViewerAvatar curava)
@@ -754,24 +754,28 @@ namespace Aiskwk.Map
             //Debug.Log($"RaiseViewer ymove:{ymove} newpos:{posstr}");
         }
 
-        void RotateViewer(float rotate)
+        void RotateViewerScaleByTime(float rotate)
         {
-            ////Debug.Log($"RotateViewer - Viewer rotation before  {transform.localRotation.eulerAngles} followGround:{followGround}");
 
             var fak = calctimefak(ref tvlastkey);
-            bodyPlaneRotation *= Quaternion.Euler(new Vector3(0, fak * rotate, 0));
+            RotateViewerByYangle(fak * rotate);
+        }
+
+
+        void RotateViewerByYangle(float yangle)
+        {
+            //Debug.Log($"RotateViewerToYangle - Viewer rotation before  {transform.localRotation.eulerAngles}");
+            //Debug.Log($"RotateViewerToYangle - Moveplane rotation before  {moveplane.transform.localRotation.eulerAngles}");
+
+            bodyPlaneRotation *= Quaternion.Euler(new Vector3(0, yangle, 0));
             moveplane.transform.localRotation = bodyPlaneRotation;
-            bodyPrefabRotation *= Quaternion.Euler(new Vector3(0, fak * rotate, 0));
+            bodyPrefabRotation *= Quaternion.Euler(new Vector3(0, yangle, 0));
             body.transform.localRotation = Quaternion.FromToRotation(Vector3.up, lstnrm) * bodyPrefabRotation;
 
-            ////if (followGround)
-            ////{
-            ////    body.transform.localRotation = Quaternion.FromToRotation(Vector3.up, lstnrm) * bodyPrefabRotation;
-            ////}
-            ////Debug.Log($"RotateViewer - Viewer rotation after   {transform.localRotation.eulerAngles}");
-            ////bodypose.transform.localRotation = Quaternion.Euler(new Vector3(0, rotate, 0)) * Quaternion.FromToRotation(Vector3.up, lstnrm) ;
-            ////Debug.Log($"RotateViewer: {rotate}");
+            //Debug.Log($"RotateViewerToYangle - Moveplane rotation after  {moveplane.transform.localRotation.eulerAngles}");
+            //Debug.Log($"RotateViewerToYangle - Viewer rotation after   {transform.localRotation.eulerAngles}");
         }
+
 
         void RotateViewerToYangle(float yangle)
         {
@@ -785,18 +789,6 @@ namespace Aiskwk.Map
 
             //Debug.Log($"RotateViewerToYangle - Moveplane rotation after  {moveplane.transform.localRotation.eulerAngles}");
             //Debug.Log($"RotateViewerToYangle - Viewer rotation after   {transform.localRotation.eulerAngles}");
-        }
-
-        void RotateViewerNoTimeFak(float rotate)
-        {
-            //Debug.Log($"RotateViewerNoTimeFak - Viewer rotation before  {transform.localRotation.eulerAngles}");
-
-            bodyPlaneRotation *= Quaternion.Euler(new Vector3(0, rotate, 0));
-            moveplane.transform.localRotation = bodyPlaneRotation;
-            bodyPrefabRotation *= Quaternion.Euler(new Vector3(0, rotate, 0));
-            body.transform.localRotation = Quaternion.FromToRotation(Vector3.up, lstnrm) * bodyPrefabRotation;
-
-            //Debug.Log($"RotateViewerNoTimeFak - Viewer rotation after   {transform.localRotation.eulerAngles}");
         }
 
         public delegate (string panCamOrietation, string panCamMonitors) GetPanCamParametersDelegate();
@@ -1062,27 +1054,8 @@ namespace Aiskwk.Map
             altitude = vst.pos.y-vn.y;
             altbase = "map";
         }
-        void MoveViewerToHomeOld()
-        {
-            //Debug.Log($"MoveViewerToHome pos:{home.viewerPosition:f1} rot:{home.viewerRotation:f1}");
-            var newpos = homestate.pos;
-            var newrot = Vector3.zero; /// this seems wierd, but we seemingly have the homeRotation coded in the toplevel Viewer rotation already
 
-
-            var bodyeuler = bodyPrefabRotation.eulerAngles;
-            // the following two lines don't work
-            var qqrot = Quaternion.FromToRotation(bodyeuler, newrot);
-            var angtorot = qqrot.eulerAngles;
-            //Debug.Log($"MoveViewerToHome bodyeuler:{bodyeuler:f1} ");
-            //Debug.Log($"MoveViewerToHome ang:{angtorot:f1} ");
-            // aparently it starts from zero every time
-
-            RotateViewerNoTimeFak(-bodyeuler.y);// this only handles the y-axis so it is wrong....
-
-            TranslateViewerToPosition(newpos);
-            TranslateViewer(0, 0);// TODO: this shouldn't be necessary but it is for MsftB19focused for some reason....
-        }
-        void MoveViewerToHome()
+        public void MoveViewerToHome()
         {
             SetViewerInState(homestate);
             var (vo, _, istat) = qmm.GetWcMeshPosProjectedAlongYnew(homestate.pos);
@@ -1109,8 +1082,13 @@ namespace Aiskwk.Map
                 {
                     nrm = -nrm;
                 }
+                if (transform.localRotation != Quaternion.identity)
+                {
+                    nrm = transform.localRotation*nrm;
+                }
                 lstnrm = nrm;
                 var nrmrot = Quaternion.FromToRotation(Vector3.up, nrm);
+ 
                 body.transform.localRotation = nrmrot * bodyPrefabRotation;
                 //body.transform.localRotation = bodyPrefabRotation * nrmrot; // this did not work
                 rodgo.transform.localRotation = nrmrot;
@@ -1361,6 +1339,7 @@ namespace Aiskwk.Map
             if (Input.GetKey(KeyCode.N) && Time.time - ctrlNhit > hitgap3)
             {
                 showNormalRod = !showNormalRod;
+                BuildViewer();
                 ctrlNhit = Time.time;
             }
             if (Input.GetKey(KeyCode.E) && ctrlpressed && Time.time - ctrlEhit > hitgap3)
@@ -1497,7 +1476,7 @@ namespace Aiskwk.Map
                 }
                 else
                 {
-                    RotateViewer(angincpersec);
+                    RotateViewerScaleByTime(angincpersec);
                 }
                 rgtArrowHit = Time.time;
             }
@@ -1513,7 +1492,7 @@ namespace Aiskwk.Map
                 }
                 else
                 {
-                    RotateViewer(-angincpersec);
+                    RotateViewerScaleByTime(-angincpersec);
                 }
                 lftArrowHit = Time.time;
             }
@@ -1567,28 +1546,28 @@ namespace Aiskwk.Map
 
         bool changed;
         int updateCount = 0;
-        ViewerAvatar old_viewerAvatar;
-        ViewerCamConfig old_viewerCamPosition;
-        ViewerControl old_viewerControl;
-        bool old_showNormalRod;
-        bool old_pinCameraToFrame;
-        bool CheckChange()
-        {
-            bool rv = false;
-            if (updateCount > 0)
-            {
-                rv = (old_viewerAvatar != viewerAvatar) ||
-                     //(old_viewerCamPosition != viewerCamPosition) || // todo - rebuilding viewer does not respect current viewing angle
-                     (old_showNormalRod != showNormalRod) ||
-                     (old_pinCameraToFrame != pinCameraToFrame);
-            }
-            updateCount++;
-            old_showNormalRod = showNormalRod;
-            old_viewerAvatar = viewerAvatar;
-            //old_viewerCamPosition = viewerCamPosition;
-            old_pinCameraToFrame = pinCameraToFrame;
-            return rv;
-        }
+        //ViewerAvatar old_viewerAvatar;
+        //ViewerCamConfig old_viewerCamPosition;
+        //ViewerControl old_viewerControl;
+        //bool old_showNormalRod;
+        //bool old_pinCameraToFrame;
+        //bool CheckChange()
+        //{
+        //    bool rv = false;
+        //    if (updateCount > 0)
+        //    {
+        //        rv = (old_viewerAvatar != viewerAvatar) ||
+        //             //(old_viewerCamPosition != viewerCamPosition) || // todo - rebuilding viewer does not respect current viewing angle
+        //             (old_showNormalRod != showNormalRod) ||
+        //             (old_pinCameraToFrame != pinCameraToFrame);
+        //    }
+        //    updateCount++;
+        //    old_showNormalRod = showNormalRod;
+        //    old_viewerAvatar = viewerAvatar;
+        //    //old_viewerCamPosition = viewerCamPosition;
+        //    old_pinCameraToFrame = pinCameraToFrame;
+        //    return rv;
+        //}
         public static bool ViewerProcessKeys = true;
 
         public static void ActivateViewerKeys(bool newstat)
