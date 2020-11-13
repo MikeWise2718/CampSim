@@ -1,9 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel.Design;
-using System.Linq.Expressions;
-using System.Runtime.InteropServices;
+﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+
 
 namespace Aiskwk.Map
 {
@@ -235,7 +233,6 @@ namespace Aiskwk.Map
             //DumpViewer();
         }
 
-        string[] primitivetypes = { "Capsule", "Sphere" };
         public (GameObject, float) GetAvatarPrefab(string avaname, float angle, Vector3 shift, Vector3 rot, float scale = 1)
         {
             //Debug.Log($"GetAvatarPrefab scale:{scale}");
@@ -249,7 +246,8 @@ namespace Aiskwk.Map
                 try
                 {
                     var prefab = Resources.Load<GameObject>(avaname);
-                    Transform t = Instantiate<Transform>(prefab.transform, Vector3.zero, Quaternion.identity);
+                    var t = Instantiate<Transform>(prefab.transform, Vector3.zero, Quaternion.identity);
+                    //var t = Instantiate<Transform>(prefab.transform);
                     instancego = t.gameObject;
                     height = 2.5f;
                     loaded = true;
@@ -620,8 +618,8 @@ namespace Aiskwk.Map
                 case ViewerAvatar.Matrice_600:
                     {
                         angle = 0;
-                        scale = 3;
-                        shift = new Vector3(0, 0, 0);
+                        scale = 4;
+                        shift = new Vector3(0, 2, 0);
                         //MakeAvatar(pfix + "quadcopter", angle, shift, scale,visorscale:0.01f);
                         MakeAvatar(pfix + "matrice_600", angle, shift, rot, scale, visorscale: 0.01f);
                         followGround = false;
@@ -630,8 +628,8 @@ namespace Aiskwk.Map
                 case ViewerAvatar.Delivery_Drone:
                     {
                         angle = 0;
-                        scale = 3;
-                        shift = new Vector3(0, 0, 0);
+                        scale = 4;
+                        shift = new Vector3(0, 2, 0);
                         //MakeAvatar(pfix + "quadcopter", angle, shift, scale,visorscale:0.01f);
                         MakeAvatar(pfix + "delivery_drone", angle, shift, rot, scale, visorscale: 0.01f);
                         followGround = false;
@@ -678,6 +676,28 @@ namespace Aiskwk.Map
             TranslateViewer(0, 0);
             RotateViewerToYangle(curang);
             Debug.Log($"    Viewer rotation after  {bodyPlaneRotation.eulerAngles}");
+        }
+
+
+        Dictionary<ViewerAvatar, ViewerAvatar> nextAva = null;
+        Dictionary<ViewerAvatar, ViewerAvatar> prevAva = null;
+
+
+        void MakeAvaDicts()
+        {
+            if (nextAva != null) return;
+            var ava = System.Enum.GetValues(typeof(ViewerAvatar)).Cast<ViewerAvatar>().ToList();
+            nextAva = new Dictionary<ViewerAvatar, ViewerAvatar>();
+            prevAva = new Dictionary<ViewerAvatar, ViewerAvatar>();
+            for (var i=0; i<ava.Count-1; i++)
+            {
+                nextAva[ava[ i ]] = ava[ i+1 ];
+                prevAva[ava[ i+1 ]] = ava[ i ];
+            }
+            var fst = ava[0];
+            var lst = ava[ava.Count - 1];
+            nextAva[lst] = fst;
+            prevAva[fst] = lst;
         }
 
         ViewerAvatar NextAvatar(ViewerAvatar curava)
@@ -727,9 +747,19 @@ namespace Aiskwk.Map
         }
         void MoveToNextAvatar()
         {
-            var nextAvatar = NextAvatar(viewerAvatar);
-            SetAvatarToForm(nextAvatar);
-            viewerAvatar = nextAvatar;
+            MakeAvaDicts();
+            var newava = nextAva[viewerAvatar];
+            SetAvatarToForm(newava);
+            viewerAvatar = newava;
+            BuildViewer();
+        }
+
+        void MoveToPrevAvatar()
+        {
+            MakeAvaDicts();
+            var newava = prevAva[viewerAvatar];
+            SetAvatarToForm(newava);
+            viewerAvatar = newava;
             BuildViewer();
         }
 
@@ -1358,7 +1388,14 @@ namespace Aiskwk.Map
                 else if (Time.time - ctrlAhit > hitgap3)
                 {
                     var oldav = viewerAvatar;
-                    MoveToNextAvatar();
+                    if (shiftpressed)
+                    {
+                        MoveToPrevAvatar();
+                    }
+                    else
+                    {
+                        MoveToNextAvatar();
+                    }
                     var newav = viewerAvatar;
                     Debug.Log($"Moving to next avatar old:{oldav}  new:{newav}");
                     ctrlAhit = Time.time;

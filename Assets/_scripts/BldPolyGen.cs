@@ -10,6 +10,9 @@ using System.Runtime.InteropServices;
 
 public enum GroundRef {  cen, min, max }
 public enum OsmBldRenderMode {  transparent, solid, defaultmode }
+
+public enum BldFoundationTerraformMode { none, centerdist, outlinedist }
+
 [Serializable]
 public class OsmBldSpec
 {
@@ -30,6 +33,7 @@ public class OsmBldSpec
     public GroundRef groundRef;
     public Vector3 ptcen;
     public OsmBldRenderMode renmode;
+    public BldFoundationTerraformMode terramode;
     public float maxy;
     public float ceny;
     public float miny;
@@ -65,6 +69,7 @@ public class OsmBldSpec
         this.bgo = null;
         this.isVisible = true;
         this.renmode = OsmBldRenderMode.defaultmode;
+        this.terramode = BldFoundationTerraformMode.none;
         this.transparency = 0.5f;
         this.maxy = 0;
         this.ceny = 0;
