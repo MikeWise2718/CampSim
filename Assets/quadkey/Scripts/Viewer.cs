@@ -629,7 +629,9 @@ namespace Aiskwk.Map
                     {
                         angle = 0;
                         scale = 4;
-                        shift = new Vector3(0, 2, 0);
+                        var dpos = new Vector3(1.27083f, 0.353567f, 2.12690f);
+                        shift = new Vector3(0, 2, 0)+dpos;
+                        rot = new Vector3( 0,-90,0 );
                         //MakeAvatar(pfix + "quadcopter", angle, shift, scale,visorscale:0.01f);
                         MakeAvatar(pfix + "delivery_drone", angle, shift, rot, scale, visorscale: 0.01f);
                         followGround = false;
