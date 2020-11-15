@@ -9,7 +9,7 @@ using Aiskwk.Map;
 
 namespace CampusSimulator
 {
-    public enum BirdFormE { none, sphere, longsphere, hummingbird, person,dog, car,drone,drone2,heli }
+    public enum BirdFormE { none, sphere, longsphere, hummingbird, person,dog, car,drone,drone2,drone3,heli }
     public enum BirdStateE { dormant, atstart, running, atgoal, stopped }
 
     public class BirdCtrl : MonoBehaviour
@@ -249,6 +249,24 @@ namespace CampusSimulator
                         restingAnimationScript = "";
                         BirdFlyHeight = 10f;
                         birdgo.name = "Mavic2";
+                        break;
+                    }
+                case BirdFormE.drone3:
+                    {
+                        var objPrefab = Resources.Load<GameObject>("obj3d/delivery_drone_v2_spinning");
+                        birdformgo = Instantiate<GameObject>(objPrefab);
+                        var s = 0.01f * sman.trman.dronescalemodelnumber.Get();
+                        if (birdscale > 0)
+                        {
+                            s *= birdscale;
+                        }
+                        birdformgo.transform.localScale = new Vector3(s, s, s);
+                        birdformgo.transform.localRotation = currot * Quaternion.Euler(-90, 0, 0);
+                        birdformgo.transform.localPosition = curpos;
+                        movingAnimationScript = "";
+                        restingAnimationScript = "";
+                        BirdFlyHeight = 10f;
+                        birdgo.name = "DelDrone";
                         break;
                     }
                 case BirdFormE.dog:

@@ -345,7 +345,7 @@ namespace Aiskwk.Map
         public void MakeAvatar(string avaname, float angle, Vector3 shift, Vector3 rot, float scale = 1, float visorscale = 2)
         {
             Debug.Log($"MakeAvatar {avaname} angle:{angle}");
-            Debug.Log($"MakeAvatar - Viewer rotation before  {transform.localRotation.eulerAngles}");
+            //Debug.Log($"MakeAvatar Viewer rotation before  {transform.localRotation.eulerAngles}");
             // TODO: if we are remaking an existing viewer, we probably need to save rotations here and restore them later on
             // see 
             DestroyAvatar();
@@ -438,7 +438,7 @@ namespace Aiskwk.Map
                 carriagego.transform.SetParent(moveplane.transform, worldPositionStays: false);
             }
             rodgo.transform.SetParent(transform, worldPositionStays: false);
-            Debug.Log($"MakeAvatar - Viewer rotation after  {transform.localRotation.eulerAngles}");
+            //Debug.Log($"MakeAvatar - Viewer rotation after  {transform.localRotation.eulerAngles}");
         }
         static Dictionary<ViewerCamConfig, (Vector3 pos, Vector3 lookdir)> viewerVectorPos = new Dictionary<ViewerCamConfig, (Vector3, Vector3)>{
             {ViewerCamConfig.EyesDown, (new Vector3(0, 0, 0), Vector3.down)},
@@ -629,11 +629,11 @@ namespace Aiskwk.Map
                     {
                         angle = 0;
                         scale = 4;
-                        var dpos = new Vector3(1.27083f, 0.353567f, 2.12690f);
-                        shift = new Vector3(0, 2, 0)+dpos;
+                        //var dpos = new Vector3(1.27083f, 0.353567f, 2.12690f);
+                        shift = new Vector3(0, 2, 0);
                         rot = new Vector3( 0,-90,0 );
                         //MakeAvatar(pfix + "quadcopter", angle, shift, scale,visorscale:0.01f);
-                        MakeAvatar(pfix + "delivery_drone", angle, shift, rot, scale, visorscale: 0.01f);
+                        MakeAvatar(pfix + "delivery_drone_v2_spinning", angle, shift, rot, scale, visorscale: 0.01f);
                         followGround = false;
                         break;
                     }
