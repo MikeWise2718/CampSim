@@ -1073,10 +1073,10 @@ namespace CampusSimulator
             {
                 EchOsmGroundOutline(bldspec.bgo, bldspec, "green","red", pgvd: pgvd);
             }
-            if (bldspec.shortname=="Bld33")
-            {
-                Debug.Log("Bld33");
-            }
+            //if (bldspec.shortname=="Bld33")
+            //{
+            //    Debug.Log("Bld33");
+            //}
             if (bm.osmoutline.Get())
             {
                 for (var lev = 1; lev <= levels; lev++)

@@ -633,7 +633,7 @@ namespace Aiskwk.Map
                         shift = new Vector3(0, 2, 0);
                         rot = new Vector3( 0,-90,0 );
                         //MakeAvatar(pfix + "quadcopter", angle, shift, scale,visorscale:0.01f);
-                        MakeAvatar(pfix + "delivery_drone_v2_spinning", angle, shift, rot, scale, visorscale: 0.01f);
+                        MakeAvatar(pfix + "delivery_drone_v2spinning", angle, shift, rot, scale, visorscale: 0.01f);
                         followGround = false;
                         break;
                     }
