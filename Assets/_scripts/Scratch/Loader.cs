@@ -101,36 +101,43 @@ public class Loader : MonoBehaviour
 
 
 
-    public (GameObject ngo, GameObject t) MakeBaseMatrice600Drone(string dname = "Matrice_600_v0")
+    public (GameObject rootgo, GameObject bodygo) MakeBaseMatrice600Drone(string dname = "Matrice_600_v0")
     {
         var avaname = "obj3d/matrice_600";
         var prefab = Resources.Load<GameObject>(avaname);
-        var t = Instantiate<Transform>(prefab.transform);
-        t.gameObject.name = "body_root";
-        t.transform.position = Vector3.zero;
-        Debug.Log($"position {t.transform.position}");
-        var ngo = new GameObject(dname);
-        t.SetParent(ngo.transform, worldPositionStays: true);
-        return (ngo, t.gameObject);
+        var bodytform = Instantiate<Transform>(prefab.transform);
+        bodytform.gameObject.name = "body_root";
+        bodytform.transform.position = Vector3.zero;
+        Debug.Log($"position {bodytform.transform.position}");
+        var rootgo = new GameObject(dname);
+        bodytform.SetParent(rootgo.transform, worldPositionStays: true);
+        return (rootgo, bodytform.gameObject);
     }
 
-    public void MakeBaseMatrice600DroneWithRotors(string dname = "Matrice_600_v0spinning")
+    public void MakeBaseMatrice600DroneWithRotors(string dname = "Matrice_600spinning")
     {
 
-        var (ngo, t) = MakeBaseMatrice600Drone(dname);
-        var pof = 0.304f;
-        var yof = 0.188f;
-        var pl = new Vector3(-pof, yof, 0);
-        var pr = new Vector3(+pof, yof, 0);
-        var pf = new Vector3(0, yof, +pof);
-        var pb = new Vector3(0, yof, -pof);
-        var rad = 0.36f;
-        //var blades = t.transform.Find("Delivery_Drone_blades");
-        //blades.gameObject.SetActive(false);
-        CreatePropellorCylinder(t, "propleft", pl, rad);
-        CreatePropellorCylinder(t, "propright", pr, rad);
-        CreatePropellorCylinder(t, "propfront", pf, rad);
-        CreatePropellorCylinder(t, "propback", pb, rad);
+        var (_, bodygo) = MakeBaseMatrice600Drone(dname);
+        foreach(Transform childtran in bodygo.transform)
+        {
+            if (childtran.name.StartsWith("Propeller"))
+            {
+                childtran.gameObject.SetActive(false);
+            }
+        }
+        var yof = 0.53f;
+        var nrotor = 8;
+        var drad = 0.53f;
+        var prad = 0.354f;
+        for (var ir=0; ir<nrotor; ir++)
+        {
+            var ang = (ir+0.5f)*2*Mathf.PI/nrotor;
+            var x = Mathf.Cos(ang) * drad;
+            var z = Mathf.Sin(ang) * drad;
+            Debug.Log($" ir:{ir}   ang:{ang} x:{x} z:{z}");
+            var pp = new Vector3(x, yof, z);
+            CreatePropellorCylinder(bodygo, $"Prop{ir}", pp, prad);
+        }
     }
 
     // Start is called before the first frame update
@@ -139,7 +146,7 @@ public class Loader : MonoBehaviour
         //makeBaseDeliveryDrone("Deliver_Drone_v2");
         //makeBaseDeliveryDroneWithRotors("Delivery_Drone_v2spinning");
         //MakeBaseMatrice600Drone("Matrice_600_v0");
-        MakeBaseMatrice600DroneWithRotors("Matrice_600_v0");
+        MakeBaseMatrice600DroneWithRotors("Matrice_600spinning");
     }
 
     // Update is called once per frame

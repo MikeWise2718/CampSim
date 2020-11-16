@@ -621,7 +621,7 @@ namespace Aiskwk.Map
                         scale = 4;
                         shift = new Vector3(0, 2, 0);
                         //MakeAvatar(pfix + "quadcopter", angle, shift, scale,visorscale:0.01f);
-                        MakeAvatar(pfix + "matrice_600", angle, shift, rot, scale, visorscale: 0.01f);
+                        MakeAvatar(pfix + "matrice_600spinning", angle, shift, rot, scale, visorscale: 0.01f);
                         followGround = false;
                         break;
                     }

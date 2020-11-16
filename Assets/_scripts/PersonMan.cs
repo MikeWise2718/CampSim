@@ -293,7 +293,7 @@ namespace CampusSimulator
         }
         public (string dispavname,string avname,float scale,Vector3 rot, Vector3 tran) GetRandomAvatarDroneName()
         {
-            var i = GraphAlgos.GraphUtil.GetRanInt(4, "popbld");
+            var irnd = GraphAlgos.GraphUtil.GetRanInt(4, "popbld");
             //var phantomrot = new Vector3(0, 0, 0);
             var phantomrot = new Vector3(0, 90, 0);
             var phantomlift = new Vector3(0, 0.117f, 0);
@@ -302,12 +302,13 @@ namespace CampusSimulator
             var mavlift = new Vector3(0, 0.074f, 0);
             var ddrot = Vector3.zero;
             var ddlift = Vector3.zero;
-            switch (i)
+            switch (irnd)
             {
                 default:
                 case 0: return ("Phantom","quadcopter", 3f, phantomrot, phantomlift);
                 case 1: return ("Mavic","DJI_Mavic_Air_2", 3f, mavrot, mavlift);
                 case 2: return ("DelDrone", "Delivery_drone_v2", 3f, ddrot, ddlift);
+                case 3: return ("Matrice", "matrice_600", 3f, ddrot, ddlift);
             }
         }
         public string GetRandomAvatarName(GenderE gender)

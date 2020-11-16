@@ -166,9 +166,10 @@ public class B19Willow : MonoBehaviour
             //ymapheight = sman.mpman.GetHeight(defpos.x, defpos.z);
             var bsheit = GetZeroBasedFloorHeight(0, includeAltitude: true);
 
-            var defpos = new Vector3(-474.3f + xoff, bsheit+5.22f-0.59f, 87.6f + zoff);
+            //var defpos = new Vector3(-474.3f + xoff, bsheit + 5.22f - 0.59f, 87.6f + zoff);
+            var defpos = new Vector3(-474.3f + xoff, bsheit+5.22f-0.79f, 87.6f + zoff);
             //ymapheight = sman.mpman.GetHeight(defpos.x, defpos.z);
-            sman.Lgg($"B19 bsheit:{bsheit} ","orange");
+            sman.Lgg($"MakeItSo B19 bsheit:{bsheit} defpos:{defpos}","orange");
             //defpos = new Vector3(defpos.x, defpos.y, defpos.z);
             var obprefab = Resources.Load<GameObject>("Willow/B19/B19-Willow");
             if (obprefab != null)

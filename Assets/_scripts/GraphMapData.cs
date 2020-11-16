@@ -2321,8 +2321,8 @@ namespace GraphAlgos
             //xs = 0;
             //zs = 0;
             grc.AddNodePtxyz("b19-f01-lobby", -474.400+xs, 0.000, 95.700 + zs, comment: ""); //  1 nn:1 nl:0
-            grc.LinkToPtxyz("b19-f01-lobby", "b19-os1-o00b", -471.000 + xs, 0.000, 98.900 + zs, LinkUse.walkway, comment: ""); //  2 nn:1 nl:1
-            grc.LinkToPtxyz("b19-os1-o00b", "b19-os1-o00a", -467.400 + xs, 0.000, 99.700 + zs, LinkUse.walkway, comment: ""); //  3 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-lobby", "b19-f01-o00b", -471.000 + xs, 0.000, 98.900 + zs, LinkUse.walkway, comment: ""); //  2 nn:1 nl:1
+            grc.LinkToPtxyz("b19-f01-o00b", "b19-os1-o00a", -467.400 + xs, 0.000, 99.700 + zs, LinkUse.stairs, comment: ""); //  3 nn:1 nl:1
             grc.LinkToPtxyz("b19-os1-o00a", "b19-os1-o00", -459.500 + xs, 0.000, 105.600 + zs, LinkUse.walkway, comment: ""); //  4 nn:1 nl:1
             grc.LinkToPtxyz("b19-os1-o00", "b19-os1-o01", -458.300 + xs, 0.000, 112.900 + zs, LinkUse.walkway, comment: ""); //  5 nn:1 nl:1
             grc.LinkToPtxyz("b19-os1-o01", "b19-os1-o02", -462.000 + xs, 0.000, 118.400 + zs, LinkUse.walkway, comment: ""); //  6 nn:1 nl:1
@@ -2332,8 +2332,8 @@ namespace GraphAlgos
             grc.LinkToPtxyz("b19-f01-lbba", "b19-f01-cp00", -467.100 + xs, 0.000, 93.400 + zs, LinkUse.walkway, comment: ""); //  10 nn:1 nl:1
             grc.LinkToPtxyz("b19-f01-lbba", "b19-f01-cp001", -465.900 + xs, 0.000, 93.700 + zs, LinkUse.walkway, comment: ""); //  11 nn:1 nl:1
             grc.LinkToPtxyz("b19-f01-lobby", "b19-f01-rm1003", -483.400 + xs, 0.000, 93.900 + zs, LinkUse.walkway, comment: ""); //  12 nn:1 nl:1
-            grc.AddLinkByNodeName("b19-os1-o00b", "b19-f01-lbba", LinkUse.walkway); //  13 nn:0 nl:1
-            grc.LinkToPtxyz("b19-os1-o00b", "b19-f01-cp0b0", -471.200 + xs, 0.000, 99.800 + zs, LinkUse.walkway, comment: ""); //  14 nn:1 nl:1
+            grc.AddLinkByNodeName("b19-f01-o00b", "b19-f01-lbba", LinkUse.walkway); //  13 nn:0 nl:1
+            grc.LinkToPtxyz("b19-f01-o00b", "b19-f01-cp0b0", -471.200 + xs, 0.000, 99.800 + zs, LinkUse.walkway, comment: ""); //  14 nn:1 nl:1
             grc.LinkToPtxyz("b19-f01-cp0b0", "b19-f01-cp0b1", -471.600 + xs, 0.000, 101.200 + zs, LinkUse.walkway, comment: ""); //  15 nn:1 nl:1
             grc.LinkToPtxyz("b19-f01-cp0b0", "b19-f01-cp0b2", -474.000 + xs, 0.000, 99.500 + zs, LinkUse.walkway, comment: ""); //  16 nn:1 nl:1
             grc.LinkToPtxyz("b19-f01-cp001", "b19-f01-cp01", -463.400 + xs, 0.000, 94.940 + zs, LinkUse.walkway, comment: ""); //  17 nn:1 nl:1
