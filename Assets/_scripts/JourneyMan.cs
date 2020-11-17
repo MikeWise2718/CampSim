@@ -34,7 +34,7 @@ namespace CampusSimulator
     }
 
     public enum JourneyStatE { NotStarted, WaitingToStart, Started, AlmostFinished, Finished, Failed }
-
+    public enum JourneyType { BldRoomToBldRoom, DronePadToDronePad }
 
     public class JourneyMan : MonoBehaviour
     {
@@ -306,6 +306,34 @@ namespace CampusSimulator
                 return null;
             }
         }
+        public BirdFormE GetForm(string avatar)
+        {
+            // ugly but temporary until I factor out drones properly
+            if (avatar.StartsWith("drone"))
+            {
+                if (avatar.EndsWith("drone"))
+                {
+                    return BirdFormE.drone;
+                }
+                if (avatar.EndsWith("drone1"))
+                {
+                    return BirdFormE.drone;
+                }
+                if (avatar.EndsWith("drone2"))
+                {
+                    return BirdFormE.drone2;
+                }
+                if (avatar.EndsWith("drone3"))
+                {
+                    return BirdFormE.drone3;
+                }
+                if (avatar.EndsWith("drone4"))
+                {
+                    return BirdFormE.drone4;
+                }
+            }
+            return BirdFormE.person;
+        }
         public Journey AddBldNodeBldNodeJourney(string fr_node, string tu_node, string pathname,string avatar="")
         {
             if (!NodeExists(fr_node))
@@ -338,7 +366,7 @@ namespace CampusSimulator
                 {
                     snode = jsnode,
                     enode = "",
-                    form = BirdFormE.person,
+                    form = GetForm(avatar),
                     capneed = LcCapType.walk,
                     formname = avatar,
                     vel = 2 * lvelfak
@@ -372,6 +400,7 @@ namespace CampusSimulator
                     vehicle = sm1.vehicle,
                     capneed = LcCapType.drive,
                     formname = sm1.carformname,
+                    skafak = 1,
                     vel = 20 * lvelfak
                 };
                 var epos = linkctrl.GetNode(jenode).pt;
@@ -399,7 +428,7 @@ namespace CampusSimulator
                 {
                     snode = leg2.enode,
                     enode = jenode,
-                    form = BirdFormE.person,
+                    form = GetForm(avatar),
                     capneed = LcCapType.walk,
                     formname = avatar,
                     vel = 2 * lvelfak
@@ -457,7 +486,7 @@ namespace CampusSimulator
                 {
                     snode = jsnode,
                     enode = jenode,
-                    form = BirdFormE.person,
+                    form = GetForm(avatar),
                     capneed = LcCapType.walk,
                     formname = avatar,
                     vel = 2 * lvelfak
@@ -484,7 +513,10 @@ namespace CampusSimulator
             {
                 case "dog": return BirdFormE.dog;
                 case "drone": return BirdFormE.drone;
+                case "drone1": return BirdFormE.drone;
                 case "drone2": return BirdFormE.drone2;
+                case "drone3": return BirdFormE.drone3;
+                case "drone4": return BirdFormE.drone4;
                 case "heli": return BirdFormE.heli;
                 default: return BirdFormE.person;
             }
@@ -972,13 +1004,22 @@ namespace CampusSimulator
             var pathname = bc1.shortname + " to " + bc2.shortname;
             var avatar = jsm.princeSpec.avatar;
             Journey jny;
-            if (bld1 == bld2)
+            if (jsm.routeSpec.routeSpecMethod == RouteSpecMethod.DronePadToDronePad)
             {
-                jny = AddNodeNodeJourney(bdest1, bdest2, pathname, avatar: avatar);
+                Person person = null;
+                BldDronePad bp1 = null;
+                jny = AddDroneJourney(person, bp1, padslot:1 );
             }
             else
             {
-                jny = AddBldNodeBldNodeJourney(bdest1, bdest2, pathname, avatar: avatar);
+                if (bld1 == bld2)
+                {
+                    jny = AddNodeNodeJourney(bdest1, bdest2, pathname, avatar: avatar);
+                }
+                else
+                {
+                    jny = AddBldNodeBldNodeJourney(bdest1, bdest2, pathname, avatar: avatar);
+                }
             }
             jny.journeyEnd = jsm.actionSpec.journeyEnd;
             jny.quitAtDest = jsm.actionSpec.quitAtDest;

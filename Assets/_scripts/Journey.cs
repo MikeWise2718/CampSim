@@ -6,7 +6,7 @@ using GraphAlgos;
 namespace CampusSimulator
 {
 
-    public enum RouteSpecMethod { BldRoomToBldRoom }
+    public enum RouteSpecMethod { BldRoomToBldRoom,DronePadToDronePad }
     public class RouteSpec
     {
         JourneySpecMan jm;

@@ -19,6 +19,7 @@ public class JourneyPanel : MonoBehaviour
     Text curJnySerializedStringText;
 
     Dropdown jnyDefinedJnysDropdown;
+    Dropdown jnytypeDropdown;
 
 
     InputField jnyNameInput;
@@ -48,7 +49,9 @@ public class JourneyPanel : MonoBehaviour
     List<string> jourEndOpts;
 
     Dictionary<string,string> definedJourneys;
-    Dictionary<string, UxUtils.UxSetting<string>> jkeys;
+    //Dictionary<string, UxUtils.UxSetting<string>> jkeys;
+
+    JourneyType curjnytype;
 
 
     public void Init0()
@@ -92,6 +95,7 @@ public class JourneyPanel : MonoBehaviour
         definedJourneyText = transform.Find("DefinedJourney").gameObject.GetComponent<Text>();
 
         jnyDefinedJnysDropdown = transform.Find("JnyDefinedJnysDropdown").gameObject.GetComponent<Dropdown>();
+        jnytypeDropdown = transform.Find("JnytypeDropdown").gameObject.GetComponent<Dropdown>();
 
 
         jnyNameInput = transform.Find("JnyNameInput").gameObject.GetComponent<InputField>();
@@ -130,6 +134,8 @@ public class JourneyPanel : MonoBehaviour
         UnityEngine.Events.UnityAction<string> readouts = delegate { ReadOutControlsIntoDefinedJourney(); };
         UnityEngine.Events.UnityAction<bool> readoutb = delegate { ReadOutControlsIntoDefinedJourney(); };
 
+        jnytypeDropdown.onValueChanged.AddListener(delegate { JourneyTypeChanged(); });
+
         jnyStartBuildingDropdown.onValueChanged.AddListener(readouti);
         jnyStartRoomDropdown.onValueChanged.AddListener(readouti);
         jnyEndBuildingDropdown.onValueChanged.AddListener(readouti);
@@ -147,14 +153,13 @@ public class JourneyPanel : MonoBehaviour
         jnyDefinedJnysDropdown.onValueChanged.AddListener(delegate { DefinedJourneyDropdownChanged(); });
 
         controlsBeingBuilt = false;
-
-
         sman.Lgg("JouneyPanel.LinkObjectAndComponents","orange");
     }
 
     public void InitVals()
     {
         Debug.Log("JourneyPanels InitVals called");
+        curjnytype =  JourneyType.BldRoomToBldRoom;
         LoadDefinedJourneys();
         var curjnyname = jnman.curJnySpecName.Get();
         JourneySpec js;
@@ -178,7 +183,47 @@ public class JourneyPanel : MonoBehaviour
             js = GetNextNewJourneySpec();
             SetStatusMessage($"Initial journey name empty", error: false);
         }
+
+        try
+        {
+            var terrModeNames = new List<string>(Enum.GetNames(typeof(JourneyType)));
+            var inival = curjnytype;
+            var idx = terrModeNames.FindIndex(s => s == inival.ToString());
+            if (idx <= 0) idx = 0;
+
+            jnytypeDropdown.ClearOptions();
+            jnytypeDropdown.AddOptions(terrModeNames);
+            jnytypeDropdown.value = idx;
+            sman.Lgg($"jnytypeDropdown value:{idx}");
+        }
+        catch (Exception ex)
+        {
+            sman.LggError($"JourneyPanels.InitVals initializing exception - ex.Message:{ex.Message}");
+        }
+
+
         PopulateFormValsWithJourneySpec(js);
+    }
+
+    public void JourneyTypeChanged()
+    {
+
+    }
+
+    public RouteSpecMethod ConvertToRsm(JourneyType jt)
+    {
+        RouteSpecMethod rsm;
+        switch (jt)
+        {
+            default:
+            case JourneyType.BldRoomToBldRoom: 
+                rsm = RouteSpecMethod.BldRoomToBldRoom;
+                break;
+            case JourneyType.DronePadToDronePad:
+                rsm = RouteSpecMethod.DronePadToDronePad;
+                break;
+        }
+        return rsm;
     }
 
 
@@ -207,7 +252,7 @@ public class JourneyPanel : MonoBehaviour
             JourneyEnd.TryParse(jeoptstr, out jeopt);
         }
         sman.Lgg($"BJS for {bld1} {room1} to {bld2} {room2}","green");
-        var rs = new RouteSpec(jnman.journeySpecMan, RouteSpecMethod.BldRoomToBldRoom, bld1, room1, bld2, room2, pname);
+        var rs = new RouteSpec(jnman.journeySpecMan, ConvertToRsm(curjnytype), bld1, room1, bld2, room2, pname);
         var jps = new JourneyPrincipalSpec(jm, JourneyMethod.walkjour, pname, aname);
         var qad = jnyQuitOnEndToggle.isOn;
         var tname = jnyEndCmdInput.text;
@@ -252,19 +297,49 @@ public class JourneyPanel : MonoBehaviour
         }
         controlsBeingBuilt = false;
     }
+    //public enum RouteSpecMethod { BldRoomToBldRoom, DronePadToDronePad }
+
+
+    public bool IsRightJnyType(string jnystr)
+    {
+        var lookfor = "";
+        switch(curjnytype)
+        {
+            case JourneyType.BldRoomToBldRoom: 
+                lookfor = "BldRoomToBldRoom";
+                break;
+            case JourneyType.DronePadToDronePad:
+                lookfor = "DronePadToDronePad";
+                break;
+        }
+        var rv = jnystr.Contains(lookfor);
+        return rv;
+    }
     public void PopulateDefinedJourneyDropdown(string inijname="" )
     {
         Debug.Log("PopulateDefinedJourneyDropdown");
         try
         {
             var inival = inijname;
-            var definedJourneysList = new List<string>(definedJourneys.Keys);
-            definedJourneysList.Add("(blank)");
-            var idx = definedJourneysList.FindIndex(s => s == inival);
-            if (idx < 0) idx = definedJourneysList.Count-1;// this is the blank entry we added
+            var populateList = new List<string>(definedJourneys.Keys);
+            var removeList = new List<string>();
+            foreach(var jnystr in populateList)
+            {
+                if (!IsRightJnyType(jnystr))
+                {
+                    removeList.Add(jnystr);
+                }
+            }
+            foreach(var jnystr in removeList)
+            {
+                populateList.Remove(jnystr);
+            }
+            populateList.Add("(blank)");
+            var idx = populateList.FindIndex(s => s == inival);
+            if (idx < 0) idx = populateList.Count-1;// this is the blank entry we added
             //if (idx <= 0) idx = 0;
             jnyDefinedJnysDropdown.ClearOptions();
-            jnyDefinedJnysDropdown.AddOptions(definedJourneysList);
+            jnyDefinedJnysDropdown.AddOptions(populateList);
             repopulateOnValueChanged = false;
             jnyDefinedJnysDropdown.value = idx;
             repopulateOnValueChanged = true;
@@ -462,6 +537,8 @@ public class JourneyPanel : MonoBehaviour
     {
         "drone/drone1",
         "drone/drone2",
+        "drone/drone3",
+        "drone/drone4",
         "People/Businesswoman001",
         "People/Businesswoman002",
         "People/Businesswoman003",

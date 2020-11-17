@@ -26,6 +26,7 @@ public class OsmPanel : MonoBehaviour
 
     Dropdown renderModeDropdown;
     InputField transparentInput;
+    Dropdown terraformModeDropdown;
 
 
     Button closeButton;
@@ -59,6 +60,7 @@ public class OsmPanel : MonoBehaviour
 
         renderModeDropdown = transform.Find("RenderModeDropdown").gameObject.GetComponent<Dropdown>();
         transparentInput = transform.Find("TransparentInput").gameObject.GetComponent<InputField>();
+        terraformModeDropdown = transform.Find("TerraformModeDropdown").gameObject.GetComponent<Dropdown>();
 
 
         applyButton = transform.Find("ApplyButton").gameObject.GetComponent<Button>();
@@ -255,6 +257,19 @@ public class OsmPanel : MonoBehaviour
                 bspec.renmode = renumval;
             }
         }
+        //public enum BldFoundationTerraformMode { none, centerdist, outlinedist }
+        {
+            var rentxt = Enum.GetName(typeof(BldFoundationTerraformMode), terraformModeDropdown.value);
+            var ok = System.Enum.TryParse<BldFoundationTerraformMode>(rentxt, true, out BldFoundationTerraformMode renumval);
+            if (!ok)
+            {
+                Debug.LogError($"Bad enum text ({rentxt}) - unknown error - should not happen");
+            }
+            else
+            {
+                bspec.terramode = renumval;
+            }
+        }
         transparentInput.text = bspec.transparency.ToString("f3");
     }
 
@@ -342,6 +357,23 @@ public class OsmPanel : MonoBehaviour
             renderModeDropdown.AddOptions(renModeNames);
             renderModeDropdown.value = idx;
             sman.Lgg($"renderModeDropdown value:{idx}");
+        }
+        catch (Exception ex)
+        {
+            sman.LggError($"OsmPanel.PopulateFormValsWithBuilding initializing groundRefDropdown - ex.Message:{ex.Message}");
+        }
+
+        try
+        {
+            var terrModeNames = new List<string>(Enum.GetNames(typeof(BldFoundationTerraformMode)));
+            var inival = bspec.terramode;
+            var idx = terrModeNames.FindIndex(s => s == inival.ToString());
+            if (idx <= 0) idx = 0;
+
+            terraformModeDropdown.ClearOptions();
+            terraformModeDropdown.AddOptions(terrModeNames);
+            terraformModeDropdown.value = idx;
+            sman.Lgg($"terraformModeDropdown value:{idx}");
         }
         catch (Exception ex)
         {
