@@ -51,7 +51,7 @@ public class JourneyPanel : MonoBehaviour
     Dictionary<string,string> definedJourneys;
     //Dictionary<string, UxUtils.UxSetting<string>> jkeys;
 
-    JourneyType curjnytype;
+    public UxUtils.UxEnumSetting<JourneyType>  curjnytype = new UxUtils.UxEnumSetting<JourneyType>("curjnytype", JourneyType.BldRoomToBldRoom );
 
 
     public void Init0()
@@ -59,14 +59,14 @@ public class JourneyPanel : MonoBehaviour
         LinkObjectsAndComponents();
     }
 
-    public string GenNewJourneyUniqueName()
+    public string GenNewJourneyUniqueName(string rootname="Journey")
     {
         var i = 1;
         var keylist = new List<string>(definedJourneys.Keys);
         while (i<=keylist.Count+1)
         {
             var ok = true;
-            var newname = $"Journey{i:d3}";
+            var newname = $"{rootname}{i:d3}";
             foreach(var key in keylist)
             {
                 if (key==newname)
@@ -78,7 +78,7 @@ public class JourneyPanel : MonoBehaviour
             if (ok) return newname;
             i++;
         }
-        return "JourneyX";
+        return "{root}X";
     }
 
     public void LinkObjectsAndComponents()
@@ -159,7 +159,7 @@ public class JourneyPanel : MonoBehaviour
     public void InitVals()
     {
         Debug.Log("JourneyPanels InitVals called");
-        curjnytype =  JourneyType.BldRoomToBldRoom;
+        curjnytype.GetInitial( JourneyType.BldRoomToBldRoom );
         LoadDefinedJourneys();
         var curjnyname = jnman.curJnySpecName.Get();
         JourneySpec js;
@@ -186,13 +186,13 @@ public class JourneyPanel : MonoBehaviour
 
         try
         {
-            var terrModeNames = new List<string>(Enum.GetNames(typeof(JourneyType)));
-            var inival = curjnytype;
-            var idx = terrModeNames.FindIndex(s => s == inival.ToString());
+            var jtypnames = new List<string>(Enum.GetNames(typeof(JourneyType)));
+            var inival = curjnytype.Get();
+            var idx = jtypnames.FindIndex(s => s == inival.ToString());
             if (idx <= 0) idx = 0;
 
             jnytypeDropdown.ClearOptions();
-            jnytypeDropdown.AddOptions(terrModeNames);
+            jnytypeDropdown.AddOptions(jtypnames);
             jnytypeDropdown.value = idx;
             sman.Lgg($"jnytypeDropdown value:{idx}");
         }
@@ -207,7 +207,10 @@ public class JourneyPanel : MonoBehaviour
 
     public void JourneyTypeChanged()
     {
-
+        var newjval = (JourneyType)jnytypeDropdown.value;
+        curjnytype.SetAndSave ( newjval );
+        PopulateDefinedJourneyDropdown();
+        NewJourney();
     }
 
     public RouteSpecMethod ConvertToRsm(JourneyType jt)
@@ -252,7 +255,7 @@ public class JourneyPanel : MonoBehaviour
             JourneyEnd.TryParse(jeoptstr, out jeopt);
         }
         sman.Lgg($"BJS for {bld1} {room1} to {bld2} {room2}","green");
-        var rs = new RouteSpec(jnman.journeySpecMan, ConvertToRsm(curjnytype), bld1, room1, bld2, room2, pname);
+        var rs = new RouteSpec(jnman.journeySpecMan, ConvertToRsm(curjnytype.Get()), bld1, room1, bld2, room2, pname);
         var jps = new JourneyPrincipalSpec(jm, JourneyMethod.walkjour, pname, aname);
         var qad = jnyQuitOnEndToggle.isOn;
         var tname = jnyEndCmdInput.text;
@@ -302,22 +305,25 @@ public class JourneyPanel : MonoBehaviour
 
     public bool IsRightJnyType(string jnystr)
     {
-        var lookfor = "";
-        switch(curjnytype)
+        RouteSpecMethod lookForRsm;
+        switch(curjnytype.Get())
         {
-            case JourneyType.BldRoomToBldRoom: 
-                lookfor = "BldRoomToBldRoom";
+            default:
+            case JourneyType.BldRoomToBldRoom:
+                lookForRsm = RouteSpecMethod.BldRoomToBldRoom;
                 break;
             case JourneyType.DronePadToDronePad:
-                lookfor = "DronePadToDronePad";
+                lookForRsm = RouteSpecMethod.DronePadToDronePad;
                 break;
         }
-        var rv = jnystr.Contains(lookfor);
+        var ss = definedJourneys[jnystr];
+        var js = new JourneySpec(jnman.journeySpecMan, ss);
+        var rv = js.routeSpec.routeSpecMethod == lookForRsm;
         return rv;
     }
     public void PopulateDefinedJourneyDropdown(string inijname="" )
     {
-        Debug.Log("PopulateDefinedJourneyDropdown");
+        sman.Lgg($"PopulateDefinedJourneyDropdown curjnytype:{curjnytype.Get()}","grass");
         try
         {
             var inival = inijname;
@@ -332,8 +338,10 @@ public class JourneyPanel : MonoBehaviour
             }
             foreach(var jnystr in removeList)
             {
+                sman.Lgg($"   Removing {jnystr}", "grass");
                 populateList.Remove(jnystr);
             }
+            sman.Lgg($"Removed {removeList.Count} from {definedJourneys.Count} defined journeys - new count:{populateList.Count}", "grass");
             populateList.Add("(blank)");
             var idx = populateList.FindIndex(s => s == inival);
             if (idx < 0) idx = populateList.Count-1;// this is the blank entry we added
@@ -424,6 +432,22 @@ public class JourneyPanel : MonoBehaviour
     }
 
 
+    public List<string> GetDestinations()
+    {
+        List<string> rv;
+        switch (curjnytype.Get())
+        {
+            default:
+            case JourneyType.BldRoomToBldRoom:
+                rv = bdman.GetBuildingsWithDestinations();
+                break;
+            case JourneyType.DronePadToDronePad:
+                rv = bdman.GetDronePadNames();
+                break;
+        }
+        return rv;
+    }
+
 
     public void PopulateFormValsWithJourneySpec(JourneySpec js)
     {
@@ -440,7 +464,7 @@ public class JourneyPanel : MonoBehaviour
         var errmsg = "Exception caught in JourneyPanel.SetValsToJourneySpec";
         try
         {
-            startBuildingOpts = bdman.GetBuildingsWithDestinations();
+            startBuildingOpts = GetDestinations();
             var inival = js.routeSpec.bld1name;
             var idx = startBuildingOpts.FindIndex(s => s == inival);
             if (idx <= 0) idx = 0;
@@ -458,7 +482,7 @@ public class JourneyPanel : MonoBehaviour
 
         try
         {
-            endBuildingOpts = bdman.GetBuildingsWithDestinations();
+            endBuildingOpts = GetDestinations();
             var inival = js.routeSpec.bld2name;
             var idx = endBuildingOpts.FindIndex(s => s == inival);
             if (idx <= 0) idx = 0;
@@ -479,7 +503,7 @@ public class JourneyPanel : MonoBehaviour
 
         try
         {
-            avatarOpts = avatars;
+            avatarOpts = curjnytype.Get() == JourneyType.BldRoomToBldRoom ? personavatars : droneavatars;
             var inival = js.princeSpec.avatar;
             var idx = avatarOpts.FindIndex(s => s == inival);
             if (idx <= 0) idx = 0;
@@ -533,12 +557,8 @@ public class JourneyPanel : MonoBehaviour
     }
 
 
-    List<string> avatars = new List<string>()
+    List<string> personavatars = new List<string>()
     {
-        "drone/drone1",
-        "drone/drone2",
-        "drone/drone3",
-        "drone/drone4",
         "People/Businesswoman001",
         "People/Businesswoman002",
         "People/Businesswoman003",
@@ -571,6 +591,13 @@ public class JourneyPanel : MonoBehaviour
         "People/Man006",
         "People/Man007",
         "People/Man008",
+    };
+    List<string> droneavatars = new List<string>()
+    {
+        "drone/drone1",
+        "drone/drone2",
+        "drone/drone3",
+        "drone/drone4",
     };
 
 
@@ -688,7 +715,8 @@ public class JourneyPanel : MonoBehaviour
 
     JourneySpec GetNextNewJourneySpec()
     {
-        var newname = GenNewJourneyUniqueName();
+        var rootname = curjnytype.Get() == JourneyType.BldRoomToBldRoom ? "BldJour" : "DroneJour";
+        var newname = GenNewJourneyUniqueName(rootname);
         var jm = jnman.journeySpecMan;
         var js = new JourneySpec(jm, newname, defaultRoute, defaultPrinceSpec, defaultActionSpec);
         return js;

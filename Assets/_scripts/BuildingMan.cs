@@ -127,12 +127,21 @@ namespace CampusSimulator
             }
             return padlookup[padname];
         }
-        public List<BldDronePad> GetPads()
+        public List<BldDronePad> GetDronePads()
         {
             return new List<BldDronePad>(padlookup.Values);
         }
 
-
+        public List<string> GetDronePadNames()
+        {
+            var padlst = GetDronePads();
+            var rv = new List<string>();
+            foreach(var pd in padlst)
+            {
+                rv.Add(pd.name);
+            }
+            return rv;
+        }
         public void ToggleBld()
         {
             if (bldMode.Get() == BldModeE.full)

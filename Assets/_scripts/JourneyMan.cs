@@ -714,6 +714,59 @@ namespace CampusSimulator
             }
         }
 
+        public Journey AddDronePadJourney(string padname1, string padname2,string avatar)
+        {
+            var fr_node = padname1;
+            var tu_node = padname2;
+            if (!NodeExists(fr_node))
+            {
+                sman.LggError($"JourneyMan.AddDronePadJourney fr_node:{fr_node} does not exist");
+                return null;
+            }
+            if (!NodeExists(tu_node))
+            {
+                sman.LggError($"JourneyMan.AddDronePadJourney tu_node:{tu_node} does not exist");
+                return null;
+            }
+            try
+            {
+                var jsnode = fr_node;
+                var jenode = tu_node;
+
+                var perform = avatar;
+
+                Leg leg1 = new Leg
+                {
+                    snode = jsnode,
+                    enode = jenode,
+                    form = GetForm(avatar),
+                    capneed = LcCapType.fly,
+                    formname = perform,
+                    vel = 5 * lvelfak,
+                    lookatpt = true,  // drone
+                    flatlookatpt = true,
+                    xoff = 0.6f
+                };
+
+                var msg = $"{avatar} drone traveling fromn {fr_node} to {tu_node}";
+                //person.PersonStateStartWaitingToTravel();
+                var stardelay = GraphAlgos.GraphUtil.GetRanFloat(0.5f, 15f);
+                var jgo = new GameObject();
+                var jny = jgo.AddComponent<Journey>();
+                // jny.InitJourney(this, null, msg);
+                jny.InitJourney(this, null, null, null, null, msg, 0.5f, stardelay, jorg: "ephemeral-drone");
+                jny.AddLeg(leg1);
+                AddJ(jny);
+                return jny;
+            }
+            catch (UnityException ex)
+            {
+                var msg = $"Could not add journey for {avatar} from {fr_node} to {tu_node} {ex.Message}";
+                sman.LggWarning(msg);
+                return null;
+            }
+        }
+
         public Journey AddDroneJourney(Person person, BldDronePad bpad, int padslot)
         {
             if (!person)
@@ -725,12 +778,12 @@ namespace CampusSimulator
             var tu_node = bpad.padNodeName;
             if (!NodeExists(fr_node))
             {
-                sman.LggError($"JouneyMan.AddDroneJourney fr_node:{fr_node} does not exist");
+                sman.LggError($"JourneyMan.AddDroneJourney fr_node:{fr_node} does not exist");
                 return null;
             }
             if (!NodeExists(tu_node))
             {
-                sman.LggError($"JouneyMan.AddDroneJourney tu_node:{tu_node} does not exist");
+                sman.LggError($"JourneyMan.AddDroneJourney tu_node:{tu_node} does not exist");
                 return null;
             }
             try
@@ -767,7 +820,8 @@ namespace CampusSimulator
             }
             catch (UnityException ex)
             {
-                sman.LggWarning("Could not add journey for " + person.personName + " from " + fr_node + " to " + tu_node + " " + ex.Message);
+                 var msg = $"Could not add journey for {person.personName} from {fr_node} to {tu_node} {ex.Message}";
+                sman.LggWarning(msg);
                 return null;
             }
         }
@@ -994,24 +1048,22 @@ namespace CampusSimulator
             CheckFastMode();
             var bld1 = jsm.routeSpec.bld1name;
             var bld2 = jsm.routeSpec.bld2name;
-            var bc1 = bm.GetBuilding(bld1);
-            var bc2 = bm.GetBuilding(bld2);
-            var b1room = jsm.routeSpec.bld1room;
-            var b2room = jsm.routeSpec.bld2room;
-            var ranset = "jnygen";
-            var bdest1 = bc1.GetMatchingDestOrRandom(b1room, ranset);
-            var bdest2 = bc2.GetMatchingDestOrRandom(b2room, ranset);
-            var pathname = bc1.shortname + " to " + bc2.shortname;
             var avatar = jsm.princeSpec.avatar;
+            var ranset = "jnygen";
             Journey jny;
             if (jsm.routeSpec.routeSpecMethod == RouteSpecMethod.DronePadToDronePad)
             {
-                Person person = null;
-                BldDronePad bp1 = null;
-                jny = AddDroneJourney(person, bp1, padslot:1 );
+                jny = AddDronePadJourney(bld1,bld2,avatar);
             }
             else
             {
+                var bc1 = bm.GetBuilding(bld1);
+                var bc2 = bm.GetBuilding(bld2);
+                var b1room = jsm.routeSpec.bld1room;
+                var b2room = jsm.routeSpec.bld2room;
+                var bdest1 = bc1.GetMatchingDestOrRandom(b1room, ranset);
+                var bdest2 = bc2.GetMatchingDestOrRandom(b2room, ranset);
+                var pathname = bc1.shortname + " to " + bc2.shortname;
                 if (bld1 == bld2)
                 {
                     jny = AddNodeNodeJourney(bdest1, bdest2, pathname, avatar: avatar);

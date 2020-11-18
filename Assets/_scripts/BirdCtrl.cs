@@ -284,7 +284,7 @@ namespace CampusSimulator
                         movingAnimationScript = "";
                         restingAnimationScript = "";
                         BirdFlyHeight = 10f;
-                        birdgo.name = "DelDrone";
+                        birdgo.name = "Matrice600";
                         break;
                     }
                 case BirdFormE.dog:
