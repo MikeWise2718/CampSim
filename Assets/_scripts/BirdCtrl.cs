@@ -273,13 +273,15 @@ namespace CampusSimulator
                     {
                         var objPrefab = Resources.Load<GameObject>("obj3d/matrice_600spinning");
                         birdformgo = Instantiate<GameObject>(objPrefab);
-                        var s = 0.01f * sman.trman.dronescalemodelnumber.Get();
+                        //var s = 0.01f * sman.trman.dronescalemodelnumber.Get();
+                        var s = sman.trman.dronescalemodelnumber.Get();
                         if (birdscale > 0)
                         {
                             s *= birdscale;
                         }
                         birdformgo.transform.localScale = new Vector3(s, s, s);
-                        birdformgo.transform.localRotation = currot * Quaternion.Euler(-90, 0, 0);
+                        //birdformgo.transform.localRotation = currot * Quaternion.Euler(-90, 0, 0);
+                        birdformgo.transform.localRotation = currot;
                         birdformgo.transform.localPosition = curpos;
                         movingAnimationScript = "";
                         restingAnimationScript = "";
