@@ -77,6 +77,17 @@ namespace CampusSimulator
             "Bld99-dronepad-centertop:6:0:4:4:T:randommix:any",
         };
 
+        public static List<string> Eb12DronePadspec = new List<string>()
+        {
+            // room name,pcap,alignang,length,width,frameit,droneselectionmode,droneselectionnum
+            "Eb0814-dronepad-centertop:6:0:8:8:T:fixedmix:matrice",
+            //"b121-dronepad-centertop:6:0:4:4:T",
+            "Eb1622-dronepad-centertop:6:0:8:8:T:randommix:any",
+            //"b19-dronepad-centertop:6:0:4:4:T",
+            "EbRewe-dronepad-centertop:6:0:4:4:T:randommix:any",
+        };
+
+
         List<string> B19roomspec = new List<string>()
         {
             // room name,pcap,alignang,length,width,frameit - see AddOneRoomSpec for code
@@ -387,7 +398,7 @@ namespace CampusSimulator
                         maingaragename = "Eb12_1";
                         roomspecs = Eb0814roomspec;
                         destnodes = new List<string> { "eb0814-f01-08-lob", "eb0814-f02-08-mbed", "eb0814-f01-10-lob", "eb0814-f02-10-mbed", "eb0814-f01-12-lob", "eb0814-f02-12-mbed", "eb0814-f01-14-lob","eb0814-f02-14-mbed", };
-                        shortname = "eb12";
+                        shortname = "Eb0814";
                         defPeoplePerRoom = 4;
                         defPercentFull = 1.0f;
                         defRoomArea = 10;
@@ -405,7 +416,7 @@ namespace CampusSimulator
                         maingaragename = "Eb12_1";
                         roomspecs = Eb1622roomspec;
                         destnodes = new List<string> { "eb1622-f01-16-lob", "eb1622-f01-18-lob", "eb1622-f01-20-lob", "eb1622-f01-22-lob" };
-                        shortname = "eb12";
+                        shortname = "Eb1622";
                         defPeoplePerRoom = 4;
                         defPercentFull = 1.0f;
                         defRoomArea = 10;
@@ -423,7 +434,7 @@ namespace CampusSimulator
                         maingaragename = "Eb12_Rewe";
                         roomspecs = Ebreweroomspec;
                         destnodes = new List<string> { "eb12-rewe-lob", "eb12-rewe-rm01", "eb12-rewe-rm02" };
-                        shortname = "Rewe";
+                        shortname = "EbRewe";
                         osmwid = "w340004557";
                         defPeoplePerRoom = 5; // 20
                         defPercentFull = 1.0f;

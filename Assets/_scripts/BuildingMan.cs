@@ -270,19 +270,7 @@ namespace CampusSimulator
             sman.Lgg($"BuildingMan.InitializeValues walllinks:{walllinks.Get()} osmblds:{osmblds.Get()} osmbldstrans:{osmbldstrans.Get()}   fixedblds:{fixedblds.Get()}","pink");
         }
 
-        public List<string> GetFilteredPadNames(string prefix)
-        {
-            var rv = new List<string>();
-            foreach(var ps in scene_padspecs)
-            {
-                if(ps.StartsWith(prefix))
-                {
-                    var padname = ps.Split(':')[0]; // trim the name out
-                    rv.Add(padname);
-                }
-            }
-            return rv;
-        }
+
         public List<string> GetFilteredPadSpecs(string prefix)
         {
             var rv = new List<string>();
@@ -517,6 +505,7 @@ namespace CampusSimulator
                     break;
                 case SceneSelE.Eb12small:
                 case SceneSelE.Eb12:
+                    scene_padspecs = Building.Eb12DronePadspec;
                     MakeBuildings("Eb");
                     break;
                 case SceneSelE.TeneriffeMtn:

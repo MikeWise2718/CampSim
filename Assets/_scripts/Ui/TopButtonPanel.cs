@@ -36,6 +36,7 @@ namespace CampusSimulator
             {"GoButton",new TopButtonMan.TopButSpec("GoButton","Go", "Kick off a preprogramed scenario dependent journey script","cen",0,"stretch",10,"Sim")},
             {"FreezeSimButton",new TopButtonMan.TopButSpec("FreezeSimButton","Frz", "Freeze/Unfreeze simulation","cen",0,"stretch",10,"Sim")},
             {"ShadowButton",new TopButtonMan.TopButSpec("ShadowButton","Shad", "Shadow stuff","cen",0,"stretch",10,"Sim")},
+            {"CamButton",new TopButtonMan.TopButSpec("CamButton","Cam", "Operate Camera","cen",0,"stretch",10,"Sim")},
             {"#SimSpacer" ,new TopButtonMan.TopButSpec("#SimSpacer","#", "Spacerbutton","cen",0,"stretch",10,"Sim")},
 
 
@@ -103,6 +104,7 @@ namespace CampusSimulator
             butspec["FlyButton"].action = delegate { FlyButton(); };
             butspec["GoButton"].action = delegate { GoButton(); };
             butspec["ShadowButton"].action = delegate { ToggleJourneyShadow(); };
+            butspec["CamButton"].action = delegate { ToggleJourneyShadow(); };
             butspec["FreezeSimButton"].action = delegate { ToggleFreezeJourneys(); };
 
 
@@ -181,6 +183,7 @@ namespace CampusSimulator
             clrbut("RunButton", "pink", loc, sman.jnman.spawnrunjourneys, "Run");
             clrbut("FlyButton", "lightblue", loc, sman.jnman.spawnflyjourneys, "Fly");
             clrbut("ShadowButton", "lightblue", loc, sman.jnman.shadowJourney, "Shad");
+            clrbut("CamButton", "pink", loc, sman.jnman.spawnrunjourneys, "Cam");
             //Debug.Log($"ColorizeButtonStates sman.jnman.freezeJourneys:{sman.jnman.freezeJourneys}");
             clrbut("FreezeSimButton", "lightblue", loc, sman.jnman.freezeJourneys, "Frz");
 
