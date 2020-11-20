@@ -23,6 +23,11 @@ namespace CampusSimulator {
         public string padNodeName;
         public string padHighName;
 
+
+
+        public DroneSelectionMode dsm;
+        public DroneSelectionNumber dsn;
+
         public void Initialize(Building bld, string roomname, string nodename)
         {
             this.bld = bld;
@@ -30,7 +35,10 @@ namespace CampusSimulator {
             this.name = roomname;
             this.padFullName = bld.name + "/"+ roomname;
             this.padNodeName = nodename;
+            this.dsm = DroneSelectionMode.randommix;
+            this.dsn = DroneSelectionNumber.any;
         }
+
 
         public void SetStatsArea(Vector3 pt, int pcap, float alignang,  float area,bool enableFrames)
         {
@@ -45,7 +53,7 @@ namespace CampusSimulator {
             occman = gameObject.AddComponent<BldRoomOccMan>();
             occman.init(this, pcap, this.width, this.length,slotsCanExpand:true);
         }
-        public void SetStats(Vector3 pt, int pcap, float alignang,  float length, float width, bool enableFrames)
+        public void SetStats(Vector3 pt, int pcap, float alignang,  float length, float width, bool enableFrames, DroneSelectionMode dsm, DroneSelectionNumber dsn)
         {
             this.personCap = pcap;
             this.pos = pt;
@@ -54,6 +62,8 @@ namespace CampusSimulator {
             this.length = length;
             this.area = length*width;
             this.enableFrames = enableFrames;
+            this.dsm = dsm;
+            this.dsn = dsn;
             occman = gameObject.AddComponent<BldRoomOccMan>();
             occman.init(this, pcap, this.width, this.length, slotsCanExpand: true);
         }

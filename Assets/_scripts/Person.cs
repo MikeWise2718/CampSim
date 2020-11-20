@@ -150,7 +150,11 @@ namespace CampusSimulator
                 ispeople = false;
             }
             var avatarNameUse = (moving ? avatarNameMoving : avatarName);
-            //SceneMan.Lggg($"Loading {avatarNameUse}","pink");
+            SceneMan.Lggg($"Loading {avatarNameUse}  scale:{scale}","pink");
+            if (scale>1)
+            {
+                SceneMan.Lggg($"  scale>1", "pink");
+            }
             var pfab = GraphAlgos.GraphUtil.GetUniResPrefab(dirname, avatarNameUse);
             var ipogo = Instantiate<GameObject>(pfab);// there is no global pogo at this point
             ipogo.name = "instance";

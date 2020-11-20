@@ -67,14 +67,14 @@ namespace CampusSimulator
         };
         public static List<string> MsftDronePadspec = new List<string>()
         {
-            // room name,pcap,alignang,length,width,frameit
-            "b121-dronepad:6:0:4:4:T",
+            // room name,pcap,alignang,length,width,frameit,droneselectionmode,droneselectionnum
+            "b121-dronepad:6:0:8:8:T:fixedmix:matrice",
             //"b121-dronepad-centertop:6:0:4:4:T",
-            "b19-dronepad:6:0:4:4:T",
+            "b19-dronepad:6:0:8:8:T:randommix:any",
             //"b19-dronepad-centertop:6:0:4:4:T",
-            "Bld122-dronepad-centertop:6:0:4:4:T",
-            "Bld123-dronepad-centertop:6:0:4:4:T",
-            "Bld99-dronepad-centertop:6:0:4:4:T",
+            "Bld122-dronepad-centertop:6:0:4:4:T:randommix:any",
+            "Bld123-dronepad-centertop:6:0:4:4:T:randommix:any",
+            "Bld99-dronepad-centertop:6:0:4:4:T:randommix:any",
         };
 
         List<string> B19roomspec = new List<string>()
