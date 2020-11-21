@@ -104,7 +104,7 @@ namespace CampusSimulator
             butspec["FlyButton"].action = delegate { FlyButton(); };
             butspec["GoButton"].action = delegate { GoButton(); };
             butspec["ShadowButton"].action = delegate { ToggleJourneyShadow(); };
-            butspec["CamButton"].action = delegate { ToggleJourneyShadow(); };
+            butspec["CamButton"].action = delegate { ToggleCamCtrl(); };
             butspec["FreezeSimButton"].action = delegate { ToggleFreezeJourneys(); };
 
 
@@ -183,7 +183,7 @@ namespace CampusSimulator
             clrbut("RunButton", "pink", loc, sman.jnman.spawnrunjourneys, "Run");
             clrbut("FlyButton", "lightblue", loc, sman.jnman.spawnflyjourneys, "Fly");
             clrbut("ShadowButton", "lightblue", loc, sman.jnman.shadowJourney, "Shad");
-            clrbut("CamButton", "pink", loc, sman.jnman.spawnrunjourneys, "Cam");
+            clrbut("CamButton", "pink", loc, sman.mpman.camctrl.Get(), "Cam");
             //Debug.Log($"ColorizeButtonStates sman.jnman.freezeJourneys:{sman.jnman.freezeJourneys}");
             clrbut("FreezeSimButton", "lightblue", loc, sman.jnman.freezeJourneys, "Frz");
 
@@ -455,7 +455,14 @@ namespace CampusSimulator
             }
         }
 
-  
+        public void ToggleCamCtrl()
+        {
+            var newstat = !sman.mpman.camctrl.Get();
+            sman.mpman.camctrl.SetAndSave(newstat);
+            ColorizeButtonStates();
+        }
+
+
         public void ToggleJourneyShadow()
         {
             sman.jnman.shadowJourney = !sman.jnman.shadowJourney;

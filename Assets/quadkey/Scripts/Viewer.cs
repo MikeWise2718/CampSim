@@ -23,6 +23,7 @@ namespace Aiskwk.Map
         public float angstart = 0;
         public float angend = 0;
         public bool carriageOn = false;
+        public bool carriageControlOn = false;
         public ViewerState()
         {
             pos = Vector3.zero;
@@ -35,6 +36,7 @@ namespace Aiskwk.Map
             angstart = 0;
             angend = 0;
             carriageOn = false;
+            carriageControlOn = false;
         }
         public ViewerState(Vector3 pos, Vector3 rot, ViewerAvatar ava = ViewerAvatar.CapsuleMan, ViewerCamConfig cam = ViewerCamConfig.Eyes, ViewerControl vctrl = ViewerControl.Position)
         {
@@ -85,16 +87,20 @@ namespace Aiskwk.Map
         public ViewerCamConfig viewerCamPosition = ViewerCamConfig.Eyes;
         public ViewerControl viewerControl = ViewerControl.Position;
 
+        public float angincpersec = 15.0f; // deg per sec
+
         public bool carriageCameraExists = true;
         public int carriageCamNumber = 3;
         public float carriageAngleStart = -20;
         public float carriageAngleEnd = 20;
         public bool carriageOn = false;
+        public bool carriageControlOn = false;
         public List<Camera> carriageCams = null;
         public List<int> carriageMons = null;
 
         public Quaternion bodyPrefabRotation = Quaternion.identity;
         public Quaternion bodyPlaneRotation = Quaternion.identity;
+        public Quaternion carRotation = Quaternion.identity;
         public string qcmdescriptor = "";
 
         public LatLng curLatLng = new LatLng(0, 0);
@@ -168,6 +174,7 @@ namespace Aiskwk.Map
             carriageCameraExists = homestate.hasCameraCarriage;
             carriageCamNumber = homestate.nCameras;
             carriageOn = homestate.carriageOn;
+            carriageControlOn = homestate.carriageControlOn;
             carriageAngleStart = homestate.angstart;
             carriageAngleEnd = homestate.angend;
             carriageCams = new List<Camera>();
@@ -205,6 +212,7 @@ namespace Aiskwk.Map
             //Debug.Log($"ReAdjustViewerInitialPosition - before scale:{transform.localScale} rotation:{transform.localRotation.eulerAngles}");
             bodyPrefabRotation = Quaternion.identity;
             bodyPlaneRotation = Quaternion.identity;
+            carRotation = Quaternion.identity;
 
             var parent = transform.parent;
             transform.SetParent(null, worldPositionStays: false);// disconnect
@@ -543,6 +551,7 @@ namespace Aiskwk.Map
             var rot = Vector3.zero;
             bodyPrefabRotation = Quaternion.identity;
             bodyPlaneRotation = Quaternion.identity;
+            carRotation = Quaternion.identity;
             var pfix = "obj3d/";
             followGround = true;
             switch (viewerAvatar)
@@ -772,9 +781,20 @@ namespace Aiskwk.Map
             BuildViewer();
             return curva;
         }
+
+        void NormHead()
+        {
+            camgo.transform.localRotation = Quaternion.identity;
+            //Debug.Log("Rotated visor by " + rotate);
+        }
+        void NormCarriage()
+        {
+            carriagego.transform.localRotation = Quaternion.identity;
+            //Debug.Log("Rotated visor by " + rotate);
+        }
         void TiltHead(float rotate)
         {
-            visor.transform.localRotation *= Quaternion.Euler(new Vector3(rotate, 0, 0));
+            camgo.transform.localRotation *= Quaternion.Euler(new Vector3(rotate, 0, 0));
             //Debug.Log("Rotated visor by " + rotate);
         }
         void RaiseViewer(float ymove)
@@ -788,7 +808,6 @@ namespace Aiskwk.Map
 
         void RotateViewerScaleByTime(float rotate)
         {
-
             var fak = calctimefak(ref tvlastkey);
             RotateViewerByYangle(fak * rotate);
         }
@@ -807,6 +826,41 @@ namespace Aiskwk.Map
             //Debug.Log($"RotateViewerToYangle - Moveplane rotation after  {moveplane.transform.localRotation.eulerAngles}");
             //Debug.Log($"RotateViewerToYangle - Viewer rotation after   {transform.localRotation.eulerAngles}");
         }
+
+        void RotateCarriageByYangle(float yangle)
+        {
+            if (carriageCameraExists)
+            {
+                carRotation *= Quaternion.Euler(new Vector3(0, yangle, 0));
+                carriagego.transform.localRotation = carRotation;
+            }
+        }
+        void RotateCarriageByXangle(float xangle)
+        {
+            if (carriageCameraExists)
+            {
+                carRotation *= Quaternion.Euler(new Vector3(xangle,0, 0));
+                carriagego.transform.localRotation = carRotation;
+            }
+        }
+
+        void RotateCarriageYangleScaleByTime(float rotate)
+        {
+            if (carriageCameraExists)
+            {
+                var fak = calctimefak(ref tvlastkey);
+                RotateCarriageByYangle(fak * rotate);
+            }
+        }
+        void RotateCarriageXangleScaleByTime(float rotate)
+        {
+            if (carriageCameraExists)
+            {
+                var fak = calctimefak(ref tvlastkey);
+                RotateCarriageByXangle(fak * rotate);
+            }
+        }
+
 
 
         void RotateViewerToYangle(float yangle)
@@ -1000,6 +1054,10 @@ namespace Aiskwk.Map
                     carriageMons.Add(2 + i);
                 }
             }
+        }
+        void ToggleCarriageCameraControl()
+        {
+            carriageControlOn = !carriageControlOn;
         }
         void ToggleCarriageCamera()
         {
@@ -1196,6 +1254,7 @@ namespace Aiskwk.Map
         float tvlastkey = 0;
         void TranslateViewer(float xmove, float zmove)
         {
+
             var fak = calctimefak(ref tvlastkey);
             TranslateViewerProjected(xmove*fak, zmove*fak);
             curLatLng = qmm.GetLngLat(transform.position);
@@ -1252,6 +1311,7 @@ namespace Aiskwk.Map
         float f2Hit = float.MinValue;
         float f4Hit = float.MinValue;
         float f8Hit = float.MinValue;
+        float f9Hit = float.MinValue;
         float ctrlAhit = float.MinValue;
         float ctrlHhit = float.MinValue;
         float ctrlVhit = float.MinValue;
@@ -1307,7 +1367,7 @@ namespace Aiskwk.Map
             var shiftpressed = Input.GetKey(KeyCode.RightShift) || Input.GetKey(KeyCode.LeftShift);
             CheckShiftTime();
 
-            var angincpersec = 15.0f; // deg per sec
+
             var incpersec = shiftMultiplier * 2.0f; //  m per sec
             if (!ViewerProcessKeys)
             {
@@ -1356,14 +1416,7 @@ namespace Aiskwk.Map
                     Debug.LogWarning("No Add Vehicle Track set");
                 }
             }
-            if (Input.GetKey(KeyCode.PageDown))
-            {
-                TiltHead(angincpersec);
-            }
-            if (Input.GetKey(KeyCode.PageDown))
-            {
-                TiltHead(-angincpersec);
-            }
+
             if (Input.GetKey(KeyCode.S))
             {
                 SetSceneCamToMainCam();
@@ -1443,6 +1496,11 @@ namespace Aiskwk.Map
                 ToggleCarriageCamera();
                 f8Hit = Time.time;
             }
+            if (Input.GetKey(KeyCode.F9) && Time.time - f9Hit > hitgap3)
+            {
+                ToggleCarriageCameraControl();
+                f9Hit = Time.time;
+            }
             if (Input.GetKey(KeyCode.Alpha0))
             {
                 //if (doTrackThings && Time.time - ctrlVhit > hitgap3)
@@ -1503,9 +1561,21 @@ namespace Aiskwk.Map
                 }
             }
             float timeinc = 0.25f;
+            //if (Input.GetKey(KeyCode.PageDown))
+            //{
+            //    TiltHead(angincpersec);
+            //}
+            //if (Input.GetKey(KeyCode.PageDown))
+            //{
+            //    TiltHead(-angincpersec);
+            //}
             if (Input.GetKey(KeyCode.RightArrow) && Time.time - rgtArrowHit > hitgap0)
             {
-                if (altpressed)
+                if (carriageControlOn && carriageCameraExists)
+                {
+                    RotateCarriageYangleScaleByTime(angincpersec);
+                }
+                else if (altpressed)
                 {
                     TranslateViewer(incpersec, 0);
                 }
@@ -1521,7 +1591,11 @@ namespace Aiskwk.Map
             }
             if (Input.GetKey(KeyCode.LeftArrow) && Time.time - lftArrowHit > hitgap0)
             {
-                if (altpressed)
+                if (carriageControlOn && carriageCameraExists)
+                {
+                    RotateCarriageYangleScaleByTime(-angincpersec);
+                }
+                else if (altpressed)
                 {
                     TranslateViewer(-incpersec, 0);
                 }
@@ -1535,9 +1609,30 @@ namespace Aiskwk.Map
                 }
                 lftArrowHit = Time.time;
             }
+            if (Input.GetKey(KeyCode.Home))
+            {
+                if (carriageControlOn && carriageCameraExists)
+                {
+                    NormCarriage();
+                }
+                else if (altpressed)
+                {
+                    NormHead();
+                }
+                else
+                {
+                    MoveViewerToHome();
+                    NormHead();
+                }
+            }
+
             if (Input.GetKey(KeyCode.UpArrow))
             {
-                if (altpressed)
+                if (carriageControlOn && carriageCameraExists)
+                {
+                    RotateCarriageXangleScaleByTime(-angincpersec);
+                }
+                else if (altpressed)
                 {
                     TiltHead(-angincpersec);
                 }
@@ -1548,7 +1643,11 @@ namespace Aiskwk.Map
             }
             if (Input.GetKey(KeyCode.DownArrow))
             {
-                if (altpressed)
+                if (carriageControlOn && carriageCameraExists)
+                {
+                    RotateCarriageXangleScaleByTime(angincpersec);
+                }
+                else if (altpressed)
                 {
                     TiltHead(angincpersec);
                 }

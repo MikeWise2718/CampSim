@@ -55,6 +55,8 @@ namespace CampusSimulator
         #endregion Map Visuals
 
 
+        public UxSettingBool camctrl = new UxSettingBool("CamCtrl", false);
+
         public UxEnumSetting<MapProvider> reqMapProv = new UxEnumSetting<MapProvider>("MapProvider", MapProvider.BingSatelliteLabels);
         // todo - think we can eliminate MapPRovider and 
         #region MapProvider
@@ -1180,6 +1182,57 @@ namespace CampusSimulator
                     isCustomizable = false;
                     break;
 
+                case SceneSelE.Doha:
+                    maplat = 25.286667;
+                    maplng = 51.533333;
+                    mapscale = 1;
+                    maprot = Vector3.zero;
+                    maptrans = Vector3.zero;
+                    //xdistkm = 14.84f / (2 * 0.4096f);
+                    //zdistkm = 25.17f / (2 * 0.4096f);
+                    xdistkm = 10;
+                    zdistkm = 10;
+                    lod = 14;
+                    //hmultForNow = 10;
+                    useElesForNow = true;
+                    useViewer = true;
+                    mapscale = 1f;
+                    roty2 = 0;
+                    //nodesPerQuadKey = 8;
+                    //vviewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
+                    viewHome.avatar = ViewerAvatar.QuadCopter;
+
+                    hasLLmap = false;
+                    isCustomizable = false;
+                    break;
+
+                case SceneSelE.Cyclades:
+                    //var llmid = new LatLng(36.801411, 25.271239, "Cyclades mid");
+                    //var llbox = new LatLngBox(llmid, 110, 170, lod: 12);
+
+                    maplat = 36.801411;
+                    maplng = 25.271239;
+                    mapscale = 1;
+                    maprot = Vector3.zero;
+                    maptrans = Vector3.zero;
+                    //xdistkm = 14.84f / (2 * 0.4096f);
+                    //zdistkm = 25.17f / (2 * 0.4096f);
+                    xdistkm = 110;
+                    zdistkm = 170;
+                    lod = 12;
+                    //hmultForNow = 10;
+                    useElesForNow = true;
+                    useViewer = true;
+                    mapscale = 1f;
+                    roty2 = 0;
+                    //nodesPerQuadKey = 8;
+                    //vviewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
+                    viewHome.avatar = ViewerAvatar.QuadCopter;
+
+                    hasLLmap = false;
+                    isCustomizable = false;
+                    break;
+
                 case SceneSelE.SanFrancisco:
                     maplat = 37.774900;
                     maplng = -122.419400;
@@ -1334,6 +1387,7 @@ namespace CampusSimulator
             reqEleProv.GetInitial(ElevProvider.BingElev);
             reqMapProv.GetInitial(MapProvider.BingSatelliteLabels);
             useElevations.GetInitial(true);
+            camctrl.GetInitial(false);
 
             frameQuadkeys.GetInitial(false);
             viewerBreadCrumbs.GetInitial(false);
