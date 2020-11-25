@@ -51,6 +51,10 @@ public class JourneyPanel : MonoBehaviour
     Dictionary<string,string> definedJourneys;
     //Dictionary<string, UxUtils.UxSetting<string>> jkeys;
 
+    JourneySpec currentJourney = null;
+    Journey launchedJny = null;
+    bool canLaunch = false;
+
     public UxUtils.UxEnumSetting<JourneyType>  curjnytype = new UxUtils.UxEnumSetting<JourneyType>("curjnytype", JourneyType.BldRoomToBldRoom );
 
 
@@ -119,11 +123,11 @@ public class JourneyPanel : MonoBehaviour
         deleteButton.onClick.AddListener(delegate { DeleteJourney(); });
 
         defineButton = transform.Find("DefineButton").gameObject.GetComponent<Button>();
-        defineButton.onClick.AddListener(delegate { DefineJourney(); });
+        defineButton.onClick.AddListener(delegate { DefineJourneyButtonPressed(); });
         launchButton = transform.Find("LaunchButton").gameObject.GetComponent<Button>();
-        launchButton.onClick.AddListener(delegate { LaunchJourney(); });
+        launchButton.onClick.AddListener(delegate { LaunchJourneyButtonPressed(); });
         shadowButton = transform.Find("ShadowButton").gameObject.GetComponent<Button>();
-        shadowButton.onClick.AddListener(delegate { ShadowJourney(); });
+        shadowButton.onClick.AddListener(delegate { ShadowJourneyButtonPressed(); });
         closeButton = transform.Find("CloseButton").gameObject.GetComponent<Button>();
         closeButton.onClick.AddListener(delegate { uiman.ClosePanel();  });
 
@@ -152,9 +156,44 @@ public class JourneyPanel : MonoBehaviour
         jnyEndBuildingDropdown.onValueChanged.AddListener(delegate { RepopulateRoomsDropdownOnBldChange(jnyEndBuildingDropdown, jnyEndRoomDropdown, ref endRoomOpts); });
         jnyDefinedJnysDropdown.onValueChanged.AddListener(delegate { DefinedJourneyDropdownChanged(); });
 
+        jnyNameInput.onValueChanged.AddListener(delegate { ControlValueChanged(); });
+        jnytypeDropdown.onValueChanged.AddListener(delegate { ControlValueChanged(); });
+        jnyStartBuildingDropdown.onValueChanged.AddListener(delegate { ControlValueChanged(); });
+        jnyStartRoomDropdown.onValueChanged.AddListener(delegate { ControlValueChanged(); });
+        jnyEndBuildingDropdown.onValueChanged.AddListener(delegate { ControlValueChanged(); });
+        jnyEndRoomDropdown.onValueChanged.AddListener(delegate { ControlValueChanged(); });
+        jnyEndRoomDropdown.onValueChanged.AddListener(delegate { ControlValueChanged(); });
+        jnyPersonNameInput.onValueChanged.AddListener(delegate { ControlValueChanged(); });
+        jnyAvatarDropdown.onValueChanged.AddListener(delegate { ControlValueChanged(); });
+        jnyEndActionDropdown.onValueChanged.AddListener(delegate { ControlValueChanged(); });
+        jnyQuitOnEndToggle.onValueChanged.AddListener(delegate { ControlValueChanged(); });
+        jnyEndCmdInput.onValueChanged.AddListener(delegate { ControlValueChanged(); });
+
         controlsBeingBuilt = false;
         sman.Lgg("JouneyPanel.LinkObjectAndComponents","orange");
     }
+
+    public void DisableLaunching()
+    {
+        canLaunch = false;
+        launchButton.enabled = false;
+        uiman.SetButtonColor(launchButton, "white", false, "Cannot Launch", idleColor:"lightgray",showstar:false);
+
+        //launchButton.gameObject.SetActive(false);
+    }
+    public void EnableLaunching()
+    {
+        canLaunch = true;
+        launchButton.enabled = true;
+        uiman.SetButtonColor(launchButton, "white", true, "Launch", idleColor: "lightgray", showstar: false);
+        //launchButton.gameObject.SetActive(true);
+    }
+
+    public void ControlValueChanged()
+    {
+        DisableLaunching();
+    }
+
 
     public void InitVals()
     {
@@ -175,7 +214,7 @@ public class JourneyPanel : MonoBehaviour
                 SetStatusMessage($"Initial journey name:{curjnyname}", error: false);
                 var curjnyss = definedJourneys[curjnyname];
                 js = new JourneySpec(jnman.journeySpecMan, curjnyss);
-                definedJourney = js;
+                currentJourney = js;
             }
         }
         else
@@ -269,8 +308,8 @@ public class JourneyPanel : MonoBehaviour
     {
         if (!controlsBeingBuilt)
         {
-            definedJourney = BuildJourneySpecFromControls();
-            PropagateChangeToDefinedJourneys(definedJourney);
+            currentJourney = BuildJourneySpecFromControls();
+            PropagateChangeToDefinedJourneys(currentJourney);
         }
     }
 
@@ -278,25 +317,25 @@ public class JourneyPanel : MonoBehaviour
     public void DefinedJourneyDropdownChanged()
     {
         controlsBeingBuilt = true;
-
-        ClearStatusMessage();
-        int idx = jnyDefinedJnysDropdown.value;
-        var jslist = definedJourneys.Keys.ToList<string>();
-        if (idx<definedJourneys.Count)
+        if (repopulateOnValueChanged)
         {
-            var key = jslist[idx].ToString();
-            var ss = definedJourneys[key];
-            var js = new JourneySpec(jnman.journeySpecMan, ss);
-            definedJourney = js;
-            if (repopulateOnValueChanged)
+            ClearStatusMessage();
+            int idx = jnyDefinedJnysDropdown.value;
+            var jslist = definedJourneys.Keys.ToList<string>();
+            if (idx < definedJourneys.Count)
             {
+                var key = jslist[idx].ToString();
+                var ss = definedJourneys[key];
+                var js = new JourneySpec(jnman.journeySpecMan, ss);
+                currentJourney = js;
                 PopulateFormValsWithJourneySpec(js);
+                EnableLaunching();
+                sman.Lgg($"DefinedJourneyDropdown changed key:{key}", "orange");
             }
-            sman.Lgg($"DefinedJourneyDropdown changed key:{key}","orange");
-        }
-        else
-        {
-            sman.Lgg($"DefinedJourneyDropdown out of range:{idx} definedJourneys:{definedJourneys.Count}","orange");
+            else
+            {
+                sman.Lgg($"DefinedJourneyDropdown out of range:{idx} definedJourneys:{definedJourneys.Count}", "orange");
+            }
         }
         controlsBeingBuilt = false;
     }
@@ -384,33 +423,6 @@ public class JourneyPanel : MonoBehaviour
         roomopts = roomlist;
     }
 
-
-
-    //public (bool ok,string val) GetJsKeySave(string key)
-    //{
-    //    var wholekey = $"journeyspec_{key}";
-    //    var uxset = new UxUtils.UxSetting<string>(wholekey, "");
-    //    var sval = uxset.GetInitial("");
-    //    var ok = false;
-    //    if (sval != "")
-    //    {
-    //        ok = true;
-    //    }
-    //    return (ok, sval);
-    //}
-    //public void SetJsKeySave(string key,string sval)
-    //{
-    //    var wholekey = $"journeyspec_{key}";
-    //    var uxset = new UxUtils.UxSetting<string>(wholekey, "");
-    //    uxset.SetAndSave(sval);
-    //}
-
-    //public void EraseJsKey(string key)
-    //{
-    //    var wholekey = $"journeyspec_{key}";
-    //    var uxset = new UxUtils.UxSetting<string>(wholekey, "");
-    //    uxset.SetAndSave("");
-    //}
 
 
     public void LoadDefinedJourneys()
@@ -601,8 +613,6 @@ public class JourneyPanel : MonoBehaviour
     };
 
 
-    JourneySpec definedJourney = null;
-    Journey launchedJny = null;
 
     public void PropagateChangeToDefinedJourneys(JourneySpec js)
     {
@@ -660,41 +670,49 @@ public class JourneyPanel : MonoBehaviour
 
 
 
-    public void DefineJourney()
+    public void DefineJourneyButtonPressed()
     {
         ClearStatusMessage();
-        definedJourney = BuildJourneySpecFromControls();
-        var ss = definedJourney.SerialString();
+        currentJourney = BuildJourneySpecFromControls();
+        var ss = currentJourney.SerialString();
         curJnySerializedStringText.text = ss;
         //jnman.curJnySpec.SetAndSave(ss);
         //Debug.Log($"Defined {definedJourney.jouneyId} length:{ss.Length}");
-        AddDefinedJourneyToKeys(definedJourney);
+        AddDefinedJourneyToKeys(currentJourney);
         SaveDefinedJourneyToPersistentStore();
+        EnableLaunching();
     }
 
 
-    public void LaunchJourney()
+    public void LaunchJourneyButtonPressed()
     {
-        ClearStatusMessage();
-        if (definedJourney!=null)
+        if (canLaunch)
         {
-            launchedJny = jnman.AddJsmJourney(definedJourney);
-            if (launchedJny)
+            ClearStatusMessage();
+            if (currentJourney != null)
             {
-                SetStatusMessage($"Launched {launchedJny.name}");
+                launchedJny = jnman.AddJsmJourney(currentJourney);
+                if (launchedJny)
+                {
+                    SetStatusMessage($"Launched {launchedJny.name}");
+                }
+                else
+                {
+                    SetStatusMessage($"Could not launch journey (jny==null)", error: true);
+                }
             }
             else
             {
-                SetStatusMessage($"Could not launch journey (jny==null)",error:true);
+                SetStatusMessage("No journey has been defined yet for shadowing", error: true);
             }
         }
         else
         {
-            SetStatusMessage("No journey has been defined yet for shadoing", error: true);
+            SetStatusMessage("Can not launch journey - not defined", error: true);
         }
     }
 
-    public void ShadowJourney()
+    public void ShadowJourneyButtonPressed()
     {
         ClearStatusMessage();
         if (launchedJny != null)
@@ -783,13 +801,13 @@ public class JourneyPanel : MonoBehaviour
     }
     public void UpdateText()
     {
-        if (definedJourney == null)
+        if (currentJourney == null)
         {
             definedJourneyText.text = "definedJourney:null";
         }
         else
         {
-            definedJourneyText.text = $"definedJourney:{definedJourney.displayName}";
+            definedJourneyText.text = $"definedJourney:{currentJourney.displayName}";
         }
 
         curJnySpecKeys.text = $"jman.CurJnySpecKeys:{jnman.curJnySpecKeys.Get()}";

@@ -141,54 +141,54 @@ namespace CampusSimulator
 
         public void ColorizeButtonStates()
         {
-            var loc = "white";
-            clrbut("PipeButton", "pink", loc, sman.lcman.pipevis, "Pipes");
-            clrbut("FteButton", "lightblue", loc, sman.frman.detectFte.Get(), "F");
-            clrbut("ConButton", "lightblue", loc, sman.frman.detectContractor.Get(), "C");
-            clrbut("SecButton", "lightblue", loc, sman.frman.detectSecurity.Get(), "S");
-            clrbut("VisButton", "lightblue", loc, sman.frman.detectVisitor.Get(), "V");
-            clrbut("UnkButton", "lightblue", loc, sman.frman.detectUnknown.Get(), "U");
+            var idlecolor = "white";
+            clrbut("PipeButton", "pink", idlecolor, sman.lcman.pipevis, "Pipes");
+            clrbut("FteButton", "lightblue", idlecolor, sman.frman.detectFte.Get(), "F");
+            clrbut("ConButton", "lightblue", idlecolor, sman.frman.detectContractor.Get(), "C");
+            clrbut("SecButton", "lightblue", idlecolor, sman.frman.detectSecurity.Get(), "S");
+            clrbut("VisButton", "lightblue", idlecolor, sman.frman.detectVisitor.Get(), "V");
+            clrbut("UnkButton", "lightblue", idlecolor, sman.frman.detectUnknown.Get(), "U");
 
-            clrbut("ShowTracksButton", "lightblue", loc, sman.trman.showtracks.Get(), "Tracks");
+            clrbut("ShowTracksButton", "lightblue", idlecolor, sman.trman.showtracks.Get(), "Tracks");
 
             var b19comp = sman.bdman.GetB19();
             if (b19comp!=null)
             {
-                clrbut("B19GlassWallsButton", "yellow", loc, b19comp.glasswalls.Get(), "Gl");
-                clrbut("B19Level1Button", "yellow", loc, b19comp.level01.Get(), "L1");
-                clrbut("B19Level2Button", "yellow", loc, b19comp.level02.Get(), "L2");
-                clrbut("B19Level3Button", "yellow", loc, b19comp.level03.Get(), "L3");
-                clrbut("B19DoorsButton", "yellow", loc, b19comp.doors.Get(), "Door");
-                clrbut("B19FloorsButton", "yellow", loc, b19comp.floors.Get(), "Flur");
-                clrbut("B19HvacButton", "yellow", loc, b19comp.hvac.Get(), "Hvac");
+                clrbut("B19GlassWallsButton", "yellow", idlecolor, b19comp.glasswalls.Get(), "Gl");
+                clrbut("B19Level1Button", "yellow", idlecolor, b19comp.level01.Get(), "L1");
+                clrbut("B19Level2Button", "yellow", idlecolor, b19comp.level02.Get(), "L2");
+                clrbut("B19Level3Button", "yellow", idlecolor, b19comp.level03.Get(), "L3");
+                clrbut("B19DoorsButton", "yellow", idlecolor, b19comp.doors.Get(), "Door");
+                clrbut("B19FloorsButton", "yellow", idlecolor, b19comp.floors.Get(), "Flur");
+                clrbut("B19HvacButton", "yellow", idlecolor, b19comp.hvac.Get(), "Hvac");
                 //var glass = b19comp.b19_materialMode.Get() == B19Willow.B19_MaterialMode.glass;
-                clrbut("B19OsmButton", "yellow", loc, b19comp.osmbld.Get(), "Osm");
-                clrbut("B19WilButton", "yellow", loc, b19comp.wilbld.Get(), "Wil");
+                clrbut("B19OsmButton", "yellow", idlecolor, b19comp.osmbld.Get(), "Osm");
+                clrbut("B19WilButton", "yellow", idlecolor, b19comp.wilbld.Get(), "Wil");
             }
 
             var b121comp = sman.bdman.GetB121();
             if (b121comp!=null)
             {
-                clrbut("B121TranButton", "lightblue", loc, b121comp.glasswalls.Get(), "Gl");
-                clrbut("B121HvacButton", "yellow", loc, b121comp.hvac.Get(), "Hv");
-                clrbut("B121ElecButton", "yellow", loc, b121comp.lighting.Get(), "El");
-                clrbut("B121PlumButton", "yellow", loc, b121comp.plumbing.Get(), "Pb");
-                clrbut("B121OsmButton", "yellow", loc, b121comp.osmbld.Get(), "Osm");
-                clrbut("B121WilButton", "yellow", loc, b121comp.wilbld.Get(), "Wil");
+                clrbut("B121TranButton", "lightblue", idlecolor, b121comp.glasswalls.Get(), "Gl");
+                clrbut("B121HvacButton", "yellow", idlecolor, b121comp.hvac.Get(), "Hv");
+                clrbut("B121ElecButton", "yellow", idlecolor, b121comp.lighting.Get(), "El");
+                clrbut("B121PlumButton", "yellow", idlecolor, b121comp.plumbing.Get(), "Pb");
+                clrbut("B121OsmButton", "yellow", idlecolor, b121comp.osmbld.Get(), "Osm");
+                clrbut("B121WilButton", "yellow", idlecolor, b121comp.wilbld.Get(), "Wil");
             }
 
-            clrbut("Vt2dButton", "lightblue", loc, sman.frman.visibilityTiedToDetectability.Get(), "Vt2D");
-            clrbut("FrameButton", "pink", loc, sman.frman.frameJourneys.Get(), "Frame");
-            clrbut("FreeFlyButton", "pink", loc, sman.vcman.InFreeFly(), "FreeFly");
-            clrbut("RunButton", "pink", loc, sman.jnman.spawnrunjourneys, "Run");
-            clrbut("FlyButton", "lightblue", loc, sman.jnman.spawnflyjourneys, "Fly");
-            clrbut("ShadowButton", "lightblue", loc, sman.jnman.shadowJourney, "Shad");
-            clrbut("CamButton", "pink", loc, sman.mpman.camctrl.Get(), "Cam");
+            clrbut("Vt2dButton", "lightblue", idlecolor, sman.frman.visibilityTiedToDetectability.Get(), "Vt2D");
+            clrbut("FrameButton", "pink", idlecolor, sman.frman.frameJourneys.Get(), "Frame");
+            clrbut("FreeFlyButton", "pink", idlecolor, sman.vcman.InFreeFly(), "FreeFly");
+            clrbut("RunButton", "pink", idlecolor, sman.jnman.spawnrunjourneys, "Run");
+            clrbut("FlyButton", "lightblue", idlecolor, sman.jnman.spawnflyjourneys, "Fly");
+            clrbut("ShadowButton", "lightblue", idlecolor, sman.jnman.shadowJourney, "Shad");
+            clrbut("CamButton", "pink", idlecolor, sman.mpman.camctrl.Get(), "Cam");
             //Debug.Log($"ColorizeButtonStates sman.jnman.freezeJourneys:{sman.jnman.freezeJourneys}");
-            clrbut("FreezeSimButton", "lightblue", loc, sman.jnman.freezeJourneys, "Frz");
+            clrbut("FreezeSimButton", "lightblue", idlecolor, sman.jnman.freezeJourneys, "Frz");
 
-            clrbut("FvGridButton", "pink", loc, sman.fvman.gridVols.Get(), "Gd");
-            clrbut("FvTranButton", "pink", loc, sman.fvman.tranVols.Get(), "Tr");
+            clrbut("FvGridButton", "pink", idlecolor, sman.fvman.gridVols.Get(), "Gd");
+            clrbut("FvTranButton", "pink", idlecolor, sman.fvman.tranVols.Get(), "Tr");
         }
 
         void LinkObjectsAndComponents()
@@ -487,7 +487,7 @@ namespace CampusSimulator
             var but = topButMan.GetButton(bname);
             if (but != null)
             {
-                uiman.SetButtonColor(but, activecolor, idlecolor, status,displaytxt);
+                uiman.SetButtonColor(but, activecolor,  status,displaytxt, idleColor:idlecolor,showstar:true);
             }
         }
 
