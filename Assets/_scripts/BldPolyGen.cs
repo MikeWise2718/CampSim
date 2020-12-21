@@ -4,9 +4,6 @@ using UnityEngine;
 using Aiskwk.Dataframe;
 using Aiskwk.Map;
 using System;
-using UnityEngine.UI;
-using UnityEditor.U2D.Sprites;
-using System.Runtime.InteropServices;
 
 public enum GroundRef {  cen, min, max }
 public enum OsmBldRenderMode {  transparent, solid, defaultmode }
