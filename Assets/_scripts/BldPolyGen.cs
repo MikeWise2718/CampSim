@@ -5,8 +5,14 @@ using Aiskwk.Dataframe;
 using Aiskwk.Map;
 using System;
 using UnityEngine.UI;
+using UnityEditor.U2D.Sprites;
+using System.Runtime.InteropServices;
 
 public enum GroundRef {  cen, min, max }
+public enum OsmBldRenderMode {  transparent, solid, defaultmode }
+
+public enum BldFoundationTerraformMode { none, centerdist, outlinedist }
+
 [Serializable]
 public class OsmBldSpec
 {
@@ -16,6 +22,7 @@ public class OsmBldSpec
     public string wid;
     public float height;
     public float levelheight;
+    public float sockOffset;
     public int levels;
     public double lat;
     public double lng;
@@ -25,10 +32,13 @@ public class OsmBldSpec
     public Vector3 loc;
     public GroundRef groundRef;
     public Vector3 ptcen;
+    public OsmBldRenderMode renmode;
+    public BldFoundationTerraformMode terramode;
     public float maxy;
     public float ceny;
     public float miny;
     public bool isVisible;
+    public float transparency;
     List<Vector3> boutline;
     public GameObject bgo;
 
@@ -54,13 +64,17 @@ public class OsmBldSpec
         this.wid = wid;
         this.height = height;
         this.levels = levels;
+        this.sockOffset = 0;
         this.levelheight = height / levels;
         this.bgo = null;
         this.isVisible = true;
+        this.renmode = OsmBldRenderMode.defaultmode;
+        this.terramode = BldFoundationTerraformMode.none;
+        this.transparency = 0.5f;
         this.maxy = 0;
         this.ceny = 0;
         this.miny = 0;
-        this.groundRef = GroundRef.cen;
+        this.groundRef = GroundRef.max;
         shortname = osmname;
         shortname = shortname.Replace("Microsoft Building ","Bld");
         shortname = shortname.Replace("Microsoft Studio ", "Stu");
@@ -154,7 +168,7 @@ public class OsmBldSpec
         return rv;
     }
 
-    public float GetFloorHeight(int i,bool includeAltitude=false)
+    public float GetZeroBasedFloorHeight(int i,bool includeAltitude=false)
     {
         // note that on a 3 story 12 meter building the 0, 1, 2 floors are on 0, 4, 8 meter altitude
         var y = height;
@@ -163,7 +177,7 @@ public class OsmBldSpec
             var iflr = i;
             if (iflr < 0) iflr = 0;
             if (iflr > levels) iflr = levels;
-            y = iflr * height / levels;
+            y = sockOffset + ((iflr * height) / levels);
         }
         if (includeAltitude)
         {
@@ -173,7 +187,7 @@ public class OsmBldSpec
     }
     public Vector3 GetCenterFloor(int i,bool includeAltitude=false)
     {
-        var y = GetFloorHeight(i, includeAltitude: includeAltitude);
+        var y = GetZeroBasedFloorHeight(i, includeAltitude: includeAltitude);
         var rv = new Vector3(ptcen.x, y, ptcen.z);
         return rv;
     }
@@ -551,7 +565,39 @@ public class BldPolyGen
     //    //var rv = pg.GenBld(parent, bldname,bldname, height, levels, clr, alf: 0.5f,dowalls:dowalls,dofloors: dofloors,doroof:doroof, ptscale: ptscale, pgvd:pgvd);
     //    return rv;
     //}
-    public GameObject GenBldFromOsmBldSpec(GameObject parent, OsmBldSpec bs, bool plotTesselation = false, float ptscale = 1, PolyGenVekMapDel pgvd = null,float alf=0.5f)
+
+    public List<Vector3> IsectOutline(List<Vector3> baseoutline, GetIsectListDel gisl )
+    {
+        var newoutline = new List<Vector3>();
+        Vector3 pta = Vector3.zero;
+        Vector3 ptb = Vector3.zero;
+        var lname = "lname";
+        for (var i = 0; i < baseoutline.Count; i++)
+        {
+            ptb = baseoutline[i];
+            if (i > 0)
+            {
+                var isectlist = gisl(lname, pta, ptb);
+                newoutline.Add(pta);
+                var n = isectlist.Count;
+                //var n = 4;
+                for (var j = 0; j < n; j++)
+                {
+                    var (pt,lamb) = isectlist[j];
+                    //var lamb = isj * 1f / n;
+                    var ptab = lamb * (ptb - pta) + pta;
+                    //ptab = pt;
+                    newoutline.Add(ptab);
+                }
+            }
+            pta = ptb;
+        }
+        newoutline.Add(ptb);
+        return newoutline;
+    }
+
+
+    public GameObject GenBldFromOsmBldSpec(GameObject parent, OsmBldSpec bs, bool plotTesselation = false, float ptscale = 1, PolyGenVekMapDel pgvd = null, GetIsectListDel gisl=null, float alf=0.5f)
     {
         //if (bs.shortname=="Bld34")
         //{
@@ -563,14 +609,22 @@ public class BldPolyGen
         var dofloors = true;
         var doroof = true;
         var dosock = true;
+        var doisects = true;
         if (plotTesselation)
         {
             dowalls = false;
             dofloors = false;
         }
-        var outline = bs.GetOutline();
- 
-        var rv = gpg.GenBld(parent, bs, clr, alf: alf, dowalls: dowalls, dofloors: dofloors, doroof: doroof,dosock:dosock, plotTesselation: plotTesselation, ptscale: ptscale, pgvd: pgvd);
+
+        if (doisects && gisl!=null)
+        {
+            var outline = bs.GetOutline();
+            var newoutline = IsectOutline(outline,gisl);
+            gpg.SetOutline(newoutline);
+            //Debug.Log($"{bs.shortname} outline.count:{outline.Count} newoutline.count:{newoutline.Count}");
+        }
+
+        var rv = gpg.GenBld(parent, bs, clr, alf: alf, dowalls: dowalls, dofloors: dofloors, doroof: doroof, dosock:dosock, plotTesselation: plotTesselation, ptscale: ptscale, pgvd: pgvd);
         return rv;
     }
 

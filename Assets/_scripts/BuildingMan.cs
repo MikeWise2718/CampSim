@@ -51,7 +51,7 @@ namespace CampusSimulator
         public UxSettingBool fixedblds = new UxSettingBool("fixedblds", false);
         public UxSettingBool osmoutline = new UxSettingBool("osmoutline", true);
         public UxSettingBool osmgroundoutline = new UxSettingBool("osmgroundoutline", true);
-
+        public UxSetting<string> selectedbldname = new UxSetting<string>("selectedbldname", "");
 
         // To do - get rid of bldmode and treemode regions in BuildingMan
         #region bldMode
@@ -127,12 +127,21 @@ namespace CampusSimulator
             }
             return padlookup[padname];
         }
-        public List<BldDronePad> GetPads()
+        public List<BldDronePad> GetDronePads()
         {
             return new List<BldDronePad>(padlookup.Values);
         }
 
-
+        public List<string> GetDronePadNames()
+        {
+            var padlst = GetDronePads();
+            var rv = new List<string>();
+            foreach(var pd in padlst)
+            {
+                rv.Add(pd.name);
+            }
+            return rv;
+        }
         public void ToggleBld()
         {
             if (bldMode.Get() == BldModeE.full)
@@ -204,7 +213,24 @@ namespace CampusSimulator
                     }
                 }
             }
-            sman.LggWarning($"Found nothing that starts with \"{namestart}\"");
+            sman.LggWarning($"FindBldSpecByNameStart - Found nothing that starts with \"{namestart}\"");
+            return null;
+        }
+
+        public OsmBldSpec FindBldSpecByWid(string seekwid)
+        {
+            if (bldspecs != null)
+            {
+                foreach (var bs in bldspecs)
+                {
+                    if (bs.wid==seekwid)
+                    {
+                        //Debug.Log($"Found {bs.wid}");
+                        return bs;
+                    }
+                }
+            }
+            sman.LggWarning($"FindBldSpecByWid - Cound not find {seekwid}");
             return null;
         }
 
@@ -238,24 +264,13 @@ namespace CampusSimulator
             osmbldpolygons.GetInitial(true);
             osmoutline.GetInitial(true);
             osmgroundoutline.GetInitial(true);
+            selectedbldname.GetInitial("");
             fixedblds.GetInitial(false);
             scene_padspecs = new List<string>();
             sman.Lgg($"BuildingMan.InitializeValues walllinks:{walllinks.Get()} osmblds:{osmblds.Get()} osmbldstrans:{osmbldstrans.Get()}   fixedblds:{fixedblds.Get()}","pink");
         }
 
-        public List<string> GetFilteredPadNames(string prefix)
-        {
-            var rv = new List<string>();
-            foreach(var ps in scene_padspecs)
-            {
-                if(ps.StartsWith(prefix))
-                {
-                    var padname = ps.Split(':')[0]; // trim the name out
-                    rv.Add(padname);
-                }
-            }
-            return rv;
-        }
+
         public List<string> GetFilteredPadSpecs(string prefix)
         {
             var rv = new List<string>();
@@ -490,6 +505,7 @@ namespace CampusSimulator
                     break;
                 case SceneSelE.Eb12small:
                 case SceneSelE.Eb12:
+                    scene_padspecs = Building.Eb12DronePadspec;
                     MakeBuildings("Eb");
                     break;
                 case SceneSelE.TeneriffeMtn:
@@ -563,14 +579,14 @@ namespace CampusSimulator
                     }
                     if (bd != null)
                     {
-                        if (bd.name == "Bld33" && fname=="f01")
-                        {
-                            Debug.Log("Here I am again");
-                        }
+                        //if (bd.name == "Bld121" && fname=="f01")
+                        //{
+                        //    Debug.Log($"here is {bd.name} {fname}");
+                        //}
                         if (floordict.ContainsKey(fname))
                         {
                             var iflr = floordict[fname];
-                            var h = bd.GetFloorAltitude(iflr);
+                            var h = bd.GetZeroBasedFloorAltitude(iflr);
                             var x = node.pt.x;
                             var z = node.pt.z;
                             //var y = sman.lcman.GetHeight(x,z);
@@ -710,8 +726,8 @@ namespace CampusSimulator
                     break;
                 case SceneSelE.Eb12small:
                 case SceneSelE.Eb12:
-                    presetEvacBldName = "Eb12-22";
-                    sman.psman.AddPersonToBuildingAtNode(PersonMan.GenderE.male, "eb12-16-lob", "eb12-oso1a", "Arnie Schwarzwald", "Businessman004",
+                    presetEvacBldName = "Eb0814";
+                    sman.psman.AddPersonToBuildingAtNode(PersonMan.GenderE.male, "eb0814-f01-12-lob", "eb12-oso1a", "Arnie Schwarzwald", "Businessman004",
                                                          PersonMan.empStatusE.Security, "IdleUnarmed", false, 0, hasHololens: true, hasCamera: true, flagged: true);
                     break;
                 default:
@@ -932,14 +948,49 @@ namespace CampusSimulator
             //Debug.Log("Added bld " + building.name);
         }
 
-        public List<string> GetBuildingList()
+        public Building FindBuildingWithHitobject(string hitname)
+        {
+            sman.Lgg($"FindBuildingWithHitObject: {hitname}");
+            var bnar = hitname.Split('/');
+            foreach (var bn in bnar)
+            {
+                if (bldmasterlist.ContainsKey(bn))
+                {
+                    var bld = GetBuilding(bn);
+                    return bld;
+                }
+            }
+            sman.Lgg($"FindBuildingWithHitobject cound not find {hitname} in in building master list", "orange");
+            return null;
+        }
+
+        public void SetSelectedBuilding(string hitname)
+        {
+            var bld = FindBuildingWithHitobject(hitname);
+            if (bld != null)
+            {
+                sman.Lgg($"selectedbldname.SetAndSave {bld.name}","amber");
+                selectedbldname.SetAndSave(bld.name);
+            }
+        }
+
+        public List<string> GetBuildingsWithDestinations()
         {
             return bldnames;
         }
-        public int GetBuildingCount()
+        public int GetDestinationBuildingCount()
         {
-            if (bldnames == null) return 0;
             return bldnames.Count;
+        }
+        public List<string> GetAllBuildings()
+        {
+            var rv = new List<string>(bldmasterlist.Keys);
+            return rv;
+        }
+        public int GetAllBuildingsCount()
+        {
+            var rv = bldmasterlist.Count;
+            return rv;
         }
         public int GetBroomCount()
         {

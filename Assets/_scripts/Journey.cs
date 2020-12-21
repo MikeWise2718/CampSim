@@ -6,7 +6,7 @@ using GraphAlgos;
 namespace CampusSimulator
 {
 
-    public enum RouteSpecMethod { BldRoomToBldRoom }
+    public enum RouteSpecMethod { BldRoomToBldRoom,DronePadToDronePad }
     public class RouteSpec
     {
         JourneySpecMan jm;
@@ -238,6 +238,50 @@ namespace CampusSimulator
             this.actionSpec = actionSpec;
         }
 
+        public static (bool ok, string val) GetJsKeySave(string key)
+        {
+            var wholekey = $"journeyspec_{key}";
+            var uxset = new UxUtils.UxSetting<string>(wholekey, "");
+            var sval = uxset.GetInitial("");
+            var ok = false;
+            if (sval != "")
+            {
+                ok = true;
+            }
+            return (ok, sval);
+        }
+
+        //public static JourneySpec GetJsKeySaveJs(string key)
+        //{
+        //    var (ok, ss) = GetJsKeySave(key);
+        //    if (!ok)
+        //    {
+        //        return null;
+        //    }    
+        //    var js = new JourneySpec(jm.jnman.journeySpecMan, ss);
+        //    return js;
+        //}
+
+        public static void SetJsKeySave(string key, string sval)
+        {
+            var wholekey = $"journeyspec_{key}";
+            var uxset = new UxUtils.UxSetting<string>(wholekey, "");
+            uxset.SetAndSave(sval);
+        }
+
+        public static void SetJsKeySave(string key, JourneySpec js)
+        {
+            var ss = js.SerialString();
+            SetJsKeySave(key, ss);
+        }
+
+        public static void EraseJsKey(string key)
+        {
+            var wholekey = $"journeyspec_{key}";
+            var uxset = new UxUtils.UxSetting<string>(wholekey, "");
+            uxset.SetAndSave("");
+        }
+
         public JourneySpec(JourneySpecMan jm)
         {
             this.jm = jm;
@@ -368,6 +412,8 @@ namespace CampusSimulator
         public PathCtrl pathctrl;
         public BirdCtrl birdctrl;
         public JourneyEnd journeyEnd=JourneyEnd.disappear;
+        public bool quitAtDest = false;
+        public string endAction = "";
         public int jindex = 0;
         public int legindex = 0;
         public Leg currentleg = null;
@@ -450,27 +496,41 @@ namespace CampusSimulator
             //jman.sman.Log("StartLeg legidx:" + legidx);
             if (legidx >= nlegs)
             {
-                if (journeyEnd == JourneyEnd.disappear)
+                switch (journeyEnd)
                 {
-                    finishedtime = Time.time;
-                    journeyelap = finishedtime - starttime;
-                    status = JourneyStatE.AlmostFinished;
-                    if (person != null)
-                    {
-                        person.PersonStateStartUntraveling("", "");
-                    }
+                    default:
+                    case JourneyEnd.disappear:
+                        {
+                            finishedtime = Time.time;
+                            journeyelap = finishedtime - starttime;
+                            status = JourneyStatE.AlmostFinished;
+                            if (person != null)
+                            {
+                                person.PersonStateStartUntraveling("", "");
+                            }
+                            break;
+                        }
+                    case JourneyEnd.restart:
+                        {
+                            if (legidx != 0)
+                            {
+                                jman.sman.Lgg($"Jouney {name} restarting");
+                                StartLeg(0);
+                            }
+                            else
+                            {
+                                jman.sman.LggError("No legs in journey");
+                            }
+                            break;
+                        }
                 }
-                else
+                if (endAction != "")
                 {
-                    if (legidx != 0)
-                    {
-                        jman.sman.Lgg($"Jouney {name} restarting");
-                        StartLeg(0);
-                    }
-                    else
-                    {
-                        jman.sman.LggError("No legs in journey");
-                    }    
+                    GraphAlgos.GraphUtil.RunFile(endAction);
+                }
+                if (quitAtDest)
+                {
+                    jman.sman.Quit();
                 }
                 return;
             }

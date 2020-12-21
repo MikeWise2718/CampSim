@@ -55,6 +55,8 @@ namespace CampusSimulator
         #endregion Map Visuals
 
 
+        public UxSettingBool camctrl = new UxSettingBool("CamCtrl", false);
+
         public UxEnumSetting<MapProvider> reqMapProv = new UxEnumSetting<MapProvider>("MapProvider", MapProvider.BingSatelliteLabels);
         // todo - think we can eliminate MapPRovider and 
         #region MapProvider
@@ -545,6 +547,22 @@ namespace CampusSimulator
             }
             return lgo;
         }
+        public List<(Vector3 pt, float lamb)> GetIsectList(string lname, Vector3 pt1, Vector3 pt2 )
+        {
+            var rv = qmapman.qmm.qtt.GetIsectList(lname, pt1, pt2, omit:-1, coordsys: QkCoordSys.UserWc, db:false, ang: fragang, xoff: fragxoff, zoff: fragzoff);
+            return rv;
+        }
+
+        public GameObject AddFragLine(string lname, Vector3 pt1, Vector3 pt2, RmLinkFormE lnform = RmLinkFormE.pipe, float lska = 1.0f, float nska = 1.0f, string lclr = "red", string nclr = "", int omit = -1, float widratio = 1, bool wps = true)
+        {
+            if (qmapman == null || qmapman.qmm == null) return null;
+            var frm = lnform.ToString();
+            qmapman.qmm.qtt.ntotIsects = 0;
+            var lgo = qmapman.qmm.qtt.AddFragLine(lname, pt1, pt2, frm, lska, nska, lclr, nclr, omit, widratio, wps, fragang: fragang, fragxoff: fragxoff, fragzoff: fragzoff);
+            nTotIsects += qmapman.qmm.qtt.ntotIsects;
+            return lgo;
+        }
+
         //public GameObject AddLine(GameObject parent, string lname, Vector3 pt1, Vector3 pt2, RmLinkFormE lnform = RmLinkFormE.pipe, float lska = 1.0f, float nska = 1.0f, string lclr = "red", string nclr = "", int omit = -1, float widratio = 1, bool wps = true, bool frag = false)
         //{
         //    if (qmapman == null || qmapman.qmm == null) return null;
@@ -831,6 +849,7 @@ namespace CampusSimulator
         }
         public void SetViewerState(Aiskwk.Map.ViewerState vs)
         {
+            if (vs == null) return;
             qmapman.qmm.viewer.SetViewerInState(vs);
         }
 
@@ -852,6 +871,7 @@ namespace CampusSimulator
                         break;
                     }
             }
+            Viewer.ActivateViewerKeys(true);
         }
 
         void SetMeshCollider(bool enable)
@@ -997,7 +1017,8 @@ namespace CampusSimulator
 
                     viewHome.avatar = ViewerAvatar.QuadCopter;
                     viewHome.pos = new Vector3(-567.2f, 3f, 427.7f);
-                    viewHome.rot = new Vector3(0, -90, 0);
+                    //viewHome.rot = new Vector3(0, -90, 0);
+                    viewHome.rot = new Vector3(0, 0, 0);
 
                     isCustomizable = false;
                     break;
@@ -1114,6 +1135,104 @@ namespace CampusSimulator
                     hasLLmap = false;
                     isCustomizable = false;
                     break;
+                case SceneSelE.KeppelPort:
+                    maplat = 1.300600;
+                    maplng = 103.655660;
+                    mapscale = 1;
+                    maprot = Vector3.zero;
+                    maptrans = Vector3.zero;
+                    //xdistkm = 14.84f / (2 * 0.4096f);
+                    //zdistkm = 25.17f / (2 * 0.4096f);
+                    xdistkm = 2;
+                    zdistkm = 2;
+                    lod = 17;
+                    //hmultForNow = 10;
+                    useElesForNow = true;
+                    useViewer = true;
+                    mapscale = 1f;
+                    roty2 = 0;
+                    //nodesPerQuadKey = 8;
+                    //vviewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
+                    viewHome.avatar = ViewerAvatar.QuadCopter;
+
+                    hasLLmap = false;
+                    isCustomizable = false;
+                    break;
+                case SceneSelE.KeppelDist:
+                    maplat = 1.27159;
+                    maplng = 103.82914;
+                    mapscale = 1;
+                    maprot = Vector3.zero;
+                    maptrans = Vector3.zero;
+                    //xdistkm = 14.84f / (2 * 0.4096f);
+                    //zdistkm = 25.17f / (2 * 0.4096f);
+                    xdistkm = 2;
+                    zdistkm = 2;
+                    lod = 17;
+                    //hmultForNow = 10;
+                    useElesForNow = true;
+                    useViewer = true;
+                    mapscale = 1f;
+                    roty2 = 0;
+                    //nodesPerQuadKey = 8;
+                    //vviewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
+                    viewHome.avatar = ViewerAvatar.QuadCopter;
+
+                    hasLLmap = false;
+                    isCustomizable = false;
+                    break;
+
+                case SceneSelE.Doha:
+                    maplat = 25.286667;
+                    maplng = 51.533333;
+                    mapscale = 1;
+                    maprot = Vector3.zero;
+                    maptrans = Vector3.zero;
+                    //xdistkm = 14.84f / (2 * 0.4096f);
+                    //zdistkm = 25.17f / (2 * 0.4096f);
+                    xdistkm = 10;
+                    zdistkm = 10;
+                    lod = 14;
+                    //hmultForNow = 10;
+                    useElesForNow = true;
+                    useViewer = true;
+                    mapscale = 1f;
+                    roty2 = 0;
+                    //nodesPerQuadKey = 8;
+                    //vviewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
+                    viewHome.avatar = ViewerAvatar.QuadCopter;
+
+                    hasLLmap = false;
+                    isCustomizable = false;
+                    break;
+
+                case SceneSelE.Cyclades:
+                    //var llmid = new LatLng(36.801411, 25.271239, "Cyclades mid");
+                    //var llbox = new LatLngBox(llmid, 110, 170, lod: 12);
+
+                    maplat = 36.801411;
+                    maplng = 25.271239;
+                    mapscale = 1;
+                    maprot = Vector3.zero;
+                    maptrans = Vector3.zero;
+                    //xdistkm = 14.84f / (2 * 0.4096f);
+                    //zdistkm = 25.17f / (2 * 0.4096f);
+                    xdistkm = 110;
+                    zdistkm = 170;
+                    lod = 12;
+                    //hmultForNow = 10;
+                    useElesForNow = true;
+                    useViewer = true;
+                    mapscale = 1f;
+                    roty2 = 0;
+                    //nodesPerQuadKey = 8;
+                    //vviewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
+                    viewHome.avatar = ViewerAvatar.QuadCopter;
+
+                    hasLLmap = false;
+                    isCustomizable = false;
+                    break;
+
                 case SceneSelE.SanFrancisco:
                     maplat = 37.774900;
                     maplng = -122.419400;
@@ -1268,6 +1387,7 @@ namespace CampusSimulator
             reqEleProv.GetInitial(ElevProvider.BingElev);
             reqMapProv.GetInitial(MapProvider.BingSatelliteLabels);
             useElevations.GetInitial(true);
+            camctrl.GetInitial(false);
 
             frameQuadkeys.GetInitial(false);
             viewerBreadCrumbs.GetInitial(false);

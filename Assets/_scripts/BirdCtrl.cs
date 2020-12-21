@@ -4,10 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using GraphAlgos;
 using System.ComponentModel.Design.Serialization;
+using UnityEngine.UIElements;
+using Aiskwk.Map;
 
 namespace CampusSimulator
 {
-    public enum BirdFormE { none, sphere, longsphere, hummingbird, person,dog, car,drone,drone2,heli }
+    public enum BirdFormE { none, sphere, longsphere, hummingbird, person,dog, car,drone,drone2,drone3,drone4,heli }
     public enum BirdStateE { dormant, atstart, running, atgoal, stopped }
 
     public class BirdCtrl : MonoBehaviour
@@ -41,12 +43,11 @@ namespace CampusSimulator
 
         public PathPos pathpos = null;
         public Weg pathweg = null;
-        public string spathweg = "";
         public float wegdistance = 0;
         public Guid wegguid = Guid.Empty;
         public string swegguid = Guid.Empty.ToString();
         public int cntgp = 0;
-        public Vector3 moveoffset = new Vector3(0.3f, -1.55f, 0);
+        public Vector3 moveoffset = new Vector3(0.3f, -1.45f, 0);
 
         static public GameObject birdgoes = null;
         public Person person = null;
@@ -106,23 +107,34 @@ namespace CampusSimulator
             return rendgo;
         }
 
-        Vector3 GetPathPoint(float gpprdist,bool curpos=true)
+        (Vector3 pt,bool fragable,LinkUse lu) GetPathPoint(float gpprdist,bool setpathpos=true)
         {
-            if (path == null) return Vector3.zero;
-            var pp = path.MovePositionAlongPath(gpprdist);
-            if (curpos)
+            var fragable = false;
+            if (path == null) return (Vector3.zero,fragable,LinkUse.legacy);
+            PathPos pp = path.MovePositionAlongPath(gpprdist);
+            fragable = pp.weg.link.IsFragable();
+            var lu = pp.weg.link.usetype;
+            if (setpathpos)
             {
                 pathpos = pp;
                 pathweg = pp.weg;
-                spathweg = pathweg.frNode.name + " to " + pathweg.toNode.name;
                 wegguid = pp.weg.id;
                 swegguid = wegguid.ToString();
                 wegdistance = pp.wegDistSoFar;
                 cntgp++;
             }
-            
-            var pt = new Vector3(pp.pt.x, pp.pt.y + BirdFlyHeight, pp.pt.z);
-            return pt;
+            var yval = pp.pt.y;
+            if (fragable)
+            {
+            //    sman.Lgg($"before curpt:{curpt}","amber");
+                yval = sman.mpman.GetHeight(pp.pt.x, pp.pt.z);
+            //    sman.Lgg($"after  curpt:{curpt}", "light green");
+            }
+            var pt = new Vector3(pp.pt.x, yval + BirdFlyHeight, pp.pt.z);
+
+            //var pt = new Vector3(pp.pt.x, pp.pt.y + BirdFlyHeight, pp.pt.z);
+            //var pt = new Vector3(pp.pt.x, pp.pt.y + 0, pp.pt.z);
+            return (pt,fragable,lu);
         }
         void CreateBirdFormGos()
         {
@@ -237,6 +249,44 @@ namespace CampusSimulator
                         restingAnimationScript = "";
                         BirdFlyHeight = 10f;
                         birdgo.name = "Mavic2";
+                        break;
+                    }
+                case BirdFormE.drone3:
+                    {
+                        var objPrefab = Resources.Load<GameObject>("obj3d/delivery_drone_v2spinning");
+                        birdformgo = Instantiate<GameObject>(objPrefab);
+                        var s = 0.01f * sman.trman.dronescalemodelnumber.Get();
+                        if (birdscale > 0)
+                        {
+                            s *= birdscale;
+                        }
+                        birdformgo.transform.localScale = new Vector3(s, s, s);
+                        birdformgo.transform.localRotation = currot * Quaternion.Euler(-90, 0, 0);
+                        birdformgo.transform.localPosition = curpos;
+                        movingAnimationScript = "";
+                        restingAnimationScript = "";
+                        BirdFlyHeight = 10f;
+                        birdgo.name = "DelDrone";
+                        break;
+                    }
+                case BirdFormE.drone4:
+                    {
+                        var objPrefab = Resources.Load<GameObject>("obj3d/matrice_600spinning");
+                        birdformgo = Instantiate<GameObject>(objPrefab);
+                        //var s = 0.01f * sman.trman.dronescalemodelnumber.Get();
+                        var s = sman.trman.dronescalemodelnumber.Get();
+                        if (birdscale > 0)
+                        {
+                            s *= birdscale;
+                        }
+                        birdformgo.transform.localScale = new Vector3(s, s, s);
+                        //birdformgo.transform.localRotation = currot * Quaternion.Euler(-90, 0, 0);
+                        birdformgo.transform.localRotation = currot;
+                        birdformgo.transform.localPosition = curpos;
+                        movingAnimationScript = "";
+                        restingAnimationScript = "";
+                        BirdFlyHeight = 10f;
+                        birdgo.name = "Matrice600";
                         break;
                     }
                 case BirdFormE.dog:
@@ -427,10 +477,15 @@ namespace CampusSimulator
             BirdSpeed = 0;
             SetAnimationScript();
         }
+        public bool dragMarkerSphere = true;
+        GameObject draggo;
+        string dragclr = "red";
         void MoveBirdGos(float deltatime)
         {
             rundist += BirdSpeedFactor*BirdSpeed*deltatime; // deltaTime is time to complete last frame
-            curpt = GetPathPoint(rundist);
+            bool fragable;
+            LinkUse lu1;
+            (curpt,fragable,lu1) = GetPathPoint(rundist,setpathpos:true);
             var delt = curpt - lastcurpt;
             if (deltatime > 0)
             {
@@ -439,8 +494,8 @@ namespace CampusSimulator
             birdgo.transform.localPosition += delt;
             if (lookatpoint)
             {
-                var curlookpt = GetPathPoint(rundist + lookaheadtime + deltatime, curpos: false);
-                if (flatlookatpoint)
+                var (curlookpt,_,lu2) = GetPathPoint(rundist + lookaheadtime + deltatime, setpathpos: false);
+                if (lu1==LinkUse.stairs || lu2 == LinkUse.stairs || flatlookatpoint)
                 {
                     var flatlookpt = new Vector3(curlookpt.x, curpt.y, curlookpt.z);
                     if (flatlookpt.magnitude > 0.1f)
@@ -453,6 +508,27 @@ namespace CampusSimulator
                     birdgo.transform.LookAt(curlookpt);
                 }
             }
+            if (dragMarkerSphere)
+            {
+                if (draggo == null)
+                {
+                    draggo = GraphAlgos.GraphUtil.CreateMarkerSphere("dragsphere", curpt, clr: dragclr);
+                }
+                else
+                {
+                    dragclr = "blue";
+                    var yval = curpt.y - BirdFlyHeight;
+                    if (fragable)
+                    {
+                        dragclr = "blue";
+                        yval = sman.mpman.GetHeight(curpt.x, curpt.z);
+                    }
+                    var dragpt = new Vector3(curpt.x, yval, curpt.z);
+                    draggo.transform.position = dragpt;
+                    GraphAlgos.GraphUtil.SetColorOfGo(draggo, dragclr);
+                }
+            }
+
             lastcurpt = curpt;
             SetAnimationScript();
             

@@ -29,6 +29,7 @@ namespace CampusSimulator
         public float defRoomArea = 10;
         public float journeyChoiceWeight = 1;
         public string osmnamestart = "";
+        public string osmwid = "";
         public int adhocLevels = 1;
         public float adhocHeight = 4;
         public Vector3 adhocCen = Vector3.zero;
@@ -298,7 +299,7 @@ namespace CampusSimulator
                 {
                     if (GraphAlgos.GraphUtil.FlipBiasedCoin(cointoss_pctFull, "popbld"))
                     {
-                        var p = bm.sman.psman.MakeRandomPersonDrone();
+                        var p = bm.sman.psman.MakeRandomPersonDrone(pad.dsm,pad.dsn);
                         p.AssignHomeLocation(name, pad.name, pad.name);
                         pad.Occupy(p, regen: false);
                         npoped++;
@@ -376,7 +377,7 @@ namespace CampusSimulator
             var padnodename = padname;
             if (padname.EndsWith("centertop"))
             {
-                if (!isOsmGenerated)
+                if (!hasBldSpec)
                 {
                     bm.sman.LggError($"Building.AddOnePadFromStringPadspec - cannot compute center of building without OsmBldSpec");
                     return;
@@ -402,8 +403,15 @@ namespace CampusSimulator
             var alignang = StrToFloat(rar[2], 0);
             var length = StrToFloat(rar[3], 2);
             var width = StrToFloat(rar[4], 3);
+            var dsmok = System.Enum.TryParse(rar[6], out DroneSelectionMode ldsm);
+            var dsnok = System.Enum.TryParse(rar[7], out DroneSelectionNumber ldsn);
+            if (!dsmok || !dsnok)
+            {
+                ldsm = DroneSelectionMode.randommix;
+                ldsn = DroneSelectionNumber.any;
+            }
             var frameit = rar[5].ToLower()[0] != 'f';
-            padcomp.SetStats(roompt, pcap, alignang, length, width, frameit);
+            padcomp.SetStats(roompt, pcap, alignang, length, width, frameit, ldsm,ldsn );
             paddict[padname] = padcomp;
             bm.RegisterPad(padname, padcomp);
             padgo.transform.parent = roomlistgo.transform;
@@ -434,7 +442,7 @@ namespace CampusSimulator
         {
             var nbld = bldgos.Count;
             ActuallyDestroyObjects();
-            //   Debug.Log("Deleted "+bldgos.Count + +" goes for building "+name);
+            //bm.sman.Lgg($"Deleted {bldgos.Count} gos for building {name}","lilac");
             var roomlist = new List<BldRoom>(roomdict.Values);
             roomlist.ForEach(brm => brm.DeleteGos());
             var padlist = new List<BldDronePad>(paddict.Values);
@@ -443,7 +451,7 @@ namespace CampusSimulator
         public void CreateGos()
         {
             CreateObjects();
-            //   Debug.Log("Created " + bldgos.Count + " gos for building "+name);
+            //bm.sman.Lgg($"Created {bldgos.Count} gos for building {name}", "lilac");
             var roomlist = new List<BldRoom>(roomdict.Values);
             roomlist.ForEach(brm => brm.CreateGos());
             var padlist = new List<BldDronePad>(paddict.Values);

@@ -291,22 +291,7 @@ namespace CampusSimulator
             pers.empStatus = empstat;
             pers.flagged = flagged;
         }
-        public (string dispavname,string avname,float scale,Vector3 rot, Vector3 tran) GetRandomAvatarDroneName()
-        {
-            var i = GraphAlgos.GraphUtil.GetRanInt(3, "popbld");
-            //var phantomrot = new Vector3(0, 0, 0);
-            var phantomrot = new Vector3(0, 90, 0);
-            var phantomlift = new Vector3(0, 0.117f, 0);
-            //var mavrot = new Vector3(0, 0, 90);
-            var mavrot = (Quaternion.Euler(0, 0, 0)).eulerAngles;
-            var mavlift = new Vector3(0, 0.074f, 0);
-            switch (i)
-            {
-                default:
-                case 0: return ("Phantom","quadcopter", 3f, phantomrot, phantomlift);
-                case 1: return ("Mavic","DJI_Mavic_Air_2", 3f, mavrot, mavlift);
-            }
-        }
+
         public string GetRandomAvatarName(GenderE gender)
         {
             var rv = "";
@@ -430,10 +415,10 @@ namespace CampusSimulator
             //pers.danceScript = "SambaDancing";
             //return pers;
         }
-        public Person MakeRandomPersonDrone()
+        public Person MakeRandomPersonDrone(DroneSelectionMode dsm,DroneSelectionNumber dsn)
         {
             var gender = GetRandomGender();
-            var (dispavname,avname,avska,avrot,avtran) = GetRandomAvatarDroneName();
+            var (dispavname,avname,avska,avrot,avtran) = sman.drman.GetRandomAvatarDroneName(dsm,dsn);
             var dronename = GenRandomDroneName(gender,dispavname);
             var flagged = GraphAlgos.GraphUtil.FlipBiasedCoin(0.25f, "popbld");
 

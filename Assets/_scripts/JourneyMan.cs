@@ -34,7 +34,7 @@ namespace CampusSimulator
     }
 
     public enum JourneyStatE { NotStarted, WaitingToStart, Started, AlmostFinished, Finished, Failed }
-
+    public enum JourneyType { BldRoomToBldRoom, DronePadToDronePad }
 
     public class JourneyMan : MonoBehaviour
     {
@@ -306,10 +306,46 @@ namespace CampusSimulator
                 return null;
             }
         }
+        public BirdFormE GetForm(string avatar)
+        {
+            // ugly but temporary until I factor out drones properly
+            if (avatar.StartsWith("drone"))
+            {
+                if (avatar.EndsWith("drone"))
+                {
+                    return BirdFormE.drone;
+                }
+                if (avatar.EndsWith("drone1"))
+                {
+                    return BirdFormE.drone;
+                }
+                if (avatar.EndsWith("drone2"))
+                {
+                    return BirdFormE.drone2;
+                }
+                if (avatar.EndsWith("drone3"))
+                {
+                    return BirdFormE.drone3;
+                }
+                if (avatar.EndsWith("drone4"))
+                {
+                    return BirdFormE.drone4;
+                }
+            }
+            return BirdFormE.person;
+        }
         public Journey AddBldNodeBldNodeJourney(string fr_node, string tu_node, string pathname,string avatar="")
         {
-            if (!NodeExists(fr_node)) return null;
-            if (!NodeExists(tu_node)) return null;
+            if (!NodeExists(fr_node))
+            {
+                sman.LggWarning($"JourneyMan.AddBldNodeBldNodeJourney fr_node:{fr_node} does not exist");
+                return null;
+            }
+            if (!NodeExists(tu_node))
+            {
+                sman.LggWarning($"JourneyMan.AddBldNodeBldNodeJourney tu_node:{tu_node} does not exist");
+                return null;
+            }
             bool reservedCar = false;
             bool reservedSlot = false;
             GarageSlot sm1 = null;
@@ -330,7 +366,7 @@ namespace CampusSimulator
                 {
                     snode = jsnode,
                     enode = "",
-                    form = BirdFormE.person,
+                    form = GetForm(avatar),
                     capneed = LcCapType.walk,
                     formname = avatar,
                     vel = 2 * lvelfak
@@ -364,6 +400,7 @@ namespace CampusSimulator
                     vehicle = sm1.vehicle,
                     capneed = LcCapType.drive,
                     formname = sm1.carformname,
+                    skafak = 1,
                     vel = 20 * lvelfak
                 };
                 var epos = linkctrl.GetNode(jenode).pt;
@@ -391,7 +428,7 @@ namespace CampusSimulator
                 {
                     snode = leg2.enode,
                     enode = jenode,
-                    form = BirdFormE.person,
+                    form = GetForm(avatar),
                     capneed = LcCapType.walk,
                     formname = avatar,
                     vel = 2 * lvelfak
@@ -421,13 +458,65 @@ namespace CampusSimulator
             }
         }
 
+        public Journey AddNodeNodeJourney(string fr_node, string tu_node, string pathname, string avatar = "")
+        {
+            if (!NodeExists(fr_node))
+            {
+                sman.LggWarning($"JourneyMan.AddNodeNodeJourney fr_node:{fr_node} does not exist");
+                return null;
+            }
+            if (!NodeExists(tu_node))
+            {
+                sman.LggWarning($"JourneyMan.AddNodeNodeJourney tu_node:{tu_node} does not exist");
+                return null;
+            }
+
+            try
+            {
+                var jsnode = fr_node;
+                var jenode = tu_node;
+
+                if (avatar == "")
+                {
+                    avatar = GetRandomPersonFormname();
+                }
+
+
+                Leg leg1 = new Leg
+                {
+                    snode = jsnode,
+                    enode = jenode,
+                    form = GetForm(avatar),
+                    capneed = LcCapType.walk,
+                    formname = avatar,
+                    vel = 2 * lvelfak
+                };
+
+                var description = " - " + pathname + " " + avatar;
+                var jgo = new GameObject();
+                var jny = jgo.AddComponent<Journey>();
+                jny.InitJourney(this, null, null, null, null, description, jorg: "ephemeral");
+                jny.AddLeg(leg1);
+                AddJ(jny);
+                return jny;
+            }
+            catch (UnityException ex)
+            {
+                sman.LggWarning("Could not add journey from " + fr_node + " to " + tu_node + " " + ex.Message);
+                return null;
+            }
+        }
+
         BirdFormE locformfunc(string form)
         {
             switch (form)
             {
                 case "dog": return BirdFormE.dog;
                 case "drone": return BirdFormE.drone;
+                case "drone1": return BirdFormE.drone;
                 case "drone2": return BirdFormE.drone2;
+                case "drone3": return BirdFormE.drone3;
+                case "drone4": return BirdFormE.drone4;
                 case "heli": return BirdFormE.heli;
                 default: return BirdFormE.person;
             }
@@ -496,8 +585,16 @@ namespace CampusSimulator
             }
             var fr_node = person.placeNode;
             var tu_node = broom.roomNodeName;
-            if (!NodeExists(fr_node)) return null;
-            if (!NodeExists(tu_node)) return null;
+            if (!NodeExists(fr_node))
+            {
+                sman.LggError($"JouneyMan.AddPersonBldroomJourney fr_node:{fr_node} does not exist");
+                return null;
+            }
+            if (!NodeExists(tu_node))
+            {
+                sman.LggError($"JouneyMan.AddPersonBldroomJourney tu_node:{tu_node} does not exist");
+                return null;
+            }
             GarageSlot sm1 = null;
             GarageSlot sm2 = null;
             try
@@ -617,6 +714,59 @@ namespace CampusSimulator
             }
         }
 
+        public Journey AddDronePadJourney(string padname1, string padname2,string avatar)
+        {
+            var fr_node = padname1;
+            var tu_node = padname2;
+            if (!NodeExists(fr_node))
+            {
+                sman.LggError($"JourneyMan.AddDronePadJourney fr_node:{fr_node} does not exist");
+                return null;
+            }
+            if (!NodeExists(tu_node))
+            {
+                sman.LggError($"JourneyMan.AddDronePadJourney tu_node:{tu_node} does not exist");
+                return null;
+            }
+            try
+            {
+                var jsnode = fr_node;
+                var jenode = tu_node;
+
+                var perform = avatar;
+
+                Leg leg1 = new Leg
+                {
+                    snode = jsnode,
+                    enode = jenode,
+                    form = GetForm(avatar),
+                    capneed = LcCapType.fly,
+                    formname = perform,
+                    vel = 5 * lvelfak,
+                    lookatpt = true,  // drone
+                    flatlookatpt = true,
+                    xoff = 0.6f
+                };
+
+                var msg = $"{avatar} drone traveling fromn {fr_node} to {tu_node}";
+                //person.PersonStateStartWaitingToTravel();
+                var stardelay = GraphAlgos.GraphUtil.GetRanFloat(0.5f, 15f);
+                var jgo = new GameObject();
+                var jny = jgo.AddComponent<Journey>();
+                // jny.InitJourney(this, null, msg);
+                jny.InitJourney(this, null, null, null, null, msg, 0.5f, stardelay, jorg: "ephemeral-drone");
+                jny.AddLeg(leg1);
+                AddJ(jny);
+                return jny;
+            }
+            catch (UnityException ex)
+            {
+                var msg = $"Could not add journey for {avatar} from {fr_node} to {tu_node} {ex.Message}";
+                sman.LggWarning(msg);
+                return null;
+            }
+        }
+
         public Journey AddDroneJourney(Person person, BldDronePad bpad, int padslot)
         {
             if (!person)
@@ -626,8 +776,16 @@ namespace CampusSimulator
             }
             var fr_node = person.placeNode;
             var tu_node = bpad.padNodeName;
-            if (!NodeExists(fr_node)) return null;
-            if (!NodeExists(tu_node)) return null;
+            if (!NodeExists(fr_node))
+            {
+                sman.LggError($"JourneyMan.AddDroneJourney fr_node:{fr_node} does not exist");
+                return null;
+            }
+            if (!NodeExists(tu_node))
+            {
+                sman.LggError($"JourneyMan.AddDroneJourney tu_node:{tu_node} does not exist");
+                return null;
+            }
             try
             {
                 var jsnode = fr_node;
@@ -662,7 +820,8 @@ namespace CampusSimulator
             }
             catch (UnityException ex)
             {
-                sman.LggWarning("Could not add journey for " + person.personName + " from " + fr_node + " to " + tu_node + " " + ex.Message);
+                 var msg = $"Could not add journey for {person.personName} from {fr_node} to {tu_node} {ex.Message}";
+                sman.LggWarning(msg);
                 return null;
             }
         }
@@ -671,7 +830,11 @@ namespace CampusSimulator
         {
             var fr_node = person.placeNode;
             var perform = person.avatarName;
-            if (!NodeExists(fr_node)) return null;
+            if (!NodeExists(fr_node))
+            {
+                sman.LggError($"JouneyMan.AddEvacJourney fr_node:{fr_node} does not exist");
+                return null;
+            }
             try
             {
                 var jsnode = fr_node;
@@ -728,7 +891,11 @@ namespace CampusSimulator
             CheckFastMode();
             var fr_node = pers.GetWaitNodeName();
             var perform = pers.avatarName;
-            if (!NodeExists(fr_node)) return null;
+            if (!NodeExists(fr_node))
+            {
+                sman.LggError($"JouneyMan.AddPersonToRoomJourney fr_node:{fr_node} does not exist");
+                return null;
+            }
             try
             {
                 var jsnode = fr_node;
@@ -779,7 +946,11 @@ namespace CampusSimulator
             CheckFastMode();
             var fr_node = pers.placeNode;
             var perform = pers.avatarName;
-            if (!NodeExists(fr_node)) return null;
+            if (!NodeExists(fr_node))
+            {
+                sman.LggError($"JouneyMan.AddPersonToRoomJourney fr_node:{fr_node} does not exist");
+                return null;
+            }
             try
             {
                 var jsnode = fr_node;
@@ -868,21 +1039,43 @@ namespace CampusSimulator
             return jny;
         }
 
+        public Journey AddJsmJourney(string jname)
+        {
+            return null;
+        }
         public Journey AddJsmJourney(JourneySpec jsm)
         {
             CheckFastMode();
             var bld1 = jsm.routeSpec.bld1name;
             var bld2 = jsm.routeSpec.bld2name;
-            var bc1 = bm.GetBuilding(bld1);
-            var bc2 = bm.GetBuilding(bld2);
-            var b1room = jsm.routeSpec.bld1room;
-            var b2room = jsm.routeSpec.bld1room;
-            var ranset = "jnygen";
-            var bdest1 = bc1.GetMatchingDestOrRandom(b1room, ranset);
-            var bdest2 = bc2.GetMatchingDestOrRandom(b2room, ranset);
-            var pathname = bc1.shortname + " to " + bc2.shortname;
             var avatar = jsm.princeSpec.avatar;
-            var jny = AddBldNodeBldNodeJourney(bdest1, bdest2, pathname,avatar:avatar);
+            var ranset = "jnygen";
+            Journey jny;
+            if (jsm.routeSpec.routeSpecMethod == RouteSpecMethod.DronePadToDronePad)
+            {
+                jny = AddDronePadJourney(bld1,bld2,avatar);
+            }
+            else
+            {
+                var bc1 = bm.GetBuilding(bld1);
+                var bc2 = bm.GetBuilding(bld2);
+                var b1room = jsm.routeSpec.bld1room;
+                var b2room = jsm.routeSpec.bld2room;
+                var bdest1 = bc1.GetMatchingDestOrRandom(b1room, ranset);
+                var bdest2 = bc2.GetMatchingDestOrRandom(b2room, ranset);
+                var pathname = bc1.shortname + " to " + bc2.shortname;
+                if (bld1 == bld2)
+                {
+                    jny = AddNodeNodeJourney(bdest1, bdest2, pathname, avatar: avatar);
+                }
+                else
+                {
+                    jny = AddBldNodeBldNodeJourney(bdest1, bdest2, pathname, avatar: avatar);
+                }
+            }
+            jny.journeyEnd = jsm.actionSpec.journeyEnd;
+            jny.quitAtDest = jsm.actionSpec.quitAtDest;
+            jny.endAction = jsm.actionSpec.thingToDo;
             return jny;
         }
         public Journey AddBldBldJourneyWithEphemeralPeople(string b1, string b2)
@@ -1044,7 +1237,7 @@ namespace CampusSimulator
             pers.GrabMainCamera();
             if (sman.curscene == SceneSelE.Eb12 || sman.curscene == SceneSelE.Eb12small)
             {
-                room = "eb12-12-lob";
+                room = "eb12-f01-12-lob";
             }
             if (pers.IsInHomeRoom())
             {
@@ -1395,7 +1588,7 @@ namespace CampusSimulator
         }
         void SpawnJourneysByBuilding()
         {
-            var nbldcnt = bm.GetBuildingCount();
+            var nbldcnt = bm.GetDestinationBuildingCount();
             if (nbldcnt == 0)
             {
                 nspawnfails++;
@@ -1455,7 +1648,7 @@ namespace CampusSimulator
 
         void SpawnDroneJourneysByBuilding()
         {
-            var nbldcnt = bm.GetBuildingCount();
+            var nbldcnt = bm.GetDestinationBuildingCount();
             if (nbldcnt == 0)
             {
                 nspawnfails++;
@@ -1728,6 +1921,7 @@ namespace CampusSimulator
                         var vs = sman.mpman.GetViewerState();
                         vs.pos = pt;
                         vs.rot = rt;
+                        vs.avatar = Aiskwk.Map.ViewerAvatar.Nothing;
                         sman.mpman.SetViewerState(vs);
                         //var pathpos = jny.birdctrl.GetBirdPos();
                         //Debug.Log($"ShadowSync to {pathpos.pt:f2}");

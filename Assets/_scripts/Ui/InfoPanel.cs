@@ -203,6 +203,7 @@ public class InfoPanel : MonoBehaviour
             if (viewer!=null)
             {
                 txtalt = $" AB:{viewer.altbase} A:{viewer.altitude:f1}";
+                var vcc = viewer.carriageControlOn;
                 var npcams = viewer.carriageMons.Count;
                 txtpancam = $"ncam:{npcams} - ";
                 for(int i=0; i<npcams; i++)
@@ -217,7 +218,8 @@ public class InfoPanel : MonoBehaviour
                     catch (System.Exception) { }
                     txtpancam += $" {mon}:{activecode}";
                 }
-                txtpancam += "\n";
+                var cc = viewer.carriageControlOn ? "cc" : "  ";
+                txtpancam = $"{txtpancam}:{cc}\n";
             }
             //txt += "Pos:" + pos.x.ToString("f2") + " " + pos.y.ToString("f2") + " " + pos.z.ToString("f2")+"\n";
             txt += $"Pos:{pos.x,4:f2} {pos.y,4:f2} {pos.z,4:f2}{txtalt}\n";
@@ -240,7 +242,7 @@ public class InfoPanel : MonoBehaviour
         var (ncolliders,nenabled) = CountColliders();
         mmsg += System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss zzz\n");
         mmsg += $"P:{sman.psman.GetPersonCount()} V:{sman.veman.GetVehicleCount()} "+
-                $"B:{sman.bdman.GetBuildingCount()} BR:{sman.bdman.GetBroomCount()} VC:{sman.vcman.GetVidcamCount()} C:{nenabled}/{ncolliders}\n"+
+                $"B:{sman.bdman.GetDestinationBuildingCount()}/{sman.bdman.GetAllBuildingsCount()} BR:{sman.bdman.GetBroomCount()} VC:{sman.vcman.GetVidcamCount()} C:{nenabled}/{ncolliders}\n"+
                 $"{GraphAlgos.GraphUtil.GetVersionString()}";
         mscText.text = mmsg;
 

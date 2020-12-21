@@ -20,7 +20,10 @@ namespace CampusSimulator
 {
     public enum RouteGarnishE { none, names, coords, all }
 
-    public enum SceneSelE {MsftSmall, MsftCoreCampus, MsftB121focused, MsftB33focused, MsftB19focused, MsftRedwest,MsftMountainView, Custom, Seattle,Seatac, MtStHelens,Riggins, Eb12,Eb12small,  MsftDublin, TukSouCen, HiddenLakeLookout,TeneriffeMtn,SanFrancisco,Frankfurt, None }
+    public enum SceneSelE {MsftSmall, MsftCoreCampus, MsftB121focused, MsftB33focused, MsftB19focused, MsftRedwest,MsftMountainView, Custom, 
+                           Seattle,Seatac, MtStHelens,Riggins, 
+                           Eb12,Eb12small,  MsftDublin, TukSouCen, HiddenLakeLookout,TeneriffeMtn,SanFrancisco,Frankfurt,
+                           KeppelPort, KeppelDist, Cyclades, Doha, None }
 
     public class SceneMan : MonoBehaviour
     {
@@ -60,6 +63,7 @@ namespace CampusSimulator
         public bool autoerrorcorrect = false;
         private bool needsrefresh = false;
         private bool needstotalrefresh = false;
+        private bool scenechange = false;
 
         public SceneSelE requestScene = SceneSelE.None;
         public SceneSelE curscene = SceneSelE.None;
@@ -67,6 +71,8 @@ namespace CampusSimulator
         public static bool kickOffRun = false;
         public static bool kickOffFly = false;
         public static bool kickOffEvac = false;
+        public static bool kickOffJourney = false;
+        public static string kickoffJname = "";
         public static bool showNoPipes = false;
 
 
@@ -285,6 +291,39 @@ namespace CampusSimulator
         //}
 
 
+
+
+        public void DumpColorName1(string cname)
+        {
+            var clr = GraphAlgos.GraphUtil.GetColorByName(cname);
+            var org = GraphAlgos.GraphUtil.GetColorOriginByName(cname);
+            var (hex, _) = GraphAlgos.GraphUtil.HexColor(clr);
+            var mag = GraphAlgos.GraphUtil.ColorMag(cname);
+            var msg = $"{hex} - {mag:f3} - {cname} - {org}";
+            this.Lgg(msg, cname);
+        }
+        public void DumpColorNames()
+        {
+            GraphAlgos.GraphUtil.InitColorTable();
+            //var isblueblue = GraphAlgos.GraphUtil.isColorName("blue");
+            DumpColorName1("red");
+            DumpColorName1("red:xkcd");
+            DumpColorName1("blue");
+            DumpColorName1("blue:xkcd");
+            DumpColorName1("green");
+            DumpColorName1("green:xkcd");
+            var cnames = GraphAlgos.GraphUtil.GetColorNames( GraphUtil.ColorNameOrder.Mag );
+            foreach (var cn in cnames)
+            {
+                var mag = GraphAlgos.GraphUtil.ColorMag(cn);
+                if (mag > 0.44f)
+                {
+                    DumpColorName1(cn);
+                }
+            }
+        }
+
+
         public void BaseInitialize(SceneSelE newscene)
         {
             // Here we do two things
@@ -304,6 +343,8 @@ namespace CampusSimulator
             GraphAlgos.GraphUtil.SetRanSeed("journeyspawn", curseed);
             GraphAlgos.GraphUtil.SetRanSeed("spawnstreaming", curseed);
             GraphAlgos.GraphUtil.InitializeRansets();
+            //DumpColorNames();
+
         }
         //public void InitializeGlbLlMap()
         //{
@@ -485,7 +526,7 @@ namespace CampusSimulator
                 {
                    LggError("Scene "+newscene.ToString()+" not initialized successfully Exception:"+ex.ToString());
                 }
-                CancelRefreshes();
+                CancelAnyPendingRefreshes(); // if we got here we want to stop now
                 Lgg($"SceneMan.SetScene completed scenario initialization for {curscene}");
             }
             else
@@ -496,17 +537,6 @@ namespace CampusSimulator
         }
 
 
-
-        //public void LggOld(string msg, string clr1, string clr2, string delim = "|", bool unitylog = true)
-        //{
-        //    var color = new string[] { clr1, clr2 };
-        //    var nmsg = LogMan.ColorCode(msg, color, delim);
-        //    if (unitylog)
-        //    {
-        //        UnityLog(nmsg, LogSeverity.Info);
-        //    }
-
-        //}
 
         public void Lgg(string msg, string clr1, string clr2, string delim = "|", bool unitylog = true)
         {
@@ -520,11 +550,25 @@ namespace CampusSimulator
                 Debug.Log(msg);
             }
         }
+
+        public static void Lggg(string msg, string color = "gray")
+        {
+            var lgman = FindObjectOfType<LogMan>();
+            if (lgman != null)
+            {
+                lgman.Lgglong(msg, LogSeverity.Info, LogTyp.General, color: new string[] { color });
+            }
+            else
+            {
+                Debug.Log(msg);
+            }
+        }
         public void Lgg(string msg, string color="gray")
         {
             if (lgman != null)
             {
-                lgman.Lgglong(msg, LogSeverity.Info,LogTyp.General, color:new string[] { color });
+                var nmsg = $"{msg} ({color})";
+                lgman.Lgglong(nmsg, LogSeverity.Info,LogTyp.General, color:new string[] { color });
             }
             else
             {
@@ -590,10 +634,11 @@ namespace CampusSimulator
             }
 #endif
         }
-        public void CancelRefreshes()
+        public void CancelAnyPendingRefreshes()
         {
             needsrefresh = false;
             needstotalrefresh = false;
+            scenechange = false;
         }
         public void RequestRefresh(string requester,bool totalrefresh=false, SceneSelE requestedScene = SceneSelE.None)
         {
@@ -604,6 +649,7 @@ namespace CampusSimulator
                 // note that just setting this to totalrefresh would overwrite other totalrefresh requests
                 needstotalrefresh = true; 
             }
+            scenechange = requestedScene != curscene;
             if (requestedScene!=SceneSelE.None)
             {
                 this.requestScene = requestedScene;
@@ -1627,9 +1673,12 @@ namespace CampusSimulator
         }
         public static SceneSelE GetInitialSceneOption()
         {
+            //GraphUtil.AddArgs(new string [] { "-jny","BlueTina" });
+
             var einival = SceneSelE.MsftB121focused; // default scene
             kickOffFly = GraphUtil.ParmBool("-fly");
             kickOffRun = GraphUtil.ParmBool("-run");
+            (kickOffJourney,kickoffJname) = GraphUtil.ParmString("-jny");
             kickOffEvac = GraphUtil.ParmBool("-evac");
             showNoPipes = GraphUtil.ParmBool("-nopipes");
 
@@ -1834,6 +1883,46 @@ namespace CampusSimulator
                 ctrlDhitTime = Time.time;
             }
         }
+        public void KickoffStartupJourneys()
+        {
+            var (ok, jss) = JourneySpec.GetJsKeySave(kickoffJname);
+            if (ok)
+            {
+                var js = new JourneySpec(jnman.journeySpecMan, jss);
+                var launchedJny = jnman.AddJsmJourney(js);
+                if (launchedJny != null)
+                {
+                    jnman.journeyToShadow = launchedJny.name;
+                    jnman.shadowJourney = true;
+                }
+            }
+            else
+            {
+                LggError($"Error dehydrating journey {kickoffJname}");
+            }
+        }
+
+        public void KickoffStartups()
+        {
+            if (kickOffRun)
+            {
+                jnman.spawnrunjourneys = true;
+            }
+            if (kickOffFly)
+            {
+                jnman.spawnflyjourneys = true;
+            }
+            if (kickOffEvac)
+            {
+                bdman.EvacPresetBld();
+            }
+            if (kickOffJourney)
+            {
+                KickoffStartupJourneys();
+            }
+            uiman.SyncState();
+        }
+
         public float lastRefreshTime = 0;
 
         int updateCount = 0;
@@ -1858,19 +1947,7 @@ namespace CampusSimulator
             }
             if (updateCount == 10)
             {
-                if (kickOffRun)
-                {
-                    jnman.spawnrunjourneys = true;
-                }
-                if (kickOffFly)
-                {
-                    jnman.spawnflyjourneys = true;
-                }
-                if (kickOffEvac)
-                {
-                    bdman.EvacPresetBld();
-                }
-                uiman.SyncState();
+                KickoffStartups();
             }
             checkTripod();
             SetArcoreTracking();
@@ -1887,10 +1964,16 @@ namespace CampusSimulator
 
             if (needsrefresh)
             {
-                Debug.Log($"SetScene.Update cnt:{updateCount} needsrefresh:{needsrefresh}");
+                Lgg($"SetScene.Update cnt:{updateCount} needsrefresh:{needsrefresh} sceenchange:{scenechange}","grass");
                 var sw1 = new StopWatch();
                 if (needstotalrefresh)
                 {
+                    var saveviewstate = !scenechange;
+                    ViewerState vstatesave=null;
+                    if (saveviewstate)
+                    {
+                        vstatesave = mpman.GetViewerState();
+                    }
                     var sceneToRefresh = curscene;
                     if (requestScene != SceneSelE.None)
                     {
@@ -1900,7 +1983,12 @@ namespace CampusSimulator
                     SetScenario(sceneToRefresh, force: true);
                     sw2.Stop();
                     lastRefreshTime = (float) sw2.Elap().TotalSeconds;
-                    Debug.Log($"TotalRefresh SetScene took {sw2.ElapSecs()} secs");
+                    if (saveviewstate)
+                    {
+                        Lgg($"Setting viewstate avatar to {vstatesave.avatar}","amber");
+                        mpman.SetViewerState(vstatesave);
+                    }
+                    Lgg($"TotalRefresh SetScene took {sw2.ElapSecs()} secs","grass");
                 }
                 else
                 {
@@ -1908,13 +1996,13 @@ namespace CampusSimulator
                     RefreshSceneManGos(); // in update if needs refresh
                     sw3.Stop();
                     lastRefreshTime = (float) sw3.Elap().TotalSeconds;
-                    Debug.Log($"RefreshSceneManGos took {sw3.ElapSecs()} secs");
+                    Lgg($"RefreshSceneManGos took {sw3.ElapSecs()} secs","grass");
                 }
                 uiman.SyncState();
                 needstotalrefresh = false;
                 needsrefresh = false;
                 sw1.Stop();
-                Debug.Log($"Refresh took {sw1.ElapSecs()} secs");
+                Lgg($"Refresh took {sw1.ElapSecs()} secs","grass");
             }
 
             if (!uiman.optpan.IsOptionsPanelOpen())
@@ -1926,7 +2014,7 @@ namespace CampusSimulator
                     var vcam = Viewer.GetViewerCamera();
                     if (vcam != null && Input.GetMouseButtonDown(0))
                     {
-                        //Debug.Log("Left Mouse was pressed");
+                        Debug.Log("Left Mouse was pressed");
 
 
                         Ray ray = vcam.ScreenPointToRay(Input.mousePosition);
@@ -1942,6 +2030,7 @@ namespace CampusSimulator
                                 go = go.transform.parent.gameObject;
                             }
                             jnman.SetShadowJourney(hitname);
+                            bdman.SetSelectedBuilding(hitname);
                             lasthitname = hitname;
                             Debug.Log($"Left mouse button hit {hitname}");
                             //var hitname = go.name.ToLower();

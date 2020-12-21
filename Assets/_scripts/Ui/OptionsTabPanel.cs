@@ -143,7 +143,7 @@ public class OptionsTabPanel : MonoBehaviour
             {
                 activecolor = "white";
             }
-            uiman.SetButtonColor(but, activecolor, "white", curts == idname, displayname, showstar: false); ;
+            uiman.SetButtonColor(but, activecolor, curts == idname, displayname, showstar: false); 
         }
     }
 

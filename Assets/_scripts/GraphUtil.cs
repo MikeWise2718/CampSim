@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using System.IO;
 using System.Reflection;
+using Newtonsoft.Json;
 
 /// <summary>
 /// GraphAlgos.cs  - This file contains static algoritms that we need in various places. 
@@ -13,7 +14,7 @@ namespace GraphAlgos
 {
     public class GraphUtil
     {
-        static string _verstring = "2020.10.20.1 - Seattle Flight Vols";
+        static string _verstring = "2020.10.27.1 - Shadowing Journeys";
         static string _sysver = "";
         static DateTime _buildDate = DateTime.UtcNow;
 
@@ -59,17 +60,55 @@ namespace GraphAlgos
             return _verstring;
         }
 
+
+        public static void RunFile(string fname)
+        {
+            var p = new System.Diagnostics.Process();
+            p.StartInfo.CreateNoWindow = true;
+            p.StartInfo.UseShellExecute = false;
+            p.StartInfo.RedirectStandardOutput = true;
+            p.StartInfo.FileName = fname;
+            p.Start();
+
+            //string output = p.StandardOutput.ReadToEnd();
+            //p.WaitForExit();
+        }
+
         static List<string> cookedArgs = null;
-        public static List<string> GetArgs(bool addtestparms = false)
+
+        public static void InitArgs()
         {
             if (cookedArgs == null)
             {
                 cookedArgs = new List<string>(System.Environment.GetCommandLineArgs());
-                if (addtestparms)
-                {
-                    cookedArgs.AddRange(new List<string>() { "-testb", "newarg2", "-tests", "hiya", "-testi", "3", "-testf", "3.14", "-testd", "1.234567890123", "-scene", "msftb19focused", "riggins","-fly","-run","-nopipes" });
-                }
             }
+        }
+        public static void AddArgs(string parmselector = "")
+        {
+            InitArgs();
+            switch (parmselector)
+            {
+                case "test":
+                    {
+                        AddArgs( new string [] { "-testb", "newarg2", "-tests", "hiya", "-testi", "3", "-testf", "3.14", "-testd", "1.234567890123", "-scene", "msftb19focused", "riggins", "-fly", "-run", "-nopipes" });
+                        break;
+                    }
+                case "testjnykickoff":
+                    {
+                        AddArgs(new string [] { "-jny","BlueTina" });
+                        break;
+                    }
+            }
+        }
+        public static void AddArgs(string[] parms)
+        {
+            InitArgs();
+            cookedArgs.AddRange(parms);
+        }
+
+        public static List<string> GetArgs()
+        {
+            InitArgs();
             return cookedArgs;
         }
 
@@ -332,7 +371,9 @@ namespace GraphAlgos
         {
             return new Color(r / 255f, g / 255f, b / 255f, alpha);
         }
+        static Dictionary<string, string> hexColorTable = null;
         static Dictionary<string, Color> colorTable =null;
+        static Dictionary<string, string> colorOrigin = null;
         public static bool isColorName(string name)
         {
             if (colorTable == null)
@@ -341,96 +382,336 @@ namespace GraphAlgos
             }
             return colorTable.ContainsKey(name);
         }
-        static void InitColorTable()
+        public static string ReadResourceAsString(string pathname)
         {
+            var asset = Resources.Load<TextAsset>(pathname);// only reads json, csv, txt and a few others - without specifying
+            if (asset == null)
+            {
+                Debug.LogError($"Could not load asset:{pathname}");
+                return null;
+            }
+            return asset.text;
+        }
+        public static int GetHexVal(char hex)
+        {
+            int val = (int)hex;
+            //For uppercase A-F letters:
+            //return val - (val < 58 ? 48 : 55);
+            //For lowercase a-f letters:
+            //return val - (val < 58 ? 48 : 87);
+            //Or the two combined, but a bit slower:
+            return val - (val < 58 ? 48 : (val < 97 ? 55 : 87));
+        }
+        public static byte[] StringToByteArrayFastest(string hex)
+        {
+            if (hex.Length % 2 == 1)
+                throw new Exception("The binary key cannot have an odd number of digits");
+
+            byte[] arr = new byte[hex.Length >> 1];
+
+            for (int i = 0; i < hex.Length >> 1; ++i)
+            {
+                arr[i] = (byte)((GetHexVal(hex[i << 1]) << 4) + (GetHexVal(hex[(i << 1) + 1])));
+            }
+            return arr;
+        }
+
+        public static Color rgbhex(string hexstr, float alpha = 1)
+        {
+            if (hexstr.Length > 6)
+            {
+                hexstr = hexstr.Remove(0, hexstr.Length - 6);
+            }
+            var bv = StringToByteArrayFastest(hexstr);
+            var c = new Color(bv[0] / 255f, bv[1] / 255f, bv[2] / 255f, alpha);
+            return c;
+        }
+        public static (string hexval, float alpha) HexColor(Color clr)
+        {
+            var r = (int)(255.99 * clr.r);
+            var g = (int)(255.99 * clr.g);
+            var b = (int)(255.99 * clr.b);
+            var rs = r.ToString("X2");
+            var gs = g.ToString("X2");
+            var bs = b.ToString("X2");
+            var hexstr = $"#{rs}{gs}{bs}";
+            return (hexstr, clr.a);
+        }
+
+        public float Brightness(Color c)
+        {
+            var maxclr = 256*254*3f;
+            var rv = Mathf.Sqrt(c.r*c.r + c.g*c.g + c.b*c.b  )/maxclr;
+            return rv;
+        }
+
+
+        class ColorMagComparer : IComparer<string>
+        {
+            public int Compare(string x, string y)
+            {
+                var mx = ColorMag(x);
+                var my = ColorMag(y);
+                var rv = 0;
+                if (mx > my) rv = -1;
+                if (mx < my) rv = +1;
+                return rv;
+            }
+        }
+        public static int colordups = 0;
+        public static int colorconflicts = 0;
+        static float clrmagmax = Mathf.Sqrt(3.00001f);
+        public static float ColorMag(string cname)
+        {
+            if (!colorTable.ContainsKey(cname))
+            {
+                return 0;
+            }
+            //if (cname=="w")
+            //{
+            //    Debug.Log("w");
+            //}
+            var clr = colorTable[cname];
+            var vc = new Vector3(clr.r, clr.g, clr.b);
+            var rv = vc.magnitude/ clrmagmax;
+            return rv;
+        }
+
+
+        public enum ColorNameOrder { KeyOrder, AlphaOrder, Mag }
+        public static List<string> GetColorNames(ColorNameOrder cord=ColorNameOrder.KeyOrder,bool reverse=false)
+        {
+            var rv = new List<string>(colorTable.Keys);
+            switch(cord)
+            {
+                case ColorNameOrder.KeyOrder:
+                    break;
+                case ColorNameOrder.AlphaOrder:
+                    rv.Sort();
+                    break;
+                case ColorNameOrder.Mag :
+                    rv.Sort(new ColorMagComparer());
+                    break;
+            }
+            if (reverse)
+            {
+                rv.Reverse();
+            }
+            return rv;
+        }
+        static void InitHexColors()
+        {
+            hexColorTable = new Dictionary<string, string>();
+            foreach (var key in colorTable.Keys)
+            {
+                var c = colorTable[key];
+                var (hexval,_) = GraphAlgos.GraphUtil.HexColor(c);
+                hexColorTable[key] = hexval;
+            }
+        }
+        static bool clrEqual(Color c1,Color c2)
+        {
+            if (c1.r != c2.r) return false;
+            if (c1.g != c2.g) return false;
+            if (c1.b != c2.b) return false;
+            return true;
+        }
+        static void InitXkcdColors()
+        {
+            var str = ReadResourceAsString("xkcd/colors");
+            if (str != null)
+            {
+                var json = Aiskwk.SimpleJSON.JSON.Parse(str);
+                var clrs = json["colors"];
+                for (int i = 0; i < clrs.Count; i++)
+                {
+                    var clrval = clrs[i];
+                    var clrname = clrval["color"].ToString();
+                    clrname = clrname.Replace("\"", "");
+                    var clrhex = clrval["hex"].ToString();
+                    clrhex = clrhex.Replace("\"", "");
+                    var newclr = rgbhex(clrhex);
+                    if (colorTable.ContainsKey(clrname))
+                    {
+                        var oldclr = colorTable[clrname];
+                        if (clrEqual(newclr, oldclr))
+                        {
+                            colordups++;
+                            continue;
+                        }
+                        colorconflicts++;
+                        clrname = $"{clrname}:xkcd";
+                        //Debug.LogWarning($"Duplicate color {clrname}"); to be expected
+                    }
+                    colorTable[clrname] = newclr;
+                    colorOrigin[clrname] = "xkcd";
+                }
+                Debug.Log($"SimpleJSON read {clrs.Count} xkcd colors");
+                //var newjson = JsonConvert.DeserializeObject<Dictionary<string,object>>(str);
+                //var newclrs = newjson["colors"];
+                //var newclrtab1 = newclrs as Dictionary<string,string>;
+                //var newclrtab2 = newclrs as Dictionary<string, object>;
+                //var newclrtab3 = newclrs as Dictionary<object, object>;
+                //var newclrtab4 = newclrs as Dictionary<string, Dictionary<string,object>>;
+                //var newclrtab5 = newclrs as Dictionary<string, Dictionary<string, string>>;
+                //var newclrarr1 = newclrs as object [];
+                //var newclrarr2 = newclrs as string[];
+                //Debug.Log("Here I am");
+                //Debug.Log($"Newtonsoft read {newclrtab.Count} xkcd colors");
+            }
+        }
+
+        public static void AddCoreColor(string cname, Color clr)
+        {
+            if (colorTable.ContainsKey(cname))
+            {
+                var oldclr = colorTable[cname];
+                if (clrEqual(clr, oldclr))
+                {
+                    colordups++;
+                    return;
+                }
+                colorconflicts++;
+                //Debug.LogWarning($"Duplicate color {cname}"); // to be expected
+                return;
+            }
+            colorTable[cname] = clr;
+            colorOrigin[cname] = "core";
+        }
+
+
+        public static void AddColor(string cname,Color clr)
+        {
+            if (colorTable.ContainsKey(cname))
+            {
+                //Debug.LogWarning($"Duplicate color {cname}"); // to be expected
+                var oldclr = colorTable[cname];
+                if (clrEqual(clr, oldclr))
+                {
+                    colordups++;
+                    return;
+                }
+                colorconflicts++;
+                return;
+            }
+            colorTable[cname] = clr;
+            colorOrigin[cname] = "adhoc";
+        }
+
+
+
+        public static void InitCoreColors()
+        {
+            AddCoreColor("red", Color.red);
+            AddCoreColor("green", Color.green);
+            AddCoreColor("blue", Color.blue);
+            AddCoreColor("gray", Color.gray);
+            AddCoreColor("grey", Color.grey);
+            AddCoreColor("cyan", Color.cyan);
+            AddCoreColor("magenta", Color.magenta);
+            AddCoreColor("yellow", Color.yellow);
+            AddCoreColor("white", Color.white);
+            AddCoreColor("black", Color.black);
+            AddCoreColor("clear", Color.clear);
+        }
+        public static void InitColorTable()
+        {
+
             colorTable = new Dictionary<string, Color>();
+            colorOrigin = new Dictionary<string, string>();
+            InitCoreColors();
+            InitXkcdColors();
             // reds
-            colorTable["r"] =
-            colorTable["red"] = new Color(1, 0, 0);
-            colorTable["dr"] = new Color(0.5f, 0, 0);
-            colorTable["crimsom"] = rgbbyte(220, 20, 60);
-            colorTable["coral"] = rgbbyte(255, 127, 80);
-            colorTable["firebrick"] = rgbbyte(178, 34, 34);
-            colorTable["darkred"] = rgbbyte(139, 0, 0);
-            colorTable["dirtyred"] = rgbbyte(117, 10, 10);
-            colorTable["lightred"] = new Color(1, 0.412f, 0.71f);
-            colorTable["pink"] = new Color(1, 0.412f, 0.71f);
-            colorTable["scarlet"] = new Color(1, 0.14f, 0.0f);
+            AddColor("r", new Color(1, 0, 0));
+            AddColor("red", new Color(1, 0, 0));
+            AddColor("dr", new Color(0.5f, 0, 0));
+            AddColor("crimsom", rgbbyte(220, 20, 60));
+            AddColor("coral", rgbbyte(255, 127, 80));
+            AddColor("firebrick", rgbbyte(178, 34, 34));
+            AddColor("darkred", rgbbyte(139, 0, 0));
+            AddColor("dirtyred", rgbbyte(117, 10, 10));
+            AddColor("lightred", new Color(1, 0.412f, 0.71f));
+            AddColor("pink", new Color(1, 0.412f, 0.71f));
+            AddColor("scarlet", new Color(1, 0.14f, 0.0f));
             // yellows
-            colorTable["y"] =
-            colorTable["yellow"] = new Color(1, 1, 0);
-            colorTable["dy"] = new Color(0.5f, 0.5f, 0);
-            colorTable["lightyellow"] = new Color(1, 1, 0.5f);
-            colorTable["goldenrod"] = rgbbyte(218, 165, 32);
+            AddColor("y", new Color(1, 1, 0));
+            AddColor("yellow", new Color(1, 1, 0));
+            AddColor("dy", new Color(0.5f, 0.5f, 0));
+            AddColor("lightyellow", new Color(1, 1, 0.5f));
+            AddColor("goldenrod", rgbbyte(218, 165, 32));
             // oranges
-            colorTable["orange"] = new Color(1, 0.5f, 0);
-            colorTable["lightorange"] = new Color(1, 0.75f, 0);
-            colorTable["darkorange"] = new Color(0.75f, 0.25f, 0);
-            colorTable["brown"] = new Color(0.647f, 0.164f, 0.164f);
-            colorTable["saddlebrown"] = new Color(0.545f, 0.271f, 0.075f);
-            colorTable["darkbrown"] = new Color(0.396f, 0.263f, 0.129f);
+            AddColor("orange", new Color(1, 0.5f, 0));
+            AddColor("lightorange", new Color(1, 0.75f, 0));
+            AddColor("darkorange", new Color(0.75f, 0.25f, 0));
+            AddColor("brown", new Color(0.647f, 0.164f, 0.164f));
+            AddColor("saddlebrown", new Color(0.545f, 0.271f, 0.075f));
+            AddColor("darkbrown", new Color(0.396f, 0.263f, 0.129f));
             // greens
-            colorTable["g"] =
-            colorTable["lightgreen"] = new Color(0.5f, 1, 0.5f);
-            colorTable["green"] = new Color(0, 1, 0);
-            colorTable["dg"] = new Color(0, 0.5f, 0);
-            colorTable["olive"] = new Color(0.5f, 0.5f, 0f);
-            colorTable["darkgreen"] = new Color(0, 0.5f, 0);
-            colorTable["darkgreen1"] = new Color(0.004f, 0.196f, 0.125f);
-            colorTable["forestgreen"] = new Color(0.132f, 0.543f, 0.132f);
-            colorTable["limegreen"] = new Color(0.195f, 0.8f, 0.195f);
-            colorTable["seagreen"] = new Color(0.33f, 1.0f, 0.62f);
+            AddColor("g", new Color(0.5f, 1, 0.5f));
+            AddColor("lightgreen", new Color(0.5f, 1, 0.5f));
+            AddColor("green", new Color(0, 1, 0));
+            AddColor("dg", new Color(0, 0.5f, 0));
+            AddColor("olive", new Color(0.5f, 0.5f, 0f));
+            AddColor("darkgreen", new Color(0, 0.5f, 0));
+            AddColor("darkgreen1", new Color(0.004f, 0.196f, 0.125f));
+            AddColor("forestgreen", new Color(0.132f, 0.543f, 0.132f));
+            AddColor("limegreen", new Color(0.195f, 0.8f, 0.195f));
+            AddColor("seagreen", new Color(0.33f, 1.0f, 0.62f));
             // cyans
-            colorTable["c"] =
-            colorTable["cyan"] = new Color(0, 1, 1);
-            colorTable["dc"] = new Color(0, 0.5f, 0.5f);
-            colorTable["turquoise"] =
-            colorTable["turquis"] = rgbbyte(64, 224, 208);
-            colorTable["teal"] = rgbbyte(0, 128, 128);
-            colorTable["aquamarine"] = rgbbyte(128, 255, 212);
+            AddColor("c", new Color(0, 1, 1));
+            AddColor("cyan", new Color(0, 1, 1));
+            AddColor("dc", new Color(0, 0.5f, 0.5f));
+            AddColor("turquoise", rgbbyte(64, 224, 208));
+            AddColor("turquis", rgbbyte(64, 224, 208));
+            AddColor("teal", rgbbyte(0, 128, 128));
+            AddColor("aquamarine", rgbbyte(128, 255, 212));
             // blues
-            colorTable["b"] =
-            colorTable["blue"] = new Color(0, 0, 1);
-            colorTable["db"] = new Color(0, 0, 0.5f);
-            colorTable["steelblue"] = new Color(0.27f, 0.51f, 0.71f);
-            colorTable["lightblue"] = rgbbyte(173, 216, 230);
-            colorTable["azure"] = rgbbyte(0, 127, 255);
-            colorTable["skyblue"] = rgbbyte(135, 206, 235);
-            colorTable["darkblue"] = new Color(0.0f, 0.0f, 0.500f);
-            colorTable["navyblue"] = new Color(0.0f, 0.0f, 0.398f);
+            AddColor("b", new Color(0, 0, 1));
+            AddColor("blue", new Color(0, 0, 1));
+            AddColor("db", new Color(0, 0, 0.5f));
+            AddColor("steelblue", new Color(0.27f, 0.51f, 0.71f));
+            AddColor("lightblue", rgbbyte(173, 216, 230));
+            AddColor("azure", rgbbyte(0, 127, 255));
+            AddColor("skyblue", rgbbyte(135, 206, 235));
+            AddColor("darkblue", new Color(0.0f, 0.0f, 0.500f));
+            AddColor("navyblue", new Color(0.0f, 0.0f, 0.398f));
             // purples
-            colorTable["m"] =
-            colorTable["magenta"] = new Color(1, 0, 1);
-            colorTable["dm"] =
-            colorTable["purple"] = new Color(0.5f, 0, 0.5f);
-            colorTable["violet"] = new Color(0.75f, 0, 0.75f);
-            colorTable["indigo"] = rgbbyte(43, 34, 170);
-            colorTable["deeppurple"] = new Color(0.4f, 0, 0.4f);
-            colorTable["darkpurple"] = rgbbyte(48, 25, 52);
-            colorTable["phlox"] = rgbbyte(223, 0, 255);
-            colorTable["mauve"] = rgbbyte(224, 176, 255);
-            colorTable["fuchsia"] = rgbbyte(255, 0, 255);
-            colorTable["lilac"] = rgbbyte(200,162,200);
+            AddColor("m", new Color(1, 0, 1));
+            AddColor("magenta", new Color(1, 0, 1));
+            AddColor("dm", new Color(0.5f, 0, 0.5f));
+            AddColor("purple", new Color(0.5f, 0, 0.5f));
+            AddColor("violet", new Color(0.75f, 0, 0.75f));
+            AddColor("indigo", rgbbyte(43, 34, 170));
+            AddColor("deeppurple", new Color(0.4f, 0, 0.4f));
+            AddColor("darkpurple", rgbbyte(48, 25, 52));
+            AddColor("phlox", rgbbyte(223, 0, 255));
+            AddColor("mauve", rgbbyte(224, 176, 255));
+            AddColor("fuchsia", rgbbyte(255, 0, 255));
+            AddColor("lilac", rgbbyte(200,162,200));
             // whites and grays
-            colorTable["w"] =
-            colorTable["white"] = new Color(1, 1, 1);
-            colorTable["chinawhite"] = new Color(0.937f, 0.910f, 0.878f);
-            colorTable["clear"] = Color.clear;
-            colorTable["silver"] = rgbbyte(192, 192, 192);
-            colorTable["lightgrey"] =
-            colorTable["lightgray"] = rgbbyte(211, 211, 211);
-            colorTable["slategray"] =
-            colorTable["slategrey"] = rgbbyte(112, 128, 144);
-            colorTable["darkslategray"] =
-            colorTable["darkslategrey"] = rgbbyte(74, 85, 83);
-            colorTable["darkgray"] =
-            colorTable["darkgrey"] =
-            colorTable["dimgray"] =
-            colorTable["dimgrey"] = rgbbyte(105, 105, 105);
-            colorTable["grey"] =
-            colorTable["gray"] = rgbbyte(128, 128, 128);
-            colorTable["blk"] =
-            colorTable["black"] = new Color(0, 0, 0);
+            AddColor("w", new Color(1, 1, 1));
+            AddColor("white", new Color(1, 1, 1));
+            AddColor("chinawhite", new Color(0.937f, 0.910f, 0.878f));
+            AddColor("clear", Color.clear );
+            AddColor("silver", rgbbyte(192, 192, 192));
+            AddColor("lightgrey", rgbbyte(211, 211, 211));
+            AddColor("lightgray", rgbbyte(211, 211, 211));
+            AddColor("slategray", rgbbyte(112, 128, 144));
+            AddColor("slategrey", rgbbyte(112, 128, 144));
+            AddColor("darkslategray", rgbbyte(74, 85, 83));
+            AddColor("darkslategrey", rgbbyte(74, 85, 83));
+            AddColor("darkgray", rgbbyte(105, 105, 105));
+            AddColor("darkgrey", rgbbyte(105, 105, 105));
+            AddColor("dimgray", rgbbyte(105, 105, 105));
+            AddColor("dimgrey", rgbbyte(105, 105, 105));
+            AddColor("grey", rgbbyte(128, 128, 128));
+            AddColor("gray", rgbbyte(128, 128, 128));
+            AddColor("blk", new Color(0, 0, 0));
+            AddColor("black", new Color(0, 0, 0));
+            InitHexColors();
+            var ncnt = colorTable.Count;
+            var msg = $"Inited color table count:{ncnt} dups:{colordups} conflicts:{colorconflicts}";
+            CampusSimulator.SceneMan.Lggg(msg, "grass");
         }
         static string[] dcolorseq = { "dr", "dg", "db", "dm", "dy", "dc" };
         static string[] colorseq = { "r", "g", "b", "m", "y", "c" };
@@ -455,6 +736,24 @@ namespace GraphAlgos
                 return Color.gray;
             }
             return colorTable[name];
+        }
+        public static string GetColorOriginByName(string name)
+        {
+            if (!isColorName(name))
+            {
+                Debug.LogError($"color {name} not defined in colortable");
+                return "unknown";
+            }
+            return colorOrigin[name];
+        }
+        public static string GetHexColorByName(string name)
+        {
+            if (!isColorName(name))
+            {
+                Debug.LogError($"color {name} not defined in colortable");
+                return "#808080";
+            }
+            return hexColorTable[name];
         }
         public static Color GetColorByName(string name, float alpha = 0.4f)
         {

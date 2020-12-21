@@ -848,7 +848,7 @@ namespace GraphAlgos
                         if (graphScene != graphSceneE.gen_campus_small)
                         {
                             GenCampusGarageLinks();
-                            grc.AddLinkByNodeName("bRWB-f01-lobby", "rwb-f03-rm3999");// stairway (sort of)
+                            grc.AddLinkByNodeName("bRWB-f01-lobby", "rwb-f03-rm3999",LinkUse.stairs);// stairway (sort of)
                         }
                         break;
                     }

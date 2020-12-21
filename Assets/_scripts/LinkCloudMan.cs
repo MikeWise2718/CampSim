@@ -477,8 +477,7 @@ namespace CampusSimulator
                     var clrname = linkcolor(lnk);
                     var linkrad = linkradius(lnk);
                     var linkfrm = linkform(lnk);
-                    var go = LinkGo.MakeLinkGo(sman, lnk, linkfrm, linkrad, clrname,1-linkTrans,this.flatlinks,
-                                                    dofrag:dofrag, fragang:sman.mpman.fragang, fragxoff:sman.mpman.fragxoff, fragzoff:sman.mpman.fragzoff);
+                    var go = LinkGo.MakeLinkGo(sman, lnk, linkfrm, linkrad, clrname,1-linkTrans,this.flatlinks );
                     go.transform.parent = grclinks.transform;
                 }
                 swlk.Stop();

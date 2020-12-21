@@ -1,13 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel.Design;
-using System.Linq.Expressions;
-using System.Runtime.InteropServices;
+﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+
 
 namespace Aiskwk.Map
 {
-    public enum ViewerAvatar { SphereMan, CapsuleMan, SimpleTruck, Minehaul1, Shovel1, Dozer1, Dozer2, Rover, QuadCopter, QuadCopter2, Car012 };
+    public enum ViewerAvatar { Nothing, CubeMan, SphereMan, CapsuleMan, SimpleTruck, Minehaul1, Shovel1, Dozer1, Dozer2, Rover, Delivery_Robot, QuadCopter, QuadCopter2, Matrice_600, Delivery_Drone, Car012 };
     public enum ViewerCamConfig { EyesDown, Eyes, FloatBehindDiv4, FloatBehindDiv2, FloatBehind, FloatBehindTimes2, FloatBehindTimes4 }
     public enum ViewerControl { Position, Velocity }
 
@@ -25,6 +23,7 @@ namespace Aiskwk.Map
         public float angstart = 0;
         public float angend = 0;
         public bool carriageOn = false;
+        public bool carriageControlOn = false;
         public ViewerState()
         {
             pos = Vector3.zero;
@@ -37,6 +36,7 @@ namespace Aiskwk.Map
             angstart = 0;
             angend = 0;
             carriageOn = false;
+            carriageControlOn = false;
         }
         public ViewerState(Vector3 pos, Vector3 rot, ViewerAvatar ava = ViewerAvatar.CapsuleMan, ViewerCamConfig cam = ViewerCamConfig.Eyes, ViewerControl vctrl = ViewerControl.Position)
         {
@@ -87,16 +87,20 @@ namespace Aiskwk.Map
         public ViewerCamConfig viewerCamPosition = ViewerCamConfig.Eyes;
         public ViewerControl viewerControl = ViewerControl.Position;
 
+        public float angincpersec = 15.0f; // deg per sec
+
         public bool carriageCameraExists = true;
         public int carriageCamNumber = 3;
         public float carriageAngleStart = -20;
         public float carriageAngleEnd = 20;
         public bool carriageOn = false;
+        public bool carriageControlOn = false;
         public List<Camera> carriageCams = null;
         public List<int> carriageMons = null;
 
         public Quaternion bodyPrefabRotation = Quaternion.identity;
         public Quaternion bodyPlaneRotation = Quaternion.identity;
+        public Quaternion carRotation = Quaternion.identity;
         public string qcmdescriptor = "";
 
         public LatLng curLatLng = new LatLng(0, 0);
@@ -110,7 +114,7 @@ namespace Aiskwk.Map
 
         private static ViewerState defViewer = new ViewerState();
 
-        public ViewerState home;
+        public ViewerState homestate;
 
         public static Camera GetViewerCamera()
         {
@@ -140,7 +144,8 @@ namespace Aiskwk.Map
         {
             var vn = new ViewerState();
             vn.pos = transform.position;
-            vn.rot = transform.localRotation.eulerAngles;
+            //vn.rot = transform.localRotation.eulerAngles;
+            vn.rot =bodyPlaneRotation.eulerAngles;
             vn.avatar = viewerAvatar;
             vn.camconfig = viewerCamPosition;
             vn.vctrl = viewerControl;
@@ -157,24 +162,25 @@ namespace Aiskwk.Map
             this.qmm = qmm;
             if (homespec != null)
             {
-                home = homespec;
+                homestate = homespec;
             }
             else
             {
-                home = defViewer;
+                homestate = defViewer;
             }
-            viewerAvatar = home.avatar;
-            viewerCamPosition = home.camconfig;
-            viewerControl = home.vctrl;
-            carriageCameraExists = home.hasCameraCarriage;
-            carriageCamNumber = home.nCameras;
-            carriageOn = home.carriageOn;
-            carriageAngleStart = home.angstart;
-            carriageAngleEnd = home.angend;
+            viewerAvatar = homestate.avatar;
+            viewerCamPosition = homestate.camconfig;
+            viewerControl = homestate.vctrl;
+            carriageCameraExists = homestate.hasCameraCarriage;
+            carriageCamNumber = homestate.nCameras;
+            carriageOn = homestate.carriageOn;
+            carriageControlOn = homestate.carriageControlOn;
+            carriageAngleStart = homestate.angstart;
+            carriageAngleEnd = homestate.angend;
             carriageCams = new List<Camera>();
             carriageMons = new List<int>();
             //var (vo,_, istat) = qmm.GetWcMeshPosFromLambda(0.5f, 0.5f);
-            var (vo, _, istat) = qmm.GetWcMeshPosProjectedAlongYnew(home.pos);
+            var (vo, _, istat) = qmm.GetWcMeshPosProjectedAlongYnew(homestate.pos);
             transform.position = vo;
             altitude = 0;
             altbase = "map";
@@ -206,12 +212,13 @@ namespace Aiskwk.Map
             //Debug.Log($"ReAdjustViewerInitialPosition - before scale:{transform.localScale} rotation:{transform.localRotation.eulerAngles}");
             bodyPrefabRotation = Quaternion.identity;
             bodyPlaneRotation = Quaternion.identity;
+            carRotation = Quaternion.identity;
 
             var parent = transform.parent;
             transform.SetParent(null, worldPositionStays: false);// disconnect
-            transform.position = home.pos;
+            transform.position = homestate.pos;
             //transform.localRotation = Quaternion.Euler(home.rot);
-            RotateViewerToYangle(home.rot.y);
+            RotateViewerToYangle(homestate.rot.y);
             //Debug.Log($"ReAdjustViewerInitialPosition - viewerDefaultRotation:{viewerDefaultRotation}");
             var t = GetRootTransform(parent.transform);
             var s = t.localScale.x;
@@ -229,12 +236,11 @@ namespace Aiskwk.Map
             //transform.localRotation = Quaternion.Euler(home.rot); // Think this has to match the rotation it was built with
                                                                   // or we get problems when we follownormal along the mesh
             TranslateViewer(0, 0);
-            RotateViewer(0);
+            RotateViewerToYangle(0);
             //Debug.Log($"ReAdjustViewerInitialPosition - after  scale:{transform.localScale} rotation:{transform.localRotation.eulerAngles}");
             //DumpViewer();
         }
 
-        string[] primitivetypes = { "Capsule", "Sphere" };
         public (GameObject, float) GetAvatarPrefab(string avaname, float angle, Vector3 shift, Vector3 rot, float scale = 1)
         {
             //Debug.Log($"GetAvatarPrefab scale:{scale}");
@@ -248,7 +254,8 @@ namespace Aiskwk.Map
                 try
                 {
                     var prefab = Resources.Load<GameObject>(avaname);
-                    Transform t = Instantiate<Transform>(prefab.transform, Vector3.zero, Quaternion.identity);
+                    var t = Instantiate<Transform>(prefab.transform, Vector3.zero, Quaternion.identity);
+                    //var t = Instantiate<Transform>(prefab.transform);
                     instancego = t.gameObject;
                     height = 2.5f;
                     loaded = true;
@@ -265,8 +272,7 @@ namespace Aiskwk.Map
                 if (!ptypespecified)
                 {
                     ptype = PrimitiveType.Capsule;
-                    shift = new Vector3(0, 1, 0)
-    ;
+                    shift = new Vector3(0, 1, 0);
                 }
                 instancego = GameObject.CreatePrimitive(ptype);
                 instancego.transform.position = new Vector3(0, 0.98f, 0);
@@ -347,15 +353,23 @@ namespace Aiskwk.Map
         public void MakeAvatar(string avaname, float angle, Vector3 shift, Vector3 rot, float scale = 1, float visorscale = 2)
         {
             Debug.Log($"MakeAvatar {avaname} angle:{angle}");
-            Debug.Log($"MakeAvatar - Viewer rotation before  {transform.localRotation.eulerAngles}");
+            //Debug.Log($"MakeAvatar Viewer rotation before  {transform.localRotation.eulerAngles}");
             // TODO: if we are remaking an existing viewer, we probably need to save rotations here and restore them later on
             // see 
             DestroyAvatar();
             moveplane = new GameObject("moveplane");
             body = new GameObject("body");
 
-            float height = 0;
-            (bodyprefab, height) = GetAvatarPrefab(avaname, angle, shift, rot, scale);
+            float height;
+            if (avaname != "nothing")
+            {
+                (bodyprefab, height) = GetAvatarPrefab(avaname, angle, shift, rot, scale);
+            }
+            else
+            {
+                bodyprefab = null;
+                height = 1.5f;
+            }
 
             body.transform.SetParent(transform, worldPositionStays: false);
 
@@ -432,7 +446,7 @@ namespace Aiskwk.Map
                 carriagego.transform.SetParent(moveplane.transform, worldPositionStays: false);
             }
             rodgo.transform.SetParent(transform, worldPositionStays: false);
-            Debug.Log($"MakeAvatar - Viewer rotation after  {transform.localRotation.eulerAngles}");
+            //Debug.Log($"MakeAvatar - Viewer rotation after  {transform.localRotation.eulerAngles}");
         }
         static Dictionary<ViewerCamConfig, (Vector3 pos, Vector3 lookdir)> viewerVectorPos = new Dictionary<ViewerCamConfig, (Vector3, Vector3)>{
             {ViewerCamConfig.EyesDown, (new Vector3(0, 0, 0), Vector3.down)},
@@ -526,9 +540,10 @@ namespace Aiskwk.Map
 
         public void BuildViewer()
         {
-            //Debug.Log("BuildViewer");
-            //Debug.Log($"BuildViewer - Viewer rotation before  {transform.localRotation.eulerAngles}");
+            Debug.Log("BuildViewer");
+            Debug.Log($"BuildViewer - Viewer rotation before  {bodyPlaneRotation.eulerAngles}");
 
+            var curang = bodyPlaneRotation.eulerAngles.y;
             DestroyAvatar();
             var shift = Vector3.zero;
             var scale = 1.0f;
@@ -536,6 +551,7 @@ namespace Aiskwk.Map
             var rot = Vector3.zero;
             bodyPrefabRotation = Quaternion.identity;
             bodyPlaneRotation = Quaternion.identity;
+            carRotation = Quaternion.identity;
             var pfix = "obj3d/";
             followGround = true;
             switch (viewerAvatar)
@@ -608,10 +624,55 @@ namespace Aiskwk.Map
                         followGround = false;
                         break;
                     }
+                case ViewerAvatar.Matrice_600:
+                    {
+                        angle = 0;
+                        scale = 4;
+                        shift = new Vector3(0, 2, 0);
+                        //MakeAvatar(pfix + "quadcopter", angle, shift, scale,visorscale:0.01f);
+                        MakeAvatar(pfix + "matrice_600spinning", angle, shift, rot, scale, visorscale: 0.01f);
+                        followGround = false;
+                        break;
+                    }
+                case ViewerAvatar.Delivery_Drone:
+                    {
+                        angle = 0;
+                        scale = 4;
+                        //var dpos = new Vector3(1.27083f, 0.353567f, 2.12690f);
+                        shift = new Vector3(0, 2, 0);
+                        rot = new Vector3( 0,-90,0 );
+                        //MakeAvatar(pfix + "quadcopter", angle, shift, scale,visorscale:0.01f);
+                        MakeAvatar(pfix + "delivery_drone_v2spinning", angle, shift, rot, scale, visorscale: 0.01f);
+                        followGround = false;
+                        break;
+                    }
+                case ViewerAvatar.Delivery_Robot:
+                    {
+                        angle = 0;
+                        scale = 3;
+                        shift = new Vector3(0, 0, 0);
+                        //MakeAvatar(pfix + "quadcopter", angle, shift, scale,visorscale:0.01f);
+                        MakeAvatar(pfix + "delivery_robot", angle, shift, rot, scale, visorscale: 0.01f);
+                        followGround = false;
+                        break;
+                    }
                 case ViewerAvatar.SphereMan:
                     {
-                        shift = new Vector3(0, 1, 0);
-                        MakeAvatar("Sphere", angle, shift, rot, scale);
+                        shift = new Vector3(0, 0, 0);
+                        MakeAvatar("Sphere", angle, shift, rot, scale, visorscale: 0.64f);
+                        break;
+                    }
+                case ViewerAvatar.CubeMan:
+                    {
+                        shift = new Vector3(0, 0, 0);
+                        MakeAvatar("Cube", angle, shift, rot, scale, visorscale: 0.64f);
+                        break;
+                    }
+                case ViewerAvatar.Nothing:
+                    {
+                        shift = new Vector3(0, 0, 0);
+                        scale = 0.001f;
+                        MakeAvatar("Quad", angle, shift, rot, scale, visorscale: scale );
                         break;
                     }
                 default:
@@ -624,8 +685,30 @@ namespace Aiskwk.Map
                     }
             }
             TranslateViewer(0, 0);
-            RotateViewer(0);
-            //Debug.Log($"BuildViewer - Viewer rotation after  {transform.localRotation.eulerAngles}");
+            RotateViewerToYangle(curang);
+            Debug.Log($"    Viewer rotation after  {bodyPlaneRotation.eulerAngles}");
+        }
+
+
+        Dictionary<ViewerAvatar, ViewerAvatar> nextAva = null;
+        Dictionary<ViewerAvatar, ViewerAvatar> prevAva = null;
+
+
+        void MakeAvaDicts()
+        {
+            if (nextAva != null) return;
+            var ava = System.Enum.GetValues(typeof(ViewerAvatar)).Cast<ViewerAvatar>().ToList();
+            nextAva = new Dictionary<ViewerAvatar, ViewerAvatar>();
+            prevAva = new Dictionary<ViewerAvatar, ViewerAvatar>();
+            for (var i=0; i<ava.Count-1; i++)
+            {
+                nextAva[ava[ i ]] = ava[ i+1 ];
+                prevAva[ava[ i+1 ]] = ava[ i ];
+            }
+            var fst = ava[0];
+            var lst = ava[ava.Count - 1];
+            nextAva[lst] = fst;
+            prevAva[fst] = lst;
         }
 
         ViewerAvatar NextAvatar(ViewerAvatar curava)
@@ -638,12 +721,30 @@ namespace Aiskwk.Map
                     rv = ViewerAvatar.QuadCopter2;
                     break;
                 case ViewerAvatar.QuadCopter2:
+                    rv = ViewerAvatar.Matrice_600;
+                    break;
+                case ViewerAvatar.Matrice_600:
+                    rv = ViewerAvatar.Delivery_Drone;
+                    break;
+                case ViewerAvatar.Delivery_Drone:
                     rv = ViewerAvatar.Rover;
                     break;
                 case ViewerAvatar.Rover:
+                    rv = ViewerAvatar.Delivery_Robot;
+                    break;
+                case ViewerAvatar.Delivery_Robot:
                     rv = ViewerAvatar.CapsuleMan;
                     break;
                 case ViewerAvatar.CapsuleMan:
+                    rv = ViewerAvatar.SphereMan;
+                    break;
+                case ViewerAvatar.SphereMan:
+                    rv = ViewerAvatar.CubeMan;
+                    break;
+                case ViewerAvatar.CubeMan:
+                    rv = ViewerAvatar.Nothing;
+                    break;
+                case ViewerAvatar.Nothing:
                     rv = ViewerAvatar.SimpleTruck;
                     break;
                 case ViewerAvatar.SimpleTruck:
@@ -657,14 +758,43 @@ namespace Aiskwk.Map
         }
         void MoveToNextAvatar()
         {
-            var nextAvatar = NextAvatar(viewerAvatar);
-            viewerAvatar = nextAvatar;
+            MakeAvaDicts();
+            var newava = nextAva[viewerAvatar];
+            SetAvatarToForm(newava);
+            viewerAvatar = newava;
             BuildViewer();
         }
 
+        void MoveToPrevAvatar()
+        {
+            MakeAvaDicts();
+            var newava = prevAva[viewerAvatar];
+            SetAvatarToForm(newava);
+            viewerAvatar = newava;
+            BuildViewer();
+        }
+
+        public ViewerAvatar SetAvatarToForm(ViewerAvatar va)
+        {
+            var curva = viewerAvatar;
+            viewerAvatar = va;
+            BuildViewer();
+            return curva;
+        }
+
+        void NormHead()
+        {
+            camgo.transform.localRotation = Quaternion.identity;
+            //Debug.Log("Rotated visor by " + rotate);
+        }
+        void NormCarriage()
+        {
+            carriagego.transform.localRotation = Quaternion.identity;
+            //Debug.Log("Rotated visor by " + rotate);
+        }
         void TiltHead(float rotate)
         {
-            visor.transform.localRotation *= Quaternion.Euler(new Vector3(rotate, 0, 0));
+            camgo.transform.localRotation *= Quaternion.Euler(new Vector3(rotate, 0, 0));
             //Debug.Log("Rotated visor by " + rotate);
         }
         void RaiseViewer(float ymove)
@@ -676,24 +806,62 @@ namespace Aiskwk.Map
             //Debug.Log($"RaiseViewer ymove:{ymove} newpos:{posstr}");
         }
 
-        void RotateViewer(float rotate)
+        void RotateViewerScaleByTime(float rotate)
         {
-            ////Debug.Log($"RotateViewer - Viewer rotation before  {transform.localRotation.eulerAngles} followGround:{followGround}");
-
             var fak = calctimefak(ref tvlastkey);
-            bodyPlaneRotation *= Quaternion.Euler(new Vector3(0, fak * rotate, 0));
+            RotateViewerByYangle(fak * rotate);
+        }
+
+
+        void RotateViewerByYangle(float yangle)
+        {
+            //Debug.Log($"RotateViewerToYangle - Viewer rotation before  {transform.localRotation.eulerAngles}");
+            //Debug.Log($"RotateViewerToYangle - Moveplane rotation before  {moveplane.transform.localRotation.eulerAngles}");
+
+            bodyPlaneRotation *= Quaternion.Euler(new Vector3(0, yangle, 0));
             moveplane.transform.localRotation = bodyPlaneRotation;
-            bodyPrefabRotation *= Quaternion.Euler(new Vector3(0, fak * rotate, 0));
+            bodyPrefabRotation *= Quaternion.Euler(new Vector3(0, yangle, 0));
             body.transform.localRotation = Quaternion.FromToRotation(Vector3.up, lstnrm) * bodyPrefabRotation;
 
-            ////if (followGround)
-            ////{
-            ////    body.transform.localRotation = Quaternion.FromToRotation(Vector3.up, lstnrm) * bodyPrefabRotation;
-            ////}
-            ////Debug.Log($"RotateViewer - Viewer rotation after   {transform.localRotation.eulerAngles}");
-            ////bodypose.transform.localRotation = Quaternion.Euler(new Vector3(0, rotate, 0)) * Quaternion.FromToRotation(Vector3.up, lstnrm) ;
-            ////Debug.Log($"RotateViewer: {rotate}");
+            //Debug.Log($"RotateViewerToYangle - Moveplane rotation after  {moveplane.transform.localRotation.eulerAngles}");
+            //Debug.Log($"RotateViewerToYangle - Viewer rotation after   {transform.localRotation.eulerAngles}");
         }
+
+        void RotateCarriageByYangle(float yangle)
+        {
+            if (carriageCameraExists)
+            {
+                carRotation *= Quaternion.Euler(new Vector3(0, yangle, 0));
+                carriagego.transform.localRotation = carRotation;
+            }
+        }
+        void RotateCarriageByXangle(float xangle)
+        {
+            if (carriageCameraExists)
+            {
+                carRotation *= Quaternion.Euler(new Vector3(xangle,0, 0));
+                carriagego.transform.localRotation = carRotation;
+            }
+        }
+
+        void RotateCarriageYangleScaleByTime(float rotate)
+        {
+            if (carriageCameraExists)
+            {
+                var fak = calctimefak(ref tvlastkey);
+                RotateCarriageByYangle(fak * rotate);
+            }
+        }
+        void RotateCarriageXangleScaleByTime(float rotate)
+        {
+            if (carriageCameraExists)
+            {
+                var fak = calctimefak(ref tvlastkey);
+                RotateCarriageByXangle(fak * rotate);
+            }
+        }
+
+
 
         void RotateViewerToYangle(float yangle)
         {
@@ -707,18 +875,6 @@ namespace Aiskwk.Map
 
             //Debug.Log($"RotateViewerToYangle - Moveplane rotation after  {moveplane.transform.localRotation.eulerAngles}");
             //Debug.Log($"RotateViewerToYangle - Viewer rotation after   {transform.localRotation.eulerAngles}");
-        }
-
-        void RotateViewerNoTimeFak(float rotate)
-        {
-            //Debug.Log($"RotateViewerNoTimeFak - Viewer rotation before  {transform.localRotation.eulerAngles}");
-
-            bodyPlaneRotation *= Quaternion.Euler(new Vector3(0, rotate, 0));
-            moveplane.transform.localRotation = bodyPlaneRotation;
-            bodyPrefabRotation *= Quaternion.Euler(new Vector3(0, rotate, 0));
-            body.transform.localRotation = Quaternion.FromToRotation(Vector3.up, lstnrm) * bodyPrefabRotation;
-
-            //Debug.Log($"RotateViewerNoTimeFak - Viewer rotation after   {transform.localRotation.eulerAngles}");
         }
 
         public delegate (string panCamOrietation, string panCamMonitors) GetPanCamParametersDelegate();
@@ -845,7 +1001,7 @@ namespace Aiskwk.Map
         void TeleportViewer(string trigger)
         {
             //var newrot = 0f; /// this seems wierd, but we seemingly have the homeRotation coded in the toplevel Viewer rotation already
-            Debug.Log($"MoveViewerToStoredPos:{trigger} pos:{home.pos:f1} rot:{home.rot:f1}");
+            Debug.Log($"MoveViewerToStoredPos:{trigger} pos:{homestate.pos:f1} rot:{homestate.rot:f1}");
             var (valid, vst) = teleporter(trigger);
             //var bodyeuler = bodyPrefabRotation.eulerAngles;
             if (valid)
@@ -898,6 +1054,10 @@ namespace Aiskwk.Map
                     carriageMons.Add(2 + i);
                 }
             }
+        }
+        void ToggleCarriageCameraControl()
+        {
+            carriageControlOn = !carriageControlOn;
         }
         void ToggleCarriageCamera()
         {
@@ -984,29 +1144,14 @@ namespace Aiskwk.Map
             altitude = vst.pos.y-vn.y;
             altbase = "map";
         }
-        void MoveViewerToHomeOld()
+
+        public void MoveViewerToHome()
         {
-            //Debug.Log($"MoveViewerToHome pos:{home.viewerPosition:f1} rot:{home.viewerRotation:f1}");
-            var newpos = home.pos;
-            var newrot = Vector3.zero; /// this seems wierd, but we seemingly have the homeRotation coded in the toplevel Viewer rotation already
-
-
-            var bodyeuler = bodyPrefabRotation.eulerAngles;
-            // the following two lines don't work
-            var qqrot = Quaternion.FromToRotation(bodyeuler, newrot);
-            var angtorot = qqrot.eulerAngles;
-            //Debug.Log($"MoveViewerToHome bodyeuler:{bodyeuler:f1} ");
-            //Debug.Log($"MoveViewerToHome ang:{angtorot:f1} ");
-            // aparently it starts from zero every time
-
-            RotateViewerNoTimeFak(-bodyeuler.y);// this only handles the y-axis so it is wrong....
-
-            TranslateViewerToPosition(newpos);
-            TranslateViewer(0, 0);// TODO: this shouldn't be necessary but it is for MsftB19focused for some reason....
-        }
-        void MoveViewerToHome()
-        {
-            SetViewerInState(home);
+            SetViewerInState(homestate);
+            var (vo, _, istat) = qmm.GetWcMeshPosProjectedAlongYnew(homestate.pos);
+            transform.position = vo;
+            altitude = 0;
+            altbase = "map";
         }
 
         Vector3 lstnrm = Vector3.up;
@@ -1027,8 +1172,13 @@ namespace Aiskwk.Map
                 {
                     nrm = -nrm;
                 }
+                if (transform.localRotation != Quaternion.identity)
+                {
+                    nrm = transform.localRotation*nrm;
+                }
                 lstnrm = nrm;
                 var nrmrot = Quaternion.FromToRotation(Vector3.up, nrm);
+ 
                 body.transform.localRotation = nrmrot * bodyPrefabRotation;
                 //body.transform.localRotation = bodyPrefabRotation * nrmrot; // this did not work
                 rodgo.transform.localRotation = nrmrot;
@@ -1104,6 +1254,7 @@ namespace Aiskwk.Map
         float tvlastkey = 0;
         void TranslateViewer(float xmove, float zmove)
         {
+
             var fak = calctimefak(ref tvlastkey);
             TranslateViewerProjected(xmove*fak, zmove*fak);
             curLatLng = qmm.GetLngLat(transform.position);
@@ -1160,6 +1311,7 @@ namespace Aiskwk.Map
         float f2Hit = float.MinValue;
         float f4Hit = float.MinValue;
         float f8Hit = float.MinValue;
+        float f9Hit = float.MinValue;
         float ctrlAhit = float.MinValue;
         float ctrlHhit = float.MinValue;
         float ctrlVhit = float.MinValue;
@@ -1215,7 +1367,7 @@ namespace Aiskwk.Map
             var shiftpressed = Input.GetKey(KeyCode.RightShift) || Input.GetKey(KeyCode.LeftShift);
             CheckShiftTime();
 
-            var angincpersec = 15.0f; // deg per sec
+
             var incpersec = shiftMultiplier * 2.0f; //  m per sec
             if (!ViewerProcessKeys)
             {
@@ -1264,14 +1416,7 @@ namespace Aiskwk.Map
                     Debug.LogWarning("No Add Vehicle Track set");
                 }
             }
-            if (Input.GetKey(KeyCode.PageDown))
-            {
-                TiltHead(angincpersec);
-            }
-            if (Input.GetKey(KeyCode.PageDown))
-            {
-                TiltHead(-angincpersec);
-            }
+
             if (Input.GetKey(KeyCode.S))
             {
                 SetSceneCamToMainCam();
@@ -1279,6 +1424,7 @@ namespace Aiskwk.Map
             if (Input.GetKey(KeyCode.N) && Time.time - ctrlNhit > hitgap3)
             {
                 showNormalRod = !showNormalRod;
+                BuildViewer();
                 ctrlNhit = Time.time;
             }
             if (Input.GetKey(KeyCode.E) && ctrlpressed && Time.time - ctrlEhit > hitgap3)
@@ -1297,7 +1443,14 @@ namespace Aiskwk.Map
                 else if (Time.time - ctrlAhit > hitgap3)
                 {
                     var oldav = viewerAvatar;
-                    MoveToNextAvatar();
+                    if (shiftpressed)
+                    {
+                        MoveToPrevAvatar();
+                    }
+                    else
+                    {
+                        MoveToNextAvatar();
+                    }
                     var newav = viewerAvatar;
                     Debug.Log($"Moving to next avatar old:{oldav}  new:{newav}");
                     ctrlAhit = Time.time;
@@ -1315,7 +1468,7 @@ namespace Aiskwk.Map
             if (Time.time - ctrlThit < 2)
             {
                 var gap = Time.time - ctrlThit;
-                //Debug.Log($"hit second ctrl-T char inputstring:\"{Input.inputString}\" gap:{gap}");
+                Debug.Log($"hit second ctrl-T char inputstring:\"{Input.inputString}\" gap:{gap}");
                 if (Input.inputString.Length>0)
                 {
                     var trigger = "t" + Input.inputString[0];
@@ -1325,7 +1478,7 @@ namespace Aiskwk.Map
             }
             if (Input.GetKey(KeyCode.T) && ctrlpressed)
             {
-                //Debug.Log($"hit T {Time.time - ctrlThit}");
+                Debug.Log($"hit ctrl-T {Time.time - ctrlThit} setting time");
                 ctrlThit = Time.time;
             }
             if (Input.GetKey(KeyCode.F2) && Time.time-f2Hit >hitgap3 )
@@ -1342,6 +1495,11 @@ namespace Aiskwk.Map
             {
                 ToggleCarriageCamera();
                 f8Hit = Time.time;
+            }
+            if (Input.GetKey(KeyCode.F9) && Time.time - f9Hit > hitgap3)
+            {
+                ToggleCarriageCameraControl();
+                f9Hit = Time.time;
             }
             if (Input.GetKey(KeyCode.Alpha0))
             {
@@ -1403,9 +1561,21 @@ namespace Aiskwk.Map
                 }
             }
             float timeinc = 0.25f;
+            //if (Input.GetKey(KeyCode.PageDown))
+            //{
+            //    TiltHead(angincpersec);
+            //}
+            //if (Input.GetKey(KeyCode.PageDown))
+            //{
+            //    TiltHead(-angincpersec);
+            //}
             if (Input.GetKey(KeyCode.RightArrow) && Time.time - rgtArrowHit > hitgap0)
             {
-                if (altpressed)
+                if (carriageControlOn && carriageCameraExists)
+                {
+                    RotateCarriageYangleScaleByTime(angincpersec);
+                }
+                else if (altpressed)
                 {
                     TranslateViewer(incpersec, 0);
                 }
@@ -1415,13 +1585,17 @@ namespace Aiskwk.Map
                 }
                 else
                 {
-                    RotateViewer(angincpersec);
+                    RotateViewerScaleByTime(angincpersec);
                 }
                 rgtArrowHit = Time.time;
             }
             if (Input.GetKey(KeyCode.LeftArrow) && Time.time - lftArrowHit > hitgap0)
             {
-                if (altpressed)
+                if (carriageControlOn && carriageCameraExists)
+                {
+                    RotateCarriageYangleScaleByTime(-angincpersec);
+                }
+                else if (altpressed)
                 {
                     TranslateViewer(-incpersec, 0);
                 }
@@ -1431,13 +1605,34 @@ namespace Aiskwk.Map
                 }
                 else
                 {
-                    RotateViewer(-angincpersec);
+                    RotateViewerScaleByTime(-angincpersec);
                 }
                 lftArrowHit = Time.time;
             }
+            if (Input.GetKey(KeyCode.Home))
+            {
+                if (carriageControlOn && carriageCameraExists)
+                {
+                    NormCarriage();
+                }
+                else if (altpressed)
+                {
+                    NormHead();
+                }
+                else
+                {
+                    MoveViewerToHome();
+                    NormHead();
+                }
+            }
+
             if (Input.GetKey(KeyCode.UpArrow))
             {
-                if (altpressed)
+                if (carriageControlOn && carriageCameraExists)
+                {
+                    RotateCarriageXangleScaleByTime(-angincpersec);
+                }
+                else if (altpressed)
                 {
                     TiltHead(-angincpersec);
                 }
@@ -1448,7 +1643,11 @@ namespace Aiskwk.Map
             }
             if (Input.GetKey(KeyCode.DownArrow))
             {
-                if (altpressed)
+                if (carriageControlOn && carriageCameraExists)
+                {
+                    RotateCarriageXangleScaleByTime(angincpersec);
+                }
+                else if (altpressed)
                 {
                     TiltHead(angincpersec);
                 }
@@ -1485,28 +1684,28 @@ namespace Aiskwk.Map
 
         bool changed;
         int updateCount = 0;
-        ViewerAvatar old_viewerAvatar;
-        ViewerCamConfig old_viewerCamPosition;
-        ViewerControl old_viewerControl;
-        bool old_showNormalRod;
-        bool old_pinCameraToFrame;
-        bool CheckChange()
-        {
-            bool rv = false;
-            if (updateCount > 0)
-            {
-                rv = (old_viewerAvatar != viewerAvatar) ||
-                     //(old_viewerCamPosition != viewerCamPosition) || // todo - rebuilding viewer does not respect current viewing angle
-                     (old_showNormalRod != showNormalRod) ||
-                     (old_pinCameraToFrame != pinCameraToFrame);
-            }
-            updateCount++;
-            old_showNormalRod = showNormalRod;
-            old_viewerAvatar = viewerAvatar;
-            //old_viewerCamPosition = viewerCamPosition;
-            old_pinCameraToFrame = pinCameraToFrame;
-            return rv;
-        }
+        //ViewerAvatar old_viewerAvatar;
+        //ViewerCamConfig old_viewerCamPosition;
+        //ViewerControl old_viewerControl;
+        //bool old_showNormalRod;
+        //bool old_pinCameraToFrame;
+        //bool CheckChange()
+        //{
+        //    bool rv = false;
+        //    if (updateCount > 0)
+        //    {
+        //        rv = (old_viewerAvatar != viewerAvatar) ||
+        //             //(old_viewerCamPosition != viewerCamPosition) || // todo - rebuilding viewer does not respect current viewing angle
+        //             (old_showNormalRod != showNormalRod) ||
+        //             (old_pinCameraToFrame != pinCameraToFrame);
+        //    }
+        //    updateCount++;
+        //    old_showNormalRod = showNormalRod;
+        //    old_viewerAvatar = viewerAvatar;
+        //    //old_viewerCamPosition = viewerCamPosition;
+        //    old_pinCameraToFrame = pinCameraToFrame;
+        //    return rv;
+        //}
         public static bool ViewerProcessKeys = true;
 
         public static void ActivateViewerKeys(bool newstat)

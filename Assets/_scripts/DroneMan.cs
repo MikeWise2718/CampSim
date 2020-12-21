@@ -5,6 +5,9 @@ using UxUtils;
 namespace CampusSimulator
 {
 
+    public enum DroneSelectionMode { randommix, fixedmix }
+    public enum DroneSelectionNumber { any = -0, phantom = 1, mavic = 2, deldrone = 3, matrice = 4 }
+
     public class DroneMan : MonoBehaviour
     {
 
@@ -19,6 +22,35 @@ namespace CampusSimulator
 
         public enum DroneModeE { none, full };
         public UxEnumSetting<DroneModeE> droneMode = new UxEnumSetting<DroneModeE>("DroneMode", DroneModeE.full);
+
+
+
+
+        public (string dispavname, string avname, float scale, Vector3 rot, Vector3 tran) GetRandomAvatarDroneName(DroneSelectionMode dsm, DroneSelectionNumber dsn)
+        {
+            var irnd = (int)dsn;
+            if (dsm == DroneSelectionMode.randommix)
+            {
+                irnd = GraphAlgos.GraphUtil.GetRanInt(4, "popbld") + 1;
+            }
+            //var phantomrot = new Vector3(0, 0, 0);
+            var phantomrot = new Vector3(0, 90, 0);
+            var phantomlift = new Vector3(0, 0.117f, 0);
+            //var mavrot = new Vector3(0, 0, 90);
+            var mavrot = (Quaternion.Euler(0, 0, 0)).eulerAngles;
+            var mavlift = new Vector3(0, 0.074f, 0);
+            var defrot = Vector3.zero;
+            var deflift = Vector3.zero;
+            switch (irnd)
+            {
+                default:
+                case 1: return ("Phantom", "quadcopter", 3f, phantomrot, phantomlift);
+                case 2: return ("Mavic", "DJI_Mavic_Air_2", 3f, mavrot, mavlift);
+                case 3: return ("DelDrone", "Delivery_drone_v2", 1f, defrot, deflift);
+                case 4: return ("Matrice", "matrice_600", 1f, defrot, deflift);
+            }
+        }
+
 
         public void InitPhase0()
         {

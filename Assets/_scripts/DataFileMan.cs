@@ -95,16 +95,13 @@ namespace CampusSimulator
                 case SceneSelE.MsftB19focused:
                 case SceneSelE.MsftB33focused:
                 case SceneSelE.MsftB121focused:
-                    //osmloadspec = "msftb19area,msftcommons,msftredwest";
                     osmloadspec = "msftcampcore";
                     break;
                 case SceneSelE.MsftDublin:
                     osmloadspec = "msftdublin";
-                    //ptscale = 1000f;
                     break;
                 case SceneSelE.MsftMountainView:
                     osmloadspec = "msftmountainview";
-                    //ptscale = 1000f;
                     break;
                 case SceneSelE.Eb12small:
                 case SceneSelE.Eb12:
@@ -112,34 +109,35 @@ namespace CampusSimulator
                     break;
                 case SceneSelE.TeneriffeMtn:
                     osmloadspec = "tenmtn";
-                    //ptscale = 1000f;
                     break;
                 case SceneSelE.TukSouCen:
                     osmloadspec = "tuksoucen";
-                    //ptscale = 1000f;
                     break;
                 case SceneSelE.Seattle:
                     osmloadspec = "seattle";
-                    //ptscale = 1000f;
+                    break;
+                case SceneSelE.KeppelPort:
+                    osmloadspec = "keppelport";
+                    break;
+                case SceneSelE.KeppelDist:
+                    osmloadspec = "keppeldist";
+                    break;
+                case SceneSelE.Doha:
+                    osmloadspec = "doha";
                     break;
                 case SceneSelE.Seatac:
-                    //ptscale = 1000f;
                     break;
                 case SceneSelE.SanFrancisco:
                     osmloadspec = "sanfrancisco";
-                    //ptscale = 1000f;
                     break;
                 case SceneSelE.Frankfurt:
                     osmloadspec = "frankfurt";
-                    //ptscale = 1000f;
                     break;
                 case SceneSelE.HiddenLakeLookout:
                     osmloadspec = "hidlakelook";
-                    //ptscale = 1000f;
                     break;
                 case SceneSelE.Riggins:
                     osmloadspec = "riggins";
-                    //ptscale = 1000f;
                     break;
                 default:
                 case SceneSelE.None:

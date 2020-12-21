@@ -48,14 +48,16 @@ public class LogMan : MonoBehaviour
             }
         }
         var iclr = 0;
-        var nmsg = $"<color={color[0]}>";
+        var hclr0 = GraphAlgos.GraphUtil.GetHexColorByName(color[0]);
+        var nmsg = $"<color={hclr0}>";
         var sidx = nmsg.Length;
         nmsg += msg;
         var lidx = 0;
         foreach (var idx in delimIdxes)
         {
             iclr = (iclr + 1) % color.Length;
-            var isrt = $"</color><color={color[iclr]}>";
+            var hclr = GraphAlgos.GraphUtil.GetHexColorByName(color[iclr]);
+            var isrt = $"</color><color={hclr}>";
             sidx += idx - lidx;
             nmsg = nmsg.Remove(sidx, delim.Length);// remove the delim
             nmsg = nmsg.Insert(sidx, isrt);

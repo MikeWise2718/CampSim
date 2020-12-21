@@ -144,11 +144,9 @@ namespace CampusSimulator
                     break;
                 case SceneSelE.MsftDublin:
                     regname = "msftdublin";
-                    //ptscale = 1000f;
                     break;
                 case SceneSelE.MsftMountainView:
                     regname = "msftmountainview";
-                    //ptscale = 1000f;
                     break;
                 case SceneSelE.Eb12small:
                 case SceneSelE.Eb12:
@@ -156,35 +154,33 @@ namespace CampusSimulator
                     break;
                 case SceneSelE.TeneriffeMtn:
                     regname = "tenmtn";
-                    //ptscale = 1000f;
                     break;
                 case SceneSelE.TukSouCen:
                     regname = "tuksoucen";
-                    //ptscale = 1000f;
                     break;
                 case SceneSelE.Seattle:
                     regname = "seattle";
-                    //ptscale = 1000f;
+                    break;
+                case SceneSelE.KeppelPort:
+                    regname = "keppelport";
+                    break;
+                case SceneSelE.KeppelDist:
+                    regname = "keppeldist";
                     break;
                 case SceneSelE.Seatac:
                     regname = "seatac";
-                    //ptscale = 1000f;
                     break;
                 case SceneSelE.SanFrancisco:
                     regname = "sanfrancisco";
-                    //ptscale = 1000f;
                     break;
                 case SceneSelE.Frankfurt:
                     regname = "frankfurt";
-                    //ptscale = 1000f;
                     break;
                 case SceneSelE.HiddenLakeLookout:
                     regname = "hidlakelook";
-                    //ptscale = 1000f;
                     break;
                 case SceneSelE.Riggins:
                     regname = "riggins";
-                    //ptscale = 1000f;
                     break;
                 default:
                 case SceneSelE.None:

@@ -410,7 +410,7 @@ namespace CampusSimulator
                         var v2 = new Vector3(48.0f, 0, 17.0f);
                         GenSlots("z_" + gname, 14, 8, v1, v2);
                         zm.CreateZoneLinks(gname, "eb12-oso01");
-                        bld = zm.sman.bdman.GetBuilding("Eb12-22");
+                        bld = zm.sman.bdman.GetBuilding("Eb0814");
                         break;
                     }
             }

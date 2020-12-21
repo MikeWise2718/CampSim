@@ -161,10 +161,16 @@ public class B19Willow : MonoBehaviour
             var xoff = -3;
             var zoff = -3;
             //var defpos = new Vector3(-474.3f+xoff, 4.72f, 87.6f+zoff);
-            var defpos = new Vector3(-474.3f+xoff, 5.22f, 87.6f+zoff);
-            ymapheight = sman.mpman.GetHeight(defpos.x, defpos.z);
-            sman.Lgg($"B19 ymapheight:{ymapheight:f3}","orange");
-            defpos = new Vector3(defpos.x, ymapheight+defpos.y, defpos.z);
+
+            //var defpos = new Vector3(-474.3f+xoff, 5.22f, 87.6f+zoff);
+            //ymapheight = sman.mpman.GetHeight(defpos.x, defpos.z);
+            var bsheit = GetZeroBasedFloorHeight(0, includeAltitude: true);
+
+            //var defpos = new Vector3(-474.3f + xoff, bsheit + 5.22f - 0.59f, 87.6f + zoff);
+            var defpos = new Vector3(-474.3f + xoff, bsheit+5.22f-0.79f, 87.6f + zoff);
+            //ymapheight = sman.mpman.GetHeight(defpos.x, defpos.z);
+            sman.Lgg($"MakeItSo B19 bsheit:{bsheit} defpos:{defpos}","orange");
+            //defpos = new Vector3(defpos.x, defpos.y, defpos.z);
             var obprefab = Resources.Load<GameObject>("Willow/B19/B19-Willow");
             if (obprefab != null)
             {
@@ -320,41 +326,41 @@ public class B19Willow : MonoBehaviour
     {
         return (2, 5f);
     }
-    public float GetFloorHeight(int floor, bool includeAltitude = true)
+    public float GetZeroBasedFloorHeight(int floor, bool includeAltitude = true)
     {
-        var rv = bspec.GetFloorHeight(floor, includeAltitude: includeAltitude);
+        var rv = bspec.GetZeroBasedFloorHeight(floor, includeAltitude: includeAltitude);
         return rv;
     }
 
-    public float GetFloorHeightOld(int floor, bool includeAltitude = true)
-    {
-        var rv = 0.01f;
-        if (floor < 0) floor = 0;
-        if (floor > 2) floor = 2;
-        switch (floor)
-        {
-            case 0:
-            case 1:
-                rv = 0.01f;
-                break;
-            case 2:
-                rv = 2.11f;
-                break;
-        }
-        if (includeAltitude)
-        {
-            //rv += ymapheight;
-            if (bspec == null)
-            {
-                sman.LggError("B19Willow.GetFloorHeight - bspec null with includeAltitude=true");
-            }
-            else
-            {
-                rv += bspec.GetGround();
-            }
-        }
-        return rv;
-    }
+    //public float GetFloorHeightOld(int floor, bool includeAltitude = true)
+    //{
+    //    var rv = 0.01f;
+    //    if (floor < 0) floor = 0;
+    //    if (floor > 2) floor = 2;
+    //    switch (floor)
+    //    {
+    //        case 0:
+    //        case 1:
+    //            rv = 0.01f;
+    //            break;
+    //        case 2:
+    //            rv = 2.11f;
+    //            break;
+    //    }
+    //    if (includeAltitude)
+    //    {
+    //        //rv += ymapheight;
+    //        if (bspec == null)
+    //        {
+    //            sman.LggError("B19Willow.GetFloorHeight - bspec null with includeAltitude=true");
+    //        }
+    //        else
+    //        {
+    //            rv += bspec.GetGround();
+    //        }
+    //    }
+    //    return rv;
+    //}
 
 
     List<string> B19_parts = new List<string>

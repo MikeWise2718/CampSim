@@ -203,9 +203,9 @@ public class B121Willow : MonoBehaviour
         return (3, 12.6f);
     }
 
-    public float GetFloorHeight(int floor, bool includeAltitude = true)
+    public float GetZeroBasedFloorHeight(int floor, bool includeAltitude = true)
     {
-        var rv = bspec.GetFloorHeight(floor, includeAltitude: includeAltitude);
+        var rv = bspec.GetZeroBasedFloorHeight(floor, includeAltitude: includeAltitude);
         return rv;
     }
 
@@ -223,8 +223,7 @@ public class B121Willow : MonoBehaviour
             //    ymapheight -= 0.10f; // adjust for map irrgularities - doesn't work well
             //}
             //var bps = bpos.ToString("f3");
-            //sman.Lgg($"Loading B121 -- height - bpos:{bps} yheit(from map):{ymapheight:f2} total:{ymapheight+bpos.y:f2}","orange");
-            var bsheit = GetFloorHeight(0, includeAltitude: true);
+            var bsheit = GetZeroBasedFloorHeight(0, includeAltitude: true);
             bpos = new Vector3(-789, bsheit, -436);
             var bps = bpos.ToString("f3");
             sman.Lgg($"Loading B121 -- bpos:{bps} bsheit:{bsheit:f3}", "orange");

@@ -97,8 +97,8 @@ namespace CampusSimulator
             this.walknode = walknode;
             this.drivenode = drivenode;
             var lclc = gm.sman.lcman.GetGraphCtrl();
-            wnode = lclc.GetNode(walknode);
-            dnode = lclc.GetNode(drivenode);
+            wnode = lclc.GetNode(walknode, complain:false);
+            dnode = lclc.GetNode(drivenode, complain: false);
             if (wnode != null)
             {
                 this.wlkpt = wnode.pt;
@@ -674,15 +674,19 @@ namespace CampusSimulator
                     break;
                 case "Eb12_Rewe_1":
                     {
-                        var v1 = new Vector3(280.0f, 0, 118.0f);
-                        var v2 = new Vector3(264.05f, 0, 147.7f);
+                        var dx_rewe = -9.3f;
+                        var dz_rewe = -4.1f;
+                        var v1 = new Vector3(280.0f + dx_rewe, 0, 118.0f + dz_rewe);
+                        var v2 = new Vector3(264.05f + dx_rewe, 0, 147.7f + dz_rewe);
                         GenSlots("g_rewe_1", 13, v1, v2);
                     }
                     break;
                 case "Eb12_Rewe_2":
                     {
-                        var v1 = new Vector3(235.6f, 0, 144.4f);
-                        var v2 = new Vector3(241.7f, 0, 107.1f);
+                        var dx_rewe = -9.3f;
+                        var dz_rewe = -4.1f;
+                        var v1 = new Vector3(235.6f + dx_rewe, 0, 144.4f + dz_rewe);
+                        var v2 = new Vector3(241.7f + dx_rewe, 0, 107.1f + dz_rewe);
                         GenSlots("g_rewe_2", 17, v1, v2);
                     }
                     break;

@@ -1,0 +1,3805 @@
+شارع الكورنيش,nodes:16,export:T
+شارع الكورنيش01,nodes:17,export:T
+البدع,nodes:3,export:T
+residential01,nodes:9,export:T
+service01,nodes:6,export:T
+service02,nodes:2,export:T
+راس ابو عبود,nodes:8,export:T
+امرير,nodes:6,export:T
+residential02,nodes:21,export:T
+طارق بن زياد,nodes:2,export:T
+خيبر,nodes:2,export:T
+ابن نوفل,nodes:2,export:T
+الوفاق,nodes:2,export:T
+ابن الزبير,nodes:2,export:T
+طارق بن زياد01,nodes:4,export:T
+ابن المسيب,nodes:2,export:T
+الاماني,nodes:6,export:T
+الثقافة,nodes:4,export:T
+شارع ابن عبد المطلب,nodes:4,export:T
+بيت الحكمة,nodes:3,export:T
+الطائي,nodes:12,export:T
+وادي الخرج,nodes:7,export:T
+الجهرة,nodes:3,export:T
+الخليل بن احمد,nodes:4,export:T
+الكسائي,nodes:12,export:T
+ابن خلدون,nodes:7,export:T
+الكسائي01,nodes:6,export:T
+ام بركة,nodes:2,export:T
+كعب بن زهير,nodes:9,export:T
+حكيم بن حزام,nodes:17,export:T
+ابو بكر الصديق,nodes:5,export:T
+ام غويلينة,nodes:8,export:T
+ابن الجوزي,nodes:14,export:T
+ابن الجوزي01,nodes:6,export:T
+ثمامة بن عدي,nodes:4,export:T
+ابن افلح,nodes:6,export:T
+جبل طارق,nodes:2,export:T
+ابن جندب,nodes:7,export:T
+حارثة بن سهل,nodes:4,export:T
+لمعتز,nodes:2,export:T
+الطريق الدائري الثالثي,nodes:10,export:T
+شارع محمد بن ثاني,nodes:17,export:T
+الطريق الدائري الثالثي01,nodes:10,export:T
+service03,nodes:2,export:T
+شارع المنصورة,nodes:6,export:T
+شارع المنصورة01,nodes:6,export:T
+وادي رشيدة,nodes:11,export:T
+حطين,nodes:5,export:T
+وادي رشيدة01,nodes:20,export:T
+tertiary01,nodes:26,export:T
+ابن درهم,nodes:8,export:T
+ابو مسلم,nodes:13,export:T
+الصالحية,nodes:8,export:T
+الصالحية01,nodes:3,export:T
+قباء,nodes:4,export:T
+هشام بن عقبة,nodes:10,export:T
+حرملة بن زيد,nodes:3,export:T
+العرب,nodes:6,export:T
+المناخ,nodes:4,export:T
+service04,nodes:6,export:T
+ابن فرناس,nodes:7,export:T
+شارع نجمة,nodes:9,export:T
+الخبيب,nodes:7,export:T
+عاصم بن علي,nodes:2,export:T
+البراء بن مالك,nodes:12,export:T
+العرب01,nodes:4,export:T
+ابن درهم01,nodes:4,export:T
+العروبة,nodes:2,export:T
+البخاري,nodes:10,export:T
+عاصم بن عمر,nodes:10,export:T
+شارع الخدري,nodes:7,export:T
+محمد بن مسلمة,nodes:4,export:T
+شارع الكورنيش02,nodes:3,export:T
+شارع المينا,nodes:10,export:T
+service05,nodes:17,export:T
+service06,nodes:5,export:T
+الاخاء,nodes:6,export:T
+القدس الشريف,nodes:9,export:T
+نصر بن سيار,nodes:6,export:T
+شارع علي بن عبدالله,nodes:16,export:T
+شارع جاسم بن محمد,nodes:5,export:T
+الجسرة,nodes:2,export:T
+الجسرة01,nodes:11,export:T
+السوق,nodes:6,export:T
+السوق01,nodes:12,export:T
+الجسرة02,nodes:5,export:T
+living_street01,nodes:3,export:T
+living_street02,nodes:2,export:T
+شارع جبر بن محمد,nodes:7,export:T
+بحر العرب,nodes:7,export:T
+شارع السليمي,nodes:2,export:T
+ابو العلاء,nodes:10,export:T
+ابن الهيثم,nodes:9,export:T
+المدينة,nodes:3,export:T
+خالد بن الوليد,nodes:11,export:T
+شارع الأسحاط,nodes:5,export:T
+الكندي,nodes:9,export:T
+شارع وادي مشيرب,nodes:3,export:T
+طريق سلوى,nodes:7,export:T
+دوار جدة,nodes:6,export:T
+الفارابي,nodes:16,export:T
+شارع وادي مشيرب01,nodes:3,export:T
+شارع وادي مشيرب02,nodes:10,export:T
+شارع وادي مشيرب03,nodes:9,export:T
+شارع وادي مشيرب04,nodes:3,export:T
+شارع وادي مشيرب05,nodes:2,export:T
+شارع وادي مشيرب06,nodes:2,export:T
+شارع وادي مشريب,nodes:4,export:T
+ابن سينا,nodes:15,export:T
+الكندي01,nodes:6,export:T
+الكندي02,nodes:6,export:T
+الروابي,nodes:2,export:T
+سعيد بن العاص,nodes:16,export:T
+مدرسة النهضة,nodes:8,export:T
+مدرسة النهضة01,nodes:5,export:T
+trunk_link01,nodes:9,export:T
+trunk_link02,nodes:6,export:T
+الروابي01,nodes:8,export:T
+trunk_link03,nodes:7,export:T
+عبد العزيز بن احمد,nodes:8,export:T
+شارع قلعة العسكر,nodes:16,export:T
+tertiary_link01,nodes:7,export:T
+primary_link01,nodes:6,export:T
+primary_link02,nodes:5,export:T
+trunk_link04,nodes:14,export:T
+راس ابو عبود01,nodes:10,export:T
+شارع الاصمخ,nodes:5,export:T
+شارع جبر بن محمد01,nodes:16,export:T
+شارع الاصمخ01,nodes:18,export:T
+شارع حمد الكبير,nodes:2,export:T
+primary_link03,nodes:8,export:T
+شارع المتحف,nodes:14,export:T
+شارع جبر بن محمد02,nodes:14,export:T
+primary_link04,nodes:7,export:T
+الديوان,nodes:4,export:T
+شارع الكورنيش03,nodes:26,export:T
+شارع وادي مشريب01,nodes:15,export:T
+عبد العزيز بن احمد01,nodes:3,export:T
+trunk_link05,nodes:8,export:T
+primary_link05,nodes:8,export:T
+دوار البدع,nodes:26,export:T
+primary_link06,nodes:7,export:T
+شارع عبدالله بن جاسم,nodes:13,export:T
+trunk_link06,nodes:11,export:T
+شارع وادي مشريب02,nodes:11,export:T
+primary_link07,nodes:7,export:T
+شارع احمد بن محمد بن ثني,nodes:12,export:T
+راس ابو عبود02,nodes:9,export:T
+الشارع المعاريف,nodes:17,export:T
+الديوان01,nodes:15,export:T
+شارع علي بن عبدالله01,nodes:13,export:T
+المرفأ,nodes:12,export:T
+دوار المرقاب,nodes:8,export:T
+الجسرة03,nodes:3,export:T
+primary_link08,nodes:8,export:T
+البدع01,nodes:3,export:T
+ساحة السوق,nodes:3,export:T
+primary_link09,nodes:12,export:T
+البدع02,nodes:23,export:T
+طريق الريان,nodes:12,export:T
+primary_link10,nodes:18,export:T
+primary01,nodes:2,export:T
+primary_link11,nodes:15,export:T
+البدع03,nodes:21,export:T
+البدع04,nodes:23,export:T
+شارع قلعة العسكر01,nodes:19,export:T
+service07,nodes:2,export:T
+primary_link12,nodes:7,export:T
+primary_link13,nodes:7,export:T
+شارع قلعة العسكر02,nodes:6,export:T
+شارع محمد بن ثاني01,nodes:7,export:T
+شارع الرميلة,nodes:10,export:T
+service08,nodes:13,export:T
+tertiary_link02,nodes:6,export:T
+شارع الرميلة01,nodes:5,export:T
+trunk_link07,nodes:11,export:T
+service09,nodes:12,export:T
+tertiary_link03,nodes:9,export:T
+سميسمة,nodes:7,export:T
+ابن خلدون01,nodes:5,export:T
+ام غويلينة01,nodes:7,export:T
+tertiary02,nodes:4,export:T
+ام غويلينة02,nodes:5,export:T
+راس ابو عبود03,nodes:6,export:T
+راس ابو عبود04,nodes:2,export:T
+راس ابو عبود05,nodes:2,export:T
+راس ابو عبود06,nodes:6,export:T
+شارع الخليج,nodes:4,export:T
+شارع الخليج01,nodes:9,export:T
+شارع الخليج02,nodes:4,export:T
+م الصوب,nodes:19,export:T
+ابو حاتم,nodes:5,export:T
+ابو امامة,nodes:4,export:T
+سنان بن ثابت,nodes:10,export:T
+motorway_link01,nodes:4,export:T
+سنان بن ثابت01,nodes:6,export:T
+شارع روضة الخيل,nodes:9,export:T
+المياه,nodes:11,export:T
+شارع المطار,nodes:2,export:T
+الكندي03,nodes:2,export:T
+شارع قلعة العسكر03,nodes:14,export:T
+الديوان02,nodes:5,export:T
+شارع عنيزة,nodes:10,export:T
+شارع احمد بن محمد بن ثني01,nodes:18,export:T
+شارع عنيزة01,nodes:17,export:T
+service10,nodes:3,export:T
+ابو سعيد,nodes:3,export:T
+ابو عبيدة,nodes:7,export:T
+motorway_link02,nodes:7,export:T
+الدوحة الجديدة,nodes:3,export:T
+الاحمدي,nodes:6,export:T
+لبصير,nodes:3,export:T
+سعيد بن زيد,nodes:5,export:T
+شارع ابن محمود,nodes:19,export:T
+مسلم بن عقيل,nodes:3,export:T
+السمر,nodes:2,export:T
+بوسلمة,nodes:10,export:T
+primary_link14,nodes:7,export:T
+ابو عمرو,nodes:4,export:T
+الطريق الدائري الثالثي02,nodes:3,export:T
+الوعب,nodes:7,export:T
+الفتح,nodes:3,export:T
+شارع المطار01,nodes:10,export:T
+primary_link15,nodes:2,export:T
+لخوير,nodes:9,export:T
+primary_link16,nodes:3,export:T
+لثمار,nodes:4,export:T
+جبل طارق01,nodes:2,export:T
+لندى,nodes:9,export:T
+شارع المطار02,nodes:6,export:T
+طريق الريان01,nodes:10,export:T
+شارع روضة الخيل01,nodes:9,export:T
+امرير01,nodes:5,export:T
+علي بن عمر العطية,nodes:5,export:T
+trunk_link08,nodes:13,export:T
+طريق الريان02,nodes:14,export:T
+شارع 954,nodes:5,export:T
+العالية,nodes:5,export:T
+primary_link17,nodes:6,export:T
+شارع الخليج03,nodes:9,export:T
+primary_link18,nodes:9,export:T
+شارع المنصورة02,nodes:10,export:T
+السافلية,nodes:11,export:T
+شارع وادي مشيرب07,nodes:6,export:T
+primary_link19,nodes:7,export:T
+شارع 821,nodes:4,export:T
+service11,nodes:7,export:T
+شارع عبدالله بن جاسم01,nodes:35,export:T
+شارع عبدالله بن جاسم02,nodes:17,export:T
+شارع الكورنيش04,nodes:5,export:T
+residential03,nodes:2,export:T
+residential04,nodes:4,export:T
+service12,nodes:11,export:T
+علي بن عمر العطية01,nodes:7,export:T
+primary_link20,nodes:2,export:T
+motorway_link03,nodes:6,export:T
+البتيل,nodes:3,export:T
+وادي المرخ,nodes:8,export:T
+خيبر01,nodes:2,export:T
+البلدية,nodes:15,export:T
+ابن ميمون,nodes:6,export:T
+العباب,nodes:11,export:T
+residential05,nodes:4,export:T
+زرارة بن قيس,nodes:3,export:T
+شارع الخليج04,nodes:24,export:T
+الفردوس,nodes:23,export:T
+الخالدية,nodes:17,export:T
+طريق الريان03,nodes:9,export:T
+service13,nodes:8,export:T
+ابن الاثير,nodes:4,export:T
+primary_link21,nodes:8,export:T
+شارع حطين,nodes:5,export:T
+motorway_link04,nodes:12,export:T
+ابو شعيب,nodes:4,export:T
+عمار بن رجاء,nodes:10,export:T
+ابو زياد,nodes:4,export:T
+شارع المطار03,nodes:23,export:T
+residential06,nodes:5,export:T
+الضيافة,nodes:13,export:T
+الهبوب,nodes:4,export:T
+الصاري,nodes:7,export:T
+شارع الفيحاء,nodes:5,export:T
+شارع عمر المختار,nodes:5,export:T
+service14,nodes:4,export:T
+شارع المطار04,nodes:2,export:T
+خيبر02,nodes:4,export:T
+خيبر03,nodes:20,export:T
+شارع حمد الكبير01,nodes:13,export:T
+الجهرة01,nodes:9,export:T
+شارع عبدالله بن جاسم03,nodes:4,export:T
+مليحة,nodes:3,export:T
+المقداد,nodes:3,export:T
+ابن الاغلب,nodes:8,export:T
+ابن رجاء,nodes:13,export:T
+service15,nodes:15,export:T
+شارع المنصورة03,nodes:18,export:T
+شارع المنصورة04,nodes:2,export:T
+الصفصاف,nodes:3,export:T
+جندب,nodes:2,export:T
+شارع حطين01,nodes:9,export:T
+ابن الارت,nodes:9,export:T
+شارع عمر المختار01,nodes:4,export:T
+شارع الفيروز,nodes:6,export:T
+شارع الفيحاء01,nodes:8,export:T
+حارثة بن سراقة,nodes:3,export:T
+الزبير,nodes:2,export:T
+الفيصل,nodes:2,export:T
+service16,nodes:10,export:T
+service17,nodes:22,export:T
+trunk_link09,nodes:14,export:T
+شارع الدستور,nodes:6,export:T
+علي بن عمر العطية02,nodes:2,export:T
+trunk_link10,nodes:7,export:T
+بلاط الشهداء,nodes:2,export:T
+شارع المطار05,nodes:14,export:T
+سعد بن مالك,nodes:5,export:T
+service18,nodes:2,export:T
+service19,nodes:2,export:T
+الطريق الدائري الثاني,nodes:44,export:T
+الأقصى,nodes:8,export:T
+primary_link22,nodes:2,export:T
+service20,nodes:9,export:T
+service21,nodes:3,export:T
+service22,nodes:3,export:T
+primary_link23,nodes:2,export:T
+service23,nodes:2,export:T
+الفيصل01,nodes:4,export:T
+شارع الكورنيش05,nodes:2,export:T
+الطريق الدائري الثالثي03,nodes:7,export:T
+primary_link24,nodes:4,export:T
+motorway_link05,nodes:4,export:T
+شارع عنيزة02,nodes:9,export:T
+علي بن عمر العطية03,nodes:11,export:T
+علي بن عمر العطية04,nodes:2,export:T
+service24,nodes:4,export:T
+شارع المنصورة05,nodes:4,export:T
+العرب02,nodes:9,export:T
+unclassified01,nodes:13,export:T
+البندقية,nodes:7,export:T
+service25,nodes:27,export:T
+المزروعة,nodes:27,export:T
+لوادي,nodes:3,export:T
+طريق سلوى01,nodes:5,export:T
+شارع وادي مشيرب08,nodes:6,export:T
+شارع وادي مشريب03,nodes:3,export:T
+شارع وادي مشريب04,nodes:9,export:T
+فلسطين,nodes:7,export:T
+motorway_link06,nodes:15,export:T
+شارع الجبر,nodes:8,export:T
+البنك,nodes:5,export:T
+شارع 976,nodes:2,export:T
+شارع الاحمد,nodes:3,export:T
+التربية,nodes:10,export:T
+شارع الاحمد01,nodes:11,export:T
+tertiary_link04,nodes:10,export:T
+شارع الجبر01,nodes:3,export:T
+الطيب,nodes:12,export:T
+البريد,nodes:2,export:T
+unclassified02,nodes:11,export:T
+path01,nodes:13,export:T
+path02,nodes:3,export:T
+path03,nodes:17,export:T
+path04,nodes:2,export:T
+footway01,nodes:7,export:T
+footway02,nodes:22,export:T
+path05,nodes:2,export:T
+service26,nodes:2,export:T
+path06,nodes:28,export:T
+path07,nodes:3,export:T
+path08,nodes:3,export:T
+path09,nodes:32,export:T
+service27,nodes:10,export:T
+path10,nodes:4,export:T
+service28,nodes:4,export:T
+path11,nodes:4,export:T
+path12,nodes:5,export:T
+service29,nodes:27,export:T
+path13,nodes:8,export:T
+unclassified03,nodes:23,export:T
+service30,nodes:2,export:T
+service31,nodes:2,export:T
+شارع افريحه,nodes:28,export:T
+ابو فراس,nodes:3,export:T
+خالد بن الوليد01,nodes:13,export:T
+الحصن,nodes:7,export:T
+living_street03,nodes:7,export:T
+الشوعي,nodes:2,export:T
+living_street04,nodes:2,export:T
+living_street05,nodes:2,export:T
+ابن تيم,nodes:5,export:T
+living_street06,nodes:2,export:T
+الفرقد,nodes:2,export:T
+الرملة,nodes:3,export:T
+الذهبي,nodes:7,export:T
+ابن عمير,nodes:3,export:T
+living_street07,nodes:3,export:T
+living_street08,nodes:3,export:T
+ابن عمر,nodes:3,export:T
+الرواسي,nodes:7,export:T
+العرين,nodes:9,export:T
+living_street09,nodes:5,export:T
+اسعد بن زرارة,nodes:8,export:T
+شارع زهير بن عوف,nodes:3,export:T
+residential07,nodes:2,export:T
+living_street10,nodes:6,export:T
+residential08,nodes:2,export:T
+الجمعية,nodes:7,export:T
+الرملة01,nodes:7,export:T
+living_street11,nodes:7,export:T
+living_street12,nodes:2,export:T
+trunk_link11,nodes:6,export:T
+ابو القاسم الشابي,nodes:9,export:T
+service32,nodes:11,export:T
+primary_link25,nodes:2,export:T
+primary_link26,nodes:2,export:T
+primary_link27,nodes:4,export:T
+الروابي02,nodes:3,export:T
+الروابي03,nodes:2,export:T
+service33,nodes:3,export:T
+trunk_link12,nodes:4,export:T
+primary_link28,nodes:4,export:T
+service34,nodes:16,export:T
+primary_link29,nodes:3,export:T
+primary_link30,nodes:3,export:T
+العالية01,nodes:5,export:T
+service35,nodes:3,export:T
+service36,nodes:4,export:T
+motorway_link07,nodes:8,export:T
+service37,nodes:4,export:T
+السياحة,nodes:5,export:T
+primary_link31,nodes:9,export:T
+service38,nodes:3,export:T
+service39,nodes:3,export:T
+service40,nodes:4,export:T
+service41,nodes:3,export:T
+service42,nodes:2,export:T
+primary_link32,nodes:6,export:T
+primary_link33,nodes:6,export:T
+السياحة01,nodes:8,export:T
+الحكمة,nodes:6,export:T
+steps01,nodes:2,export:T
+service43,nodes:3,export:T
+service44,nodes:2,export:T
+service45,nodes:7,export:T
+Overhead Pass,nodes:2,export:T
+steps02,nodes:2,export:T
+service46,nodes:24,export:T
+service47,nodes:2,export:T
+service48,nodes:21,export:T
+service49,nodes:9,export:T
+service50,nodes:8,export:T
+مدرسة النهضة02,nodes:10,export:T
+footway03,nodes:2,export:T
+footway04,nodes:3,export:T
+footway05,nodes:3,export:T
+footway06,nodes:2,export:T
+footway07,nodes:2,export:T
+footway08,nodes:6,export:T
+footway09,nodes:3,export:T
+footway10,nodes:3,export:T
+footway11,nodes:4,export:T
+service51,nodes:8,export:T
+footway12,nodes:3,export:T
+footway13,nodes:3,export:T
+footway14,nodes:5,export:T
+footway15,nodes:3,export:T
+footway16,nodes:3,export:T
+footway17,nodes:2,export:T
+footway18,nodes:8,export:T
+footway19,nodes:23,export:T
+footway20,nodes:3,export:T
+footway21,nodes:3,export:T
+footway22,nodes:14,export:T
+footway23,nodes:10,export:T
+footway24,nodes:3,export:T
+footway25,nodes:13,export:T
+footway26,nodes:3,export:T
+footway27,nodes:3,export:T
+footway28,nodes:5,export:T
+footway29,nodes:12,export:T
+شارع الكورنيش06,nodes:24,export:T
+footway30,nodes:12,export:T
+footway31,nodes:14,export:T
+footway32,nodes:7,export:T
+شرق,nodes:6,export:T
+footway33,nodes:3,export:T
+footway34,nodes:9,export:T
+footway35,nodes:9,export:T
+footway36,nodes:9,export:T
+footway37,nodes:5,export:T
+service52,nodes:11,export:T
+footway38,nodes:18,export:T
+footway39,nodes:4,export:T
+footway40,nodes:2,export:T
+footway41,nodes:3,export:T
+footway42,nodes:2,export:T
+footway43,nodes:5,export:T
+footway44,nodes:7,export:T
+footway45,nodes:2,export:T
+footway46,nodes:2,export:T
+footway47,nodes:5,export:T
+footway48,nodes:2,export:T
+footway49,nodes:25,export:T
+tertiary_link05,nodes:5,export:T
+tertiary_link06,nodes:9,export:T
+tertiary_link07,nodes:5,export:T
+pedestrian01,nodes:6,export:T
+شارع الجبر02,nodes:14,export:T
+pedestrian02,nodes:15,export:T
+primary_link34,nodes:10,export:T
+خالد بن الوليد02,nodes:6,export:T
+خالد بن الوليد03,nodes:7,export:T
+pedestrian03,nodes:5,export:T
+footway50,nodes:91,export:T
+footway51,nodes:3,export:T
+service53,nodes:11,export:T
+service54,nodes:6,export:T
+footway52,nodes:20,export:T
+service55,nodes:3,export:T
+footway53,nodes:40,export:T
+service56,nodes:25,export:T
+footway54,nodes:2,export:T
+pedestrian04,nodes:17,export:T
+footway55,nodes:2,export:T
+footway56,nodes:2,export:T
+footway57,nodes:8,export:T
+service57,nodes:12,export:T
+footway58,nodes:2,export:T
+service58,nodes:12,export:T
+service59,nodes:11,export:T
+service60,nodes:18,export:T
+footway59,nodes:2,export:T
+footway60,nodes:24,export:T
+service61,nodes:7,export:T
+footway61,nodes:2,export:T
+footway62,nodes:2,export:T
+service62,nodes:2,export:T
+primary_link35,nodes:5,export:T
+primary_link36,nodes:4,export:T
+service63,nodes:8,export:T
+primary_link37,nodes:2,export:T
+primary_link38,nodes:7,export:T
+service64,nodes:7,export:T
+service65,nodes:2,export:T
+primary_link39,nodes:6,export:T
+service66,nodes:2,export:T
+service67,nodes:9,export:T
+primary_link40,nodes:6,export:T
+سميسمة01,nodes:8,export:T
+service68,nodes:10,export:T
+service69,nodes:6,export:T
+service70,nodes:2,export:T
+service71,nodes:14,export:T
+footway63,nodes:67,export:T
+براحة الجفيري,nodes:7,export:T
+primary_link41,nodes:2,export:T
+براحة الجفيري01,nodes:5,export:T
+شارع حمد الكبير02,nodes:7,export:T
+راس ابو عبود07,nodes:5,export:T
+path14,nodes:2,export:T
+الطريق الدائري الثالثي04,nodes:8,export:T
+ابن سينا01,nodes:17,export:T
+الروابي04,nodes:5,export:T
+الطريق الدائري الثالثي05,nodes:13,export:T
+طريق سلوى02,nodes:9,export:T
+راس ابو عبود08,nodes:4,export:T
+service72,nodes:3,export:T
+service73,nodes:12,export:T
+primary_link42,nodes:9,export:T
+service74,nodes:2,export:T
+service75,nodes:2,export:T
+primary_link43,nodes:9,export:T
+شارع الكورنيش07,nodes:31,export:T
+شارع الكورنيش08,nodes:48,export:T
+شارع المنصورة06,nodes:9,export:T
+شارع المطار06,nodes:17,export:T
+شارع المطار07,nodes:15,export:T
+الثريا,nodes:6,export:T
+العروبة01,nodes:22,export:T
+الطريق الدائري الثاني01,nodes:17,export:T
+الطريق الدائري الثاني02,nodes:16,export:T
+الطريق الدائري الثاني03,nodes:8,export:T
+شارع نجمة01,nodes:13,export:T
+service76,nodes:16,export:T
+tertiary03,nodes:24,export:T
+الحريرة,nodes:2,export:T
+service77,nodes:2,export:T
+العرب03,nodes:4,export:T
+شارع الأسحاط01,nodes:4,export:T
+الصالحية02,nodes:3,export:T
+شارع الأسحاط02,nodes:4,export:T
+ابن درهم02,nodes:2,export:T
+العرب04,nodes:2,export:T
+لجميز,nodes:3,export:T
+ابن درهم03,nodes:5,export:T
+ابو محجن,nodes:5,export:T
+ابو هند,nodes:4,export:T
+حيان,nodes:5,export:T
+ابن درهم04,nodes:3,export:T
+primary_link44,nodes:5,export:T
+العرب05,nodes:3,export:T
+ابن مالك,nodes:2,export:T
+primary_link45,nodes:6,export:T
+ابن درهم05,nodes:4,export:T
+شارع احمد بن محمد بن ثني02,nodes:2,export:T
+شارع احمد بن محمد بن ثني03,nodes:2,export:T
+شارع المطار08,nodes:2,export:T
+شارع المطار09,nodes:4,export:T
+شارع المطار10,nodes:3,export:T
+شارع المطار11,nodes:5,export:T
+شارع المطار12,nodes:15,export:T
+دوار المرقاب01,nodes:4,export:T
+شارع علي بن عبدالله02,nodes:3,export:T
+الطريق الدائري الثالثي06,nodes:17,export:T
+الطريق الدائري الثالثي07,nodes:3,export:T
+الطريق الدائري الثالثي08,nodes:7,export:T
+دوار دار الكتب,nodes:26,export:T
+ابن خلدون02,nodes:4,export:T
+ابن خلدون03,nodes:4,export:T
+شارع احمد بن محمد بن ثني04,nodes:2,export:T
+الجهرة02,nodes:8,export:T
+primary_link46,nodes:2,export:T
+primary_link47,nodes:2,export:T
+primary_link48,nodes:4,export:T
+primary_link49,nodes:4,export:T
+primary_link50,nodes:4,export:T
+primary_link51,nodes:4,export:T
+خالد بن الوليد04,nodes:7,export:T
+ابن مالك01,nodes:18,export:T
+tertiary04,nodes:21,export:T
+trunk_link13,nodes:6,export:T
+trunk_link14,nodes:6,export:T
+طارق بن زياد02,nodes:3,export:T
+طارق بن زياد03,nodes:5,export:T
+طريق الريان04,nodes:11,export:T
+العباس,nodes:7,export:T
+شارع احمد بن محمد بن ثني05,nodes:14,export:T
+شارع احمد بن محمد بن ثني06,nodes:5,export:T
+شارع الهفوف,nodes:3,export:T
+شارع الخليج05,nodes:21,export:T
+طريق الريان05,nodes:5,export:T
+شارع ابن محمود01,nodes:4,export:T
+شارع ابن محمود02,nodes:8,export:T
+شارع ابن محمود03,nodes:11,export:T
+شارع قطريبن الفجاءة,nodes:2,export:T
+شارع قطريبن الفجاءة01,nodes:4,export:T
+دوار جدة01,nodes:6,export:T
+ابن عوف,nodes:2,export:T
+ابن العميد,nodes:10,export:T
+ابن مالك02,nodes:11,export:T
+شارع المنصورة07,nodes:6,export:T
+شارع المنصورة08,nodes:3,export:T
+شارع المنصورة09,nodes:6,export:T
+شارع المنصورة10,nodes:7,export:T
+شارع المطار13,nodes:2,export:T
+سكة التعاون,nodes:7,export:T
+ابو اميمة,nodes:5,export:T
+شارع المحــار,nodes:2,export:T
+service78,nodes:14,export:T
+يثرب,nodes:6,export:T
+سكة السيف,nodes:2,export:T
+لحويلة,nodes:2,export:T
+عياض,nodes:2,export:T
+يثرب01,nodes:2,export:T
+النصرانية,nodes:2,export:T
+service79,nodes:2,export:T
+المجداف,nodes:2,export:T
+الفشت,nodes:2,export:T
+بن عساكر,nodes:3,export:T
+service80,nodes:3,export:T
+service81,nodes:3,export:T
+service82,nodes:3,export:T
+service83,nodes:3,export:T
+service84,nodes:3,export:T
+service85,nodes:3,export:T
+سكة الابريز,nodes:4,export:T
+سكة نعمان,nodes:4,export:T
+service86,nodes:4,export:T
+سكة الزهرة,nodes:4,export:T
+المرشد,nodes:6,export:T
+الثريا01,nodes:6,export:T
+primary_link52,nodes:7,export:T
+البندقية01,nodes:7,export:T
+service87,nodes:8,export:T
+service88,nodes:2,export:T
+service89,nodes:2,export:T
+service90,nodes:2,export:T
+service91,nodes:10,export:T
+service92,nodes:3,export:T
+service93,nodes:8,export:T
+service94,nodes:4,export:T
+شارع روضة الخيل02,nodes:13,export:T
+سكة الفلاح,nodes:3,export:T
+سكة الحنان,nodes:2,export:T
+بشر بن البراء,nodes:2,export:T
+سكة الاخاء,nodes:2,export:T
+service95,nodes:2,export:T
+سكة الصلاح,nodes:2,export:T
+الحارث بن مسلم,nodes:2,export:T
+النعمان بن بشير,nodes:3,export:T
+سكة الصفاء,nodes:3,export:T
+residential09,nodes:3,export:T
+الخالدية01,nodes:5,export:T
+residential10,nodes:7,export:T
+الخالدية02,nodes:6,export:T
+ابن حذيفة,nodes:7,export:T
+الخريب,nodes:12,export:T
+شارع المطار14,nodes:12,export:T
+الطريق الدائري الثالثي09,nodes:18,export:T
+trunk_link15,nodes:8,export:T
+شارع المطار15,nodes:15,export:T
+شارع حمد الكبير03,nodes:6,export:T
+المأمون,nodes:4,export:T
+العاصمة,nodes:9,export:T
+صلالة,nodes:5,export:T
+العاصمة01,nodes:3,export:T
+ابن عباس,nodes:4,export:T
+شارع احمد بن محمد بن ثني07,nodes:2,export:T
+شارع احمد بن محمد بن ثني08,nodes:2,export:T
+شارع المطار16,nodes:2,export:T
+شارع حمد الكبير04,nodes:2,export:T
+primary_link53,nodes:2,export:T
+primary_link54,nodes:2,export:T
+primary_link55,nodes:2,export:T
+primary_link56,nodes:2,export:T
+شارع المنصورة11,nodes:3,export:T
+شارع المنصورة12,nodes:2,export:T
+شارع المطار17,nodes:16,export:T
+شارع المطار18,nodes:2,export:T
+شارع المطار19,nodes:10,export:T
+شارع المنصورة13,nodes:3,export:T
+ام وشاح,nodes:4,export:T
+المسيلة,nodes:10,export:T
+ام وشاح01,nodes:2,export:T
+اغادير,nodes:20,export:T
+الجهراء,nodes:3,export:T
+مسافي,nodes:7,export:T
+سكة البشائر,nodes:2,export:T
+المغيرة,nodes:4,export:T
+ابن حنبل,nodes:2,export:T
+النجادة,nodes:9,export:T
+النجم,nodes:6,export:T
+العريق,nodes:12,export:T
+ابو الحارث,nodes:2,export:T
+Ahmed Bin Mohammed Bin Thani Street,nodes:4,export:T
+الميمون,nodes:14,export:T
+residential11,nodes:4,export:T
+ابن الوليد,nodes:5,export:T
+سكة الاشراق,nodes:4,export:T
+service96,nodes:5,export:T
+شارع الهفوف01,nodes:11,export:T
+البرج,nodes:5,export:T
+الاصفهاني,nodes:3,export:T
+residential12,nodes:3,export:T
+service97,nodes:8,export:T
+service98,nodes:9,export:T
+service99,nodes:3,export:T
+service100,nodes:2,export:T
+service101,nodes:3,export:T
+living_street13,nodes:3,export:T
+service102,nodes:9,export:T
+علي بن عمر العطية05,nodes:2,export:T
+علي بن عمر العطية06,nodes:2,export:T
+علي بن عمر العطية07,nodes:9,export:T
+شارع المتحف01,nodes:15,export:T
+شارع المتحف02,nodes:2,export:T
+شارع المتحف03,nodes:2,export:T
+شارع المتحف04,nodes:15,export:T
+primary_link57,nodes:6,export:T
+شارع نجمة02,nodes:4,export:T
+عدي بن زيد,nodes:4,export:T
+علي بن عمر العطية08,nodes:10,export:T
+علي بن عمر العطية09,nodes:4,export:T
+دوار المرقاب02,nodes:5,export:T
+شارع المتحف05,nodes:2,export:T
+شارع الكورنيش09,nodes:2,export:T
+شارع الكورنيش10,nodes:38,export:T
+الطريق الدائري الثالثي10,nodes:9,export:T
+motorway_link08,nodes:13,export:T
+motorway_link09,nodes:2,export:T
+motorway_link10,nodes:2,export:T
+motorway_link11,nodes:4,export:T
+trunk_link16,nodes:8,export:T
+لمعتز01,nodes:4,export:T
+service103,nodes:2,export:T
+الندوة,nodes:9,export:T
+أم طاقة,nodes:5,export:T
+النبعة,nodes:2,export:T
+الجساسية,nodes:4,export:T
+شارع احمد بن محمد بن ثني09,nodes:4,export:T
+شارع الكورنيش11,nodes:4,export:T
+علي بن عمر العطية10,nodes:4,export:T
+دوار المرقاب03,nodes:20,export:T
+شارع حمد الكبير05,nodes:11,export:T
+service104,nodes:20,export:T
+motorway_link12,nodes:4,export:T
+tertiary_link08,nodes:7,export:T
+المرفأ01,nodes:4,export:T
+service105,nodes:2,export:T
+العقبة,nodes:4,export:T
+ابن الخطيب,nodes:5,export:T
+نوفل بن معاوية,nodes:2,export:T
+ابن الارقم,nodes:15,export:T
+البخاري01,nodes:4,export:T
+شارع المطار20,nodes:5,export:T
+زياد بن عياض,nodes:10,export:T
+موسى بن نصير,nodes:12,export:T
+العرب06,nodes:5,export:T
+الخطابي,nodes:10,export:T
+pedestrian05,nodes:2,export:T
+السعادة,nodes:2,export:T
+الامواج,nodes:4,export:T
+الياسمين,nodes:13,export:T
+service106,nodes:10,export:T
+service107,nodes:13,export:T
+service108,nodes:22,export:T
+service109,nodes:5,export:T
+شارع المنصورة14,nodes:2,export:T
+service110,nodes:24,export:T
+طريق الريان06,nodes:11,export:T
+شارع احمد بن محمد بن ثني10,nodes:7,export:T
+شارع احمد بن محمد بن ثني11,nodes:18,export:T
+شارع احمد بن محمد بن ثني12,nodes:2,export:T
+شارع احمد بن محمد بن ثني13,nodes:2,export:T
+شارع احمد بن محمد بن ثني14,nodes:14,export:T
+شارع المطار21,nodes:2,export:T
+شارع المطار22,nodes:6,export:T
+شارع حمد الكبير06,nodes:2,export:T
+شارع حمد الكبير07,nodes:5,export:T
+فلسطين01,nodes:9,export:T
+شارع روضة الخيل03,nodes:20,export:T
+primary_link58,nodes:2,export:T
+primary_link59,nodes:2,export:T
+primary_link60,nodes:2,export:T
+primary_link61,nodes:2,export:T
+primary_link62,nodes:2,export:T
+primary_link63,nodes:2,export:T
+primary_link64,nodes:2,export:T
+primary_link65,nodes:2,export:T
+شارع وادي مشريب05,nodes:2,export:T
+عبد العزيز بن احمد02,nodes:8,export:T
+علي بن عمر العطية11,nodes:2,export:T
+علي بن عمر العطية12,nodes:2,export:T
+شارع المتحف06,nodes:2,export:T
+شارع المتحف07,nodes:2,export:T
+شارع المتحف08,nodes:3,export:T
+primary_link66,nodes:8,export:T
+primary_link67,nodes:7,export:T
+الطريق الدائري الثالثي11,nodes:2,export:T
+motorway_link13,nodes:3,export:T
+motorway_link14,nodes:3,export:T
+شارع الخدري01,nodes:7,export:T
+الطريق الدائري الثاني04,nodes:11,export:T
+شارع روضة الخيل04,nodes:21,export:T
+شارع روضة الخيل05,nodes:15,export:T
+سليمان الحيدر,nodes:5,export:T
+سليمان الحيدر01,nodes:5,export:T
+ابو هند01,nodes:2,export:T
+residential13,nodes:5,export:T
+ابو ايوب,nodes:3,export:T
+اسعد بن زرارة01,nodes:2,export:T
+سنان بن ثابت02,nodes:2,export:T
+الزوراء,nodes:2,export:T
+العروبة02,nodes:2,export:T
+نواف,nodes:2,export:T
+عاصم بن علي01,nodes:5,export:T
+service111,nodes:2,export:T
+ضرار بن الخطاب,nodes:2,export:T
+المهند,nodes:2,export:T
+الدسمة,nodes:4,export:T
+ابو محجن01,nodes:5,export:T
+service112,nodes:2,export:T
+الخرائج,nodes:3,export:T
+بو محرز,nodes:4,export:T
+الصويريات,nodes:2,export:T
+المرمر,nodes:3,export:T
+service113,nodes:39,export:T
+ابو عمير,nodes:4,export:T
+معاذ بن جبل,nodes:10,export:T
+وهب بن عمير,nodes:4,export:T
+ابو جبير,nodes:4,export:T
+secondary01,nodes:7,export:T
+المسك,nodes:5,export:T
+service114,nodes:5,export:T
+الروضتين,nodes:4,export:T
+الينبوع,nodes:4,export:T
+زياد بن عياض01,nodes:5,export:T
+الابنوس,nodes:7,export:T
+شارع المطار23,nodes:4,export:T
+شارع المطار24,nodes:2,export:T
+شارع المطار25,nodes:10,export:T
+شارع المطار26,nodes:4,export:T
+service115,nodes:21,export:T
+service116,nodes:13,export:T
+service117,nodes:3,export:T
+service118,nodes:11,export:T
+service119,nodes:9,export:T
+service120,nodes:13,export:T
+service121,nodes:16,export:T
+service122,nodes:2,export:T
+service123,nodes:2,export:T
+service124,nodes:15,export:T
+service125,nodes:2,export:T
+service126,nodes:2,export:T
+service127,nodes:2,export:T
+service128,nodes:12,export:T
+service129,nodes:2,export:T
+service130,nodes:11,export:T
+service131,nodes:12,export:T
+service132,nodes:2,export:T
+service133,nodes:3,export:T
+service134,nodes:2,export:T
+service135,nodes:2,export:T
+service136,nodes:9,export:T
+service137,nodes:2,export:T
+service138,nodes:2,export:T
+service139,nodes:2,export:T
+service140,nodes:2,export:T
+service141,nodes:2,export:T
+service142,nodes:2,export:T
+service143,nodes:10,export:T
+ابن سينا02,nodes:5,export:T
+ابن سينا03,nodes:13,export:T
+ابن سينا04,nodes:16,export:T
+الاخاء01,nodes:6,export:T
+service144,nodes:5,export:T
+شارع الجزيرة,nodes:13,export:T
+ابن الاثير01,nodes:5,export:T
+service145,nodes:2,export:T
+الضاحية,nodes:14,export:T
+الاضواء,nodes:5,export:T
+service146,nodes:3,export:T
+service147,nodes:3,export:T
+service148,nodes:8,export:T
+service149,nodes:2,export:T
+service150,nodes:3,export:T
+service151,nodes:6,export:T
+service152,nodes:11,export:T
+service153,nodes:10,export:T
+service154,nodes:5,export:T
+service155,nodes:2,export:T
+service156,nodes:6,export:T
+service157,nodes:20,export:T
+service158,nodes:2,export:T
+راس ابو عبود09,nodes:4,export:T
+راس ابو عبود10,nodes:3,export:T
+الطريق الدائري الثاني05,nodes:33,export:T
+علي بن عمر العطية13,nodes:2,export:T
+الطريق الدائري الثاني06,nodes:24,export:T
+residential14,nodes:4,export:T
+سالم بن عمير,nodes:4,export:T
+ابن الجارود,nodes:3,export:T
+ابن الجارود01,nodes:2,export:T
+service159,nodes:2,export:T
+service160,nodes:2,export:T
+شارع مجلس التعاون,nodes:18,export:T
+شارع محمد بن ثاني02,nodes:9,export:T
+الكافور,nodes:2,export:T
+tertiary_link09,nodes:8,export:T
+بدر,nodes:5,export:T
+المزروعة01,nodes:4,export:T
+القلائد,nodes:2,export:T
+service161,nodes:12,export:T
+المصباح,nodes:4,export:T
+الدوحة الجديدة01,nodes:6,export:T
+زرارة بن عمرو,nodes:9,export:T
+انس بن مالك,nodes:8,export:T
+المغيرة بن شعبة,nodes:7,export:T
+زياد بن عياض02,nodes:4,export:T
+زياد بن عياض03,nodes:6,export:T
+primary_link68,nodes:2,export:T
+صلاح الدين,nodes:10,export:T
+ابن عبد السلام,nodes:9,export:T
+حضرموت,nodes:6,export:T
+عبدالله بن عمر,nodes:2,export:T
+زيد بن عامر,nodes:3,export:T
+زهير بن عثمان,nodes:9,export:T
+سعيد العلي,nodes:5,export:T
+motorway_link15,nodes:2,export:T
+service162,nodes:3,export:T
+شط العرب,nodes:5,export:T
+ابن عبدالمطلب,nodes:4,export:T
+عبدالحميد الكاتب,nodes:2,export:T
+الهشيمية,nodes:7,export:T
+ابن الجوزي02,nodes:3,export:T
+الحباب بن جبير,nodes:6,export:T
+الياقوت,nodes:4,export:T
+عايض,nodes:2,export:T
+ابن معاوية,nodes:5,export:T
+service163,nodes:5,export:T
+service164,nodes:8,export:T
+unclassified04,nodes:5,export:T
+unclassified05,nodes:5,export:T
+حسان,nodes:5,export:T
+ابن عمرو,nodes:10,export:T
+service165,nodes:16,export:T
+service166,nodes:18,export:T
+service167,nodes:3,export:T
+شارع الكورنيش12,nodes:4,export:T
+trunk_link17,nodes:16,export:T
+trunk_link18,nodes:16,export:T
+شارع محمد بن ثاني03,nodes:3,export:T
+شارع محمد بن ثاني04,nodes:3,export:T
+البدع05,nodes:21,export:T
+شارع مجلس التعاون01,nodes:22,export:T
+سكة الاحسان,nodes:10,export:T
+البارودي,nodes:5,export:T
+ابن المنذر,nodes:4,export:T
+البحتري,nodes:7,export:T
+النجيان,nodes:2,export:T
+الاصمعي,nodes:2,export:T
+ابن عديس,nodes:3,export:T
+الارشاد,nodes:3,export:T
+ابن عقيل,nodes:3,export:T
+الغانم القديم,nodes:12,export:T
+الارشاد01,nodes:6,export:T
+البرثة,nodes:2,export:T
+residential15,nodes:7,export:T
+المجداف01,nodes:4,export:T
+primary_link69,nodes:14,export:T
+primary_link70,nodes:17,export:T
+primary_link71,nodes:17,export:T
+primary_link72,nodes:16,export:T
+trunk_link19,nodes:21,export:T
+شارع الكورنيش13,nodes:4,export:T
+unclassified06,nodes:6,export:T
+unclassified07,nodes:5,export:T
+service168,nodes:9,export:T
+حسن,nodes:2,export:T
+ام البرك,nodes:2,export:T
+حسين,nodes:2,export:T
+سعد بن عبادة,nodes:2,export:T
+سعد بن عبادة01,nodes:6,export:T
+ام المواقع,nodes:7,export:T
+راس ابو مشوط,nodes:7,export:T
+موسى,nodes:2,export:T
+عبدالحميد الكاتب01,nodes:2,export:T
+اسماعيل,nodes:3,export:T
+حيفا,nodes:6,export:T
+ابن ابي بكر,nodes:8,export:T
+residential16,nodes:24,export:T
+عاصم,nodes:3,export:T
+السماح,nodes:2,export:T
+ابو عباد,nodes:6,export:T
+الاشراق,nodes:8,export:T
+سراقة بن مالك,nodes:12,export:T
+الصخامة,nodes:2,export:T
+لوسيل,nodes:3,export:T
+راس بروق,nodes:3,export:T
+الغوص,nodes:3,export:T
+بو حصية,nodes:3,export:T
+ابن العوام,nodes:14,export:T
+الظهران,nodes:4,export:T
+موسى بن نصير01,nodes:7,export:T
+زياد بن عياض04,nodes:3,export:T
+الاصفهاني01,nodes:2,export:T
+الطريق الدائري الثالثي12,nodes:2,export:T
+علي بن عمر العطية14,nodes:2,export:T
+شارع المينا01,nodes:4,export:T
+trunk_link20,nodes:7,export:T
+footway64,nodes:6,export:T
+شارع حمد الكبير08,nodes:2,export:T
+شارع حمد الكبير09,nodes:6,export:T
+شارع الاحمد02,nodes:2,export:T
+شارع الاحمد03,nodes:13,export:T
+service169,nodes:4,export:T
+البريد01,nodes:8,export:T
+البريد02,nodes:8,export:T
+البريد03,nodes:4,export:T
+البريد04,nodes:4,export:T
+service170,nodes:10,export:T
+footway65,nodes:9,export:T
+footway66,nodes:2,export:T
+شارع حمد الكبير10,nodes:11,export:T
+trunk_link21,nodes:14,export:T
+شارع الكورنيش14,nodes:20,export:T
+footway67,nodes:8,export:T
+footway68,nodes:12,export:T
+footway69,nodes:2,export:T
+footway70,nodes:2,export:T
+service171,nodes:5,export:T
+service172,nodes:3,export:T
+service173,nodes:3,export:T
+service174,nodes:2,export:T
+service175,nodes:2,export:T
+الفارابي01,nodes:4,export:T
+الطريق الدائري الثاني07,nodes:4,export:T
+service176,nodes:2,export:T
+service177,nodes:2,export:T
+unclassified08,nodes:23,export:T
+service178,nodes:18,export:T
+service179,nodes:2,export:T
+شارع مالك بن أنس,nodes:3,export:T
+اللؤلؤ,nodes:2,export:T
+اللؤلؤ01,nodes:6,export:T
+شارع المتحف09,nodes:8,export:T
+service180,nodes:18,export:T
+service181,nodes:18,export:T
+service182,nodes:10,export:T
+service183,nodes:2,export:T
+service184,nodes:2,export:T
+service185,nodes:2,export:T
+شارع الكورنيش15,nodes:6,export:T
+الجهرة03,nodes:5,export:T
+الجهرة04,nodes:6,export:T
+trunk_link22,nodes:9,export:T
+trunk_link23,nodes:8,export:T
+الجهرة05,nodes:3,export:T
+service186,nodes:6,export:T
+service187,nodes:8,export:T
+service188,nodes:9,export:T
+م الصوب01,nodes:4,export:T
+بو قرن,nodes:9,export:T
+بو قرن01,nodes:2,export:T
+cycleway01,nodes:20,export:T
+م الصوب02,nodes:8,export:T
+cycleway02,nodes:126,export:T
+unclassified09,nodes:11,export:T
+unclassified10,nodes:5,export:T
+شارع عنيزة03,nodes:11,export:T
+service189,nodes:3,export:T
+service190,nodes:5,export:T
+شارع حمد الكبير11,nodes:4,export:T
+trunk_link24,nodes:4,export:T
+pedestrian06,nodes:3,export:T
+pedestrian07,nodes:4,export:T
+pedestrian08,nodes:2,export:T
+path15,nodes:3,export:T
+path16,nodes:3,export:T
+footway71,nodes:3,export:T
+footway72,nodes:2,export:T
+footway73,nodes:8,export:T
+service191,nodes:3,export:T
+footway74,nodes:2,export:T
+footway75,nodes:5,export:T
+footway76,nodes:7,export:T
+footway77,nodes:2,export:T
+footway78,nodes:2,export:T
+footway79,nodes:3,export:T
+الدوحة الجديدة02,nodes:4,export:T
+عفان,nodes:2,export:T
+الظهران01,nodes:2,export:T
+السافلية01,nodes:13,export:T
+السافلية02,nodes:18,export:T
+الشارع المعاريف01,nodes:2,export:T
+ام الغيلم,nodes:2,export:T
+الفطام,nodes:2,export:T
+مالك بن انس,nodes:4,export:T
+شارع أم الجواشين,nodes:4,export:T
+يافا,nodes:9,export:T
+البشيرية,nodes:9,export:T
+ابن جندب01,nodes:2,export:T
+الضحى,nodes:3,export:T
+شارع حطين02,nodes:7,export:T
+residential17,nodes:3,export:T
+ابن زائدة,nodes:5,export:T
+ابن معمر,nodes:6,export:T
+service192,nodes:2,export:T
+service193,nodes:2,export:T
+ثامر,nodes:4,export:T
+رباح,nodes:2,export:T
+ابن ارقم,nodes:6,export:T
+الزورق,nodes:2,export:T
+ابن عوف01,nodes:3,export:T
+ابن حنبل01,nodes:6,export:T
+الجساسية01,nodes:3,export:T
+service194,nodes:3,export:T
+service195,nodes:5,export:T
+service196,nodes:11,export:T
+سعد بن مالك01,nodes:2,export:T
+حيان01,nodes:3,export:T
+ابن الجوزي03,nodes:15,export:T
+سليمان الحيدر02,nodes:16,export:T
+مسافي01,nodes:9,export:T
+اوس بن الصامت,nodes:2,export:T
+بئر الحصين,nodes:3,export:T
+ساحة المنصورة,nodes:2,export:T
+الدسمة01,nodes:3,export:T
+سكة المرسال,nodes:2,export:T
+سكة المرسال01,nodes:4,export:T
+service197,nodes:2,export:T
+service198,nodes:2,export:T
+service199,nodes:2,export:T
+service200,nodes:2,export:T
+service201,nodes:2,export:T
+pedestrian09,nodes:3,export:T
+pedestrian10,nodes:3,export:T
+pedestrian11,nodes:8,export:T
+pedestrian12,nodes:2,export:T
+pedestrian13,nodes:2,export:T
+ابن الجوزي04,nodes:4,export:T
+يثرب02,nodes:3,export:T
+يثرب03,nodes:3,export:T
+يثرب04,nodes:5,export:T
+الينبوع01,nodes:3,export:T
+الابنوس01,nodes:5,export:T
+الصالحية03,nodes:7,export:T
+الصالحية04,nodes:7,export:T
+الصالحية05,nodes:6,export:T
+unclassified11,nodes:6,export:T
+العباس01,nodes:6,export:T
+service202,nodes:3,export:T
+الغدير,nodes:7,export:T
+الشارع المعاريف02,nodes:5,export:T
+الشارع المعاريف03,nodes:5,export:T
+الشارع المعاريف04,nodes:4,export:T
+علي بن عمر العطية15,nodes:2,export:T
+شارع الدستور01,nodes:5,export:T
+شارع الدستور02,nodes:5,export:T
+شارع الدستور03,nodes:8,export:T
+شارع الدستور04,nodes:4,export:T
+شارع الدستور05,nodes:7,export:T
+راس ابو عبود11,nodes:2,export:T
+primary_link73,nodes:4,export:T
+primary_link74,nodes:7,export:T
+primary_link75,nodes:8,export:T
+السافلية03,nodes:5,export:T
+السافلية04,nodes:5,export:T
+السافلية05,nodes:5,export:T
+البلدية01,nodes:6,export:T
+البلدية02,nodes:5,export:T
+السياحة02,nodes:5,export:T
+السياحة03,nodes:3,export:T
+البلدية03,nodes:5,export:T
+البلدية04,nodes:5,export:T
+العالية02,nodes:7,export:T
+العالية03,nodes:5,export:T
+residential18,nodes:2,export:T
+residential19,nodes:6,export:T
+service203,nodes:18,export:T
+service204,nodes:8,export:T
+شارع الميناء,nodes:5,export:T
+راس عشيرج,nodes:6,export:T
+الجسرة04,nodes:4,export:T
+service205,nodes:4,export:T
+Al Khail Street,nodes:10,export:T
+Al Khail Street01,nodes:6,export:T
+service206,nodes:2,export:T
+service207,nodes:3,export:T
+service208,nodes:9,export:T
+service209,nodes:4,export:T
+residential20,nodes:10,export:T
+Abdul Aziz Bin Ahmed,nodes:3,export:T
+عبد العزيز بن احمد03,nodes:8,export:T
+عبد العزيز بن احمد04,nodes:16,export:T
+service210,nodes:3,export:T
+service211,nodes:2,export:T
+service212,nodes:24,export:T
+service213,nodes:7,export:T
+service214,nodes:6,export:T
+الجسرة05,nodes:4,export:T
+tertiary_link10,nodes:8,export:T
+tertiary_link11,nodes:12,export:T
+tertiary_link12,nodes:8,export:T
+شارع جاسم بن محمد01,nodes:2,export:T
+شارع وادي مشريب06,nodes:2,export:T
+tertiary_link13,nodes:8,export:T
+tertiary_link14,nodes:6,export:T
+tertiary_link15,nodes:7,export:T
+براحة الجفيري02,nodes:2,export:T
+trunk_link25,nodes:15,export:T
+شارع جبر بن محمد03,nodes:3,export:T
+trunk_link26,nodes:13,export:T
+trunk_link27,nodes:9,export:T
+شارع جبر بن محمد04,nodes:3,export:T
+شارع جبر بن محمد05,nodes:8,export:T
+trunk_link28,nodes:4,export:T
+شارع جاسم بن محمد02,nodes:10,export:T
+trunk_link29,nodes:10,export:T
+trunk_link30,nodes:9,export:T
+البنك01,nodes:5,export:T
+البنك02,nodes:5,export:T
+الطيب01,nodes:7,export:T
+الطيب02,nodes:6,export:T
+الطيب03,nodes:13,export:T
+الطيب04,nodes:2,export:T
+البريد05,nodes:2,export:T
+trunk_link31,nodes:10,export:T
+trunk_link32,nodes:9,export:T
+شارع المينا02,nodes:5,export:T
+شارع المينا03,nodes:2,export:T
+service215,nodes:7,export:T
+شارع الكورنيش16,nodes:4,export:T
+شارع الكورنيش17,nodes:5,export:T
+شارع المينا04,nodes:9,export:T
+شارع الميناء01,nodes:2,export:T
+شارع شراعوه,nodes:12,export:T
+شارع شراعوه01,nodes:6,export:T
+شارع شراعوه02,nodes:4,export:T
+شارع شراعوه03,nodes:35,export:T
+شارع شراعوه04,nodes:12,export:T
+وادي رشيدة02,nodes:13,export:T
+وادي رشيدة03,nodes:2,export:T
+الحُسَام,nodes:2,export:T
+ابن بلال,nodes:5,export:T
+ابو مصعب,nodes:5,export:T
+ابن عياض,nodes:6,export:T
+ابن عثمان,nodes:4,export:T
+ابن عثمان01,nodes:6,export:T
+الفارابي02,nodes:5,export:T
+ابن الارقم01,nodes:5,export:T
+ابن الارقم02,nodes:3,export:T
+ساحة النور,nodes:2,export:T
+عمرو بن الجموح,nodes:13,export:T
+عمرو بن الجموح01,nodes:3,export:T
+سكة الأنوار,nodes:2,export:T
+سكة الأنوار01,nodes:6,export:T
+residential21,nodes:2,export:T
+الغدير01,nodes:2,export:T
+مسلم بن عقيل01,nodes:2,export:T
+residential22,nodes:2,export:T
+residential23,nodes:5,export:T
+residential24,nodes:7,export:T
+residential25,nodes:7,export:T
+residential26,nodes:7,export:T
+residential27,nodes:8,export:T
+المقداد01,nodes:2,export:T
+المقداد02,nodes:4,export:T
+ابن جندب02,nodes:3,export:T
+المرسال,nodes:2,export:T
+المرابيع,nodes:2,export:T
+الخليل بن احمد01,nodes:6,export:T
+الشعاب,nodes:2,export:T
+لثمار01,nodes:5,export:T
+شارع المطار27,nodes:16,export:T
+شارع المطار28,nodes:2,export:T
+شارع المطار29,nodes:2,export:T
+ابو اميمة01,nodes:5,export:T
+ابو اميمة02,nodes:3,export:T
+ابن معاوية01,nodes:4,export:T
+النجود,nodes:4,export:T
+هشام,nodes:5,export:T
+هشام01,nodes:6,export:T
+هشام02,nodes:4,export:T
+النسر,nodes:6,export:T
+ابن قيس,nodes:9,export:T
+ابن ثابت,nodes:10,export:T
+ابن شهيد,nodes:3,export:T
+مسافي02,nodes:5,export:T
+العرب07,nodes:2,export:T
+العرب08,nodes:3,export:T
+ابن درهم06,nodes:3,export:T
+ابن درهم07,nodes:2,export:T
+شارع نجمة03,nodes:4,export:T
+ابن درهم08,nodes:4,export:T
+الطريق الدائري الثالثي13,nodes:3,export:T
+حكيم بن معاوية,nodes:8,export:T
+زرارة بن قيس01,nodes:7,export:T
+Al Khail Street02,nodes:4,export:T
+residential28,nodes:14,export:T
+residential29,nodes:4,export:T
+النبات,nodes:2,export:T
+الاخاء02,nodes:6,export:T
+البرق,nodes:7,export:T
+بو قرن02,nodes:8,export:T
+السلمي,nodes:7,export:T
+ثابت بن عامر,nodes:4,export:T
+ابن افلح01,nodes:2,export:T
+لخفوس,nodes:11,export:T
+ابن البراء,nodes:3,export:T
+لمعتز02,nodes:4,export:T
+الواثق,nodes:6,export:T
+بن زهير,nodes:8,export:T
+قريش,nodes:4,export:T
+الرقة,nodes:2,export:T
+الرقة01,nodes:8,export:T
+بابل,nodes:6,export:T
+بابل01,nodes:2,export:T
+ابن خفاجة,nodes:11,export:T
+ابن الجوزي05,nodes:6,export:T
+service216,nodes:2,export:T
+service217,nodes:2,export:T
+service218,nodes:2,export:T
+service219,nodes:2,export:T
+service220,nodes:2,export:T
+service221,nodes:2,export:T
+service222,nodes:4,export:T
+service223,nodes:7,export:T
+service224,nodes:17,export:T
+service225,nodes:14,export:T
+service226,nodes:6,export:T
+بلقيس,nodes:13,export:T
+residential30,nodes:6,export:T
+residential31,nodes:2,export:T
+الهدا,nodes:2,export:T
+unclassified12,nodes:5,export:T
+المنصورية,nodes:3,export:T
+الاخلاص,nodes:3,export:T
+الجوهرة,nodes:4,export:T
+ثقيف,nodes:3,export:T
+residential32,nodes:2,export:T
+المشتري,nodes:2,export:T
+residential33,nodes:2,export:T
+عثمان,nodes:4,export:T
+لوبرة,nodes:3,export:T
+وعب اثميد,nodes:5,export:T
+ابن الفرات,nodes:5,export:T
+المها,nodes:8,export:T
+ابن الزبير01,nodes:3,export:T
+الكثبان,nodes:2,export:T
+عاصم بن علي02,nodes:2,export:T
+طارق بن زياد04,nodes:3,export:T
+service227,nodes:2,export:T
+residential34,nodes:3,export:T
+residential35,nodes:4,export:T
+residential36,nodes:3,export:T
+residential37,nodes:3,export:T
+ام الربى,nodes:18,export:T
+service228,nodes:3,export:T
+service229,nodes:2,export:T
+residential38,nodes:12,export:T
+residential39,nodes:5,export:T
+لخوير01,nodes:2,export:T
+وادي حرض,nodes:2,export:T
+الفسطاط,nodes:2,export:T
+وهران,nodes:2,export:T
+الفتح01,nodes:2,export:T
+الفتح02,nodes:2,export:T
+service230,nodes:6,export:T
+service231,nodes:4,export:T
+شرق01,nodes:11,export:T
+شارع مالك بن أنس01,nodes:2,export:T
+مالك بن انس01,nodes:5,export:T
+وادي رشيدة04,nodes:3,export:T
+ابن الهيثم01,nodes:9,export:T
+ابن نعيم,nodes:2,export:T
+tertiary_link16,nodes:5,export:T
+tertiary_link17,nodes:8,export:T
+شارع حطين03,nodes:17,export:T
+tertiary_link18,nodes:12,export:T
+tertiary_link19,nodes:7,export:T
+service232,nodes:5,export:T
+زياد بن لبيد,nodes:3,export:T
+سنان,nodes:5,export:T
+ابو عبيدة01,nodes:2,export:T
+حطين01,nodes:6,export:T
+residential40,nodes:2,export:T
+residential41,nodes:2,export:T
+residential42,nodes:2,export:T
+ابن اسلم,nodes:2,export:T
+residential43,nodes:2,export:T
+residential44,nodes:2,export:T
+residential45,nodes:2,export:T
+service233,nodes:11,export:T
+service234,nodes:8,export:T
+residential46,nodes:2,export:T
+residential47,nodes:3,export:T
+زهير بن عياض,nodes:4,export:T
+زهير بن عياض01,nodes:3,export:T
+trunk_link33,nodes:8,export:T
+trunk_link34,nodes:8,export:T
+service235,nodes:13,export:T
+service236,nodes:18,export:T
+unclassified13,nodes:2,export:T
+service237,nodes:10,export:T
+شارع 956,nodes:2,export:T
+السافلية06,nodes:19,export:T
+السافلية07,nodes:27,export:T
+امرير02,nodes:5,export:T
+امرير03,nodes:5,export:T
+السافلية08,nodes:4,export:T
+السافلية09,nodes:5,export:T
+tertiary05,nodes:25,export:T
+service238,nodes:9,export:T
+service239,nodes:21,export:T
+service240,nodes:12,export:T
+service241,nodes:4,export:T
+ابو بكر الصديق01,nodes:5,export:T
+motorway_link16,nodes:5,export:T
+شرق02,nodes:6,export:T
+حكيم بن معاوية01,nodes:5,export:T
+حكيم بن معاوية02,nodes:7,export:T
+اللؤلؤ02,nodes:2,export:T
+راس ابو عبود12,nodes:11,export:T
+عدي بن زيد01,nodes:2,export:T
+شارع مالك بن أنس02,nodes:9,export:T
+المرفأ02,nodes:4,export:T
+طريق الريان07,nodes:12,export:T
+شارع المحــار01,nodes:3,export:T
+سكة ثابت,nodes:5,export:T
+سكة الريحان,nodes:2,export:T
+سكة زيد,nodes:2,export:T
+سكة السعادة,nodes:2,export:T
+خيبر04,nodes:3,export:T
+حسين01,nodes:2,export:T
+ابو وقاص,nodes:2,export:T
+الوفاق01,nodes:11,export:T
+الدوحة الجديدة03,nodes:2,export:T
+النهى,nodes:2,export:T
+البارودي01,nodes:6,export:T
+شارع المنصورة15,nodes:5,export:T
+سكة الصفاء01,nodes:3,export:T
+الابريز,nodes:6,export:T
+المقداد03,nodes:2,export:T
+سكة الهداية,nodes:2,export:T
+الجساسية02,nodes:2,export:T
+برزان,nodes:3,export:T
+الفارابي03,nodes:4,export:T
+البتيل01,nodes:5,export:T
+الشوعي01,nodes:5,export:T
+residential48,nodes:9,export:T
+ابن نعيم01,nodes:2,export:T
+footway80,nodes:6,export:T
+الطريق الدائري الثالثي14,nodes:3,export:T
+primary_link76,nodes:5,export:T
+طارق بن زياد05,nodes:2,export:T
+طارق بن زياد06,nodes:4,export:T
+ابن خلدون04,nodes:10,export:T
+سميسمة02,nodes:6,export:T
+unclassified14,nodes:4,export:T
+ابن خلدون05,nodes:2,export:T
+ابن خلدون06,nodes:2,export:T
+ابن خلدون07,nodes:2,export:T
+ابن خلدون08,nodes:2,export:T
+سميسمة03,nodes:2,export:T
+سميسمة04,nodes:2,export:T
+سميسمة05,nodes:2,export:T
+سميسمة06,nodes:2,export:T
+سعيد بن العاص01,nodes:4,export:T
+سعيد بن العاص02,nodes:4,export:T
+الجهرة06,nodes:4,export:T
+الجهرة07,nodes:4,export:T
+سميسمة07,nodes:4,export:T
+سميسمة08,nodes:4,export:T
+الفتح03,nodes:3,export:T
+الفتح04,nodes:4,export:T
+سهل,nodes:2,export:T
+الصرح,nodes:2,export:T
+الصرح01,nodes:5,export:T
+الصافي,nodes:2,export:T
+living_street14,nodes:2,export:T
+الجهرة08,nodes:19,export:T
+ابن خلدون09,nodes:2,export:T
+ابن خلدون10,nodes:2,export:T
+ام غويلينة03,nodes:2,export:T
+ام غويلينة04,nodes:2,export:T
+ابن خلدون11,nodes:2,export:T
+ابن خلدون12,nodes:2,export:T
+ام غويلينة05,nodes:2,export:T
+ام غويلينة06,nodes:2,export:T
+الحباب بن جبير01,nodes:2,export:T
+العدالة,nodes:2,export:T
+الياقوت01,nodes:2,export:T
+شنان,nodes:2,export:T
+خيبر05,nodes:5,export:T
+خيبر06,nodes:5,export:T
+الوفاق02,nodes:5,export:T
+الوفاق03,nodes:5,export:T
+كعب بن زهير01,nodes:5,export:T
+كعب بن زهير02,nodes:5,export:T
+residential49,nodes:4,export:T
+residential50,nodes:5,export:T
+بن زهير01,nodes:4,export:T
+بن زهير02,nodes:4,export:T
+primary_link77,nodes:7,export:T
+حطين02,nodes:5,export:T
+حطين03,nodes:5,export:T
+عاصم01,nodes:5,export:T
+عاصم02,nodes:4,export:T
+العروبة03,nodes:2,export:T
+العروبة04,nodes:2,export:T
+ابن درهم09,nodes:2,export:T
+ابن درهم10,nodes:2,export:T
+شارع المنصورة16,nodes:2,export:T
+شارع المنصورة17,nodes:2,export:T
+ابن درهم11,nodes:2,export:T
+ابن درهم12,nodes:2,export:T
+شارع المنصورة18,nodes:2,export:T
+شارع المنصورة19,nodes:2,export:T
+النشاب,nodes:2,export:T
+العرب09,nodes:5,export:T
+العرب10,nodes:5,export:T
+عمرو,nodes:4,export:T
+شارع روضة الخيل06,nodes:2,export:T
+عياض01,nodes:3,export:T
+البراء بن مالك01,nodes:2,export:T
+الروابي05,nodes:6,export:T
+المغيرة01,nodes:3,export:T
+سكة النجم,nodes:2,export:T
+عوف,nodes:10,export:T
+سكة المريدة,nodes:2,export:T
+رشيدة,nodes:3,export:T
+النبع,nodes:3,export:T
+بلال,nodes:2,export:T
+سكة احمد,nodes:2,export:T
+سكة الزمرد,nodes:3,export:T
+الخريس,nodes:4,export:T
+الفشت01,nodes:4,export:T
+سكة جبران,nodes:3,export:T
+سكة المرسال02,nodes:2,export:T
+حارثة الخزاعي,nodes:2,export:T
+ابو محجن02,nodes:7,export:T
+جبل طارق02,nodes:2,export:T
+مسيمير,nodes:3,export:T
+دار الكتب,nodes:3,export:T
+الطريق الدائري الثالثي15,nodes:2,export:T
+البندقية02,nodes:4,export:T
+البندقية03,nodes:4,export:T
+البندقية04,nodes:5,export:T
+ابن الربيع,nodes:3,export:T
+البندقية05,nodes:5,export:T
+البندقية06,nodes:5,export:T
+ابن معاوية02,nodes:4,export:T
+ابن معاوية03,nodes:4,export:T
+عسير,nodes:4,export:T
+شارع الجزيرة01,nodes:7,export:T
+شارع الجزيرة02,nodes:5,export:T
+شارع قطريبن الفجاءة02,nodes:2,export:T
+شارع قطريبن الفجاءة03,nodes:2,export:T
+شارع ابن محمود04,nodes:8,export:T
+شارع الجزيرة03,nodes:3,export:T
+شارع ابن محمود05,nodes:8,export:T
+شارع الجزيرة04,nodes:2,export:T
+ابن الجارود02,nodes:3,export:T
+الغدير02,nodes:9,export:T
+الغدير03,nodes:6,export:T
+الفردوس01,nodes:4,export:T
+الفردوس02,nodes:5,export:T
+service242,nodes:5,export:T
+service243,nodes:5,export:T
+ابو فراس01,nodes:6,export:T
+ابو فراس02,nodes:7,export:T
+شارع السليمي01,nodes:12,export:T
+شارع السليمي02,nodes:2,export:T
+الاحمدي01,nodes:6,export:T
+الاحمدي02,nodes:6,export:T
+البدع06,nodes:4,export:T
+residential51,nodes:3,export:T
+الديوان03,nodes:7,export:T
+طريق الريان08,nodes:3,export:T
+primary_link78,nodes:9,export:T
+primary_link79,nodes:9,export:T
+primary_link80,nodes:8,export:T
+primary_link81,nodes:12,export:T
+primary_link82,nodes:7,export:T
+primary_link83,nodes:6,export:T
+primary_link84,nodes:6,export:T
+primary_link85,nodes:7,export:T
+شارع الخليج06,nodes:2,export:T
+شارع محمد بن ثاني05,nodes:16,export:T
+ابن سينا05,nodes:3,export:T
+residential52,nodes:5,export:T
+residential53,nodes:2,export:T
+residential54,nodes:2,export:T
+residential55,nodes:2,export:T
+residential56,nodes:2,export:T
+شارع الكورنيش18,nodes:4,export:T
+شارع الكورنيش19,nodes:2,export:T
+شارع الكورنيش20,nodes:3,export:T
+unclassified15,nodes:11,export:T
+service244,nodes:4,export:T
+trunk_link35,nodes:18,export:T
+شارع الرميلة02,nodes:3,export:T
+شارع الكورنيش21,nodes:27,export:T
+شارع الكورنيش22,nodes:12,export:T
+علي بن عمر العطية16,nodes:2,export:T
+شارع المينا05,nodes:3,export:T
+شارع الكورنيش23,nodes:22,export:T
+service245,nodes:2,export:T
+service246,nodes:7,export:T
+service247,nodes:6,export:T
+service248,nodes:6,export:T
+service249,nodes:2,export:T
+service250,nodes:6,export:T
+trunk_link36,nodes:12,export:T
+شارع الكورنيش24,nodes:11,export:T
+البشيرية01,nodes:5,export:T
+البشيرية02,nodes:5,export:T
+service251,nodes:12,export:T
+service252,nodes:21,export:T
+service253,nodes:6,export:T
+service254,nodes:7,export:T
+شارع عبدالله بن جاسم04,nodes:4,export:T
+شارع جاسم بن محمد03,nodes:3,export:T
+طريق الريان09,nodes:2,export:T
+شارع جاسم بن محمد04,nodes:11,export:T
+service255,nodes:2,export:T
+شارع الرميلة03,nodes:11,export:T
+primary_link86,nodes:5,export:T
+service256,nodes:24,export:T
+شارع جاسم بن محمد05,nodes:7,export:T
+طريق الريان10,nodes:7,export:T
+service257,nodes:3,export:T
+primary_link87,nodes:5,export:T
+service258,nodes:6,export:T
+طريق سلوى03,nodes:7,export:T
+شارع وادي مشيرب09,nodes:5,export:T
+خيبر07,nodes:3,export:T
+primary_link88,nodes:2,export:T
+موسى بن نصير02,nodes:6,export:T
+شارع احمد بن محمد بن ثني15,nodes:18,export:T
+براحة الجفيري03,nodes:6,export:T
+service259,nodes:4,export:T
+العاصمة02,nodes:2,export:T
+سكة الهناء,nodes:2,export:T
+أم طاقة01,nodes:2,export:T
+الندوة01,nodes:3,export:T
+سكة الدانة,nodes:2,export:T
+البطحاء,nodes:3,export:T
+ابن الصامت,nodes:3,export:T
+الحسن بن علي,nodes:2,export:T
+الحسن بن علي01,nodes:2,export:T
+ام وشاح02,nodes:2,export:T
+النجادة01,nodes:6,export:T
+شارع الاصمخ02,nodes:6,export:T
+ام وشاح03,nodes:2,export:T
+Abdul Aziz Bin Ahmed01,nodes:3,export:T
+عبد العزيز بن احمد05,nodes:5,export:T
+عبد العزيز بن احمد06,nodes:8,export:T
+شارع وادي مشريب07,nodes:10,export:T
+عبد العزيز بن احمد07,nodes:4,export:T
+شارع وادي مشريب08,nodes:15,export:T
+عبد العزيز بن احمد08,nodes:2,export:T
+عبد العزيز بن احمد09,nodes:3,export:T
+ام وشاح04,nodes:12,export:T
+عبد العزيز بن احمد10,nodes:2,export:T
+ابو ثيلة,nodes:3,export:T
+Abu Thila,nodes:3,export:T
+سكة السخاء,nodes:4,export:T
+سكة الامان,nodes:2,export:T
+ابن الاثير02,nodes:4,export:T
+ابن الاثير03,nodes:5,export:T
+unclassified16,nodes:6,export:T
+ابن الجارود03,nodes:2,export:T
+شارع قطريبن الفجاءة04,nodes:13,export:T
+ابن جعفر,nodes:2,export:T
+service260,nodes:4,export:T
+service261,nodes:3,export:T
+ابن الزبير02,nodes:4,export:T
+طارق بن زياد07,nodes:2,export:T
+طارق بن زياد08,nodes:2,export:T
+خيبر08,nodes:2,export:T
+خيبر09,nodes:7,export:T
+خيبر10,nodes:2,export:T
+خيبر11,nodes:7,export:T
+طارق بن زياد09,nodes:2,export:T
+طارق بن زياد10,nodes:4,export:T
+الوفاق04,nodes:2,export:T
+الوفاق05,nodes:7,export:T
+طارق بن زياد11,nodes:2,export:T
+طارق بن زياد12,nodes:2,export:T
+الوفاق06,nodes:2,export:T
+الوفاق07,nodes:2,export:T
+طارق بن زياد13,nodes:2,export:T
+طارق بن زياد14,nodes:2,export:T
+service262,nodes:8,export:T
+طريق سلوى04,nodes:11,export:T
+ابن نوفل01,nodes:7,export:T
+ابن نوفل02,nodes:2,export:T
+residential57,nodes:7,export:T
+شارع الجبر03,nodes:5,export:T
+شارع الجبر04,nodes:5,export:T
+شارع المحــار02,nodes:4,export:T
+شارع المحــار03,nodes:4,export:T
+شارع الدستور06,nodes:4,export:T
+شارع الدستور07,nodes:5,export:T
+الصويريات01,nodes:3,export:T
+الفارابي04,nodes:2,export:T
+الطريق الدائري الثاني08,nodes:3,export:T
+العروبة05,nodes:2,export:T
+trunk_link37,nodes:6,export:T
+شارع المينا06,nodes:10,export:T
+ابن الهيثم02,nodes:2,export:T
+الديوان04,nodes:17,export:T
+service263,nodes:2,export:T
+service264,nodes:2,export:T
+service265,nodes:6,export:T
+شارع روضة الخيل07,nodes:7,export:T
+primary_link89,nodes:5,export:T
+شارع جبر بن محمد06,nodes:9,export:T
+شارع عبدالله بن جاسم05,nodes:8,export:T
+service266,nodes:13,export:T
+service267,nodes:2,export:T
+التربية01,nodes:2,export:T
+التربية02,nodes:2,export:T
+علي بن عمر العطية17,nodes:3,export:T
+شارع جبر بن محمد07,nodes:9,export:T
+service268,nodes:6,export:T
+service269,nodes:4,export:T
+service270,nodes:5,export:T
+service271,nodes:4,export:T
+service272,nodes:6,export:T
+service273,nodes:4,export:T
+service274,nodes:2,export:T
+service275,nodes:3,export:T
+service276,nodes:8,export:T
+service277,nodes:4,export:T
+trunk_link38,nodes:7,export:T
+trunk_link39,nodes:7,export:T
+trunk_link40,nodes:6,export:T
+trunk_link41,nodes:4,export:T
+شارع المحــار04,nodes:8,export:T
+شارع المحــار05,nodes:6,export:T
+شارع الرميلة04,nodes:6,export:T
+شارع الرميلة05,nodes:9,export:T
+service278,nodes:4,export:T
+شارع قلعة العسكر04,nodes:13,export:T
+شارع جاسم بن محمد06,nodes:2,export:T
+شارع الكورنيش25,nodes:2,export:T
+motorway_link17,nodes:2,export:T
+راس ابو عبود13,nodes:2,export:T
+الطريق الدائري الثاني09,nodes:3,export:T
+secondary02,nodes:7,export:T
+secondary03,nodes:6,export:T
+secondary04,nodes:5,export:T
+secondary05,nodes:6,export:T
+secondary06,nodes:5,export:T
+secondary07,nodes:6,export:T
+secondary08,nodes:5,export:T
+شارع الخليج07,nodes:9,export:T
+الطريق الدائري الثالثي16,nodes:2,export:T
+tertiary06,nodes:4,export:T
+tertiary07,nodes:4,export:T
+tertiary08,nodes:3,export:T
+tertiary09,nodes:3,export:T
+tertiary10,nodes:3,export:T
+tertiary11,nodes:3,export:T
+tertiary12,nodes:3,export:T
+unclassified17,nodes:4,export:T
+unclassified18,nodes:3,export:T
+unclassified19,nodes:4,export:T
+unclassified20,nodes:3,export:T
+unclassified21,nodes:4,export:T
+unclassified22,nodes:3,export:T
+unclassified23,nodes:2,export:T
+motorway_link18,nodes:2,export:T
+دوار جدة02,nodes:3,export:T
+primary02,nodes:2,export:T
+primary03,nodes:2,export:T
+عاصم بن علي03,nodes:6,export:T
+الخبيب01,nodes:5,export:T
+pedestrian14,nodes:6,export:T
+footway81,nodes:5,export:T
+footway82,nodes:3,export:T
+footway83,nodes:3,export:T
+footway84,nodes:2,export:T
+footway85,nodes:2,export:T
+footway86,nodes:2,export:T
+residential58,nodes:2,export:T
+footway87,nodes:4,export:T
+pedestrian15,nodes:3,export:T
+footway88,nodes:4,export:T
+footway89,nodes:4,export:T
+footway90,nodes:4,export:T
+footway91,nodes:4,export:T
+شارع وادي مشريب09,nodes:14,export:T
+pedestrian16,nodes:5,export:T
+pedestrian17,nodes:4,export:T
+service279,nodes:2,export:T
+footway92,nodes:4,export:T
+pedestrian18,nodes:3,export:T
+pedestrian19,nodes:4,export:T
+pedestrian20,nodes:3,export:T
+pedestrian21,nodes:3,export:T
+footway93,nodes:5,export:T
+footway94,nodes:4,export:T
+footway95,nodes:10,export:T
+footway96,nodes:5,export:T
+footway97,nodes:3,export:T
+footway98,nodes:2,export:T
+footway99,nodes:3,export:T
+footway100,nodes:5,export:T
+footway101,nodes:7,export:T
+pedestrian22,nodes:5,export:T
+pedestrian23,nodes:3,export:T
+pedestrian24,nodes:2,export:T
+pedestrian25,nodes:5,export:T
+pedestrian26,nodes:5,export:T
+pedestrian27,nodes:3,export:T
+pedestrian28,nodes:9,export:T
+footway102,nodes:7,export:T
+pedestrian29,nodes:6,export:T
+pedestrian30,nodes:2,export:T
+pedestrian31,nodes:6,export:T
+pedestrian32,nodes:6,export:T
+Al Mariah Street,nodes:5,export:T
+residential59,nodes:5,export:T
+Al Ghaffat Street,nodes:3,export:T
+pedestrian33,nodes:6,export:T
+footway103,nodes:4,export:T
+footway104,nodes:3,export:T
+footway105,nodes:2,export:T
+شارع وادي مشريب10,nodes:2,export:T
+شارع علي بن عبدالله03,nodes:16,export:T
+شارع علي بن عبدالله04,nodes:22,export:T
+طريق الريان11,nodes:7,export:T
+footway106,nodes:2,export:T
+footway107,nodes:2,export:T
+footway108,nodes:2,export:T
+trunk_link42,nodes:6,export:T
+trunk_link43,nodes:6,export:T
+trunk_link44,nodes:8,export:T
+الجهرة09,nodes:3,export:T
+حديقة المطار,nodes:8,export:T
+حديقة المطار01,nodes:8,export:T
+شارع مالك بن أنس03,nodes:11,export:T
+unclassified24,nodes:10,export:T
+unclassified25,nodes:15,export:T
+footway109,nodes:6,export:T
+unclassified26,nodes:8,export:T
+الديوان05,nodes:5,export:T
+المياه01,nodes:16,export:T
+الغدير04,nodes:9,export:T
+primary_link90,nodes:7,export:T
+الاضواء01,nodes:5,export:T
+شارع المحــار06,nodes:6,export:T
+شارع الاصمخ03,nodes:4,export:T
+شارع الاصمخ04,nodes:4,export:T
+دوار جدة03,nodes:2,export:T
+دوار جدة04,nodes:5,export:T
+دوار جدة05,nodes:6,export:T
+شارع قطريبن الفجاءة05,nodes:4,export:T
+شارع قطريبن الفجاءة06,nodes:2,export:T
+شارع قطريبن الفجاءة07,nodes:3,export:T
+شارع قطريبن الفجاءة08,nodes:3,export:T
+شارع قطريبن الفجاءة09,nodes:3,export:T
+شارع الجزيرة05,nodes:4,export:T
+شارع الجزيرة06,nodes:2,export:T
+شارع الجزيرة07,nodes:4,export:T
+شارع الجزيرة08,nodes:4,export:T
+شارع الجزيرة09,nodes:4,export:T
+primary_link91,nodes:6,export:T
+primary_link92,nodes:6,export:T
+primary_link93,nodes:5,export:T
+primary_link94,nodes:5,export:T
+primary_link95,nodes:2,export:T
+unclassified27,nodes:11,export:T
+primary_link96,nodes:5,export:T
+primary_link97,nodes:6,export:T
+primary_link98,nodes:5,export:T
+primary_link99,nodes:5,export:T
+شارع المطار30,nodes:15,export:T
+residential60,nodes:3,export:T
+شارع المطار31,nodes:4,export:T
+شارع المطار32,nodes:8,export:T
+primary_link100,nodes:2,export:T
+شارع المنصورة20,nodes:5,export:T
+شارع المنصورة21,nodes:2,export:T
+شارع المنصورة22,nodes:4,export:T
+tertiary_link20,nodes:3,export:T
+البتيل02,nodes:3,export:T
+البتيل03,nodes:3,export:T
+residential61,nodes:12,export:T
+ثامر01,nodes:3,export:T
+ثامر02,nodes:3,export:T
+residential62,nodes:5,export:T
+حطين04,nodes:6,export:T
+سعيد بن زيد01,nodes:4,export:T
+سعيد بن زيد02,nodes:4,export:T
+residential63,nodes:2,export:T
+residential64,nodes:2,export:T
+residential65,nodes:3,export:T
+المدينة01,nodes:2,export:T
+المدينة02,nodes:2,export:T
+المدينة03,nodes:2,export:T
+المدينة04,nodes:2,export:T
+residential66,nodes:14,export:T
+المدينة05,nodes:7,export:T
+residential67,nodes:4,export:T
+residential68,nodes:4,export:T
+residential69,nodes:4,export:T
+residential70,nodes:4,export:T
+residential71,nodes:2,export:T
+residential72,nodes:2,export:T
+residential73,nodes:2,export:T
+residential74,nodes:2,export:T
+residential75,nodes:6,export:T
+residential76,nodes:2,export:T
+Ahmed Bin Mohammed Bin Thani Street01,nodes:6,export:T
+Ahmed Bin Mohammed Bin Thani Street02,nodes:11,export:T
+unclassified28,nodes:5,export:T
+البرق01,nodes:2,export:T
+عبدالله بن عمر01,nodes:3,export:T
+primary04,nodes:3,export:T
+residential77,nodes:2,export:T
+service280,nodes:9,export:T
+service281,nodes:2,export:T
+المنذر,nodes:2,export:T
+unclassified29,nodes:6,export:T
+unclassified30,nodes:5,export:T
+شارع الميناء02,nodes:25,export:T
+شارع 95401,nodes:2,export:T
+شارع 95402,nodes:5,export:T
+السافلية10,nodes:6,export:T
+السافلية11,nodes:6,export:T
+service282,nodes:6,export:T
+service283,nodes:3,export:T
+service284,nodes:4,export:T
+service285,nodes:5,export:T
+service286,nodes:2,export:T
+service287,nodes:6,export:T
+الأقصى01,nodes:6,export:T
+الأقصى02,nodes:6,export:T
+secondary_link01,nodes:9,export:T
+secondary_link02,nodes:14,export:T
+secondary_link03,nodes:10,export:T
+secondary_link04,nodes:9,export:T
+secondary_link05,nodes:8,export:T
+secondary_link06,nodes:9,export:T
+secondary_link07,nodes:14,export:T
+service288,nodes:34,export:T
+service289,nodes:16,export:T
+service290,nodes:21,export:T
+residential78,nodes:4,export:T
+residential79,nodes:4,export:T
+residential80,nodes:5,export:T
+residential81,nodes:5,export:T
+service291,nodes:18,export:T
+service292,nodes:49,export:T
+service293,nodes:25,export:T
+service294,nodes:14,export:T
+service295,nodes:28,export:T
+unclassified31,nodes:36,export:T
+service296,nodes:28,export:T
+service297,nodes:6,export:T
+service298,nodes:7,export:T
+service299,nodes:9,export:T
+service300,nodes:5,export:T
+unclassified32,nodes:4,export:T
+unclassified33,nodes:17,export:T
+service301,nodes:15,export:T
+service302,nodes:36,export:T
+unclassified34,nodes:11,export:T
+service303,nodes:3,export:T
+شارع محمد بن ثاني06,nodes:8,export:T
+شارع المطار33,nodes:3,export:T
+ابو بكر الصديق02,nodes:3,export:T
+ابو بكر الصديق03,nodes:3,export:T
+شارع وادي مشريب11,nodes:2,export:T
+شارع وادي مشريب12,nodes:10,export:T
+pedestrian34,nodes:4,export:T
+service304,nodes:2,export:T
+service305,nodes:22,export:T
+residential82,nodes:11,export:T
+residential83,nodes:2,export:T
+service306,nodes:14,export:T
+residential84,nodes:3,export:T
+residential85,nodes:8,export:T
+residential86,nodes:4,export:T
+residential87,nodes:4,export:T
+residential88,nodes:4,export:T
+residential89,nodes:2,export:T
+residential90,nodes:7,export:T
+residential91,nodes:8,export:T
+residential92,nodes:16,export:T
+residential93,nodes:11,export:T
+service307,nodes:2,export:T
+service308,nodes:3,export:T
+service309,nodes:2,export:T
+service310,nodes:4,export:T
+service311,nodes:4,export:T
+service312,nodes:2,export:T
+service313,nodes:3,export:T
+service314,nodes:2,export:T
+service315,nodes:2,export:T
+service316,nodes:2,export:T
+service317,nodes:2,export:T
+service318,nodes:2,export:T
+service319,nodes:2,export:T
+service320,nodes:2,export:T
+service321,nodes:4,export:T
+residential94,nodes:2,export:T
+Sikkat Al Shatt Street,nodes:3,export:T
+service322,nodes:2,export:T
+residential95,nodes:2,export:T
+service323,nodes:2,export:T
+service324,nodes:2,export:T
+service325,nodes:10,export:T
+service326,nodes:3,export:T
+service327,nodes:14,export:T
+service328,nodes:2,export:T
+service329,nodes:3,export:T
+service330,nodes:19,export:T
+service331,nodes:11,export:T
+residential96,nodes:3,export:T
+residential97,nodes:2,export:T
+service332,nodes:4,export:T
+service333,nodes:4,export:T
+service334,nodes:6,export:T
+service335,nodes:2,export:T
+service336,nodes:6,export:T
+service337,nodes:2,export:T
+service338,nodes:3,export:T
+service339,nodes:2,export:T
+service340,nodes:2,export:T
+service341,nodes:4,export:T
+service342,nodes:11,export:T
+residential98,nodes:2,export:T
+service343,nodes:2,export:T
+service344,nodes:2,export:T
+service345,nodes:2,export:T
+service346,nodes:2,export:T
+service347,nodes:2,export:T
+service348,nodes:2,export:T
+service349,nodes:9,export:T
+service350,nodes:4,export:T
+service351,nodes:5,export:T
+residential99,nodes:19,export:T
+service352,nodes:5,export:T
+service353,nodes:21,export:T
+service354,nodes:8,export:T
+service355,nodes:7,export:T
+service356,nodes:2,export:T
+service357,nodes:4,export:T
+service358,nodes:6,export:T
+service359,nodes:4,export:T
+residential100,nodes:3,export:T
+residential101,nodes:2,export:T
+residential102,nodes:2,export:T
+service360,nodes:2,export:T
+service361,nodes:5,export:T
+service362,nodes:7,export:T
+residential103,nodes:2,export:T
+residential104,nodes:4,export:T
+residential105,nodes:4,export:T
+construction01,nodes:7,export:T
+service363,nodes:14,export:T
+residential106,nodes:10,export:T
+خالد بن الوليد05,nodes:3,export:T
+ابن مالك03,nodes:5,export:T
+service364,nodes:4,export:T
+service365,nodes:2,export:T
+service366,nodes:3,export:T
+service367,nodes:4,export:T
+residential107,nodes:2,export:T
+residential108,nodes:4,export:T
+service368,nodes:5,export:T
+service369,nodes:7,export:T
+service370,nodes:6,export:T
+service371,nodes:5,export:T
+service372,nodes:13,export:T
+service373,nodes:9,export:T
+service374,nodes:24,export:T
+footway110,nodes:2,export:T
+residential109,nodes:8,export:T
+residential110,nodes:2,export:T
+footway111,nodes:2,export:T
+footway112,nodes:3,export:T
+footway113,nodes:3,export:T
+footway114,nodes:6,export:T
+footway115,nodes:2,export:T
+footway116,nodes:4,export:T
+footway117,nodes:3,export:T
+footway118,nodes:2,export:T
+footway119,nodes:3,export:T
+service375,nodes:4,export:T
+primary_link101,nodes:4,export:T
+الاضواء02,nodes:2,export:T
+service376,nodes:2,export:T
+service377,nodes:3,export:T
+service378,nodes:2,export:T
+service379,nodes:4,export:T
+service380,nodes:2,export:T
+service381,nodes:3,export:T
+service382,nodes:2,export:T
+service383,nodes:4,export:T
+service384,nodes:2,export:T
+service385,nodes:4,export:T
+service386,nodes:7,export:T
+service387,nodes:11,export:T
+شارع الرميلة06,nodes:3,export:T
+شارع الرميلة07,nodes:4,export:T
+شارع الرميلة08,nodes:3,export:T
+شارع الرميلة09,nodes:3,export:T
+شارع الرميلة10,nodes:2,export:T
+شارع الرميلة11,nodes:9,export:T
+شارع الرميلة12,nodes:5,export:T
+شارع الرميلة13,nodes:2,export:T
+شارع الرميلة14,nodes:3,export:T
+شارع الرميلة15,nodes:3,export:T
+شارع الرميلة16,nodes:4,export:T
+شارع الرميلة17,nodes:11,export:T
+pedestrian35,nodes:28,export:T
+primary_link102,nodes:5,export:T
+footway120,nodes:52,export:T
+footway121,nodes:19,export:T
+footway122,nodes:3,export:T
+footway123,nodes:11,export:T
+footway124,nodes:6,export:T
+footway125,nodes:4,export:T
+footway126,nodes:3,export:T
+footway127,nodes:4,export:T
+footway128,nodes:8,export:T
+footway129,nodes:38,export:T
+footway130,nodes:7,export:T
+footway131,nodes:6,export:T
+footway132,nodes:17,export:T
+footway133,nodes:4,export:T
+footway134,nodes:4,export:T
+footway135,nodes:7,export:T
+footway136,nodes:13,export:T
+footway137,nodes:4,export:T
+footway138,nodes:6,export:T
+footway139,nodes:9,export:T
+footway140,nodes:3,export:T
+footway141,nodes:7,export:T
+footway142,nodes:19,export:T
+footway143,nodes:5,export:T
+footway144,nodes:4,export:T
+footway145,nodes:6,export:T
+footway146,nodes:25,export:T
+footway147,nodes:14,export:T
+footway148,nodes:2,export:T
+footway149,nodes:2,export:T
+footway150,nodes:2,export:T
+footway151,nodes:2,export:T
+footway152,nodes:2,export:T
+footway153,nodes:2,export:T
+footway154,nodes:3,export:T
+footway155,nodes:3,export:T
+footway156,nodes:7,export:T
+footway157,nodes:9,export:T
+footway158,nodes:2,export:T
+footway159,nodes:6,export:T
+footway160,nodes:4,export:T
+footway161,nodes:4,export:T
+footway162,nodes:8,export:T
+footway163,nodes:20,export:T
+footway164,nodes:19,export:T
+footway165,nodes:17,export:T
+footway166,nodes:5,export:T
+footway167,nodes:15,export:T
+footway168,nodes:5,export:T
+footway169,nodes:23,export:T
+footway170,nodes:45,export:T
+footway171,nodes:3,export:T
+footway172,nodes:10,export:T
+footway173,nodes:3,export:T
+footway174,nodes:6,export:T
+footway175,nodes:8,export:T
+footway176,nodes:10,export:T
+footway177,nodes:4,export:T
+footway178,nodes:28,export:T
+footway179,nodes:6,export:T
+footway180,nodes:3,export:T
+footway181,nodes:2,export:T
+footway182,nodes:3,export:T
+footway183,nodes:3,export:T
+footway184,nodes:2,export:T
+footway185,nodes:10,export:T
+footway186,nodes:8,export:T
+footway187,nodes:11,export:T
+footway188,nodes:15,export:T
+footway189,nodes:2,export:T
+footway190,nodes:4,export:T
+footway191,nodes:2,export:T
+footway192,nodes:2,export:T
+footway193,nodes:3,export:T
+footway194,nodes:6,export:T
+footway195,nodes:20,export:T
+footway196,nodes:3,export:T
+footway197,nodes:22,export:T
+footway198,nodes:17,export:T
+footway199,nodes:11,export:T
+footway200,nodes:15,export:T
+footway201,nodes:34,export:T
+footway202,nodes:4,export:T
+footway203,nodes:3,export:T
+footway204,nodes:12,export:T
+footway205,nodes:32,export:T
+footway206,nodes:4,export:T
+footway207,nodes:2,export:T
+footway208,nodes:9,export:T
+footway209,nodes:8,export:T
+footway210,nodes:8,export:T
+footway211,nodes:8,export:T
+footway212,nodes:4,export:T
+بحر العرب01,nodes:5,export:T
+residential111,nodes:6,export:T
+primary_link103,nodes:4,export:T
+primary_link104,nodes:4,export:T
+primary05,nodes:22,export:T
+شارع ابن محمود06,nodes:2,export:T
+شارع ابن محمود07,nodes:2,export:T
+شارع حمد الكبير12,nodes:3,export:T
+شارع حمد الكبير13,nodes:3,export:T
+شارع حمد الكبير14,nodes:3,export:T
+شارع حمد الكبير15,nodes:2,export:T
+شارع عبدالله بن جاسم06,nodes:2,export:T
+شارع حمد الكبير16,nodes:2,export:T
+شارع حمد الكبير17,nodes:2,export:T
+شارع عبدالله بن جاسم07,nodes:2,export:T
+علي بن عمر العطية18,nodes:2,export:T
+شارع الكورنيش26,nodes:2,export:T
+شارع الكورنيش27,nodes:2,export:T
+trunk_link45,nodes:5,export:T
+trunk_link46,nodes:7,export:T
+trunk_link47,nodes:6,export:T
+شارع الكورنيش28,nodes:2,export:T
+شارع الكورنيش29,nodes:2,export:T
+footway213,nodes:2,export:T
+service388,nodes:6,export:T
+service389,nodes:5,export:T
+residential112,nodes:2,export:T
+residential113,nodes:2,export:T
+footway214,nodes:2,export:T
+footway215,nodes:2,export:T
+pedestrian36,nodes:2,export:T
+pedestrian37,nodes:3,export:T
+pedestrian38,nodes:2,export:T
+pedestrian39,nodes:2,export:T
+pedestrian40,nodes:2,export:T
+service390,nodes:7,export:T
+service391,nodes:6,export:T
+service392,nodes:6,export:T
+ابو عبيدة02,nodes:6,export:T
+ابو عبيدة03,nodes:6,export:T
+primary06,nodes:32,export:T
+الفارابي05,nodes:4,export:T
+residential114,nodes:5,export:T
+service393,nodes:2,export:T
+footway216,nodes:5,export:T
+service394,nodes:3,export:T
+service395,nodes:7,export:T
+service396,nodes:3,export:T
+service397,nodes:2,export:T
+service398,nodes:3,export:T
+footway217,nodes:2,export:T
+footway218,nodes:7,export:T
+footway219,nodes:3,export:T
+footway220,nodes:9,export:T
+footway221,nodes:4,export:T
+footway222,nodes:4,export:T
+footway223,nodes:11,export:T
+footway224,nodes:14,export:T
+footway225,nodes:5,export:T
+footway226,nodes:2,export:T
+footway227,nodes:2,export:T
+footway228,nodes:10,export:T
+footway229,nodes:2,export:T
+footway230,nodes:28,export:T
+footway231,nodes:8,export:T
+footway232,nodes:2,export:T
+footway233,nodes:9,export:T
+footway234,nodes:16,export:T
+footway235,nodes:3,export:T
+footway236,nodes:4,export:T
+footway237,nodes:4,export:T
+footway238,nodes:2,export:T
+footway239,nodes:6,export:T
+footway240,nodes:5,export:T
+شارع المطار34,nodes:2,export:T
+footway241,nodes:4,export:T
+footway242,nodes:4,export:T
+شارع احمد بن محمد بن ثني16,nodes:3,export:T
+شارع احمد بن محمد بن ثني17,nodes:2,export:T
+primary_link105,nodes:10,export:T
+ابن سينا06,nodes:3,export:T
+ابن سينا07,nodes:2,export:T
+tertiary_link21,nodes:3,export:T
+tertiary_link22,nodes:3,export:T
+الروابي06,nodes:2,export:T
+الروابي07,nodes:2,export:T
+tertiary_link23,nodes:4,export:T
+tertiary_link24,nodes:4,export:T
+service399,nodes:12,export:T
+service400,nodes:2,export:T
+service401,nodes:2,export:T
+البخاري02,nodes:4,export:T
+الجمعية01,nodes:5,export:T
+steps03,nodes:2,export:T
+footway243,nodes:3,export:T
+steps04,nodes:5,export:T
+footway244,nodes:3,export:T
+footway245,nodes:5,export:T
+footway246,nodes:91,export:T
+unclassified35,nodes:2,export:T
+service402,nodes:11,export:T
+الوفاق08,nodes:3,export:T
+الوفاق09,nodes:4,export:T
+بيت الحكمة01,nodes:2,export:T
+residential115,nodes:9,export:T
+unclassified36,nodes:4,export:T
+service403,nodes:4,export:T
+footway247,nodes:4,export:T
+footway248,nodes:4,export:T
+شارع المينا07,nodes:4,export:T
+unclassified37,nodes:4,export:T
+unclassified38,nodes:4,export:T
+شارع الميناء03,nodes:2,export:T
+شارع المينا08,nodes:3,export:T
+service404,nodes:5,export:T
+شارع الميناء04,nodes:4,export:T
+شارع الميناء05,nodes:3,export:T
+service405,nodes:4,export:T
+شارع الميناء06,nodes:2,export:T
+pedestrian41,nodes:2,export:T
+pedestrian42,nodes:3,export:T
+pedestrian43,nodes:2,export:T
+pedestrian44,nodes:2,export:T
+pedestrian45,nodes:3,export:T
+pedestrian46,nodes:3,export:T
+pedestrian47,nodes:2,export:T
+pedestrian48,nodes:6,export:T
+footway249,nodes:2,export:T
+footway250,nodes:4,export:T
+footway251,nodes:5,export:T
+footway252,nodes:5,export:T
+footway253,nodes:2,export:T
+footway254,nodes:3,export:T
+footway255,nodes:4,export:T
+footway256,nodes:2,export:T
+footway257,nodes:3,export:T
+footway258,nodes:3,export:T
+footway259,nodes:5,export:T
+footway260,nodes:2,export:T
+footway261,nodes:2,export:T
+footway262,nodes:2,export:T
+footway263,nodes:2,export:T
+footway264,nodes:2,export:T
+footway265,nodes:2,export:T
+شارع عبدالله بن جاسم08,nodes:2,export:T
+شارع عبدالله بن جاسم09,nodes:3,export:T
+شارع عبدالله بن جاسم10,nodes:4,export:T
+pedestrian49,nodes:8,export:T
+pedestrian50,nodes:2,export:T
+pedestrian51,nodes:2,export:T
+pedestrian52,nodes:2,export:T
+service406,nodes:20,export:T
+service407,nodes:2,export:T
+service408,nodes:3,export:T
+service409,nodes:2,export:T
+service410,nodes:3,export:T
+service411,nodes:2,export:T
+service412,nodes:2,export:T
+service413,nodes:2,export:T
+footway266,nodes:3,export:T
+footway267,nodes:6,export:T
+footway268,nodes:3,export:T
+footway269,nodes:3,export:T
+footway270,nodes:3,export:T
+footway271,nodes:2,export:T
+footway272,nodes:2,export:T
+footway273,nodes:2,export:T
+footway274,nodes:3,export:T
+footway275,nodes:3,export:T
+footway276,nodes:3,export:T
+footway277,nodes:2,export:T
+footway278,nodes:2,export:T
+footway279,nodes:2,export:T
+footway280,nodes:2,export:T
+footway281,nodes:2,export:T
+footway282,nodes:2,export:T
+footway283,nodes:2,export:T
+footway284,nodes:2,export:T
+footway285,nodes:2,export:T
+footway286,nodes:2,export:T
+steps05,nodes:2,export:T
+steps06,nodes:2,export:T
+steps07,nodes:2,export:T
+footway287,nodes:10,export:T
+footway288,nodes:2,export:T
+footway289,nodes:2,export:T
+footway290,nodes:2,export:T
+footway291,nodes:31,export:T
+footway292,nodes:2,export:T
+footway293,nodes:12,export:T
+footway294,nodes:2,export:T
+footway295,nodes:2,export:T
+footway296,nodes:2,export:T
+service414,nodes:16,export:T
+service415,nodes:11,export:T
+service416,nodes:3,export:T
+service417,nodes:2,export:T
+footway297,nodes:16,export:T
+footway298,nodes:3,export:T
+footway299,nodes:4,export:T
+footway300,nodes:5,export:T
+footway301,nodes:3,export:T
+footway302,nodes:3,export:T
+footway303,nodes:18,export:T
+footway304,nodes:2,export:T
+service418,nodes:2,export:T
+service419,nodes:2,export:T
+footway305,nodes:2,export:T
+footway306,nodes:2,export:T
+footway307,nodes:6,export:T
+footway308,nodes:15,export:T
+footway309,nodes:3,export:T
+footway310,nodes:7,export:T
+footway311,nodes:2,export:T
+footway312,nodes:2,export:T
+service420,nodes:2,export:T
+service421,nodes:2,export:T
+service422,nodes:2,export:T
+service423,nodes:2,export:T
+footway313,nodes:2,export:T
+footway314,nodes:6,export:T
+path17,nodes:15,export:T
+path18,nodes:3,export:T
+path19,nodes:3,export:T
+footway315,nodes:2,export:T
+footway316,nodes:3,export:T
+path20,nodes:6,export:T
+path21,nodes:4,export:T
+pedestrian53,nodes:13,export:T
+footway317,nodes:2,export:T
+service424,nodes:3,export:T
+service425,nodes:7,export:T
+service426,nodes:6,export:T
+service427,nodes:3,export:T
+footway318,nodes:2,export:T
+footway319,nodes:2,export:T
+footway320,nodes:2,export:T
+footway321,nodes:2,export:T
+footway322,nodes:2,export:T
+footway323,nodes:2,export:T
+footway324,nodes:2,export:T
+footway325,nodes:2,export:T
+footway326,nodes:2,export:T
+footway327,nodes:3,export:T
+footway328,nodes:4,export:T
+footway329,nodes:4,export:T
+footway330,nodes:3,export:T
+footway331,nodes:2,export:T
+footway332,nodes:4,export:T
+footway333,nodes:3,export:T
+footway334,nodes:2,export:T
+footway335,nodes:3,export:T
+footway336,nodes:2,export:T
+footway337,nodes:2,export:T
+footway338,nodes:11,export:T
+footway339,nodes:3,export:T
+footway340,nodes:3,export:T
+footway341,nodes:7,export:T
+footway342,nodes:7,export:T
+service428,nodes:3,export:T
+service429,nodes:4,export:T
+footway343,nodes:10,export:T
+footway344,nodes:17,export:T
+footway345,nodes:4,export:T
+footway346,nodes:13,export:T
+footway347,nodes:5,export:T
+service430,nodes:3,export:T
+service431,nodes:2,export:T
+السوق02,nodes:2,export:T
+السوق03,nodes:3,export:T
+شارع علي بن عبدالله05,nodes:3,export:T
+شارع علي بن عبدالله06,nodes:4,export:T
+service432,nodes:9,export:T
+service433,nodes:2,export:T
+service434,nodes:2,export:T
+service435,nodes:17,export:T
+footway348,nodes:2,export:T
+footway349,nodes:2,export:T
+footway350,nodes:7,export:T
+footway351,nodes:2,export:T
+footway352,nodes:2,export:T
+footway353,nodes:2,export:T
+footway354,nodes:3,export:T
+steps08,nodes:2,export:T
+footway355,nodes:2,export:T
+footway356,nodes:2,export:T
+footway357,nodes:2,export:T
+footway358,nodes:2,export:T
+footway359,nodes:2,export:T
+footway360,nodes:2,export:T
+footway361,nodes:2,export:T
+footway362,nodes:5,export:T
+footway363,nodes:4,export:T
+footway364,nodes:2,export:T
+footway365,nodes:5,export:T
+footway366,nodes:2,export:T
+footway367,nodes:4,export:T
+footway368,nodes:2,export:T
+footway369,nodes:3,export:T
+service436,nodes:3,export:T
+service437,nodes:7,export:T
+service438,nodes:12,export:T
+service439,nodes:3,export:T
+service440,nodes:4,export:T
+service441,nodes:2,export:T
+service442,nodes:10,export:T
+footway370,nodes:5,export:T
+service443,nodes:8,export:T
+service444,nodes:12,export:T
+service445,nodes:5,export:T
+service446,nodes:3,export:T
+footway371,nodes:21,export:T
+footway372,nodes:10,export:T
+service447,nodes:4,export:T
+motorway_link19,nodes:2,export:T
+motorway_link20,nodes:2,export:T
+footway373,nodes:209,export:T
+footway374,nodes:2,export:T
+footway375,nodes:2,export:T
+pedestrian54,nodes:13,export:T
+footway376,nodes:40,export:T
+footway377,nodes:22,export:T
+footway378,nodes:139,export:T
+residential116,nodes:11,export:T
+service448,nodes:6,export:T
+service449,nodes:2,export:T
+service450,nodes:4,export:T
+service451,nodes:3,export:T
+service452,nodes:3,export:T
+service453,nodes:3,export:T
+service454,nodes:17,export:T
+service455,nodes:2,export:T
+service456,nodes:6,export:T
+شارع وادي مشريب13,nodes:3,export:T
+شارع وادي مشريب14,nodes:7,export:T
+شارع وادي مشريب15,nodes:2,export:T
+شارع وادي مشريب16,nodes:3,export:T
+شارع وادي مشريب17,nodes:2,export:T
+شارع وادي مشريب18,nodes:5,export:T
+شارع جاسم بن محمد07,nodes:3,export:T
+شارع جاسم بن محمد08,nodes:9,export:T
+شارع جاسم بن محمد09,nodes:6,export:T
+ساحة السوق01,nodes:3,export:T
+ساحة السوق02,nodes:12,export:T
+ساحة السوق03,nodes:2,export:T
+شارع جاسم بن محمد10,nodes:4,export:T
+شارع جاسم بن محمد11,nodes:8,export:T
+شارع عبدالله بن جاسم11,nodes:2,export:T
+شارع عبدالله بن جاسم12,nodes:5,export:T
+شارع عبدالله بن جاسم13,nodes:4,export:T
+شارع عبدالله بن جاسم14,nodes:3,export:T
+شارع عبدالله بن جاسم15,nodes:3,export:T
+شارع عبدالله بن جاسم16,nodes:3,export:T
+شارع حمد الكبير18,nodes:2,export:T
+شارع حمد الكبير19,nodes:3,export:T
+شارع حمد الكبير20,nodes:3,export:T
+شارع حمد الكبير21,nodes:11,export:T
+برزان01,nodes:3,export:T
+برزان02,nodes:3,export:T
+برزان03,nodes:2,export:T
+برزان04,nodes:3,export:T
+شارع الاصمخ05,nodes:4,export:T
+شارع الاصمخ06,nodes:3,export:T
+شارع الاصمخ07,nodes:3,export:T
+شارع الاصمخ08,nodes:4,export:T
+footway379,nodes:4,export:T
+footway380,nodes:4,export:T
+steps09,nodes:2,export:T
+footway381,nodes:2,export:T
+footway382,nodes:4,export:T
+footway383,nodes:7,export:T
+footway384,nodes:3,export:T
+footway385,nodes:4,export:T
+footway386,nodes:2,export:T
+footway387,nodes:2,export:T
+footway388,nodes:3,export:T
+footway389,nodes:2,export:T
+footway390,nodes:2,export:T
+pedestrian55,nodes:4,export:T
+pedestrian56,nodes:4,export:T
+pedestrian57,nodes:4,export:T
+pedestrian58,nodes:3,export:T
+pedestrian59,nodes:3,export:T
+pedestrian60,nodes:2,export:T
+pedestrian61,nodes:2,export:T
+footway391,nodes:3,export:T
+footway392,nodes:6,export:T
+pedestrian62,nodes:4,export:T
+service457,nodes:4,export:T
+service458,nodes:2,export:T
+service459,nodes:2,export:T
+footway393,nodes:2,export:T
+steps10,nodes:2,export:T
+footway394,nodes:3,export:T
+footway395,nodes:10,export:T
+footway396,nodes:2,export:T
+pedestrian63,nodes:3,export:T
+pedestrian64,nodes:5,export:T
+pedestrian65,nodes:2,export:T
+pedestrian66,nodes:3,export:T
+footway397,nodes:2,export:T
+footway398,nodes:3,export:T
+footway399,nodes:4,export:T
+pedestrian67,nodes:3,export:T
+pedestrian68,nodes:4,export:T
+pedestrian69,nodes:3,export:T
+pedestrian70,nodes:2,export:T
+pedestrian71,nodes:5,export:T
+pedestrian72,nodes:2,export:T
+footway400,nodes:2,export:T
+footway401,nodes:2,export:T
+footway402,nodes:2,export:T
+footway403,nodes:2,export:T
+footway404,nodes:3,export:T
+footway405,nodes:3,export:T
+pedestrian73,nodes:2,export:T
+footway406,nodes:2,export:T
+footway407,nodes:2,export:T
+footway408,nodes:2,export:T
+footway409,nodes:2,export:T
+footway410,nodes:4,export:T
+footway411,nodes:2,export:T
+footway412,nodes:7,export:T
+cycleway03,nodes:28,export:T
+pedestrian74,nodes:37,export:T
+pedestrian75,nodes:66,export:T
+cycleway04,nodes:9,export:T
+شارع الرميلة18,nodes:5,export:T
+service460,nodes:13,export:T
+شارع زهير بن عوف01,nodes:2,export:T
+شارع زهير بن عوف02,nodes:6,export:T
+service461,nodes:3,export:T
+service462,nodes:4,export:T
+service463,nodes:4,export:T
+service464,nodes:4,export:T
+service465,nodes:2,export:T
+service466,nodes:8,export:T
+primary_link106,nodes:2,export:T
+unclassified39,nodes:6,export:T
+service467,nodes:2,export:T
+service468,nodes:2,export:T
+service469,nodes:2,export:T
+service470,nodes:2,export:T
+service471,nodes:2,export:T
+service472,nodes:11,export:T
+service473,nodes:8,export:T
+service474,nodes:2,export:T
+service475,nodes:2,export:T
+residential117,nodes:12,export:T
+يافا01,nodes:4,export:T
+residential118,nodes:3,export:T
+residential119,nodes:3,export:T
+residential120,nodes:4,export:T
+residential121,nodes:2,export:T
+residential122,nodes:8,export:T
+primary07,nodes:44,export:T
+primary08,nodes:34,export:T
+شارع بديع الزمان,nodes:2,export:T
+شارع روضة الخيل08,nodes:3,export:T
+شارع المنصورة23,nodes:2,export:T
+شارع المنصورة24,nodes:2,export:T
+footway413,nodes:3,export:T
+footway414,nodes:6,export:T
+primary_link107,nodes:4,export:T
+primary_link108,nodes:8,export:T
+primary_link109,nodes:7,export:T
+primary09,nodes:7,export:T
+primary10,nodes:4,export:T
+المياه02,nodes:6,export:T
+primary_link110,nodes:3,export:T
+شارع المطار35,nodes:2,export:T
+شارع المنصورة25,nodes:3,export:T
+شارع المنصورة26,nodes:2,export:T
+footway415,nodes:2,export:T
+footway416,nodes:7,export:T
+الطريق الدائري الثاني10,nodes:3,export:T
+الديوان06,nodes:4,export:T
+طريق الريان12,nodes:2,export:T
+primary_link111,nodes:9,export:T
+primary_link112,nodes:5,export:T
+primary_link113,nodes:6,export:T
+primary_link114,nodes:7,export:T
+primary_link115,nodes:4,export:T
+residential123,nodes:4,export:T
+residential124,nodes:6,export:T
+primary_link116,nodes:10,export:T
+شارع ابن محمود08,nodes:2,export:T
+شارع ابن محمود09,nodes:5,export:T
+tertiary13,nodes:2,export:T
+شارع ابن محمود10,nodes:2,export:T
+primary_link117,nodes:6,export:T
+primary_link118,nodes:10,export:T
+primary_link119,nodes:5,export:T
+primary_link120,nodes:9,export:T
+residential125,nodes:3,export:T
+primary_link121,nodes:4,export:T
+primary_link122,nodes:4,export:T
+primary_link123,nodes:4,export:T
+service476,nodes:20,export:T
+شارع الرميلة19,nodes:3,export:T
+شارع الرميلة20,nodes:3,export:T
+primary_link124,nodes:4,export:T
+yes01,nodes:6,export:T
+yes02,nodes:5,export:T
+yes03,nodes:5,export:T
+yes04,nodes:5,export:T
+Hamad Medical Corporation Psychiatry Department,nodes:11,export:T
+The Center,nodes:21,export:T
+yes05,nodes:11,export:T
+قلعة أماكن الجذب - تميم المجد,nodes:35,export:T
+yes06,nodes:5,export:T
+yes07,nodes:6,export:T
+yes08,nodes:5,export:T
+yes09,nodes:5,export:T
+Souq Al Asiery,nodes:5,export:T
+City Souq,nodes:18,export:T
+retail01,nodes:7,export:T
+Qatar Exchange,nodes:5,export:T
+بنك صادرات إيران,nodes:5,export:T
+Abu Bakr Al Siddiq Mosque,nodes:5,export:T
+Retaj Royale Hotel,nodes:5,export:T
+yes10,nodes:5,export:T
+Gold Souq,nodes:5,export:T
+مكتبة قطر الوطنية,nodes:5,export:T
+وزارة الداخلية,nodes:5,export:T
+Al Meera Airport Branch,nodes:9,export:T
+Al Osra Restaurant,nodes:5,export:T
+yes11,nodes:5,export:T
+Hleyton Tower,nodes:5,export:T
+Alfardan Centre,nodes:6,export:T
+mosque01,nodes:5,export:T
+yes12,nodes:5,export:T
+Gloria Hotel,nodes:5,export:T
+yes13,nodes:5,export:T
+Best Western Plus Doha,nodes:5,export:T
+Horizon Manor Hotel,nodes:7,export:T
+Dana Hotel,nodes:6,export:T
+yes14,nodes:5,export:T
+yes15,nodes:5,export:T
+yes16,nodes:5,export:T
+Doha International Airport Arrival Terminal,nodes:7,export:T
+commercial01,nodes:5,export:T
+Al MIrqab,nodes:11,export:T
+yes17,nodes:5,export:T
+yes18,nodes:5,export:T
+commercial02,nodes:5,export:T
+yes19,nodes:5,export:T
+yes20,nodes:10,export:T
+yes21,nodes:10,export:T
+yes22,nodes:10,export:T
+yes23,nodes:10,export:T
+yes24,nodes:7,export:T
+yes25,nodes:7,export:T
+yes26,nodes:10,export:T
+yes27,nodes:33,export:T
+yes28,nodes:15,export:T
+yes29,nodes:18,export:T
+mosque02,nodes:5,export:T
+Al Shaheen,nodes:8,export:T
+hotel01,nodes:20,export:T
+yes30,nodes:6,export:T
+yes31,nodes:11,export:T
+hotel02,nodes:19,export:T
+yes32,nodes:8,export:T
+Al Kaabi Tower,nodes:7,export:T
+yes33,nodes:6,export:T
+yes34,nodes:7,export:T
+yes35,nodes:5,export:T
+yes36,nodes:12,export:T
+yes37,nodes:12,export:T
+yes38,nodes:5,export:T
+yes39,nodes:5,export:T
+yes40,nodes:7,export:T
+Regency Residence (Musheireb 5),nodes:8,export:T
+yes41,nodes:5,export:T
+yes42,nodes:5,export:T
+Regency Residence (Musheireb 1),nodes:11,export:T
+house01,nodes:6,export:T
+Al Liwan Suites,nodes:8,export:T
+office01,nodes:9,export:T
+office02,nodes:10,export:T
+HSBC Premier,nodes:13,export:T
+office03,nodes:5,export:T
+office04,nodes:5,export:T
+Olympic Sports,nodes:5,export:T
+Al Jazeera Service Apartments,nodes:6,export:T
+yes43,nodes:13,export:T
+Radisson Blu Hotel,nodes:22,export:T
+commercial03,nodes:5,export:T
+Elaj Medical Center,nodes:6,export:T
+بنك قطر الوطني,nodes:5,export:T
+بنك الدوحة,nodes:5,export:T
+Doha Marble Centre,nodes:4,export:T
+Habib Qatar International Exchange,nodes:5,export:T
+بنك الدوحة01,nodes:5,export:T
+البنك التجاري,nodes:9,export:T
+Al Emadi Electronics Est,nodes:5,export:T
+Al Rufaa Tower,nodes:16,export:T
+Kingsgate Hotel,nodes:9,export:T
+Diamond Hotel,nodes:5,export:T
+yes44,nodes:5,export:T
+yes45,nodes:5,export:T
+البنك العربي,nodes:6,export:T
+بنك قطر الوطني01,nodes:6,export:T
+General Directorate of Customs,nodes:5,export:T
+commercial04,nodes:5,export:T
+ALMEERA MANSOURA MALL,nodes:11,export:T
+mosque03,nodes:9,export:T
+The Green Garden Restaurant,nodes:5,export:T
+مصرف قطر الإسلامي,nodes:5,export:T
+بنك قطر الدولي الإسلامي,nodes:5,export:T
+Commercial Bank,nodes:5,export:T
+Souq Al Reem,nodes:5,export:T
+Fraser Suites, Doha,nodes:16,export:T
+yes46,nodes:14,export:T
+yes47,nodes:37,export:T
+yes48,nodes:39,export:T
+yes49,nodes:6,export:T
+Al Meera Umm Ghuwailina Branch,nodes:8,export:T
+Al-Meera Office tower,nodes:6,export:T
+Ezdan Accomodation-2,nodes:14,export:T
+Ezdan Accomodation-3,nodes:16,export:T
+KFC -Accomodation,nodes:15,export:T
+New World,nodes:12,export:T
+Doha City,nodes:12,export:T
+Ezdan Accomodation-1,nodes:13,export:T
+Al-khayyat and Urbacon Company,nodes:8,export:T
+QATAR TRADING COMPANY BLDG,nodes:6,export:T
+CHUBB FIRE BLDG,nodes:6,export:T
+mosque04,nodes:19,export:T
+Grand Mosque,nodes:13,export:T
+Apollo Clinic,nodes:9,export:T
+Grand Regal,nodes:17,export:T
+Merzam Residence,nodes:5,export:T
+Al-Riwaq Exhibition Hall,nodes:5,export:T
+Qatar Bowling Centre,nodes:19,export:T
+وزارة المالية,nodes:9,export:T
+Qatar Central Bank,nodes:5,export:T
+مسجد النجادة,nodes:12,export:T
+K 108 Hotel,nodes:5,export:T
+Grand Suite Hotel,nodes:5,export:T
+yes50,nodes:11,export:T
+yes51,nodes:5,export:T
+Le Gourmet,nodes:5,export:T
+yes52,nodes:5,export:T
+yes53,nodes:10,export:T
+yes54,nodes:5,export:T
+yes55,nodes:6,export:T
+Al Jaffal Centre,nodes:13,export:T
+yes56,nodes:10,export:T
+yes57,nodes:23,export:T
+house02,nodes:12,export:T
+apartments01,nodes:25,export:T
+قطر للبترول,nodes:9,export:T
+Bone & Joint Centre,nodes:11,export:T
+commercial05,nodes:5,export:T
+house03,nodes:10,export:T
+Westin Hotel,nodes:19,export:T
+commercial06,nodes:11,export:T
+فندق سينشري,nodes:5,export:T
+yes58,nodes:5,export:T
+yes59,nodes:5,export:T
+yes60,nodes:5,export:T
+yes61,nodes:11,export:T
+yes62,nodes:5,export:T
+yes63,nodes:5,export:T
+yes64,nodes:5,export:T
+yes65,nodes:5,export:T
+yes66,nodes:5,export:T
+mosque05,nodes:9,export:T
+mosque06,nodes:12,export:T
+mosque07,nodes:5,export:T
+mosque08,nodes:5,export:T
+mosque09,nodes:5,export:T
+Al Meera,nodes:5,export:T
+mosque10,nodes:6,export:T
+Al Seef Residence,nodes:7,export:T
+mosque11,nodes:5,export:T
+Souqe al Dira,nodes:8,export:T
+yes67,nodes:6,export:T
+yes68,nodes:7,export:T
+Al Jabor Center,nodes:9,export:T
+retail02,nodes:5,export:T
+Mobil Center,nodes:7,export:T
+KEO International Consultants,nodes:5,export:T
+Al Shaheen Est,nodes:10,export:T
+apartments02,nodes:5,export:T
+apartments03,nodes:5,export:T
+apartments04,nodes:5,export:T
+apartments05,nodes:5,export:T
+apartments06,nodes:6,export:T
+apartments07,nodes:5,export:T
+residential126,nodes:5,export:T
+residential127,nodes:6,export:T
+residential128,nodes:5,export:T
+residential129,nodes:6,export:T
+retail03,nodes:5,export:T
+Al Sayyad Grocery,nodes:6,export:T
+retail04,nodes:7,export:T
+retail05,nodes:11,export:T
+apartments08,nodes:5,export:T
+apartments09,nodes:5,export:T
+apartments10,nodes:5,export:T
+apartments11,nodes:5,export:T
+residential130,nodes:5,export:T
+residential131,nodes:5,export:T
+residential132,nodes:6,export:T
+Global Business Center,nodes:5,export:T
+commercial07,nodes:5,export:T
+Whyte Company,nodes:5,export:T
+Miratech,nodes:5,export:T
+residential133,nodes:5,export:T
+بنك قطر الدولي,nodes:5,export:T
+commercial08,nodes:9,export:T
+Capital Police Station,nodes:5,export:T
+apartments12,nodes:5,export:T
+apartments13,nodes:5,export:T
+residential134,nodes:6,export:T
+residential135,nodes:6,export:T
+Gulf Residence 19,nodes:5,export:T
+retail06,nodes:6,export:T
+residential136,nodes:6,export:T
+residential137,nodes:5,export:T
+residential138,nodes:5,export:T
+residential139,nodes:6,export:T
+residential140,nodes:6,export:T
+Turkish Laayonak Restaurant,nodes:5,export:T
+residential141,nodes:5,export:T
+residential142,nodes:5,export:T
+residential143,nodes:6,export:T
+residential144,nodes:5,export:T
+yes69,nodes:5,export:T
+Al Naeem Grocery,nodes:5,export:T
+residential145,nodes:5,export:T
+retail07,nodes:5,export:T
+residential146,nodes:6,export:T
+residential147,nodes:5,export:T
+residential148,nodes:5,export:T
+retail08,nodes:5,export:T
+Doha Executive Suites Hotel,nodes:7,export:T
+apartments14,nodes:6,export:T
+apartments15,nodes:7,export:T
+residential149,nodes:5,export:T
+Al Ikhlas Grocery,nodes:6,export:T
+East West Cafeteria,nodes:5,export:T
+residential150,nodes:5,export:T
+residential151,nodes:5,export:T
+Al Sulaity Grocery,nodes:5,export:T
+residential152,nodes:5,export:T
+residential153,nodes:5,export:T
+residential154,nodes:6,export:T
+Zekret Restaurant,nodes:5,export:T
+residential155,nodes:5,export:T
+apartments16,nodes:6,export:T
+residential156,nodes:5,export:T
+residential157,nodes:5,export:T
+residential158,nodes:5,export:T
+residential159,nodes:5,export:T
+Twinkle Auto Care Centre,nodes:5,export:T
+residential160,nodes:5,export:T
+residential161,nodes:5,export:T
+residential162,nodes:5,export:T
+residential163,nodes:5,export:T
+residential164,nodes:5,export:T
+residential165,nodes:6,export:T
+apartments17,nodes:7,export:T
+apartments18,nodes:12,export:T
+residential166,nodes:6,export:T
+apartments19,nodes:5,export:T
+apartments20,nodes:5,export:T
+apartments21,nodes:5,export:T
+apartments22,nodes:5,export:T
+Guest Palace Hotel,nodes:5,export:T
+apartments23,nodes:5,export:T
+residential167,nodes:5,export:T
+residential168,nodes:5,export:T
+residential169,nodes:5,export:T
+residential170,nodes:5,export:T
+residential171,nodes:5,export:T
+residential172,nodes:7,export:T
+Subway Building, Umm Ghuwailina,nodes:5,export:T
+Abdul Hameed Abdul Raheem Al Emadi Trading Co.,nodes:5,export:T
+residential173,nodes:5,export:T
+Jabri Restaurant,nodes:7,export:T
+residential174,nodes:7,export:T
+Jumeirah Furnished Apartments,nodes:7,export:T
+Al Feroz International Trading,nodes:6,export:T
+apartments24,nodes:5,export:T
+residential175,nodes:6,export:T
+apartments25,nodes:6,export:T
+apartments26,nodes:6,export:T
+apartments27,nodes:5,export:T
+apartments28,nodes:5,export:T
+apartments29,nodes:5,export:T
+residential176,nodes:5,export:T
+residential177,nodes:5,export:T
+residential178,nodes:7,export:T
+residential179,nodes:6,export:T
+apartments30,nodes:13,export:T
+residential180,nodes:5,export:T
+residential181,nodes:6,export:T
+apartments31,nodes:5,export:T
+apartments32,nodes:5,export:T
+Qatar Billiards & Snooker Federation,nodes:5,export:T
+WOQOD,nodes:9,export:T
+apartments33,nodes:5,export:T
+retail09,nodes:5,export:T
+residential182,nodes:5,export:T
+retail10,nodes:11,export:T
+apartments34,nodes:7,export:T
+residential183,nodes:5,export:T
+residential184,nodes:6,export:T
+residential185,nodes:5,export:T
+Mataam Wa Maasaret Al Dinar,nodes:6,export:T
+residential186,nodes:6,export:T
+commercial09,nodes:5,export:T
+residential187,nodes:5,export:T
+residential188,nodes:7,export:T
+residential189,nodes:5,export:T
+residential190,nodes:5,export:T
+residential191,nodes:5,export:T
+residential192,nodes:5,export:T
+residential193,nodes:5,export:T
+residential194,nodes:6,export:T
+residential195,nodes:6,export:T
+residential196,nodes:6,export:T
+Iconic Restaurant,nodes:5,export:T
+Islamic Exchange,nodes:5,export:T
+residential197,nodes:5,export:T
+residential198,nodes:7,export:T
+residential199,nodes:5,export:T
+residential200,nodes:5,export:T
+residential201,nodes:5,export:T
+residential202,nodes:5,export:T
+residential203,nodes:5,export:T
+residential204,nodes:5,export:T
+residential205,nodes:6,export:T
+residential206,nodes:5,export:T
+residential207,nodes:6,export:T
+residential208,nodes:5,export:T
+residential209,nodes:5,export:T
+Al Reif Al Akhdar Supermarket,nodes:5,export:T
+residential210,nodes:5,export:T
+residential211,nodes:5,export:T
+residential212,nodes:5,export:T
+residential213,nodes:5,export:T
+Waleed Al Meer Trading & Contracting,nodes:6,export:T
+residential214,nodes:5,export:T
+residential215,nodes:9,export:T
+residential216,nodes:5,export:T
+residential217,nodes:5,export:T
+residential218,nodes:5,export:T
+commercial10,nodes:13,export:T
+Rusiya,nodes:5,export:T
+commercial11,nodes:7,export:T
+apartments35,nodes:8,export:T
+commercial12,nodes:5,export:T
+apartments36,nodes:5,export:T
+commercial13,nodes:14,export:T
+commercial14,nodes:5,export:T
+commercial15,nodes:5,export:T
+commercial16,nodes:6,export:T
+commercial17,nodes:10,export:T
+commercial18,nodes:7,export:T
+Nasrallah Centre,nodes:11,export:T
+Almana & Partners,nodes:5,export:T
+Luxury Apartment Hotel Royal Suites,nodes:11,export:T
+Al Jazeera Medical Centre,nodes:7,export:T
+commercial19,nodes:7,export:T
+apartments37,nodes:5,export:T
+apartments38,nodes:5,export:T
+commercial20,nodes:10,export:T
+Gulf Paradise Hotel,nodes:9,export:T
+commercial21,nodes:9,export:T
+commercial22,nodes:11,export:T
+commercial23,nodes:7,export:T
+apartments39,nodes:5,export:T
+Food Palace,nodes:5,export:T
+apartments40,nodes:9,export:T
+Mr. Shawarma,nodes:7,export:T
+apartments41,nodes:6,export:T
+commercial24,nodes:6,export:T
+commercial25,nodes:12,export:T
+apartments42,nodes:5,export:T
+yes70,nodes:5,export:T
+Woqod,nodes:5,export:T
+commercial26,nodes:5,export:T
+yes71,nodes:7,export:T
+residential219,nodes:11,export:T
+commercial27,nodes:6,export:T
+Arabian Bookshop,nodes:5,export:T
+commercial28,nodes:7,export:T
+commercial29,nodes:5,export:T
+residential220,nodes:5,export:T
+residential221,nodes:9,export:T
+residential222,nodes:6,export:T
+residential223,nodes:11,export:T
+residential224,nodes:5,export:T
+commercial30,nodes:5,export:T
+yes72,nodes:5,export:T
+Taliban Shop,nodes:5,export:T
+Al-Diwan Tailors,nodes:5,export:T
+commercial31,nodes:5,export:T
+commercial32,nodes:5,export:T
+residential225,nodes:6,export:T
+yes73,nodes:10,export:T
+Al Badi Trading & Contracting,nodes:5,export:T
+Kashmir Tailors Textiles,nodes:7,export:T
+Al Raabiya Grocery,nodes:7,export:T
+Qatar National Folkloric Troop,nodes:6,export:T
+commercial33,nodes:6,export:T
+commercial34,nodes:11,export:T
+commercial35,nodes:5,export:T
+Al Mourouj Inn Hotel,nodes:5,export:T
+Dhaman Bakery,nodes:7,export:T
+United Bank,nodes:8,export:T
+commercial36,nodes:8,export:T
+residential226,nodes:5,export:T
+apartments43,nodes:5,export:T
+commercial37,nodes:9,export:T
+commercial38,nodes:6,export:T
+commercial39,nodes:5,export:T
+residential227,nodes:5,export:T
+commercial40,nodes:5,export:T
+Al Hamra Restraurent,nodes:6,export:T
+yes74,nodes:5,export:T
+KFC,nodes:10,export:T
+commercial41,nodes:7,export:T
+commercial42,nodes:6,export:T
+Al Watan Center,nodes:10,export:T
+apartments44,nodes:15,export:T
+apartments45,nodes:13,export:T
+commercial43,nodes:5,export:T
+commercial44,nodes:5,export:T
+commercial45,nodes:8,export:T
+Ultimate Concept Design,nodes:7,export:T
+residential228,nodes:5,export:T
+apartments46,nodes:6,export:T
+apartments47,nodes:7,export:T
+house04,nodes:5,export:T
+apartments48,nodes:5,export:T
+commercial46,nodes:6,export:T
+apartments49,nodes:5,export:T
+yes75,nodes:5,export:T
+apartments50,nodes:6,export:T
+yes76,nodes:5,export:T
+yes77,nodes:5,export:T
+yes78,nodes:5,export:T
+house05,nodes:5,export:T
+apartments51,nodes:6,export:T
+commercial47,nodes:6,export:T
+Almuftah,nodes:6,export:T
+apartments52,nodes:10,export:T
+apartments53,nodes:6,export:T
+apartments54,nodes:6,export:T
+apartments55,nodes:5,export:T
+apartments56,nodes:5,export:T
+apartments57,nodes:5,export:T
+commercial48,nodes:5,export:T
+commercial49,nodes:11,export:T
+apartments58,nodes:7,export:T
+apartments59,nodes:6,export:T
+Burmeth Gents Saloon,nodes:5,export:T
+apartments60,nodes:5,export:T
+apartments61,nodes:5,export:T
+residential229,nodes:7,export:T
+apartments62,nodes:5,export:T
+apartments63,nodes:7,export:T
+apartments64,nodes:5,export:T
+apartments65,nodes:7,export:T
+residential230,nodes:5,export:T
+commercial50,nodes:8,export:T
+commercial51,nodes:5,export:T
+commercial52,nodes:5,export:T
+Al-Sulaiti,nodes:5,export:T
+residential231,nodes:5,export:T
+house06,nodes:5,export:T
+apartments66,nodes:5,export:T
+residential232,nodes:6,export:T
+apartments67,nodes:5,export:T
+residential233,nodes:5,export:T
+Al Khaja Furniture,nodes:5,export:T
+commercial53,nodes:6,export:T
+commercial54,nodes:6,export:T
+commercial55,nodes:7,export:T
+Al Nakheel,nodes:5,export:T
+apartments68,nodes:5,export:T
+Modern Electrical Supplies Trading & Cont. Co.,nodes:6,export:T
+apartments69,nodes:6,export:T
+Al Rasheed Electronics,nodes:6,export:T
+apartments70,nodes:5,export:T
+apartments71,nodes:5,export:T
+apartments72,nodes:5,export:T
+apartments73,nodes:5,export:T
+فندق رويال قطر,nodes:8,export:T
+residential234,nodes:5,export:T
+residential235,nodes:5,export:T
+residential236,nodes:5,export:T
+residential237,nodes:5,export:T
+apartments74,nodes:7,export:T
+apartments75,nodes:6,export:T
+apartments76,nodes:8,export:T
+apartments77,nodes:6,export:T
+apartments78,nodes:8,export:T
+apartments79,nodes:5,export:T
+Al Hermas Incestments,nodes:5,export:T
+الرأس,nodes:6,export:T
+Capital Furniture,nodes:5,export:T
+apartments80,nodes:11,export:T
+apartments81,nodes:5,export:T
+Qatar Carpet Centre,nodes:5,export:T
+commercial56,nodes:5,export:T
+commercial57,nodes:7,export:T
+apartments82,nodes:8,export:T
+apartments83,nodes:9,export:T
+apartments84,nodes:6,export:T
+apartments85,nodes:7,export:T
+yes79,nodes:6,export:T
+apartments86,nodes:5,export:T
+yes80,nodes:5,export:T
+yes81,nodes:5,export:T
+apartments87,nodes:6,export:T
+apartments88,nodes:7,export:T
+commercial58,nodes:9,export:T
+yes82,nodes:5,export:T
+yes83,nodes:5,export:T
+residential238,nodes:5,export:T
+commercial59,nodes:6,export:T
+apartments89,nodes:7,export:T
+residential239,nodes:7,export:T
+World Trade Center,nodes:5,export:T
+roof01,nodes:7,export:T
+apartments90,nodes:5,export:T
+apartments91,nodes:5,export:T
+apartments92,nodes:6,export:T
+apartments93,nodes:6,export:T
+Qatar Palace Hotel,nodes:5,export:T
+yes84,nodes:13,export:T
+Grand Qatar Palace Hotel,nodes:10,export:T
+The Tower,nodes:7,export:T
+commercial60,nodes:6,export:T
+Jaidah Tower,nodes:12,export:T
+apartments94,nodes:5,export:T
+apartments95,nodes:5,export:T
+apartments96,nodes:5,export:T
+apartments97,nodes:5,export:T
+apartments98,nodes:7,export:T
+apartments99,nodes:5,export:T
+apartments100,nodes:5,export:T
+apartments101,nodes:6,export:T
+apartments102,nodes:6,export:T
+apartments103,nodes:5,export:T
+apartments104,nodes:7,export:T
+commercial61,nodes:6,export:T
+apartments105,nodes:6,export:T
+apartments106,nodes:5,export:T
+apartments107,nodes:5,export:T
+yes85,nodes:5,export:T
+yes86,nodes:5,export:T
+yes87,nodes:7,export:T
+apartments108,nodes:5,export:T
+commercial62,nodes:5,export:T
+apartments109,nodes:5,export:T
+Mercure Grand Hotel,nodes:8,export:T
+Al-M Market,nodes:5,export:T
+apartments110,nodes:6,export:T
+apartments111,nodes:5,export:T
+apartments112,nodes:5,export:T
+apartments113,nodes:5,export:T
+apartments114,nodes:8,export:T
+Mosaned Grocery,nodes:5,export:T
+B1,nodes:5,export:T
+B2,nodes:5,export:T
+B3,nodes:6,export:T
+yes88,nodes:5,export:T
+Adam,nodes:5,export:T
+house07,nodes:5,export:T
+Al Mathar Grocery,nodes:5,export:T
+Al Mana Residences,nodes:5,export:T
+yes89,nodes:5,export:T
+yes90,nodes:5,export:T
+yes91,nodes:5,export:T
+9,nodes:5,export:T
+11,nodes:5,export:T
+10,nodes:5,export:T
+Crystal Palace,nodes:8,export:T
+commercial63,nodes:8,export:T
+commercial64,nodes:11,export:T
+apartments115,nodes:5,export:T
+apartments116,nodes:5,export:T
+Regency Residence,nodes:7,export:T
+residential240,nodes:5,export:T
+residential241,nodes:5,export:T
+yes92,nodes:7,export:T
+apartments117,nodes:5,export:T
+residential242,nodes:7,export:T
+apartments118,nodes:6,export:T
+commercial65,nodes:6,export:T
+apartments119,nodes:8,export:T
+apartments120,nodes:5,export:T
+apartments121,nodes:5,export:T
+commercial66,nodes:6,export:T
+commercial67,nodes:6,export:T
+Sports Village,nodes:7,export:T
+commercial68,nodes:5,export:T
+apartments122,nodes:9,export:T
+apartments123,nodes:5,export:T
+house08,nodes:5,export:T
+house09,nodes:5,export:T
+house10,nodes:5,export:T
+house11,nodes:5,export:T
+house12,nodes:5,export:T
+apartments124,nodes:5,export:T
+apartments125,nodes:5,export:T
+apartments126,nodes:6,export:T
+commercial69,nodes:5,export:T
+commercial70,nodes:5,export:T
+Doha Palace Residence,nodes:5,export:T
+apartments127,nodes:5,export:T
+MRA,nodes:7,export:T
+yes93,nodes:5,export:T
+apartments128,nodes:5,export:T
+apartments129,nodes:7,export:T
+apartments130,nodes:5,export:T
+apartments131,nodes:13,export:T
+apartments132,nodes:5,export:T
+apartments133,nodes:5,export:T
+commercial71,nodes:7,export:T
+apartments134,nodes:11,export:T
+Al Maaroof Supermarket,nodes:5,export:T
+Al-Abed,nodes:5,export:T
+apartments135,nodes:5,export:T
+apartments136,nodes:6,export:T
+apartments137,nodes:6,export:T
+apartments138,nodes:5,export:T
+apartments139,nodes:6,export:T
+yes94,nodes:9,export:T
+yes95,nodes:5,export:T
+apartments140,nodes:6,export:T
+apartments141,nodes:11,export:T
+Liberty Suites,nodes:10,export:T
+commercial72,nodes:7,export:T
+Ramaco,nodes:7,export:T
+commercial73,nodes:5,export:T
+residential243,nodes:7,export:T
+residential244,nodes:5,export:T
+ميشلان,nodes:5,export:T
+yes96,nodes:5,export:T
+retail11,nodes:8,export:T
+yes97,nodes:5,export:T
+residential245,nodes:5,export:T
+residential246,nodes:5,export:T
+residential247,nodes:10,export:T
+retail12,nodes:5,export:T
+residential248,nodes:5,export:T
+Souq Waqif Art Center,nodes:5,export:T
+yes98,nodes:5,export:T
+yes99,nodes:6,export:T
+Golden Ocean Hotel,nodes:13,export:T
+yes100,nodes:5,export:T
+Al Mulla Travels CO.,nodes:5,export:T
+house13,nodes:7,export:T
+Public Relations Department,nodes:5,export:T
+yes101,nodes:9,export:T
+commercial74,nodes:5,export:T
+residential249,nodes:5,export:T
+residential250,nodes:6,export:T
+residential251,nodes:7,export:T
+Dagon Bhuiyan Restaurant,nodes:5,export:T
+Al Istiqama Grocery,nodes:5,export:T
+Plaza Inn,nodes:10,export:T
+Doha Port Services Complex,nodes:5,export:T
+residential252,nodes:5,export:T
+Supermarket Al Aaila Al Qataria,nodes:5,export:T
+Al Jadia Grocery,nodes:5,export:T
+residential253,nodes:6,export:T
+Sahal Grocery,nodes:5,export:T
+New House Complex,nodes:5,export:T
+residential254,nodes:5,export:T
+Qatar Central Bank01,nodes:5,export:T
+apartments142,nodes:6,export:T
+apartments143,nodes:8,export:T
+retail13,nodes:8,export:T
+retail14,nodes:4,export:T
+commercial75,nodes:7,export:T
+apartments144,nodes:5,export:T
+commercial76,nodes:5,export:T
+apartments145,nodes:5,export:T
+apartments146,nodes:5,export:T
+apartments147,nodes:5,export:T
+apartments148,nodes:5,export:T
+commercial77,nodes:13,export:T
+commercial78,nodes:5,export:T
+Dana Centre,nodes:5,export:T
+apartments149,nodes:5,export:T
+commercial79,nodes:5,export:T
+commercial80,nodes:5,export:T
+apartments150,nodes:8,export:T
+commercial81,nodes:8,export:T
+Fuda Hotel,nodes:5,export:T
+commercial82,nodes:10,export:T
+Retaj Hotel Apartments,nodes:5,export:T
+residential255,nodes:5,export:T
+Almeer Stores,nodes:5,export:T
+commercial83,nodes:7,export:T
+commercial84,nodes:5,export:T
+commercial85,nodes:7,export:T
+residential256,nodes:5,export:T
+residential257,nodes:7,export:T
+Al Said Bakery,nodes:5,export:T
+yes102,nodes:5,export:T
+residential258,nodes:5,export:T
+Regency Business Centre,nodes:5,export:T
+apartments151,nodes:5,export:T
+Al Ezz Tower 4,nodes:8,export:T
+بنك بروة,nodes:5,export:T
+yes103,nodes:7,export:T
+yes104,nodes:5,export:T
+yes105,nodes:6,export:T
+yes106,nodes:5,export:T
+yes107,nodes:5,export:T
+yes108,nodes:5,export:T
+yes109,nodes:5,export:T
+yes110,nodes:5,export:T
+yes111,nodes:5,export:T
+yes112,nodes:5,export:T
+yes113,nodes:5,export:T
+yes114,nodes:6,export:T
+yes115,nodes:5,export:T
+yes116,nodes:5,export:T
+yes117,nodes:5,export:T
+yes118,nodes:5,export:T
+yes119,nodes:5,export:T
+yes120,nodes:10,export:T
+yes121,nodes:15,export:T
+yes122,nodes:9,export:T
+yes123,nodes:6,export:T
+yes124,nodes:6,export:T
+yes125,nodes:5,export:T
+yes126,nodes:5,export:T
+yes127,nodes:5,export:T
+yes128,nodes:5,export:T
+yes129,nodes:5,export:T
+yes130,nodes:5,export:T
+yes131,nodes:5,export:T
+yes132,nodes:5,export:T
+yes133,nodes:5,export:T
+yes134,nodes:5,export:T
+yes135,nodes:5,export:T
+yes136,nodes:5,export:T
+yes137,nodes:5,export:T
+yes138,nodes:5,export:T
+yes139,nodes:5,export:T
+yes140,nodes:5,export:T
+yes141,nodes:5,export:T
+yes142,nodes:5,export:T
+yes143,nodes:5,export:T
+yes144,nodes:5,export:T
+yes145,nodes:5,export:T
+yes146,nodes:5,export:T
+yes147,nodes:5,export:T
+yes148,nodes:5,export:T
+yes149,nodes:5,export:T
+yes150,nodes:5,export:T
+yes151,nodes:6,export:T
+yes152,nodes:6,export:T
+yes153,nodes:5,export:T
+yes154,nodes:5,export:T
+yes155,nodes:5,export:T
+yes156,nodes:5,export:T
+yes157,nodes:5,export:T
+yes158,nodes:5,export:T
+yes159,nodes:5,export:T
+yes160,nodes:5,export:T
+yes161,nodes:5,export:T
+yes162,nodes:5,export:T
+yes163,nodes:5,export:T
+yes164,nodes:5,export:T
+yes165,nodes:5,export:T
+yes166,nodes:13,export:T
+yes167,nodes:5,export:T
+yes168,nodes:18,export:T
+yes169,nodes:5,export:T
+yes170,nodes:9,export:T
+yes171,nodes:5,export:T
+yes172,nodes:5,export:T
+yes173,nodes:5,export:T
+yes174,nodes:13,export:T
+yes175,nodes:5,export:T
+yes176,nodes:9,export:T
+yes177,nodes:9,export:T
+yes178,nodes:5,export:T
+yes179,nodes:6,export:T
+yes180,nodes:6,export:T
+International Trading & Technical Services (Inter-tech),nodes:5,export:T
+yes181,nodes:6,export:T
+yes182,nodes:5,export:T
+yes183,nodes:5,export:T
+yes184,nodes:5,export:T
+yes185,nodes:5,export:T
+yes186,nodes:7,export:T
+yes187,nodes:5,export:T
+yes188,nodes:5,export:T
+yes189,nodes:8,export:T
+yes190,nodes:7,export:T
+yes191,nodes:7,export:T
+yes192,nodes:5,export:T
+roof02,nodes:34,export:T
+yes193,nodes:5,export:T
+yes194,nodes:7,export:T
+yes195,nodes:5,export:T
+yes196,nodes:7,export:T
+yes197,nodes:5,export:T
+yes198,nodes:7,export:T
+yes199,nodes:7,export:T
+yes200,nodes:7,export:T
+yes201,nodes:11,export:T
+yes202,nodes:7,export:T
+yes203,nodes:12,export:T
+yes204,nodes:10,export:T
+yes205,nodes:5,export:T
+yes206,nodes:10,export:T
+yes207,nodes:11,export:T
+yes208,nodes:9,export:T
+yes209,nodes:8,export:T
+yes210,nodes:9,export:T
+yes211,nodes:7,export:T
+yes212,nodes:5,export:T
+yes213,nodes:5,export:T
+yes214,nodes:5,export:T
+yes215,nodes:5,export:T
+yes216,nodes:5,export:T
+yes217,nodes:5,export:T
+yes218,nodes:5,export:T
+yes219,nodes:5,export:T
+yes220,nodes:5,export:T
+yes221,nodes:5,export:T
+yes222,nodes:5,export:T
+yes223,nodes:5,export:T
+yes224,nodes:5,export:T
+yes225,nodes:5,export:T
+yes226,nodes:11,export:T
+yes227,nodes:5,export:T
+yes228,nodes:5,export:T
+yes229,nodes:10,export:T
+yes230,nodes:5,export:T
+yes231,nodes:9,export:T
+yes232,nodes:7,export:T
+yes233,nodes:6,export:T
+yes234,nodes:5,export:T
+yes235,nodes:5,export:T
+yes236,nodes:5,export:T
+yes237,nodes:5,export:T
+yes238,nodes:5,export:T
+yes239,nodes:7,export:T
+yes240,nodes:7,export:T
+yes241,nodes:5,export:T
+yes242,nodes:7,export:T
+yes243,nodes:6,export:T
+yes244,nodes:5,export:T
+yes245,nodes:8,export:T
+yes246,nodes:5,export:T
+yes247,nodes:20,export:T
+yes248,nodes:8,export:T
+yes249,nodes:7,export:T
+yes250,nodes:9,export:T
+yes251,nodes:5,export:T
+yes252,nodes:7,export:T
+yes253,nodes:5,export:T
+yes254,nodes:9,export:T
+yes255,nodes:5,export:T
+yes256,nodes:6,export:T
+yes257,nodes:5,export:T
+yes258,nodes:5,export:T
+yes259,nodes:6,export:T
+yes260,nodes:10,export:T
+yes261,nodes:5,export:T
+yes262,nodes:5,export:T
+yes263,nodes:5,export:T
+yes264,nodes:5,export:T
+yes265,nodes:7,export:T
+yes266,nodes:5,export:T
+yes267,nodes:5,export:T
+yes268,nodes:9,export:T
+yes269,nodes:5,export:T
+yes270,nodes:7,export:T
+yes271,nodes:8,export:T
+EB 20,nodes:5,export:T
+Safir Hotel Doha,nodes:14,export:T
+Souq Waqif Falcon Hospital,nodes:7,export:T
+Falcon Souq,nodes:9,export:T
+yes272,nodes:9,export:T
+yes273,nodes:36,export:T
+mosque12,nodes:21,export:T
+yes274,nodes:5,export:T
+البدع07,nodes:6,export:T
+transportation01,nodes:5,export:T
+yes275,nodes:8,export:T
+yes276,nodes:7,export:T
+yes277,nodes:5,export:T
+yes278,nodes:5,export:T
+yes279,nodes:15,export:T
+yes280,nodes:8,export:T
+yes281,nodes:10,export:T
+yes282,nodes:5,export:T
+yes283,nodes:11,export:T
+yes284,nodes:11,export:T
+yes285,nodes:5,export:T
+yes286,nodes:5,export:T
+yes287,nodes:5,export:T
+yes288,nodes:5,export:T
+yes289,nodes:5,export:T
+yes290,nodes:5,export:T
+yes291,nodes:5,export:T
+yes292,nodes:5,export:T
+yes293,nodes:5,export:T
+yes294,nodes:5,export:T
+yes295,nodes:5,export:T
+yes296,nodes:5,export:T
+Doha Oasis,nodes:12,export:T
+yes297,nodes:20,export:T
+yes298,nodes:20,export:T
+yes299,nodes:55,export:T
+yes300,nodes:6,export:T
+yes301,nodes:8,export:T
+yes302,nodes:6,export:T
+yes303,nodes:8,export:T
+yes304,nodes:11,export:T
+yes305,nodes:7,export:T
+yes306,nodes:19,export:T
+yes307,nodes:5,export:T
+yes308,nodes:13,export:T
+yes309,nodes:11,export:T
+yes310,nodes:5,export:T
+yes311,nodes:7,export:T
+yes312,nodes:18,export:T
+yes313,nodes:12,export:T
+yes314,nodes:9,export:T
+yes315,nodes:5,export:T
+yes316,nodes:7,export:T
+yes317,nodes:9,export:T
+yes318,nodes:12,export:T
+yes319,nodes:5,export:T
+apartments152,nodes:5,export:T
+apartments153,nodes:5,export:T
+apartments154,nodes:9,export:T
+yes320,nodes:5,export:T
+yes321,nodes:5,export:T
+roof03,nodes:5,export:T
+roof04,nodes:5,export:T
+roof05,nodes:5,export:T
+yes322,nodes:5,export:T
+yes323,nodes:10,export:T
+construction02,nodes:7,export:T
+yes324,nodes:5,export:T
+yes325,nodes:5,export:T
+yes326,nodes:6,export:T
+yes327,nodes:5,export:T
+yes328,nodes:15,export:T
+yes329,nodes:20,export:T
+yes330,nodes:6,export:T
+yes331,nodes:11,export:T
+yes332,nodes:5,export:T
+yes333,nodes:7,export:T
+yes334,nodes:20,export:T
+yes335,nodes:20,export:T
+yes336,nodes:5,export:T
+roof06,nodes:20,export:T
+yes337,nodes:5,export:T
+yes338,nodes:5,export:T
+yes339,nodes:5,export:T
+yes340,nodes:5,export:T
+yes341,nodes:7,export:T
+yes342,nodes:7,export:T
+parking01,nodes:14,export:T
+yes343,nodes:17,export:T
+yes344,nodes:12,export:T
+roof07,nodes:9,export:T
+roof08,nodes:5,export:T
+Refreshment Kiosk,nodes:5,export:T
+yes345,nodes:9,export:T
+yes346,nodes:6,export:T
+yes347,nodes:17,export:T
+yes348,nodes:7,export:T
+yes349,nodes:5,export:T
+yes350,nodes:20,export:T
+yes351,nodes:12,export:T
+yes352,nodes:21,export:T
+yes353,nodes:19,export:T
+yes354,nodes:9,export:T
+yes355,nodes:7,export:T
+yes356,nodes:5,export:T
+yes357,nodes:9,export:T
+yes358,nodes:5,export:T
+yes359,nodes:10,export:T
+yes360,nodes:5,export:T
+yes361,nodes:5,export:T
+yes362,nodes:12,export:T
+yes363,nodes:5,export:T
+yes364,nodes:17,export:T
+yes365,nodes:5,export:T
+مطعم لؤلؤة الشرق,nodes:20,export:T
+yes366,nodes:25,export:T
+yes367,nodes:25,export:T
+yes368,nodes:25,export:T
+yes369,nodes:25,export:T
+yes370,nodes:5,export:T
+yes371,nodes:5,export:T
+yes372,nodes:9,export:T
+apartments155,nodes:13,export:T
+apartments156,nodes:25,export:T
+apartments157,nodes:22,export:T
+apartments158,nodes:22,export:T
+apartments159,nodes:21,export:T
+apartments160,nodes:21,export:T
+apartments161,nodes:21,export:T
+apartments162,nodes:34,export:T
+yes373,nodes:8,export:T
+yes374,nodes:5,export:T
+yes375,nodes:10,export:T
+yes376,nodes:5,export:T
+yes377,nodes:6,export:T
+yes378,nodes:5,export:T
+yes379,nodes:7,export:T
+yes380,nodes:8,export:T
+yes381,nodes:6,export:T
+yes382,nodes:11,export:T
+yes383,nodes:6,export:T
+yes384,nodes:20,export:T
+yes385,nodes:11,export:T
+Souq Waqif Art Center01,nodes:12,export:T
+yes386,nodes:5,export:T
+yes387,nodes:5,export:T
+yes388,nodes:5,export:T
+yes389,nodes:5,export:T
+Le Mirage Downtown,nodes:5,export:T
+yes390,nodes:5,export:T
+yes391,nodes:5,export:T

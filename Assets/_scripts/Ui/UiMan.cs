@@ -188,7 +188,7 @@ namespace CampusSimulator
             listenForKeys = false;
         }
 
-        public void SetButtonColor(Button butt, string activeColor, string idleColor, bool status, string txt,bool showstar=true)
+        public void SetButtonColor(Button butt, string activeColor, bool status, string txt,bool showstar=false, string idleColor="white")
         {
             if (butt == null)
             {
@@ -208,8 +208,9 @@ namespace CampusSimulator
                 colors.selectedColor = hiclr;
                 if (showstar)
                 {
-                    textcomp.text = txt + "*";
+                    txt = txt + "*";
                 }
+                textcomp.text = txt;
             }
             else
             {

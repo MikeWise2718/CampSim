@@ -823,7 +823,7 @@ namespace GraphAlgos
             }
             return nlst;
         }
-        public LcNode GetNode(int n)
+        public LcNode GetNode(int n, bool complain=true)
         {
             if (n < 0)
             {
@@ -831,18 +831,24 @@ namespace GraphAlgos
             }
             if (n < 0 || nodenamelist.Count <= n)
             {
-                LggError("GetNode: index out of range:" + n);
+                if (complain)
+                {
+                    LggError("GetNode: index out of range:" + n);
+                }
                 return null;
             }
             var pname = nodenamelist[n];
             return (nodedict[pname]);
         }
-        public LcNode GetNode(string nodename)
+        public LcNode GetNode(string nodename, bool complain=true)
         {
             nodename = LcNode.NormName(nodename);
             if (!IsNodeName(nodename))
             {
-                LggError("GetNode: No node with this name:" + nodename);
+                if (complain)
+                {
+                    LggError("GetNode: No node with this name:" + nodename);
+                }
                 return null;
                 //throw new UnityException("GetNode: No node with this name:" + nodename);
             }
@@ -1446,5 +1452,7 @@ namespace GraphAlgos
         }
         #endregion
     }
+
+
 }
 

@@ -93,7 +93,7 @@ public class MapSetPanel : MonoBehaviour
     bool panelTakingInput = false;
 
     Color textColorDef = Color.gray;
-    Color darkGreenColor = GraphAlgos.GraphUtil.GetColorByName("darkgreen");
+    Color darkGreenColor = new Color(0, 0, 0x7f, 0xff);
 
 
 
