@@ -122,6 +122,9 @@ namespace CampusSimulator
                 case SceneSelE.KeppelDist:
                     osmloadspec = "keppeldist";
                     break;
+                case SceneSelE.Doha:
+                    osmloadspec = "doha";
+                    break;
                 case SceneSelE.Seatac:
                     break;
                 case SceneSelE.SanFrancisco:
