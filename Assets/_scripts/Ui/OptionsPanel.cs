@@ -89,6 +89,47 @@ public class OptionsPanel : MonoBehaviour
     public enum TabState { Visuals, MapSet, FireFly, Frames, Buildings, Osm, Journey, General, Ui, Log, Help, About }
     TabState currentTabState;
 
+
+    public void NoOp()
+    {
+
+    }
+
+
+    T InitPanel<T>(string panname,TabState panstate, Initer paninitdel, SetAndSaver pansetandsave=null )
+    {
+        var tran = transform.Find(panname);
+        if (tran==null)
+        {
+            sman.LggError($"OptionsPanel could not find panel gameobject:{panname}");
+            return default(T);
+        }
+        var pan = tran.GetComponent<T>();
+        panDict[panstate] = tran.gameObject;
+        initDict[panstate] = paninitdel;
+        if (pansetandsave!=null)
+        {
+            setAndSaveDict[panstate] = pansetandsave;
+        }
+        return pan;
+    }
+
+    public void Init0new()
+    {
+        //var nopdel = new delegate { NoOp(); };
+        visualsPanel = InitPanel<VisualsPanel>("VisualsPanel", TabState.Visuals, delegate { visualsPanel.InitVals(); });
+        mapSetPanel = InitPanel<MapSetPanel>("MapSetPanel", TabState.MapSet, delegate { mapSetPanel.InitVals(); });
+        framePanel = InitPanel<FramePanel>("FramePanel", TabState.Frames, delegate { framePanel.InitVals(); });
+        fireFlyPanel = InitPanel<FireFlyPanel>("FireFlyPanel", TabState.FireFly, delegate { fireFlyPanel.InitVals(); });
+        buildingsPanel = InitPanel<BuildingsPanel>("BuildingsPanel", TabState.Buildings, delegate { buildingsPanel.InitVals(); });
+        osmPanel = InitPanel<OsmPanel>("OsmPanel", TabState.Osm, delegate { osmPanel.InitVals(); });
+        journeyPanel = InitPanel<JourneyPanel>("JourneyPanel", TabState.Journey, delegate { journeyPanel.InitVals(); });
+        uiConfigPanel = InitPanel<UiConfigPanel>("UiConfigPanel", TabState.Ui, delegate { uiConfigPanel.InitVals(); });
+        generalPanel = InitPanel<GeneralPanel>("GeneralPanel", TabState.General, delegate { generalPanel.InitVals(); });
+        logPanel = InitPanel<LogPanel>("LogPanel", TabState.Log, delegate { logPanel.InitVals(); });
+        aboutPanel = InitPanel<AboutPanel>("AboutPanel", TabState.About, delegate { aboutPanel.InitVals(); });
+    }
+
     public void Init0()
     {
         //Debug.Log("Options Panel Init0:"+name);
@@ -101,50 +142,54 @@ public class OptionsPanel : MonoBehaviour
         initDict = new Dictionary<TabState, Initer>();
         setAndSaveDict = new Dictionary<TabState, SetAndSaver>();
 
+        Init0new();
+
         // Panels are predefined so we can layout things on them
-        visualsPanel = transform.Find("VisualsPanel").GetComponent<VisualsPanel>();
-        mapSetPanel = transform.Find("MapSetPanel").GetComponent<MapSetPanel>();
-        framePanel = transform.Find("FramePanel").GetComponent<FramePanel>();
-        fireFlyPanel = transform.Find("FireFlyPanel").GetComponent<FireFlyPanel>();
-        buildingsPanel = transform.Find("BuildingsPanel").GetComponent<BuildingsPanel>();
-        osmPanel = transform.Find("OsmPanel").GetComponent<OsmPanel>();
-        journeyPanel = transform.Find("JourneyPanel").GetComponent<JourneyPanel>();
-        uiConfigPanel = transform.Find("UiConfigPanel").GetComponent<UiConfigPanel>();
-        generalPanel = transform.Find("GeneralPanel").GetComponent<GeneralPanel>();
-        logPanel = transform.Find("LogPanel").GetComponent<LogPanel>();
-        helpPanel = transform.Find("HelpPanel").GetComponent<HelpPanel>();
-        aboutPanel = transform.Find("AboutPanel").GetComponent<AboutPanel>();
+        //visualsPanel = transform.Find("VisualsPanel").GetComponent<VisualsPanel>();
+        //mapSetPanel = transform.Find("MapSetPanel").GetComponent<MapSetPanel>();
+        //framePanel = transform.Find("FramePanel").GetComponent<FramePanel>();
+
+        //fireFlyPanel = transform.Find("FireFlyPanel").GetComponent<FireFlyPanel>();
+        //buildingsPanel = transform.Find("BuildingsPanel").GetComponent<BuildingsPanel>();
+        //osmPanel = transform.Find("OsmPanel").GetComponent<OsmPanel>();
+        //journeyPanel = transform.Find("JourneyPanel").GetComponent<JourneyPanel>();
+        //uiConfigPanel = transform.Find("UiConfigPanel").GetComponent<UiConfigPanel>();
+        //generalPanel = transform.Find("GeneralPanel").GetComponent<GeneralPanel>();
+        //logPanel = transform.Find("LogPanel").GetComponent<LogPanel>();
+        //helpPanel = transform.Find("HelpPanel").GetComponent<HelpPanel>();
+
+        //aboutPanel = transform.Find("AboutPanel").GetComponent<AboutPanel>();
 
         // Connecting them up
-        panDict[TabState.Visuals] = visualsPanel.gameObject;
-        panDict[TabState.MapSet] = mapSetPanel.gameObject;
-        panDict[TabState.Frames] = framePanel.gameObject;
-        panDict[TabState.FireFly] = fireFlyPanel.gameObject;
-        panDict[TabState.Buildings] = buildingsPanel.gameObject;
-        panDict[TabState.Osm] = osmPanel.gameObject;
-        panDict[TabState.Journey] = journeyPanel.gameObject;
-        panDict[TabState.Ui] = uiConfigPanel.gameObject;
-        panDict[TabState.General] = generalPanel.gameObject;
-        panDict[TabState.Log] = logPanel.gameObject;
-        panDict[TabState.Help] = helpPanel.gameObject;
-        panDict[TabState.About] = aboutPanel.gameObject;
+        //panDict[TabState.Visuals] = visualsPanel.gameObject;
+        //panDict[TabState.MapSet] = mapSetPanel.gameObject;
+        //panDict[TabState.Frames] = framePanel.gameObject;
+        //panDict[TabState.FireFly] = fireFlyPanel.gameObject;
+        //panDict[TabState.Buildings] = buildingsPanel.gameObject;
+        //panDict[TabState.Osm] = osmPanel.gameObject;
+        //panDict[TabState.Journey] = journeyPanel.gameObject;
+        //panDict[TabState.Ui] = uiConfigPanel.gameObject;
+        //panDict[TabState.General] = generalPanel.gameObject;
+        //panDict[TabState.Log] = logPanel.gameObject;
+        //panDict[TabState.Help] = helpPanel.gameObject;
+        //panDict[TabState.About] = aboutPanel.gameObject;
 
 
-        initDict[TabState.Visuals] = delegate { visualsPanel.InitVals(); };
-        initDict[TabState.MapSet] = delegate { mapSetPanel.InitVals(); };
-        initDict[TabState.Frames] = delegate { framePanel.InitVals(); };
-        initDict[TabState.FireFly] = delegate { fireFlyPanel.InitVals(); };
-        initDict[TabState.Buildings] = delegate { buildingsPanel.InitVals(); };
-        initDict[TabState.Osm] = delegate { osmPanel.InitVals(); };
-        initDict[TabState.Journey] = delegate { journeyPanel.InitVals(); };
-        initDict[TabState.General] = delegate { generalPanel.InitVals(); };
-        initDict[TabState.Ui] = delegate { uiConfigPanel.InitVals(); };
-        initDict[TabState.Log] = delegate { logPanel.FillLogPanel(); };
-        initDict[TabState.Help] = delegate { helpPanel.FillHelpPanel(); };
-        initDict[TabState.About] = delegate { aboutPanel.FillAboutPanel(); };
+        //initDict[TabState.Visuals] = delegate { visualsPanel.InitVals(); };
+        //initDict[TabState.MapSet] = delegate { mapSetPanel.InitVals(); };
+        //initDict[TabState.Frames] = delegate { framePanel.InitVals(); };
+        //initDict[TabState.FireFly] = delegate { fireFlyPanel.InitVals(); };
+        //initDict[TabState.Buildings] = delegate { buildingsPanel.InitVals(); };
+        //initDict[TabState.Osm] = delegate { osmPanel.InitVals(); };
+        //initDict[TabState.Journey] = delegate { journeyPanel.InitVals(); };
+        //initDict[TabState.General] = delegate { generalPanel.InitVals(); };
+        //initDict[TabState.Ui] = delegate { uiConfigPanel.InitVals(); };
+        //initDict[TabState.Log] = delegate { logPanel.InitVals(); };
+        //initDict[TabState.Help] = delegate { helpPanel.InitVals(); };
+        //initDict[TabState.About] = delegate { aboutPanel.InitVals(); };
 
         setAndSaveDict[TabState.Visuals] = delegate { visualsPanel.SetVals(true); };
-        setAndSaveDict[TabState.MapSet] = delegate { mapSetPanel.SetVals(true);  };
+        setAndSaveDict[TabState.MapSet] = delegate { mapSetPanel.SetVals(true); };
         setAndSaveDict[TabState.Frames] = delegate { framePanel.SetVals(true); };
         setAndSaveDict[TabState.FireFly] = delegate { fireFlyPanel.SetVals(true); };
         setAndSaveDict[TabState.Buildings] = delegate { buildingsPanel.SetVals(true); };
@@ -273,7 +318,14 @@ public class OptionsPanel : MonoBehaviour
             }
             if (initDict.ContainsKey(currentTabState))
             {
-                initDict[currentTabState]();
+                try
+                {
+                    initDict[currentTabState]();
+                }
+                catch(System.Exception ex)
+                {
+                    sman.LggError(ex.Message);
+                }
             }
         }
         var curts = currentTabState.ToString();

@@ -248,7 +248,11 @@ public class VisualsPanel : MonoBehaviour
             sman.RequestRefresh("VisualPanel-SetLinkTransText");
         }
     }
+
     public void SetVals(bool closing = false)
+    {
+    }
+    public void SetValsOld(bool closing = false)
     {
         //Debug.Log($"VisualsPanel/SetVals called - closing:{closing}");
         var chg = false;

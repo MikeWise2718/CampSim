@@ -80,7 +80,7 @@ public class LogPanel : MonoBehaviour
         return rv;
     }
 
-    public void FillLogPanel()
+    public void InitVals()
     {
         var arial = (Font)Resources.GetBuiltinResource(typeof(Font), "Arial.ttf");
         var consolas = Font.CreateDynamicFontFromOSFont("Consolas", 24);

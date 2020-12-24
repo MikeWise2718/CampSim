@@ -92,24 +92,36 @@ namespace CampusSimulator
 
             CreateSpriteDict();
 
-            ttman.Init0();
-            optpan.Init0();
-            ottpan.Init0();
-            tbtpan.Init0();
-            infpan.Init0();
-            logpan.Init0();
 
-            vispan.Init0();
-            mappan.Init0();
-            genpan.Init0();
-            frapan.Init0();
-            bldpan.Init0();
-            osmpan.Init0();
-            jnypan.Init0();
-            uiconpan.Init0();
-            helpan.Init0();
-            abtpan.Init0();
-            flypan.Init0();
+
+            ttman.Init0();
+
+            try
+            {
+                abtpan.Init0();
+                helpan.Init0();
+
+                optpan.Init0();
+                ottpan.Init0();
+                tbtpan.Init0();
+                infpan.Init0();
+                logpan.Init0();
+
+
+                vispan.Init0();
+                mappan.Init0();
+                genpan.Init0();
+                frapan.Init0();
+                bldpan.Init0();
+                osmpan.Init0();
+                jnypan.Init0();
+                uiconpan.Init0();
+                flypan.Init0();
+            }
+            catch(System.Exception ex)
+            {
+                sman.LggError(ex.Message);
+            }
             listenForKeys = false;
         }
         public void CreateSpriteDict()

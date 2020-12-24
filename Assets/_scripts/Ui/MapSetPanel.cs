@@ -712,9 +712,12 @@ public class MapSetPanel : MonoBehaviour
         }
         return changed;
     }
+    public void SetVals(bool closing = false)
+    {
+    }
 
 
-    public void SetVals(bool closing=false)
+    public void SetValsOld(bool closing=false)
     {
        // Debug.Log("MapSetPanel.SetVals called closing:{closing}");
 
