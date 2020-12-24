@@ -95,8 +95,10 @@ public class FramePanel : MonoBehaviour
         nSetTextValuesCalled += 1;
     }
 
-
     public void SetVals(bool closing = false)
+    {
+    }
+    public void SetValsOld(bool closing = false)
     {
         Debug.Log($"FramePanel.SetVals called - closing:{closing}");
         fman.visibilityTiedToDetectability.SetAndSave(visTiedToggle.isOn);

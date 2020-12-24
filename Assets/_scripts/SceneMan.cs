@@ -614,7 +614,7 @@ namespace CampusSimulator
             SaveSceneState();
             Application.Quit();
 #if UNITY_EDITOR
-            EditorApplication.ExecuteMenuItem("Edit/Play");
+            EditorApplication.ExecuteMenuItem("Edit/Play");// this makes the editor quit playing
 #endif
         }
 

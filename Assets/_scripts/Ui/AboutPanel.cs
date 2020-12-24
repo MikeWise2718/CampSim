@@ -586,7 +586,7 @@ public class AboutPanel : MonoBehaviour
         var rv = new List<string>(msg.Split('\n'));
         return rv;
     }
-    public void FillAboutPanel()
+    public void InitVals()
     {
         if (aboutTabText == null)
         {
