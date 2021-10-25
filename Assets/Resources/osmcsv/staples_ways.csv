@@ -1,0 +1,682 @@
+osm_wid,name,osmtype,osmsubtype,linkuse,nnodes,lat,lng,z,x,height,levels
+w13285802,Overton Street,highway,residential,slowroad,2,34.0468227,-118.2693668,-0.1969,0.3939,0,0
+w13289292,Midway Lane,highway,service,driveway,3,34.0386757,-118.2620685,0.4756,-0.5120,0,0
+w13295212,service01,highway,service,driveway,21,34.0375865,-118.2691871,-0.1803,-0.6331,0,0
+w13301099,Cameron Lane,highway,service,driveway,6,34.0398850,-118.2678398,-0.0562,-0.3775,0,0
+w13304133,Chick Hearn Court,highway,secondary,road,8,34.0438278,-118.2658239,0.1296,0.0609,0,0
+w13313810,Cottage Place,highway,service,driveway,8,34.0460846,-118.2646013,0.2422,0.3119,0,0
+w13318047,West 12th Street,highway,tertiary,road,16,34.0408746,-118.2644380,0.2572,-0.2675,0,0
+w13318058,West 12th Street01,highway,residential,slowroad,25,34.0468978,-118.2775680,-0.9525,0.4023,0,0
+w13320484,West 11th Place,highway,residential,slowroad,3,34.0454135,-118.2721380,-0.4522,0.2372,0,0
+w13396539,15th Drive,highway,unclassified,road,7,34.0384678,-118.2706939,-0.3192,-0.5351,0,0
+w13403853,Georgia Street,highway,residential,slowroad,3,34.0471008,-118.2660149,0.1120,0.4249,0,0
+w13403859,Georgia Street01,highway,unclassified,road,3,34.0385424,-118.2715975,-0.4024,-0.5268,0,0
+w13417192,South Pembroke Lane,highway,service,driveway,4,34.0385657,-118.2670433,0.0172,-0.5242,0,0
+w13428608,Connecticut Street,highway,residential,slowroad,3,34.0468407,-118.2718743,-0.4279,0.3959,0,0
+w13429856,South Bixel Street,highway,residential,slowroad,4,34.0466864,-118.2675274,-0.0274,0.3788,0,0
+w13451645,West 11th Street,highway,secondary,road,5,34.0457715,-118.2708502,-0.3336,0.2770,0,0
+w13454322,West 10th Place,highway,service,driveway,2,34.0477100,-118.2720260,-0.4419,0.4926,0,0
+w13467011,South Hall Drive,highway,service,driveway,2,34.0411070,-118.2718759,-0.4281,-0.2416,0,0
+w13467307,Figueroa Drive,highway,service,driveway,4,34.0390975,-118.2692320,-0.1845,-0.4651,0,0
+w24849419,motorway_link01,highway,motorway_link,highway,2,34.0477257,-118.2664871,0.0684,0.4943,0,0
+w24849425,motorway_link02,highway,motorway_link,highway,3,34.0470895,-118.2646683,0.2360,0.4236,0,0
+w24849455,Harbor Freeway,highway,motorway,highway,4,34.0462154,-118.2695300,-0.2119,0.3264,0,0
+w24849456,Harbor Freeway01,highway,motorway,highway,2,34.0467034,-118.2686982,-0.1353,0.3807,0,0
+w24849475,Harbor Freeway02,highway,motorway,highway,3,34.0456451,-118.2704463,-0.2963,0.2630,0,0
+w24849477,Harbor Freeway03,highway,motorway,highway,3,34.0450145,-118.2711687,-0.3629,0.1929,0,0
+w24849554,Harbor Freeway04,highway,motorway,highway,3,34.0442992,-118.2718828,-0.4287,0.1133,0,0
+w27767398,motorway_link03,highway,motorway_link,highway,3,34.0404780,-118.2726433,-0.4988,-0.3116,0,0
+w27767422,motorway_link04,highway,motorway_link,highway,14,34.0394820,-118.2718952,-0.4298,-0.4223,0,0
+w27767423,motorway_link05,highway,motorway_link,highway,8,34.0408366,-118.2725241,-0.4878,-0.2717,0,0
+w27767424,motorway_link06,highway,motorway_link,highway,2,34.0443625,-118.2720262,-0.4419,0.1204,0,0
+w27767425,motorway_link07,highway,motorway_link,highway,4,34.0436381,-118.2726811,-0.5022,0.0398,0,0
+w45536229,L. A. Live Way,highway,primary,road,4,34.0420359,-118.2719392,-0.4339,-0.1383,0,0
+w45536230,Blaine Street,highway,secondary,road,3,34.0463818,-118.2707116,-0.3208,0.3449,0,0
+w45619516,West 11th Street01,highway,secondary,road,4,34.0433696,-118.2647166,0.2316,0.0100,0,0
+w45619518,West 12th Street02,highway,tertiary,road,8,34.0416980,-118.2658353,0.1285,-0.1759,0,0
+w48118014,Harbor Freeway05,highway,motorway,highway,2,34.0442235,-118.2717332,-0.4149,0.1049,0,0
+w48118015,Harbor Freeway06,highway,motorway,highway,2,34.0446513,-118.2713245,-0.3773,0.1525,0,0
+w48118016,motorway_link08,highway,motorway_link,highway,2,34.0444118,-118.2721221,-0.4507,0.1259,0,0
+w48118017,motorway_link09,highway,motorway_link,highway,4,34.0437280,-118.2726887,-0.5029,0.0498,0,0
+w48118018,Harbor Freeway07,highway,motorway,highway,3,34.0454873,-118.2703158,-0.2843,0.2454,0,0
+w48118019,Harbor Freeway08,highway,motorway,highway,2,34.0461186,-118.2693565,-0.1959,0.3156,0,0
+w66668839,motorway_link10,highway,motorway_link,highway,3,34.0454271,-118.2702495,-0.2782,0.2387,0,0
+w66668843,motorway_link11,highway,motorway_link,highway,2,34.0474562,-118.2669370,0.0270,0.4644,0,0
+w66668844,motorway_link12,highway,motorway_link,highway,4,34.0470577,-118.2675786,-0.0321,0.4201,0,0
+w66668850,motorway_link13,highway,motorway_link,highway,2,34.0465674,-118.2683933,-0.1072,0.3655,0,0
+w66668852,Harbor Freeway09,highway,motorway,highway,2,34.0477934,-118.2665963,0.0584,0.5019,0,0
+w66668853,motorway_link14,highway,motorway_link,highway,2,34.0465595,-118.2683745,-0.1055,0.3647,0,0
+w66668856,Harbor Freeway10,highway,motorway,highway,2,34.0471649,-118.2676315,-0.0370,0.4320,0,0
+w66668865,motorway_link15,highway,motorway_link,highway,9,34.0477277,-118.2659938,0.1139,0.4946,0,0
+w66668867,motorway_link16,highway,motorway_link,highway,2,34.0467775,-118.2689012,-0.1540,0.3889,0,0
+w66668870,Harbor Freeway11,highway,motorway,highway,2,34.0466332,-118.2685232,-0.1192,0.3729,0,0
+w66668875,motorway_link17,highway,motorway_link,highway,2,34.0460522,-118.2692437,-0.1855,0.3083,0,0
+w113403567,service02,highway,service,driveway,12,34.0409679,-118.2721268,-0.4512,-0.2571,0,0
+w113403569,service03,highway,service,driveway,3,34.0404990,-118.2720168,-0.4410,-0.3092,0,0
+w113403575,Harbor Freeway12,highway,motorway,highway,4,34.0433888,-118.2723759,-0.4741,0.0121,0,0
+w119882427,motorway_link18,highway,motorway_link,highway,9,34.0396593,-118.2720756,-0.4465,-0.4026,0,0
+w123429023,footway01,highway,footway,walkway,6,34.0403525,-118.2664623,0.0707,-0.3255,0,0
+w123429024,footway02,highway,footway,walkway,11,34.0414166,-118.2653800,0.1705,-0.2072,0,0
+w123429025,footway03,highway,footway,walkway,4,34.0410490,-118.2657975,0.1320,-0.2481,0,0
+w123561820,Harbor Freeway13,highway,motorway,highway,2,34.0450774,-118.2708496,-0.3335,0.1999,0,0
+w148252671,Harbor Freeway14,highway,motorway,highway,3,34.0479040,-118.2667751,0.0419,0.5142,0,0
+w148252674,Harbor Freeway15,highway,motorway,highway,2,34.0476015,-118.2672636,-0.0031,0.4805,0,0
+w148252682,Harbor Freeway16,highway,motorway,highway,4,34.0435871,-118.2724561,-0.4815,0.0342,0,0
+w148356684,motorway_link19,highway,motorway_link,highway,24,34.0386314,-118.2727141,-0.5053,-0.5169,0,0
+w148356685,motorway_link20,highway,motorway_link,highway,22,34.0386314,-118.2734135,-0.5697,-0.5169,0,0
+w148385370,Blaine Street01,highway,primary,road,6,34.0470496,-118.2702742,-0.2805,0.4192,0,0
+w148385372,Blaine Street02,highway,residential,slowroad,9,34.0450511,-118.2718170,-0.4226,0.1969,0,0
+w148385469,West 11th Street02,highway,tertiary,road,2,34.0459814,-118.2712843,-0.3736,0.3004,0,0
+w148385558,motorway_link21,highway,motorway_link,highway,3,34.0471657,-118.2681112,-0.0812,0.4321,0,0
+w148385599,motorway_link22,highway,motorway_link,highway,2,34.0474451,-118.2669231,0.0283,0.4631,0,0
+w148385605,motorway_link23,highway,motorway_link,highway,3,34.0450325,-118.2708332,-0.3320,0.1949,0,0
+w148385697,motorway_link24,highway,motorway_link,highway,4,34.0449692,-118.2713340,-0.3781,0.1878,0,0
+w148385706,motorway_link25,highway,motorway_link,highway,4,34.0464451,-118.2705852,-0.3091,0.3519,0,0
+w148385719,motorway_link26,highway,motorway_link,highway,5,34.0454159,-118.2712540,-0.3708,0.2375,0,0
+w148385721,motorway_link27,highway,motorway_link,highway,6,34.0457315,-118.2693719,-0.1973,0.2726,0,0
+w148385846,motorway_link28,highway,motorway_link,highway,3,34.0464654,-118.2694953,-0.2087,0.3542,0,0
+w165518733,Albany Street,highway,residential,slowroad,26,34.0452205,-118.2728062,-0.5138,0.2158,0,0
+w165518744,James M Wood Boulevard,highway,tertiary,road,2,34.0478370,-118.2666144,0.0567,0.5067,0,0
+w165520585,Sunbury Street,highway,residential,slowroad,4,34.0473542,-118.2683810,-0.1060,0.4530,0,0
+w165520589,James M Wood Boulevard01,highway,primary,road,2,34.0474543,-118.2656860,0.1423,0.4642,0,0
+w165521625,L. A. Live Way01,highway,secondary,road,8,34.0456040,-118.2692154,-0.1829,0.2584,0,0
+w165521626,Georgia Street02,highway,residential,slowroad,5,34.0445939,-118.2678004,-0.0526,0.1461,0,0
+w165521628,Francisco Street,highway,residential,slowroad,8,34.0462007,-118.2652382,0.1835,0.3248,0,0
+w167413476,West 9th Street,highway,primary,road,14,34.0457782,-118.2615224,0.5259,0.2778,0,0
+w167413478,Figueroa Street,highway,primary,road,8,34.0455591,-118.2634373,0.3495,0.2534,0,0
+w167419949,Bond Street,highway,unclassified,road,11,34.0416334,-118.2726408,-0.4985,-0.1831,0,0
+w167419950,Convention Center Drive,highway,unclassified,road,20,34.0401454,-118.2718575,-0.4264,-0.3485,0,0
+w167419952,Wright Street,highway,unclassified,road,6,34.0392681,-118.2728337,-0.5163,-0.4461,0,0
+w172604447,West Pico Boulevard,highway,primary,road,4,34.0408767,-118.2684381,-0.1113,-0.2672,0,0
+w172604448,West Pico Boulevard01,highway,primary,road,2,34.0412016,-118.2690789,-0.1704,-0.2311,0,0
+w175963053,service04,highway,service,driveway,3,34.0417489,-118.2712353,-0.3690,-0.1702,0,0
+w175963379,West Pico Boulevard02,highway,primary,road,6,34.0420191,-118.2712254,-0.3681,-0.1402,0,0
+w175963380,West Pico Boulevard03,highway,primary,road,3,34.0417031,-118.2701929,-0.2730,-0.1753,0,0
+w175963381,West Pico Boulevard04,highway,primary,road,2,34.0410745,-118.2691641,-0.1782,-0.2452,0,0
+w175963382,West Pico Boulevard05,highway,primary,road,3,34.0407338,-118.2683573,-0.1039,-0.2831,0,0
+w175963383,Gilbert Lindsay Drive,highway,service,driveway,8,34.0418418,-118.2680872,-0.0790,-0.1599,0,0
+w175963535,service05,highway,service,driveway,4,34.0452096,-118.2658742,0.1249,0.2146,0,0
+w181418903,L. A. Live Way02,highway,secondary,road,3,34.0425407,-118.2716949,-0.4114,-0.0822,0,0
+w185010972,Blaine Street03,highway,residential,slowroad,7,34.0479443,-118.2696127,-0.2195,0.5186,0,0
+w185747928,West Olympic Boulevard,highway,primary,road,3,34.0445167,-118.2630250,0.3874,0.1375,0,0
+w185747931,West Olympic Boulevard01,highway,primary,road,4,34.0450497,-118.2642254,0.2768,0.1968,0,0
+w185948952,South Flower Street,highway,secondary,road,3,34.0428179,-118.2642764,0.2721,-0.0514,0,0
+w186070703,James M Wood Boulevard02,highway,primary,road,2,34.0468373,-118.2642874,0.2711,0.3956,0,0
+w186070704,West Pico Boulevard06,highway,secondary,road,7,34.0383350,-118.2633537,0.3572,-0.5499,0,0
+w186070706,West Pico Boulevard07,highway,primary,road,2,34.0424207,-118.2719807,-0.4377,-0.0955,0,0
+w186070711,West 11th Street03,highway,tertiary,road,8,34.0466347,-118.2727217,-0.5060,0.3730,0,0
+w186070714,West 8th Place,highway,primary,road,7,34.0479555,-118.2665534,0.0623,0.5199,0,0
+w186076399,South Hope Street,highway,secondary,road,2,34.0400677,-118.2650880,0.1974,-0.3572,0,0
+w186076400,South Hope Street01,highway,secondary,road,8,34.0382801,-118.2664441,0.0724,-0.5560,0,0
+w206372064,South Grand Avenue,highway,primary,road,10,34.0376148,-118.2651130,0.1951,-0.6299,0,0
+w237022767,South Flower Street01,highway,secondary,road,8,34.0460950,-118.2611985,0.5557,0.3130,0,0
+w255019604,service06,highway,service,driveway,2,34.0472500,-118.2708284,-0.3315,0.4414,0,0
+w255495064,service07,highway,service,driveway,11,34.0403552,-118.2641254,0.2860,-0.3252,0,0
+w255497615,service08,highway,service,driveway,6,34.0417108,-118.2644264,0.2583,-0.1745,0,0
+w255497619,service09,highway,service,driveway,3,34.0401236,-118.2659044,0.1221,-0.3510,0,0
+w255497620,service10,highway,service,driveway,4,34.0406812,-118.2651597,0.1908,-0.2890,0,0
+w276871789,footway04,highway,footway,walkway,2,34.0461024,-118.2617303,0.5067,0.3138,0,0
+w276872471,footway05,highway,footway,walkway,3,34.0450402,-118.2623821,0.4467,0.1957,0,0
+w276872495,footway06,highway,footway,walkway,7,34.0455488,-118.2627273,0.4149,0.2523,0,0
+w276873491,footway07,highway,footway,walkway,3,34.0451261,-118.2619301,0.4883,0.2053,0,0
+w283199649,footway08,highway,footway,walkway,82,34.0415701,-118.2602353,0.6445,-0.1901,0,0
+w283202893,footway09,highway,footway,walkway,7,34.0438799,-118.2634232,0.3507,0.0667,0,0
+w283202894,footway10,highway,footway,walkway,9,34.0449944,-118.2639391,0.3032,0.1906,0,0
+w283202895,footway11,highway,footway,walkway,3,34.0443246,-118.2626661,0.4205,0.1162,0,0
+w283202896,footway12,highway,footway,walkway,6,34.0436794,-118.2633020,0.3619,0.0444,0,0
+w283202897,footway13,highway,footway,walkway,4,34.0434228,-118.2621012,0.4726,0.0159,0,0
+w283202899,footway14,highway,footway,walkway,4,34.0425829,-118.2608232,0.5903,-0.0775,0,0
+w285316506,footway15,highway,footway,walkway,5,34.0456433,-118.2637536,0.3203,0.2628,0,0
+w285316511,footway16,highway,footway,walkway,19,34.0446343,-118.2656900,0.1419,0.1506,0,0
+w285316513,footway17,highway,footway,walkway,2,34.0454301,-118.2653252,0.1755,0.2391,0,0
+w285316515,footway18,highway,footway,walkway,3,34.0453678,-118.2656522,0.1454,0.2322,0,0
+w285316517,footway19,highway,footway,walkway,4,34.0454794,-118.2658763,0.1247,0.2446,0,0
+w285316518,footway20,highway,footway,walkway,3,34.0455330,-118.2656833,0.1425,0.2505,0,0
+w285316520,footway21,highway,footway,walkway,4,34.0458495,-118.2664766,0.0694,0.2857,0,0
+w285316522,footway22,highway,footway,walkway,3,34.0474145,-118.2618917,0.4919,0.4597,0,0
+w332036355,service11,highway,service,driveway,4,34.0468719,-118.2613386,0.5428,0.3994,0,0
+w332491808,footway23,highway,footway,walkway,14,34.0398396,-118.2643610,0.2643,-0.3826,0,0
+w332491849,footway24,highway,footway,walkway,7,34.0412852,-118.2631175,0.3789,-0.2218,0,0
+w332491850,footway25,highway,footway,walkway,3,34.0414729,-118.2636260,0.3321,-0.2009,0,0
+w332492436,footway26,highway,footway,walkway,10,34.0417158,-118.2642622,0.2734,-0.1739,0,0
+w332492983,footway27,highway,footway,walkway,3,34.0387905,-118.2643553,0.2649,-0.4992,0,0
+w332492984,footway28,highway,footway,walkway,3,34.0389352,-118.2644242,0.2585,-0.4831,0,0
+w332492985,footway29,highway,footway,walkway,3,34.0407706,-118.2642942,0.2705,-0.2790,0,0
+w332492986,footway30,highway,footway,walkway,3,34.0421704,-118.2631396,0.3769,-0.1234,0,0
+w332492987,footway31,highway,footway,walkway,5,34.0429516,-118.2642155,0.2778,-0.0365,0,0
+w332493494,footway32,highway,footway,walkway,3,34.0423031,-118.2631624,0.3748,-0.1086,0,0
+w332493495,footway33,highway,footway,walkway,3,34.0421813,-118.2629592,0.3935,-0.1222,0,0
+w332722805,footway34,highway,footway,walkway,9,34.0404323,-118.2651966,0.1874,-0.3166,0,0
+w332722807,footway35,highway,footway,walkway,17,34.0389156,-118.2683521,-0.1034,-0.4853,0,0
+w333177005,footway36,highway,footway,walkway,9,34.0391908,-118.2635364,0.3403,-0.4547,0,0
+w333177006,footway37,highway,footway,walkway,5,34.0401347,-118.2632473,0.3670,-0.3497,0,0
+w333187901,footway38,highway,footway,walkway,3,34.0388285,-118.2642209,0.2772,-0.4950,0,0
+w333201566,footway39,highway,footway,walkway,43,34.0430404,-118.2590985,0.7492,-0.0266,0,0
+w333368329,footway40,highway,footway,walkway,8,34.0470668,-118.2604890,0.6211,0.4211,0,0
+w333368330,footway41,highway,footway,walkway,7,34.0463018,-118.2623316,0.4513,0.3360,0,0
+w333368331,Francisco Street01,highway,residential,slowroad,3,34.0481566,-118.2632471,0.3670,0.5423,0,0
+w333368332,footway42,highway,footway,walkway,3,34.0481074,-118.2631872,0.3725,0.5368,0,0
+w333368333,West 8th Place01,highway,residential,slowroad,3,34.0472314,-118.2630310,0.3869,0.4394,0,0
+w333368334,footway43,highway,footway,walkway,2,34.0472655,-118.2629972,0.3900,0.4432,0,0
+w333368335,footway44,highway,footway,walkway,18,34.0468509,-118.2633203,0.3602,0.3971,0,0
+w333368336,footway45,highway,footway,walkway,12,34.0462765,-118.2644070,0.2601,0.3332,0,0
+w333368337,footway46,highway,footway,walkway,3,34.0462119,-118.2626277,0.4240,0.3260,0,0
+w333368338,footway47,highway,footway,walkway,3,34.0463245,-118.2626804,0.4192,0.3385,0,0
+w333368339,footway48,highway,footway,walkway,3,34.0462378,-118.2629227,0.3969,0.3289,0,0
+w333368340,footway49,highway,footway,walkway,3,34.0461271,-118.2628913,0.3998,0.3166,0,0
+w351595819,service12,highway,service,driveway,7,34.0415014,-118.2650180,0.2038,-0.1978,0,0
+w380941698,L. A. Live Way03,highway,secondary,road,3,34.0448725,-118.2701817,-0.2720,0.1771,0,0
+w380942080,service13,highway,service,driveway,2,34.0415650,-118.2700693,-0.2616,-0.1907,0,0
+w380942081,service14,highway,service,driveway,4,34.0419096,-118.2699239,-0.2482,-0.1524,0,0
+w380942934,Figueroa Street01,highway,primary,road,3,34.0404106,-118.2682028,-0.0896,-0.3191,0,0
+w380942935,Figueroa Street02,highway,primary,road,3,34.0408632,-118.2678466,-0.0568,-0.2687,0,0
+w380944776,South Flower Street02,highway,secondary,road,3,34.0405949,-118.2663844,0.0779,-0.2986,0,0
+w380944781,South Flower Street03,highway,secondary,road,9,34.0388780,-118.2676444,-0.0382,-0.4895,0,0
+w380944788,West Pico Boulevard08,highway,secondary,road,3,34.0401571,-118.2670795,0.0139,-0.3472,0,0
+w380944795,West Pico Boulevard09,highway,secondary,road,4,34.0399748,-118.2666968,0.0491,-0.3675,0,0
+w381185306,West Olympic Boulevard02,highway,primary,road,4,34.0459825,-118.2670986,0.0121,0.3005,0,0
+w381185307,West Olympic Boulevard03,highway,primary,road,3,34.0463917,-118.2679947,-0.0705,0.3460,0,0
+w381185308,West Olympic Boulevard04,highway,primary,road,2,34.0455933,-118.2662374,0.0915,0.2572,0,0
+w381187778,West Olympic Boulevard05,highway,primary,road,3,34.0442623,-118.2625955,0.4270,0.1092,0,0
+w381193087,West Olympic Boulevard06,highway,primary,road,4,34.0453385,-118.2655565,0.1542,0.2289,0,0
+w381196468,Francisco Street02,highway,residential,slowroad,5,34.0472674,-118.2640710,0.2911,0.4434,0,0
+w381196472,James M Wood Boulevard03,highway,primary,road,2,34.0469529,-118.2645616,0.2459,0.4084,0,0
+w381243038,South Hope Street02,highway,secondary,road,21,34.0420030,-118.2633011,0.3620,-0.1420,0,0
+w381450301,Figueroa Street03,highway,primary,road,5,34.0395565,-118.2687603,-0.1410,-0.4140,0,0
+w381451676,Chick Hearn Court01,highway,secondary,road,2,34.0443879,-118.2685669,-0.1232,0.1232,0,0
+w381451677,Figueroa Street04,highway,primary,road,3,34.0440049,-118.2649291,0.2120,0.0806,0,0
+w381451678,Figueroa Street05,highway,primary,road,2,34.0420520,-118.2667506,0.0442,-0.1366,0,0
+w384292055,Georgia Street03,highway,residential,slowroad,2,34.0459310,-118.2668226,0.0375,0.2948,0,0
+w386112880,motorway_link29,highway,motorway_link,highway,27,34.0396938,-118.2727399,-0.5077,-0.3988,0,0
+w386112912,motorway_link30,highway,motorway_link,highway,10,34.0392800,-118.2719378,-0.4338,-0.4448,0,0
+w399266751,Figueroa Street06,highway,primary,road,3,34.0400534,-118.2684401,-0.1115,-0.3588,0,0
+w399270498,West Pico Boulevard10,highway,primary,road,3,34.0425857,-118.2723492,-0.4717,-0.0772,0,0
+w399271118,L. A. Live Way04,highway,primary,road,2,34.0412998,-118.2723796,-0.4745,-0.2202,0,0
+w399277292,West Olympic Boulevard07,highway,primary,road,2,34.0471455,-118.2696509,-0.2231,0.4298,0,0
+w399277293,West Olympic Boulevard08,highway,primary,road,2,34.0466610,-118.2685874,-0.1251,0.3760,0,0
+w399281366,West Olympic Boulevard09,highway,primary,road,2,34.0477555,-118.2709916,-0.3466,0.4977,0,0
+w399281368,West Olympic Boulevard10,highway,primary,road,2,34.0474700,-118.2703701,-0.2893,0.4659,0,0
+w399281371,West Olympic Boulevard11,highway,primary,road,2,34.0476555,-118.2707787,-0.3270,0.4865,0,0
+w399283650,Figueroa Street07,highway,primary,road,2,34.0413369,-118.2674075,-0.0164,-0.2161,0,0
+w399283651,Figueroa Street08,highway,primary,road,2,34.0422890,-118.2665328,0.0642,-0.1102,0,0
+w399283652,Figueroa Street09,highway,primary,road,2,34.0412285,-118.2675071,-0.0255,-0.2281,0,0
+w399283653,Figueroa Street10,highway,primary,road,2,34.0433975,-118.2655141,0.1581,0.0131,0,0
+w399283655,Figueroa Street11,highway,primary,road,2,34.0427445,-118.2661143,0.1028,-0.0595,0,0
+w399283656,Figueroa Street12,highway,primary,road,2,34.0416567,-118.2671136,0.0107,-0.1805,0,0
+w399283657,South Flower Street04,highway,secondary,road,2,34.0420938,-118.2649714,0.2081,-0.1319,0,0
+w399284202,South Hope Street03,highway,secondary,road,2,34.0396620,-118.2654662,0.1625,-0.4023,0,0
+w399284203,South Hope Street04,highway,secondary,road,3,34.0393545,-118.2657428,0.1370,-0.4365,0,0
+w399294709,South Grand Avenue01,highway,primary,road,15,34.0409941,-118.2624929,0.4365,-0.2542,0,0
+w399295047,Chick Hearn Court02,highway,secondary,road,2,34.0446562,-118.2691291,-0.1750,0.1530,0,0
+w399295048,Chick Hearn Court03,highway,secondary,road,4,34.0448605,-118.2695573,-0.2144,0.1757,0,0
+w399295049,L. A. Live Way05,highway,secondary,road,3,34.0445470,-118.2704197,-0.2939,0.1409,0,0
+w399295050,L. A. Live Way06,highway,secondary,road,2,34.0440512,-118.2707630,-0.3255,0.0858,0,0
+w399296440,West Pico Boulevard11,highway,secondary,road,2,34.0397868,-118.2662898,0.0866,-0.3884,0,0
+w399296442,West Pico Boulevard12,highway,secondary,road,3,34.0403123,-118.2674033,-0.0160,-0.3300,0,0
+w399296443,West Pico Boulevard13,highway,secondary,road,3,34.0404668,-118.2677218,-0.0453,-0.3128,0,0
+w399296446,West 11th Street04,highway,secondary,road,3,34.0430502,-118.2642930,0.2706,-0.0255,0,0
+w399296450,West 12th Street03,highway,tertiary,road,6,34.0417851,-118.2664425,0.0726,-0.1662,0,0
+w399296451,West Olympic Boulevard12,highway,primary,road,3,34.0438276,-118.2618817,0.4928,0.0609,0,0
+w399304449,motorway_link31,highway,motorway_link,highway,3,34.0463380,-118.2706379,-0.3140,0.3400,0,0
+w399304450,motorway_link32,highway,motorway_link,highway,3,34.0463046,-118.2703246,-0.2851,0.3363,0,0
+w399305998,James M Wood Boulevard04,highway,primary,road,4,34.0462862,-118.2630249,0.3875,0.3343,0,0
+w399307897,Chick Hearn Court04,highway,secondary,road,2,34.0438889,-118.2666381,0.0545,0.0677,0,0
+w399307898,Chick Hearn Court05,highway,secondary,road,2,34.0438755,-118.2663601,0.0802,0.0662,0,0
+w399307899,Chick Hearn Court06,highway,secondary,road,8,34.0440091,-118.2675767,-0.0319,0.0811,0,0
+w399307900,West Olympic Boulevard13,highway,primary,road,3,34.0461793,-118.2675291,-0.0276,0.3224,0,0
+w399307902,West Olympic Boulevard14,highway,primary,road,2,34.0452136,-118.2650451,0.2013,0.2150,0,0
+w399307903,West Olympic Boulevard15,highway,primary,road,3,34.0454732,-118.2659480,0.1181,0.2439,0,0
+w399307905,West Olympic Boulevard16,highway,primary,road,2,34.0451470,-118.2647116,0.2320,0.2076,0,0
+w399307907,West Olympic Boulevard17,highway,primary,road,2,34.0457521,-118.2665883,0.0591,0.2749,0,0
+w399307908,West Olympic Boulevard18,highway,primary,road,2,34.0452561,-118.2652423,0.1831,0.2197,0,0
+w399307909,West Olympic Boulevard19,highway,primary,road,5,34.0448535,-118.2636326,0.3315,0.1750,0,0
+w399311981,Figueroa Street13,highway,primary,road,4,34.0447962,-118.2641343,0.2852,0.1686,0,0
+w399311982,Figueroa Street14,highway,primary,road,2,34.0442508,-118.2646822,0.2347,0.1079,0,0
+w399311983,Figueroa Street15,highway,primary,road,2,34.0444742,-118.2644578,0.2554,0.1328,0,0
+w399311986,South Flower Street05,highway,secondary,road,5,34.0446254,-118.2625739,0.4290,0.1496,0,0
+w399311989,South Flower Street06,highway,secondary,road,10,34.0437238,-118.2634139,0.3516,0.0494,0,0
+w399311990,motorway_link33,highway,motorway_link,highway,3,34.0474580,-118.2651453,0.1921,0.4646,0,0
+w404032784,L. A. Live Way07,highway,secondary,road,2,34.0436920,-118.2709988,-0.3472,0.0458,0,0
+w404032785,L. A. Live Way08,highway,secondary,road,2,34.0429415,-118.2714632,-0.3900,-0.0376,0,0
+w404032786,L. A. Live Way09,highway,secondary,road,2,34.0432580,-118.2712672,-0.3720,-0.0024,0,0
+w404032787,L. A. Live Way10,highway,secondary,road,2,34.0428176,-118.2715398,-0.3971,-0.0514,0,0
+w404032788,West Pico Boulevard14,highway,primary,road,3,34.0413345,-118.2697355,-0.2309,-0.2163,0,0
+w404032789,West Pico Boulevard15,highway,primary,road,2,34.0408944,-118.2687647,-0.1414,-0.2653,0,0
+w404032790,West Pico Boulevard16,highway,primary,road,2,34.0416027,-118.2703308,-0.2857,-0.1865,0,0
+w404032792,West Pico Boulevard17,highway,primary,road,3,34.0422452,-118.2714821,-0.3918,-0.1151,0,0
+w404032796,motorway_link34,highway,motorway_link,highway,2,34.0409631,-118.2726136,-0.4960,-0.2576,0,0
+w404203224,Blaine Street04,highway,secondary,road,2,34.0460640,-118.2709192,-0.3399,0.3096,0,0
+w404203225,L. A. Live Way11,highway,secondary,road,6,34.0462567,-118.2685478,-0.1214,0.3310,0,0
+w404989094,Figueroa Street16,highway,primary,road,4,34.0470401,-118.2620545,0.4769,0.4181,0,0
+w404989112,West 11th Street05,highway,secondary,road,3,34.0435926,-118.2650563,0.2003,0.0348,0,0
+w404989116,West Olympic Boulevard20,highway,primary,road,3,34.0440488,-118.2622447,0.4593,0.0855,0,0
+w442378927,Cameron Lane01,highway,service,driveway,5,34.0389959,-118.2658840,0.1240,-0.4764,0,0
+w491696553,pedestrian01,highway,pedestrian,walkway,2,34.0440402,-118.2680850,-0.0788,0.0845,0,0
+w491696554,pedestrian02,highway,pedestrian,walkway,6,34.0438901,-118.2660212,0.1114,0.0678,0,0
+w491696559,service15,highway,service,driveway,3,34.0437880,-118.2681497,-0.0847,0.0565,0,0
+w491696560,pedestrian03,highway,pedestrian,walkway,9,34.0432019,-118.2679820,-0.0693,-0.0087,0,0
+w491696562,service16,highway,service,driveway,10,34.0430777,-118.2708283,-0.3315,-0.0225,0,0
+w491696567,service17,highway,service,driveway,2,34.0451624,-118.2692369,-0.1849,0.2093,0,0
+w491696568,footway50,highway,footway,walkway,3,34.0442169,-118.2679443,-0.0658,0.1042,0,0
+w491696569,Ritz-Carlton Service Road,highway,service,driveway,5,34.0450615,-118.2666046,0.0576,0.1981,0,0
+w491696570,service18,highway,service,driveway,7,34.0439622,-118.2683906,-0.1069,0.0759,0,0
+w491696571,service19,highway,service,driveway,7,34.0452036,-118.2692711,-0.1881,0.2139,0,0
+w491696574,pedestrian04,highway,pedestrian,walkway,6,34.0444479,-118.2658691,0.1254,0.1299,0,0
+w491696576,service20,highway,service,driveway,3,34.0444877,-118.2702949,-0.2824,0.1343,0,0
+w491696577,West Road,highway,residential,slowroad,2,34.0453713,-118.2682650,-0.0954,0.2325,0,0
+w496247691,service21,highway,service,driveway,5,34.0477372,-118.2625149,0.4344,0.4956,0,0
+w508689006,service22,highway,service,driveway,2,34.0476132,-118.2643879,0.2619,0.4818,0,0
+w579092938,service23,highway,service,driveway,7,34.0457636,-118.2641164,0.2869,0.2762,0,0
+w579092939,service24,highway,service,driveway,10,34.0444819,-118.2638779,0.3089,0.1336,0,0
+w579092940,service25,highway,service,driveway,4,34.0437767,-118.2625204,0.4339,0.0552,0,0
+w579092941,service26,highway,service,driveway,6,34.0467421,-118.2652686,0.1807,0.3850,0,0
+w579092942,service27,highway,service,driveway,3,34.0465696,-118.2657674,0.1348,0.3658,0,0
+w581694389,service28,highway,service,driveway,3,34.0447401,-118.2697123,-0.2287,0.1624,0,0
+w581694390,service29,highway,service,driveway,11,34.0435098,-118.2644339,0.2576,0.0256,0,0
+w581694391,service30,highway,service,driveway,6,34.0438658,-118.2636033,0.3342,0.0651,0,0
+w581694392,service31,highway,service,driveway,3,34.0446146,-118.2638548,0.3110,0.1484,0,0
+w581694398,service32,highway,service,driveway,2,34.0439597,-118.2645176,0.2499,0.0756,0,0
+w582066032,West 12th Street04,highway,service,driveway,11,34.0421908,-118.2675424,-0.0288,-0.1211,0,0
+w603531495,South Grand Avenue02,highway,primary,road,3,34.0391011,-118.2641908,0.2800,-0.4647,0,0
+w603531496,West Pico Boulevard18,highway,secondary,road,6,34.0392656,-118.2651396,0.1926,-0.4464,0,0
+w604086257,Figueroa Street17,highway,primary,road,3,34.0463620,-118.2626749,0.4197,0.3427,0,0
+w607576334,Olive Street,highway,primary,road,3,34.0390101,-118.2626141,0.4253,-0.4748,0,0
+w607576335,West 12th Street05,highway,tertiary,road,3,34.0390875,-118.2616798,0.5114,-0.4662,0,0
+w642611095,service33,highway,service,driveway,2,34.0475701,-118.2640335,0.2945,0.4770,0,0
+w642611097,service34,highway,service,driveway,2,34.0477767,-118.2643955,0.2612,0.5000,0,0
+w642611100,service35,highway,service,driveway,2,34.0477611,-118.2644559,0.2556,0.4983,0,0
+w642611102,service36,highway,service,driveway,2,34.0477076,-118.2644824,0.2532,0.4923,0,0
+w642611104,service37,highway,service,driveway,4,34.0475964,-118.2642243,0.2769,0.4800,0,0
+w642611107,service38,highway,service,driveway,2,34.0477183,-118.2642737,0.2724,0.4935,0,0
+w642611109,service39,highway,service,driveway,2,34.0474540,-118.2641396,0.2847,0.4641,0,0
+w643857566,James M Wood Boulevard05,highway,primary,road,3,34.0465937,-118.2637481,0.3208,0.3685,0,0
+w648604239,West 8th Place02,highway,primary,road,2,34.0476110,-118.2659809,0.1151,0.4816,0,0
+w648604241,motorway_link35,highway,motorway_link,highway,2,34.0477702,-118.2655633,0.1536,0.4993,0,0
+w648604242,motorway_link36,highway,motorway_link,highway,2,34.0475938,-118.2656865,0.1422,0.4797,0,0
+w648604243,James M Wood Boulevard06,highway,tertiary,road,2,34.0475870,-118.2660268,0.1109,0.4789,0,0
+w648604248,West Pico Boulevard19,highway,primary,road,2,34.0427997,-118.2728325,-0.5162,-0.0534,0,0
+w648604249,West 12th Street06,highway,residential,slowroad,2,34.0443219,-118.2718553,-0.4262,0.1159,0,0
+w648604251,West 12th Street07,highway,residential,slowroad,2,34.0440184,-118.2712021,-0.3660,0.0821,0,0
+w648604252,West 11th Street06,highway,secondary,road,2,34.0454801,-118.2704806,-0.2995,0.2446,0,0
+w648604253,West 11th Street07,highway,secondary,road,2,34.0451867,-118.2701439,-0.2685,0.2120,0,0
+w648604254,West Olympic Boulevard21,highway,primary,road,2,34.0469033,-118.2691185,-0.1740,0.4029,0,0
+w664520643,steps01,highway,steps,walkway,2,34.0410362,-118.2658537,0.1268,-0.2495,0,0
+w669629537,Olive Street01,highway,primary,road,11,34.0402144,-118.2614888,0.5290,-0.3409,0,0
+w673046627,service40,highway,service,driveway,2,34.0391374,-118.2620669,0.4757,-0.4606,0,0
+w674189147,Harbor Freeway17,highway,motorway,highway,2,34.0454275,-118.2707408,-0.3235,0.2388,0,0
+w678427262,service41,highway,service,driveway,3,34.0398433,-118.2622236,0.4613,-0.3821,0,0
+w678427263,service42,highway,service,driveway,3,34.0398077,-118.2623717,0.4476,-0.3861,0,0
+w678427264,service43,highway,service,driveway,4,34.0406353,-118.2615179,0.5263,-0.2941,0,0
+w712052305,West 12th Street08,highway,tertiary,road,3,34.0395948,-118.2624628,0.4392,-0.4098,0,0
+w712052306,Margo Street,highway,service,driveway,4,34.0391991,-118.2632950,0.3626,-0.4538,0,0
+w712052307,Margo Street01,highway,service,driveway,4,34.0399551,-118.2625861,0.4279,-0.3697,0,0
+w712052310,service44,highway,service,driveway,2,34.0396365,-118.2623630,0.4484,-0.4051,0,0
+w712274179,service45,highway,service,driveway,4,34.0447469,-118.2626409,0.4228,0.1631,0,0
+w712274180,service46,highway,service,driveway,3,34.0461010,-118.2632107,0.3703,0.3137,0,0
+w712274181,service47,highway,service,driveway,2,34.0463426,-118.2645197,0.2497,0.3405,0,0
+w712274182,service48,highway,service,driveway,2,34.0464069,-118.2665385,0.0637,0.3477,0,0
+w712274183,service49,highway,service,driveway,6,34.0469728,-118.2670154,0.0198,0.4106,0,0
+w712274184,service50,highway,service,driveway,4,34.0461655,-118.2668011,0.0395,0.3209,0,0
+w712274185,service51,highway,service,driveway,4,34.0462605,-118.2671703,0.0055,0.3314,0,0
+w712274186,service52,highway,service,driveway,2,34.0465534,-118.2671898,0.0037,0.3640,0,0
+w717068635,service53,highway,service,driveway,4,34.0471277,-118.2632061,0.3708,0.4278,0,0
+w717068636,service54,highway,service,driveway,2,34.0468459,-118.2634488,0.3484,0.3965,0,0
+w717068637,service55,highway,service,driveway,4,34.0466973,-118.2635803,0.3363,0.3800,0,0
+w717493947,service56,highway,service,driveway,2,34.0467572,-118.2673308,-0.0093,0.3866,0,0
+w717493948,service57,highway,service,driveway,2,34.0467949,-118.2674133,-0.0169,0.3908,0,0
+w717493949,service58,highway,service,driveway,4,34.0465634,-118.2671218,0.0100,0.3651,0,0
+w722826991,service59,highway,service,driveway,8,34.0449233,-118.2628087,0.4074,0.1827,0,0
+w722826992,service60,highway,service,driveway,2,34.0450213,-118.2627813,0.4099,0.1936,0,0
+w723356239,service61,highway,service,driveway,6,34.0427656,-118.2624517,0.4403,-0.0572,0,0
+w723356240,service62,highway,service,driveway,6,34.0426259,-118.2622348,0.4602,-0.0727,0,0
+w723356241,service63,highway,service,driveway,2,34.0426252,-118.2622325,0.4605,-0.0728,0,0
+w723370918,service64,highway,service,driveway,6,34.0406171,-118.2648021,0.2237,-0.2961,0,0
+w723370919,service65,highway,service,driveway,6,34.0405871,-118.2648264,0.2215,-0.2994,0,0
+w723370920,service66,highway,service,driveway,2,34.0405232,-118.2647033,0.2328,-0.3065,0,0
+w723370921,service67,highway,service,driveway,5,34.0439506,-118.2628069,0.4075,0.0746,0,0
+w723370922,service68,highway,service,driveway,3,34.0409636,-118.2649209,0.2128,-0.2576,0,0
+w723370923,footway51,highway,footway,walkway,2,34.0412452,-118.2651011,0.1962,-0.2263,0,0
+w723370924,service69,highway,service,driveway,2,34.0410859,-118.2648110,0.2229,-0.2440,0,0
+w723370925,service70,highway,service,driveway,2,34.0407345,-118.2650210,0.2035,-0.2830,0,0
+w723476500,service71,highway,service,driveway,4,34.0457079,-118.2653310,0.1750,0.2700,0,0
+w723476501,service72,highway,service,driveway,3,34.0457682,-118.2652277,0.1845,0.2767,0,0
+w723476502,service73,highway,service,driveway,3,34.0455977,-118.2653304,0.1750,0.2577,0,0
+w723476503,service74,highway,service,driveway,5,34.0460510,-118.2651639,0.1904,0.3081,0,0
+w723516947,service75,highway,service,driveway,2,34.0471068,-118.2654481,0.1642,0.4255,0,0
+w723516948,service76,highway,service,driveway,2,34.0471723,-118.2655969,0.1505,0.4328,0,0
+w723516949,service77,highway,service,driveway,2,34.0471706,-118.2658732,0.1250,0.4326,0,0
+w723794746,service78,highway,service,driveway,9,34.0393963,-118.2663148,0.0843,-0.4318,0,0
+w724036748,service79,highway,service,driveway,6,34.0395131,-118.2642730,0.2725,-0.4189,0,0
+w724036749,service80,highway,service,driveway,6,34.0396601,-118.2642224,0.2771,-0.4025,0,0
+w724251621,service81,highway,service,driveway,3,34.0469835,-118.2657137,0.1397,0.4118,0,0
+w724251622,service82,highway,service,driveway,3,34.0472011,-118.2657557,0.1358,0.4360,0,0
+w725753592,service83,highway,service,driveway,3,34.0452598,-118.2617152,0.5081,0.2201,0,0
+w725820782,service84,highway,service,driveway,5,34.0426326,-118.2614964,0.5283,-0.0720,0,0
+w725856224,service85,highway,service,driveway,3,34.0442686,-118.2621472,0.4683,0.1099,0,0
+w726046256,service86,highway,service,driveway,3,34.0465241,-118.2637173,0.3237,0.3607,0,0
+w726046257,service87,highway,service,driveway,3,34.0461256,-118.2639955,0.2980,0.3164,0,0
+w726063543,service88,highway,service,driveway,10,34.0458831,-118.2720008,-0.4396,0.2894,0,0
+w726063544,service89,highway,service,driveway,6,34.0455409,-118.2718142,-0.4224,0.2514,0,0
+w726063545,service90,highway,service,driveway,3,34.0455675,-118.2716981,-0.4117,0.2544,0,0
+w726063546,service91,highway,service,driveway,4,34.0458126,-118.2715503,-0.3981,0.2816,0,0
+w726087326,service92,highway,service,driveway,3,34.0419966,-118.2622329,0.4604,-0.1427,0,0
+w726087327,service93,highway,service,driveway,4,34.0417967,-118.2619336,0.4880,-0.1649,0,0
+w726149515,service94,highway,service,driveway,5,34.0389389,-118.2677052,-0.0438,-0.4827,0,0
+w726149516,service95,highway,service,driveway,2,34.0390570,-118.2679716,-0.0683,-0.4696,0,0
+w727657779,service96,highway,service,driveway,6,34.0463120,-118.2725973,-0.4945,0.3371,0,0
+w728088186,service97,highway,service,driveway,2,34.0478119,-118.2623426,0.4503,0.5039,0,0
+w750115352,service98,highway,service,driveway,5,34.0399356,-118.2639165,0.3053,-0.3719,0,0
+w756842290,service99,highway,service,driveway,2,34.0409272,-118.2653150,0.1764,-0.2616,0,0
+w766588957,footway52,highway,footway,walkway,5,34.0401349,-118.2633769,0.3550,-0.3497,0,0
+w766588958,footway53,highway,footway,walkway,3,34.0409094,-118.2644704,0.2543,-0.2636,0,0
+w766588959,footway54,highway,footway,walkway,3,34.0407636,-118.2644572,0.2555,-0.2798,0,0
+w766588960,footway55,highway,footway,walkway,3,34.0408979,-118.2643344,0.2668,-0.2649,0,0
+w773753042,service100,highway,service,driveway,4,34.0410806,-118.2644599,0.2552,-0.2446,0,0
+w773753043,service101,highway,service,driveway,4,34.0411823,-118.2643639,0.2641,-0.2332,0,0
+w777294310,Margo Street02,highway,service,driveway,3,34.0404899,-118.2620938,0.4732,-0.3102,0,0
+w777294311,West 11th Street08,highway,secondary,road,9,34.0422015,-118.2629877,0.3909,-0.1199,0,0
+w778727988,service102,highway,service,driveway,3,34.0390604,-118.2669288,0.0278,-0.4692,0,0
+w791759106,service103,highway,service,driveway,13,34.0451424,-118.2726462,-0.4990,0.2071,0,0
+w791759107,service104,highway,service,driveway,3,34.0447768,-118.2726320,-0.4977,0.1664,0,0
+w791759108,service105,highway,service,driveway,2,34.0450411,-118.2726136,-0.4960,0.1958,0,0
+w791759109,service106,highway,service,driveway,3,34.0452592,-118.2722984,-0.4670,0.2201,0,0
+w799837509,service107,highway,service,driveway,10,34.0467014,-118.2701163,-0.2659,0.3804,0,0
+w799837510,service108,highway,service,driveway,2,34.0469717,-118.2700821,-0.2628,0.4105,0,0
+w812711518,service109,highway,service,driveway,3,34.0478056,-118.2725866,-0.4935,0.5032,0,0
+w813896895,service110,highway,service,driveway,3,34.0446852,-118.2724388,-0.4799,0.1562,0,0
+w822410329,service111,highway,service,driveway,3,34.0392950,-118.2667802,0.0414,-0.4431,0,0
+w826377636,service112,highway,service,driveway,5,34.0422933,-118.2621476,0.4683,-0.1097,0,0
+w842770219,service113,highway,service,driveway,3,34.0465209,-118.2679154,-0.0632,0.3604,0,0
+w842924468,service114,highway,service,driveway,4,34.0393993,-118.2650915,0.1970,-0.4315,0,0
+w843873872,service115,highway,service,driveway,2,34.0471778,-118.2719288,-0.4329,0.4334,0,0
+w844943964,service116,highway,service,driveway,4,34.0412368,-118.2696688,-0.2247,-0.2272,0,0
+w844943965,service117,highway,service,driveway,3,34.0418153,-118.2709756,-0.3451,-0.1629,0,0
+w844943966,service118,highway,service,driveway,4,34.0415064,-118.2704637,-0.2979,-0.1972,0,0
+w844943967,South Hall Drive01,highway,service,driveway,10,34.0417808,-118.2714238,-0.3864,-0.1667,0,0
+w844998223,service119,highway,service,driveway,2,34.0463582,-118.2664640,0.0706,0.3423,0,0
+w844998224,service120,highway,service,driveway,4,34.0464292,-118.2660944,0.1046,0.3502,0,0
+w844998225,service121,highway,service,driveway,5,34.0461516,-118.2663028,0.0854,0.3193,0,0
+w844998226,service122,highway,service,driveway,4,34.0460067,-118.2663994,0.0765,0.3032,0,0
+w844998227,service123,highway,service,driveway,2,34.0467346,-118.2652957,0.1782,0.3841,0,0
+w844998228,service124,highway,service,driveway,2,34.0466237,-118.2650318,0.2025,0.3718,0,0
+w844998229,service125,highway,service,driveway,2,34.0464565,-118.2651464,0.1920,0.3532,0,0
+w844998230,service126,highway,service,driveway,3,34.0465521,-118.2662513,0.0902,0.3638,0,0
+w844998231,Georgia Street04,highway,residential,slowroad,7,34.0462426,-118.2665810,0.0598,0.3294,0,0
+w844998232,service127,highway,service,driveway,2,34.0465969,-118.2662974,0.0859,0.3688,0,0
+w844998233,service128,highway,service,driveway,6,34.0460681,-118.2638139,0.3148,0.3100,0,0
+w847381647,service129,highway,service,driveway,9,34.0462673,-118.2661231,0.1020,0.3322,0,0
+w859634176,service130,highway,service,driveway,4,34.0446417,-118.2634858,0.3450,0.1514,0,0
+w859681317,Harbor Freeway18,highway,motorway,highway,2,34.0471244,-118.2680231,-0.0731,0.4275,0,0
+w876429565,service131,highway,service,driveway,5,34.0433822,-118.2632109,0.3703,0.0114,0,0
+w876469772,service132,highway,service,driveway,5,34.0397079,-118.2683960,-0.1074,-0.3972,0,0
+w876469773,service133,highway,service,driveway,8,34.0398537,-118.2680497,-0.0755,-0.3810,0,0
+w876469774,service134,highway,service,driveway,6,34.0397505,-118.2681784,-0.0874,-0.3925,0,0
+w876469775,service135,highway,service,driveway,4,34.0396301,-118.2679576,-0.0670,-0.4059,0,0
+w876469776,service136,highway,service,driveway,8,34.0395174,-118.2683372,-0.1020,-0.4184,0,0
+w876469777,service137,highway,service,driveway,3,34.0394729,-118.2680646,-0.0769,-0.4233,0,0
+w876469778,service138,highway,service,driveway,3,34.0395291,-118.2679931,-0.0703,-0.4171,0,0
+w880103782,service139,highway,service,driveway,2,34.0387236,-118.2657894,0.1327,-0.5066,0,0
+w880945636,motorway_link37,highway,motorway_link,highway,2,34.0448348,-118.2717169,-0.4134,0.1729,0,0
+w884988007,service140,highway,service,driveway,10,34.0471457,-118.2713205,-0.3769,0.4298,0,0
+w900850433,Georgia Street05,highway,residential,slowroad,4,34.0455434,-118.2671467,0.0077,0.2517,0,0
+w900850434,Georgia Street06,highway,residential,slowroad,2,34.0451560,-118.2674280,-0.0182,0.2086,0,0
+w900850435,footway56,highway,footway,walkway,12,34.0443006,-118.2673524,-0.0113,0.1135,0,0
+w900850436,footway57,highway,footway,walkway,2,34.0451109,-118.2673276,-0.0090,0.2036,0,0
+w900850437,Xbox Plaza,highway,pedestrian,walkway,6,34.0442207,-118.2659671,0.1164,0.1046,0,0
+w900897618,footway58,highway,footway,walkway,6,34.0425369,-118.2612282,0.5530,-0.0826,0,0
+w900972790,footway59,highway,footway,walkway,5,34.0473303,-118.2648413,0.2201,0.4504,0,0
+w900972791,service141,highway,service,driveway,9,34.0482106,-118.2647735,0.2263,0.5483,0,0
+w900973557,West 12th Street09,highway,residential,slowroad,2,34.0441218,-118.2714205,-0.3861,0.0936,0,0
+w900973558,West 12th Street10,highway,residential,slowroad,2,34.0439152,-118.2709849,-0.3460,0.0706,0,0
+w902508071,service142,highway,service,driveway,5,34.0416117,-118.2726047,-0.4952,-0.1855,0,0
+w902508072,service143,highway,service,driveway,3,34.0418804,-118.2725867,-0.4936,-0.1556,0,0
+w903668561,service144,highway,service,driveway,3,34.0422289,-118.2723690,-0.4735,-0.1169,0,0
+w903901139,footway60,highway,footway,walkway,2,34.0419899,-118.2641432,0.2844,-0.1435,0,0
+w905744208,service145,highway,service,driveway,3,34.0438716,-118.2626527,0.4217,0.0658,0,0
+w905744209,service146,highway,service,driveway,3,34.0440012,-118.2628238,0.4060,0.0802,0,0
+w946282178,James M Wood Boulevard07,highway,primary,road,4,34.0472483,-118.2652336,0.1839,0.4413,0,0
+w946282179,James M Wood Boulevard08,highway,primary,road,2,34.0473899,-118.2655447,0.1553,0.4570,0,0
+w973460068,motorway_link38,highway,motorway_link,highway,4,34.0462988,-118.2698934,-0.2454,0.3357,0,0
+w976736240,footway61,highway,footway,walkway,3,34.0468684,-118.2623989,0.4451,0.3990,0,0
+w426377252,apartments01,building,apartments,bldwall,11,34.0468178,-118.2707704,-0.3262,0.3934,4.6,0
+w426377254,apartments02,building,apartments,bldwall,11,34.0469507,-118.2709663,-0.3443,0.4082,4.7,0
+w426377255,apartments03,building,apartments,bldwall,11,34.0467676,-118.2706574,-0.3158,0.3878,4.3,0
+w426377256,yes01,building,yes,bldwall,11,34.0469734,-118.2698727,-0.2435,0.4107,6.8,0
+w426377257,apartments04,building,apartments,bldwall,11,34.0468710,-118.2708893,-0.3372,0.3993,3.7,0
+w426377259,house01,building,house,bldwall,11,34.0466677,-118.2708569,-0.3342,0.3767,6.8,0
+w426377261,industrial01,building,industrial,bldwall,11,34.0443708,-118.2727277,-0.5065,0.1213,6.2,0
+w426377262,warehouse01,building,warehouse,bldwall,10,34.0440307,-118.2726696,-0.5012,0.0835,6.3,0
+w426377267,commercial01,building,commercial,bldwall,13,34.0468000,-118.2695719,-0.2158,0.3914,7.4,0
+w426377269,apartments05,building,apartments,bldwall,13,34.0468706,-118.2715245,-0.3957,0.3993,6.5,0
+w426377271,residential01,highway,residential,slowroad,13,34.0466010,-118.2717211,-0.4138,0.3693,7.9,0
+w426377273,apartments06,building,apartments,bldwall,13,34.0461057,-118.2721152,-0.4501,0.3142,14.7,0
+w426377275,apartments07,building,apartments,bldwall,14,34.0461072,-118.2719357,-0.4336,0.3144,14.4,0
+w426377276,residential02,highway,residential,slowroad,15,34.0450699,-118.2722342,-0.4611,0.1990,6.8,0
+w426377278,residential03,highway,residential,slowroad,15,34.0452183,-118.2721160,-0.4502,0.2155,6.9,0
+w426377282,apartments08,building,apartments,bldwall,15,34.0459640,-118.2706262,-0.3129,0.2985,8.4,0
+w426377284,apartments09,building,apartments,bldwall,17,34.0472002,-118.2711734,-0.3633,0.4359,6.5,0
+w426377322,residential04,highway,residential,slowroad,21,34.0464347,-118.2717984,-0.4209,0.3508,9.7,0
+w426377336,apartments10,building,apartments,bldwall,25,34.0469601,-118.2713506,-0.3797,0.4092,7.2,0
+w426377339,apartments11,building,apartments,bldwall,26,34.0463604,-118.2716976,-0.4116,0.3425,7.9,0
+w426377348,retail01,building,retail,bldwall,5,34.0474373,-118.2709379,-0.3416,0.4623,9.5,0
+w426377354,warehouse02,building,warehouse,bldwall,30,34.0477493,-118.2689471,-0.1582,0.4970,18.4,0
+w426377358,commercial02,building,commercial,bldwall,5,34.0450457,-118.2723500,-0.4717,0.1963,6.7,0
+w426377361,warehouse03,building,warehouse,bldwall,5,34.0463502,-118.2713496,-0.3796,0.3414,6.1,0
+w426377369,house02,building,house,bldwall,5,34.0465933,-118.2709589,-0.3436,0.3684,5.7,0
+w426377372,house03,building,house,bldwall,5,34.0467590,-118.2711201,-0.3584,0.3869,5.9,0
+w426377385,retail02,building,retail,bldwall,5,34.0460442,-118.2717869,-0.4199,0.3074,8.0,0
+w426377390,apartments12,building,apartments,bldwall,5,34.0471360,-118.2712918,-0.3742,0.4288,11.1,0
+w426377392,commercial03,building,commercial,bldwall,7,34.0477025,-118.2695874,-0.2172,0.4918,5.8,0
+w426377395,house04,building,house,bldwall,5,34.0461675,-118.2710991,-0.3565,0.3211,5.5,0
+w426377403,house05,building,house,bldwall,5,34.0467436,-118.2707715,-0.3263,0.3851,6.5,0
+w426377406,house06,building,house,bldwall,9,34.0467407,-118.2709526,-0.3430,0.3848,2.6,0
+w426377419,industrial02,building,industrial,bldwall,7,34.0452334,-118.2724455,-0.4805,0.2172,5.1,0
+w426377420,commercial04,building,commercial,bldwall,7,34.0472755,-118.2705785,-0.3085,0.4443,24.1,0
+w426377422,retail03,building,retail,bldwall,5,34.0443264,-118.2725223,-0.4876,0.1164,6.8,0
+w426377423,commercial05,building,commercial,bldwall,7,34.0463732,-118.2715383,-0.3970,0.3440,5.8,0
+w426377425,apartments13,building,apartments,bldwall,7,34.0468895,-118.2707165,-0.3212,0.4014,3.9,0
+w426377426,apartments14,building,apartments,bldwall,7,34.0468305,-118.2706045,-0.3109,0.3948,4.4,0
+w426377427,house07,building,house,bldwall,8,34.0467671,-118.2709212,-0.3401,0.3878,2.4,0
+w426377428,apartments15,building,apartments,bldwall,8,34.0469519,-118.2708543,-0.3339,0.4083,3.6,0
+w426377430,apartments16,building,apartments,bldwall,8,34.0459057,-118.2704953,-0.3009,0.2920,14.3,0
+w426377433,retail04,building,retail,bldwall,9,34.0459980,-118.2707759,-0.3267,0.3022,10.0,0
+w426377434,retail05,building,retail,bldwall,9,34.0462742,-118.2712199,-0.3676,0.3329,4.0,0
+w426377436,retail06,building,retail,bldwall,9,34.0461656,-118.2706988,-0.3196,0.3209,4.0,0
+w426377441,commercial06,building,commercial,bldwall,9,34.0470234,-118.2706557,-0.3156,0.4162,0.3,0
+w426377444,apartments17,building,apartments,bldwall,9,34.0467781,-118.2714010,-0.3843,0.3890,4.7,0
+w426377446,apartments18,building,apartments,bldwall,9,34.0468931,-118.2710999,-0.3566,0.4018,2.2,0
+w426377447,residential05,highway,residential,slowroad,9,34.0465173,-118.2708000,-0.3289,0.3600,5.8,0
+w426377450,industrial03,building,industrial,bldwall,10,34.0449425,-118.2722714,-0.4645,0.1849,4.6,0
+w426396046,apartments19,building,apartments,bldwall,29,34.0463589,-118.2725230,-0.4877,0.3424,8.7,0
+w426712045,commercial07,building,commercial,bldwall,10,34.0465250,-118.2721917,-0.4572,0.3608,3.8,0
+w426712047,retail07,building,retail,bldwall,10,34.0466468,-118.2722166,-0.4595,0.3744,8.0,0
+w426712049,apartments20,building,apartments,bldwall,13,34.0474613,-118.2718906,-0.4294,0.4649,7.9,0
+w426712051,residential06,highway,residential,slowroad,13,34.0476790,-118.2716086,-0.4034,0.4891,10.4,0
+w426712053,apartments21,building,apartments,bldwall,13,34.0468033,-118.2726928,-0.5033,0.3918,7.7,0
+w426712058,apartments22,building,apartments,bldwall,14,34.0478369,-118.2718692,-0.4274,0.5067,13.9,0
+w426712060,apartments23,building,apartments,bldwall,15,34.0467880,-118.2725160,-0.4870,0.3901,7.6,0
+w426712064,yes02,building,yes,bldwall,15,34.0470805,-118.2719590,-0.4357,0.4226,8.3,0
+w426712075,apartments24,building,apartments,bldwall,19,34.0475404,-118.2720229,-0.4416,0.4737,7.8,0
+w426712077,apartments25,building,apartments,bldwall,21,34.0473928,-118.2716566,-0.4079,0.4573,7.9,0
+w426712084,yes03,building,yes,bldwall,39,34.0471765,-118.2721992,-0.4578,0.4333,9.2,0
+w426712086,residential07,highway,residential,slowroad,5,34.0475312,-118.2715036,-0.3938,0.4727,7.1,0
+w426712087,residential08,highway,residential,slowroad,5,34.0475731,-118.2723002,-0.4672,0.4774,6.7,0
+w426712090,apartments26,building,apartments,bldwall,5,34.0466909,-118.2723813,-0.4746,0.3793,9.0,0
+w426712091,yes04,building,yes,bldwall,5,34.0473229,-118.2723337,-0.4702,0.4495,2.9,0
+w426712092,residential09,highway,residential,slowroad,5,34.0476199,-118.2721732,-0.4555,0.4826,6.6,0
+w426712094,residential10,highway,residential,slowroad,5,34.0476727,-118.2722222,-0.4600,0.4884,7.7,0
+w426712096,apartments27,building,apartments,bldwall,5,34.0468629,-118.2723842,-0.4749,0.3984,2.8,0
+w426712100,apartments28,building,apartments,bldwall,5,34.0468468,-118.2722422,-0.4618,0.3966,6.5,0
+w426712104,commercial08,building,commercial,bldwall,6,34.0477845,-118.2716842,-0.4104,0.5009,7.1,0
+w426712106,yes05,building,yes,bldwall,51,34.0475343,-118.2726130,-0.4960,0.4731,11.2,0
+w426712107,yes06,building,yes,bldwall,56,34.0473091,-118.2720001,-0.4395,0.4480,10.7,0
+w426712108,apartments29,building,apartments,bldwall,7,34.0476165,-118.2714677,-0.3905,0.4822,5.7,0
+w426712109,apartments30,building,apartments,bldwall,7,34.0469837,-118.2726095,-0.4957,0.4118,6.0,0
+w426712120,apartments31,building,apartments,bldwall,9,34.0477891,-118.2715428,-0.3974,0.5014,11.9,0
+w426712126,apartments32,building,apartments,bldwall,9,34.0469558,-118.2725477,-0.4900,0.4087,6.0,0
+w426712127,apartments33,building,apartments,bldwall,9,34.0468672,-118.2723533,-0.4721,0.3989,6.7,0
+w426712130,apartments34,building,apartments,bldwall,10,34.0476897,-118.2713862,-0.3829,0.4903,8.2,0
+w428021683,commercial09,building,commercial,bldwall,24,34.0454049,-118.2642421,0.2753,0.2363,6.5,1
+w428021724,Figueroa Hotel,building,hotel,bldwall,20,34.0455274,-118.2641073,0.2877,0.2499,0,14
+w428021728,International Tower,building,commercial,bldwall,14,34.0467758,-118.2617935,0.5009,0.3887,92.5,23
+w428021731,Los Angeles Convention Center,building,yes,bldwall,111,34.0413722,-118.2697472,-0.2319,-0.2121,0,0
+w428021733,Microsoft Theater,building,commercial,bldwall,62,34.0443185,-118.2668812,0.0321,0.1155,33.5,0
+w428021737,Regal L.A. LIVE: A Barco Innovation Center,building,yes,bldwall,41,34.0459163,-118.2678364,-0.0559,0.2931,36.6,0
+w428021739,STAPLES Center,building,stadium,bldwall,121,34.0431451,-118.2669809,0.0230,-0.0150,39.1,0
+w428021741,Watermarke Tower,building,apartments,bldwall,23,34.0463029,-118.2615002,0.5279,0.3361,61.5,0
+w428021747,yes07,building,yes,bldwall,12,34.0467640,-118.2645931,0.2430,0.3874,14.1,0
+w428021748,parking01,building,parking,bldwall,12,34.0477788,-118.2631493,0.3760,0.5002,8.9,4
+w428021775,DISTRIBUTING STATION 9,building,yes,bldwall,17,34.0462024,-118.2647941,0.2244,0.3250,13.3,0
+w428021776,Courtyard and Residence Inn,building,hotel,bldwall,20,34.0459269,-118.2656971,0.1412,0.2943,0,23
+w428021783,apartments35,building,apartments,bldwall,18,34.0468959,-118.2657782,0.1338,0.4021,13.3,0
+w428021786,yes08,building,yes,bldwall,19,34.0471472,-118.2623208,0.4523,0.4300,28.0,5
+w428021787,retail08,building,retail,bldwall,19,34.0471880,-118.2667996,0.0397,0.4346,5.4,0
+w428021790,West Garage,building,commercial,bldwall,20,34.0451266,-118.2687671,-0.1416,0.2053,18.6,2
+w428021792,commercial10,building,commercial,bldwall,23,34.0469296,-118.2635263,0.3413,0.4058,13.9,6
+w428021800,commercial11,building,commercial,bldwall,38,34.0440591,-118.2654098,0.1677,0.0866,38.5,0
+w428021806,801 Tower,building,commercial,bldwall,38,34.0477758,-118.2618548,0.4953,0.4999,117.8,24
+w428021810,yes09,building,yes,bldwall,29,34.0438735,-118.2713382,-0.3785,0.0660,5.1,0
+w428021817,commercial12,building,commercial,bldwall,5,34.0456881,-118.2647090,0.2323,0.2678,7.0,0
+w428021820,commercial13,building,commercial,bldwall,5,34.0470465,-118.2651604,0.1907,0.4188,21.6,0
+w428021821,commercial14,building,commercial,bldwall,5,34.0463800,-118.2657550,0.1359,0.3447,4.9,0
+w428021823,commercial15,building,commercial,bldwall,5,34.0464687,-118.2655331,0.1564,0.3546,4.5,0
+w428021825,commercial16,building,commercial,bldwall,5,34.0467942,-118.2675817,-0.0324,0.3908,3.8,0
+w428021833,commercial17,building,commercial,bldwall,5,34.0453982,-118.2648203,0.2220,0.2355,7.3,0
+w428021837,yes10,building,yes,bldwall,5,34.0420318,-118.2698426,-0.2407,-0.1388,2.7,0
+w428021847,commercial18,building,commercial,bldwall,5,34.0452078,-118.2692901,-0.1898,0.2144,3.8,0
+w428021850,commercial19,building,commercial,bldwall,5,34.0471306,-118.2630728,0.3830,0.4282,5.5,0
+w428021854,yes11,building,yes,bldwall,5,34.0438743,-118.2685821,-0.1246,0.0661,32.1,0
+w428021856,yes12,building,yes,bldwall,5,34.0464380,-118.2648434,0.2199,0.3512,5.5,0
+w428021858,retail09,building,retail,bldwall,41,34.0464198,-118.2629535,0.3940,0.3491,0,1
+w428021861,commercial20,building,commercial,bldwall,6,34.0465261,-118.2677841,-0.0511,0.3610,3.6,0
+w428021872,yes13,building,yes,bldwall,7,34.0437903,-118.2679158,-0.0632,0.0567,30.9,0
+w428021878,commercial21,building,commercial,bldwall,7,34.0451573,-118.2693289,-0.1934,0.2087,5.3,0
+w428021899,residential11,highway,residential,slowroad,10,34.0464556,-118.2640707,0.2911,0.3531,12.8,3
+w428021900,commercial22,building,commercial,bldwall,9,34.0466766,-118.2634250,0.3506,0.3777,10.5,1
+w428023125,industrial04,building,industrial,bldwall,13,34.0388931,-118.2671056,0.0115,-0.4878,8.3,0
+w428023129,apartments36,building,apartments,bldwall,13,34.0389572,-118.2663856,0.0778,-0.4807,15.1,0
+w428023133,yes14,building,yes,bldwall,15,34.0388643,-118.2665114,0.0662,-0.4910,14.9,0
+w428023150,hotel01,building,hotel,bldwall,17,34.0394987,-118.2725308,-0.4884,-0.4205,10.9,0
+w428023151,apartments37,building,apartments,bldwall,18,34.0398290,-118.2673089,-0.0073,-0.3837,19.5,0
+w428023154,commercial23,building,commercial,bldwall,6,34.0392620,-118.2677965,-0.0522,-0.4468,7.5,0
+w428023156,industrial05,building,industrial,bldwall,5,34.0389032,-118.2725334,-0.4886,-0.4867,5.9,0
+w428023158,industrial06,building,industrial,bldwall,5,34.0387289,-118.2672074,0.0021,-0.5061,8.6,0
+w428023160,warehouse04,building,warehouse,bldwall,5,34.0391808,-118.2724759,-0.4833,-0.4558,6.2,0
+w428023169,apartments38,building,apartments,bldwall,45,34.0387143,-118.2681539,-0.0851,-0.5077,26.2,0
+w428023170,apartments39,building,apartments,bldwall,47,34.0400488,-118.2676621,-0.0398,-0.3593,16.1,0
+w428023174,industrial07,building,industrial,bldwall,7,34.0391563,-118.2678758,-0.0595,-0.4585,6.4,0
+w428023177,industrial08,building,industrial,bldwall,7,34.0387012,-118.2665777,0.0601,-0.5091,6.9,0
+w428023182,Avant,building,apartments,bldwall,69,34.0391155,-118.2685431,-0.1210,-0.4631,23.4,0
+w428023183,industrial09,building,industrial,bldwall,6,34.0395755,-118.2676903,-0.0424,-0.4119,15.0,0
+w428023189,industrial10,building,industrial,bldwall,9,34.0392091,-118.2668897,0.0314,-0.4527,7.8,0
+w428023190,industrial11,building,industrial,bldwall,9,34.0390762,-118.2663865,0.0777,-0.4674,8.3,0
+w428023192,yes15,building,yes,bldwall,9,34.0420771,-118.2715994,-0.4026,-0.1338,5.8,0
+w428023194,warehouse05,building,warehouse,bldwall,7,34.0394113,-118.2677349,-0.0465,-0.4302,6.0,0
+w428023196,apartments40,building,apartments,bldwall,9,34.0393673,-118.2724897,-0.4846,-0.4351,8.2,0
+w428023198,apartments41,building,apartments,bldwall,9,34.0388746,-118.2679781,-0.0689,-0.4899,12.3,0
+w428024323,commercial24,building,commercial,bldwall,14,34.0410712,-118.2652405,0.1833,-0.2456,24.4,0
+w428024324,Apex Tower,building,apartments,bldwall,17,34.0458320,-118.2627837,0.4097,0.2838,105.7,28
+w428024325,Concerto Lofts,highway,residential,slowroad,15,34.0454651,-118.2622808,0.4560,0.2430,25.8,7
+w428024326,Luxe Hotel,building,hotel,bldwall,36,34.0442059,-118.2642528,0.2743,0.1030,38.6,9
+w428024327,Petroleum Building,building,commercial,bldwall,11,34.0442552,-118.2634998,0.3437,0.1084,52.7,11
+w428024328,Variety Arts Center,building,yes,bldwall,15,34.0453909,-118.2630546,0.3847,0.2347,91.8,7
+w428024329,Willys Overland Co. Building,building,industrial,bldwall,14,34.0422390,-118.2626322,0.4236,-0.1158,31.3,0
+w428024330,commercial25,building,commercial,bldwall,12,34.0422617,-118.2636409,0.3307,-0.1132,20.3,0
+w428024331,industrial12,building,industrial,bldwall,11,34.0406212,-118.2652265,0.1846,-0.2956,5.2,0
+w428024332,Luma,building,house,bldwall,12,34.0416260,-118.2629993,0.3898,-0.1839,68.5,19
+w428024333,Packard Lofts,building,apartments,bldwall,12,34.0433311,-118.2616854,0.5109,0.0057,30.3,0
+w428024334,Elleven,highway,residential,slowroad,14,34.0414974,-118.2625128,0.4346,-0.1982,47.9,13
+w428024336,apartments42,building,apartments,bldwall,16,34.0413206,-118.2635046,0.3432,-0.2179,11.4,0
+w428024338,Hope Place,building,yes,bldwall,163,34.0434924,-118.2624097,0.4441,0.0236,20.2,5
+w428024341,Standard Oil Building,building,commercial,bldwall,22,34.0441720,-118.2617705,0.5030,0.0992,52.0,9
+w428024343,717 Olympic,building,apartments,bldwall,9,34.0450835,-118.2633646,0.3561,0.2005,96.2,26
+w428024344,yes16,building,yes,bldwall,29,34.0430056,-118.2633921,0.3536,-0.0305,28.8,0
+w428024346,commercial26,building,commercial,bldwall,35,34.0436753,-118.2639009,0.3067,0.0440,9.6,0
+w428024347,Evo South,highway,residential,slowroad,38,34.0406126,-118.2633491,0.3576,-0.2966,80.3,0
+w428024348,retail10,building,retail,bldwall,5,34.0425132,-118.2640964,0.2887,-0.0853,16.4,0
+w428024349,industrial13,building,industrial,bldwall,5,34.0399815,-118.2646263,0.2399,-0.3668,8.9,0
+w428024350,industrial14,building,industrial,bldwall,5,34.0398087,-118.2647878,0.2250,-0.3860,7.4,0
+w428024351,commercial27,building,commercial,bldwall,5,34.0413351,-118.2643000,0.2700,-0.2163,13.0,0
+w428024352,yes17,building,yes,bldwall,5,34.0406157,-118.2659811,0.1151,-0.2963,5.0,0
+w428024354,apartments43,building,apartments,bldwall,5,34.0434538,-118.2630140,0.3885,0.0193,5.1,0
+w428024355,Telacu Plaza,building,apartments,bldwall,5,34.0430830,-118.2628507,0.4035,-0.0219,24.4,6
+w428024357,retail11,building,retail,bldwall,5,34.0402950,-118.2660410,0.1096,-0.3319,5.8,0
+w428024358,yes18,building,yes,bldwall,5,34.0405167,-118.2658401,0.1281,-0.3073,4.3,0
+w428024359,commercial28,building,commercial,bldwall,6,34.0438093,-118.2641600,0.2829,0.0588,9.5,0
+w428024360,industrial15,building,industrial,bldwall,5,34.0403215,-118.2644379,0.2573,-0.3290,10.0,0
+w428024361,yes19,building,yes,bldwall,5,34.0431223,-118.2626193,0.4248,-0.0175,2.4,0
+w428024362,warehouse06,building,warehouse,bldwall,5,34.0404501,-118.2660207,0.1114,-0.3147,7.0,0
+w428024364,industrial16,building,industrial,bldwall,5,34.0398948,-118.2656899,0.1419,-0.3764,5.3,0
+w428024365,warehouse07,building,warehouse,bldwall,5,34.0404133,-118.2652010,0.1869,-0.3188,10.9,0
+w428024366,industrial17,building,industrial,bldwall,5,34.0423438,-118.2617911,0.5011,-0.1041,17.2,0
+w428024367,Met Lofts,building,apartments,bldwall,59,34.0435737,-118.2631356,0.3772,0.0327,25.7,8
+w428024368,retail12,building,retail,bldwall,5,34.0398502,-118.2641523,0.2836,-0.3814,9.5,0
+w428024369,retail13,building,retail,bldwall,5,34.0402355,-118.2662206,0.0930,-0.3385,5.8,0
+w428024370,retail14,building,retail,bldwall,5,34.0420471,-118.2619520,0.4863,-0.1371,17.7,0
+w428024371,retail15,building,retail,bldwall,6,34.0402334,-118.2654942,0.1599,-0.3388,9.7,0
+w428024372,industrial18,building,industrial,bldwall,5,34.0401247,-118.2644925,0.2522,-0.3508,9.0,0
+w428024373,roof01,building,roof,bldwall,6,34.0404775,-118.2663795,0.0784,-0.3116,7.7,0
+w428024374,yes20,building,yes,bldwall,5,34.0404576,-118.2657216,0.1390,-0.3138,3.8,0
+w428024376,retail16,building,retail,bldwall,6,34.0409825,-118.2637798,0.3179,-0.2555,8.2,0
+w428024377,industrial19,building,industrial,bldwall,6,34.0405388,-118.2642745,0.2723,-0.3048,22.2,0
+w428024378,retail17,building,retail,bldwall,6,34.0397460,-118.2657907,0.1326,-0.3930,7.1,0
+w428024379,retail18,building,retail,bldwall,6,34.0400663,-118.2663063,0.0851,-0.3573,15.0,0
+w428024381,hotel02,building,hotel,bldwall,7,34.0396869,-118.2650934,0.1969,-0.3995,19.2,0
+w428024382,industrial20,building,industrial,bldwall,7,34.0407965,-118.2638901,0.3077,-0.2762,8.0,0
+w428024383,industrial21,building,industrial,bldwall,5,34.0406019,-118.2657575,0.1357,-0.2978,7.3,0
+w428024385,industrial22,building,industrial,bldwall,8,34.0401343,-118.2656284,0.1476,-0.3498,7.4,0
+w428024386,commercial29,building,commercial,bldwall,8,34.0422485,-118.2619049,0.4906,-0.1147,6.7,0
+w428024387,retail19,building,retail,bldwall,9,34.0410942,-118.2636160,0.3330,-0.2430,7.6,0
+w428024389,Flower Street Lofts,building,apartments,bldwall,10,34.0421434,-118.2643781,0.2628,-0.1264,21,0
+w428024390,The Metropolitan Apartments,building,apartments,bldwall,89,34.0446725,-118.2620918,0.4734,0.1548,47.0,14
+w428024391,industrial23,building,industrial,bldwall,5,34.0401289,-118.2637691,0.3189,-0.3504,15.2,0
+w428128083,apartments44,building,apartments,bldwall,21,34.0386622,-118.2624277,0.4425,-0.5135,11.6,0
+w428128108,industrial24,building,industrial,bldwall,5,34.0388270,-118.2616534,0.5138,-0.4952,11.0,0
+w428128132,industrial25,building,industrial,bldwall,5,34.0388880,-118.2623017,0.4541,-0.4884,7.2,0
+w428128192,retail20,building,retail,bldwall,8,34.0389265,-118.2639187,0.3051,-0.4841,6.1,0
+w428128204,commercial30,building,commercial,bldwall,9,34.0393924,-118.2627519,0.4126,-0.4323,6.7,0
+w428128211,commercial31,building,commercial,bldwall,9,34.0402732,-118.2618623,0.4946,-0.3343,24.0,0
+w428128212,commercial32,building,commercial,bldwall,9,34.0394587,-118.2625367,0.4324,-0.4249,6.7,0
+w428383092,yes21,building,yes,bldwall,26,34.0387927,-118.2656738,0.1434,-0.4990,10.3,0
+w428383394,retail21,building,retail,bldwall,6,34.0388335,-118.2649920,0.2062,-0.4944,14.2,0
+w428383438,industrial26,building,industrial,bldwall,8,34.0387243,-118.2646991,0.2332,-0.5066,8.2,0
+w442356750,commercial33,building,commercial,bldwall,15,34.0467417,-118.2630780,0.3826,0.3849,158.6,39
+w491696556,WaterMarke Tower,building,yes,bldwall,12,34.0462376,-118.2616136,0.5175,0.3289,120,35
+w491696557,The Ritz-Carlton,building,yes,bldwall,15,34.0453459,-118.2669282,0.0278,0.2297,203,54
+w491696558,yes22,building,yes,bldwall,9,34.0451412,-118.2674116,-0.0167,0.2070,0,0
+w491696563,tower01,building,tower,bldwall,12,34.0426351,-118.2684859,-0.1157,-0.0717,42.7,0
+w491696572,tower02,building,tower,bldwall,14,34.0403373,-118.2692388,-0.1851,-0.3272,42.7,0
+w491696573,yes23,building,yes,bldwall,17,34.0452451,-118.2667545,0.0438,0.2185,0,0
+w491696575,Staples Center,building,yes,bldwall,19,34.0430776,-118.2671906,0.0036,-0.0225,46,0
+w491696580,yes24,building,yes,bldwall,7,34.0452561,-118.2665462,0.0630,0.2197,0,24
+w491697748,Evo South01,highway,residential,slowroad,21,34.0405111,-118.2634541,0.3479,-0.3079,80.3,23
+w491697756,OLiVE DTLA,building,yes,bldwall,5,34.0390594,-118.2631538,0.3756,-0.4693,0,8
+w491697758,AT&T Center,building,office,bldwall,33,34.0394944,-118.2614001,0.5372,-0.4209,138,0
+w491697759,G12,building,apartments,bldwall,5,34.0395471,-118.2634224,0.3508,-0.4151,0,8
+w491697762,yes25,building,yes,bldwall,25,34.0456909,-118.2625557,0.4307,0.2681,0,2
+w491697765,yes26,building,yes,bldwall,8,34.0395738,-118.2616283,0.5161,-0.4121,132.8,32
+w496247683,apartments45,building,apartments,bldwall,5,34.0478564,-118.2639160,0.3053,0.5089,0,13
+w496247684,Hotel Indigo,building,hotel,bldwall,6,34.0473725,-118.2645794,0.2442,0.4551,83,18
+w496247689,yes27,building,yes,bldwall,25,34.0481409,-118.2642146,0.2778,0.5405,0,7
+w582055206,construction01,building,construction,bldwall,6,34.0386110,-118.2689190,-0.1556,-0.5192,0,0
+w582055207,Circa LA Apartments,building,apartments,bldwall,20,34.0414235,-118.2662893,0.0867,-0.2064,0,7
+w582055209,Alina,building,apartments,bldwall,17,34.0459511,-118.2622532,0.4586,0.2970,95,28
+w608956402,yes28,building,yes,bldwall,6,34.0414814,-118.2690310,-0.1659,-0.2000,20,2
+w608964251,yes29,building,yes,bldwall,23,34.0433908,-118.2697163,-0.2291,0.0123,10,0
+w641095971,AVEN Apartments,building,apartments,bldwall,7,34.0405855,-118.2624209,0.4431,-0.2996,150,38
+w641095978,1120 South Grand Avenue,building,yes,bldwall,7,34.0405144,-118.2625067,0.4352,-0.3075,0,0
+w641095980,Grand on Pico,building,apartments,bldwall,10,34.0393007,-118.2644474,0.2564,-0.4425,0,0
+w641096669,Oceanwide Plaza II,building,yes,bldwall,5,34.0424021,-118.2650406,0.2017,-0.0976,162,40
+w641096670,Oceanwide Plaza,building,yes,bldwall,21,34.0424686,-118.2654564,0.1634,-0.0902,0,0
+w641096671,Oceanwide Plaza III,building,yes,bldwall,5,34.0420104,-118.2654160,0.1671,-0.1412,162,40
+w641096672,Oceanwide Plaza I,building,yes,bldwall,7,34.0430505,-118.2648950,0.2151,-0.0255,206,49
+w641096673,Circa LA Apartments (East),building,yes,bldwall,48,34.0413977,-118.2660147,0.1120,-0.2093,122,36
+w641096674,Circa LA Apartments (West),building,apartments,bldwall,48,34.0413933,-118.2667335,0.0457,-0.2098,122,36
+w641097907,L.A. Live,building,retail,bldwall,15,34.0447631,-118.2648903,0.2156,0.1649,30.1,6
+w722826993,1133 Hope,building,construction,bldwall,5,34.0416096,-118.2642109,0.2782,-0.1857,0,0
+w900895442,Onyx Apartments,building,yes,bldwall,5,34.0391066,-118.2654493,0.1641,-0.4641,0,0
+w903900325,Hope + Flower,building,apartments,bldwall,9,34.0408723,-118.2652412,0.1832,-0.2677,0,0
+w903900326,Hope + Flower II,building,apartments,bldwall,5,34.0409071,-118.2655669,0.1532,-0.2639,128,31
+w903900327,Hope + Flower I,building,apartments,bldwall,5,34.0407901,-118.2648009,0.2238,-0.2769,161,50
+w906385745,Moxy & AC Hotels,building,construction,bldwall,6,34.0407729,-118.2673205,-0.0083,-0.2788,161,42
+w907186945,The Metropolitan Apartments Parking Garage,building,parking,bldwall,50,34.0448069,-118.2616647,0.5128,0.1698,0,2

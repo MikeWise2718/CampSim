@@ -188,7 +188,7 @@ public class OptionsPanel : MonoBehaviour
         //initDict[TabState.Help] = delegate { helpPanel.InitVals(); };
         //initDict[TabState.About] = delegate { aboutPanel.InitVals(); };
 
-        setAndSaveDict[TabState.Visuals] = delegate { visualsPanel.SetVals(true); };
+        setAndSaveDict[TabState.Visuals] = delegate { visualsPanel.SetValsOld(true); };
         setAndSaveDict[TabState.MapSet] = delegate { mapSetPanel.SetVals(true); };
         setAndSaveDict[TabState.Frames] = delegate { framePanel.SetVals(true); };
         setAndSaveDict[TabState.FireFly] = delegate { fireFlyPanel.SetVals(true); };

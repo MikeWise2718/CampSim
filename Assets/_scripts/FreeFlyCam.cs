@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 
-// Derived from the Excellent FreeFlyCamera, changed the name to 
+// Derived from the Ex
+// ent FreeFlyCamera, changed the name to 
 // disambiguate, and preserve our changes
 
 namespace CampusSimulator

@@ -125,6 +125,9 @@ namespace CampusSimulator
                 case SceneSelE.Doha:
                     osmloadspec = "doha";
                     break;
+                case SceneSelE.StaplesCenter:
+                    osmloadspec = "staples";
+                    break;
                 case SceneSelE.Seatac:
                     break;
                 case SceneSelE.SanFrancisco:

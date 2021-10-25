@@ -155,7 +155,7 @@ public class B19Willow : MonoBehaviour
     public void MakeItSo()
     {
         bool loadedThisTime  = false;
-        //Debug.Log($"MakeItSo loadModel:{loadmodel.Get()} _b19WillowModel:{_b19_WillowModelLoaded}");
+        Debug.Log($"MakeItSo loadModel:{loadmodel.Get()} _b19WillowModel:{_b19_WillowModelLoaded}");
         if (loadmodel.Get() && !_b19_WillowModelLoaded)
         {
             var xoff = -3;
