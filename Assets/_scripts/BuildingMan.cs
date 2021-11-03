@@ -361,6 +361,7 @@ namespace CampusSimulator
             b19comp.ActuateWilStatus(curval);
             b19comp.wilbld.SetAndSave(curval);
             //Debug.Log($"Togglingb19osm new val{curval}");
+            b19comp.MakeItSo();
         }
 
         public void ToggleB19glassmode()
