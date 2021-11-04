@@ -216,8 +216,36 @@ namespace CampusSimulator
 
             switch (name)
             {
+                case "StaplesStadium":
+                    {
+
+                        osmnamestart = "Staples Stadium";
+                        maingaragename = "Garage19_1";
+                        newosmgroundref = GroundRef.max;
+                        //roomspecs = B19roomspec;
+                        //destnodes = SplitRoomNameOutOfRoomspecs(roomspecs);
+                        shortname = "stapstad";
+                        journeyChoiceWeight = 20;
+                        if (bm.sman.curscene == SceneSelE.StaplesCenter)
+                        {
+                            bm.sman.jnman.preferedJourneyBuildingName = name;
+                        }
+                        defPeoplePerRoom = 8;
+                        defPercentFull = 0.80f;
+                        defRoomArea = 16;
+                        defAngAlign = 24.0f;
+
+                        sscomp = this.transform.gameObject.AddComponent<StaplesStadium>();
+                        sscomp.InitializeValues(bm.sman, this);
+                        bm.AddBuildingAlias("StaplesStadium", this);
+                        newosmlevels = 2;
+                        newosmheight = 6;
+                        newosmgroundref = GroundRef.max;
+                        break;
+                    }
                 case "Bld19":
                     {
+
                         osmnamestart = "Microsoft Building 19";
                         maingaragename = "Garage19_1";
                         newosmgroundref = GroundRef.max;
@@ -557,6 +585,10 @@ namespace CampusSimulator
             {
                 b19comp.MakeItSo();
             }
+            if (sscomp != null)
+            {
+                sscomp.MakeItSo();
+            }
         }
 
         public void EchOsmLevelOutline(GameObject parent,OsmBldSpec bs,string baseclr,int lev)
@@ -680,6 +712,10 @@ namespace CampusSimulator
             else if (b19comp != null)
             {
                 rv = b19comp.GetCenterPoint(includeAltitude: includeAltitude);
+            }
+            if (sscomp != null)
+            {
+                sscomp.GetCenterPoint(includeAltitude: includeAltitude); 
             }
             else if (hasBldSpec)
             {

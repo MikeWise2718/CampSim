@@ -39,6 +39,7 @@ namespace CampusSimulator
 
         B121Willow b121comp = null;
         B19Willow b19comp = null;
+        StaplesStadium sscomp = null;
 
         //System.Random ranman = new System.Random();
         public Person GetRandomFreeToTravelPerson(string ranset="")

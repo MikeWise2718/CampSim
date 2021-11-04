@@ -501,6 +501,9 @@ namespace CampusSimulator
                     scene_padspecs = Building.MsftDronePadspec;
                     MakeBuildings("Bld");
                     break;
+                case SceneSelE.StaplesCenter:
+                    MakeBuildings("Bld19");
+                    break;
                 case SceneSelE.MsftDublin:
                     MakeBuildings("Dub");
                     break;

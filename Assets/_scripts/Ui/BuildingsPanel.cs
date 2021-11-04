@@ -48,6 +48,7 @@ public class BuildingsPanel : MonoBehaviour
     BuildingMan bdman;
     B19Willow b19comp;
     B121Willow b121comp;
+    StaplesStadium sscomp;
 
 
 
@@ -101,6 +102,19 @@ public class BuildingsPanel : MonoBehaviour
     }
 
 
+    public void EnableStapStadParts(bool state)
+    {
+        //b19_model_toggle.enabled = state;
+        //b19_level1_toggle.enabled = state;
+        //b19_level2_toggle.enabled = state;
+        //b19_level3_toggle.enabled = state;
+        //b19_hvac_toggle.enabled = state;
+        //b19_floors_toggle.enabled = state;
+        //b19_doors_toggle.enabled = state;
+        //b19_osmbld_toggle.enabled = state;
+        //b19_wilbld_toggle.enabled = state;
+    }
+
     public void EnableB19Parts(bool state)
     {
         b19_model_toggle.enabled = state;
@@ -132,6 +146,7 @@ public class BuildingsPanel : MonoBehaviour
     {
         InitB19Vals();
         InitB121Vals();
+        InitSsVals();
 
         walllinks_toggle.isOn = bdman.walllinks.Get();
         osmblds_toggle.isOn = bdman.osmblds.Get();
@@ -201,6 +216,61 @@ public class BuildingsPanel : MonoBehaviour
         }
 
         if (b19comp == null)
+        {
+            EnableB19Parts(false);
+            b19_model_toggle.isOn = false;
+            b19_level1_toggle.isOn = false;
+            b19_level2_toggle.isOn = false;
+            b19_level3_toggle.isOn = false;
+            b19_hvac_toggle.isOn = false;
+            b19_floors_toggle.isOn = false;
+            b19_doors_toggle.isOn = false;
+            b19_osmbld_toggle.isOn = false;
+            b19_wilbld_toggle.isOn = false;
+
+            b19_matmode_dropdown.ClearOptions();
+        }
+        else
+        {
+            EnableB19Parts(true);
+            b19_model_toggle.isOn = b19comp.loadmodel.Get();
+            b19_level1_toggle.isOn = b19comp.level01.Get();
+            b19_level2_toggle.isOn = b19comp.level02.Get();
+            b19_level3_toggle.isOn = b19comp.level03.Get();
+            b19_hvac_toggle.isOn = b19comp.hvac.Get();
+            b19_floors_toggle.isOn = b19comp.floors.Get();
+            b19_doors_toggle.isOn = b19comp.doors.Get();
+            b19_osmbld_toggle.isOn = b19comp.osmbld.Get();
+            b19_wilbld_toggle.isOn = b19comp.wilbld.Get();
+
+            // MaterialMode
+            {
+                var opts = b19comp.b19_materialMode.GetOptionsAsList();
+                var inival = b19comp.b19_materialMode.Get().ToString();
+                var idx = opts.FindIndex(s => s == inival);
+                if (idx <= 0) idx = 0;
+                b19_matmode_dropdown.ClearOptions();
+                b19_matmode_dropdown.AddOptions(opts);
+                //Debug.Log("MatMode add options n:" + opts.Count);
+                b19_matmode_dropdown.value = idx;
+            }
+        }
+    }
+
+    public void InitSsVals()
+    {
+        sscomp = null;
+        var ssbld = bdman.GetBuilding("StaplesStadium", couldFail: true);
+        if (ssbld != null)
+        {
+            sscomp = ssbld.GetComponent<StaplesStadium>();
+            if (sscomp == null)
+            {
+                Debug.LogWarning("BuildingsPanel could not find B19Willow component in B19 building object that it needs to operate");
+            }
+        }
+
+        if (sscomp == null)
         {
             EnableB19Parts(false);
             b19_model_toggle.isOn = false;
