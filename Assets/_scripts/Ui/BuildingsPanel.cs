@@ -28,6 +28,10 @@ public class BuildingsPanel : MonoBehaviour
     Toggle b121_osmbld_toggle;
     Toggle b121_wilbld_toggle;
 
+    Toggle ss_model_toggle;
+    Toggle ss_osmbld_toggle;
+    Toggle ss_wilbld_toggle;
+
 
     Toggle walllinks_toggle;
     Toggle osmblds_toggle;
@@ -41,6 +45,7 @@ public class BuildingsPanel : MonoBehaviour
 
     Dropdown b19_matmode_dropdown;
     Dropdown b121_matmode_dropdown;
+    Dropdown ss_matmode_dropdown;
     Button applyButton;
     Button closeButton;
 
@@ -78,6 +83,13 @@ public class BuildingsPanel : MonoBehaviour
         b121_wilbld_toggle = transform.Find("B121WilbldToggle").GetComponent<Toggle>();
         b121_matmode_dropdown = transform.Find("B121MaterialModeDropdown").GetComponent<Dropdown>();
 
+        ss_model_toggle = transform.Find("SSModelToggle").GetComponent<Toggle>();
+        ss_osmbld_toggle = transform.Find("SSOsmbldToggle").GetComponent<Toggle>();
+        ss_wilbld_toggle = transform.Find("SSCadbldToggle").GetComponent<Toggle>();
+
+        ss_matmode_dropdown = transform.Find("SSMaterialModeDropdown").GetComponent<Dropdown>();
+
+
         walllinks_toggle = transform.Find("WallLinksToggle").GetComponent<Toggle>();
         osmblds_toggle = transform.Find("OsmBldsToggle").GetComponent<Toggle>();
         osmbldstrans_toggle = transform.Find("OsmBldsTransToggle").GetComponent<Toggle>();
@@ -104,15 +116,9 @@ public class BuildingsPanel : MonoBehaviour
 
     public void EnableStapStadParts(bool state)
     {
-        //b19_model_toggle.enabled = state;
-        //b19_level1_toggle.enabled = state;
-        //b19_level2_toggle.enabled = state;
-        //b19_level3_toggle.enabled = state;
-        //b19_hvac_toggle.enabled = state;
-        //b19_floors_toggle.enabled = state;
-        //b19_doors_toggle.enabled = state;
-        //b19_osmbld_toggle.enabled = state;
-        //b19_wilbld_toggle.enabled = state;
+        ss_model_toggle.enabled = state;
+        ss_osmbld_toggle.enabled = state;
+        ss_wilbld_toggle.enabled = state;
     }
 
     public void EnableB19Parts(bool state)
@@ -266,48 +272,36 @@ public class BuildingsPanel : MonoBehaviour
             sscomp = ssbld.GetComponent<StaplesStadium>();
             if (sscomp == null)
             {
-                Debug.LogWarning("BuildingsPanel could not find B19Willow component in B19 building object that it needs to operate");
+                Debug.LogWarning("BuildingsPanel could not find Staples Stadium component in SS building object that it needs to operate");
             }
         }
 
         if (sscomp == null)
         {
-            EnableB19Parts(false);
-            b19_model_toggle.isOn = false;
-            b19_level1_toggle.isOn = false;
-            b19_level2_toggle.isOn = false;
-            b19_level3_toggle.isOn = false;
-            b19_hvac_toggle.isOn = false;
-            b19_floors_toggle.isOn = false;
-            b19_doors_toggle.isOn = false;
-            b19_osmbld_toggle.isOn = false;
-            b19_wilbld_toggle.isOn = false;
+            EnableStapStadParts(false);
+            ss_model_toggle.isOn = false;
+            ss_osmbld_toggle.isOn = false;
+            ss_wilbld_toggle.isOn = false;
 
-            b19_matmode_dropdown.ClearOptions();
+            ss_matmode_dropdown.ClearOptions();
         }
         else
         {
-            EnableB19Parts(true);
-            b19_model_toggle.isOn = b19comp.loadmodel.Get();
-            b19_level1_toggle.isOn = b19comp.level01.Get();
-            b19_level2_toggle.isOn = b19comp.level02.Get();
-            b19_level3_toggle.isOn = b19comp.level03.Get();
-            b19_hvac_toggle.isOn = b19comp.hvac.Get();
-            b19_floors_toggle.isOn = b19comp.floors.Get();
-            b19_doors_toggle.isOn = b19comp.doors.Get();
-            b19_osmbld_toggle.isOn = b19comp.osmbld.Get();
-            b19_wilbld_toggle.isOn = b19comp.wilbld.Get();
+            EnableStapStadParts(true);
+            ss_model_toggle.isOn = sscomp.loadmodel.Get();
+            ss_osmbld_toggle.isOn = sscomp.osmbld.Get();
+            ss_wilbld_toggle.isOn = sscomp.cadbld.Get();
 
             // MaterialMode
             {
-                var opts = b19comp.b19_materialMode.GetOptionsAsList();
-                var inival = b19comp.b19_materialMode.Get().ToString();
+                var opts = sscomp.StapStad_materialMode.GetOptionsAsList();
+                var inival = sscomp.StapStad_materialMode.Get().ToString();
                 var idx = opts.FindIndex(s => s == inival);
                 if (idx <= 0) idx = 0;
-                b19_matmode_dropdown.ClearOptions();
-                b19_matmode_dropdown.AddOptions(opts);
-                //Debug.Log("MatMode add options n:" + opts.Count);
-                b19_matmode_dropdown.value = idx;
+                ss_matmode_dropdown.ClearOptions();
+                ss_matmode_dropdown.AddOptions(opts);
+                Debug.Log("MatMode add options n:" + opts.Count);
+                ss_matmode_dropdown.value = idx;
             }
         }
     }
@@ -369,6 +363,18 @@ public class BuildingsPanel : MonoBehaviour
 
             }
         }
+        if (sscomp != null)
+        {
+            chg = chg || sscomp.loadmodel.SetAndSave(ss_model_toggle.isOn);
+            chg = chg || sscomp.osmbld.SetAndSave(ss_osmbld_toggle.isOn);
+            chg = chg || sscomp.cadbld.SetAndSave(ss_wilbld_toggle.isOn);
+            {
+                var opts = sscomp.StapStad_materialMode.GetOptionsAsList();
+                var newval = opts[ss_matmode_dropdown.value];
+                //Debug.Log("Set toptextlabel default to " + newval);
+                chg = chg || sscomp.StapStad_materialMode.SetAndSave(newval);
+            }
+        }
 
         tchg = tchg || bdman.walllinks.SetAndSave(walllinks_toggle.isOn);
         tchg = tchg || bdman.osmblds.SetAndSave(osmblds_toggle.isOn);
@@ -384,13 +390,17 @@ public class BuildingsPanel : MonoBehaviour
         Debug.Log($"SetValsForRefresh t:{Time.time:f1}   chg:{chg} tchg:{tchg}");
         if (chg || tchg)
         {
+            if (b19comp != null)
+            {
+                b19comp.ActuateChange();
+            }
             if (b121comp != null)
             {
                 b121comp.ActuateChange();
             }
-            if (b19comp != null)
+            if (sscomp != null)
             {
-                b19comp.ActuateChange();
+                sscomp.ActuateChange();
             }
             //Debug.Log($"BuildingsPanel.SetValsForRefresh bman.fixedblds.SetAndSave:{fixedblds_toggle.isOn}");
             sman.RequestRefresh("BuildingsPanel.SetValsForRefresh", totalrefresh:tchg);

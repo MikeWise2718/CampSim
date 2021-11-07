@@ -56,6 +56,7 @@ namespace CampusSimulator
                 "DubBld1",
                 "MtTen-foundher",
                 "MtTen-lastseen",
+                "StaplesStadium",
             };
             l.RemoveAll(item => !item.StartsWith(filter));
             return l;
@@ -219,8 +220,8 @@ namespace CampusSimulator
                 case "StaplesStadium":
                     {
 
-                        osmnamestart = "Staples Stadium";
-                        maingaragename = "Garage19_1";
+                        osmnamestart = "Staples";
+                        maingaragename = "";
                         newosmgroundref = GroundRef.max;
                         //roomspecs = B19roomspec;
                         //destnodes = SplitRoomNameOutOfRoomspecs(roomspecs);
@@ -247,6 +248,10 @@ namespace CampusSimulator
                     {
 
                         osmnamestart = "Microsoft Building 19";
+                        if (bm.sman.curscene== SceneSelE.StaplesCenter)
+                        {
+                            osmnamestart = "retail08";
+                        }
                         maingaragename = "Garage19_1";
                         newosmgroundref = GroundRef.max;
                         roomspecs = B19roomspec;
@@ -312,6 +317,10 @@ namespace CampusSimulator
                 case "Bld121":
                     {
                         osmnamestart = "Microsoft Building 121";
+                        if (bm.sman.curscene == SceneSelE.StaplesCenter)
+                        {
+                            osmnamestart = "retail08";
+                        }
                         maingaragename = "Garage121_1";
                         roomspecs = B121roomspec;
                         destnodes = SplitRoomNameOutOfRoomspecs(roomspecs);

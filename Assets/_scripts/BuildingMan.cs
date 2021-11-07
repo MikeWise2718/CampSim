@@ -503,6 +503,8 @@ namespace CampusSimulator
                     break;
                 case SceneSelE.StaplesCenter:
                     MakeBuildings("Bld19");
+                    MakeBuildings("Bld121");
+                    MakeBuildings("Staples");
                     break;
                 case SceneSelE.MsftDublin:
                     MakeBuildings("Dub");

@@ -330,7 +330,8 @@ public class B19Willow : MonoBehaviour
     {
         if (bspec == null)
         {
-            return floor*3;
+            var rv = floor * 2.5f;
+            return rv;
         }
         else
         {
