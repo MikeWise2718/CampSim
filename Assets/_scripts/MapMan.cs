@@ -999,6 +999,7 @@ namespace CampusSimulator
                     //nodesPerQuadKey = 8;
                     //vviewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
                     viewHome.avatar = ViewerAvatar.QuadCopter;
+                    viewHome.camconfig = ViewerCamConfig.FloatBehindDiv2;
                     viewHome.pos = new Vector3(-82.2f,26.6f,117.0f);
                     viewHome.rot = new Vector3(0, 125, 0);
                     hasLLmap = false;
