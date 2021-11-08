@@ -220,7 +220,8 @@ namespace CampusSimulator
                 case "StaplesStadium":
                     {
 
-                        osmnamestart = "Staples";
+                        //osmnamestart = "Staples";
+                        osmnamestart = "STAPLES";
                         maingaragename = "";
                         newosmgroundref = GroundRef.max;
                         //roomspecs = B19roomspec;

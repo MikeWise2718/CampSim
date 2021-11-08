@@ -389,6 +389,8 @@ public class OptionsPanel : MonoBehaviour
                     enableStringSceneDefault = "Visuals,MapSet,Ui,Log,Help,About";
                     break;
                 }
+            default:
+            case SceneSelE.StaplesCenter:
             case SceneSelE.MsftB19focused:
                 {
                     enableStringSceneDefault = "Visuals,MapSet,Frames,Buildings,Osm,Journey,General,Ui,Log,Help,About";

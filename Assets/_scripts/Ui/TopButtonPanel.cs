@@ -245,6 +245,7 @@ namespace CampusSimulator
                 case SceneSelE.MsftSmall:
                     tbpfiltlist = ",All";
                     break;
+                default:
                 case SceneSelE.MsftB121focused:
                     tbpfiltlist += ",B121,Frame";
                     break;

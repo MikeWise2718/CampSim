@@ -24,6 +24,7 @@ public class StaplesStadium : MonoBehaviour
     public UxEnumSetting<StapStad_MaterialMode> StapStad_materialMode = new UxEnumSetting<StapStad_MaterialMode>("StapStad_MaterialMode", StapStad_MaterialMode.glass);
 
     public OsmBldSpec bspec;
+    public OsmBldSpec bspecaux;
 
     public void InitializeValues(CampusSimulator.SceneMan sman,CampusSimulator.Building bld)
     {
@@ -156,27 +157,29 @@ public class StaplesStadium : MonoBehaviour
         sman.Lgg($"MakeItSo loadModel:{loadmodel.Get()} _ss_CadModelLoaded:{_ss_CadModelLoaded}",color:"violet");
         if (loadmodel.Get() && !_ss_CadModelLoaded)
         {
-            var xoff = -3;
-            var zoff = -3;
-            //var defpos = new Vector3(-474.3f+xoff, 4.72f, 87.6f+zoff);
-
-            //var defpos = new Vector3(-474.3f+xoff, 5.22f, 87.6f+zoff);
-            //ymapheight = sman.mpman.GetHeight(defpos.x, defpos.z);
+            //var xoff = -3;
+            //var zoff = -3;
+            var xoff = 0;
+            var zoff = 0;
             var bsheit = GetZeroBasedFloorHeight(0, includeAltitude: true);
 
-            //var defpos = new Vector3(-474.3f + xoff, bsheit + 5.22f - 0.59f, 87.6f + zoff);
-            var defpos = new Vector3(-474.3f + xoff, bsheit+5.22f-0.79f, 87.6f + zoff);
-            //ymapheight = sman.mpman.GetHeight(defpos.x, defpos.z);
-            sman.Lgg($"MakeItSo B19 bsheit:{bsheit} defpos:{defpos}","orange");
-            //defpos = new Vector3(defpos.x, defpos.y, defpos.z);
-            var obprefab = Resources.Load<GameObject>("Willow/B19/B19-Willow");
+            //var defpos = new Vector3(-474.3f + xoff, bsheit+5.22f-0.79f, 87.6f + zoff);
+            //var defpos = new Vector3(-15.69f + xoff, bsheit, -25.17f + zoff);
+            var defpos = new Vector3(26.7f + xoff, bsheit, 38.5f + zoff);
+            sman.Lgg($"MakeItSo StapleStadium bsheit:{bsheit} defpos:{defpos}","orange");
+            //var obprefab = Resources.Load<GameObject>("Willow/B19/B19-Willow");
+            var obprefab = Resources.Load<GameObject>("Stadiums/StaplesCenter02");
+            if (obprefab==null)
+            {
+                sman.Lgg($"MakeItSo StapleStadium obprefab is null", "orange");
+            }
             if (obprefab != null)
             {
                 ssgo = Instantiate<GameObject>(obprefab);
-                var ftm = 0.3048f;
-                ssgo.transform.localScale = new Vector3(ftm, ftm, ftm);
+                var ska = 0.085f;
+                ssgo.transform.localScale = new Vector3(ska,ska,ska);
                 ssgo.transform.position = defpos;
-                ssgo.transform.Rotate(new Vector3(-90, 26, 0));
+                ssgo.transform.Rotate(new Vector3(-90, 26, -63));
                 ssgo.transform.parent = this.transform;
                 _ss_CadModelLoaded = true;
                 _ss_level01 = true;
@@ -284,12 +287,24 @@ public class StaplesStadium : MonoBehaviour
         {
             bspec = sman.bdman.FindBldSpecByNameStart(bld.osmnamestart);
         }
+        if (bspecaux == null)
+        {
+            bspecaux = sman.bdman.FindBldSpecByNameStart("Staples");
+        }
         if (bspec != null)
         {
             bspec.isVisible = stat;
             if (bspec.bgo != null)
             {
                 bspec.bgo.SetActive(stat);
+            }
+        }
+        if (bspecaux != null)
+        {
+            bspecaux.isVisible = stat;
+            if (bspecaux.bgo != null)
+            {
+                bspecaux.bgo.SetActive(stat);
             }
         }
     }

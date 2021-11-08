@@ -502,8 +502,8 @@ namespace CampusSimulator
                     MakeBuildings("Bld");
                     break;
                 case SceneSelE.StaplesCenter:
-                    MakeBuildings("Bld19");
-                    MakeBuildings("Bld121");
+                    MakeBuildings("Bld19", doosm:false);
+                    MakeBuildings("Bld121", doosm: false);
                     MakeBuildings("Staples");
                     break;
                 case SceneSelE.MsftDublin:
@@ -653,14 +653,18 @@ namespace CampusSimulator
                 nDronesOnPads += pad.GetAllPeopleInRoom().Count;
             }
         }
-        public void MakeBuildings(string predeffiltername)
+        public void MakeBuildings(string predeffiltername,bool doosm=true)
         {
             if (predeffiltername != "")
             {
                 var bldlst = Building.GetPredefinedBuildingNames(predeffiltername);
+                sman.Lgg($"MakeBuildings pdf:{predeffiltername} doosm:{doosm}","purple");
                 bldlst.ForEach(mbname => MakeBuilding(mbname));
             }
-            bldspecs.ForEach(osmbs => MakeOsmBuilding(osmbs));
+            if (doosm)
+            {
+                bldspecs.ForEach(osmbs => MakeOsmBuilding(osmbs));
+            }
         }
         public string presetEvacBldName = "";
         public void EvacPresetBld()
@@ -823,12 +827,6 @@ namespace CampusSimulator
             //sman.Lgg($"MakeOsmBuilding name:{name} bs.shortname:{bldspec.shortname} bs.osmname:{bldspec.osmname}","lilac");
             bld.AddOsmBldDetails(this, bldspec);
             AddBuildingToCollection(bld,mightAlreadyExist:true);
-
-            //bld.llm = bgo.AddComponent<LatLongMap>(); // todo uncomment
-            //var origin = $"BuildingMan.MakeOsmBuilding(\"{mbname}\")";
-            //bld.llm = new LatLongMap(origin); // todo uncomment
-            //bld.llm.AddLlmDetails();
-            //sman.jnman.AddViewerJourneyNodes(bld.destnodes, prefix: $"{mbname}/");
         }
         public void MakeBuilding(string mbname)
         {
@@ -838,11 +836,6 @@ namespace CampusSimulator
             var bld = bgo.AddComponent<Building>();
             bld.AddBldDetails(this);
             AddBuildingToCollection(bld);
-
-            //bld.llm = bgo.AddComponent<LatLongMap>(); // todo uncomment
-            //var origin = $"BuildingMan.MakeBuilding(\"{mbname}\")";
-            //bld.llm = new LatLongMap(origin); // todo uncomment
-            //bld.llm.AddLlmDetails();
             sman.jnman.AddViewerJourneyNodes(bld.destnodes,prefix:$"{mbname}/");
         }
         public void DelBuildings()

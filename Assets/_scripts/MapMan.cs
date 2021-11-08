@@ -979,6 +979,31 @@ namespace CampusSimulator
 
                     isCustomizable = false;
                     break;
+
+                case SceneSelE.StaplesCenter:
+                    maplat = 34.04328;
+                    maplng = -118.26723;
+                    mapscale = 1;
+                    maprot = Vector3.zero;
+                    maptrans = Vector3.zero;
+                    //xdistkm = 14.84f / (2 * 0.4096f);
+                    //zdistkm = 25.17f / (2 * 0.4096f);
+                    xdistkm = 2;
+                    zdistkm = 2;
+                    lod = 16;
+                    //hmultForNow = 10;
+                    useElesForNow = true;
+                    useViewer = true;
+                    mapscale = 1f;
+                    roty2 = 0;
+                    //nodesPerQuadKey = 8;
+                    //vviewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
+                    viewHome.avatar = ViewerAvatar.QuadCopter;
+                    viewHome.pos = new Vector3(-82.2f,26.6f,117.0f);
+                    viewHome.rot = new Vector3(0, 125, 0);
+                    hasLLmap = false;
+                    isCustomizable = false;
+                    break;
                 case SceneSelE.MsftB19focused:
                     maplat = 47.639217;
                     maplng = -122.134216;
@@ -1206,29 +1231,7 @@ namespace CampusSimulator
                     isCustomizable = false;
                     break;
 
-                case SceneSelE.StaplesCenter:
-                    maplat = 34.04328;
-                    maplng = -118.26723;
-                    mapscale = 1;
-                    maprot = Vector3.zero;
-                    maptrans = Vector3.zero;
-                    //xdistkm = 14.84f / (2 * 0.4096f);
-                    //zdistkm = 25.17f / (2 * 0.4096f);
-                    xdistkm = 2;
-                    zdistkm = 2;
-                    lod = 16;
-                    //hmultForNow = 10;
-                    useElesForNow = true;
-                    useViewer = true;
-                    mapscale = 1f;
-                    roty2 = 0;
-                    //nodesPerQuadKey = 8;
-                    //vviewerAvatarDefaultValue = ViewerAvatar.QuadCopter;
-                    viewHome.avatar = ViewerAvatar.QuadCopter;
 
-                    hasLLmap = false;
-                    isCustomizable = false;
-                    break;
 
                 case SceneSelE.Cyclades:
                     //var llmid = new LatLng(36.801411, 25.271239, "Cyclades mid");
