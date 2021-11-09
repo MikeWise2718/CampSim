@@ -74,6 +74,9 @@ namespace CampusSimulator
             {"B121WilButton",new TopButtonMan.TopButSpec("B121WilButton", "Wil", "Show Willow Building Model","cen",0,"stretch",10,"B121")},
             {"#B121Spacer" ,new TopButtonMan.TopButSpec("#B121Spacer","#", "Spacerbutton","cen",0,"stretch",10,"B121")},
 
+            {"SsOsmButton" ,new TopButtonMan.TopButSpec("SsOsmButton","Osm", "Show OsmBUilding","cen",0,"stretch",10,"StSt")},
+            {"SsCadButton",new TopButtonMan.TopButSpec("SsCadButton", "Cad", "Show CAD Building Model","cen",0,"stretch",10,"StSt")},
+            {"#SsSpacer" ,new TopButtonMan.TopButSpec("#SsSpacer","#", "Spacerbutton","cen",0,"stretch",10,"StadStap")},
 
              {"FvGridButton" ,new TopButtonMan.TopButSpec("FvGridButton","Gd", "Show Flight Volume Grids","cen",0,"stretch",10,"Fvol")},
              {"FvTranButton" ,new TopButtonMan.TopButSpec("FvTranButton","Tr", "Show Flight Volume Transparently","cen",0,"stretch",10,"Fvol")},
@@ -166,6 +169,14 @@ namespace CampusSimulator
                 clrbut("B19WilButton", "yellow", idlecolor, b19comp.wilbld.Get(), "Wil");
             }
 
+            var sscomp = sman.bdman.GetSs();
+            if (sscomp != null)
+            {
+                //var glass = b19comp.b19_materialMode.Get() == B19Willow.B19_MaterialMode.glass;
+                clrbut("SsOsmButton", "yellow", idlecolor, sscomp.osmbld.Get(), "Osm");
+                clrbut("SsCadButton", "yellow", idlecolor, sscomp.cadbld.Get(), "Cad");
+            }
+
             var b121comp = sman.bdman.GetB121();
             if (b121comp!=null)
             {
@@ -215,6 +226,7 @@ namespace CampusSimulator
             { "Trx","Track simulations (FireFly)" },
             { "B121","B121 options" },
             { "B19","B19 options" },
+            { "StSt","Staples Stadium options" },
             { "Evac","Evacuation options" },
             { "Frame","Simulated Objectt detection" },
             { "Fvol","Flight Volume Managemnt" },
@@ -246,6 +258,9 @@ namespace CampusSimulator
                     tbpfiltlist = ",All";
                     break;
                 default:
+                case SceneSelE.StaplesCenter:
+                    tbpfiltlist += ",StSt,Frame";
+                    break;
                 case SceneSelE.MsftB121focused:
                     tbpfiltlist += ",B121,Frame";
                     break;

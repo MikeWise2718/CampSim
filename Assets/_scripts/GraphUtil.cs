@@ -14,7 +14,7 @@ namespace GraphAlgos
 {
     public class GraphUtil
     {
-        static string _verstring = "2020.12.21.1 - Winter Solstice 2020";
+        static string _verstring = "2021.11.09.1 - All Saints Day 2021";
         static string _sysver = "";
         static DateTime _buildDate = DateTime.UtcNow;
 

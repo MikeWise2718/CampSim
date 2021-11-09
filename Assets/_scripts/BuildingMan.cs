@@ -283,6 +283,23 @@ namespace CampusSimulator
             }
             return rv;
         }
+
+        public StaplesStadium GetSs()
+        {
+            var bldss = GetBuilding("StaplesStadium", couldFail: true);
+            if (bldss == null)
+            {
+                //sman.LggError($"No Bld19 in scene"); // not all scenes even have B19
+                return null;
+            }
+            var sscomp = bldss.GetComponent<StaplesStadium>();
+            if (sscomp == null)
+            {
+                sman.LggError($"No Staples Stadium Component attached to Bld19 in scene");
+                return null;
+            }
+            return sscomp;
+        }
         public B19Willow GetB19()
         {
             var bld19 = GetBuilding("Bld19", couldFail: true);
@@ -502,8 +519,8 @@ namespace CampusSimulator
                     MakeBuildings("Bld");
                     break;
                 case SceneSelE.StaplesCenter:
-                    MakeBuildings("Bld19", doosm:false);
-                    MakeBuildings("Bld121", doosm: false);
+                    //MakeBuildings("Bld19", doosm:false);
+                    //MakeBuildings("Bld121", doosm: false);
                     MakeBuildings("Staples");
                     break;
                 case SceneSelE.MsftDublin:

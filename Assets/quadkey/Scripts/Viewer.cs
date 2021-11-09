@@ -158,7 +158,7 @@ namespace Aiskwk.Map
         }
         public void InitViewer(QmapMesh qmm, ViewerState homespec = null)
         {
-            //Debug.Log("InitViewer");
+            Debug.Log("InitViewer");
             this.qmm = qmm;
             if (homespec != null)
             {
@@ -184,13 +184,13 @@ namespace Aiskwk.Map
             transform.position = vo;
             altitude = 0;
             altbase = "map";
-            //Debug.Log($"Initviwer initial position {vo}");
-            //RotateViewerToYangle(home.rot.y);
-            //transform.localRotation = Quaternion.Euler(home.rot);
+            Debug.Log($"InitViewer initial position {vo} rot:{homestate.rot}");
+            //RotateViewerToYangle(homestate.rot.y);
+            //transform.localRotation = Quaternion.Euler(homestate.rot);
             qcmdescriptor = qmm.descriptor;
             BuildViewer();
             InitTeleporter();
-            //Debug.Log("Done with InitViewer");
+            Debug.Log("Done with InitViewer");
         }
 
 
