@@ -309,17 +309,17 @@ namespace CampusSimulator
             sscomp.ActuateOsmStatus(curval);
             sscomp.osmbld.SetAndSave(curval);
             //Debug.Log($"TogglingSsosm new val{curval}");
-            sscomp.MakeItSo();
+            // sscomp.MakeItSo();
         }
         public void ToggleSsCad()
         {
             var sscomp = GetSs();
-            var curval = sscomp.osmbld.Get();
+            var curval = sscomp.cadbld.Get();
             curval = !curval;
             sscomp.ActuateCadStatus(curval);
             sscomp.cadbld.SetAndSave(curval);
             //Debug.Log($"TogglingSsCad new val{curval}");
-            sscomp.MakeItSo();
+           // sscomp.MakeItSo();
         }
         public B19Willow GetB19()
         {
