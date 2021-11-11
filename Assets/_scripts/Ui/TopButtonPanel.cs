@@ -133,6 +133,10 @@ namespace CampusSimulator
             butspec["B19WilButton"].action = delegate { ToggleB19Wil(); };
             butspec["B19GlassWallsButton"].action = delegate { ToggleB19GlassMode(); };
 
+            butspec["SsOsmButton"].action = delegate { ToggleSsOsm(); };
+            butspec["SsCadButton"].action = delegate { ToggleSsCad(); };
+
+
             butspec["B121TranButton"].action = delegate { B121MakeTransButton(); };
             butspec["B121HvacButton"].action = delegate { ToggleB121HvacButton(); };
             butspec["B121ElecButton"].action = delegate { ToggleB121lighting(); };
@@ -242,7 +246,7 @@ namespace CampusSimulator
             return rv;
         }
 
-        public const string tbprootfiltlist = "All,Sim,Trx,B19,B121,Evac,Frame,Fvol";
+        public const string tbprootfiltlist = "All,Sim,Trx,B19,B121,StSt,Evac,Frame,Fvol";
 
         public string tbpfiltlist;
 
@@ -593,6 +597,17 @@ namespace CampusSimulator
             ColorizeButtonStates();
         }
 
+
+        public void ToggleSsOsm()
+        {
+            sman.bdman.ToggleSsOsm();
+            ColorizeButtonStates();
+        }
+        public void ToggleSsCad()
+        {
+            sman.bdman.ToggleSsCad();
+            ColorizeButtonStates();
+        }
 
 
         public void B121MakeTransButton()

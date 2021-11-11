@@ -214,7 +214,7 @@ public class StaplesStadium : MonoBehaviour
             if (cadbld.Get() != _ss_cadbld)
             {
                 var stat = cadbld.Get();
-                ActuateWilStatus(stat);
+                ActuateCadStatus(stat);
                 _ss_cadbld = stat;
             }
             if (osmbld.Get() != _ss_osmbld)
@@ -310,7 +310,7 @@ public class StaplesStadium : MonoBehaviour
         }
     }
 
-    public void ActuateWilStatus(bool stat)
+    public void ActuateCadStatus(bool stat)
     {
         if (ssgo != null)
         {

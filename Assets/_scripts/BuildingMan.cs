@@ -300,6 +300,27 @@ namespace CampusSimulator
             }
             return sscomp;
         }
+
+        public void ToggleSsOsm()
+        {
+            var sscomp = GetSs();
+            var curval = sscomp.osmbld.Get();
+            curval = !curval;
+            sscomp.ActuateOsmStatus(curval);
+            sscomp.osmbld.SetAndSave(curval);
+            //Debug.Log($"TogglingSsosm new val{curval}");
+            sscomp.MakeItSo();
+        }
+        public void ToggleSsCad()
+        {
+            var sscomp = GetSs();
+            var curval = sscomp.osmbld.Get();
+            curval = !curval;
+            sscomp.ActuateCadStatus(curval);
+            sscomp.cadbld.SetAndSave(curval);
+            //Debug.Log($"TogglingSsCad new val{curval}");
+            sscomp.MakeItSo();
+        }
         public B19Willow GetB19()
         {
             var bld19 = GetBuilding("Bld19", couldFail: true);
@@ -398,6 +419,8 @@ namespace CampusSimulator
             b19comp.glasswalls.SetAndSave(newmat == B19Willow.B19_MaterialMode.glass);
             b19comp.MakeItSo();
         }
+
+
 
 
         public B121Willow GetB121()
