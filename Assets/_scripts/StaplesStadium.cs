@@ -168,7 +168,8 @@ public class StaplesStadium : MonoBehaviour
             var defpos = new Vector3(26.7f + xoff, bsheit-1.0f, 38.5f + zoff);
             sman.Lgg($"MakeItSo StapleStadium bsheit:{bsheit} defpos:{defpos}","orange");
             //var obprefab = Resources.Load<GameObject>("Willow/B19/B19-Willow");
-            var obprefab = Resources.Load<GameObject>("Stadiums/StaplesCenter02");
+            //var obprefab = Resources.Load<GameObject>("Stadiums/StaplesCenter02");
+            var obprefab = Resources.Load<GameObject>("Stadiums/StaplesStadium03");
             if (obprefab==null)
             {
                 sman.Lgg($"MakeItSo StapleStadium obprefab is null", "orange");

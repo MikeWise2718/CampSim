@@ -667,9 +667,6 @@ public class JourneyPanel : MonoBehaviour
         definedJourneys.Remove(key);
         JourneySpec.EraseJsKey(key);
     }
-
-
-
     public void DefineJourneyButtonPressed()
     {
         ClearStatusMessage();
@@ -814,7 +811,6 @@ public class JourneyPanel : MonoBehaviour
         curJnySpecName.text = $"jman.CurJnySpecName:{jnman.curJnySpecName.Get()}";
     }
 
-
     public void SaveDefinedJourneyToPersistentStore()
     {
         foreach (var key in definedJourneys.Keys)
@@ -843,5 +839,4 @@ public class JourneyPanel : MonoBehaviour
             lastCheck = Time.time;
         }
     }
-
 }

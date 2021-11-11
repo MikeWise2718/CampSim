@@ -186,6 +186,7 @@ namespace Aiskwk.Map
             altbase = "map";
             Debug.Log($"InitViewer initial position {vo} rot:{homestate.rot}");
             //RotateViewerToYangle(homestate.rot.y);
+            //bodyPlaneRotation.eulerAngles = homestate.rot;
             //transform.localRotation = Quaternion.Euler(homestate.rot);
             qcmdescriptor = qmm.descriptor;
             BuildViewer();
@@ -236,7 +237,7 @@ namespace Aiskwk.Map
             //transform.localRotation = Quaternion.Euler(home.rot); // Think this has to match the rotation it was built with
                                                                   // or we get problems when we follownormal along the mesh
             TranslateViewer(0, 0);
-            RotateViewerToYangle(0);
+            RotateViewerToYangle(homestate.rot.y);
             //Debug.Log($"ReAdjustViewerInitialPosition - after  scale:{transform.localScale} rotation:{transform.localRotation.eulerAngles}");
             //DumpViewer();
         }
@@ -862,19 +863,33 @@ namespace Aiskwk.Map
         }
 
 
+        int rvtycnt = 0;
 
         void RotateViewerToYangle(float yangle)
         {
-            //Debug.Log($"RotateViewerToYangle - Viewer rotation before  {transform.localRotation.eulerAngles}");
-            //Debug.Log($"RotateViewerToYangle - Moveplane rotation before  {moveplane.transform.localRotation.eulerAngles}");
+            rvtycnt++;
+            Debug.Log($"RotateViewerToYangle - Viewer rotation before  {transform.localRotation.eulerAngles} {rvtycnt}");
+            if (moveplane != null)
+            {
+                Debug.Log($"                 - Moveplane rotation before  {moveplane.transform.localRotation.eulerAngles}");
+            }
 
             bodyPlaneRotation = Quaternion.Euler(new Vector3(0, yangle, 0));
-            moveplane.transform.localRotation = bodyPlaneRotation;
+            if (moveplane != null)
+            {
+                moveplane.transform.localRotation = bodyPlaneRotation;
+            }
             bodyPrefabRotation = Quaternion.Euler(new Vector3(0, yangle, 0));
-            body.transform.localRotation = Quaternion.FromToRotation(Vector3.up, lstnrm) * bodyPrefabRotation;
+            if (body != null)
+            {
+                body.transform.localRotation = Quaternion.FromToRotation(Vector3.up, lstnrm) * bodyPrefabRotation;
+            }
 
-            //Debug.Log($"RotateViewerToYangle - Moveplane rotation after  {moveplane.transform.localRotation.eulerAngles}");
-            //Debug.Log($"RotateViewerToYangle - Viewer rotation after   {transform.localRotation.eulerAngles}");
+            if (moveplane != null)
+            {
+                Debug.Log($"            - Moveplane rotation after  {moveplane.transform.localRotation.eulerAngles}");
+            }
+            Debug.Log($"             - Viewer rotation after   {transform.localRotation.eulerAngles}");
         }
 
         public delegate (string panCamOrietation, string panCamMonitors) GetPanCamParametersDelegate();
