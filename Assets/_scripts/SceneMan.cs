@@ -1848,7 +1848,7 @@ namespace CampusSimulator
                     Debug.Log("Hit it twice so quitting: Application.Quit()");
                     Quit();
                 }
-                // CTRL + Q
+                // CTRL + Q - 
                 ctrlQhitTime = Time.time;
             }
             if (((Time.time - F5hitTime) > 0.5) && Input.GetKeyDown(KeyCode.F5))

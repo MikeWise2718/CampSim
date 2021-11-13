@@ -318,8 +318,6 @@ namespace CampusSimulator
             curval = !curval;
             sscomp.ActuateCadStatus(curval);
             sscomp.cadbld.SetAndSave(curval);
-            //Debug.Log($"TogglingSsCad new val{curval}");
-           // sscomp.MakeItSo();
         }
         public B19Willow GetB19()
         {
