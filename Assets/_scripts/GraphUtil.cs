@@ -1137,7 +1137,8 @@ namespace GraphAlgos
             var renderer = go.GetComponent<Renderer>();
             if (renderer != null)
             {
-                msg += ", m:" + renderer.material.name;
+                //msg += ", m:" + renderer.material.name;
+                msg += "," + renderer.material.name;
             }
             slist.Add(msg);
             var got = go.transform;

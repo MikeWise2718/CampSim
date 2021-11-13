@@ -8,10 +8,7 @@ public class StaplesStadium : MonoBehaviour
     public enum StapStad_MaterialMode {  raw, materialed, glass, glasswalls };
 
     public UxSetting<bool> loadmodel = new UxSetting<bool>("StapStad_Model", true);
-    public UxSetting<bool> level01 = new UxSetting<bool>("StapStad_level01", true);
-    public UxSetting<bool> level02 = new UxSetting<bool>("StapStad_level02", true);
-    public UxSetting<bool> level03 = new UxSetting<bool>("StapStad_level03", true);
-    public UxSetting<bool> hvac = new UxSetting<bool>("StapStad_hvac", true);
+    public UxSetting<bool> roof = new UxSetting<bool>("StapStad_roof", true);
     public UxSetting<bool> floors = new UxSetting<bool>("StapStad_floors", true);
     public UxSetting<bool> doors = new UxSetting<bool>("StapStad_doors", true);
     public UxSetting<bool> osmbld = new UxSetting<bool>("StapStad_osmbld", false);
@@ -32,10 +29,7 @@ public class StaplesStadium : MonoBehaviour
         this.bld = bld;
         StapStad_materialMode.GetInitial(StapStad_MaterialMode.glasswalls);
         loadmodel.GetInitial(true);
-        _ss_level01 = level01.GetInitial(true);
-        _ss_level02 = level02.GetInitial(false);
-        _ss_level03 = level03.GetInitial(false);
-        _ss_hvac = hvac.GetInitial(false);
+        _ss_roof = roof.GetInitial(false);
         _ss_floors = floors.GetInitial(false);
         _ss_doors = doors.GetInitial(false);
         _ss_osmbld = osmbld.GetInitial(false);
@@ -48,10 +42,7 @@ public class StaplesStadium : MonoBehaviour
 
 
     bool _ss_CadModelLoaded = false;
-    bool _ss_level01 = false;
-    bool _ss_level02 = false;
-    bool _ss_level03 = false;
-    bool _ss_hvac = false;
+    bool _ss_roof = false;
     bool _ss_floors = false;
     bool _ss_doors = false;
     bool _ss_osmbld = false;
@@ -67,21 +58,6 @@ public class StaplesStadium : MonoBehaviour
     {
         var chg = false;
         if (loadmodel.Get() != _ss_CadModelLoaded) chg = true;
-        if (level01.Get() != _ss_level01)
-        {
-            chg = true;
-            //Debug.Log("1");
-        }
-        if (level02.Get() != _ss_level02)
-        {
-            chg = true;
-            //Debug.Log("2");
-        }
-        if (level03.Get() != _ss_level03)
-        {
-            chg = true;
-            //Debug.Log("3");
-        }
         if (floors.Get() != _ss_floors)
         {
             chg = true;
@@ -92,7 +68,7 @@ public class StaplesStadium : MonoBehaviour
             chg = true;
             //Debug.Log("floors");
         }
-        if (hvac.Get() != _ss_hvac)
+        if (roof.Get() != _ss_roof)
         {
             chg = true;
             //Debug.Log("floors");
@@ -177,18 +153,16 @@ public class StaplesStadium : MonoBehaviour
             if (obprefab != null)
             {
                 ssgo = Instantiate<GameObject>(obprefab);
+                ssgo.name = "StapleStadium";
                 var ska = 0.085f;
                 ssgo.transform.localScale = new Vector3(ska,ska,ska);
                 ssgo.transform.position = defpos;
                 ssgo.transform.Rotate(new Vector3(-90, 26, -63));
                 ssgo.transform.parent = this.transform;
                 _ss_CadModelLoaded = true;
-                _ss_level01 = true;
-                _ss_level02 = true;
-                _ss_level03 = true;
                 _ss_floors = true;
                 _ss_doors = true;
-                _ss_hvac = true;
+                _ss_roof = true;
                 _ss_osmbld = sman.bdman.osmblds.Get();
                 _ss_cadbld = true;
                 loadedThisTime = true;
@@ -199,14 +173,8 @@ public class StaplesStadium : MonoBehaviour
             DestroyGos();
             loadmodel.SetAndSave( false );
             _ss_CadModelLoaded = false;
-            level01.SetAndSave( false );
-            _ss_level01 = false;
-            level02.SetAndSave( false );
-            _ss_level02 = false;
-            level03.SetAndSave( false );
-            _ss_level03 = false;
-            hvac.SetAndSave( false );
-            _ss_hvac = false;
+            roof.SetAndSave( false );
+            _ss_roof = false;
             _ss_osmbld = sman.bdman.osmblds.Get(); 
         }
         if (ssgo)
@@ -223,56 +191,23 @@ public class StaplesStadium : MonoBehaviour
                 ActuateOsmStatus(stat);
                 _ss_osmbld = stat;
             }
-            if (level01.Get() != _ss_level01)
-            {
-                //Debug.Log("Fixing 1");
-                var stat = level01.Get();
-                SetChildVis("L01-AR", stat);
-                //SetChildVis("L01-ME", stat);
-                _ss_level01 = stat;
-            }
-            if (level02.Get() != _ss_level02)
-            {
-                //Debug.Log("Fixing 2");
-                var stat = level02.Get();
-                SetChildVis("L02-AR", stat);
-                //SetChildVis("L02-ME", stat);
-                _ss_level02 = stat;
-            }
-            if (level03.Get() != _ss_level03)
-            {
-                //Debug.Log("Fixing 3");
-                var stat = level03.Get();
-                SetChildVis("L03-AR", stat);
-                //SetChildVis("L03-ME", stat);
-                _ss_level03 = stat;
-            }
             if (floors.Get() != _ss_floors)
             {
                 //Debug.Log("Fixing floors");
                 var stat = floors.Get();
-                SetChildVis2("L01-AR", "Solid", stat);
-                SetChildVis2("L02-AR", "Solid", stat);
-                SetChildVis2("L03-AR", "Solid", stat);
                 _ss_floors = stat;
             }
             if (doors.Get() != _ss_doors)
             {
                 //Debug.Log("Fixing doors");
                 var stat = doors.Get();
-                SetChildVis2("L01-AR", "Composite_Part", stat);
-                SetChildVis2("L02-AR", "Composite_Part", stat);
-                SetChildVis2("L03-AR", "Composite_Part", stat);
                 _ss_doors = stat;
             }
-            if (hvac.Get() != _ss_hvac)
+            if (roof.Get() != _ss_roof)
             {
                 //Debug.Log("Fixing hvac");
-                var stat = hvac.Get();
-                SetChildVis("L01-ME", stat);
-                SetChildVis("L02-ME", stat);
-                SetChildVis("L03-ME", stat);
-                _ss_hvac = stat;
+                var stat = roof.Get();
+                _ss_roof = stat;
             }
             if (loadedThisTime || lastMaterialMode != StapStad_materialMode.Get())
             {
@@ -346,165 +281,192 @@ public class StaplesStadium : MonoBehaviour
         return rv;
     }
 
-    //public float GetFloorHeightOld(int floor, bool includeAltitude = true)
-    //{
-    //    var rv = 0.01f;
-    //    if (floor < 0) floor = 0;
-    //    if (floor > 2) floor = 2;
-    //    switch (floor)
-    //    {
-    //        case 0:
-    //        case 1:
-    //            rv = 0.01f;
-    //            break;
-    //        case 2:
-    //            rv = 2.11f;
-    //            break;
-    //    }
-    //    if (includeAltitude)
-    //    {
-    //        //rv += ymapheight;
-    //        if (bspec == null)
-    //        {
-    //            sman.LggError("B19Willow.GetFloorHeight - bspec null with includeAltitude=true");
-    //        }
-    //        else
-    //        {
-    //            rv += bspec.GetGround();
-    //        }
-    //    }
-    //    return rv;
-    //}
-
-
     List<string> ss_parts = new List<string>
     {
-        //"B19-Willow/L03-ME/Exhaust_Air_Duct,Exhaust_Air_DuctMat",
-        //"B19-Willow/L03-ME/Solid,SolidMat",
-        //"B19-Willow/L03-ME/Supply_Air_Duct,Supply_Air_DuctMat",
-        //"B19-Willow/L01-AR/*Door_Frame,_Door_FrameMat",
-        //"B19-Willow/L01-AR/*Finish_Facade_Feature_Wall,_Finish_Facade_Feature_WallMat",
-        //"B19-Willow/L01-AR/*Glazing_Glass_-_Clear,_Glazing_Glass_-_ClearMat",
-        //"B19-Willow/L01-AR/*Metal_Aluminum,_Metal_AluminumMat",
-        //"B19-Willow/L01-AR/*Metal_Powdercoated_White,_Metal_Powdercoated_WhiteMat",
-        //"B19-Willow/L01-AR/*Metal_Stainless_Steel_-_Polished,_Metal_Stainless_Steel_-_PolishedMat",
-        //"B19-Willow/L01-AR/*Wall_Generic,_Wall_GenericMat",
-        //"B19-Willow/L01-AR/.Wall_Default,",
-        //"B19-Willow/L01-AR/_Aluminium,_AluminiumMat",
-        //"B19-Willow/L01-AR/Composite_Part,Composite_PartMat",
-        //"B19-Willow/L01-AR/Computer_Basic,Computer_BasicMat",
-        //"B19-Willow/L01-AR/Computer_Basic_2,Computer_Basic_2Mat",
-        //"B19-Willow/L01-AR/Computer_Basic_3,Computer_Basic_3Mat",
-        //"B19-Willow/L01-AR/Computer_Glass,Computer_GlassMat",
-        //"B19-Willow/L01-AR/Computer_Light_(ON),Computer_Light_(ON)Mat",
-        //"B19-Willow/L01-AR/Computer_Metal,Computer_MetalMat",
-        //"B19-Willow/L01-AR/Computer_Metal_2,Computer_Metal_2Mat",
-        //"B19-Willow/L01-AR/Generic_-_Plastic_-_Black,Generic_-_Plastic_-_BlackMat",
-        //"B19-Willow/L01-AR/Generic_-_Plastic_-_Grey,Generic_-_Plastic_-_GreyMat",
-        //"B19-Willow/L01-AR/IKE080018_2,IKE080018_2Mat",
-        //"B19-Willow/L01-AR/IKE080018_3,IKE080018_3Mat",
-        //"B19-Willow/L01-AR/IKE160124_1,IKE160124_1Mat",
-        //"B19-Willow/L01-AR/IKE160124_2,IKE160124_2Mat",
-        //"B19-Willow/L01-AR/IKE160124_3,IKE160124_3Mat",
-        //"B19-Willow/L01-AR/IKE160124_4,IKE160124_4Mat",
-        //"B19-Willow/L01-AR/IKE160130_1,IKE160130_1Mat",
-        //"B19-Willow/L01-AR/IKE160130_2,IKE160130_2Mat",
-        //"B19-Willow/L01-AR/IKE160130_3,IKE160130_3Mat",
-        //"B19-Willow/L01-AR/IKE160130_4,IKE160130_4Mat",
-        //"B19-Willow/L01-AR/Metal-Chrome-Caroma,Metal-Chrome-CaromaMat",
-        //"B19-Willow/L01-AR/PC_Monitor_Color,PC_Monitor_ColorMat",
-        //"B19-Willow/L01-AR/PC_Monitor_Glass,PC_Monitor_GlassMat",
-        //"B19-Willow/L01-AR/Porcelain-White-Caroma,Porcelain-White-CaromaMat",
-        //"B19-Willow/L01-AR/Solid,SolidMat",
-        //"B19-Willow/L01-ME/Copper,CopperMat",
-        //"B19-Willow/L01-ME/Gas_Pipe,Gas_PipeMat",
-        //"B19-Willow/L01-ME/Line,LineMat",
-        //"B19-Willow/L01-ME/Return_Air_Duct,Return_Air_DuctMat",
-        //"B19-Willow/L01-ME/Solid,SolidMat",
-        //"B19-Willow/L01-ME/Supply_Air_Duct,Supply_Air_DuctMat",
-        //"B19-Willow/L02-AR/*Door_Frame,_Door_FrameMat",
-        //"B19-Willow/L02-AR/*Fabric_Linen_Porcelain,_Fabric_Linen_PorcelainMat",
-        //"B19-Willow/L02-AR/*Finish_Facade_Feature_Wall,_Finish_Facade_Feature_WallMat",
-        //"B19-Willow/L02-AR/*Glazing_Glass_-_Clear,_Glazing_Glass_-_ClearMat",
-        //"B19-Willow/L02-AR/*Metal_Aluminum,_Metal_AluminumMat",
-        //"B19-Willow/L02-AR/*Wall_Generic,_Wall_GenericMat",
-        //"B19-Willow/L02-AR/.Wall_Default,",
-        //"B19-Willow/L02-AR/_Aluminium,_AluminiumMat",
-        //"B19-Willow/L02-AR/Composite_Part,Composite_PartMat",
-        //"B19-Willow/L02-AR/Metal-Chrome-Caroma,Metal-Chrome-CaromaMat",
-        //"B19-Willow/L02-AR/Porcelain-White-Caroma,Porcelain-White-CaromaMat",
-        //"B19-Willow/L02-AR/Solid,SolidMat",
-        //"B19-Willow/L02-ME/Exhaust_Air_Duct,Exhaust_Air_DuctMat",
-        //"B19-Willow/L02-ME/Return_Air_Duct,Return_Air_DuctMat",
-        //"B19-Willow/L02-ME/Solid,SolidMat",
-        //"B19-Willow/L02-ME/Supply_Air_Duct,Supply_Air_DuctMat",
-        //"B19-Willow/L03-AR/*Finish_Facade_Feature_Wall,_Finish_Facade_Feature_WallMat",
-        //"B19-Willow/L03-AR/*Wall_Generic,_Wall_GenericMat"
+        "StapleStadium/air_con,air_con (Instance)",
+        "StapleStadium/air_con_stand,air_stand (Instance)",
+        "StapleStadium/balcons,balcony (Instance)",
+        "StapleStadium/balcons_floor,balcons_floor (Instance)",
+        "StapleStadium/balcons_lamps,balcons_lamps (Instance)",
+        "StapleStadium/balcony_building,balcony_building (Instance)",
+        "StapleStadium/balustrade,balustrade (Instance)",
+        "StapleStadium/balustrade2,balustrade (Instance)",
+        "StapleStadium/bar_frame,white_frame (Instance)",
+        "StapleStadium/bar_frame.000,white_frame (Instance)",
+        "StapleStadium/base,base (Instance)",
+        "StapleStadium/black_window_frame,black_window_frame (Instance)",
+        "StapleStadium/bright_windows,bright_glass (Instance)",
+        "StapleStadium/chairs_brown,chairs_brown (Instance)",
+        "StapleStadium/chairs_tables_white,chairs_tables_white (Instance)",
+        "StapleStadium/columns,columns (Instance)",
+        "StapleStadium/Cube,Material (Instance)",
+        "StapleStadium/Cube.001,Material.001 (Instance)",
+        "StapleStadium/curtains,curtains (Instance)",
+        "StapleStadium/dark_windows,dark_glass (Instance)",
+        "StapleStadium/dome,dome (Instance)",
+        "StapleStadium/doors,doors (Instance)",
+        "StapleStadium/entry_columnB,entry_columnB (Instance)",
+        "StapleStadium/entry_columnsW,entry_columnsW (Instance)",
+        "StapleStadium/gray_ventilator,gray_wall1 (Instance)",
+        "StapleStadium/gray_wall1,gray_wall2 (Instance)",
+        "StapleStadium/gray_wall2,gray_wall2 (Instance)",
+        "StapleStadium/gray_wall3,gray_wall2 (Instance)",
+        "StapleStadium/gray_wall4,gray_wall2 (Instance)",
+        "StapleStadium/gray_wall5,gray_wall2 (Instance)",
+        "StapleStadium/gray_wall6,gray_wall2 (Instance)",
+        "StapleStadium/gray_wall7,gray_wall2 (Instance)",
+        "StapleStadium/gray_wall8,gray_wall2 (Instance)",
+        "StapleStadium/gray_wall9,gray_wall2 (Instance)",
+        "StapleStadium/gray_wall10,gray_wall2 (Instance)",
+        "StapleStadium/gray_wall11,gray_wall2 (Instance)",
+        "StapleStadium/gray_wall12,gray_wall2 (Instance)",
+        "StapleStadium/gray_wall13,gray_wall2 (Instance)",
+        "StapleStadium/gray_wall14,gray_wall2 (Instance)",
+        "StapleStadium/gray_wall15,gray_wall2 (Instance)",
+        "StapleStadium/gray_wall16,gray_wall2 (Instance)",
+        "StapleStadium/gray_wall17,gray_wall2 (Instance)",
+        "StapleStadium/gray_wall18,gray_wall2 (Instance)",
+        "StapleStadium/gray_wall19,gray_wall2 (Instance)",
+        "StapleStadium/gray_wall20,gray_wall2 (Instance)",
+        "StapleStadium/gray_wall21,gray_wall2 (Instance)",
+        "StapleStadium/ground1,wall_ground1 (Instance)",
+        "StapleStadium/ground2,wall_ground2 (Instance)",
+        "StapleStadium/ground3,wall_ground4 (Instance)",
+        "StapleStadium/ground4,wall_ground4 (Instance)",
+        "StapleStadium/ground5,wall_ground5 (Instance)",
+        "StapleStadium/ground6,wall_ground6 (Instance)",
+        "StapleStadium/ground7,wall_ground6 (Instance)",
+        "StapleStadium/ground8,wall_ground8 (Instance)",
+        "StapleStadium/ground9,wall_ground9 (Instance)",
+        "StapleStadium/ground10,wall_ground10 (Instance)",
+        "StapleStadium/ground11,wall_ground11 (Instance)",
+        "StapleStadium/ground12,wall_ground12 (Instance)",
+        "StapleStadium/ground13,wall_ground13 (Instance)",
+        "StapleStadium/handrail,handrail (Instance)",
+        "StapleStadium/hood,hood (Instance)",
+        "StapleStadium/lakers_ad,lakers_logo (Instance)",
+        "StapleStadium/lamp_globe,white_glass (Instance)",
+        //"StapleStadium/Light",
+        //"StapleStadium/Light.001",
+        "StapleStadium/NE_wall,wall1 (Instance)",
+        "StapleStadium/NE_wall1,gray_wall1 (Instance)",
+        "StapleStadium/NE_wall2,wall_concrete_grey (Instance)",
+        "StapleStadium/NE_wall3,wall2 (Instance)",
+        "StapleStadium/NE_wall4,wall3 (Instance)",
+        "StapleStadium/nike_ad,nike_ads (Instance)",
+        "StapleStadium/northeastern_wall,wall7 (Instance)",
+        "StapleStadium/office_pink,box_office (Instance)",
+        "StapleStadium/poles,poles (Instance)",
+        "StapleStadium/reflectors,reflectors (Instance)",
+        "StapleStadium/restaurant_floor,restaurant_floor (Instance)",
+        "StapleStadium/restaurant_floor_out,restaurant_floor_out (Instance)",
+        "StapleStadium/restaurant_roof,restaurant_roof (Instance)",
+        "StapleStadium/ring_roof,ring_roof (Instance)",
+        "StapleStadium/roof,roof (Instance)",
+        "StapleStadium/roof_bar,roof_stripe (Instance)",
+        "StapleStadium/roof_door_frame,roof_door_frame (Instance)",
+        "StapleStadium/roof_doors_frame,roof_doors (Instance)",
+        "StapleStadium/roof_lamps,roof_lamps (Instance)",
+        "StapleStadium/roof_red,red_roof (Instance)",
+        "StapleStadium/roof_room,roof_room (Instance)",
+        "StapleStadium/roof_room_floor,szpic (Instance)",
+        "StapleStadium/roof_spitz,roof_spitz (Instance)",
+        "StapleStadium/roof_stairs,stairs (Instance)",
+        "StapleStadium/roof_wall,roof_wall (Instance)",
+        "StapleStadium/S_building,S_building (Instance)",
+        "StapleStadium/S_bulding_wall,gray_wall1 (Instance)",
+        "StapleStadium/S_floor,S_floor (Instance)",
+        "StapleStadium/S_floor2,S_floor (Instance)",
+        "StapleStadium/S_roofDark,S_roofdark (Instance)",
+        "StapleStadium/S_roofDark2,S_roofdark (Instance)",
+        "StapleStadium/S_roofWhite,S_roofWhite (Instance)",
+        "StapleStadium/S_wall1,S_bulding_wall (Instance)",
+        "StapleStadium/S_wall2,S_wall (Instance)",
+        "StapleStadium/S_wall3,S_bulding_wall (Instance)",
+        "StapleStadium/S_wall4,S_wall4 (Instance)",
+        "StapleStadium/S_wall5,S_wall5 (Instance)",
+        "StapleStadium/S_wall6,S_wall6 (Instance)",
+        "StapleStadium/S_wall7,white_frame (Instance)",
+        "StapleStadium/S_wall8,white_frame (Instance)",
+        "StapleStadium/S_wall9,b_w_wall (Instance)",
+        "StapleStadium/S_wall10,gray_wall1 (Instance)",
+        "StapleStadium/satellite_dishes,satellite_dishes (Instance)",
+        "StapleStadium/solar_standB,solar_stand_black (Instance)",
+        "StapleStadium/solar_standW,solar_white_stand (Instance)",
+        "StapleStadium/solars,solars (Instance)",
+        "StapleStadium/stairs,white_frame (Instance)",
+        "StapleStadium/staple_stand,text_stands (Instance)",
+        "StapleStadium/staples_handle,staples_handle (Instance)",
+        "StapleStadium/staples_red,staples_red_text (Instance)",
+        "StapleStadium/staples_roof,staples_roof (Instance)",
+        "StapleStadium/storey,storey (Instance)",
+        "StapleStadium/storey_buildings,storey_buildings (Instance)",
+        "StapleStadium/storey_lamps,lamps (Instance)",
+        "StapleStadium/tables_brown,tables (Instance)",
+        "StapleStadium/teamLA,team_LA (Instance)",
+        "StapleStadium/teamLA_ad,teamLA (Instance)",
+        "StapleStadium/ticket_office,white_frame (Instance)",
+        "StapleStadium/ticketoffice,white_frame (Instance)",
+        "StapleStadium/TV_desktop,tv (Instance)",
+        "StapleStadium/TV_frame,TV_frame (Instance)",
+        "StapleStadium/TV_wall,wall7 (Instance)",
+        "StapleStadium/ventilator,wire_255255255 (Instance)",
+        "StapleStadium/ventilators,ventilators (Instance)",
+        "StapleStadium/W_building1,W_building2 (Instance)",
+        "StapleStadium/W_building2,W_building2 (Instance)",
+        "StapleStadium/W_wall,grey_wall2 (Instance)",
+        "StapleStadium/W_wall1,W_wall1 (Instance)",
+        "StapleStadium/W_wall2,wall5 (Instance)",
+        "StapleStadium/white_window_frame,white_frame (Instance)",
     };
 
-    Dictionary<string, string> bldmatmap = new Dictionary<string, string>
-    {
-        {"SolidMat","WallWhite"},
-        {"Exhaust_Air_DuctMat","Aluminium"},
-        {"Supply_Air_DuctMat","Aluminium"},
-        {"Return_Air_DuctMat","Aluminium"},
-        {"_Door_FrameMat","Plywood"},
-        {"_Finish_Facade_Feature_WallMat","FacadeWall"},
-        {"_Glazing_Glass_-_ClearMat","DustyGlass"},
-        {"_Metal_Powdercoated_WhiteMat","Aluminium"},
-        {"_Metal_Stainless_Steel_-_PolishedMat","Steel"},
-        {"_Wall_GenericMat","WallMat"},
-        {"_Fabric_Linen_PorcelainMat","WallMat"},
-        {"","WallMat"},
-        {"_Metal_AluminumMat","Aluminium"},
-        {"_AluminiumMat","Aluminium"},
-        {"Composite_PartMat","WallMat"},
-        {"Computer_BasicMat","PlasticHololens"},
-        {"Computer_Basic_2Mat","PlasticHololens"},
-        {"Computer_Basic_3Mat","PlasticHololens"},
-        {"Computer_GlassMat","ComputerGlass"},
-        {"Computer_Light_(ON)Mat","BlueLight"},
-        {"Computer_MetalMat","Aluminium"},
-        {"Computer_Metal_2Mat","Aluminium"},
-        {"PC_Monitor_ColorMat","ComputerGlass"},
-        {"PC_Monitor_GlassMat","ComputerGlass"},
-        {"Generic_-_Plastic_-_BlackMat","PlasticHololens"},
-        {"Generic_-_Plastic_-_GreyMat","PlasticHololens"},
-        {"IKE080018_2Mat","Aluminium"},
-        {"IKE080018_3Mat","Aluminium"},
-        {"IKE160124_1Mat","Aluminium"},
-        {"IKE160124_2Mat","Aluminium"},
-        {"IKE160124_3Mat","Aluminium"},
-        {"IKE160124_4Mat","Aluminium"},
-        {"IKE160130_1Mat","Aluminium"},
-        {"IKE160130_2Mat","Aluminium"},
-        {"IKE160130_3Mat","Aluminium"},
-        {"IKE160130_4Mat","Aluminium"},
-        {"Metal-Chrome-CaromaMat","Steel"},
-        {"Porcelain-White-CaromaMat","WallMat"},
-        {"CopperMat","Copper"},
-        {"Gas_PipeMat","Copper"},
-        {"LineMat","WallMat"},
-    };
+
+    //Dictionary<string, string> bldmatmap = new Dictionary<string, string>
+    //{
+    //    {"SolidMat","WallWhite"},
+    //    {"Exhaust_Air_DuctMat","Aluminium"},
+    //    {"Supply_Air_DuctMat","Aluminium"},
+    //    {"Return_Air_DuctMat","Aluminium"},
+    //    {"_Door_FrameMat","Plywood"},
+    //    {"_Finish_Facade_Feature_WallMat","FacadeWall"},
+    //    {"_Glazing_Glass_-_ClearMat","DustyGlass"},
+    //    {"_Metal_Powdercoated_WhiteMat","Aluminium"},
+    //    {"_Metal_Stainless_Steel_-_PolishedMat","Steel"},
+    //    {"_Wall_GenericMat","WallMat"},
+    //    {"_Fabric_Linen_PorcelainMat","WallMat"},
+    //    {"","WallMat"},
+    //    {"_Metal_AluminumMat","Aluminium"},
+    //    {"_AluminiumMat","Aluminium"},
+    //    {"Composite_PartMat","WallMat"},
+    //    {"Computer_BasicMat","PlasticHololens"},
+    //    {"Computer_Basic_2Mat","PlasticHololens"},
+    //    {"Computer_Basic_3Mat","PlasticHololens"},
+    //    {"Computer_GlassMat","ComputerGlass"},
+    //    {"Computer_Light_(ON)Mat","BlueLight"},
+    //    {"Computer_MetalMat","Aluminium"},
+    //    {"Computer_Metal_2Mat","Aluminium"},
+    //    {"PC_Monitor_ColorMat","ComputerGlass"},
+    //    {"PC_Monitor_GlassMat","ComputerGlass"},
+    //    {"Generic_-_Plastic_-_BlackMat","PlasticHololens"},
+    //    {"Generic_-_Plastic_-_GreyMat","PlasticHololens"},
+    //    {"IKE080018_2Mat","Aluminium"},
+    //    {"IKE080018_3Mat","Aluminium"},
+    //    {"IKE160124_1Mat","Aluminium"},
+    //    {"IKE160124_2Mat","Aluminium"},
+    //    {"IKE160124_3Mat","Aluminium"},
+    //    {"IKE160124_4Mat","Aluminium"},
+    //    {"IKE160130_1Mat","Aluminium"},
+    //    {"IKE160130_2Mat","Aluminium"},
+    //    {"IKE160130_3Mat","Aluminium"},
+    //    {"IKE160130_4Mat","Aluminium"},
+    //    {"Metal-Chrome-CaromaMat","Steel"},
+    //    {"Porcelain-White-CaromaMat","WallMat"},
+    //    {"CopperMat","Copper"},
+    //    {"Gas_PipeMat","Copper"},
+    //    {"LineMat","WallMat"},
+    //};
 
 
-
-    public void WriteOutPartsAndMaterials()
-    {
-        if (this.ssgo == null)
-        {
-            this.ssgo = GameObject.Find("StaplesStadium");
-        }
-        if (this.ssgo == null)
-        {
-            Debug.Log("Cound not find StaplesStadium");
-            return;
-        }
-        var lst = GraphAlgos.GraphUtil.HierarchyDescToText(this.ssgo, "");
-        var fname = "stapstad_materials.txt";
-        //GraphAlgos.GraphUtil.writeListToFile(lst, fname);
-        //Debug.Log("Wrote " + lst.Count + " lines to " + fname);
-    }
 
     public GameObject GetPart(GameObject root,string partname)
     {
@@ -525,7 +487,7 @@ public class StaplesStadium : MonoBehaviour
         }
         return curgo;
     }
-    public void AssignPartMat(GameObject rootgo,string partname,string matname)
+    public void AssignPartMat(GameObject rootgo,string partname,string matname,bool prefix=true,bool loadmat=true)
     {
         if (matname=="")
         {
@@ -541,6 +503,10 @@ public class StaplesStadium : MonoBehaviour
                 return;
             }
             var fullmatname = "Materials/" + matname;
+            if (!prefix)
+            {
+                fullmatname = matname;
+            }
             var mat = Resources.Load<Material>(fullmatname);
             if (!mat)
             {
@@ -564,18 +530,23 @@ public class StaplesStadium : MonoBehaviour
         }
         foreach( var pname in ss_parts)
         {
+            Debug.Log(pname);
             var parcom = pname.Split(',');
             var partname = parcom[0];
             var partmat = parcom[1];
             var defmatname = "ComputerGlass";
             var matname = defmatname;
+            var prefix = true;
             switch (StapStad_materialMode.Get())
             {
                 case StapStad_MaterialMode.glass:
                     matname = "ComputerGlass";
                     break;
                 case StapStad_MaterialMode.materialed:
-                    matname = bldmatmap[parcom[1]];
+                    // matname = bldmatmap[parcom[1]];
+                    matname = parcom[1];
+                    matname = matname.Replace(" (Instance)","");
+                    prefix = true;
                     break;
                 case StapStad_MaterialMode.glasswalls:
                     var pnl = partname.ToLower();
@@ -585,7 +556,8 @@ public class StaplesStadium : MonoBehaviour
                     }
                     else
                     {
-                        matname = bldmatmap[partmat];
+                        // matname = bldmatmap[partmat];
+                        matname = partmat;
                     }
                     break;
                 case StapStad_MaterialMode.raw:
@@ -593,12 +565,12 @@ public class StaplesStadium : MonoBehaviour
                     matname = "";
                     break;
             }
-            AssignPartMat(this.ssgo,partname, matname);
+            AssignPartMat(this.ssgo,partname, matname, prefix:prefix);
         }
         if (writepartlisttofile)
         {
             var lst = GraphAlgos.GraphUtil.HierarchyDescToText(this.ssgo, "");
-            var fname = "B19materials.txt";
+            var fname = "StapStadium.txt";
             GraphAlgos.GraphUtil.writeListToFile(lst, fname);
             Debug.Log($"Wrote {lst.Count} lines to {fname}");
         }
@@ -626,7 +598,7 @@ public class StaplesStadium : MonoBehaviour
         {
             if (ChangeHappened())
             {
-                Debug.Log($"ChangeHappened to B19 upd:{updcount}");
+                Debug.Log($"ChangeHappened to StapStad upd:{updcount}");
                 MakeItSo();
             }
         }
