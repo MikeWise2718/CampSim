@@ -54,28 +54,29 @@ namespace CampusSimulator
             {"#FrameSpacer" ,new TopButtonMan.TopButSpec("#FrameSpacer","#", "Spacerbutton","cen",0,"stretch",10,"Frame")},
 
 
-            {"B19GlassWallsButton",new TopButtonMan.TopButSpec("B19GlassWallsButton", "Gl", "After an evacuation, go back to starting positions","cen",0,"stretch",10,"B19")},
+            {"B19GlassWallsButton",new TopButtonMan.TopButSpec("B19GlassWallsButton", "Gl", "B19 - Glass Walls","cen",0,"stretch",10,"B19")},
             {"B19Level1Button",new TopButtonMan.TopButSpec("B19Level1Button", "L1", "Show B19 Level One","cen",0,"stretch",10,"B19")},
             {"B19Level2Button",new TopButtonMan.TopButSpec("B19Level2Button", "L2", "Show B19 Level Twoe","cen",0,"stretch",10,"B19")},
             {"B19Level3Button",new TopButtonMan.TopButSpec("B19Level3Button", "L3", "Show B19 Level Three","cen",0,"stretch",10,"B19")},
-            {"B19HvacButton",new TopButtonMan.TopButSpec("B19HvacButton", "Hvac", "Show HVAC system","cen",0,"stretch",10,"B19")},
-            {"B19FloorsButton",new TopButtonMan.TopButSpec("B19FloorsButton", "Flur", "Show floors","cen",0,"stretch",10,"B19")},
-            {"B19DoorsButton",new TopButtonMan.TopButSpec("B19DoorsButton", "Door", "Show floors","cen",0,"stretch",10,"B19")},
-            {"B19OsmButton",new TopButtonMan.TopButSpec("B19OsmButton", "Osm", "Show OSM Building","cen",0,"stretch",10,"B19")},
-            {"B19WilButton",new TopButtonMan.TopButSpec("B19WilButton", "Wil", "Show Willow Building Model","cen",0,"stretch",10,"B19")},
+            {"B19HvacButton",new TopButtonMan.TopButSpec("B19HvacButton", "Hvac", "B19- Show HVAC system","cen",0,"stretch",10,"B19")},
+            {"B19FloorsButton",new TopButtonMan.TopButSpec("B19FloorsButton", "Flur", "B19 - Show floors","cen",0,"stretch",10,"B19")},
+            {"B19DoorsButton",new TopButtonMan.TopButSpec("B19DoorsButton", "Door", "B19 - Show doors","cen",0,"stretch",10,"B19")},
+            {"B19OsmButton",new TopButtonMan.TopButSpec("B19OsmButton", "Osm", "B19 - Show OSM Building","cen",0,"stretch",10,"B19")},
+            {"B19WilButton",new TopButtonMan.TopButSpec("B19WilButton", "Wil", "B190 Show Willow CADg Model","cen",0,"stretch",10,"B19")},
             {"#B19Spacer" ,new TopButtonMan.TopButSpec("#B19Spacer","#", "Spacerbutton","cen",0,"stretch",10,"B19")},
 
 
-            {"B121TranButton" ,new TopButtonMan.TopButSpec("B121TranButton","Gl", "Make Walls Transparent","cen",0,"stretch",10,"B121")},
-            {"B121HvacButton" ,new TopButtonMan.TopButSpec("B121HvacButton","Hv", "Show HVAC System","cen",0,"stretch",10,"B121")},
-            {"B121ElecButton" ,new TopButtonMan.TopButSpec("B121ElecButton","El", "Show Electrical System","cen",0,"stretch",10,"B121")},
-            {"B121PlumButton" ,new TopButtonMan.TopButSpec("B121PlumButton","Pb", "Show Plumbing System","cen",0,"stretch",10,"B121")},
-            {"B121OsmButton" ,new TopButtonMan.TopButSpec("B121OsmButton","Osm", "Show OsmBUilding","cen",0,"stretch",10,"B121")},
-            {"B121WilButton",new TopButtonMan.TopButSpec("B121WilButton", "Wil", "Show Willow Building Model","cen",0,"stretch",10,"B121")},
+            {"B121TranButton" ,new TopButtonMan.TopButSpec("B121TranButton","Gl", "B121 - Make Walls Transparent","cen",0,"stretch",10,"B121")},
+            {"B121HvacButton" ,new TopButtonMan.TopButSpec("B121HvacButton","Hv", "B121 - Show HVAC System","cen",0,"stretch",10,"B121")},
+            {"B121ElecButton" ,new TopButtonMan.TopButSpec("B121ElecButton","El", "B121 - Show Electrical System","cen",0,"stretch",10,"B121")},
+            {"B121PlumButton" ,new TopButtonMan.TopButSpec("B121PlumButton","Pb", "B121 - Show Plumbing System","cen",0,"stretch",10,"B121")},
+            {"B121OsmButton" ,new TopButtonMan.TopButSpec("B121OsmButton","Osm", "B121 - Show OsmBUilding","cen",0,"stretch",10,"B121")},
+            {"B121WilButton",new TopButtonMan.TopButSpec("B121WilButton", "Wil", "B121 - Show Willow CAD Model","cen",0,"stretch",10,"B121")},
             {"#B121Spacer" ,new TopButtonMan.TopButSpec("#B121Spacer","#", "Spacerbutton","cen",0,"stretch",10,"B121")},
 
-            {"SsOsmButton" ,new TopButtonMan.TopButSpec("SsOsmButton","Osm", "Show OsmBUilding","cen",0,"stretch",10,"StSt")},
-            {"SsCadButton",new TopButtonMan.TopButSpec("SsCadButton", "Cad", "Show CAD Building Model","cen",0,"stretch",10,"StSt")},
+            {"SsRoofButton" ,new TopButtonMan.TopButSpec("SsRoofButton","Rf", "Staples - Show Roof","cen",0,"stretch",10,"StSt")},
+            {"SsOsmButton" ,new TopButtonMan.TopButSpec("SsOsmButton","Osm", "Staples - Show OsmBUilding","cen",0,"stretch",10,"StSt")},
+            {"SsCadButton",new TopButtonMan.TopButSpec("SsCadButton", "Cad", "Staples - Show CAD Building Model","cen",0,"stretch",10,"StSt")},
             {"#SsSpacer" ,new TopButtonMan.TopButSpec("#SsSpacer","#", "Spacerbutton","cen",0,"stretch",10,"StadStap")},
 
              {"FvGridButton" ,new TopButtonMan.TopButSpec("FvGridButton","Gd", "Show Flight Volume Grids","cen",0,"stretch",10,"Fvol")},
@@ -133,6 +134,7 @@ namespace CampusSimulator
             butspec["B19WilButton"].action = delegate { ToggleB19Wil(); };
             butspec["B19GlassWallsButton"].action = delegate { ToggleB19GlassMode(); };
 
+            butspec["SsRoofButton"].action = delegate { ToggleSsRoof(); };
             butspec["SsOsmButton"].action = delegate { ToggleSsOsm(); };
             butspec["SsCadButton"].action = delegate { ToggleSsCad(); };
 
@@ -177,6 +179,7 @@ namespace CampusSimulator
             if (sscomp != null)
             {
                 //var glass = b19comp.b19_materialMode.Get() == B19Willow.B19_MaterialMode.glass;
+                clrbut("SsRofButton", "yellow", idlecolor, sscomp.ssroof.Get(), "Roof");
                 clrbut("SsOsmButton", "yellow", idlecolor, sscomp.osmbld.Get(), "Osm");
                 clrbut("SsCadButton", "yellow", idlecolor, sscomp.cadbld.Get(), "Cad");
             }
@@ -601,6 +604,12 @@ namespace CampusSimulator
         public void ToggleSsOsm()
         {
             sman.bdman.ToggleSsOsm();
+            ColorizeButtonStates();
+        }
+
+        public void ToggleSsRoof()
+        {
+            sman.bdman.ToggleSsRoof();
             ColorizeButtonStates();
         }
         public void ToggleSsCad()

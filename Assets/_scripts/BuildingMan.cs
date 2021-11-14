@@ -311,6 +311,17 @@ namespace CampusSimulator
             //Debug.Log($"TogglingSsosm new val{curval}");
             // sscomp.MakeItSo();
         }
+
+        public void ToggleSsRoof()
+        {
+            var sscomp = GetSs();
+            var curval = sscomp.ssroof.Get();
+            curval = !curval;
+            sscomp.ssroof.SetAndSave(curval);
+            sscomp.ActuatePartVisMode();
+            //Debug.Log($"TogglingSsosm new val{curval}");
+            // sscomp.MakeItSo();
+        }
         public void ToggleSsCad()
         {
             var sscomp = GetSs();

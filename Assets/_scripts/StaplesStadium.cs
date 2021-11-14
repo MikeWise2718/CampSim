@@ -8,9 +8,9 @@ public class StaplesStadium : MonoBehaviour
     public enum StapStad_MaterialMode {  raw, materialed, glass, glasswalls };
 
     public UxSetting<bool> loadmodel = new UxSetting<bool>("StapStad_Model", true);
-    public UxSetting<bool> roof = new UxSetting<bool>("StapStad_roof", true);
-    public UxSetting<bool> floors = new UxSetting<bool>("StapStad_floors", true);
-    public UxSetting<bool> doors = new UxSetting<bool>("StapStad_doors", true);
+    public UxSetting<bool> ssroof = new UxSetting<bool>("StapStad_roof", true);
+    public UxSetting<bool> ssfloors = new UxSetting<bool>("StapStad_floors", true);
+    public UxSetting<bool> ssdoors = new UxSetting<bool>("StapStad_doors", true);
     public UxSetting<bool> osmbld = new UxSetting<bool>("StapStad_osmbld", false);
     public UxSetting<bool> cadbld = new UxSetting<bool>("StapStad_wilbld", false);
     public UxSetting<bool> glasswalls = new UxSetting<bool>("StapStad_glasswalls", false);
@@ -29,9 +29,9 @@ public class StaplesStadium : MonoBehaviour
         this.bld = bld;
         StapStad_materialMode.GetInitial(StapStad_MaterialMode.glasswalls);
         loadmodel.GetInitial(true);
-        _ss_roof = roof.GetInitial(false);
-        _ss_floors = floors.GetInitial(false);
-        _ss_doors = doors.GetInitial(false);
+        _ss_roof = ssroof.GetInitial(false);
+        _ss_floors = ssfloors.GetInitial(false);
+        _ss_doors = ssdoors.GetInitial(false);
         _ss_osmbld = osmbld.GetInitial(false);
         _ss_cadbld = cadbld.GetInitial(false);
         _ss_glasswalls = glasswalls.GetInitial(false);
@@ -58,17 +58,17 @@ public class StaplesStadium : MonoBehaviour
     {
         var chg = false;
         if (loadmodel.Get() != _ss_CadModelLoaded) chg = true;
-        if (floors.Get() != _ss_floors)
+        if (ssfloors.Get() != _ss_floors)
         {
             chg = true;
             //Debug.Log("floors");
         }
-        if (doors.Get() != _ss_doors)
+        if (ssdoors.Get() != _ss_doors)
         {
             chg = true;
             //Debug.Log("floors");
         }
-        if (roof.Get() != _ss_roof)
+        if (ssroof.Get() != _ss_roof)
         {
             chg = true;
             //Debug.Log("floors");
@@ -173,7 +173,7 @@ public class StaplesStadium : MonoBehaviour
             DestroyGos();
             loadmodel.SetAndSave( false );
             _ss_CadModelLoaded = false;
-            roof.SetAndSave( false );
+            ssroof.SetAndSave( false );
             _ss_roof = false;
             _ss_osmbld = sman.bdman.osmblds.Get(); 
         }
@@ -191,27 +191,28 @@ public class StaplesStadium : MonoBehaviour
                 ActuateOsmStatus(stat);
                 _ss_osmbld = stat;
             }
-            if (floors.Get() != _ss_floors)
+            if (ssfloors.Get() != _ss_floors)
             {
                 //Debug.Log("Fixing floors");
-                var stat = floors.Get();
+                var stat = ssfloors.Get();
                 _ss_floors = stat;
             }
-            if (doors.Get() != _ss_doors)
+            if (ssdoors.Get() != _ss_doors)
             {
                 //Debug.Log("Fixing doors");
-                var stat = doors.Get();
+                var stat = ssdoors.Get();
                 _ss_doors = stat;
             }
-            if (roof.Get() != _ss_roof)
+            if (ssroof.Get() != _ss_roof)
             {
                 //Debug.Log("Fixing hvac");
-                var stat = roof.Get();
+                var stat = ssroof.Get();
                 _ss_roof = stat;
             }
             if (loadedThisTime || lastMaterialMode != StapStad_materialMode.Get())
             {
                 ActuateMaterialMode();
+                ActuatePartVisMode();
                 lastMaterialMode = StapStad_materialMode.Get();
             }
         }
@@ -244,6 +245,8 @@ public class StaplesStadium : MonoBehaviour
             }
         }
     }
+
+
 
     public void ActuateCadStatus(bool stat)
     {
@@ -283,141 +286,141 @@ public class StaplesStadium : MonoBehaviour
 
     List<string> ss_parts = new List<string>
     {
-        "StapleStadium/air_con,air_con (Instance)",
-        "StapleStadium/air_con_stand,air_stand (Instance)",
-        "StapleStadium/balcons,balcony (Instance)",
-        "StapleStadium/balcons_floor,balcons_floor (Instance)",
-        "StapleStadium/balcons_lamps,balcons_lamps (Instance)",
-        "StapleStadium/balcony_building,balcony_building (Instance)",
-        "StapleStadium/balustrade,balustrade (Instance)",
-        "StapleStadium/balustrade2,balustrade (Instance)",
-        "StapleStadium/bar_frame,white_frame (Instance)",
-        "StapleStadium/bar_frame.000,white_frame (Instance)",
-        "StapleStadium/base,base (Instance)",
-        "StapleStadium/black_window_frame,black_window_frame (Instance)",
-        "StapleStadium/bright_windows,bright_glass (Instance)",
-        "StapleStadium/chairs_brown,chairs_brown (Instance)",
-        "StapleStadium/chairs_tables_white,chairs_tables_white (Instance)",
-        "StapleStadium/columns,columns (Instance)",
-        "StapleStadium/Cube,Material (Instance)",
-        "StapleStadium/Cube.001,Material.001 (Instance)",
-        "StapleStadium/curtains,curtains (Instance)",
-        "StapleStadium/dark_windows,dark_glass (Instance)",
-        "StapleStadium/dome,dome (Instance)",
-        "StapleStadium/doors,doors (Instance)",
-        "StapleStadium/entry_columnB,entry_columnB (Instance)",
-        "StapleStadium/entry_columnsW,entry_columnsW (Instance)",
-        "StapleStadium/gray_ventilator,gray_wall1 (Instance)",
-        "StapleStadium/gray_wall1,gray_wall2 (Instance)",
-        "StapleStadium/gray_wall2,gray_wall2 (Instance)",
-        "StapleStadium/gray_wall3,gray_wall2 (Instance)",
-        "StapleStadium/gray_wall4,gray_wall2 (Instance)",
-        "StapleStadium/gray_wall5,gray_wall2 (Instance)",
-        "StapleStadium/gray_wall6,gray_wall2 (Instance)",
-        "StapleStadium/gray_wall7,gray_wall2 (Instance)",
-        "StapleStadium/gray_wall8,gray_wall2 (Instance)",
-        "StapleStadium/gray_wall9,gray_wall2 (Instance)",
-        "StapleStadium/gray_wall10,gray_wall2 (Instance)",
-        "StapleStadium/gray_wall11,gray_wall2 (Instance)",
-        "StapleStadium/gray_wall12,gray_wall2 (Instance)",
-        "StapleStadium/gray_wall13,gray_wall2 (Instance)",
-        "StapleStadium/gray_wall14,gray_wall2 (Instance)",
-        "StapleStadium/gray_wall15,gray_wall2 (Instance)",
-        "StapleStadium/gray_wall16,gray_wall2 (Instance)",
-        "StapleStadium/gray_wall17,gray_wall2 (Instance)",
-        "StapleStadium/gray_wall18,gray_wall2 (Instance)",
-        "StapleStadium/gray_wall19,gray_wall2 (Instance)",
-        "StapleStadium/gray_wall20,gray_wall2 (Instance)",
-        "StapleStadium/gray_wall21,gray_wall2 (Instance)",
-        "StapleStadium/ground1,wall_ground1 (Instance)",
-        "StapleStadium/ground2,wall_ground2 (Instance)",
-        "StapleStadium/ground3,wall_ground4 (Instance)",
-        "StapleStadium/ground4,wall_ground4 (Instance)",
-        "StapleStadium/ground5,wall_ground5 (Instance)",
-        "StapleStadium/ground6,wall_ground6 (Instance)",
-        "StapleStadium/ground7,wall_ground6 (Instance)",
-        "StapleStadium/ground8,wall_ground8 (Instance)",
-        "StapleStadium/ground9,wall_ground9 (Instance)",
-        "StapleStadium/ground10,wall_ground10 (Instance)",
-        "StapleStadium/ground11,wall_ground11 (Instance)",
-        "StapleStadium/ground12,wall_ground12 (Instance)",
-        "StapleStadium/ground13,wall_ground13 (Instance)",
-        "StapleStadium/handrail,handrail (Instance)",
-        "StapleStadium/hood,hood (Instance)",
-        "StapleStadium/lakers_ad,lakers_logo (Instance)",
-        "StapleStadium/lamp_globe,white_glass (Instance)",
+        "StapleStadium/air_con,air_con",
+        "StapleStadium/air_con_stand,air_stand",
+        "StapleStadium/balcons,balcony",
+        "StapleStadium/balcons_floor,balcons_floor",
+        "StapleStadium/balcons_lamps,balcons_lamps",
+        "StapleStadium/balcony_building,balcony_building",
+        "StapleStadium/balustrade,balustrade",
+        "StapleStadium/balustrade2,balustrade",
+        "StapleStadium/bar_frame,white_frame",
+        "StapleStadium/bar_frame.000,white_frame",
+        "StapleStadium/base,base",
+        "StapleStadium/black_window_frame,black_window_frame",
+        "StapleStadium/bright_windows,bright_glass",
+        "StapleStadium/chairs_brown,chairs_brown",
+        "StapleStadium/chairs_tables_white,chairs_tables_white",
+        "StapleStadium/columns,columns",
+        "StapleStadium/Cube,Material",
+        "StapleStadium/Cube.001,Material.001",
+        "StapleStadium/curtains,curtains",
+        "StapleStadium/dark_windows,dark_glass",
+        "StapleStadium/dome,dome",
+        "StapleStadium/doors,doors",
+        "StapleStadium/entry_columnB,entry_columnB",
+        "StapleStadium/entry_columnsW,entry_columnsW",
+        "StapleStadium/gray_ventilator,gray_wall1",
+        "StapleStadium/gray_wall1,gray_wall2",
+        "StapleStadium/gray_wall2,gray_wall2",
+        "StapleStadium/gray_wall3,gray_wall2",
+        "StapleStadium/gray_wall4,gray_wall2",
+        "StapleStadium/gray_wall5,gray_wall2",
+        "StapleStadium/gray_wall6,gray_wall2",
+        "StapleStadium/gray_wall7,gray_wall2",
+        "StapleStadium/gray_wall8,gray_wall2",
+        "StapleStadium/gray_wall9,gray_wall2",
+        "StapleStadium/gray_wall10,gray_wall2",
+        "StapleStadium/gray_wall11,gray_wall2",
+        "StapleStadium/gray_wall12,gray_wall2",
+        "StapleStadium/gray_wall13,gray_wall2",
+        "StapleStadium/gray_wall14,gray_wall2",
+        "StapleStadium/gray_wall15,gray_wall2",
+        "StapleStadium/gray_wall16,gray_wall2",
+        "StapleStadium/gray_wall17,gray_wall2",
+        "StapleStadium/gray_wall18,gray_wall2",
+        "StapleStadium/gray_wall19,gray_wall2",
+        "StapleStadium/gray_wall20,gray_wall2",
+        "StapleStadium/gray_wall21,gray_wall2",
+        "StapleStadium/ground1,wall_ground1",
+        "StapleStadium/ground2,wall_ground2",
+        "StapleStadium/ground3,wall_ground4",
+        "StapleStadium/ground4,wall_ground4",
+        "StapleStadium/ground5,wall_ground5",
+        "StapleStadium/ground6,wall_ground6",
+        "StapleStadium/ground7,wall_ground6",
+        "StapleStadium/ground8,wall_ground8",
+        "StapleStadium/ground9,wall_ground9",
+        "StapleStadium/ground10,wall_ground10",
+        "StapleStadium/ground11,wall_ground11",
+        "StapleStadium/ground12,wall_ground12",
+        "StapleStadium/ground13,wall_ground13",
+        "StapleStadium/handrail,handrail",
+        "StapleStadium/hood,hood",
+        "StapleStadium/lakers_ad,lakers_logo",
+        "StapleStadium/lamp_globe,white_glass",
         //"StapleStadium/Light",
         //"StapleStadium/Light.001",
-        "StapleStadium/NE_wall,wall1 (Instance)",
-        "StapleStadium/NE_wall1,gray_wall1 (Instance)",
-        "StapleStadium/NE_wall2,wall_concrete_grey (Instance)",
-        "StapleStadium/NE_wall3,wall2 (Instance)",
-        "StapleStadium/NE_wall4,wall3 (Instance)",
-        "StapleStadium/nike_ad,nike_ads (Instance)",
-        "StapleStadium/northeastern_wall,wall7 (Instance)",
-        "StapleStadium/office_pink,box_office (Instance)",
-        "StapleStadium/poles,poles (Instance)",
-        "StapleStadium/reflectors,reflectors (Instance)",
-        "StapleStadium/restaurant_floor,restaurant_floor (Instance)",
-        "StapleStadium/restaurant_floor_out,restaurant_floor_out (Instance)",
-        "StapleStadium/restaurant_roof,restaurant_roof (Instance)",
-        "StapleStadium/ring_roof,ring_roof (Instance)",
-        "StapleStadium/roof,roof (Instance)",
-        "StapleStadium/roof_bar,roof_stripe (Instance)",
-        "StapleStadium/roof_door_frame,roof_door_frame (Instance)",
-        "StapleStadium/roof_doors_frame,roof_doors (Instance)",
-        "StapleStadium/roof_lamps,roof_lamps (Instance)",
-        "StapleStadium/roof_red,red_roof (Instance)",
-        "StapleStadium/roof_room,roof_room (Instance)",
-        "StapleStadium/roof_room_floor,szpic (Instance)",
-        "StapleStadium/roof_spitz,roof_spitz (Instance)",
-        "StapleStadium/roof_stairs,stairs (Instance)",
-        "StapleStadium/roof_wall,roof_wall (Instance)",
-        "StapleStadium/S_building,S_building (Instance)",
-        "StapleStadium/S_bulding_wall,gray_wall1 (Instance)",
-        "StapleStadium/S_floor,S_floor (Instance)",
-        "StapleStadium/S_floor2,S_floor (Instance)",
-        "StapleStadium/S_roofDark,S_roofdark (Instance)",
-        "StapleStadium/S_roofDark2,S_roofdark (Instance)",
-        "StapleStadium/S_roofWhite,S_roofWhite (Instance)",
-        "StapleStadium/S_wall1,S_bulding_wall (Instance)",
-        "StapleStadium/S_wall2,S_wall (Instance)",
-        "StapleStadium/S_wall3,S_bulding_wall (Instance)",
-        "StapleStadium/S_wall4,S_wall4 (Instance)",
-        "StapleStadium/S_wall5,S_wall5 (Instance)",
-        "StapleStadium/S_wall6,S_wall6 (Instance)",
-        "StapleStadium/S_wall7,white_frame (Instance)",
-        "StapleStadium/S_wall8,white_frame (Instance)",
-        "StapleStadium/S_wall9,b_w_wall (Instance)",
-        "StapleStadium/S_wall10,gray_wall1 (Instance)",
-        "StapleStadium/satellite_dishes,satellite_dishes (Instance)",
-        "StapleStadium/solar_standB,solar_stand_black (Instance)",
-        "StapleStadium/solar_standW,solar_white_stand (Instance)",
-        "StapleStadium/solars,solars (Instance)",
-        "StapleStadium/stairs,white_frame (Instance)",
-        "StapleStadium/staple_stand,text_stands (Instance)",
-        "StapleStadium/staples_handle,staples_handle (Instance)",
-        "StapleStadium/staples_red,staples_red_text (Instance)",
-        "StapleStadium/staples_roof,staples_roof (Instance)",
-        "StapleStadium/storey,storey (Instance)",
-        "StapleStadium/storey_buildings,storey_buildings (Instance)",
-        "StapleStadium/storey_lamps,lamps (Instance)",
-        "StapleStadium/tables_brown,tables (Instance)",
-        "StapleStadium/teamLA,team_LA (Instance)",
-        "StapleStadium/teamLA_ad,teamLA (Instance)",
-        "StapleStadium/ticket_office,white_frame (Instance)",
-        "StapleStadium/ticketoffice,white_frame (Instance)",
-        "StapleStadium/TV_desktop,tv (Instance)",
-        "StapleStadium/TV_frame,TV_frame (Instance)",
-        "StapleStadium/TV_wall,wall7 (Instance)",
-        "StapleStadium/ventilator,wire_255255255 (Instance)",
-        "StapleStadium/ventilators,ventilators (Instance)",
-        "StapleStadium/W_building1,W_building2 (Instance)",
-        "StapleStadium/W_building2,W_building2 (Instance)",
-        "StapleStadium/W_wall,grey_wall2 (Instance)",
-        "StapleStadium/W_wall1,W_wall1 (Instance)",
-        "StapleStadium/W_wall2,wall5 (Instance)",
-        "StapleStadium/white_window_frame,white_frame (Instance)",
+        "StapleStadium/NE_wall,wall1",
+        "StapleStadium/NE_wall1,gray_wall1",
+        "StapleStadium/NE_wall2,wall_concrete_grey",
+        "StapleStadium/NE_wall3,wall2",
+        "StapleStadium/NE_wall4,wall3",
+        "StapleStadium/nike_ad,nike_ads",
+        "StapleStadium/northeastern_wall,wall7",
+        "StapleStadium/office_pink,box_office",
+        "StapleStadium/poles,poles",
+        "StapleStadium/reflectors,reflectors",
+        "StapleStadium/restaurant_floor,restaurant_floor",
+        "StapleStadium/restaurant_floor_out,restaurant_floor_out",
+        "StapleStadium/restaurant_roof,restaurant_roof",
+        "StapleStadium/ring_roof,ring_roof",
+        "StapleStadium/roof,roof",
+        "StapleStadium/roof_bar,roof_stripe",
+        "StapleStadium/roof_door_frame,roof_door_frame",
+        "StapleStadium/roof_doors_frame,roof_doors",
+        "StapleStadium/roof_lamps,roof_lamps",
+        "StapleStadium/roof_red,red_roof",
+        "StapleStadium/roof_room,roof_room",
+        "StapleStadium/roof_room_floor,szpic",
+        "StapleStadium/roof_spitz,roof_spitz",
+        "StapleStadium/roof_stairs,stairs",
+        "StapleStadium/roof_wall,roof_wall",
+        "StapleStadium/S_building,S_building",
+        "StapleStadium/S_bulding_wall,gray_wall1",
+        "StapleStadium/S_floor,S_floor",
+        "StapleStadium/S_floor2,S_floor",
+        "StapleStadium/S_roofDark,S_roofdark",
+        "StapleStadium/S_roofDark2,S_roofdark",
+        "StapleStadium/S_roofWhite,S_roofWhite",
+        "StapleStadium/S_wall1,S_bulding_wall",
+        "StapleStadium/S_wall2,S_wall",
+        "StapleStadium/S_wall3,S_bulding_wall",
+        "StapleStadium/S_wall4,S_wall4",
+        "StapleStadium/S_wall5,S_wall5",
+        "StapleStadium/S_wall6,S_wall6",
+        "StapleStadium/S_wall7,white_frame",
+        "StapleStadium/S_wall8,white_frame",
+        "StapleStadium/S_wall9,b_w_wall",
+        "StapleStadium/S_wall10,gray_wall1",
+        "StapleStadium/satellite_dishes,satellite_dishes",
+        "StapleStadium/solar_standB,solar_stand_black",
+        "StapleStadium/solar_standW,solar_white_stand",
+        "StapleStadium/solars,solars",
+        "StapleStadium/stairs,white_frame",
+        "StapleStadium/staple_stand,text_stands",
+        "StapleStadium/staples_handle,staples_handle",
+        "StapleStadium/staples_red,staples_red_text",
+        "StapleStadium/staples_roof,staples_roof",
+        "StapleStadium/storey,storey",
+        "StapleStadium/storey_buildings,storey_buildings",
+        "StapleStadium/storey_lamps,lamps",
+        "StapleStadium/tables_brown,tables",
+        "StapleStadium/teamLA,team_LA",
+        "StapleStadium/teamLA_ad,teamLA",
+        "StapleStadium/ticket_office,white_frame",
+        "StapleStadium/ticketoffice,white_frame",
+        "StapleStadium/TV_desktop,tv",
+        "StapleStadium/TV_frame,TV_frame",
+        "StapleStadium/TV_wall,wall7",
+        "StapleStadium/ventilator,wire_255255255",
+        "StapleStadium/ventilators,ventilators",
+        "StapleStadium/W_building1,W_building2",
+        "StapleStadium/W_building2,W_building2",
+        "StapleStadium/W_wall,grey_wall2",
+        "StapleStadium/W_wall1,W_wall1",
+        "StapleStadium/W_wall2,wall5",
+        "StapleStadium/white_window_frame,white_frame",
     };
 
 
@@ -487,7 +490,7 @@ public class StaplesStadium : MonoBehaviour
         }
         return curgo;
     }
-    public void AssignPartMat(GameObject rootgo,string partname,string matname,bool prefix=true,bool loadmat=true)
+    public void AssignPartMat(GameObject rootgo,string partname,string matname,bool prefix=true)
     {
         if (matname=="")
         {
@@ -503,10 +506,6 @@ public class StaplesStadium : MonoBehaviour
                 return;
             }
             var fullmatname = "Materials/" + matname;
-            if (!prefix)
-            {
-                fullmatname = matname;
-            }
             var mat = Resources.Load<Material>(fullmatname);
             if (!mat)
             {
@@ -519,54 +518,53 @@ public class StaplesStadium : MonoBehaviour
 
     public void ActuateMaterialMode(bool writepartlisttofile=false)
     {
-        if (this.ssgo == null)
+        var newmode = StapStad_materialMode.Get();
+        var sw = new Aiskwk.Dataframe.StopWatch();
+        var nglass = 0;
+        var nmat = 0;
+        foreach ( var pname in ss_parts)
         {
-            this.ssgo = GameObject.Find("B19-Willow");
-        }
-        if (this.ssgo == null)
-        {
-            Debug.Log("Cound not find B19-Willow");
-            return;
-        }
-        foreach( var pname in ss_parts)
-        {
-            Debug.Log(pname);
+            //Debug.Log(pname);
             var parcom = pname.Split(',');
             var partname = parcom[0];
             var partmat = parcom[1];
             var defmatname = "ComputerGlass";
             var matname = defmatname;
-            var prefix = true;
-            switch (StapStad_materialMode.Get())
+            switch (newmode)
             {
                 case StapStad_MaterialMode.glass:
                     matname = "ComputerGlass";
+                    nglass++;
                     break;
                 case StapStad_MaterialMode.materialed:
                     // matname = bldmatmap[parcom[1]];
                     matname = parcom[1];
-                    matname = matname.Replace(" (Instance)","");
-                    prefix = true;
+                    nmat++;
                     break;
                 case StapStad_MaterialMode.glasswalls:
                     var pnl = partname.ToLower();
-                    if (pnl.Contains("solid") || pnl.Contains("wall") || pnl.Contains("door") || pnl.Contains("composite_part"))
+                    if (pnl.Contains("wall") || pnl.Contains("door"))
                     {
                         matname = "ComputerGlass";
+                        nglass++;
                     }
                     else
                     {
                         // matname = bldmatmap[partmat];
                         matname = partmat;
+                        nmat++;
                     }
                     break;
                 case StapStad_MaterialMode.raw:
-                    //matname = parcom[1];
-                    matname = "";
+                    matname = parcom[1];
+                    nmat++;
+                    //matname = "";
                     break;
             }
-            AssignPartMat(this.ssgo,partname, matname, prefix:prefix);
+            AssignPartMat(this.ssgo,partname, matname);
         }
+        sw.Stop();
+        sman.Lgg($"SS Materials reassignment to {newmode} took {sw.ElapSecs()} secs nmat:{nmat} nglass:{nglass}","darkblue");
         if (writepartlisttofile)
         {
             var lst = GraphAlgos.GraphUtil.HierarchyDescToText(this.ssgo, "");
@@ -575,6 +573,32 @@ public class StaplesStadium : MonoBehaviour
             Debug.Log($"Wrote {lst.Count} lines to {fname}");
         }
     }
+
+    public void ActuatePartVisMode()
+    {
+        var sw = new Aiskwk.Dataframe.StopWatch();
+        var roofon = ssroof.Get();
+        foreach (var pname in ss_parts)
+        {
+            var parcom = pname.Split(',');
+            var partname = parcom[0];
+            if (partname.Contains("roof") || partname.Contains("solar"))
+            {
+                var go = GetPart(this.ssgo, partname);
+                if (go != null)
+                {
+                    go.SetActive(roofon);
+                }
+                else
+                {
+                    Debug.LogError($"SS ActuatPartVisMode could not find part {partname}");
+                }
+            }
+        }
+        sw.Stop();
+        sman.Lgg($"SS Part Visiblity actuation took {sw.ElapSecs()} secs","darkblue");
+    }
+
 
     public bool ActuateChange()
     {
