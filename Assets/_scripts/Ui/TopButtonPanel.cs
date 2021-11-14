@@ -75,6 +75,8 @@ namespace CampusSimulator
             {"#B121Spacer" ,new TopButtonMan.TopButSpec("#B121Spacer","#", "Spacerbutton","cen",0,"stretch",10,"B121")},
 
             {"SsRoofButton" ,new TopButtonMan.TopButSpec("SsRoofButton","Rf", "Staples - Show Roof","cen",0,"stretch",10,"StSt")},
+            {"SsWallButton" ,new TopButtonMan.TopButSpec("SsWallButton","Rf", "Staples - Show Walls","cen",0,"stretch",10,"StSt")},
+            {"SsFloorButton" ,new TopButtonMan.TopButSpec("SsFloorButton","Rf", "Staples - Show Floors","cen",0,"stretch",10,"StSt")},
             {"SsOsmButton" ,new TopButtonMan.TopButSpec("SsOsmButton","Osm", "Staples - Show OsmBUilding","cen",0,"stretch",10,"StSt")},
             {"SsCadButton",new TopButtonMan.TopButSpec("SsCadButton", "Cad", "Staples - Show CAD Building Model","cen",0,"stretch",10,"StSt")},
             {"#SsSpacer" ,new TopButtonMan.TopButSpec("#SsSpacer","#", "Spacerbutton","cen",0,"stretch",10,"StadStap")},
@@ -135,6 +137,8 @@ namespace CampusSimulator
             butspec["B19GlassWallsButton"].action = delegate { ToggleB19GlassMode(); };
 
             butspec["SsRoofButton"].action = delegate { ToggleSsRoof(); };
+            butspec["SsFloorButton"].action = delegate { ToggleSsFloors(); };
+            butspec["SsWallButton"].action = delegate { ToggleSsWalls(); };
             butspec["SsOsmButton"].action = delegate { ToggleSsOsm(); };
             butspec["SsCadButton"].action = delegate { ToggleSsCad(); };
 
@@ -179,7 +183,9 @@ namespace CampusSimulator
             if (sscomp != null)
             {
                 //var glass = b19comp.b19_materialMode.Get() == B19Willow.B19_MaterialMode.glass;
-                clrbut("SsRofButton", "yellow", idlecolor, sscomp.ssroof.Get(), "Roof");
+                clrbut("SsRoofButton", "yellow", idlecolor, sscomp.ssroof.Get(), "Rf");
+                clrbut("SsFloorButton", "yellow", idlecolor, sscomp.ssfloors.Get(), "Fl");
+                clrbut("SsWallButton", "yellow", idlecolor, sscomp.sswalls.Get(), "Wl");
                 clrbut("SsOsmButton", "yellow", idlecolor, sscomp.osmbld.Get(), "Osm");
                 clrbut("SsCadButton", "yellow", idlecolor, sscomp.cadbld.Get(), "Cad");
             }
@@ -610,6 +616,17 @@ namespace CampusSimulator
         public void ToggleSsRoof()
         {
             sman.bdman.ToggleSsRoof();
+            ColorizeButtonStates();
+        }
+
+        public void ToggleSsWalls()
+        {
+            sman.bdman.ToggleSsWalls();
+            ColorizeButtonStates();
+        }
+        public void ToggleSsFloors()
+        {
+            sman.bdman.ToggleSsFloors();
             ColorizeButtonStates();
         }
         public void ToggleSsCad()

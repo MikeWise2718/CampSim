@@ -10,7 +10,7 @@ public class StaplesStadium : MonoBehaviour
     public UxSetting<bool> loadmodel = new UxSetting<bool>("StapStad_Model", true);
     public UxSetting<bool> ssroof = new UxSetting<bool>("StapStad_roof", true);
     public UxSetting<bool> ssfloors = new UxSetting<bool>("StapStad_floors", true);
-    public UxSetting<bool> ssdoors = new UxSetting<bool>("StapStad_doors", true);
+    public UxSetting<bool> sswalls = new UxSetting<bool>("StapStad_walls", true);
     public UxSetting<bool> osmbld = new UxSetting<bool>("StapStad_osmbld", false);
     public UxSetting<bool> cadbld = new UxSetting<bool>("StapStad_wilbld", false);
     public UxSetting<bool> glasswalls = new UxSetting<bool>("StapStad_glasswalls", false);
@@ -31,7 +31,7 @@ public class StaplesStadium : MonoBehaviour
         loadmodel.GetInitial(true);
         _ss_roof = ssroof.GetInitial(false);
         _ss_floors = ssfloors.GetInitial(false);
-        _ss_doors = ssdoors.GetInitial(false);
+        _ss_walls = sswalls.GetInitial(false);
         _ss_osmbld = osmbld.GetInitial(false);
         _ss_cadbld = cadbld.GetInitial(false);
         _ss_glasswalls = glasswalls.GetInitial(false);
@@ -44,7 +44,7 @@ public class StaplesStadium : MonoBehaviour
     bool _ss_CadModelLoaded = false;
     bool _ss_roof = false;
     bool _ss_floors = false;
-    bool _ss_doors = false;
+    bool _ss_walls = false;
     bool _ss_osmbld = false;
     bool _ss_cadbld = false;
     bool _ss_glasswalls = false;
@@ -63,7 +63,7 @@ public class StaplesStadium : MonoBehaviour
             chg = true;
             //Debug.Log("floors");
         }
-        if (ssdoors.Get() != _ss_doors)
+        if (sswalls.Get() != _ss_walls)
         {
             chg = true;
             //Debug.Log("floors");
@@ -161,7 +161,7 @@ public class StaplesStadium : MonoBehaviour
                 ssgo.transform.parent = this.transform;
                 _ss_CadModelLoaded = true;
                 _ss_floors = true;
-                _ss_doors = true;
+                _ss_walls = true;
                 _ss_roof = true;
                 _ss_osmbld = sman.bdman.osmblds.Get();
                 _ss_cadbld = true;
@@ -197,11 +197,11 @@ public class StaplesStadium : MonoBehaviour
                 var stat = ssfloors.Get();
                 _ss_floors = stat;
             }
-            if (ssdoors.Get() != _ss_doors)
+            if (sswalls.Get() != _ss_walls)
             {
                 //Debug.Log("Fixing doors");
-                var stat = ssdoors.Get();
-                _ss_doors = stat;
+                var stat = sswalls.Get();
+                _ss_walls = stat;
             }
             if (ssroof.Get() != _ss_roof)
             {
@@ -578,6 +578,8 @@ public class StaplesStadium : MonoBehaviour
     {
         var sw = new Aiskwk.Dataframe.StopWatch();
         var roofon = ssroof.Get();
+        var wallson = sswalls.Get();
+        var floorson = ssfloors.Get();
         foreach (var pname in ss_parts)
         {
             var parcom = pname.Split(',');
@@ -591,7 +593,31 @@ public class StaplesStadium : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogError($"SS ActuatPartVisMode could not find part {partname}");
+                    Debug.LogError($"SS ActuatPartVisMode could not find part {partname} while actuating roof status");
+                }
+            }
+            if (partname.Contains("floor") )
+            {
+                var go = GetPart(this.ssgo, partname);
+                if (go != null)
+                {
+                    go.SetActive(floorson);
+                }
+                else
+                {
+                    Debug.LogError($"SS ActuatPartVisMode could not find part {partname} while actuating floor status");
+                }
+            }
+            if (partname.Contains("wall"))
+            {
+                var go = GetPart(this.ssgo, partname);
+                if (go != null)
+                {
+                    go.SetActive(wallson);
+                }
+                else
+                {
+                    Debug.LogError($"SS ActuatPartVisMode could not find part {partname} while actuating wall status");
                 }
             }
         }

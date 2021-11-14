@@ -308,8 +308,6 @@ namespace CampusSimulator
             curval = !curval;
             sscomp.ActuateOsmStatus(curval);
             sscomp.osmbld.SetAndSave(curval);
-            //Debug.Log($"TogglingSsosm new val{curval}");
-            // sscomp.MakeItSo();
         }
 
         public void ToggleSsRoof()
@@ -319,8 +317,24 @@ namespace CampusSimulator
             curval = !curval;
             sscomp.ssroof.SetAndSave(curval);
             sscomp.ActuatePartVisMode();
-            //Debug.Log($"TogglingSsosm new val{curval}");
-            // sscomp.MakeItSo();
+        }
+
+        public void ToggleSsWalls()
+        {
+            var sscomp = GetSs();
+            var curval = sscomp.sswalls.Get();
+            curval = !curval;
+            sscomp.sswalls.SetAndSave(curval);
+            sscomp.ActuatePartVisMode();
+        }
+
+        public void ToggleSsFloors()
+        {
+            var sscomp = GetSs();
+            var curval = sscomp.ssfloors.Get();
+            curval = !curval;
+            sscomp.ssfloors.SetAndSave(curval);
+            sscomp.ActuatePartVisMode();
         }
         public void ToggleSsCad()
         {
