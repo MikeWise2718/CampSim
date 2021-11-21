@@ -126,6 +126,11 @@ public class LogMan : MonoBehaviour
         }
     }
 
+    public void Lgg(string msg, string color = "gray")
+    {
+        Lgglong(msg, LogSeverity.Info, LogTyp.GraphCtrl, color: new string[] { color });
+    }
+
     public void SetScene()
     {
 

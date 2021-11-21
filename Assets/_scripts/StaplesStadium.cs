@@ -596,7 +596,7 @@ public class StaplesStadium : MonoBehaviour
                     Debug.LogError($"SS ActuatPartVisMode could not find part {partname} while actuating roof status");
                 }
             }
-            if (partname.Contains("floor") )
+            else if (partname.Contains("floor") )
             {
                 var go = GetPart(this.ssgo, partname);
                 if (go != null)
@@ -608,7 +608,7 @@ public class StaplesStadium : MonoBehaviour
                     Debug.LogError($"SS ActuatPartVisMode could not find part {partname} while actuating floor status");
                 }
             }
-            if (partname.Contains("wall"))
+            else if (partname.Contains("wall"))
             {
                 var go = GetPart(this.ssgo, partname);
                 if (go != null)
