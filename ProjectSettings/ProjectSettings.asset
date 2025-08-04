@@ -755,10 +755,10 @@ PlayerSettings:
     m_VersionCode: 1
     m_VersionName: 
   apiCompatibilityLevel: 3
-  cloudProjectId: e83c44bb-35be-40c8-8d68-a59d5261ba74
+  cloudProjectId: 
   framebufferDepthMemorylessMode: 0
-  projectName: campusim (1)
-  organizationId: jmarymee
+  projectName: 
+  organizationId: 
   cloudEnabled: 0
   enableNativePlatformBackendsForNewInputSystem: 0
   disableOldInputManagerSupport: 0

@@ -73,7 +73,7 @@ namespace GraphAlgos
             //string output = p.StandardOutput.ReadToEnd();
             //p.WaitForExit();
         }
-
+        #region args
         static List<string> cookedArgs = null;
 
         public static void InitArgs()
@@ -237,7 +237,7 @@ namespace GraphAlgos
             var (testd, testdv) = ParmDouble("-testd");
             var (testd1, testdv1) = ParmDouble("-testd1", -3);
         }
-
+        #endregion
 
         static Dictionary<string, GameObject> uniresdict = new Dictionary<string, GameObject>();
         public static GameObject GetUniResPrefab(string dirname,string prefabname)
