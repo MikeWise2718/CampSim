@@ -69,7 +69,7 @@ public class InfoPanel : MonoBehaviour
     void InitoInfoPanels()
     {
 
-        var arial = (Font)Resources.GetBuiltinResource(typeof(Font), "Arial.ttf");
+        var arial = (Font)Resources.GetBuiltinResource(typeof(Font), "LegacyRuntime.ttf");
         sysText.font = arial;
         sysText.fontSize = 24;
         sysText.alignment = TextAnchor.MiddleLeft;

@@ -4,7 +4,7 @@ using UnityEngine;
 using UxUtils;
 using Aiskwk.Map;
 using System.Runtime.InteropServices;
-using Boo.Lang.Runtime.DynamicDispatching;
+// using Boo.Lang.Runtime.DynamicDispatching;
 
 namespace CampusSimulator
 {

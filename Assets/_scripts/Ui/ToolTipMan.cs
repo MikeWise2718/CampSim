@@ -63,7 +63,7 @@ public class ToolTipMan : MonoBehaviour
             var txtcomp = txgo.AddComponent<Text>();
 
             txtcomp.text = tip;
-            Font arial = (Font)Resources.GetBuiltinResource(typeof(Font), "Arial.ttf");
+            Font arial = (Font)Resources.GetBuiltinResource(typeof(Font), "LegacyRuntime.ttf");
             txtcomp.font = arial;
             txtcomp.fontSize = 18;
             txtcomp.alignment = TextAnchor.MiddleCenter;

@@ -99,7 +99,7 @@ public class HelpPanel : MonoBehaviour
 
     public void InitVals()
     {
-        var arial = (Font)Resources.GetBuiltinResource(typeof(Font), "Arial.ttf");
+        var arial = (Font)Resources.GetBuiltinResource(typeof(Font), "LegacyRuntime.ttf");
         var consolas = Font.CreateDynamicFontFromOSFont("Consolas", 24);
 
         var font = arial;

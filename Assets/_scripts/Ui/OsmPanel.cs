@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using CampusSimulator;
 using System.Linq;
-using UnityScript.Steps;
+// using UnityScript.Steps;
 
 public class OsmPanel : MonoBehaviour
 {

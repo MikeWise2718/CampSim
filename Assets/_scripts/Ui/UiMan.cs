@@ -210,6 +210,11 @@ namespace CampusSimulator
             var colors = butt.colors;
             //Debug.Log("Set button color:"+hicolor+" status:"+status+" butt.name:"+butt.name);
             var textgo = butt.transform.Find("Text");
+            if (textgo == null)
+            {
+                Debug.LogWarning($"SetButton color button {txt} has no text child");
+                return;
+            }
             var textcomp = textgo.GetComponent<Text>();
             if (status)
             {
@@ -238,7 +243,7 @@ namespace CampusSimulator
 
         public Font GetFont()
         {
-            var arial = (Font)Resources.GetBuiltinResource(typeof(Font), "Arial.ttf");
+            var arial = (Font)Resources.GetBuiltinResource(typeof(Font), "LegacyRuntime.ttf");
             var consolas = Font.CreateDynamicFontFromOSFont("Consolas", 24);
 
             var font = arial;

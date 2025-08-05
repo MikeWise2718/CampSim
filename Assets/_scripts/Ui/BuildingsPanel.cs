@@ -190,6 +190,11 @@ public class BuildingsPanel : MonoBehaviour
     public void InitB19Vals()
     {
         b19comp = null;
+        if (bdman == null)
+        {
+            Debug.LogError("BuildingsPanel.InitB19Vals - bdman is null, cannot continue");
+            return;
+        }   
         var b19bld = bdman.GetBuilding("Bld19", couldFail: true);
         if (b19bld != null)
         {

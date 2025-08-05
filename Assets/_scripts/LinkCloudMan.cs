@@ -21,7 +21,7 @@ namespace CampusSimulator
 
         public graphSceneE graphScene = graphSceneE.gen_campus;
         public Vector2 stats_nodes_links = Vector2.zero;
-        public Range LinkFLoor;
+        public GraphAlgos.Range LinkFLoor;
         public float markerNodeSize;
         public bool nodesvisible = true;
         public bool linksvisible = true;
@@ -152,7 +152,7 @@ namespace CampusSimulator
             markerNodeSize = 0.18f;
             //Debug.Log("linkRadius:" + linkRadius + " linkNodeSize:" + linkNodeSize);
             mappars = new MapGenParameters();
-            LinkFLoor = new Range(0, 0);
+            LinkFLoor = new GraphAlgos.Range(0, 0);
             nodesvisible = true;
 
 

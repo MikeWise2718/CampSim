@@ -596,7 +596,7 @@ public class AboutPanel : MonoBehaviour
         var sysver = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
         var utc = System.DateTime.UtcNow;
         Font arial;
-        arial = (Font)Resources.GetBuiltinResource(typeof(Font), "Arial.ttf");
+        arial = (Font)Resources.GetBuiltinResource(typeof(Font), "LegacyRuntime.ttf");
 
         var go = GameObject.Find("AboutTabText");
         aboutTabText = go.GetComponent<Text>();
